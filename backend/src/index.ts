@@ -4,6 +4,7 @@
  */
 
 import { handleSupportSubmission } from './routes/support';
+import { handleCommentSubmission, handleGetApprovedComments } from './routes/comments';
 import { EmailEnv } from './utils/email';
 
 export interface Env extends EmailEnv {
@@ -45,6 +46,20 @@ export default {
     // POST /api/support — Destek Formu Kaydı
     if (url.pathname === '/api/support' && request.method === 'POST') {
       const res = await handleSupportSubmission(request, env);
+      Object.entries(corsHeaders).forEach(([key, val]) => res.headers.set(key, val));
+      return res;
+    }
+
+    // POST /api/comments — Blog Yorum Kaydı
+    if (url.pathname === '/api/comments' && request.method === 'POST') {
+      const res = await handleCommentSubmission(request, env);
+      Object.entries(corsHeaders).forEach(([key, val]) => res.headers.set(key, val));
+      return res;
+    }
+
+    // GET /api/comments — Onaylı Yorumları Listeleme
+    if (url.pathname === '/api/comments' && request.method === 'GET') {
+      const res = await handleGetApprovedComments(request, env);
       Object.entries(corsHeaders).forEach(([key, val]) => res.headers.set(key, val));
       return res;
     }
