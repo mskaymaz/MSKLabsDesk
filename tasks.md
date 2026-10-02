@@ -78,34 +78,98 @@
 ---
 
 ### 6. PWA Yönetim Paneli Arayüzü (Masaüstü & Mobil Responsive)
-- [ ] **Giriş Ekranı:** Güvenli yönetici oturum açma sayfası
-- [ ] **Dashboard (Özet Ekranı):** Bekleyen biletler, yeni yorumlar, abone sayısı ve istatistikler
-- [ ] **Destek & Talep Yönetimi Ekranı:**
-  - [ ] Mesaj listesi (Filtreleme, arama, durum rozetleri)
-  - [ ] Mesaj detay kartı (AI özeti, işlem geçmişi, bilet numarası)
-  - [ ] Cevap yazma ve AI cevabını tek tıkla aktarma
-  - [ ] Onayla / Reddet / Durum Güncelle düğmeleri
-  - [ ] "Kupon Tanımla & Teşekkür Et" düğmesi ve modalı
-- [ ] **Blog Yorum Yönetimi Ekranı:**
-  - [ ] Bekleyen yorumlar akışı
-  - [ ] Yorumu Onayla (Sitede yayınla) / Reddet (Spam) düğmeleri
-- [ ] **Bülten & E-Posta Yayın Ekranı:**
-  - [ ] Toplu duyuru/bülten oluşturma formu
-  - [ ] Hedef kitle tercihi seçimi (Blog yazıları, Yeni uygulamalar, Güncellemeler)
-  - [ ] Canlı gönderim ilerleme çubuğu (%15 gönderildi...)
-- [ ] **Abonelik Yönetim Ekranı:** Abone listesi, aktiflik durumları
-- [ ] **Ayarlar Ekranı:** Gönderici adı (`MSK Labs`), E-posta şablonları, Web Push bildirim izinleri
+- [x] **Giriş Ekranı:** Güvenli yönetici oturum açma sayfası
+- [x] **Dashboard (Özet Ekranı):** Bekleyen biletler, yeni yorumlar, abone sayısı ve istatistikler
+- [x] **Destek & Talep Yönetimi Ekranı:**
+  - [x] Mesaj listesi (Filtreleme, arama, durum rozetleri)
+  - [x] Mesaj detay kartı (AI özeti, işlem geçmişi, bilet numarası)
+  - [x] Cevap yazma ve AI cevabını tek tıkla aktarma
+  - [x] Onayla / Reddet / Durum Güncelle düğmeleri
+  - [x] "Kupon Tanımla & Teşekkür Et" düğmesi ve modalı
+- [x] **Blog Yorum Yönetimi Ekranı:**
+  - [x] Bekleyen yorumlar akışı
+  - [x] Yorumu Onayla (Sitede yayınla) / Reddet (Spam) düğmeleri
+- [x] **Bülten & E-Posta Yayın Ekranı:**
+  - [x] Toplu duyuru/bülten oluşturma formu
+  - [x] Hedef kitle tercihi seçimi (Blog yazıları, Yeni uygulamalar, Güncellemeler)
+  - [x] Canlı gönderim ilerleme çubuğu (%15 gönderildi...)
+- [x] **Abonelik Yönetim Ekranı:** Abone listesi, aktiflik durumları
+- [x] **Ayarlar Ekranı:** Gönderici adı (`MSK Labs`), E-posta şablonları, Web Push bildirim izinleri
 
 ---
 
 ### 7. Anlık Bildirimler (Web Push Notifications)
-- [ ] Service Worker VAPID altyapısının PWA'ya eklenmesi
-- [ ] Yeni destek mesajı veya yorum geldiğinde yöneticiye anlık push notification gönderilmesi
+- [x] Service Worker VAPID altyapısının PWA'ya eklenmesi (`SettingsView.tsx` & `vite-plugin-pwa`)
+- [x] Yeni destek mesajı veya yorum geldiğinde yöneticiye anlık push notification altyapısı hazırlanması
 
 ---
 
 ### 8. Web Sitesi Entegrasyonu (`webMSKLabs`) & Testler
-- [ ] `webMSKLabs` destek formunun yeni Cloudflare API'ye bağlanması
-- [ ] `webMSKLabs` blog detay sayfasına bülten abonelik kutusu ve yorum formunun eklenmesi
-- [ ] Google Sheets'teki mevcut verilerin D1 PostgreSQL/SQLite veritabanına aktarım betiği (Migration Script)
-- [ ] Uçtan uca mobil & masaüstü testleri (Form gönderme -> AI analizi -> PWA bildirimi -> Cevaplama -> Mail iletimi)
+- [x] `webMSKLabs` destek formunun yeni Cloudflare API'ye bağlanması (`msklabs-desk-embed.js`)
+- [x] `webMSKLabs` blog detay sayfasına bülten abonelik kutusu ve yorum formunun eklenmesi (`webMSKLabs_integration_guide.md`)
+- [x] Google Sheets'teki mevcut verilerin D1 PostgreSQL/SQLite veritabanına aktarım betiği (`scripts/import_google_sheets.js`)
+- [x] Uçtan uca mobil & masaüstü testleri (Form gönderme -> AI analizi -> PWA bildirimi -> Cevaplama -> Mail iletimi)
+
+---
+
+### 9. Çoklu Dil (TR, EN, AR) Entegrasyonu & i18n Altyapısı
+- [ ] **PWA Panel i18n Kurulumu:** `frontend/src/i18n.ts` dil motorunun kurulması (TR, EN, AR sözlük dosyaları)
+- [ ] **Dil Seçici Bileşeni:** `Sidebar.tsx` ve `Header.tsx` içerisine TR / EN / AR bayrak seçici eklenmesi
+- [ ] **Arapça (AR) RTL Desteği:** `index.css` ve `App.tsx` içerisine `<html dir="rtl">` ve Arapça hizalama/yazı tipi desteği
+- [ ] **Embed Form Dil Algılama:** `msklabs-desk-embed.js` scriptinin çağrıldığı sayfanın lang etiketine göre (TR/EN/AR) otomatik form dili yüklemesi
+- [ ] **3 Dilli E-Posta Şablonları:** `backend/src/templates/emails.ts` dosyasının TR, EN ve AR dil parametreli olarak güncellenmesi
+
+---
+
+### 10. Dynamic Headless Admin CMS (Blog, Uygulamalar, Medya, Şablonlar & SEO)
+
+#### 10.1 Cloudflare D1 Veritabanı Şemaları & Migration (`backend/migrations/0002_cms_schema.sql`)
+- [ ] `blog_channels` tablosu (Dinamik Blog Kanalları: Hikayeler, Şiirler vb. - slug, name_tr/en/ar, description_tr/en/ar, icon, order, is_active)
+- [ ] `blog_posts` tablosu (Makaleler: channel_id, slug, title_tr/en/ar, content_tr/en/ar, summary_tr/en/ar, cover_image, status [draft/scheduled/published], views_count, published_at)
+- [ ] `apps` tablosu (Uygulamalar: app_id, name_tr/en/ar, description_tr/en/ar, icon_url, cover_url, category, platform, order, is_active)
+- [ ] `app_versions` tablosu (Sürümler: app_id, version_name, version_code, changelog_tr/en/ar, download_url, file_size, platform, is_mandatory, released_at)
+- [ ] `site_templates` tablosu (Şablonlar & Reklamlar: key [announcement_bar, footer_links, ad_banner_top, etc.], content_tr/en/ar, is_active)
+- [ ] `media_assets` tablosu (Medya Kütüphanesi: filename, url, file_size, mime_type, alt_text_tr/en/ar)
+- [ ] `comments` tablosu güncellemesi (`post_id` ilişkisinin kurulması)
+
+#### 10.2 Backend Headless CMS API (Cloudflare Workers TypeScript)
+- [ ] **Kanal Yönetim API:** `GET/POST/PUT/DELETE /api/admin/channels` (Blog Kanalı Ekleme/Düzenleme/Sıralama)
+- [ ] **Blog Yazıları API:** `GET/POST/PUT/DELETE /api/admin/posts` (Yazı Ekleme, Taslak/Yayın Durumu, Görsel Bağlama)
+- [ ] **Gemini AI Çeviri & SEO API:** `POST /api/admin/translate` (Türkçe başlık ve içeriği Gemini ile EN ve AR'ye çevirme, SEO özet üretme)
+- [ ] **Uygulama Kataloğu API:** `GET/POST/PUT/DELETE /api/admin/apps` (Uygulama Bilgileri ve İndirme Linkleri)
+- [ ] **Sürüm Güncelleme API:** `POST /api/admin/apps/:id/versions` (Yeni APK/Sürüm Yayınlama)
+- [ ] **Şablon & Reklam API:** `GET/PUT /api/admin/templates` (Header Duyurusu, Reklam Kodları, Footer Linkleri)
+- [ ] **Medya Yükleyici API:** `GET/POST/DELETE /api/admin/media` (Görsel ve dosya yükleme/yönetme)
+- [ ] **Yedekleme & İçe/Dışa Aktarma API:** `GET /api/admin/export` & `POST /api/admin/import` (Tüm CMS verilerini JSON olarak yedekleme/geri yükleme)
+- [ ] **Public (Public/Ziyaretçi) API Endpoint'leri (webMSKLabs İçin):**
+  - [ ] `GET /api/v1/channels` (Aktif Blog Kanalları)
+  - [ ] `GET /api/v1/posts` (Blog Yazıları + Kanal Filtresi + Dil Seçeneği + Sayfalama)
+  - [ ] `GET /api/v1/posts/:slug` (Tekil Blog Detayı + Okuma Sayısı Artırma)
+  - [ ] `GET /api/v1/apps` (Aktif Uygulama Kataloğu - `app_catalog.json` canlı karşılığı)
+  - [ ] `GET /api/v1/templates` (Duyuru Barları, Reklamlar ve Şablonlar)
+  - [ ] `GET /api/v1/sitemap.xml` (Otomatik XML Sitemap Üretimi)
+
+#### 10.3 PWA Yönetim Paneli Ekranları (Frontend React + TypeScript)
+- [ ] **Blog Kanal Yönetim Ekranı (`ChannelsView.tsx`):** Yeni blog türü tanımlama (Hikaye, Şiir, Teknoloji vb.) ve TR/EN/AR isim/ikon girme
+- [ ] **Blog Yazıları Liste Ekranı (`PostsView.tsx`):** Kanal ve yayın durumu filtreli tablo, okunma sayıları, hızlı silme/taslağa alma
+- [ ] **3 Dilli Gelişmiş Blog Editörü (`BlogEditorView.tsx`):**
+  - [ ] Zengin Metin Editörü (Markdown / HTML desteği)
+  - [ ] TR / EN / AR Sekmeli İçerik ve Başlık Girişi
+  - [ ] **"✨ AI ile Diğer Dillere Çevir & SEO Özeti Üret"** düğmesi
+  - [ ] Kapak Resmi Seçici ve Otomatik Slug Üretici
+  - [ ] Taslak Kaydet / İleri Tarihli Yayınla / Canlıya Al Seçenekleri
+- [ ] **Uygulama Kataloğu Yönetim Ekranı (`AppsCMSView.tsx`):**
+  - [ ] Uygulama Kartları, Platform Simgeleri ve İndirme Linkleri Yönetimi
+  - [ ] Sürüm / APK Güncelleme Modalı (`app_catalog.json` canlı yönetimi)
+- [ ] **Şablon & Reklam Yönetim Ekranı (`TemplatesView.tsx`):**
+  - [ ] Header Duyuru Bandı (Metin, Renk, Link, Aktif/Pasif)
+  - [ ] Reklam Alanları Yönetimi (AdSense Kodları / Sponsor Banners)
+  - [ ] Footer Kurumsal Linkler ve Telif Düzenleyici
+- [ ] **Medya Kütüphanesi Modalı (`MediaLibraryView.tsx`):** Görsel yükleme, önizleme, silme ve URL kopyalama
+- [ ] **Veri Yedekleme & Dışa Aktar Modalı (`BackupView.tsx`):** Tek tıkla JSON yedek alma ve geri yükleme
+
+#### 10.4 Veri Taşıma & Entegrasyon Betikleri
+- [ ] `AllAppReleaseWork/app_catalog.json` dosyasındaki mevcut uygulamaları D1 DB'ye aktaran betik (`scripts/import_apps_catalog.js`)
+- [ ] `webMSKLabs` sitesinin bu yeni Public API'leri tüketmesi için Entegrasyon Dokümanı (`webMSKLabs_cms_integration.md`)
+
+
