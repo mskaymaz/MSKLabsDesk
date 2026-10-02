@@ -3,7 +3,10 @@
  * Cloudflare Workers + TypeScript API Service
  */
 
-export interface Env {
+import { handleSupportSubmission } from './routes/support';
+import { EmailEnv } from './utils/email';
+
+export interface Env extends EmailEnv {
   DB: D1Database;
 }
 
@@ -37,6 +40,13 @@ export default {
           },
         }
       );
+    }
+
+    // POST /api/support — Destek Formu Kaydı
+    if (url.pathname === '/api/support' && request.method === 'POST') {
+      const res = await handleSupportSubmission(request, env);
+      Object.entries(corsHeaders).forEach(([key, val]) => res.headers.set(key, val));
+      return res;
     }
 
     return new Response(

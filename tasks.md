@@ -47,7 +47,7 @@
 ---
 
 ### 3. Backend API Geliştirmesi (Cloudflare Workers)
-- [ ] **Destek API:** Destek/talep formu kabul endpoint'i (`POST /api/support`), Bilet No üretici (`MSK-YYYY-XXXX`)
+- [x] **Destek API:** Destek/talep formu kabul endpoint'i (`POST /api/support`), Bilet No üretici (`MSK-YYYY-XXXX`)
 - [ ] **Blog Yorum API:** Blog yorum kabul endpoint'i (`POST /api/comments`)
 - [ ] **Abonelik API:** Bültene abone olma (`POST /api/subscribe`) ve Abonelikten çıkma/tercih güncelleme (`GET/POST /api/unsubscribe`)
 - [ ] **Admin Auth API:** Güvenli yönetici girişi ve JWT/Session yönetimi

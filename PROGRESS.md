@@ -1,10 +1,8 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
-## 🟢 Son Güncelleme [02.10.2026 - 09:58]
-* **Tamamlanan Aşama:** **Bölüm 1 (Hazırlık ve Altyapı Kurulumu)** %100 Tamamlandı! 🎉
-  - 1.1. Backend projesi altyapısı (`backend/` - Cloudflare Workers + TypeScript + Wrangler)
-  - 1.2. Frontend projesi altyapısı (`frontend/` - Vite + React + PWA)
-  - 1.3. Cloudflare D1 Veritabanı Şeması & Migration Yapısı (`0001_initial_schema.sql` - 9 Tablo)
-  - 1.4. E-posta servis modülü (`src/utils/email.ts` - Gmail SMTP & Resend Entegrasyonu)
-* **Sıradaki Aşama:** **Bölüm 2 & 3 (Backend API Geliştirmesi)** — Destek bilet alma API'si (`POST /api/support`) ve Bilet No üretici (`MSK-YYYY-XXXX`).
+## 🟢 Son Güncelleme [02.10.2026 - 10:22]
+* **Tamamlanan Adımlar:**
+  - 1.1 - 1.4. Hazırlık ve Altyapı Kurulumu (Worker, React PWA, D1 Database, Email Module)
+  - 3.1. **Destek API (`POST /api/support`):** Kullanıcı destek/talep formu kaydı, `MSK-YYYY-XXXX` formatında benzersiz bilet no üretimi, D1 veritabanına kayıt ve otomatik e-posta gönderimi.
+* **Sıradaki Adım:** 3.2. **Blog Yorum API (`POST /api/comments`):** Blog yazıları altına yorum gönderme ve spam/beklemede statüsü ile D1'e kaydetme.
