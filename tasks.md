@@ -29,7 +29,7 @@
 - [ ] Backend projesi kurulumu (`backend/` - Cloudflare Workers + TypeScript + Wrangler)
 - [ ] Frontend projesi kurulumu (`frontend/` - Vite + React / PWA konfigürasyonu)
 - [x] Cloudflare D1 veritabanı oluşturulması ve `wrangler.toml` bağlantısı
-- [ ] E-posta servis entegrasyonu konfigürasyonu (`msklabs.org@gmail.com` SMTP & App Password)
+- [x] E-posta servis entegrasyonu konfigürasyonu (`msklabs.org@gmail.com` SMTP & App Password)
 
 ---
 
