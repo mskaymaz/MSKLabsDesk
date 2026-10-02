@@ -1,0 +1,10 @@
+name = "msklabsdesk-backend"
+main = "src/index.ts"
+compatibility_date = "2024-10-01"
+compatibility_flags = ["nodejs_compat"]
+
+# Cloudflare D1 Database Binding (Faz 2'de ID eklenecek)
+[[d1_databases]]
+binding = "DB"
+database_name = "msklabsdesk_db"
+database_id = "dummy-id-pending-creation"

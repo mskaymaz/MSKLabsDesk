@@ -1,0 +1,17 @@
+{
+  "name": "msklabsdesk-backend",
+  "version": "1.0.0",
+  "description": "MSKLabsDesk Backend - Cloudflare Workers + TypeScript API Engine",
+  "main": "src/index.ts",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "types": "wrangler types"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20241022.0",
+    "typescript": "^5.6.3",
+    "wrangler": "^3.80.4"
+  }
+}
