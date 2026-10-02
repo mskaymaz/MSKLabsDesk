@@ -1,5 +1,10 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
-> **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedıldığı dokümandır.
+> **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
+
+## [02.10.2026 - 09:53] - Frontend PWA Altyapı Kurulumu (Madde 1.2)
+- rontend/ dizininde Vite + React + TypeScript projesi oluşturuldu.
+- ite-plugin-pwa ve lucide-react kütüphaneleri yüklendi.
+- ite.config.ts PWA manifest ve service worker oto-güncelleme konfigürasyonu eklendi.
 
 ## [02.10.2026 - 09:49] - Backend Altyapı Kurulumu (Madde 1.1)
 - ackend/ klasörü altında Cloudflare Workers + TypeScript projesi oluşturuldu.
