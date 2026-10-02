@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { AuthProvider, useAuth } from './context/AuthContext';
+import { I18nProvider } from './context/I18nContext';
 import { Sidebar, type TabType } from './components/Sidebar';
 import { LoginView } from './views/LoginView';
 import { DashboardView } from './views/DashboardView';
@@ -130,8 +131,11 @@ const AdminPanelContent: React.FC = () => {
 
 export default function App() {
   return (
-    <AuthProvider>
-      <AdminPanelContent />
-    </AuthProvider>
+    <I18nProvider>
+      <AuthProvider>
+        <AdminPanelContent />
+      </AuthProvider>
+    </I18nProvider>
   );
 }
+

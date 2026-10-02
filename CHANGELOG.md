@@ -1,6 +1,14 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [02.10.2026 - 16:25] - Çoklu Dil (TR, EN, AR) Entegrasyonu & RTL Desteği (Aşama 9)
+- `frontend/src/i18n/translations.ts` 3 dilli sözlük modülü oluşturuldu (TR, EN, AR).
+- `frontend/src/context/I18nContext.tsx` dil yönetimi ve localStorage kalıcılığı sağlandı.
+- `frontend/src/components/Sidebar.tsx` bileşenine 🇹🇷 TR / 🇬🇧 EN / 🇸🇦 AR dil seçici eklendi.
+- `frontend/src/index.css` dosyasına Cairo Arapça yazı tipi ve `<html dir="rtl">` stilleri eklendi.
+- `backend/src/utils/emailTemplates.ts` 3 dilli ve RTL uyumlu HTML e-posta şablonları eklendi.
+- Frontend ve Backend 0 hata ile derlendi.
+
 ## [02.10.2026 - 16:15] - Dynamic Headless Admin CMS & Çoklu Dil (TR/EN/AR) Planlaması
 - `tasks.md` dosyası güncellendi: Aşama 9 (Çoklu Dil i18n & RTL) ve Aşama 10 (Dynamic Headless Admin CMS: Dinamik Blog Kanalları, Uygulama Kataloğu, Medya & Şablon Yönetimi) detaylı mikro-görevler halinde eklendi.
 - `PROGRESS.md` güncellendi.

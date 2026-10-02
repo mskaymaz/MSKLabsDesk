@@ -7,9 +7,12 @@ import {
   Users, 
   Settings, 
   LogOut, 
-  ShieldCheck 
+  ShieldCheck,
+  Globe
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { useTranslation } from '../context/I18nContext';
+import type { Language } from '../i18n/translations';
 
 export type TabType = 'dashboard' | 'tickets' | 'comments' | 'broadcast' | 'subscribers' | 'settings';
 
@@ -27,24 +30,31 @@ export const Sidebar: React.FC<SidebarProps> = ({
   pendingCommentCount = 0,
 }) => {
   const { user, logout } = useAuth();
+  const { language, setLanguage, t } = useTranslation();
 
   const menuItems = [
-    { id: 'dashboard' as TabType, label: 'Özet Ekranı', icon: LayoutDashboard },
+    { id: 'dashboard' as TabType, label: t('dashboard'), icon: LayoutDashboard },
     { 
       id: 'tickets' as TabType, 
-      label: 'Destek & Talepler', 
+      label: t('tickets'), 
       icon: Inbox, 
       badge: pendingTicketCount > 0 ? pendingTicketCount : undefined 
     },
     { 
       id: 'comments' as TabType, 
-      label: 'Blog Yorumları', 
+      label: t('comments'), 
       icon: MessageSquare, 
       badge: pendingCommentCount > 0 ? pendingCommentCount : undefined 
     },
-    { id: 'broadcast' as TabType, label: 'Bülten & E-Posta', icon: Send },
-    { id: 'subscribers' as TabType, label: 'Aboneler', icon: Users },
-    { id: 'settings' as TabType, label: 'Ayarlar', icon: Settings },
+    { id: 'broadcast' as TabType, label: t('broadcasts'), icon: Send },
+    { id: 'subscribers' as TabType, label: t('subscribers'), icon: Users },
+    { id: 'settings' as TabType, label: t('settings'), icon: Settings },
+  ];
+
+  const languages: { code: Language; flag: string; label: string }[] = [
+    { code: 'tr', flag: '🇹🇷', label: 'TR' },
+    { code: 'en', flag: '🇬🇧', label: 'EN' },
+    { code: 'ar', flag: '🇸🇦', label: 'AR' },
   ];
 
   return (
@@ -52,6 +62,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       width: '260px',
       background: 'var(--bg-sidebar)',
       borderRight: '1px solid var(--border-color)',
+      borderLeft: language === 'ar' ? '1px solid var(--border-color)' : 'none',
       display: 'flex',
       flexDirection: 'column',
       padding: '20px 16px',
@@ -60,7 +71,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       top: 0
     }}>
       {/* Brand */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '8px 12px', marginBottom: '28px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '8px 12px', marginBottom: '20px' }}>
         <div style={{
           width: '38px',
           height: '38px',
@@ -76,7 +87,49 @@ export const Sidebar: React.FC<SidebarProps> = ({
         </div>
         <div>
           <h2 style={{ fontSize: '1.1rem', fontWeight: 800, color: '#FFF', letterSpacing: '-0.01em' }}>MSKLabsDesk</h2>
-          <span style={{ fontSize: '0.75rem', color: 'var(--accent-cyan)', fontWeight: 600 }}>Yönetici Paneli</span>
+          <span style={{ fontSize: '0.75rem', color: 'var(--accent-cyan)', fontWeight: 600 }}>{user?.name || 'Admin'}</span>
+        </div>
+      </div>
+
+      {/* Language Switcher */}
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        padding: '6px 10px',
+        background: 'rgba(255, 255, 255, 0.04)',
+        borderRadius: 'var(--radius-md)',
+        marginBottom: '20px',
+        border: '1px solid var(--border-color)'
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--text-muted)', fontSize: '0.8rem' }}>
+          <Globe size={15} />
+          <span>Lang:</span>
+        </div>
+        <div style={{ display: 'flex', gap: '4px' }}>
+          {languages.map((lang) => (
+            <button
+              key={lang.code}
+              onClick={() => setLanguage(lang.code)}
+              style={{
+                background: language === lang.code ? 'var(--accent-primary)' : 'transparent',
+                color: language === lang.code ? '#FFF' : 'var(--text-secondary)',
+                border: 'none',
+                borderRadius: '6px',
+                padding: '4px 8px',
+                fontSize: '0.75rem',
+                fontWeight: 700,
+                cursor: 'pointer',
+                transition: 'all 0.2s ease',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '4px'
+              }}
+            >
+              <span>{lang.flag}</span>
+              <span>{lang.label}</span>
+            </button>
+          ))}
         </div>
       </div>
 
@@ -141,7 +194,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         </div>
         <button
           onClick={logout}
-          title="Çıkış Yap"
+          title={t('logout')}
           style={{
             background: 'transparent',
             border: 'none',
@@ -159,3 +212,4 @@ export const Sidebar: React.FC<SidebarProps> = ({
     </aside>
   );
 };
+
