@@ -3,6 +3,7 @@
  */
 
 import { EmailEnv, sendEmail } from '../utils/email';
+import { AIEnv, analyzeSupportTicketWithAI } from '../utils/ai';
 
 export interface SupportTicketPayload {
   sender_name: string;
@@ -17,7 +18,7 @@ export interface SupportTicketPayload {
  */
 export function generateTicketId(): string {
   const year = new Date().getFullYear();
-  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // Okunabilir karakterler
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
   let randomPart = '';
   for (let i = 0; i < 4; i++) {
     randomPart += chars.charAt(Math.floor(Math.random() * chars.length));
@@ -28,11 +29,10 @@ export function generateTicketId(): string {
 /**
  * POST /api/support İşleyicisi
  */
-export async function handleSupportSubmission(request: Request, env: { DB: D1Database } & EmailEnv): Promise<Response> {
+export async function handleSupportSubmission(request: Request, env: { DB: D1Database } & EmailEnv & AIEnv): Promise<Response> {
   try {
     const payload = await request.json() as SupportTicketPayload;
 
-    // 1. Doğrulama
     if (!payload.sender_name || !payload.sender_email || !payload.subject || !payload.content) {
       return new Response(
         JSON.stringify({ error: 'Lütfen tüm zorunlu alanları (ad, e-posta, konu, içerik) doldurun.' }),
@@ -51,7 +51,7 @@ export async function handleSupportSubmission(request: Request, env: { DB: D1Dat
     const ticketId = generateTicketId();
     const category = payload.category || 'general';
 
-    // 2. D1 Veritabanına Kayıt
+    // 1. D1 Veritabanına Kayıt
     await env.DB.prepare(`
       INSERT INTO messages (id, sender_name, sender_email, subject, content, category, status, created_at)
       VALUES (?, ?, ?, ?, ?, ?, 'open', CURRENT_TIMESTAMP)
@@ -64,13 +64,43 @@ export async function handleSupportSubmission(request: Request, env: { DB: D1Dat
       category
     ).run();
 
-    // 3. Message Event Log Kaydı
+    // 2. Message Event Log Kaydı
     await env.DB.prepare(`
       INSERT INTO message_events (message_id, actor, action, details)
       VALUES (?, 'user', 'created', 'Kullanıcı destek talebi oluşturdu.')
     `).bind(ticketId).run();
 
-    // 4. Otomatik E-Posta Gönderimi (Arka Plan)
+    // 3. Yapay Zeka (Gemini API) Otomatik Analizi
+    analyzeSupportTicketWithAI({
+      id: ticketId,
+      sender_name: payload.sender_name.trim(),
+      subject: payload.subject.trim(),
+      content: payload.content.trim(),
+      category
+    }, env).then(async (analysis) => {
+      if (analysis) {
+        const newStatus = analysis.is_spam ? 'spam' : 'open';
+        await env.DB.prepare(`
+          UPDATE messages 
+          SET category = ?, urgency = ?, ai_summary = ?, ai_draft = ?, status = ?
+          WHERE id = ?
+        `).bind(
+          analysis.category || category,
+          analysis.urgency || 'medium',
+          analysis.summary || null,
+          analysis.draft_response || null,
+          newStatus,
+          ticketId
+        ).run();
+
+        await env.DB.prepare(`
+          INSERT INTO message_events (message_id, actor, action, details)
+          VALUES (?, 'system', 'ai_analyzed', ?)
+        `).bind(ticketId, `Gemini AI analizi tamamlandı. Urgency: ${analysis.urgency}`).run();
+      }
+    }).catch(err => console.error('AI Analiz Hatası:', err));
+
+    // 4. Otomatik E-Posta Gönderimi
     const emailSubject = `[${ticketId}] Destek Talebiniz Alındı — MSK Labs`;
     const emailHtml = `
       <div style="font-family: Arial, sans-serif; color: #333; line-height: 1.6;">
@@ -84,7 +114,6 @@ export async function handleSupportSubmission(request: Request, env: { DB: D1Dat
       </div>
     `;
 
-    // E-posta gönderimi (Hata verirse bile destek bileti iptal edilmez)
     sendEmail({
       to: payload.sender_email.trim(),
       toName: payload.sender_name.trim(),

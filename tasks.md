@@ -59,10 +59,10 @@
 ---
 
 ### 4. Yapay Zeka Entegrasyonu (Google Gemini API)
-- [ ] Gemini API istemcisinin kurulması
-- [ ] Gelen destek mesajını otomatik analiz etme (Spam kontrolü, aciliyet, kategori belirleme)
-- [ ] Mesaj özeti çıkarma ve yönetici için önerilen cevap taslağı (`ai_draft`) üretme
-- [ ] Prompt injection koruması (Kullanıcı mesajının sistem talimatlarını bozmasını engelleme)
+- [x] Gemini API istemcisinin kurulması
+- [x] Gelen destek mesajını otomatik analiz etme (Spam kontrolü, aciliyet, kategori belirleme)
+- [x] Mesaj özeti çıkarma ve yönetici için önerilen cevap taslağı (`ai_draft`) üretme
+- [x] Prompt injection koruması (Kullanıcı mesajının sistem talimatlarını bozmasını engelleme)
 
 ---
 
