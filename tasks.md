@@ -50,10 +50,10 @@
 - [x] **Destek API:** Destek/talep formu kabul endpoint'i (`POST /api/support`), Bilet No üretici (`MSK-YYYY-XXXX`)
 - [x] **Blog Yorum API:** Blog yorum kabul endpoint'i (`POST /api/comments` & `GET /api/comments`)
 - [x] **Abonelik API:** Bültene abone olma (`POST /api/subscribe`) ve Abonelikten çıkma/tercih güncelleme (`POST /api/unsubscribe`)
-- [ ] **Admin Auth API:** Güvenli yönetici girişi ve JWT/Session yönetimi
-- [ ] **Admin Mesaj İşlemleri API:** Mesaj listeleme, detay görme, onaylama, reddetme, cevaplama
-- [ ] **Admin Yorum İşlemleri API:** Yorum onaylama/reddetme
-- [ ] **Admin E-Posta / Duyuru API:** Toplu bülten oluşturma ve kuyruğa ekleme (`POST /api/broadcast`)
+- [x] **Admin Auth API:** Güvenli yönetici girişi ve JWT/Session yönetimi
+- [x] **Admin Mesaj İşlemleri API:** Mesaj listeleme, detay görme, onaylama, reddetme, cevaplama
+- [x] **Admin Yorum İşlemleri API:** Yorum onaylama/reddetme
+- [x] **Admin E-Posta / Duyuru API:** Toplu bülten oluşturma ve kuyruğa ekleme (`POST /api/admin/broadcast`)
 - [ ] **Kupon Üretim API:** Özel kupon/teşekkür kodu oluşturma ve e-posta ile iletme
 
 ---
