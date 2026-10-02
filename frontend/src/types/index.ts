@@ -64,3 +64,84 @@ export interface AdminUser {
   name: string;
   role: 'super_admin' | 'moderator';
 }
+
+export interface BlogChannel {
+  id: string;
+  slug: string;
+  name_tr: string;
+  name_en?: string;
+  name_ar?: string;
+  description_tr?: string;
+  description_en?: string;
+  description_ar?: string;
+  icon?: string;
+  display_order?: number;
+  is_active?: boolean;
+}
+
+export interface BlogPost {
+  id: string;
+  channel_id: string;
+  channel_name?: string;
+  slug: string;
+  title_tr: string;
+  title_en?: string;
+  title_ar?: string;
+  content_tr: string;
+  content_en?: string;
+  content_ar?: string;
+  summary_tr?: string;
+  summary_en?: string;
+  summary_ar?: string;
+  cover_image?: string;
+  meta_keywords?: string;
+  author_name?: string;
+  status: 'draft' | 'scheduled' | 'published' | 'archived';
+  views_count?: number;
+  published_at?: string;
+  created_at?: string;
+}
+
+export interface AppVersion {
+  id: string;
+  app_id: string;
+  version_name: string;
+  version_code?: number;
+  changelog_tr?: string;
+  changelog_en?: string;
+  changelog_ar?: string;
+  download_url: string;
+  platform?: string;
+  file_size_mb?: number;
+  is_mandatory?: boolean;
+  released_at?: string;
+}
+
+export interface AppItem {
+  id: string;
+  app_id: string;
+  name_tr: string;
+  name_en?: string;
+  name_ar?: string;
+  description_tr: string;
+  description_en?: string;
+  description_ar?: string;
+  icon_url?: string;
+  cover_url?: string;
+  category?: string;
+  platform?: string;
+  display_order?: number;
+  is_active?: boolean;
+  versions?: AppVersion[];
+}
+
+export interface SiteTemplate {
+  id: string;
+  key_name: string;
+  content_tr?: string;
+  content_en?: string;
+  content_ar?: string;
+  meta_json?: string;
+  is_active?: boolean;
+}
+

@@ -9,6 +9,10 @@ import { CommentsView } from './views/CommentsView';
 import { BroadcastView } from './views/BroadcastView';
 import { SubscribersView } from './views/SubscribersView';
 import { SettingsView } from './views/SettingsView';
+import { ChannelsView } from './views/ChannelsView';
+import { PostsView } from './views/PostsView';
+import { AppsCMSView } from './views/AppsCMSView';
+import { TemplatesView } from './views/TemplatesView';
 import { CouponModal } from './components/CouponModal';
 import type { Ticket, CommentItem, Subscriber } from './types';
 import { api } from './services/api';
@@ -108,6 +112,11 @@ const AdminPanelContent: React.FC = () => {
             />
           )}
 
+          {activeTab === 'channels' && <ChannelsView />}
+          {activeTab === 'posts' && <PostsView />}
+          {activeTab === 'apps' && <AppsCMSView />}
+          {activeTab === 'templates' && <TemplatesView />}
+
           {activeTab === 'broadcast' && <BroadcastView />}
 
           {activeTab === 'subscribers' && (
@@ -117,6 +126,7 @@ const AdminPanelContent: React.FC = () => {
           {activeTab === 'settings' && <SettingsView />}
         </div>
       </main>
+
 
       <CouponModal
         isOpen={couponModalData.isOpen}

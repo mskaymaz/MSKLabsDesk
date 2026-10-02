@@ -8,13 +8,17 @@ import {
   Settings, 
   LogOut, 
   ShieldCheck,
-  Globe
+  Globe,
+  BookOpen,
+  FileText,
+  Smartphone,
+  Layout
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useTranslation } from '../context/I18nContext';
 import type { Language } from '../i18n/translations';
 
-export type TabType = 'dashboard' | 'tickets' | 'comments' | 'broadcast' | 'subscribers' | 'settings';
+export type TabType = 'dashboard' | 'tickets' | 'comments' | 'broadcast' | 'subscribers' | 'settings' | 'channels' | 'posts' | 'apps' | 'templates';
 
 interface SidebarProps {
   activeTab: TabType;
@@ -46,10 +50,15 @@ export const Sidebar: React.FC<SidebarProps> = ({
       icon: MessageSquare, 
       badge: pendingCommentCount > 0 ? pendingCommentCount : undefined 
     },
+    { id: 'channels' as TabType, label: 'Blog Türleri', icon: BookOpen },
+    { id: 'posts' as TabType, label: 'Blog Yazıları', icon: FileText },
+    { id: 'apps' as TabType, label: 'Uygulamalar', icon: Smartphone },
+    { id: 'templates' as TabType, label: 'Şablon & Reklam', icon: Layout },
     { id: 'broadcast' as TabType, label: t('broadcasts'), icon: Send },
     { id: 'subscribers' as TabType, label: t('subscribers'), icon: Users },
     { id: 'settings' as TabType, label: t('settings'), icon: Settings },
   ];
+
 
   const languages: { code: Language; flag: string; label: string }[] = [
     { code: 'tr', flag: '🇹🇷', label: 'TR' },

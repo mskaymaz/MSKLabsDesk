@@ -10,6 +10,11 @@ import { handleAdminLogin } from './routes/adminAuth';
 import { handleAdminGetTickets, handleAdminGetTicketDetail, handleAdminReplyTicket, handleAdminUpdateTicketStatus } from './routes/adminTickets';
 import { handleAdminGetComments, handleAdminModerateComment } from './routes/adminComments';
 import { handleAdminGetSubscribers, handleAdminBroadcastNewsletter } from './routes/adminBroadcast';
+import { handleCmsChannels } from './routes/cmsChannels';
+import { handleCmsPosts } from './routes/cmsPosts';
+import { handleCmsApps } from './routes/cmsApps';
+import { handleCmsTemplates } from './routes/cmsTemplates';
+import { handleCmsPublic } from './routes/cmsPublic';
 import { EmailEnv } from './utils/email';
 import { AIEnv } from './utils/ai';
 import { AuthEnv } from './utils/auth';
@@ -35,8 +40,10 @@ export default {
 
     let response: Response;
 
-    // 1. Kamusal API Endpoint'leri
-    if (path === '/api/health') {
+    // 1. Kamusal & Headless CMS Public API V1 Endpoint'leri
+    if (path.startsWith('/api/v1/')) {
+      response = await handleCmsPublic(request, env);
+    } else if (path === '/api/health') {
       response = new Response(JSON.stringify({ status: 'ok', service: 'MSKLabsDesk API Engine', timestamp: new Date().toISOString() }), {
         headers: { 'Content-Type': 'application/json; charset=utf-8' },
       });
@@ -51,7 +58,17 @@ export default {
     } else if (path === '/api/unsubscribe' && request.method === 'POST') {
       response = await handleUnsubscribe(request, env);
     } 
-    // 2. Admin API Endpoint'leri
+    // 2. Headless CMS Admin API Endpoint'leri
+    else if (path.startsWith('/api/admin/channels')) {
+      response = await handleCmsChannels(request, env);
+    } else if (path.startsWith('/api/admin/posts') || path === '/api/admin/translate') {
+      response = await handleCmsPosts(request, env);
+    } else if (path.startsWith('/api/admin/apps')) {
+      response = await handleCmsApps(request, env);
+    } else if (path.startsWith('/api/admin/templates')) {
+      response = await handleCmsTemplates(request, env);
+    }
+    // 3. Destek & Bülten Admin API Endpoint'leri
     else if (path === '/api/admin/login' && request.method === 'POST') {
       response = await handleAdminLogin(request, env);
     } else if (path === '/api/admin/tickets' && request.method === 'GET') {
@@ -82,3 +99,4 @@ export default {
     return response;
   },
 };
+

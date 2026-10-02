@@ -100,5 +100,133 @@ export const api = {
     });
     if (!res.ok) throw new Error('Duyuru gönderilemedi.');
     return res.json();
-  }
+  },
+
+  // Headless CMS — Channels
+  async getChannels() {
+    const res = await fetch(`${API_BASE}/admin/channels`, { headers: getHeaders() });
+    if (!res.ok) throw new Error('Kanallar yüklenemedi.');
+    return res.json();
+  },
+
+  async createChannel(data: any) {
+    const res = await fetch(`${API_BASE}/admin/channels`, {
+      method: 'POST',
+      headers: getHeaders(),
+      body: JSON.stringify(data),
+    });
+    if (!res.ok) throw new Error('Kanal oluşturulamadı.');
+    return res.json();
+  },
+
+  async updateChannel(id: string, data: any) {
+    const res = await fetch(`${API_BASE}/admin/channels/${id}`, {
+      method: 'PUT',
+      headers: getHeaders(),
+      body: JSON.stringify(data),
+    });
+    if (!res.ok) throw new Error('Kanal güncellenemedi.');
+    return res.json();
+  },
+
+  async deleteChannel(id: string) {
+    const res = await fetch(`${API_BASE}/admin/channels/${id}`, {
+      method: 'DELETE',
+      headers: getHeaders(),
+    });
+    if (!res.ok) throw new Error('Kanal silinemedi.');
+    return res.json();
+  },
+
+  // Headless CMS — Posts & AI Translate
+  async getPosts(channelId?: string) {
+    const query = channelId ? `?channel_id=${channelId}` : '';
+    const res = await fetch(`${API_BASE}/admin/posts${query}`, { headers: getHeaders() });
+    if (!res.ok) throw new Error('Yazılar yüklenemedi.');
+    return res.json();
+  },
+
+  async createPost(data: any) {
+    const res = await fetch(`${API_BASE}/admin/posts`, {
+      method: 'POST',
+      headers: getHeaders(),
+      body: JSON.stringify(data),
+    });
+    if (!res.ok) throw new Error('Yazı eklenemedi.');
+    return res.json();
+  },
+
+  async updatePost(id: string, data: any) {
+    const res = await fetch(`${API_BASE}/admin/posts/${id}`, {
+      method: 'PUT',
+      headers: getHeaders(),
+      body: JSON.stringify(data),
+    });
+    if (!res.ok) throw new Error('Yazı güncellenemedi.');
+    return res.json();
+  },
+
+  async deletePost(id: string) {
+    const res = await fetch(`${API_BASE}/admin/posts/${id}`, {
+      method: 'DELETE',
+      headers: getHeaders(),
+    });
+    if (!res.ok) throw new Error('Yazı silinemedi.');
+    return res.json();
+  },
+
+  async translatePostAI(data: { title_tr: string; content_tr: string; summary_tr?: string }) {
+    const res = await fetch(`${API_BASE}/admin/translate`, {
+      method: 'POST',
+      headers: getHeaders(),
+      body: JSON.stringify(data),
+    });
+    if (!res.ok) throw new Error('AI çevirisi yapılamadı.');
+    return res.json();
+  },
+
+  // Headless CMS — Apps
+  async getApps() {
+    const res = await fetch(`${API_BASE}/admin/apps`, { headers: getHeaders() });
+    if (!res.ok) throw new Error('Uygulamalar yüklenemedi.');
+    return res.json();
+  },
+
+  async createApp(data: any) {
+    const res = await fetch(`${API_BASE}/admin/apps`, {
+      method: 'POST',
+      headers: getHeaders(),
+      body: JSON.stringify(data),
+    });
+    if (!res.ok) throw new Error('Uygulama oluşturulamadı.');
+    return res.json();
+  },
+
+  async addAppVersion(appId: string, data: any) {
+    const res = await fetch(`${API_BASE}/admin/apps/${appId}/versions`, {
+      method: 'POST',
+      headers: getHeaders(),
+      body: JSON.stringify(data),
+    });
+    if (!res.ok) throw new Error('Sürüm eklenemedi.');
+    return res.json();
+  },
+
+  // Headless CMS — Templates & Ads
+  async getTemplates() {
+    const res = await fetch(`${API_BASE}/admin/templates`, { headers: getHeaders() });
+    if (!res.ok) throw new Error('Şablonlar yüklenemedi.');
+    return res.json();
+  },
+
+  async updateTemplate(data: any) {
+    const res = await fetch(`${API_BASE}/admin/templates`, {
+      method: 'PUT',
+      headers: getHeaders(),
+      body: JSON.stringify(data),
+    });
+    if (!res.ok) throw new Error('Şablon güncellenemedi.');
+    return res.json();
+  },
 };
+

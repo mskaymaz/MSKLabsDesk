@@ -1,6 +1,14 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [02.10.2026 - 16:38] - Dynamic Headless Admin CMS (Aşama 10)
+- `backend/migrations/0002_cms_schema.sql` oluşturuldu ve D1 veritabanına uygulandı (`blog_channels`, `blog_posts`, `apps`, `app_versions`, `site_templates`, `media_assets`).
+- `backend/src/routes/cmsChannels.ts`, `cmsPosts.ts`, `cmsApps.ts`, `cmsTemplates.ts`, `cmsPublic.ts` modülleri yazıldı.
+- `backend/src/utils/ai.ts` modülüne `translatePostWithAI` (Gemini AI ile EN ve AR oto-çeviri) eklendi.
+- Frontend views oluşturuldu: `ChannelsView.tsx`, `PostsView.tsx` (AI Çevirili Editör), `AppsCMSView.tsx`, `TemplatesView.tsx`.
+- `scripts/import_apps_catalog.js` aktarım betiği ve `webMSKLabs_cms_integration.md` rehberi hazırlandı.
+- Frontend ve Backend 0 hata ile başarıyla derlendi.
+
 ## [02.10.2026 - 16:25] - Çoklu Dil (TR, EN, AR) Entegrasyonu & RTL Desteği (Aşama 9)
 - `frontend/src/i18n/translations.ts` 3 dilli sözlük modülü oluşturuldu (TR, EN, AR).
 - `frontend/src/context/I18nContext.tsx` dil yönetimi ve localStorage kalıcılığı sağlandı.

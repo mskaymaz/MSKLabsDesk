@@ -82,3 +82,75 @@ DESTEK TALEBİ:
     return null;
   }
 }
+
+export interface AITranslationResult {
+  title_en: string;
+  title_ar: string;
+  summary_tr: string;
+  summary_en: string;
+  summary_ar: string;
+  content_en: string;
+  content_ar: string;
+  meta_keywords: string;
+}
+
+/**
+ * Blog yazısını Gemini API ile İngilizce ve Arapça'ya çevirir ve SEO özeti üretir
+ */
+export async function translatePostWithAI(
+  post: { title_tr: string; content_tr: string; summary_tr?: string },
+  env: AIEnv
+): Promise<AITranslationResult | null> {
+  if (!env.GEMINI_API_KEY) {
+    return null;
+  }
+
+  try {
+    const prompt = `
+Aşağıdaki Türkçe blog yazısını İngilizce ve Arapça'ya yüksek kalitede, doğal ve akıcı bir dille çevir. Ayrıca Türkçe, İngilizce ve Arapça SEO özetleri (max 2 cümle) ve virgülle ayrılmış SEO anahtar kelimeleri üret.
+YALNIZCA geçerli bir JSON objesi döndür. Başka hiçbir açıklama yazma.
+
+TÜRKÇE BLOG İÇERİĞİ:
+Başlık: "${post.title_tr}"
+İçerik: "${post.content_tr}"
+
+İSTENEN JSON FORMATI:
+{
+  "title_en": "İngilizce Başlık",
+  "title_ar": "العنوان باللغة العربية",
+  "summary_tr": "Türkçe 1-2 cümlelik ilgi çekici SEO özeti",
+  "summary_en": "English 1-2 sentence engaging SEO summary",
+  "summary_ar": "الملخص باللغة العربية",
+  "content_en": "Full English translation of the content",
+  "content_ar": "الترجمة الكاملة للمحتوى باللغة العربية",
+  "meta_keywords": "keyword1, keyword2, keyword3"
+}
+`;
+
+    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${env.GEMINI_API_KEY}`;
+    
+    const response = await fetch(apiUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: [{ parts: [{ text: prompt }] }],
+        generationConfig: {
+          temperature: 0.3,
+          responseMimeType: 'application/json'
+        }
+      })
+    });
+
+    if (!response.ok) return null;
+
+    const data = await response.json() as any;
+    const rawText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+    if (!rawText) return null;
+
+    return JSON.parse(rawText) as AITranslationResult;
+  } catch (err) {
+    console.error('[AI TRANSLATION ERROR]', err);
+    return null;
+  }
+}
+

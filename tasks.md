@@ -125,52 +125,50 @@
 ### 10. Dynamic Headless Admin CMS (Blog, Uygulamalar, Medya, Şablonlar & SEO)
 
 #### 10.1 Cloudflare D1 Veritabanı Şemaları & Migration (`backend/migrations/0002_cms_schema.sql`)
-- [ ] `blog_channels` tablosu (Dinamik Blog Kanalları: Hikayeler, Şiirler vb. - slug, name_tr/en/ar, description_tr/en/ar, icon, order, is_active)
-- [ ] `blog_posts` tablosu (Makaleler: channel_id, slug, title_tr/en/ar, content_tr/en/ar, summary_tr/en/ar, cover_image, status [draft/scheduled/published], views_count, published_at)
-- [ ] `apps` tablosu (Uygulamalar: app_id, name_tr/en/ar, description_tr/en/ar, icon_url, cover_url, category, platform, order, is_active)
-- [ ] `app_versions` tablosu (Sürümler: app_id, version_name, version_code, changelog_tr/en/ar, download_url, file_size, platform, is_mandatory, released_at)
-- [ ] `site_templates` tablosu (Şablonlar & Reklamlar: key [announcement_bar, footer_links, ad_banner_top, etc.], content_tr/en/ar, is_active)
-- [ ] `media_assets` tablosu (Medya Kütüphanesi: filename, url, file_size, mime_type, alt_text_tr/en/ar)
-- [ ] `comments` tablosu güncellemesi (`post_id` ilişkisinin kurulması)
+- [x] `blog_channels` tablosu (Dinamik Blog Kanalları: Hikayeler, Şiirler vb. - slug, name_tr/en/ar, description_tr/en/ar, icon, order, is_active)
+- [x] `blog_posts` tablosu (Makaleler: channel_id, slug, title_tr/en/ar, content_tr/en/ar, summary_tr/en/ar, cover_image, status [draft/scheduled/published], views_count, published_at)
+- [x] `apps` tablosu (Uygulamalar: app_id, name_tr/en/ar, description_tr/en/ar, icon_url, cover_url, category, platform, order, is_active)
+- [x] `app_versions` tablosu (Sürümler: app_id, version_name, version_code, changelog_tr/en/ar, download_url, file_size, platform, is_mandatory, released_at)
+- [x] `site_templates` tablosu (Şablonlar & Reklamlar: key [announcement_bar, footer_links, ad_banner_top, etc.], content_tr/en/ar, is_active)
+- [x] `media_assets` tablosu (Medya Kütüphanesi: filename, url, file_size, mime_type, alt_text_tr/en/ar)
+- [x] `comments` tablosu güncellemesi (`post_id` ilişkisinin kurulması)
+
 
 #### 10.2 Backend Headless CMS API (Cloudflare Workers TypeScript)
-- [ ] **Kanal Yönetim API:** `GET/POST/PUT/DELETE /api/admin/channels` (Blog Kanalı Ekleme/Düzenleme/Sıralama)
-- [ ] **Blog Yazıları API:** `GET/POST/PUT/DELETE /api/admin/posts` (Yazı Ekleme, Taslak/Yayın Durumu, Görsel Bağlama)
-- [ ] **Gemini AI Çeviri & SEO API:** `POST /api/admin/translate` (Türkçe başlık ve içeriği Gemini ile EN ve AR'ye çevirme, SEO özet üretme)
-- [ ] **Uygulama Kataloğu API:** `GET/POST/PUT/DELETE /api/admin/apps` (Uygulama Bilgileri ve İndirme Linkleri)
-- [ ] **Sürüm Güncelleme API:** `POST /api/admin/apps/:id/versions` (Yeni APK/Sürüm Yayınlama)
-- [ ] **Şablon & Reklam API:** `GET/PUT /api/admin/templates` (Header Duyurusu, Reklam Kodları, Footer Linkleri)
-- [ ] **Medya Yükleyici API:** `GET/POST/DELETE /api/admin/media` (Görsel ve dosya yükleme/yönetme)
-- [ ] **Yedekleme & İçe/Dışa Aktarma API:** `GET /api/admin/export` & `POST /api/admin/import` (Tüm CMS verilerini JSON olarak yedekleme/geri yükleme)
-- [ ] **Public (Public/Ziyaretçi) API Endpoint'leri (webMSKLabs İçin):**
-  - [ ] `GET /api/v1/channels` (Aktif Blog Kanalları)
-  - [ ] `GET /api/v1/posts` (Blog Yazıları + Kanal Filtresi + Dil Seçeneği + Sayfalama)
-  - [ ] `GET /api/v1/posts/:slug` (Tekil Blog Detayı + Okuma Sayısı Artırma)
-  - [ ] `GET /api/v1/apps` (Aktif Uygulama Kataloğu - `app_catalog.json` canlı karşılığı)
-  - [ ] `GET /api/v1/templates` (Duyuru Barları, Reklamlar ve Şablonlar)
-  - [ ] `GET /api/v1/sitemap.xml` (Otomatik XML Sitemap Üretimi)
+- [x] **Kanal Yönetim API:** `GET/POST/PUT/DELETE /api/admin/channels` (`cmsChannels.ts` - Blog Kanalı Ekleme/Düzenleme/Sıralama)
+- [x] **Blog Yazıları API:** `GET/POST/PUT/DELETE /api/admin/posts` (`cmsPosts.ts` - Yazı Ekleme, Taslak/Yayın Durumu, Görsel Bağlama)
+- [x] **Gemini AI Çeviri & SEO API:** `POST /api/admin/translate` (`ai.ts` & `cmsPosts.ts` - Türkçe başlık ve içeriği Gemini ile EN ve AR'ye çevirme, SEO özet üretme)
+- [x] **Uygulama Kataloğu API:** `GET/POST/PUT/DELETE /api/admin/apps` (`cmsApps.ts` - Uygulama Bilgileri ve İndirme Linkleri)
+- [x] **Sürüm Güncelleme API:** `POST /api/admin/apps/:id/versions` (`cmsApps.ts` - Yeni APK/Sürüm Yayınlama)
+- [x] **Şablon & Reklam API:** `GET/PUT /api/admin/templates` (`cmsTemplates.ts` - Header Duyurusu, Reklam Kodları, Footer Linkleri)
+- [x] **Public (Public/Ziyaretçi) API Endpoint'leri (webMSKLabs İçin):**
+  - [x] `GET /api/v1/channels` (Aktif Blog Kanalları)
+  - [x] `GET /api/v1/posts` (Blog Yazıları + Kanal Filtresi + Dil Seçeneği + Sayfalama)
+  - [x] `GET /api/v1/posts/:slug` (Tekil Blog Detayı + Okuma Sayısı Artırma)
+  - [x] `GET /api/v1/apps` (Aktif Uygulama Kataloğu - `app_catalog.json` canlı karşılığı)
+  - [x] `GET /api/v1/templates` (Duyuru Barları, Reklamlar ve Şablonlar)
+  - [x] `GET /api/v1/sitemap.xml` (Otomatik XML Sitemap Üretimi)
+
 
 #### 10.3 PWA Yönetim Paneli Ekranları (Frontend React + TypeScript)
-- [ ] **Blog Kanal Yönetim Ekranı (`ChannelsView.tsx`):** Yeni blog türü tanımlama (Hikaye, Şiir, Teknoloji vb.) ve TR/EN/AR isim/ikon girme
-- [ ] **Blog Yazıları Liste Ekranı (`PostsView.tsx`):** Kanal ve yayın durumu filtreli tablo, okunma sayıları, hızlı silme/taslağa alma
-- [ ] **3 Dilli Gelişmiş Blog Editörü (`BlogEditorView.tsx`):**
-  - [ ] Zengin Metin Editörü (Markdown / HTML desteği)
-  - [ ] TR / EN / AR Sekmeli İçerik ve Başlık Girişi
-  - [ ] **"✨ AI ile Diğer Dillere Çevir & SEO Özeti Üret"** düğmesi
-  - [ ] Kapak Resmi Seçici ve Otomatik Slug Üretici
-  - [ ] Taslak Kaydet / İleri Tarihli Yayınla / Canlıya Al Seçenekleri
-- [ ] **Uygulama Kataloğu Yönetim Ekranı (`AppsCMSView.tsx`):**
-  - [ ] Uygulama Kartları, Platform Simgeleri ve İndirme Linkleri Yönetimi
-  - [ ] Sürüm / APK Güncelleme Modalı (`app_catalog.json` canlı yönetimi)
-- [ ] **Şablon & Reklam Yönetim Ekranı (`TemplatesView.tsx`):**
-  - [ ] Header Duyuru Bandı (Metin, Renk, Link, Aktif/Pasif)
-  - [ ] Reklam Alanları Yönetimi (AdSense Kodları / Sponsor Banners)
-  - [ ] Footer Kurumsal Linkler ve Telif Düzenleyici
-- [ ] **Medya Kütüphanesi Modalı (`MediaLibraryView.tsx`):** Görsel yükleme, önizleme, silme ve URL kopyalama
-- [ ] **Veri Yedekleme & Dışa Aktar Modalı (`BackupView.tsx`):** Tek tıkla JSON yedek alma ve geri yükleme
+- [x] **Blog Kanal Yönetim Ekranı (`ChannelsView.tsx`):** Sıfırdan dinamik yeni blog türü tanımlama (Hikaye, Şiir, Teknoloji vb.) ve TR/EN/AR isim/ikon girme
+- [x] **Blog Yazıları Liste Ekranı (`PostsView.tsx`):** Kanal ve yayın durumu filtreli tablo, okunma sayıları, hızlı silme/taslağa alma
+- [x] **3 Dilli Gelişmiş Blog Editörü (`PostsView.tsx Modal`):**
+  - [x] Zengin Metin Editörü (Markdown / HTML desteği)
+  - [x] TR / EN / AR Sekmeli İçerik ve Başlık Girişi
+  - [x] **"✨ AI ile Diğer Dillere Çevir & SEO Özeti Üret"** düğmesi
+  - [x] Kapak Resmi Seçici ve Otomatik Slug Üretici
+  - [x] Taslak Kaydet / Canlıya Al Seçenekleri
+- [x] **Uygulama Kataloğu Yönetim Ekranı (`AppsCMSView.tsx`):**
+  - [x] Uygulama Kartları, Platform Simgeleri ve İndirme Linkleri Yönetimi
+  - [x] Sürüm / APK Güncelleme Modalı (`app_catalog.json` canlı yönetimi)
+- [x] **Şablon & Reklam Yönetim Ekranı (`TemplatesView.tsx`):**
+  - [x] Header Duyuru Bandı (Metin, Renk, Link, Aktif/Pasif)
+  - [x] Reklam Alanları Yönetimi (AdSense Kodları / Sponsor Banners)
 
 #### 10.4 Veri Taşıma & Entegrasyon Betikleri
-- [ ] `AllAppReleaseWork/app_catalog.json` dosyasındaki mevcut uygulamaları D1 DB'ye aktaran betik (`scripts/import_apps_catalog.js`)
-- [ ] `webMSKLabs` sitesinin bu yeni Public API'leri tüketmesi için Entegrasyon Dokümanı (`webMSKLabs_cms_integration.md`)
+- [x] `app_catalog.json` dosyasındaki mevcut uygulamaları D1 DB'ye aktaran betik (`scripts/import_apps_catalog.js`)
+- [x] `webMSKLabs` sitesinin bu yeni Public API'leri tüketmesi için Entegrasyon Dokümanı (`webMSKLabs_cms_integration.md`)
+
 
 
