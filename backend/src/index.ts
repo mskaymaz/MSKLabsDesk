@@ -5,6 +5,7 @@
 
 import { handleSupportSubmission } from './routes/support';
 import { handleCommentSubmission, handleGetApprovedComments } from './routes/comments';
+import { handleSubscribe, handleUnsubscribe } from './routes/subscribe';
 import { EmailEnv } from './utils/email';
 
 export interface Env extends EmailEnv {
@@ -60,6 +61,20 @@ export default {
     // GET /api/comments — Onaylı Yorumları Listeleme
     if (url.pathname === '/api/comments' && request.method === 'GET') {
       const res = await handleGetApprovedComments(request, env);
+      Object.entries(corsHeaders).forEach(([key, val]) => res.headers.set(key, val));
+      return res;
+    }
+
+    // POST /api/subscribe — Bülten Aboneliği
+    if (url.pathname === '/api/subscribe' && request.method === 'POST') {
+      const res = await handleSubscribe(request, env);
+      Object.entries(corsHeaders).forEach(([key, val]) => res.headers.set(key, val));
+      return res;
+    }
+
+    // POST /api/unsubscribe — Abonelikten Çıkma
+    if (url.pathname === '/api/unsubscribe' && request.method === 'POST') {
+      const res = await handleUnsubscribe(request, env);
       Object.entries(corsHeaders).forEach(([key, val]) => res.headers.set(key, val));
       return res;
     }
