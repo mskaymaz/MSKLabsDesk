@@ -1,6 +1,14 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [05.10.2026 - 16:42] - Master Task Dokümanı Denetimi ve Uyumlaştırması (Aşama 22A - 22C)
+- `tasks.md` master task dokümanında 22A (Analiz), 22B (Cerrahi Müdahale) ve 22C (Final Coverage) denetimleri uygulandı.
+- `## N.` duplicate section başlıkları benzersiz hale getirildi; özet listeler `###` seviyesine çekildi.
+- `blog_posts.status` CHECK kısıtı CMS lifecycle durumları ile eşitlendi.
+- `messages` ↔ `replies` ilişkisi, `comments.post_slug`, `coupons` (max_uses, current_uses, discount_percent), `broadcasts` ve `post_revisions.snapshot_json` veri modelleri DB ve API spesifikasyonları arasında tam uyumlu hale getirildi.
+- `SEC-AUDIT-001` referansları `SEC-REQ-001` olarak düzeltildi.
+- Doküman `READY FOR IMPLEMENTATION` kararıyla kodlamaya hazır ilan edildi.
+
 ## [02.10.2026 - 16:42] - Tüm Proje Geliştirmesi Eksiksiz Tamamlandı (Test Aşamasına Geçildi)
 - Projenin 10 ana aşaması (Destek Biletleri, Yorum Yönetimi, Bülten Kuyruğu, Gemini AI, PWA Panel, Push Bildirimleri, Web SDK, 3 Dilli Altyapı ve Dynamic Headless CMS) eksiksiz olarak tamamlandı.
 - `tasks.md`, `PROGRESS.md` ve `CHANGELOG.md` güncellendi.
