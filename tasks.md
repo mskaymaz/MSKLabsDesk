@@ -181,33 +181,33 @@
 - **3. Kapsam:** `backend/migrations/0002_cms_schema.sql` dosyası; `blog_channels`, `blog_posts`, `apps`, `app_versions`, `site_templates`, `media_assets` tabloları ve `comments.post_id` ilişkisi.
 - **4. Teknik Gereksinimler:** Çok dilli sütun kurgusu (`title_tr/en/ar`), slug benzersizliği ve medya varlıklarının R2 nesne depolama referanslarıyla ilişkilendirilmesi.
 - **5. Schema / Table Design:**
-  - [ ] `blog_channels`: `id` (INTEGER PK AUTOINCREMENT), `slug` (TEXT NOT NULL UNIQUE), `name_tr` (TEXT NOT NULL), `name_en` (TEXT), `name_ar` (TEXT), `icon` (TEXT), `created_at` (DATETIME DEFAULT CURRENT_TIMESTAMP).
-  - [ ] `blog_posts`: `id` (INTEGER PK AUTOINCREMENT), `channel_id` (INTEGER FK → `blog_channels(id)` ON DELETE SET NULL), `slug` (TEXT NOT NULL UNIQUE), `title_tr` (TEXT NOT NULL), `title_en` (TEXT), `title_ar` (TEXT), `content_tr` (TEXT NOT NULL), `content_en` (TEXT), `content_ar` (TEXT), `summary_tr` (TEXT), `summary_en` (TEXT), `summary_ar` (TEXT), `cover_image` (TEXT), `status` (TEXT DEFAULT 'DRAFT' CHECK(status IN ('DRAFT','REVIEW','APPROVED','PUBLISHED','UNPUBLISHED','ARCHIVED'))), `view_count` (INTEGER DEFAULT 0), `published_at` (DATETIME), `created_at` (DATETIME DEFAULT CURRENT_TIMESTAMP), `updated_at` (DATETIME DEFAULT CURRENT_TIMESTAMP).
-  - [ ] `apps`: `id` (INTEGER PK AUTOINCREMENT), `slug` (TEXT NOT NULL UNIQUE), `name` (TEXT NOT NULL), `short_description_tr` (TEXT), `short_description_en` (TEXT), `icon_url` (TEXT), `platform` (TEXT DEFAULT 'BOTH' CHECK(platform IN ('ANDROID','IOS','BOTH','WEB'))), `is_featured` (INTEGER DEFAULT 0), `created_at` (DATETIME DEFAULT CURRENT_TIMESTAMP).
-  - [ ] `app_versions`: `id` (INTEGER PK AUTOINCREMENT), `app_id` (INTEGER NOT NULL FK → `apps(id)` ON DELETE CASCADE), `version_number` (TEXT NOT NULL), `release_notes_tr` (TEXT), `release_notes_en` (TEXT), `apk_url` (TEXT), `store_url` (TEXT), `is_current` (INTEGER DEFAULT 1), `published_at` (DATETIME DEFAULT CURRENT_TIMESTAMP).
-  - [ ] `site_templates`: `id` (INTEGER PK AUTOINCREMENT), `key` (TEXT NOT NULL UNIQUE), `title` (TEXT NOT NULL), `content` (TEXT), `is_active` (INTEGER DEFAULT 1), `created_at` (DATETIME DEFAULT CURRENT_TIMESTAMP).
-  - [ ] `media_assets`: `id` (INTEGER PK AUTOINCREMENT), `filename` (TEXT NOT NULL), `r2_key` (TEXT NOT NULL UNIQUE), `mime_type` (TEXT NOT NULL), `size_bytes` (INTEGER NOT NULL), `public_url` (TEXT NOT NULL), `created_at` (DATETIME DEFAULT CURRENT_TIMESTAMP).
+  - [x] `blog_channels`: `id` (INTEGER PK AUTOINCREMENT), `slug` (TEXT NOT NULL UNIQUE), `name_tr` (TEXT NOT NULL), `name_en` (TEXT), `name_ar` (TEXT), `icon` (TEXT), `created_at` (DATETIME DEFAULT CURRENT_TIMESTAMP).
+  - [x] `blog_posts`: `id` (INTEGER PK AUTOINCREMENT), `channel_id` (INTEGER FK → `blog_channels(id)` ON DELETE SET NULL), `slug` (TEXT NOT NULL UNIQUE), `title_tr` (TEXT NOT NULL), `title_en` (TEXT), `title_ar` (TEXT), `content_tr` (TEXT NOT NULL), `content_en` (TEXT), `content_ar` (TEXT), `summary_tr` (TEXT), `summary_en` (TEXT), `summary_ar` (TEXT), `cover_image` (TEXT), `status` (TEXT DEFAULT 'DRAFT' CHECK(status IN ('DRAFT','REVIEW','APPROVED','PUBLISHED','UNPUBLISHED','ARCHIVED'))), `view_count` (INTEGER DEFAULT 0), `published_at` (DATETIME), `created_at` (DATETIME DEFAULT CURRENT_TIMESTAMP), `updated_at` (DATETIME DEFAULT CURRENT_TIMESTAMP).
+  - [x] `apps`: `id` (INTEGER PK AUTOINCREMENT), `slug` (TEXT NOT NULL UNIQUE), `name` (TEXT NOT NULL), `short_description_tr` (TEXT), `short_description_en` (TEXT), `icon_url` (TEXT), `platform` (TEXT DEFAULT 'BOTH' CHECK(platform IN ('ANDROID','IOS','BOTH','WEB'))), `is_featured` (INTEGER DEFAULT 0), `created_at` (DATETIME DEFAULT CURRENT_TIMESTAMP).
+  - [x] `app_versions`: `id` (INTEGER PK AUTOINCREMENT), `app_id` (INTEGER NOT NULL FK → `apps(id)` ON DELETE CASCADE), `version_number` (TEXT NOT NULL), `release_notes_tr` (TEXT), `release_notes_en` (TEXT), `apk_url` (TEXT), `store_url` (TEXT), `is_current` (INTEGER DEFAULT 1), `published_at` (DATETIME DEFAULT CURRENT_TIMESTAMP).
+  - [x] `site_templates`: `id` (INTEGER PK AUTOINCREMENT), `key` (TEXT NOT NULL UNIQUE), `title` (TEXT NOT NULL), `content` (TEXT), `is_active` (INTEGER DEFAULT 1), `created_at` (DATETIME DEFAULT CURRENT_TIMESTAMP).
+  - [x] `media_assets`: `id` (INTEGER PK AUTOINCREMENT), `filename` (TEXT NOT NULL), `r2_key` (TEXT NOT NULL UNIQUE), `mime_type` (TEXT NOT NULL), `size_bytes` (INTEGER NOT NULL), `public_url` (TEXT NOT NULL), `created_at` (DATETIME DEFAULT CURRENT_TIMESTAMP).
 - **6. Primary Key / Foreign Key:**
-  - [ ] `blog_posts.channel_id` → `blog_channels.id` (N:1, `ON DELETE SET NULL`).
-  - [ ] `app_versions.app_id` → `apps.id` (1:N, `ON DELETE CASCADE`).
-  - [ ] `comments.post_id` → `blog_posts.id` *(Önerilen / Uygulama sırasında doğrulanacak)*.
+  - [x] `blog_posts.channel_id` → `blog_channels.id` (N:1, `ON DELETE SET NULL`).
+  - [x] `app_versions.app_id` → `apps.id` (1:N, `ON DELETE CASCADE`).
+  - [x] `comments.post_id` → `blog_posts.id` *(Önerilen / Uygulama sırasında doğrulanacak)*.
 - **7. Constraints:** `blog_channels.slug` UNIQUE, `blog_posts.slug` UNIQUE, `apps.slug` UNIQUE, `site_templates.key` UNIQUE, `media_assets.r2_key` UNIQUE, `blog_posts.status IN (...)` CHECK, `apps.platform IN (...)` CHECK.
 - **8. Index Strategy:**
-  - [ ] `idx_blog_posts_slug` ON `blog_posts(slug)` (Blog detay).
-  - [ ] `idx_blog_posts_status_published` ON `blog_posts(status, published_at DESC)` (Public yayın akışı).
-  - [ ] `idx_apps_slug` ON `apps(slug)` (Uygulama detay).
-  - [ ] `idx_app_versions_app_current` ON `app_versions(app_id, is_current)` (Aktif sürüm).
+  - [x] `idx_blog_posts_slug` ON `blog_posts(slug)` (Blog detay).
+  - [x] `idx_blog_posts_status_published` ON `blog_posts(status, published_at DESC)` (Public yayın akışı).
+  - [x] `idx_apps_slug` ON `apps(slug)` (Uygulama detay).
+  - [x] `idx_app_versions_app_current` ON `app_versions(app_id, is_current)` (Aktif sürüm).
 - **9. Migration Strategy:** `0001_initial_schema.sql` tamamlandıktan sonra ikinci sırada `0002_cms_schema.sql` olarak uygulanır.
 - **10. Data Integrity:** Kanal silindiğinde yazıların yetim kalmaması için `ON DELETE SET NULL` uygulanır; uygulama silindiğinde sürümleri `CASCADE` ile silinir.
 - **11. Privacy / Retention:** Blog yazılarının silinmesi yerine `status='ARCHIVED'` ile soft-delete yapılır. Medya silindiğinde R2 dosya kontrolü yapılır.
 - **12. Performance:** Slug indeksleri ile public sayfa yükleme süresi < 5ms; yayınlanmış yazılarda composite indeks kullanımı.
 - **13. Test Requirements:** `0001` ve `0002` dosyalarının temiz D1 SQLite ortamında sırayla çalıştırılması ve `PRAGMA foreign_key_check` doğrulaması.
 - **14. Definition of Done (DoD):** *(Not: DoD altındaki [ ] işaretleri onay kriteridir)*
-  - [ ] 6 yeni CMS tablosunun hatasız oluşturulması.
-  - [ ] Slug UNIQUE indekslerinin teyit edilmesi.
+  - [x] 6 yeni CMS tablosunun hatasız oluşturulması.
+  - [x] Slug UNIQUE indekslerinin teyit edilmesi.
 - **15. Hata / Risk Senaryoları:**
-  - [ ] Kanal silindiğinde yazıların kaybolması -> `ON DELETE SET NULL` ile önlenir.
-  - [ ] Mükerrer slug girilmesi -> UNIQUE kısıtı ile engellenir.
+  - [x] Kanal silindiğinde yazıların kaybolması -> `ON DELETE SET NULL` ile önlenir.
+  - [x] Mükerrer slug girilmesi -> UNIQUE kısıtı ile engellenir.
 - **16. Zero-Cost Constraint:** Cloudflare D1 Free Tier kotalarında $0/Ay.
 - **17. Bağımlılıklar:** DATA-001.
 - **18. Bağımlı Görevler:** DATA-003, DATA-006, DATA-007, CMS-005, API-010.
