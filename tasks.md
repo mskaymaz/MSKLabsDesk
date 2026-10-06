@@ -37,29 +37,29 @@
 - **Amaç:** Cloudflare Workers (TypeScript) ve Wrangler CLI kullanarak sunucusuz (serverless), olay odaklı, ultra düşük gecikmeli Edge backend çekirdeğini kurmak ve yönetmek.
 - **Kapsam:** `backend/` dizini, `wrangler.toml`, `package.json`, `tsconfig.json`, `src/index.ts` giriş noktası, Cloudflare D1 ve R2 binding tanımları ile `Env` arayüzü (interface).
 - **Teknik Gereksinimler:**
-  - [x] Node.js & Wrangler CLI ile uyumlu TypeScript strict-mode yapılandırması (`noImplicitAny`, `strictNullChecks`).
-  - [x] Worker global `Env` type arayüzünün (D1 Database `DB`, R2 Bucket `MEDIA`, Environment secrets) eksiksiz tanımlanması.
-  - [x] Modüler proje dizin yapısı (`src/routes/`, `src/services/`, `src/utils/`, `src/middleware/`).
-  - [x] Domain sınırları ve tek sorumluluk prensibi esas alınarak **maksimum 400 - 450 satır sınırı** kurgusu (gereksiz parçalama yapmadan).
+  - [ ] Node.js & Wrangler CLI ile uyumlu TypeScript strict-mode yapılandırması (`noImplicitAny`, `strictNullChecks`).
+  - [ ] Worker global `Env` type arayüzünün (D1 Database `DB`, R2 Bucket `MEDIA`, Environment secrets) eksiksiz tanımlanması.
+  - [ ] Modüler proje dizin yapısı (`src/routes/`, `src/services/`, `src/utils/`, `src/middleware/`).
+  - [ ] Domain sınırları ve tek sorumluluk prensibi esas alınarak **maksimum 400 - 450 satır sınırı** kurgusu (gereksiz parçalama yapmadan).
 - **Mimari Karar:** Cloudflare Workers fetch-event mantığına dayalı modüler, hafif, üçüncü parti framework (Express vb.) yükü getirmeyen saf/hafif TypeScript router mimarisi.
 - **Etkilenecek Katmanlar:** Backend (Cloudflare Workers Runtime), Infrastructure (Wrangler Config), Types/Contracts.
 - **Bağımlılıklar:** Belirlenmedi — Taban mimari görevidir.
 - **Bağımlı Görevler:** ARCH-003, DATA-001, DATA-003, SEC-AUTH-001, API-001, API-006.
 - **Güvenlik Gereksinimleri:**
-  - [x] Secret'lar (`JWT_SECRET`, `RESEND_API_KEY` vb.) kesinlikle koda yazılmamalı, `backend/.dev.vars` (lokal) ve `wrangler secret put` (prod) üzerinden `Env` bağlamında erişilmelidir.
-  - [x] CORS başlıkları kontrollü Origin listesine dayanmalıdır.
+  - [ ] Secret'lar (`JWT_SECRET`, `RESEND_API_KEY` vb.) kesinlikle koda yazılmamalı, `backend/.dev.vars` (lokal) ve `wrangler secret put` (prod) üzerinden `Env` bağlamında erişilmelidir.
+  - [ ] CORS başlıkları kontrollü Origin listesine dayanmalıdır.
 - **Performans Kriterleri:**
-  - [x] *Teknik İlke:* Backend ve middleware katmanı gereksiz işlem ve dependency yükü oluşturmamalıdır.
-  - [x] *Performans Hedefleri (Benchmark ile Doğrulanacak Target):* Cold-start süresi < 50ms, bellek kullanımı < 128 MB (canlı ortam testlerinde doğrulanacaktır).
+  - [ ] *Teknik İlke:* Backend ve middleware katmanı gereksiz işlem ve dependency yükü oluşturmamalıdır.
+  - [ ] *Performans Hedefleri (Benchmark ile Doğrulanacak Target):* Cold-start süresi < 50ms, bellek kullanımı < 128 MB (canlı ortam testlerinde doğrulanacaktır).
 - **Test Gereksinimleri (Mimari Seviye):** `wrangler dev` ile yerel simülasyon ve Vitest ile Worker handler tip/çalışma doğrulaması. *(Kapsamlı E2E ve integration testleri Testing & Quality bölümünde ele alınacaktır).*
 - **Definition of Done (DoD):** *(Not: DoD altındaki [ ] işaretleri görev durumu değil, tamamlanma onay kriterleridir)*
-  - [x] TypeScript derleme hatası olmaması (`tsc --noEmit`).
-  - [x] `wrangler.toml` yapılandırmasının valid olması.
-  - [x] `Env` arayüzünde tüm D1/R2/Secret alanlarının tip tanımlarının bulunması.
-  - [x] Hiçbir backend dosyasının 450 satırı aşmaması.
+  - [ ] TypeScript derleme hatası olmaması (`tsc --noEmit`).
+  - [ ] `wrangler.toml` yapılandırmasının valid olması.
+  - [ ] `Env` arayüzünde tüm D1/R2/Secret alanlarının tip tanımlarının bulunması.
+  - [ ] Hiçbir backend dosyasının 450 satırı aşmaması.
 - **Hata / Risk Senaryoları:**
-  - [x] Eksik Secret tanımlarında Worker başlatma hatası -> `Env` kontrolleri ile güvenli fallback/error handling.
-  - [x] D1 binding isminin yanlış yazılması -> Wrangler build-time tip denetimi.
+  - [ ] Eksik Secret tanımlarında Worker başlatma hatası -> `Env` kontrolleri ile güvenli fallback/error handling.
+  - [ ] D1 binding isminin yanlış yazılması -> Wrangler build-time tip denetimi.
 - **Zero-Cost Constraint:** Kullanılan servislerin (Cloudflare Workers) güncel ücretsiz plan/kota sınırları içinde kalınması ($0/Ay maliyet hedefi).
 - **Uygulama Notları:** `index.ts` dosyası sadece ana router ve fetch event yönlendiricisi olarak kalmalı, iş mantığı (business logic) `routes/` ve `services/` dizinlerine dağıtılmalıdır.
 
