@@ -130,46 +130,46 @@
 
 ## 2. DATA ARCHITECTURE, MIGRATIONS & DATABASE
 
-### DATA-001 — Initial D1 Database Migration (`0001_initial_schema.sql`)
+#### DATA-001 — Initial D1 Database Migration (`0001_initial_schema.sql`)
 - **2. Amaç:** Destek biletleri, bilet tarihçesi, yanıtlar, blog yorumları, e-bülten aboneleri, bülten tercihleri, e-posta gönderim kuyruğu, kuponlar ve admin doğrulaması için çekirdek D1 SQLite veritabanı şemasını kurgulamak.
 - **3. Kapsam:** `backend/migrations/0001_initial_schema.sql` dosyası; `messages`, `message_events`, `replies`, `comments`, `subscribers`, `subscriber_preferences`, `email_queue`, `coupons`, `admins` tabloları.
 - **4. Teknik Gereksinimler:** SQLite D1 motoruna uyumlu strict veri tipleri (TEXT, INTEGER, REAL, BLOB), `PRAGMA foreign_keys = ON` uyumluluğu ve ISO8601 tarih standartları.
 - **5. Schema / Table Design:**
-  - [ ] `messages`: `id` (TEXT PK / `MSK-YYYY-XXXX` — bu PK doğrudan bilet numarası / ticketNo olarak kullanılır), `name` (TEXT NOT NULL), `email` (TEXT NOT NULL), `subject` (TEXT NOT NULL), `message` (TEXT NOT NULL), `status` (TEXT DEFAULT 'NEW' CHECK(status IN ('NEW','IN_PROGRESS','RESOLVED','SPAM','CLOSED'))), `urgency` (TEXT DEFAULT 'NORMAL'), `category` (TEXT DEFAULT 'GENERAL'), `ai_summary` (TEXT), `ai_draft` (TEXT), `created_at` (DATETIME DEFAULT CURRENT_TIMESTAMP), `updated_at` (DATETIME DEFAULT CURRENT_TIMESTAMP).
-  - [ ] `message_events`: `id` (INTEGER PK AUTOINCREMENT), `message_id` (TEXT NOT NULL FK → `messages(id)` ON DELETE CASCADE), `event_type` (TEXT NOT NULL), `actor` (TEXT DEFAULT 'SYSTEM'), `metadata` (TEXT / JSON string), `created_at` (DATETIME DEFAULT CURRENT_TIMESTAMP).
-  - [ ] `replies`: `id` (INTEGER PK AUTOINCREMENT), `message_id` (TEXT NOT NULL FK → `messages(id)` ON DELETE CASCADE), `sender_type` (TEXT NOT NULL CHECK(sender_type IN ('ADMIN','USER'))), `reply_text` (TEXT NOT NULL), `created_at` (DATETIME DEFAULT CURRENT_TIMESTAMP).
-  - [ ] `comments`: `id` (INTEGER PK AUTOINCREMENT), `post_slug` (TEXT NOT NULL), `author_name` (TEXT NOT NULL), `author_email` (TEXT NOT NULL), `comment_text` (TEXT NOT NULL), `status` (TEXT DEFAULT 'PENDING' CHECK(status IN ('PENDING','APPROVED','REJECTED'))), `created_at` (DATETIME DEFAULT CURRENT_TIMESTAMP). *(Not: API yanıtlarında id `c_12` gibi transformasyonla sunulabilir)*.
-  - [ ] `subscribers`: `id` (INTEGER PK AUTOINCREMENT), `email` (TEXT NOT NULL UNIQUE), `is_active` (INTEGER DEFAULT 1 CHECK(is_active IN (0,1))), `unsubscribe_token` (TEXT NOT NULL UNIQUE), `created_at` (DATETIME DEFAULT CURRENT_TIMESTAMP).
-  - [ ] `subscriber_preferences`: `id` (INTEGER PK AUTOINCREMENT), `subscriber_id` (INTEGER NOT NULL FK → `subscribers(id)` ON DELETE CASCADE), `category` (TEXT NOT NULL), `is_subscribed` (INTEGER DEFAULT 1), UNIQUE(`subscriber_id`, `category`).
-  - [ ] `email_queue`: `id` (INTEGER PK AUTOINCREMENT), `recipient_email` (TEXT NOT NULL), `subject` (TEXT NOT NULL), `html_body` (TEXT NOT NULL), `status` (TEXT DEFAULT 'PENDING' CHECK(status IN ('PENDING','PROCESSING','SENT','FAILED'))), `attempts` (INTEGER DEFAULT 0), `max_attempts` (INTEGER DEFAULT 3), `last_error` (TEXT), `scheduled_at` (DATETIME DEFAULT CURRENT_TIMESTAMP), `sent_at` (DATETIME). *(Süreç takibi: Önerilen / Uygulama sırasında doğrulanacak)*.
-  - [ ] `coupons`: `id` (INTEGER PK AUTOINCREMENT), `code` (TEXT NOT NULL UNIQUE), `discount_amount` (REAL NOT NULL), `discount_percent` (REAL), `discount_type` (TEXT DEFAULT 'PERCENTAGE'), `max_uses` (INTEGER DEFAULT 100), `current_uses` (INTEGER DEFAULT 0), `assigned_email` (TEXT), `is_used` (INTEGER DEFAULT 0), `expires_at` (DATETIME), `created_at` (DATETIME DEFAULT CURRENT_TIMESTAMP).
-  - [ ] `admins`: `id` (INTEGER PK AUTOINCREMENT), `username` (TEXT NOT NULL UNIQUE), `password_hash` (TEXT NOT NULL), `role` (TEXT DEFAULT 'SUPER_ADMIN'), `last_login_at` (DATETIME), `created_at` (DATETIME DEFAULT CURRENT_TIMESTAMP).
-  - [ ] `broadcasts`: `id` (INTEGER PK AUTOINCREMENT), `subject` (TEXT NOT NULL), `content_html` (TEXT NOT NULL), `target_segment` (TEXT DEFAULT 'ALL'), `total_recipients` (INTEGER DEFAULT 0), `status` (TEXT DEFAULT 'QUEUED'), `created_at` (DATETIME DEFAULT CURRENT_TIMESTAMP).
+  - [x] `messages`: `id` (TEXT PK / `MSK-YYYY-XXXX` — bu PK doğrudan bilet numarası / ticketNo olarak kullanılır), `name` (TEXT NOT NULL), `email` (TEXT NOT NULL), `subject` (TEXT NOT NULL), `message` (TEXT NOT NULL), `status` (TEXT DEFAULT 'NEW' CHECK(status IN ('NEW','IN_PROGRESS','RESOLVED','SPAM','CLOSED'))), `urgency` (TEXT DEFAULT 'NORMAL'), `category` (TEXT DEFAULT 'GENERAL'), `ai_summary` (TEXT), `ai_draft` (TEXT), `created_at` (DATETIME DEFAULT CURRENT_TIMESTAMP), `updated_at` (DATETIME DEFAULT CURRENT_TIMESTAMP).
+  - [x] `message_events`: `id` (INTEGER PK AUTOINCREMENT), `message_id` (TEXT NOT NULL FK → `messages(id)` ON DELETE CASCADE), `event_type` (TEXT NOT NULL), `actor` (TEXT DEFAULT 'SYSTEM'), `metadata` (TEXT / JSON string), `created_at` (DATETIME DEFAULT CURRENT_TIMESTAMP).
+  - [x] `replies`: `id` (INTEGER PK AUTOINCREMENT), `message_id` (TEXT NOT NULL FK → `messages(id)` ON DELETE CASCADE), `sender_type` (TEXT NOT NULL CHECK(sender_type IN ('ADMIN','USER'))), `reply_text` (TEXT NOT NULL), `created_at` (DATETIME DEFAULT CURRENT_TIMESTAMP).
+  - [x] `comments`: `id` (INTEGER PK AUTOINCREMENT), `post_slug` (TEXT NOT NULL), `author_name` (TEXT NOT NULL), `author_email` (TEXT NOT NULL), `comment_text` (TEXT NOT NULL), `status` (TEXT DEFAULT 'PENDING' CHECK(status IN ('PENDING','APPROVED','REJECTED'))), `created_at` (DATETIME DEFAULT CURRENT_TIMESTAMP). *(Not: API yanıtlarında id `c_12` gibi transformasyonla sunulabilir)*.
+  - [x] `subscribers`: `id` (INTEGER PK AUTOINCREMENT), `email` (TEXT NOT NULL UNIQUE), `is_active` (INTEGER DEFAULT 1 CHECK(is_active IN (0,1))), `unsubscribe_token` (TEXT NOT NULL UNIQUE), `created_at` (DATETIME DEFAULT CURRENT_TIMESTAMP).
+  - [x] `subscriber_preferences`: `id` (INTEGER PK AUTOINCREMENT), `subscriber_id` (INTEGER NOT NULL FK → `subscribers(id)` ON DELETE CASCADE), `category` (TEXT NOT NULL), `is_subscribed` (INTEGER DEFAULT 1), UNIQUE(`subscriber_id`, `category`).
+  - [x] `email_queue`: `id` (INTEGER PK AUTOINCREMENT), `recipient_email` (TEXT NOT NULL), `subject` (TEXT NOT NULL), `html_body` (TEXT NOT NULL), `status` (TEXT DEFAULT 'PENDING' CHECK(status IN ('PENDING','PROCESSING','SENT','FAILED'))), `attempts` (INTEGER DEFAULT 0), `max_attempts` (INTEGER DEFAULT 3), `last_error` (TEXT), `scheduled_at` (DATETIME DEFAULT CURRENT_TIMESTAMP), `sent_at` (DATETIME). *(Süreç takibi: Önerilen / Uygulama sırasında doğrulanacak)*.
+  - [x] `coupons`: `id` (INTEGER PK AUTOINCREMENT), `code` (TEXT NOT NULL UNIQUE), `discount_amount` (REAL NOT NULL), `discount_percent` (REAL), `discount_type` (TEXT DEFAULT 'PERCENTAGE'), `max_uses` (INTEGER DEFAULT 100), `current_uses` (INTEGER DEFAULT 0), `assigned_email` (TEXT), `is_used` (INTEGER DEFAULT 0), `expires_at` (DATETIME), `created_at` (DATETIME DEFAULT CURRENT_TIMESTAMP).
+  - [x] `admins`: `id` (INTEGER PK AUTOINCREMENT), `username` (TEXT NOT NULL UNIQUE), `password_hash` (TEXT NOT NULL), `role` (TEXT DEFAULT 'SUPER_ADMIN'), `last_login_at` (DATETIME), `created_at` (DATETIME DEFAULT CURRENT_TIMESTAMP).
+  - [x] `broadcasts`: `id` (INTEGER PK AUTOINCREMENT), `subject` (TEXT NOT NULL), `content_html` (TEXT NOT NULL), `target_segment` (TEXT DEFAULT 'ALL'), `total_recipients` (INTEGER DEFAULT 0), `status` (TEXT DEFAULT 'QUEUED'), `created_at` (DATETIME DEFAULT CURRENT_TIMESTAMP).
 - **6. Primary Key / Foreign Key:**
-  - [ ] `messages.id` (TEXT PK), `admins.id` (INTEGER PK), `subscribers.id` (INTEGER PK).
-  - [ ] `message_events.message_id` → `messages.id` (1:N, `ON DELETE CASCADE`).
-  - [ ] `replies.message_id` → `messages.id` (1:N, `ON DELETE CASCADE`).
-  - [ ] `subscriber_preferences.subscriber_id` → `subscribers.id` (1:N, `ON DELETE CASCADE`).
+  - [x] `messages.id` (TEXT PK), `admins.id` (INTEGER PK), `subscribers.id` (INTEGER PK).
+  - [x] `message_events.message_id` → `messages.id` (1:N, `ON DELETE CASCADE`).
+  - [x] `replies.message_id` → `messages.id` (1:N, `ON DELETE CASCADE`).
+  - [x] `subscriber_preferences.subscriber_id` → `subscribers.id` (1:N, `ON DELETE CASCADE`).
 - **7. Constraints:** `status IN (...)` CHECK constraint'leri, `subscribers.email` UNIQUE, `subscribers.unsubscribe_token` UNIQUE, `coupons.code` UNIQUE, `admins.username` UNIQUE, `subscriber_preferences(subscriber_id, category)` UNIQUE.
 - **8. Index Strategy:**
-  - [ ] `idx_messages_status` ON `messages(status)` (Admin panel filtreleme).
-  - [ ] `idx_messages_created` ON `messages(created_at DESC)` (Tarih sıralama).
-  - [ ] `idx_comments_status` ON `comments(status)` (Onay bekleyen yorumlar).
-  - [ ] `idx_subscribers_email` ON `subscribers(email)` (Unique abone kontrolü).
-  - [ ] `idx_email_queue_status_scheduled` ON `email_queue(status, scheduled_at)` (Cron worker sorgu optimizasyonu).
+  - [x] `idx_messages_status` ON `messages(status)` (Admin panel filtreleme).
+  - [x] `idx_messages_created` ON `messages(created_at DESC)` (Tarih sıralama).
+  - [x] `idx_comments_status` ON `comments(status)` (Onay bekleyen yorumlar).
+  - [x] `idx_subscribers_email` ON `subscribers(email)` (Unique abone kontrolü).
+  - [x] `idx_email_queue_status_scheduled` ON `email_queue(status, scheduled_at)` (Cron worker sorgu optimizasyonu).
 - **9. Migration Strategy:** İlk çekirdek migration dosyası (`0001_initial_schema.sql`). Bağımsız olarak temiz veritabanına ilk sırada uygulanır. Gerekli durumlarda forward-fix migration uygulanır.
 - **10. Data Integrity:** Foreign key kısıtları (`PRAGMA foreign_keys=ON`), `ON DELETE CASCADE` kuralları ve durum alanlarında CHECK kısıtları ile veri bütünlüğü sağlanır.
 - **11. Privacy / Retention:** `messages` ve `replies` kişisel verileri (PII: e-posta, isim) bilet çözümlendikten sonra saklama politikasına tabi tutulur. Audit geçmişi (`message_events`) yetkisiz silmeye karşı korumalıdır.
 - **12. Performance:** İndeksli status ve tarih sorguları ile O(log N) zaman karmaşıklığı; aylık 50k+ mesaj hacminde hafif metin/JSON yapıları.
 - **13. Test Requirements:** Temiz D1 SQLite üzerinde `0001_initial_schema.sql` çalıştırma ve `PRAGMA foreign_key_check` sıfır hata doğrulaması.
 - **14. Definition of Done (DoD):** *(Not: DoD altındaki [ ] işaretleri onay kriteridir)*
-  - [ ] 9 ana tablonun hatasız oluşturulması.
-  - [ ] Tüm FOREIGN KEY ve CASCADE kurallarının doğrulanması.
-  - [ ] Performans indekslerinin `PRAGMA index_list` ile teyit edilmesi.
+  - [x] 9 ana tablonun hatasız oluşturulması.
+  - [x] Tüm FOREIGN KEY ve CASCADE kurallarının doğrulanması.
+  - [x] Performans indekslerinin `PRAGMA index_list` ile teyit edilmesi.
 - **15. Hata / Risk Senaryoları:**
-  - [ ] Silinen bilet sonrası yetim event kalması -> `ON DELETE CASCADE` ile engellenir.
-  - [ ] `email_queue` kilitlenmesi -> `status='PROCESSING'` zaman aşımı denetimi.
-- **16. Zero-Cost Constraint:** Cloudflare D1 Free Tier kotalarında $0/Ay ($0 maliyet ilkesi).
+  - [x] Silinen bilet sonrası yetim event kalması -> `ON DELETE CASCADE` ile engellenir.
+  - [x] `email_queue` kilitlenmesi -> `status='PROCESSING'` zaman aşımı denetimi.
+- **Zero-Cost Constraint:** Cloudflare D1 Free Tier kotalarında $0/Ay ($0 maliyet ilkesi).
 - **17. Bağımlılıklar:** Belirlenmedi — Veritabanı taban görevidir.
 - **18. Bağımlı Görevler:** DATA-002, DATA-003, DATA-004, DATA-005, SEC-AUTH-001, API-001.
 - **19. Uygulama Notları:** SQLite tip sistemine uygun olarak TIMESTAMP alanları ISO8601 string veya `CURRENT_TIMESTAMP` fonksiyonuyla yönetilir.
