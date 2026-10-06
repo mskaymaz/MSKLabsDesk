@@ -802,10 +802,14 @@ Mevcut görevlerin kapsamını aşan ancak kapsamlı bir güvenlik mimarisi içi
 - **Neden Gerekli:** HTTP yanıt başlıklarının (Security Headers) eksikliği tarayıcı seviyesinde XSS, Clickjacking ve MIME-sniffing korumasını zayıflatır.
 - **Hangi Tehdidi Çözüyor:** Clickjacking, Reflected XSS, Content Sniffing, Information Leakage.
 - **Mevcut Görevlerden Neden Ayrı olmalı:** CORS veya Auth görevleri HTTP response header politikalarını (CSP, HSTS, X-Frame-Options) doğrudan kapsamamaktadır.
-- **Öncelik:** P1 | **Teknik Detay:** `Content-Security-Policy`, `Strict-Transport-Security`, `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin` başlıklarının Worker yanıtlarına eklenmesi.
+- **Teknik Detay:**
+  - [ ] `Content-Security-Policy`, `Strict-Transport-Security`, `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin` başlıklarının Worker yanıtlarına eklenmesini sağla.
+- **Öncelik:** P1
 
 ### SEC-ADV-002 — Cookie Security & Session Fixation Protection
-- **Neden Gerekli:** Çerez tabanlı oturum yönetimi tercih edilirse `HttpOnly`, `Secure`, `SameSite=Strict` bayraklarının zorunlu kılınması gerekir.
+- **Neden Gerekli:** Çerez tabanlı oturum yönetimi tercih edildiğinde oturum çerezleri için güvenlik bayraklarının zorunlu kılınması gerekir.
+- **Teknik Gereksinimler:**
+  - [ ] Çerez tabanlı oturum yönetiminde `HttpOnly`, `Secure` ve `SameSite=Strict` bayraklarını zorunlu kıl.
 - **Hangi Tehdidi Çözüyor:** Cookie Theft, CSRF, Session Fixation.
 - **Mevcut Görevlerden Neden Ayrı olmalı:** `SEC-AUTH-001` daha çok JWT/Bearer akışına odaklanmaktadır; çerez güvenliği izole bir politika gerektirir.
 - **Öncelik:** P1
@@ -1938,7 +1942,16 @@ sequenceDiagram
 ---
 
 ### CMS-TTS-001 — TTS Audio CMS & Mobile Accessible Public Player
-- **2. Kapsam:** CMS yönetim panelinde makale ses üretimi durumunun (`generating`, `draft`, `approved`, `failed`, `stale`) ve STT kalite doğrulama skorunun takip edilmesi; ön dinleme, onay, yayından kaldırma ve yenileme aksiyonlarının sunulması. Public blog tarafında sadece `status = 'APPROVED'` ve **`article_version == audio_version`** (`post_revisions.revision_number`) olan güncel seslerin gösterilmesi. HTML5 Audio Player bileşeninde mobil uyumlu arayüz, autoplay olmaması, Play/Pause/Seek/Süre göstergeleri, klavye erişilebilirliği (`tabindex`, ARIA), ekran okuyucu uyumu ve ses bulunmadığında zarif metinsel fallback sunumu (Web Speech API artık ana çözüm olarak kullanılmaz).
+- **2. Kapsam:**
+  - [ ] CMS yönetim panelinde makale ses üretimi durumunun (`generating`, `draft`, `approved`, `failed`, `stale`) takibini sağla.
+  - [ ] STT (Speech-to-Text) kalite doğrulama skorunun takibini ekle.
+  - [ ] Yönetim panelinde ses ön dinleme, onay, yayından kaldırma ve yenileme aksiyonlarını sun.
+  - [ ] Public blog tarafında sadece `status = 'APPROVED'` ve `article_version == audio_version` (`post_revisions.revision_number`) olan güncel seslerin gösterilmesini sağla.
+  - [ ] HTML5 Audio Player bileşeninde mobil uyumlu arayüz yapısını kurgula.
+  - [ ] Player bileşeninde autoplay olmamasını garanti et.
+  - [ ] Play, Pause, Seek ve Süre gösterge kontrollerini ekle.
+  - [ ] Klavye erişilebilirliği (`tabindex`, ARIA) ve ekran okuyucu uyumunu sağla.
+  - [ ] Ses dosyası bulunmadığında zarif metinsel fallback sunumunu kurgula (Web Speech API artık ana çözüm olarak kullanılmaz).
 - **3. Öncelik:** P1 | **Bağımlılık:** API-TTS-001, AI-TTS-002.
 
 ---
