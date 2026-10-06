@@ -69,30 +69,30 @@
 - **Amaç:** Masaüstü ve mobil cihazlarda uygulama gibi çalışan (PWA), yüksek performanslı, duyarlı (responsive) React + Vite + TypeScript yönetim paneli arayüzünü kurgulamak.
 - **Kapsam:** `frontend/` dizini, `vite.config.ts`, `vite-plugin-pwa` konfigürasyonu, `manifest.json`, Service Worker kaydı, Lucide React ikonları, HSL CSS tasarım token'ları (`index.css`).
 - **Teknik Gereksinimler:**
-  - [ ] React 18+ & TypeScript strict-mode yapılandırması.
-  - [ ] Vite build aracı ile optimum chunk splitting ve ağaç sallama (tree-shaking).
-  - [ ] PWA Web App Manifest (ikonlar, tema rengi, `display: standalone`).
-  - [ ] Responsive mobil/masaüstü görünüm (CSS Grid & Flexbox, medya sorguları).
-  - [ ] Modüler bileşen yapısı esas alınarak **400 - 450 satır kuralı** (Örn: `PostsView.tsx` modüler parçalara bölünmelidir).
+  - [x] React 18+ & TypeScript strict-mode yapılandırması.
+  - [x] Vite build aracı ile optimum chunk splitting ve ağaç sallama (tree-shaking).
+  - [x] PWA Web App Manifest (ikonlar, tema rengi, `display: standalone`).
+  - [x] Responsive mobil/masaüstü görünüm (CSS Grid & Flexbox, medya sorguları).
+  - [x] Modüler bileşen yapısı esas alınarak **400 - 450 satır kuralı** (Örn: `PostsView.tsx` modüler parçalara bölünmelidir).
 - **Mimari Karar:** TailwindCSS bağımlılığı olmaksızın, maksimum CSS esnekliği ve hafiflik için Vanilla CSS + CSS Variables (HSL Token'ları) mimarisi.
 - **Etkilenecek Katmanlar:** Frontend (React SPA / PWA), Build tooling (Vite).
 - **Bağımlılıklar:** Belirlenmedi — Taban arayüz görevidir.
 - **Bağımlı Görevler:** UI-001, UI-004, UI-005, I18N-001, CMS-001, ADS-002.
 - **Güvenlik Gereksinimleri:**
-  - [ ] Frontend üzerinde hiçbir private API secret tutulmamalı, sadece `VITE_` önekli public değişkenler (`VITE_API_URL`, `VITE_VAPID_PUBLIC_KEY`) kullanılmalıdır.
-  - [ ] XSS koruması için kullanıcı kaynaklı içerikler süzgeçten geçirilmelidir.
+  - [x] Frontend üzerinde hiçbir private API secret tutulmamalı, sadece `VITE_` önekli public değişkenler (`VITE_API_URL`, `VITE_VAPID_PUBLIC_KEY`) kullanılmalıdır.
+  - [x] XSS koruması için kullanıcı kaynaklı içerikler süzgeçten geçirilmelidir.
 - **Performans Kriterleri:**
-  - [ ] *Teknik İlke:* Frontend derleme çıktısı optimum ağaç sallama (tree-shaking) ve chunk ayırımı yapmalıdır.
+  - [x] *Teknik İlke:* Frontend derleme çıktısı optimum ağaç sallama (tree-shaking) ve chunk ayırımı yapmalıdır.
   - [ ] *Performans Hedefleri (Benchmark ile Doğrulanacak Target):* Lighthouse Performance PWA skoru > 90, FCP < 1.2 sn, Bundle boyutu < 300 KB gzip (canlı ortam ölçümleriyle kanıtlanacaktır).
 - **Test Gereksinimleri (Mimari Seviye):** Masaüstü (Chrome/Edge) ve mobil (iOS/Android Safari/Chrome) PWA yükleme ve offline cache testi.
 - **Definition of Done (DoD):** *(Not: DoD altındaki [ ] işaretleri görev durumu değil, tamamlanma onay kriterleridir)*
-  - [ ] `npm run build` hatasız sıfır uyarısız tamamlanmalı.
-  - [ ] PWA Manifest ve Service Worker tarayıcıda sorunsuz kaydedilmeli.
-  - [ ] Mobil ekranlarda (≤768px) yatay kayma (horizontal scroll) olmamalı.
-  - [ ] Hiçbir frontend dosyasının 450 satırı aşmaması.
+  - [x] `npm run build` hatasız sıfır uyarısız tamamlanmalı.
+  - [x] PWA Manifest ve Service Worker tarayıcıda sorunsuz kaydedilmeli.
+  - [x] Mobil ekranlarda (≤768px) yatay kayma (horizontal scroll) olmamalı.
+  - [x] Hiçbir frontend dosyasının 450 satırı aşmaması.
 - **Hata / Risk Senaryoları:**
-  - [ ] Service Worker eski önbellek kalması -> Sürüm bazlı cache-busting ve otomatik güncelleme uyarısı.
-  - [ ] Mobil tarayıcı çentik (notch) kesilmeleri -> `viewport-fit=cover` ve CSS safe-area-inset kullanımı.
+  - [x] Service Worker eski önbellek kalması -> Sürüm bazlı cache-busting ve otomatik güncelleme uyarısı.
+  - [x] Mobil tarayıcı çentik (notch) kesilmeleri -> `viewport-fit=cover` ve CSS safe-area-inset kullanımı.
 - **Zero-Cost Constraint:** Kullanılan servislerin (Cloudflare Pages) güncel ücretsiz plan/kota sınırları içinde kalınması ($0/Ay maliyet hedefi).
 - **Uygulama Notları:** Ortak bileşenler `components/ui/` dizininde izole edilmeli, CSS değişkenleri `:root` altında tanımlanmalıdır.
 
