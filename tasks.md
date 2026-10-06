@@ -34,7 +34,7 @@
 ## 1. ARCHITECTURE & ENGINEERING FOUNDATION
 
 ### ARCH-001 — Serverless Edge Backend Kurulumu
-- **Durum:** `[x?]` (Kodlandı - Mimari & Kod Denetimi Bekliyor)
+- **Durum:** `[ ]` (Yapılacak)
 - **Amaç:** Cloudflare Workers (TypeScript) ve Wrangler CLI kullanarak sunucusuz (serverless), olay odaklı, ultra düşük gecikmeli Edge backend çekirdeğini kurmak ve yönetmek.
 - **Kapsam:** `backend/` dizini, `wrangler.toml`, `package.json`, `tsconfig.json`, `src/index.ts` giriş noktası, Cloudflare D1 ve R2 binding tanımları ile `Env` arayüzü (interface).
 - **Teknik Gereksinimler:**
@@ -67,7 +67,7 @@
 ---
 
 ### ARCH-002 — PWA Frontend Projesi Kurulumu
-- **Durum:** `[x?]` (Kodlandı - UI & Mobil Denetim Bekliyor)
+- **Durum:** `[ ]` (Yapılacak)
 - **Amaç:** Masaüstü ve mobil cihazlarda uygulama gibi çalışan (PWA), yüksek performanslı, duyarlı (responsive) React + Vite + TypeScript yönetim paneli arayüzünü kurgulamak.
 - **Kapsam:** `frontend/` dizini, `vite.config.ts`, `vite-plugin-pwa` konfigürasyonu, `manifest.json`, Service Worker kaydı, Lucide React ikonları, HSL CSS tasarım token'ları (`index.css`).
 - **Teknik Gereksinimler:**
@@ -134,7 +134,7 @@
 ## 2. DATA ARCHITECTURE, MIGRATIONS & DATABASE
 
 ### DATA-001 — Initial D1 Database Migration (`0001_initial_schema.sql`)
-- **1. Durum:** `[x?]` (Kodlandı - Şema & Yapı Denetimi Bekliyor)
+- **1. Durum:** `[ ]` (Yapılacak)
 - **2. Amaç:** Destek biletleri, bilet tarihçesi, yanıtlar, blog yorumları, e-bülten aboneleri, bülten tercihleri, e-posta gönderim kuyruğu, kuponlar ve admin doğrulaması için çekirdek D1 SQLite veritabanı şemasını kurgulamak.
 - **3. Kapsam:** `backend/migrations/0001_initial_schema.sql` dosyası; `messages`, `message_events`, `replies`, `comments`, `subscribers`, `subscriber_preferences`, `email_queue`, `coupons`, `admins` tabloları.
 - **4. Teknik Gereksinimler:** SQLite D1 motoruna uyumlu strict veri tipleri (TEXT, INTEGER, REAL, BLOB), `PRAGMA foreign_keys = ON` uyumluluğu ve ISO8601 tarih standartları.
@@ -181,7 +181,7 @@
 ---
 
 ### DATA-002 — CMS D1 Database Migration (`0002_cms_schema.sql`)
-- **1. Durum:** `[x?]` (Kodlandı - Şema & İlişki Denetimi Bekliyor)
+- **1. Durum:** `[ ]` (Yapılacak)
 - **2. Amaç:** Headless CMS için blog kanalları, blog yazıları, mobil uygulama kataloğu, sürüm geçmişi, site şablon duyuruları ve medya varlıklarının veritabanı altyapısını kurmak.
 - **3. Kapsam:** `backend/migrations/0002_cms_schema.sql` dosyası; `blog_channels`, `blog_posts`, `apps`, `app_versions`, `site_templates`, `media_assets` tabloları ve `comments.post_id` ilişkisi.
 - **4. Teknik Gereksinimler:** Çok dilli sütun kurgusu (`title_tr/en/ar`), slug benzersizliği ve medya varlıklarının R2 nesne depolama referanslarıyla ilişkilendirilmesi.
@@ -221,7 +221,7 @@
 ---
 
 ### DATA-003 — Gerçek D1 Veritabanı Kurulumu & Binding (`10.5.1`)
-- **1. Durum:** `[x]` (Tamamlandı)
+- **1. Durum:** `[ ]` (Yapılacak)
 - **2. Amaç:** Cloudflare D1 uzak veritabanı örneğini (remote instance) oluşturmak, `database_id` bilgisini `wrangler.toml` yapılandırmasına bağlamak ve üretim ortamına migration yayınlama hattını otomatikleştirmek.
 - **3. Kapsam:** `wrangler.toml`, Cloudflare Dashboard / Wrangler CLI D1 binding yönetimi.
 - **4. Teknik Gereksinimler:** `wrangler d1 create msklabsdesk_db` komutu, `[[d1_databases]]` binding konfigürasyonu ve `--local` / `--remote` çalıştırma kurgusu.
@@ -482,7 +482,7 @@ Her veritabanı migration dosyası için aşağıdaki testler sırasıyla gerçe
 ### 3.1 Authentication (Kimlik Doğrulama)
 
 ### SEC-AUTH-001 — Admin Auth API ve Oturum Yönetimi
-- **1. Durum:** `[x?]` (Kodlandı - Güvenlik Denetimi Bekliyor)
+- **1. Durum:** `[ ]` (Yapılacak)
 - **2. Amaç:** Yönetici kullanıcılarının sisteme güvenli şekilde giriş yapmasını, oturum doğrulaması gerçekleştirmesini ve oturumu güvenle sonlandırmasını sağlamak.
 - **3. Kapsam:** `backend/src/routes/adminAuth.ts`, `backend/src/middleware/auth.ts`, `POST /api/admin/login`, `POST /api/admin/logout`, `GET /api/admin/me` uç noktaları.
 - **4. Tehdit Modeli:** Credential stuffing, Brute-force, Session hijacking, Token theft, Timing attacks, Replay attacks.
@@ -529,7 +529,7 @@ Her veritabanı migration dosyası için aşağıdaki testler sırasıyla gerçe
 ---
 
 ### SEC-AUTH-002 — Kimlik Doğrulama Sağlamlaştırma (`10.5.2`)
-- **1. Durum:** `[x]` (Tamamlandı)
+- **1. Durum:** `[ ]` (Yapılacak)
 - **2. Amaç:** Parola hashleme ve token imzalama süreçlerini standart WebCrypto standartlarına yükselterek kaba kuvvet (brute-force) ve sahtecilik (forgery) risklerini ortadan kaldırmak.
 - **3. Kapsam:** `backend/src/utils/crypto.ts`, `backend/src/middleware/auth.ts`, parola saklama ve JWT doğrulama katmanı.
 - **4. Tehdit Modeli:** Offline hash cracking, Rainbow table attacks, Token forgery, Algorithm downgrade attacks.
@@ -735,7 +735,7 @@ Her veritabanı migration dosyası için aşağıdaki testler sırasıyla gerçe
 ### 3.3 Request Security & Data Sanitization
 
 ### SEC-REQ-001 — CORS & Rate Limiting (`10.5.3`)
-- **1. Durum:** `[x]` (Tamamlandı)
+- **1. Durum:** `[ ]` (Yapılacak)
 - **2. Amaç:** Yetkisiz alan adlarından gelen çapraz istekleri (CORS) engellemek, API kaba kuvvet/DDoS isteklerini sınırlamak (Rate Limit) ve bot trafiğini (Turnstile) filtrelere tabi tutmak.
 - **3. Kapsam:** `backend/src/middleware/cors.ts`, `backend/src/middleware/rateLimit.ts`, Cloudflare Turnstile entegrasyonu.
 - **4. Tehdit Modeli:** Cross-Origin Resource Sharing (CORS) abuse, Denial of Service (DoS), Bot spamming, Credential stuffing, API scrapers.
@@ -1032,7 +1032,7 @@ sequenceDiagram
 ### 4.2 API Görev Spesifikasyonları (API-001 — API-010)
 
 ### API-001 — Public Destek API (`POST /api/v1/support`)
-- **1. Durum:** `[x?]` (Kodlandı - API Sözleşme Denetimi Bekliyor)
+- **1. Durum:** `[ ]` (Yapılacak)
 - **2. Amaç:** Kullanıcıların destek/iletişim formu göndermesini sağlamak, benzersiz bilet numarası üretmek ve mesajı D1 veritabanına kaydetmek.
 - **3. Kapsam:** `backend/src/routes/support.ts`, `POST /api/v1/support`.
 - **4. İstek / Yanıt Sözleşmesi:**
@@ -1064,7 +1064,7 @@ sequenceDiagram
 ---
 
 ### API-002 — Blog Yorum API (`POST/GET /api/v1/comments`)
-- **1. Durum:** `[x?]` (Kodlandı - Denetim Bekliyor)
+- **1. Durum:** `[ ]` (Yapılacak)
 - **2. Amaç:** Ziyaretçilerin blog yazılarına yorum yapmasını (`POST`) ve onaylanmış yorumların listelenmesini (`GET`) sağlamak.
 - **3. Kapsam:** `backend/src/routes/comments.ts`, `GET /api/v1/comments?postSlug=...`, `POST /api/v1/comments`.
 - **4. İstek / Yanıt Sözleşmesi:**
@@ -1095,7 +1095,7 @@ sequenceDiagram
 ---
 
 ### API-003 — E-Bülten Abonelik API (`POST /api/v1/subscribe` & `/unsubscribe`)
-- **1. Durum:** `[x?]` (Kodlandı - Denetim Bekliyor)
+- **1. Durum:** `[ ]` (Yapılacak)
 - **2. Amaç:** Kullanıcıların e-bültene kaydolmasını, tercihlerini güncellemesini ve tek tıkla bültenden çıkmasını (Unsubscribe) sağlamak.
 - **3. Kapsam:** `backend/src/routes/subscribe.ts`, `POST /api/v1/subscribe`, `POST /api/v1/unsubscribe`, `POST /api/v1/subscribe/verify` (Double Opt-In E-Posta Doğrulama).
 - **4. İstek / Yanıt Sözleşmesi:**
@@ -1127,7 +1127,7 @@ sequenceDiagram
 ---
 
 ### API-004 — Admin Mesaj ve Yorum İşlemleri API
-- **1. Durum:** `[x?]` (Kodlandı - Denetim Bekliyor)
+- **1. Durum:** `[ ]` (Yapılacak)
 - **2. Amaç:** Yöneticilerin gelen destek biletlerini ve blog yorumlarını incelemesi, onaylaması, yanıtlaması veya silmesini sağlamak.
 - **3. Kapsam:** `backend/src/routes/admin/messages.ts`, `backend/src/routes/admin/comments.ts`, `GET/PATCH/DELETE /api/v1/admin/messages`, `PATCH /api/v1/admin/comments/:id`.
 - **4. İstek / Yanıt Sözleşmesi:**
@@ -1157,7 +1157,7 @@ sequenceDiagram
 ---
 
 ### API-005 — Admin E-Posta / Duyuru API (`POST /api/v1/admin/broadcast`)
-- **1. Durum:** `[x?]` (Kodlandı - Denetim Bekliyor)
+- **1. Durum:** `[ ]` (Yapılacak)
 - **2. Amaç:** Yöneticilerin aktif e-bülten abonelerine toplu duyuru veya bülten e-postası göndermesini sağlamak.
 - **3. Kapsam:** `backend/src/routes/admin/broadcast.ts`, `POST /api/v1/admin/broadcast`.
 - **4. İstek / Yanıt Sözleşmesi:**
@@ -1382,7 +1382,7 @@ sequenceDiagram
 ### 5.2 AI Görev Spesifikasyonları (AI-001 — AI-TTS-002)
 
 ### AI-001 — Gemini API İstemcisi ve Temel Entegrasyon
-- **1. Durum:** `[x?]` (Kodlandı (`ai.ts`) - Denetim Bekliyor)
+- **1. Durum:** `[ ]` (Yapılacak) - Denetim Bekliyor)
 - **2. Amaç:** AI istemcisini yapılandırmak, zaman aşımı (timeout), exponential backoff retry, istek iptali (AbortController) ve provider hata normalizasyonu ile üretim seviyesinde istemci altyapısı sunmak.
 - **3. Kapsam:** `backend/src/utils/ai.ts`, Gemini SDK istemcisi, ortam değişkenleri (`GEMINI_API_KEY`, `AI_MODEL`, `AI_TIMEOUT_MS`, `AI_MAX_RETRIES`).
 - **4. Konfigürasyon ve Parametreler:** `GEMINI_API_KEY` (`wrangler secret put`), `AI_MODEL` (varsayılan `gemini-1.5-flash` / konfigüre edilebilir), `timeoutMs` (10.000ms), `maxRetries` (3 deneme, jitter exponential backoff).
@@ -1403,7 +1403,7 @@ sequenceDiagram
 ---
 
 ### AI-002 — Otomatik Mesaj Analizi & Özet (Structured Output & HITL)
-- **1. Durum:** `[x?]` (Kodlandı - Denetim Bekliyor)
+- **1. Durum:** `[ ]` (Yapılacak)
 - **2. Amaç:** Gelen destek biletlerini ve mesajları AI ile analiz ederek spam sınıflandırması, aciliyet seviyesi, kategori tespiti, özet ve `ai_draft` cevap önerisi üretmek.
 - **3. Kapsam:** `backend/src/services/aiAnalysis.ts`, `messages` ve `message_events` entegrasyonu.
 - **4. Structured Output Contract:** AI çıktısı JSON şeması ile zorunlu kılınır: `{ "spam": boolean, "urgency": "LOW"|"MEDIUM"|"HIGH"|"CRITICAL", "category": string, "summary": string, "suggestedReply": string, "confidence": number, "reasoning": string }`.
@@ -1421,7 +1421,7 @@ sequenceDiagram
 ---
 
 ### AI-003 — Prompt Injection & Güvenlik Koruması (DATA ≠ INSTRUCTION)
-- **1. Durum:** `[x?]` (Kodlandı - Denetim Bekliyor)
+- **1. Durum:** `[ ]` (Yapılacak)
 - **2. Amaç:** Kullanıcı girdilerinin sistem promptunu bozmasını, rol değiştirmesini veya gizli verileri sızdırmasını engelleyen güvenlik katmanını kurmak.
 - **3. Kapsam:** `backend/src/utils/sanitizePrompt.ts`, prompt yapıcı (prompt builder) katmanı.
 - **4. Tehdit Modeli:** Direct Prompt Injection ("Ignore previous instructions"), System Prompt Leakage, Role Impersonation, Obfuscated/Encoded Injection (Base64, Unicode bypass), Indirect Injection (HTML/Markdown payload), Tool/Function Hijacking.
@@ -1439,7 +1439,7 @@ sequenceDiagram
 ---
 
 ### AI-004 — Gemini AI Çeviri & SEO API (`POST /api/v1/admin/translate`)
-- **1. Durum:** `[x?]` (Kodlandı - Denetim Bekliyor)
+- **1. Durum:** `[ ]` (Yapılacak)
 - **2. Amaç:** Türkçe blog içeriklerini Gemini ile EN ve AR dillerine çevirmek, HTML yapısını bozmadan SEO özeti ve slug önerisi üretmek.
 - **3. Kapsam:** `backend/src/routes/admin/translate.ts`, `POST /api/v1/admin/translate`.
 - **4. Çeviri Bütünlük Kuralları:** HTML etiketi (`<p>`, `<h1>`, `<img>`, `<code>`), script/style içerikleri, URL'ler, Markdown syntax ve terim sözlüğü (`glossary`) koruması. Çeviride HTML yapısı kesinlikle bozulmaz.
@@ -1504,16 +1504,16 @@ sequenceDiagram
 
 ### Özet Görev Listesi (5. AI PLATFORM & GEMINI ENTEGRASYONU)
 
-- [x?] **AI-001 — Gemini API İstemcisi ve Temel Entegrasyon**
+- [ ] **AI-001 — Gemini API İstemcisi ve Temel Entegrasyon**
   - **Kapsam:** Google Gemini SDK bağlantısı ve yapılandırması.
   - **Durum:** Kodlandı (`ai.ts`), denetim bekliyor.
-- [x?] **AI-002 — Otomatik Mesaj Analizi & Özet**
+- [ ] **AI-002 — Otomatik Mesaj Analizi & Özet**
   - **Kapsam:** Spam kontrolü, aciliyet seviyesi, kategori belirleme, `ai_draft` cevap önerisi üretimi.
   - **Durum:** Kodlandı, denetim bekliyor.
-- [x?] **AI-003 — Prompt Injection Koruması**
+- [ ] **AI-003 — Prompt Injection Koruması**
   - **Kapsam:** Kullanıcı girdilerinin sistem promptunu bozmasını engelleme güvenlik süzgeci.
   - **Durum:** Kodlandı, denetim bekliyor.
-- [x?] **AI-004 — Gemini AI Çeviri & SEO API (`POST /api/admin/translate`)**
+- [ ] **AI-004 — Gemini AI Çeviri & SEO API (`POST /api/admin/translate`)**
   - **Kapsam:** Türkçe başlık ve içeriği Gemini ile EN ve AR'ye çevirme, SEO özet üretimi.
   - **Durum:** Kodlandı, denetim bekliyor.
 - [ ] **AI-005 — AI Abstraction Layer & Token/Maliyet Kontrolü**
@@ -1548,7 +1548,7 @@ sequenceDiagram
 ### 6.2 İletişim Görev Spesifikasyonları (COM-001 — COM-004)
 
 ### COM-001 — Temel & Gelişmiş HTML E-Posta Şablon Sistemi (Template Engine & Safety)
-- **1. Durum:** `[x?]` (Kodlandı - Denetim Bekliyor)
+- **1. Durum:** `[ ]` (Yapılacak)
 - **2. Amaç:** Çok dilli (TR/EN/AR) ve erişilebilir HTML/Düz Metin (plain-text fallback) e-posta şablon motorunu kurmak, kullanıcı girdilerini güvenle işleyerek e-posta şablon enjeksiyonlarını engellemek.
 - **3. Kapsam:** `backend/src/utils/emailTemplates.ts`, destek, bülten, duyuru ve sistem şablonları.
 - **4. Desteklenen E-Posta Şablon Tipleri:**
@@ -1661,7 +1661,7 @@ sequenceDiagram
 
 ### Özet Görev Listesi (6. COMMUNICATION, EMAIL, QUEUE & PUSH)
 
-- [x?] **COM-001 — Temel HTML E-Posta Şablonları**
+- [ ] **COM-001 — Temel HTML E-Posta Şablonları**
   - **Kapsam:** Bilet Alındı ve Destek Cevap e-posta şablonları (TR/EN/AR).
   - **Durum:** Kodlandı, denetim bekliyor.
 - [ ] **COM-002 — Resend E-Posta Motoru & Alan Adı Doğrulama (`10.6.1`)**
@@ -1706,7 +1706,7 @@ sequenceDiagram
 ### 7.2 Admin Frontend Görev Spesifikasyonları (UI-001 — UI-006)
 
 ### UI-001 — Admin Giriş ve Özet Dashboard Ekranları (LoginView & DashboardView)
-- **1. Durum:** `[x]` (Tamamlandı)
+- **1. Durum:** `[ ]` (Yapılacak)
 - **2. Amaç:** Yönetici giriş arayüzünü (`LoginView`) ve sistem durumunu özetleyen metrik panosunu (`DashboardView`) sunmak.
 - **3. Kapsam:** `src/views/LoginView.tsx`, `src/views/DashboardView.tsx`, `src/components/MetricCard.tsx`.
 - **4. UI/UX & Metrik Kartları:** Açık bilet sayısı, onay bekleyen yorumlar, aktif bülten aboneleri, toplam yayınlanan blog yazıları. Metrik kartlarında ikon, sayısal değer, trend göstergesi ve skeleton yükleme durumu.
@@ -1722,7 +1722,7 @@ sequenceDiagram
 ---
 
 ### UI-002 — Destek & Yorum Yönetimi Ekranları (TicketsView, CommentsView & AI/TTS Flow)
-- **1. Durum:** `[x]` (Tamamlandı)
+- **1. Durum:** `[ ]` (Yapılacak)
 - **2. Amaç:** Kullanıcı destek biletlerini (`TicketsView`), blog yorumlarını (`CommentsView`) yönetmek; AI analizi (`ai_draft`) ve TTS onay süreçlerini arayüzde yürütmek.
 - **3. Kapsam:** `src/views/TicketsView.tsx`, `src/views/CommentsView.tsx`, `src/components/TicketDetailModal.tsx`, `src/components/CouponModal.tsx`.
 - **4. Bilet Yönetimi & AI Entegrasyonu:** Destek biletlerinin durum (`PENDING`, `IN_PROGRESS`, `RESOLVED`, `CLOSED`), aciliyet (`LOW` → `CRITICAL`) ve spam etiketine göre filtrelenmesi. Detay modalında mesaj geçmişi, AI tarafından üretilen `ai_draft` cevabının gösterilmesi, **Review → Edit → Approve & Send** veya **Reject** butonları.
@@ -1738,7 +1738,7 @@ sequenceDiagram
 ---
 
 ### UI-003 — Bülten, Abone & Ayarlar Ekranları (BroadcastView, SubscribersView & SettingsView)
-- **1. Durum:** `[x?]` (Kodlandı - Denetim Bekliyor)
+- **1. Durum:** `[ ]` (Yapılacak)
 - **2. Amaç:** E-bülten duyuru gönderimi (`BroadcastView`), abone listesi yönetimi (`SubscribersView`) ve sistem ayarlarını (`SettingsView`) sunmak.
 - **3. Kapsam:** `src/views/BroadcastView.tsx`, `src/views/SubscribersView.tsx`, `src/views/SettingsView.tsx`.
 - **4. Bülten Gönderimi:** TR/EN/AR dil seçimi, e-posta şablon seçimi, canlı HTML önizleme paneli, hedef kitle sayısı gösterimi, gönderim onay modalı (`ConfirmationDialog`).
@@ -1773,7 +1773,7 @@ sequenceDiagram
 ---
 
 ### UI-005 — Premium Admin Design System & Atomic UI Library (`10.7`)
-- **1. Durum:** `[x]` (Tamamlandı)
+- **1. Durum:** `[ ]` (Yapılacak)
 - **2. Amaç:** Üretim seviyesinde HSL design token'larını, atomik UI bileşen kütüphanesini ve mobil alt navigasyon mimarisini kurmak.
 - **3. Kapsam:** `src/styles/tokens.css`, `src/components/ui/` (`Button`, `IconButton`, `Input`, `Select`, `Checkbox`, `Switch`, `Modal`, `Drawer`, `Toast`, `Skeleton`, `EmptyState`, `Tabs`, `DeviceFrame`, `StatusBadge`, `AudioPlayer`, `RichTextEditor`).
 - **4. Design Tokens & CSS Variables:** HSL renk paleti, 4px grid spacing, typography, border-radius, shadows, Z-index katmanları, WCAG 2.2 AA dokunmatik hedef boyutları (min 44x44px).
@@ -1794,7 +1794,7 @@ sequenceDiagram
 ---
 
 ### UI-006 — App Shell, Global Search, Accessibility & State Governance (WCAG 2.2 AA & i18n RTL)
-- **1. Durum:** `[x]` (Tamamlandı)
+- **1. Durum:** `[ ]` (Yapılacak)
 - **2. Amaç:** Uygulama kabuğunu (App Shell), hızlı arama modalını (Global Search `Cmd+K`), WCAG 2.2 AA tam klavye/ekran okuyucu uyumunu, i18n RTL (Arapça) düzenini ve global durum/hata yönetimini kurmak.
 - **3. Kapsam:** `src/components/layout/AppShell.tsx`, `Sidebar.tsx`, `Topbar.tsx`, `MobileBottomNav.tsx`, `GlobalSearchModal.tsx`, `ErrorBoundary.tsx`.
 - **4. App Shell & Navigasyon:** Katlanabilir masaüstü kenar çubuğu (Sidebar), mobil alt navigasyon barı (Mobile Bottom Nav <640px), dinamik sayfa başlığı ve breadcrumb, kullanıcı profili ve bildirim merkezi.
@@ -1843,22 +1843,22 @@ sequenceDiagram
 
 ### Özet Görev Listesi (7. ADMIN FRONTEND & DESIGN SYSTEM)
 
-- [x] **UI-001 — Admin Giriş ve Özet Dashboard Ekranları**
+- [ ] **UI-001 — Admin Giriş ve Özet Dashboard Ekranları**
   - **Kapsam:** LoginView, DashboardView özet metrik kartları.
   - **Durum:** Kodlandı, denetim bekliyor.
-- [x] **UI-002 — Destek & Yorum Yönetimi Ekranları**
+- [ ] **UI-002 — Destek & Yorum Yönetimi Ekranları**
   - **Kapsam:** TicketsView, CommentsView, TicketDetailModal, CouponModal.
   - **Durum:** Kodlandı, denetim bekliyor.
-- [x?] **UI-003 — Bülten, Abone & Ayarlar Ekranları**
+- [ ] **UI-003 — Bülten, Abone & Ayarlar Ekranları**
   - **Kapsam:** BroadcastView, SubscribersView, SettingsView.
   - **Durum:** Kodlandı, denetim bekliyor.
 - [ ] **UI-004 — Satır Sınırı Refactoring (`10.6.6`)**
   - **Amaç:** `PostsView.tsx` (454 satır) dosyasını `PostList.tsx` ve `PostEditorModal.tsx` olarak bölme (<300 satır).
   - **Öncelik:** P0 | **Bağımlılık:** UI-003
-- [x] **UI-005 — Premium Admin Design System (`10.7`)**
+- [ ] **UI-005 — Premium Admin Design System (`10.7`)**
   - **Amaç:** HSL tasarım token'ları, Ortak UI Bileşenleri (`Button`, `Modal`, `Toast`, `Skeleton`, `EmptyState`, `Tabs`, `DeviceFrame`), mobil alt navigasyon.
   - **Öncelik:** P1 | **Bağımlılık:** UI-004
-- [x] **UI-006 — App Shell, Global Search, Accessibility & State Governance**
+- [ ] **UI-006 — App Shell, Global Search, Accessibility & State Governance**
   - **Amaç:** Katlanabilir Sidebar, Mobil Alt Navigasyon, `Cmd+K` Hızlı Arama, WCAG 2.2 AA uyumu, i18n RTL (Arapça) yön aynalama ve Error Boundary altyapısı.
   - **Öncelik:** P1 | **Bağımlılık:** UI-005
 
@@ -1879,14 +1879,14 @@ sequenceDiagram
 ### 8.2 CMS Görev Spesifikasyonları (CMS-001 — CMS-008, CMS-TTS-001)
 
 ### CMS-001 — Blog Kanal Yönetim Ekranı (`ChannelsView.tsx`)
-- **1. Durum:** `[x?]` (Kodlandı - Denetim Bekliyor)
+- **1. Durum:** `[ ]` (Yapılacak)
 - **2. Kapsam:** `src/views/ChannelsView.tsx`, dinamik kanal tanımlama (TR/EN/AR isim, slug ve ikon).
 - **3. Öncelik:** P1 | **Bağımlılık:** DATA-002, UI-005.
 
 ---
 
 ### CMS-002 — Blog Yazıları Yönetimi (Management & Lifecycle)
-- **1. Durum:** `[x?]` (Kodlandı - Denetim Bekliyor)
+- **1. Durum:** `[ ]` (Yapılacak)
 - **2. Amaç:** Blog yazılarını listelemek, durum bazlı yaşam döngüsünü (`DRAFT`, `REVIEW`, `APPROVED`, `PUBLISHED`, `UNPUBLISHED`, `ARCHIVED`) yönetmek, filtreleme, arama ve toplu işlemleri yürütmek.
 - **3. Kapsam:** `backend/src/routes/admin/posts.ts`, `src/views/PostsView.tsx`, `post_revisions` entegrasyonu.
 - **4. İçerik Durumları & Yaşam Döngüsü:**
@@ -1909,21 +1909,21 @@ sequenceDiagram
 ---
 
 ### CMS-003 — Uygulama Kataloğu Yönetim Ekranı (`AppsCMSView.tsx`)
-- **1. Durum:** `[x?]` (Kodlandı - Denetim Bekliyor)
+- **1. Durum:** `[ ]` (Yapılacak)
 - **2. Kapsam:** Uygulama kartları, platform simgeleri, APK/Sürüm modalı, indirme bağlantıları yönetimi.
 - **3. Öncelik:** P1 | **Bağımlılık:** DATA-002, UI-005.
 
 ---
 
 ### CMS-004 — Şablon & Reklam Yönetim Ekranı (`TemplatesView.tsx`)
-- **1. Durum:** `[x?]` (Kodlandı - Denetim Bekliyor)
+- **1. Durum:** `[ ]` (Yapılacak)
 - **2. Kapsam:** Duyuru bandı metin/renk/link yönetimi, reklam alanları yerleşim tercihleri.
 - **3. Öncelik:** P1 | **Bağımlılık:** DATA-005, ADS-001.
 
 ---
 
 ### CMS-005 — Headless CMS Public API'leri (Security & Caching Boundary)
-- **1. Durum:** `[x?]` (Kodlandı - Denetim Bekliyor)
+- **1. Durum:** `[ ]` (Yapılacak)
 - **2. Amaç:** webMSKLabs ve dış entegrasyonlar için salt-okunur, yüksek performanslı, güvenli ve önbelleklenmiş public CMS REST API'lerini sunmak.
 - **3. Kapsam:** `GET /api/v1/channels`, `/posts`, `/posts/:slug`, `/apps`, `/templates`, `/sitemap.xml`.
 - **4. Güvenlik & Veri Sızdırmazlığı:** Yalnızca `status = 'PUBLISHED'` ve `published_at <= UTC NOW` olan içerikler sunulur. Taslaklar (`DRAFT`, `REVIEW`), `ai_metadata`, iç editör notları ve admin ID bilgileri public API yanıtlarından kesinlikle süzülür (Strict Exclusion).
@@ -2026,19 +2026,19 @@ sequenceDiagram
 
 ### Özet Görev Listesi (8. CMS, CONTENT, EDITOR & MEDIA)
 
-- [x?] **CMS-001 — Blog Kanal Yönetim Ekranı (`ChannelsView.tsx`)**
+- [ ] **CMS-001 — Blog Kanal Yönetim Ekranı (`ChannelsView.tsx`)**
   - **Kapsam:** Dinamik kanal tanımlama (TR/EN/AR isim ve ikon).
   - **Durum:** Kodlandı, denetim bekliyor.
-- [x?] **CMS-002 — Blog Yazıları Liste Ekranı (`PostsView.tsx`)**
+- [ ] **CMS-002 — Blog Yazıları Liste Ekranı (`PostsView.tsx`)**
   - **Kapsam:** Yayın durumu filtreleme, okuma sayıları, silme/taslak aksiyonları.
   - **Durum:** Kodlandı, denetim bekliyor.
-- [x?] **CMS-003 — Uygulama Kataloğu Yönetim Ekranı (`AppsCMSView.tsx`)**
+- [ ] **CMS-003 — Uygulama Kataloğu Yönetim Ekranı (`AppsCMSView.tsx`)**
   - **Kapsam:** Uygulama kartları, platform simgeleri, APK/Sürüm modalı.
   - **Durum:** Kodlandı, denetim bekliyor.
-- [x?] **CMS-004 — Şablon & Reklam Yönetim Ekranı (`TemplatesView.tsx`)**
+- [ ] **CMS-004 — Şablon & Reklam Yönetim Ekranı (`TemplatesView.tsx`)**
   - **Kapsam:** Duyuru bandı metin/renk/link yönetimi, reklam alanları.
   - **Durum:** Kodlandı, denetim bekliyor.
-- [x?] **CMS-005 — Headless CMS Public API'leri**
+- [ ] **CMS-005 — Headless CMS Public API'leri**
   - **Kapsam:** `GET /api/v1/channels`, `/posts`, `/apps`, `/templates`, `/sitemap.xml`.
   - **Durum:** Kodlandı, denetim bekliyor.
 - [ ] **CMS-006 — TipTap Zengin Metin Editörü & Medya Yöneticisi (`12.1` & `12.2`)**
@@ -2073,14 +2073,14 @@ sequenceDiagram
 ### 9.2 i18n & SEO Görev Spesifikasyonları (I18N-001 — I18N-004)
 
 ### I18N-001 — PWA Panel i18n Temel Altyapısı
-- **1. Durum:** `[x?]` (Kodlandı - Denetim Bekliyor)
+- **1. Durum:** `[ ]` (Yapılacak)
 - **2. Kapsam:** `translations.ts` (TR, EN, AR sözlükleri), `I18nContext.tsx`, Dil Seçici (`Sidebar.tsx`), Arapça (AR) RTL desteği (`index.css` Cairo font).
 - **3. Öncelik:** P0 | **Bağımlılık:** ARCH-001, UI-005.
 
 ---
 
 ### I18N-002 — Embed Form & E-Posta i18n Desteği
-- **1. Durum:** `[x?]` (Kodlandı - Denetim Bekliyor)
+- **1. Durum:** `[ ]` (Yapılacak)
 - **2. Kapsam:** `msklabs-desk-embed.js` otomatik dil algılama, 3 dilli HTML e-posta şablonları.
 - **3. Öncelik:** P1 | **Bağımlılık:** COM-001, API-001.
 
@@ -2150,10 +2150,10 @@ sequenceDiagram
 
 ### Özet Görev Listesi (9. SEO, TRANSLATION & INTERNATIONALIZATION (i18n))
 
-- [x?] **I18N-001 — PWA Panel i18n Temel Altyapısı**
+- [ ] **I18N-001 — PWA Panel i18n Temel Altyapısı**
   - **Kapsam:** `translations.ts` (TR, EN, AR sözlükleri), `I18nContext.tsx`, Dil Seçici (`Sidebar.tsx`), Arapça (AR) RTL desteği (`index.css` Cairo font).
   - **Durum:** Kodlandı, denetim bekliyor.
-- [x?] **I18N-002 — Embed Form & E-Posta i18n Desteği**
+- [ ] **I18N-002 — Embed Form & E-Posta i18n Desteği**
   - **Kapsam:** `msklabs-desk-embed.js` otomatik dil algılama, 3 dilli HTML e-posta şablonları.
   - **Durum:** Kodlandı, denetim bekliyor.
 - [ ] **I18N-003 — i18n Çevirilerinin Tüm Ekranlara Uygulanması & Statik Anahtar Doğrulaması (`10.6.4`)**
@@ -2252,7 +2252,7 @@ sequenceDiagram
 
 ## 11. AUDIT, LOGGING, OBSERVABILITY & MONITORING ($0 Cost)
 
-- [x?] **OBS-001 — Message Events Audit Trail**
+- [ ] **OBS-001 — Message Events Audit Trail**
   - **Kapsam:** `message_events` tablosu ile bilet durum değişikliklerinin kayıt altına alınması.
   - **Durum:** Kodlandı, denetim bekliyor.
 - [ ] **OBS-002 — Audit Log vs Application Log Ayrımı ve D1 Loglama Altyapısı**
@@ -2563,7 +2563,7 @@ sequenceDiagram
 ---
 
 ### TEST-001 — Veri Aktarım Betikleri (Import Scripts & Audit Verification)
-- **1. Durum:** `[x?]` (Kodlandı, Denetim Bekliyor)
+- **1. Durum:** `[ ]` (Yapılacak)
 - **2. Kapsam:** `scripts/import_google_sheets.js`, `scripts/import_apps_catalog.js`.
 - **3. İşlevsellik & Doğrulama Garantileri:**
   - *Input Validation:* Aktarılan JSON/CSV verilerinin zorunlu alanlarının (schema check), tip uygunluklarının ve slug benzersizliğinin doğrulanması.
@@ -2650,7 +2650,7 @@ sequenceDiagram
 
 ### Özet Görev Listesi (15. TESTING, QUALITY & CI/CD ($0 Cost))
 
-- [x?] **TEST-001 — Veri Aktarım Betikleri**
+- [ ] **TEST-001 — Veri Aktarım Betikleri**
   - **Kapsam:** `import_google_sheets.js` ve `import_apps_catalog.js`.
   - **Durum:** Kodlandı, denetim bekliyor.
 - [ ] **TEST-002 — Vitest Unit Test Altyapısı (`14`)**
@@ -2872,7 +2872,7 @@ sequenceDiagram
 ---
 
 ### INT-001 — Entegrasyon Dokümantasyon Rehberi & Sözleşme Mimarisi
-- **1. Durum:** `[x?]` (Hazırlandı, Denetim Bekliyor)
+- **1. Durum:** `[ ]` (Yapılacak)
 - **2. Kapsam:** `webMSKLabs_cms_integration.md`, `webMSKLabs_integration_guide.md`.
 - **3. Entegrasyon Sözleşmesi & Veri Akış Mimarisi:**
   - *MSKLabsDesk → webMSKLabs Veri Akışı:* Yayınlanmış makaleler (`POSTS`), kanal/kategori tanımları, medya asset URL'leri (R2), onaylanmış TTS MP3 ses dosyaları (`audio_url`), SEO metadataları.
@@ -2975,7 +2975,7 @@ sequenceDiagram
 
 ### Özet Görev Listesi (18. WEBMSKLABS INTEGRATION ($0 Cost))
 
-- [x?] **INT-001 — Entegrasyon Dokümantasyon Rehberi**
+- [ ] **INT-001 — Entegrasyon Dokümantasyon Rehberi**
   - **Kapsam:** `webMSKLabs_cms_integration.md` ve `webMSKLabs_integration_guide.md` dokümanlarının hazırlanması.
   - **Durum:** Hazırlandı, denetim bekliyor.
 - [ ] **INT-002 — webMSKLabs Salt-Okunur Entegrasyon Aşaması (`15`)**
