@@ -243,24 +243,24 @@
 
 ### DATA-004 — Push Subscriptions Migration (`0003_push_subscriptions.sql`)
 - **2. Amaç:** Web Push bildirimleri için tarayıcı push abonelik noktalarını (VAPID endpoint ve anahtarları) saklayan veritabanı tablosunu oluşturmak.
-- **3. Kapsam:** `backend/migrations/0003_push_subscriptions.sql` dosyası; `push_subscriptions` tablosu.
+- **3. Kapsam:** `backend/migrations/0003_push_subscriptions.sql` (Repo yerel sıralamasında `migrations/0006_push_subscriptions.sql`) dosyası; `push_subscriptions` tablosu.
 - **4. Teknik Gereksinimler:** Tarayıcı VAPID kimlik doğrulama anahtarlarının (`p256dh`, `auth`) şifreli saklanması ve `endpoint` benzersizliği.
 - **5. Schema / Table Design:**
-  - [ ] `push_subscriptions`: `id` (INTEGER PK AUTOINCREMENT), `endpoint` (TEXT NOT NULL UNIQUE), `p256dh` (TEXT NOT NULL), `auth` (TEXT NOT NULL), `user_agent` (TEXT), `is_active` (INTEGER DEFAULT 1 CHECK(is_active IN (0,1))), `created_at` (DATETIME DEFAULT CURRENT_TIMESTAMP), `updated_at` (DATETIME DEFAULT CURRENT_TIMESTAMP).
+  - [x] `push_subscriptions`: `id` (INTEGER PK AUTOINCREMENT), `endpoint` (TEXT NOT NULL UNIQUE), `p256dh` (TEXT NOT NULL), `auth` (TEXT NOT NULL), `user_agent` (TEXT), `is_active` (INTEGER DEFAULT 1 CHECK(is_active IN (0,1))), `created_at` (DATETIME DEFAULT CURRENT_TIMESTAMP), `updated_at` (DATETIME DEFAULT CURRENT_TIMESTAMP).
 - **6. Primary Key / Foreign Key:** `endpoint` sütunu benzersiz (UNIQUE) abonelik anahtarıdır. *(Kullanıcı/Admin FK ilişkisi: Önerilen / Uygulama sırasında doğrulanacak)*.
 - **7. Constraints:** `endpoint` UNIQUE kısıtı, `is_active IN (0,1)` CHECK kısıtı.
 - **8. Index Strategy:**
-  - [ ] `idx_push_endpoint` ON `push_subscriptions(endpoint)` (Abonelik sorgulaması).
-  - [ ] `idx_push_active` ON `push_subscriptions(is_active)` (Aktif alıcı listesi).
-- **9. Migration Strategy:** `DATA-001` sonrasında `0003_push_subscriptions.sql` olarak uygulanır.
+  - [x] `idx_push_endpoint` ON `push_subscriptions(endpoint)` *(SQLite UNIQUE kısıtı ile otomatik `sqlite_autoindex_push_subscriptions_1` olarak oluşturulmuştur)*.
+  - [x] `idx_push_active` ON `push_subscriptions(is_active)` (Aktif alıcı listesi).
+- **9. Migration Strategy:** `DATA-001` sonrasında (mevcut reposunda `0006_push_subscriptions.sql` olarak) uygulanır.
 - **10. Data Integrity:** Çift abonelik oluşmaması için `ON CONFLICT(endpoint) DO UPDATE` stratejisi kullanılır.
 - **11. Privacy / Retention:** Süresi dolan (410 Gone) abonelikler pasife alınır veya veritabanından temizlenir.
 - **12. Performance:** İndeksli `is_active` sorgusu ile bildirim gönderim altyapısına hızlı alıcı listesi sunumu.
 - **13. Test Requirements:** Mükerrer `endpoint` kaydında UNIQUE engelleme testi.
 - **14. Definition of Done (DoD):** *(Not: DoD altındaki [ ] işaretleri onay kriteridir)*
-  - [ ] `push_subscriptions` tablosunun D1 üzerinde hatasız oluşturulması.
+  - [x] `push_subscriptions` tablosunun D1 üzerinde hatasız oluşturulması.
 - **15. Hata / Risk Senaryoları:**
-  - [ ] Yenilenen abonelikte eski kaydın kalması -> `ON CONFLICT` ile güncelleme.
+  - [x] Yenilenen abonelikte eski kaydın kalması -> `ON CONFLICT` ile güncelleme.
 - **16. Zero-Cost Constraint:** Cloudflare D1 Free Tier kotalarında $0/Ay.
 - **17. Bağımlılıklar:** DATA-001.
 - **18. Bağımlı Görevler:** COM-004.
