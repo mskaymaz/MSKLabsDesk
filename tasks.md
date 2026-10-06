@@ -119,7 +119,8 @@
 - **Test Gereksinimleri (Mimari Seviye):** Geçerli/geçersiz rotalar ve middleware zinciri için birim testleri (Vitest).
 - **Definition of Done (DoD):** *(Not: DoD altındaki [ ] işaretleri görev durumu değil, tamamlanma onay kriterleridir)*
   - [x] `index.ts` dosyasının satır sayısının 150 satırın altına düşmesi.
-  - [x] Tüm public ve admin rotalarının modüler route dosyalarında tanımlanması.
+- [x] Tüm public rotaların modüler route dosyalarında tanımlanması.
+- [x] Tüm admin rotalarının modüler route dosyalarında tanımlanması.
   - [x] Global error handler'ın unhandled exception'ları güvenle yakalaması.
   - [x] Modüler router yapısının 450 satır kuralını ihlal etmemesi.
 - **Hata / Risk Senaryoları:**
@@ -231,7 +232,8 @@
 - **14. Definition of Done (DoD):** *(Not: DoD altındaki [ ] işaretleri onay kriteridir)*
   - [x] D1 veritabanı binding konfigürasyonunun (`binding = "DB"`, `database_name = "msklabsdesk_db"`) `wrangler.toml` dosyasında tanımlanması.
   - [x] Mevcut migration zincirindeki tüm migration dosyalarının temiz yerel `--local` D1 ortamında sıralı şekilde uygulanıp `d1_migrations` tablosu ile doğrulanması.
-  - [ ] Remote D1 veritabanına migration uygulanması ve canlı doğrulama *(Cloudflare API token/authentication gerektirir)*.
+- [ ] Remote D1 veritabanına migration uygulanması (`wrangler d1 migrations apply DB --remote`).
+- [ ] Remote D1 veritabanının canlı sorgu (`PRAGMA table_info`) ile doğrulanması.
 - **15. Hata / Risk Senaryoları:**
   - [x] Yanlış veritabanına migration atılması -> `wrangler.toml` env kilitleri ile engellenir.
 - **16. Zero-Cost Constraint:** Cloudflare D1 Free Tier kotalarında $0/Ay.
