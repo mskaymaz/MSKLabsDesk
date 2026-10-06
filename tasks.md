@@ -270,24 +270,24 @@
 
 ### DATA-005 — Ad Settings Migration (`0004_ad_settings.sql`)
 - **2. Amaç:** Sitedeki reklam alanlarının konum, boyut, aktiflik ve marj ayarlarını saklamak ve varsayılan 4 reklam alanını seed verisi olarak veritabanına eklemek.
-- **3. Kapsam:** `backend/migrations/0004_ad_settings.sql` dosyası; `ad_settings` tablosu ve 4 varsayılan seed kaydı (`header_banner`, `sidebar_top`, `post_in_article`, `footer_sticky`).
+- **3. Kapsam:** `backend/migrations/0004_ad_settings.sql` (Repo yerel sıralamasında `migrations/0007_ad_settings.sql`) dosyası; `ad_settings` tablosu ve 4 varsayılan seed kaydı (`header_banner`, `sidebar_top`, `post_in_article`, `footer_sticky`).
 - **4. Teknik Gereksinimler:** AdSense duyarlı (responsive) veya özel boyut parametrelerinin saklanması, `slot_key` benzersizliği.
 - **5. Schema / Table Design:**
-  - [ ] `ad_settings`: `id` (INTEGER PK AUTOINCREMENT), `slot_key` (TEXT NOT NULL UNIQUE), `title` (TEXT NOT NULL), `is_enabled` (INTEGER DEFAULT 0 CHECK(is_enabled IN (0,1))), `ad_client` (TEXT), `ad_slot` (TEXT), `preset_size` (TEXT DEFAULT 'RESPONSIVE'), `custom_width` (INTEGER), `custom_height` (INTEGER), `margin_top` (INTEGER DEFAULT 16), `margin_bottom` (INTEGER DEFAULT 16), `is_sticky` (INTEGER DEFAULT 0), `updated_at` (DATETIME DEFAULT CURRENT_TIMESTAMP).
-  - [ ] Seed Verisi: `INSERT OR IGNORE INTO ad_settings` ile 4 varsayılan slot kaydı.
+  - [x] `ad_settings`: `id` (INTEGER PK AUTOINCREMENT), `slot_key` (TEXT NOT NULL UNIQUE), `title` (TEXT NOT NULL), `is_enabled` (INTEGER DEFAULT 0 CHECK(is_enabled IN (0,1))), `ad_client` (TEXT), `ad_slot` (TEXT), `preset_size` (TEXT DEFAULT 'RESPONSIVE'), `custom_width` (INTEGER), `custom_height` (INTEGER), `margin_top` (INTEGER DEFAULT 16), `margin_bottom` (INTEGER DEFAULT 16), `is_sticky` (INTEGER DEFAULT 0 CHECK(is_sticky IN (0,1))), `updated_at` (DATETIME DEFAULT CURRENT_TIMESTAMP).
+  - [x] Seed Verisi: `INSERT OR IGNORE INTO ad_settings` ile 4 varsayılan slot kaydı.
 - **6. Primary Key / Foreign Key:** `slot_key` benzersiz metin anahtarıdır.
 - **7. Constraints:** `slot_key` UNIQUE, `is_enabled IN (0,1)` CHECK, `is_sticky IN (0,1)` CHECK.
 - **8. Index Strategy:**
-  - [ ] `idx_ad_slot_key` ON `ad_settings(slot_key)` (Hızlı reklam ayarı çekimi).
-- **9. Migration Strategy:** `DATA-001` sonrasında `0004_ad_settings.sql` olarak çalıştırılır.
+  - [x] `idx_ad_slot_key` ON `ad_settings(slot_key)` (Hızlı reklam ayarı çekimi).
+- **9. Migration Strategy:** `DATA-001` sonrasında (mevcut reposunda `0007_ad_settings.sql` olarak) çalıştırılır.
 - **10. Data Integrity:** Seed verisinin tekrar çalıştırılan migration'larda mükerrer kayıt oluşturmaması (`INSERT OR IGNORE`).
 - **11. Privacy / Retention:** Reklam ayarlarında PII bulunmaz; kamuya açık reklam kodları sunulur.
 - **12. Performance:** 4 sabit reklam alanının O(1) hızında önbellekten veya indeksli D1 sorgusundan çekilmesi.
 - **13. Test Requirements:** Migration iki kez çalıştırıldığında seed verisinin tekrarlanmadığının doğrulanması.
 - **14. Definition of Done (DoD):** *(Not: DoD altındaki [ ] işaretleri onay kriteridir)*
-  - [ ] `ad_settings` tablosunun ve 4 seed kaydının veritabanına eklenmesi.
+  - [x] `ad_settings` tablosunun ve 4 seed kaydının veritabanına eklenmesi.
 - **15. Hata / Risk Senaryoları:**
-  - [ ] Tekrarlanan migration uygulamasında UNIQUE hatası -> `INSERT OR IGNORE` ile önlenir.
+  - [x] Tekrarlanan migration uygulamasında UNIQUE hatası -> `INSERT OR IGNORE` ile önlenir.
 - **16. Zero-Cost Constraint:** Cloudflare D1 Free Tier kotalarında $0/Ay.
 - **17. Bağımlılıklar:** DATA-001.
 - **18. Bağımlı Görevler:** ADS-001, ADS-002.
