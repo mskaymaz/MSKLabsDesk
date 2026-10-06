@@ -163,7 +163,7 @@
 - **12. Performance:** İndeksli status ve tarih sorguları ile O(log N) zaman karmaşıklığı; aylık 50k+ mesaj hacminde hafif metin/JSON yapıları.
 - **13. Test Requirements:** Temiz D1 SQLite üzerinde `0001_initial_schema.sql` çalıştırma ve `PRAGMA foreign_key_check` sıfır hata doğrulaması.
 - **14. Definition of Done (DoD):** *(Not: DoD altındaki [ ] işaretleri onay kriteridir)*
-  - [x] 9 ana tablonun hatasız oluşturulması.
+  - [x] 10 ana tablonun (`messages`, `message_events`, `replies`, `comments`, `subscribers`, `subscriber_preferences`, `email_queue`, `coupons`, `admins`, `broadcasts`) hatasız oluşturulması.
   - [x] Tüm FOREIGN KEY ve CASCADE kurallarının doğrulanması.
   - [x] Performans indekslerinin `PRAGMA index_list` ile teyit edilmesi.
 - **15. Hata / Risk Senaryoları:**
@@ -176,32 +176,32 @@
 
 ---
 
-### DATA-002 — CMS D1 Database Migration (`0002_cms_schema.sql`)
+### DATA-002 — CMS D1 Database Migration (`0002_cms_schema.sql` / Repo: `0005_cms_schema.sql`)
 - **2. Amaç:** Headless CMS için blog kanalları, blog yazıları, mobil uygulama kataloğu, sürüm geçmişi, site şablon duyuruları ve medya varlıklarının veritabanı altyapısını kurmak.
-- **3. Kapsam:** `backend/migrations/0002_cms_schema.sql` dosyası; `blog_channels`, `blog_posts`, `apps`, `app_versions`, `site_templates`, `media_assets` tabloları ve `comments.post_id` ilişkisi.
+- **3. Kapsam:** `backend/migrations/0002_cms_schema.sql` (Repo yerel sıralamasında `migrations/0005_cms_schema.sql`) dosyası; `blog_channels`, `blog_posts`, `apps`, `app_versions`, `site_templates`, `media_assets` tabloları ve `comments.post_id` ilişkisi.
 - **4. Teknik Gereksinimler:** Çok dilli sütun kurgusu (`title_tr/en/ar`), slug benzersizliği ve medya varlıklarının R2 nesne depolama referanslarıyla ilişkilendirilmesi.
 - **5. Schema / Table Design:**
   - [x] `blog_channels`: `id` (INTEGER PK AUTOINCREMENT), `slug` (TEXT NOT NULL UNIQUE), `name_tr` (TEXT NOT NULL), `name_en` (TEXT), `name_ar` (TEXT), `icon` (TEXT), `created_at` (DATETIME DEFAULT CURRENT_TIMESTAMP).
   - [x] `blog_posts`: `id` (INTEGER PK AUTOINCREMENT), `channel_id` (INTEGER FK → `blog_channels(id)` ON DELETE SET NULL), `slug` (TEXT NOT NULL UNIQUE), `title_tr` (TEXT NOT NULL), `title_en` (TEXT), `title_ar` (TEXT), `content_tr` (TEXT NOT NULL), `content_en` (TEXT), `content_ar` (TEXT), `summary_tr` (TEXT), `summary_en` (TEXT), `summary_ar` (TEXT), `cover_image` (TEXT), `status` (TEXT DEFAULT 'DRAFT' CHECK(status IN ('DRAFT','REVIEW','APPROVED','PUBLISHED','UNPUBLISHED','ARCHIVED'))), `view_count` (INTEGER DEFAULT 0), `published_at` (DATETIME), `created_at` (DATETIME DEFAULT CURRENT_TIMESTAMP), `updated_at` (DATETIME DEFAULT CURRENT_TIMESTAMP).
-  - [x] `apps`: `id` (INTEGER PK AUTOINCREMENT), `slug` (TEXT NOT NULL UNIQUE), `name` (TEXT NOT NULL), `short_description_tr` (TEXT), `short_description_en` (TEXT), `icon_url` (TEXT), `platform` (TEXT DEFAULT 'BOTH' CHECK(platform IN ('ANDROID','IOS','BOTH','WEB'))), `is_featured` (INTEGER DEFAULT 0), `created_at` (DATETIME DEFAULT CURRENT_TIMESTAMP).
-  - [x] `app_versions`: `id` (INTEGER PK AUTOINCREMENT), `app_id` (INTEGER NOT NULL FK → `apps(id)` ON DELETE CASCADE), `version_number` (TEXT NOT NULL), `release_notes_tr` (TEXT), `release_notes_en` (TEXT), `apk_url` (TEXT), `store_url` (TEXT), `is_current` (INTEGER DEFAULT 1), `published_at` (DATETIME DEFAULT CURRENT_TIMESTAMP).
-  - [x] `site_templates`: `id` (INTEGER PK AUTOINCREMENT), `key` (TEXT NOT NULL UNIQUE), `title` (TEXT NOT NULL), `content` (TEXT), `is_active` (INTEGER DEFAULT 1), `created_at` (DATETIME DEFAULT CURRENT_TIMESTAMP).
-  - [x] `media_assets`: `id` (INTEGER PK AUTOINCREMENT), `filename` (TEXT NOT NULL), `r2_key` (TEXT NOT NULL UNIQUE), `mime_type` (TEXT NOT NULL), `size_bytes` (INTEGER NOT NULL), `public_url` (TEXT NOT NULL), `created_at` (DATETIME DEFAULT CURRENT_TIMESTAMP).
+  - [x] `apps`: `id` (INTEGER PK AUTOINCREMENT), `slug` (TEXT NOT NULL UNIQUE), `name` (TEXT NOT NULL), `short_description_tr` (TEXT), `short_description_en` (TEXT), `icon_url` (TEXT), `platform` (TEXT DEFAULT 'BOTH' CHECK(platform IN ('ANDROID','IOS','BOTH','WEB'))), `is_featured` (INTEGER DEFAULT 0 CHECK(is_featured IN (0,1))), `created_at` (DATETIME DEFAULT CURRENT_TIMESTAMP).
+  - [x] `app_versions`: `id` (INTEGER PK AUTOINCREMENT), `app_id` (INTEGER NOT NULL FK → `apps(id)` ON DELETE CASCADE), `version_number` (TEXT NOT NULL), `release_notes_tr` (TEXT), `release_notes_en` (TEXT), `apk_url` (TEXT), `store_url` (TEXT), `is_current` (INTEGER DEFAULT 1 CHECK(is_current IN (0,1))), `published_at` (DATETIME DEFAULT CURRENT_TIMESTAMP).
+  - [x] `site_templates`: `id` (INTEGER PK AUTOINCREMENT), `key` (TEXT NOT NULL UNIQUE), `title` (TEXT NOT NULL), `content` (TEXT), `is_active` (INTEGER DEFAULT 1 CHECK(is_active IN (0,1))), `created_at` (DATETIME DEFAULT CURRENT_TIMESTAMP).
+  - [x] `media_assets`: `id` (INTEGER PK AUTOINCREMENT), `filename` (TEXT NOT NULL), `r2_key` (TEXT NOT NULL UNIQUE), `mime_type` (TEXT NOT NULL), `size_bytes` (INTEGER NOT NULL), `public_url` (TEXT NOT NULL), `created_at` (DATETIME DEFAULT CURRENT_TIMESTAMP). *(Not: public_url alanının saklanması veya r2_key üzerinden API katmanında dinamik üretilmesi tercihi uygulama mimarisi sırasında doğrulanacaktır)*.
 - **6. Primary Key / Foreign Key:**
   - [x] `blog_posts.channel_id` → `blog_channels.id` (N:1, `ON DELETE SET NULL`).
   - [x] `app_versions.app_id` → `apps.id` (1:N, `ON DELETE CASCADE`).
-  - [x] `comments.post_id` → `blog_posts.id` *(Önerilen / Uygulama sırasında doğrulanacak)*.
-- **7. Constraints:** `blog_channels.slug` UNIQUE, `blog_posts.slug` UNIQUE, `apps.slug` UNIQUE, `site_templates.key` UNIQUE, `media_assets.r2_key` UNIQUE, `blog_posts.status IN (...)` CHECK, `apps.platform IN (...)` CHECK.
+  - [x] `comments.post_id` → `blog_posts.id` (1:N, `ON DELETE CASCADE` — `0005_cms_schema.sql` ile eklenmiş ve doğrulanmıştır).
+- **7. Constraints:** `blog_channels.slug` UNIQUE, `blog_posts.slug` UNIQUE, `apps.slug` UNIQUE, `site_templates.key` UNIQUE, `media_assets.r2_key` UNIQUE, `blog_posts.status IN (...)` CHECK, `apps.platform IN (...)` CHECK, `apps.is_featured IN (0,1)` CHECK, `app_versions.is_current IN (0,1)` CHECK, `site_templates.is_active IN (0,1)` CHECK.
 - **8. Index Strategy:**
   - [x] `idx_blog_posts_slug` ON `blog_posts(slug)` (Blog detay).
   - [x] `idx_blog_posts_status_published` ON `blog_posts(status, published_at DESC)` (Public yayın akışı).
   - [x] `idx_apps_slug` ON `apps(slug)` (Uygulama detay).
   - [x] `idx_app_versions_app_current` ON `app_versions(app_id, is_current)` (Aktif sürüm).
-- **9. Migration Strategy:** `0001_initial_schema.sql` tamamlandıktan sonra ikinci sırada `0002_cms_schema.sql` olarak uygulanır.
-- **10. Data Integrity:** Kanal silindiğinde yazıların yetim kalmaması için `ON DELETE SET NULL` uygulanır; uygulama silindiğinde sürümleri `CASCADE` ile silinir.
+- **9. Migration Strategy:** `0001` alt yapısı tamamlandıktan sonra CMS migration'ı olarak (mevcut reposunda `0005_cms_schema.sql`) uygulanır.
+- **10. Data Integrity & Migration Güvenliği:** Kanal silindiğinde yazıların yetim kalmaması için `ON DELETE SET NULL` uygulanır; uygulama silindiğinde sürümleri `CASCADE` ile silinir. *Foreign Key Migration Güvenliği:* Mevcut `comments` kayıtları varsa migration sırasında FK dönüşümünün veri kaybı oluşturmaması için `post_slug` ile `blog_posts.slug` arasındaki eşleştirme/uyumsuz kayıt politikası tanımlanmalı, migration öncesi veri uyumluluk adımı uygulanmalıdır.
 - **11. Privacy / Retention:** Blog yazılarının silinmesi yerine `status='ARCHIVED'` ile soft-delete yapılır. Medya silindiğinde R2 dosya kontrolü yapılır.
 - **12. Performance:** Slug indeksleri ile public sayfa yükleme süresi < 5ms; yayınlanmış yazılarda composite indeks kullanımı.
-- **13. Test Requirements:** `0001` ve `0002` dosyalarının temiz D1 SQLite ortamında sırayla çalıştırılması ve `PRAGMA foreign_key_check` doğrulaması.
+- **13. Test Requirements:** `0001` ve `0005` dosyalarının temiz D1 SQLite ortamında sırayla çalıştırılması ve `PRAGMA foreign_key_check` doğrulaması.
 - **14. Definition of Done (DoD):** *(Not: DoD altındaki [ ] işaretleri onay kriteridir)*
   - [x] 6 yeni CMS tablosunun hatasız oluşturulması.
   - [x] Slug UNIQUE indekslerinin teyit edilmesi.
@@ -230,7 +230,7 @@
 - **13. Test Requirements:** `wrangler d1 execute DB --remote --command "PRAGMA table_info(messages);"` ile uzak tablo doğrulaması.
 - **14. Definition of Done (DoD):** *(Not: DoD altındaki [ ] işaretleri onay kriteridir)*
   - [x] D1 veritabanı binding konfigürasyonunun (`binding = "DB"`, `database_name = "msklabsdesk_db"`) `wrangler.toml` dosyasında tanımlanması.
-  - [x] Yerel `--local` ortamda tüm 5 migration dosyasının uygulanıp `d1_migrations` tablosu ile doğrulanması.
+  - [x] Mevcut migration zincirindeki tüm migration dosyalarının temiz yerel `--local` D1 ortamında sıralı şekilde uygulanıp `d1_migrations` tablosu ile doğrulanması.
   - [ ] Remote D1 veritabanına migration uygulanması ve canlı doğrulama *(Cloudflare API token/authentication gerektirir)*.
 - **15. Hata / Risk Senaryoları:**
   - [x] Yanlış veritabanına migration atılması -> `wrangler.toml` env kilitleri ile engellenir.
@@ -241,10 +241,10 @@
 
 ---
 
-### DATA-004 — Push Subscriptions Migration (`0003_push_subscriptions.sql`)
+### DATA-004 — Push Subscriptions Migration (`0006_push_subscriptions.sql`)
 - **2. Amaç:** Web Push bildirimleri için tarayıcı push abonelik noktalarını (VAPID endpoint ve anahtarları) saklayan veritabanı tablosunu oluşturmak.
-- **3. Kapsam:** `backend/migrations/0003_push_subscriptions.sql` (Repo yerel sıralamasında `migrations/0006_push_subscriptions.sql`) dosyası; `push_subscriptions` tablosu.
-- **4. Teknik Gereksinimler:** Tarayıcı VAPID kimlik doğrulama anahtarlarının (`p256dh`, `auth`) şifreli saklanması ve `endpoint` benzersizliği.
+- **3. Kapsam:** `backend/migrations/0006_push_subscriptions.sql` dosyası; `push_subscriptions` tablosu.
+- **4. Teknik Gereksinimler:** DB kolon tipi `TEXT`'tir. `p256dh` ve `auth` anahtarlarının şifreli saklanması ve çözülmesi uygulama/servis katmanında (SEC/COM) yönetilecek bir güvenlik gereksinimidir; bu değerler API yanıtlarında kesinlikle dışarıya sızdırılmamalıdır. `endpoint` benzersizliği garanti edilmelidir.
 - **5. Schema / Table Design:**
   - [x] `push_subscriptions`: `id` (INTEGER PK AUTOINCREMENT), `endpoint` (TEXT NOT NULL UNIQUE), `p256dh` (TEXT NOT NULL), `auth` (TEXT NOT NULL), `user_agent` (TEXT), `is_active` (INTEGER DEFAULT 1 CHECK(is_active IN (0,1))), `created_at` (DATETIME DEFAULT CURRENT_TIMESTAMP), `updated_at` (DATETIME DEFAULT CURRENT_TIMESTAMP).
 - **6. Primary Key / Foreign Key:** `endpoint` sütunu benzersiz (UNIQUE) abonelik anahtarıdır. *(Kullanıcı/Admin FK ilişkisi: Önerilen / Uygulama sırasında doğrulanacak)*.
@@ -252,8 +252,8 @@
 - **8. Index Strategy:**
   - [x] `idx_push_endpoint` ON `push_subscriptions(endpoint)` *(SQLite UNIQUE kısıtı ile otomatik `sqlite_autoindex_push_subscriptions_1` olarak oluşturulmuştur)*.
   - [x] `idx_push_active` ON `push_subscriptions(is_active)` (Aktif alıcı listesi).
-- **9. Migration Strategy:** `DATA-001` sonrasında (mevcut reposunda `0006_push_subscriptions.sql` olarak) uygulanır.
-- **10. Data Integrity:** Çift abonelik oluşmaması için `ON CONFLICT(endpoint) DO UPDATE` stratejisi kullanılır.
+- **9. Migration Strategy:** `DATA-001` sonrasında (reposunda `0006_push_subscriptions.sql` olarak) uygulanır.
+- **10. Data Integrity:** Çift abonelik oluşmaması için `ON CONFLICT(endpoint) DO UPDATE` stratejisi kullanılır. `updated_at` alanı `DEFAULT CURRENT_TIMESTAMP` ile sadece INSERT anını belirler; UPDATE anında otomatik zaman yenilenmesi uygulama katmanı veya açık SQLite trigger ile sağlanır.
 - **11. Privacy / Retention:** Süresi dolan (410 Gone) abonelikler pasife alınır veya veritabanından temizlenir.
 - **12. Performance:** İndeksli `is_active` sorgusu ile bildirim gönderim altyapısına hızlı alıcı listesi sunumu.
 - **13. Test Requirements:** Mükerrer `endpoint` kaydında UNIQUE engelleme testi.
@@ -268,9 +268,9 @@
 
 ---
 
-### DATA-005 — Ad Settings Migration (`0004_ad_settings.sql`)
+### DATA-005 — Ad Settings Migration (`0007_ad_settings.sql`)
 - **2. Amaç:** Sitedeki reklam alanlarının konum, boyut, aktiflik ve marj ayarlarını saklamak ve varsayılan 4 reklam alanını seed verisi olarak veritabanına eklemek.
-- **3. Kapsam:** `backend/migrations/0004_ad_settings.sql` (Repo yerel sıralamasında `migrations/0007_ad_settings.sql`) dosyası; `ad_settings` tablosu ve 4 varsayılan seed kaydı (`header_banner`, `sidebar_top`, `post_in_article`, `footer_sticky`).
+- **3. Kapsam:** `backend/migrations/0007_ad_settings.sql` dosyası; `ad_settings` tablosu ve 4 varsayılan seed kaydı (`header_banner`, `sidebar_top`, `post_in_article`, `footer_sticky`).
 - **4. Teknik Gereksinimler:** AdSense duyarlı (responsive) veya özel boyut parametrelerinin saklanması, `slot_key` benzersizliği.
 - **5. Schema / Table Design:**
   - [x] `ad_settings`: `id` (INTEGER PK AUTOINCREMENT), `slot_key` (TEXT NOT NULL UNIQUE), `title` (TEXT NOT NULL), `is_enabled` (INTEGER DEFAULT 0 CHECK(is_enabled IN (0,1))), `ad_client` (TEXT), `ad_slot` (TEXT), `preset_size` (TEXT DEFAULT 'RESPONSIVE'), `custom_width` (INTEGER), `custom_height` (INTEGER), `margin_top` (INTEGER DEFAULT 16), `margin_bottom` (INTEGER DEFAULT 16), `is_sticky` (INTEGER DEFAULT 0 CHECK(is_sticky IN (0,1))), `updated_at` (DATETIME DEFAULT CURRENT_TIMESTAMP).
@@ -279,10 +279,10 @@
 - **7. Constraints:** `slot_key` UNIQUE, `is_enabled IN (0,1)` CHECK, `is_sticky IN (0,1)` CHECK.
 - **8. Index Strategy:**
   - [x] `idx_ad_slot_key` ON `ad_settings(slot_key)` (Hızlı reklam ayarı çekimi).
-- **9. Migration Strategy:** `DATA-001` sonrasında (mevcut reposunda `0007_ad_settings.sql` olarak) çalıştırılır.
-- **10. Data Integrity:** Seed verisinin tekrar çalıştırılan migration'larda mükerrer kayıt oluşturmaması (`INSERT OR IGNORE`).
+- **9. Migration Strategy:** `DATA-001` sonrasında (reposunda `0007_ad_settings.sql` olarak) çalıştırılır.
+- **10. Data Integrity:** Seed verisinin tekrar çalıştırılan migration'larda mükerrer kayıt oluşturmaması (`INSERT OR IGNORE`). `updated_at` alanı UPDATE işlemi sırasında uygulama katmanı veya açıkça tanımlanmış SQLite trigger (`trg_ad_settings_updated_at`) tarafından güncellenir.
 - **11. Privacy / Retention:** Reklam ayarlarında PII bulunmaz; kamuya açık reklam kodları sunulur.
-- **12. Performance:** 4 sabit reklam alanının O(1) hızında önbellekten veya indeksli D1 sorgusundan çekilmesi.
+- **12. Performance:** 4 sabit reklam alanının indeksli sorgu veya önbellek ile düşük maliyetli erişimi *(benchmark ile doğrulanacak target)*.
 - **13. Test Requirements:** Migration iki kez çalıştırıldığında seed verisinin tekrarlanmadığının doğrulanması.
 - **14. Definition of Done (DoD):** *(Not: DoD altındaki [ ] işaretleri onay kriteridir)*
   - [x] `ad_settings` tablosunun ve 4 seed kaydının veritabanına eklenmesi.
@@ -295,61 +295,62 @@
 
 ---
 
-### DATA-006 — Blog Layouts & Revisions Migration (`0005_blog_layouts.sql`)
+### DATA-006 — Blog Layouts & Revisions Migration (`Mevcut migration zincirindeki bir sonraki uygun numara (örn: 0008_blog_layouts.sql)`)
 - **2. Amaç:** Blog yazılarının geçmiş sürüm revizyonlarını saklamak ve blok tabanlı dinamik sayfa düzenlerini depolamak.
-- **3. Kapsam:** `backend/migrations/0005_blog_layouts.sql` dosyası; `post_revisions` ve `blog_layouts` tabloları.
-- **4. Teknik Gereksinimler:** Revizyon geçmişinin numaralandırılması (`revision_number`), JSON formatlı blok ve tema yapısı (`block_structure_json`, `theme_config_json`), silme işlemlerinde referans bütünlüğü (`CASCADE`).
+- **3. Kapsam:** `backend/migrations/0008_blog_layouts.sql` (Mevcut migration zincirindeki sıradaki dosya) dosyası; `post_revisions` ve `blog_layouts` tabloları.
+- **4. Teknik Gereksinimler:** Revizyon geçmişinin numaralandırılması (`revision_number`), `(post_id, revision_number)` bileşik benzersizliği (`UNIQUE`), JSON formatlı blok ve tema yapısı (`block_structure_json`, `theme_config_json`), silme işlemlerinde referans bütünlüğü (`CASCADE`).
 - **5. Schema / Table Design:**
-  - [ ] `post_revisions`: `id` (INTEGER PRIMARY KEY AUTOINCREMENT), `post_id` (INTEGER NOT NULL FK → `blog_posts(id)` ON DELETE CASCADE), `title` (TEXT NOT NULL), `content` (TEXT NOT NULL), `summary` (TEXT), `snapshot_json` (TEXT), `revision_number` (INTEGER NOT NULL), `created_by` (TEXT DEFAULT 'ADMIN'), `created_at` (DATETIME DEFAULT CURRENT_TIMESTAMP).
-  - [ ] `blog_layouts`: `id` (INTEGER PRIMARY KEY AUTOINCREMENT), `post_id` (INTEGER FK → `blog_posts(id)` ON DELETE CASCADE), `layout_name` (TEXT NOT NULL), `block_structure_json` (TEXT NOT NULL), `theme_config_json` (TEXT), `is_active` (INTEGER DEFAULT 1 CHECK(is_active IN (0,1))), `updated_at` (DATETIME DEFAULT CURRENT_TIMESTAMP). *(JSON şeması: Önerilen / Uygulama sırasında doğrulanacak)*.
+  - [ ] `post_revisions`: `id` (INTEGER PRIMARY KEY AUTOINCREMENT), `post_id` (INTEGER NOT NULL FK → `blog_posts(id)` ON DELETE CASCADE), `title` (TEXT NOT NULL), `content` (TEXT NOT NULL), `summary` (TEXT), `snapshot_json` (TEXT NOT NULL), `revision_number` (INTEGER NOT NULL), `created_by_admin_id` (INTEGER FK → `admins(id)` ON DELETE SET NULL), `created_at` (DATETIME DEFAULT CURRENT_TIMESTAMP), UNIQUE(`post_id`, `revision_number`). *(Mimari Not: `title`, `content` ve `summary` alanları hızlı sorgulama ve indeksleme amacıyla ayrıştırılmış; `snapshot_json` ise revizyon anının tam ve değişmez canonical doğru kaynağı / source of truth olarak saklanır. `created_by_admin_id` admin ID tutar, sistem revizyonlarında NULL/system actor kabul edilir)*.
+  - [ ] `blog_layouts`: `id` (INTEGER PRIMARY KEY AUTOINCREMENT), `post_id` (INTEGER NOT NULL FK → `blog_posts(id)` ON DELETE CASCADE), `layout_name` (TEXT NOT NULL), `block_structure_json` (TEXT NOT NULL), `theme_config_json` (TEXT), `is_active` (INTEGER DEFAULT 1 CHECK(is_active IN (0,1))), `updated_at` (DATETIME DEFAULT CURRENT_TIMESTAMP). *(Not: `post_id NOT NULL` kuralı geçerlidir; global şablon desteği istenirse açık mimari kararla nullable yapılabilir. Her post için aynı anda yalnızca tek bir aktif layout (`is_active = 1`) bulunabilir)*.
 - **6. Primary Key / Foreign Key:**
   - [ ] `post_revisions.id` (INTEGER PK), `blog_layouts.id` (INTEGER PK).
   - [ ] `post_revisions.post_id` → `blog_posts.id` (1:N, `ON DELETE CASCADE`).
   - [ ] `blog_layouts.post_id` → `blog_posts.id` (1:N, `ON DELETE CASCADE`).
-- **7. Constraints:** `post_revisions` için `(post_id, revision_number)` bileşik benzersizlik *(Önerilen / Uygulama sırasında doğrulanacak)*, `blog_layouts.is_active IN (0,1)` CHECK kısıtı.
+  - [ ] `post_revisions.created_by_admin_id` → `admins.id` (N:1, `ON DELETE SET NULL`).
+- **7. Constraints:** `post_revisions(post_id, revision_number)` UNIQUE kısıtı zorunludur. `blog_layouts.is_active IN (0,1)` CHECK kısıtı. Her yazı için maksimum 1 aktif layout iş kuralı kısıtı.
 - **8. Index Strategy:**
   - [ ] `idx_revisions_post_id` ON `post_revisions(post_id, revision_number DESC)` (Revizyon geçmişi çekimi).
   - [ ] `idx_blog_layouts_post` ON `blog_layouts(post_id)` (Yazıya özel düzen çekimi).
-- **9. Migration Strategy:** `DATA-002` (`blog_posts`) oluştuktan sonra `0005_blog_layouts.sql` olarak uygulanır.
-- **10. Data Integrity:** Bağlı blog yazısı silindiğinde revizyon ve düzen kayıtları otomatik silinir (`ON DELETE CASCADE`); JSON verileri API katmanında doğrulanır.
-- **11. Privacy / Retention:** Yazı başına maksimum 10 revizyon sınırı tutularak veritabanı şişmesi engellenir. Revizyonlarda PII tutulmaz.
-- **12. Performance:** Revizyon ve düzen sorguları O(log N) indeks erişimi ile 5ms altında yanıtlanır.
-- **13. Test Requirements:** Post silindiğinde revizyon ve layout kayıtlarının silindiğinin (`CASCADE`) ve `PRAGMA foreign_key_check` doğrulanması.
+- **9. Migration Strategy:** `DATA-002` (`blog_posts`) oluştuktan sonra zincirdeki bir sonraki numara ile uygulanır.
+- **10. Data Integrity & Retention Kuralı:** Bağlı blog yazısı silindiğinde revizyon ve düzen kayıtları otomatik silinir (`ON DELETE CASCADE`). *Maksimum 10 Revizyon Limiti:* Yazı başına 11. revizyon oluşturulduğunda en eski revizyon kontrollü bir transaction içinde otomatik temizlenir. *Revision Restore Davranışı:* Eski revizyona geri dönme (restore) işleminde geçmiş kayıt üzerine yazılmaz, eski içerikle yeni bir revizyon kaydı oluşturulur.
+- **11. Privacy / Retention:** Revizyonlarda PII tutulmaz. 10 revizyon sınırı ile veritabanı şişmesi engellenir.
+- **12. Performance:** Revizyon ve düzen sorguları indeks erişimi ile düşük gecikmeli yanıtlanır *(benchmark ile doğrulanacak target)*.
+- **13. Test Requirements:** Post silindiğinde revizyon ve layout kayıtlarının silindiğinin (`CASCADE`), `(post_id, revision_number)` UNIQUE kısıtının ve `PRAGMA foreign_key_check` doğrulanması.
 - **14. Definition of Done (DoD):** *(Not: DoD altındaki [ ] işaretleri onay kriteridir)*
   - [ ] `post_revisions` ve `blog_layouts` tablolarının D1 üzerinde hatasız oluşturulması.
-  - [ ] Foreign key CASCADE davranışının test edilmesi.
+  - [ ] Foreign key CASCADE ve UNIQUE kısıt davranışlarının test edilmesi.
 - **15. Hata / Risk Senaryoları:**
-  - [ ] Hatalı JSON kaydedilmesi -> API seviyesinde JSON şema denetimi.
-  - [ ] Revizyon sayısının kontrolden çıkması -> Yazı başına 10 revizyon sınırı uygulanması.
+  - [ ] Hatalı JSON kaydedilmesi -> API/service katmanında geçerli JSON, nesne yapısı ve schema version doğrulaması.
+  - [ ] Revizyon sayısının kontrolden çıkması -> Transaction içinde en eski 11. revizyonun temizlenmesi.
 - **16. Zero-Cost Constraint:** Cloudflare D1 Free Tier kotalarında $0/Ay.
 - **17. Bağımlılıklar:** DATA-002.
 - **18. Bağımlı Görevler:** CMS-001, CMS-005.
-- **19. Uygulama Notları:** Blok yapıları `block_structure_json` içinde saklanır; tema özelleştirmeleri `theme_config_json` içinde tutulur.
+- **19. Uygulama Notları:** Blok yapıları `block_structure_json` içinde, tema özelleştirmeleri `theme_config_json` içinde saklanır. API katmanında JSON schema doğrulaması zorunludur.
 
 ---
 
-### DATA-007 — Translation Cache & Glossary Migration (`0006_translation.sql`)
+### DATA-007 — Translation Cache & Glossary Migration (`Mevcut migration zincirindeki bir sonraki uygun numara (örn: 0009_translation.sql)`)
 - **2. Amaç:** Gemini/DeepL API tarafından yapılan çevirileri önbelleğe alarak mükerrer API harcamalarını engellemek ve terim sözlüğü (glossary) verilerini saklamak.
-- **3. Kapsam:** `backend/migrations/0006_translation.sql` dosyası; `translation_cache` ve `glossary` tabloları.
-- **4. Teknik Gereksinimler:** Çeviri kaynağının SHA-256 hash'lenerek (`source_hash`) O(1) hızında aranabilmesi, dil çifti yönetimi (`source_lang`, `target_lang`), glossary terim eşleştirmesi.
+- **3. Kapsam:** `backend/migrations/0009_translation.sql` (Mevcut migration zincirindeki sıradaki dosya) dosyası; `translation_cache` ve `glossary` tabloları.
+- **4. Teknik Gereksinimler:** Çeviri kaynağının SHA-256 hash'lenerek (`source_hash`) indeksli sorgu ile hızlı aranabilmesi, dil çifti yönetimi (`source_lang`, `target_lang`), glossary terim eşleştirmesi.
 - **5. Schema / Table Design:**
-  - [ ] `translation_cache`: `id` (INTEGER PRIMARY KEY AUTOINCREMENT), `source_hash` (TEXT NOT NULL UNIQUE), `source_lang` (TEXT NOT NULL), `target_lang` (TEXT NOT NULL), `source_text` (TEXT NOT NULL), `translated_text` (TEXT NOT NULL), `provider` (TEXT DEFAULT 'GEMINI'), `quality_score` (REAL DEFAULT 1.0), `created_at` (DATETIME DEFAULT CURRENT_TIMESTAMP). *(Metin hash formatı: Önerilen / Uygulama sırasında doğrulanacak)*.
+  - [ ] `translation_cache`: `id` (INTEGER PRIMARY KEY AUTOINCREMENT), `source_hash` (TEXT NOT NULL UNIQUE), `source_lang` (TEXT NOT NULL), `target_lang` (TEXT NOT NULL), `source_text` (TEXT NOT NULL), `translated_text` (TEXT NOT NULL), `provider` (TEXT DEFAULT 'GEMINI'), `quality_score` (REAL DEFAULT 1.0), `created_at` (DATETIME DEFAULT CURRENT_TIMESTAMP). *(Mimari Not: `source_hash` varsayılan olarak provider-independent `SHA-256(source_lang + ":" + target_lang + ":" + source_text)` üzerinden hesaplanır; provider bu senaryoda metadata'dır. Eğer provider/model bazlı izolasyon istenirse `source_hash` türetimine provider adı dahil edilmelidir. `quality_score` 0.0 - 1.0 arası güven/kalite skorunu temsil eder)*.
   - [ ] `glossary`: `id` (INTEGER PRIMARY KEY AUTOINCREMENT), `source_term` (TEXT NOT NULL), `target_term` (TEXT NOT NULL), `source_lang` (TEXT DEFAULT 'TR'), `target_lang` (TEXT DEFAULT 'EN'), `category` (TEXT DEFAULT 'TECHNICAL'), `is_active` (INTEGER DEFAULT 1 CHECK(is_active IN (0,1))), `created_at` (DATETIME DEFAULT CURRENT_TIMESTAMP), UNIQUE(`source_term`, `source_lang`, `target_lang`).
 - **6. Primary Key / Foreign Key:** `translation_cache.id` (INTEGER PK), `glossary.id` (INTEGER PK). `source_hash` (TEXT UNIQUE) benzersiz arama anahtarıdır.
 - **7. Constraints:** `source_hash` UNIQUE, `glossary(source_term, source_lang, target_lang)` UNIQUE, `glossary.is_active IN (0,1)` CHECK kısıtı.
 - **8. Index Strategy:**
-  - [ ] `idx_translation_source_hash` ON `translation_cache(source_hash)` (O(1) önbellek sorgulaması).
+  - [ ] `idx_translation_source_hash` ON `translation_cache(source_hash)` (İndeksli önbellek sorgulaması).
   - [ ] `idx_glossary_lookup` ON `glossary(source_lang, target_lang, is_active)` (Sözlük terim çekimi).
-- **9. Migration Strategy:** `DATA-002` sonrasında `0006_translation.sql` olarak uygulanır.
-- **10. Data Integrity:** Hash çakışmalarını önlemek için SHA-256 (`source_lang + ":" + target_lang + ":" + source_text`) benzersizliği garanti edilir.
+- **9. Migration Strategy:** `DATA-002` sonrasında zincirdeki bir sonraki numara ile uygulanır.
+- **10. Data Integrity & Retention:** Hash çakışmalarını önlemek için deterministik `source_hash` benzersizliği garanti edilir. Önbellek büyüklüğü, TTL süresi ve en eski verilerin temizlenmesi (TTL/LRU) operasyonel bakim/cron worker görevi olarak yönetilir.
 - **11. Privacy / Retention:** Önbellekte yalnızca kamuya açık blog/doküman metinleri saklanır; PII içeren bilet metinleri çeviri önbelleğine kaydedilmez.
-- **12. Performance:** Hash bazlı indeks araması ile çeviri önbelleği < 2ms hızında döner, harici LLM API çağrılarını %80+ azaltır.
+- **12. Performance:** Hash bazlı indeks araması ile çeviri önbelleği düşük gecikme ile döner, harici LLM API çağrılarını düşürür *(benchmark ile doğrulanacak target)*.
 - **13. Test Requirements:** Aynı metin ve dil çifti için türetilen `source_hash` kaydının tekrarlanamadığının doğrulanması ve `PRAGMA foreign_key_check` kontrolü.
 - **14. Definition of Done (DoD):** *(Not: DoD altındaki [ ] işaretleri onay kriteridir)*
   - [ ] `translation_cache` ve `glossary` tablolarının D1 üzerinde hatasız oluşturulması.
   - [ ] `source_hash` UNIQUE kısıtının doğrulanması.
 - **15. Hata / Risk Senaryoları:**
-  - [ ] Önbellek tablosunun aşırı büyüyerek D1 kotalarını zorlaması -> Zaman bazlı en eski önbellek verilerinin temizlenmesi (TTL/LRU stratejisi).
+  - [ ] Önbellek tablosunun aşırı büyüyerek D1 kotalarını zorlaması -> Operasyonel TTL/LRU temizlik betiği.
 - **16. Zero-Cost Constraint:** Gemini Free Tier API kotalarını koruyarak %100 sıfır maliyet ($0/Ay) sağlar.
 - **17. Bağımlılıklar:** DATA-002.
 - **18. Bağımlı Görevler:** AI-004, AI-005, I18N-001.
@@ -357,26 +358,26 @@
 
 ---
 
-### DATA-TTS-001 — TTS Audio Metadata Schema (`0007_post_audio_assets.sql`)
+### DATA-TTS-001 — TTS Audio Metadata Schema (`Mevcut migration zincirindeki bir sonraki uygun numara (örn: 0010_post_audio_assets.sql)`)
 - **2. Amaç:** Makalelerin çok dilli (TR/EN/AR) server-side TTS ile üretilmiş MP3 ses dosyası metadatalarını, revizyon bağıntısını ve onay durumunu depolamak.
-- **3. Kapsam:** `backend/migrations/0007_post_audio_assets.sql` dosyası; `post_audio_assets` tablosu.
-- **4. Teknik Gereksinimler:** `post_id`, `language`, `article_version`, `audio_version`, `provider`, `model`, `r2_object_key`, `file_size`, `duration_seconds`, `status`, `validation_result_json` alanlarının depolanması.
+- **3. Kapsam:** `backend/migrations/0010_post_audio_assets.sql` (Mevcut migration zincirindeki sıradaki dosya) dosyası; `post_audio_assets` tablosu.
+- **4. Teknik Gereksinimler:** `post_id`, `language`, `article_version`, `audio_version`, `provider`, `model`, `r2_object_key` (UNIQUE), `file_size`, `duration_seconds`, `status`, `validation_result_json` alanlarının depolanması.
 - **5. Schema / Table Design (Provider Abstraction & Domain Registry):**
-  - [ ] `post_audio_assets`: `id` (INTEGER PRIMARY KEY AUTOINCREMENT), `post_id` (INTEGER NOT NULL FK → `blog_posts(id)` ON DELETE CASCADE), `language` (TEXT NOT NULL CHECK(language IN ('TR', 'EN', 'AR'))), `article_version` (INTEGER NOT NULL), `audio_version` (INTEGER NOT NULL), `provider` (TEXT NOT NULL), `model` (TEXT NOT NULL), `r2_object_key` (TEXT NOT NULL), `file_size` (INTEGER NOT NULL), `duration_seconds` (INTEGER NOT NULL), `status` (TEXT DEFAULT 'DRAFT' CHECK(status IN ('GENERATING', 'DRAFT', 'APPROVED', 'FAILED', 'STALE'))), `validation_result_json` (TEXT), `created_at` (DATETIME DEFAULT CURRENT_TIMESTAMP), `updated_at` (DATETIME DEFAULT CURRENT_TIMESTAMP), UNIQUE(`post_id`, `language`, `audio_version`).
-  - [ ] *Mimari Açıklama (Seçenek A - Domain Metadata Registry):* `post_audio_assets` tablosu makale revizyonu ve onay süreçlerine özgü alanları tutar; R2 nesnesini `r2_object_key` ile doğrudan adresler. Genel medya galerisi (`DATA-002 media_assets`) ile gereksiz metadata tekrarı oluşturulmaz.
+  - [ ] `post_audio_assets`: `id` (INTEGER PRIMARY KEY AUTOINCREMENT), `post_id` (INTEGER NOT NULL FK → `blog_posts(id)` ON DELETE CASCADE), `language` (TEXT NOT NULL CHECK(language IN ('TR', 'EN', 'AR'))), `article_version` (INTEGER NOT NULL), `audio_version` (INTEGER NOT NULL), `provider` (TEXT NOT NULL), `model` (TEXT NOT NULL), `r2_object_key` (TEXT NOT NULL UNIQUE), `file_size` (INTEGER NOT NULL), `duration_seconds` (INTEGER NOT NULL), `status` (TEXT DEFAULT 'DRAFT' CHECK(status IN ('GENERATING', 'DRAFT', 'APPROVED', 'FAILED', 'STALE'))), `validation_result_json` (TEXT), `created_at` (DATETIME DEFAULT CURRENT_TIMESTAMP), `updated_at` (DATETIME DEFAULT CURRENT_TIMESTAMP), UNIQUE(`post_id`, `language`, `audio_version`).
+  - [ ] *Mimari Açıklama (Seçenek A - Domain Metadata Registry):* `post_audio_assets` tablosu makale revizyonu ve onay süreçlerine özgü alanları tutar; R2 nesnesini `r2_object_key` ile doğrudan adresler. Genel medya galerisi (`DATA-002 media_assets`) ile gereksiz metadata tekrarı oluşturulmaz. `r2_object_key UNIQUE` kısıtı ile mükerrer nesne çakışmaları engellenir.
 - **6. Primary Key / Foreign Key:** `post_id` → `blog_posts.id` (`ON DELETE CASCADE`). `(post_id, language, audio_version)` bileşik UNIQUE kısıtı.
-- **7. Revizyon & Sürüm Bağıntısı:**
-  - [ ] `article_version`: `post_revisions.revision_number` (DATA-006) değerini temsil eder. Makale metni her güncellendiğinde revizyon numarası artar.
+- **7. Revizyon & Sürüm Bağıntısı (Servis Seviyesi Sürüm Uyum Kontrolü):**
+  - [ ] `article_version`: `post_revisions.revision_number` (DATA-006) değerini temsil eder. *(Not: DB seviyesinde Foreign Key değildir; uygulama/servis katmanı seviyesinde sürüm uyumluluğu olarak doğrulanır)*.
   - [ ] `audio_version`: Sesin üretildiği anki `post_revisions.revision_number` değeridir.
 - **8. Index Strategy:**
   - [ ] `idx_audio_post_lang_status` ON `post_audio_assets(post_id, language, status)` (Public player hızlı dinleme sorgusu).
   - [ ] `idx_audio_version_check` ON `post_audio_assets(post_id, article_version, audio_version)` (Sürüm uyum denetimi).
-- **9. Migration Strategy:** `DATA-002` (`blog_posts`) ve `DATA-006` (`post_revisions`) oluştuktan sonra `0007_post_audio_assets.sql` olarak uygulanır.
+- **9. Migration Strategy:** `DATA-002` (`blog_posts`) ve `DATA-006` (`post_revisions`) oluştuktan sonra zincirdeki sıradaki dosya olarak uygulanır.
 - **10. Data Integrity (SÜRÜM UYUM KURALI & STALE TEMİZLİĞİ):**
-  - [ ] **`article_version != audio_version`** durumunda ses otomatik olarak **`STALE`** kabul edilir ve public API tarafından sunulmaz (metin değişikliğinin eski sesle uyumsuz oynaması engellenir).
-  - [ ] *Stale Audio Cleanup:* Stale olan R2 nesneleri geri alma (rollback) ihtimali için geçici tutulur (başlangıç retention politikası: konfigüre edilebilir / operasyonel olarak doğrulanacak saklama süresi), ardından zamanlanmış async temizlik işleyicisi ile güvenle R2'den silinir.
+  - [ ] **`article_version != audio_version`** durumunda ses uygulama/servis katmanı tarafından otomatik olarak **`STALE`** durumuna geçirilir. Public API yalnızca `status = 'APPROVED' AND article_version = current_article_revision` olan sesleri sunar.
+  - [ ] *Stale Audio Cleanup:* Stale olan R2 nesneleri geçici tutulur ve zamanlanmış async temizlik işleyicisi (Cron/Worker operasyonel görevi) ile güvenle R2'den ve veritabanından silinir.
 - **11. Privacy / Retention:** Ses dosyaları Cloudflare R2 nesne depolamada saklanır (`r2_object_key`). PII tutulmaz.
-- **12. Performance:** *Benchmark Target:* Bileşik indeks ile public blog audio player metadata sorgusu < 3ms (Ölçüm yapılacaktır).
+- **12. Performance:** *Benchmark Target:* Bileşik indeks ile public blog audio player metadata sorgusu < 3ms (Ölçümle doğrulanacak target).
 - **13. Test Requirements:** Post silindiğinde audio kayıtlarının silindiğinin (`CASCADE`) ve `article_version != audio_version` durumunda `STALE` işaretlenmesinin doğrulanması.
 - **14. Definition of Done (DoD):**
   - [ ] `post_audio_assets` tablosunun D1 üzerinde hatasız oluşturulması.
@@ -391,12 +392,12 @@
 ---
 
 ### Database Integrity Rules (Veritabanı Bütünlük Kuralları)
-1. **Foreign Key Aktifliği:** Cloudflare D1/SQLite bağlantılarında `PRAGMA foreign_keys = ON;` komutu her çalışma zamanı (runtime) bağlantısında açık olmalı, yetim (orphan) kayıt oluşumu veritabanı seviyesinde engellenmelidir.
+1. **Foreign Key Aktifliği:** Cloudflare D1/SQLite bağlantılarında `PRAGMA foreign_keys = ON;` komutu her çalışma zamanı (runtime) bağlantısında açık olmalı, yetim (orphan) kayıt oluşumu veritabanı seviyesinde engellenmelidir. D1/SQLite ortamında foreign key enforcement'ın gerçekten nasıl uygulandığı runtime ve birim testleri ile doğrulanacaktır.
 2. **Cascading Silme Prensipleri:** Mesaj silindiğinde yanıtları (`replies`) ve olayları (`message_events`) silinmeli (`CASCADE`); ancak kanal silindiğinde blog yazıları silinmeyip kanalsız (`NULL`) olarak korunmalıdır (`ON DELETE SET NULL`).
-3. **Timestamp Standardı:** Tüm tarih alanları UTC zaman diliminde ISO8601 formatında (`YYYY-MM-DD HH:MM:SS`) saklanmalı veya SQLite `CURRENT_TIMESTAMP` fonksiyonu kullanılmalıdır.
+3. **Timestamp Standardı:** Tüm tarih alanları UTC zaman diliminde ISO8601 formatında (`YYYY-MM-DD HH:MM:SS`) saklanmalı veya SQLite `CURRENT_TIMESTAMP` fonksiyonu kullanılmalıdır. `DEFAULT CURRENT_TIMESTAMP` yalnızca `INSERT` anını belirler; `UPDATE` anında otomatik zaman yenilenmesi uygulama katmanı veya açık SQLite trigger ile sağlanır.
 4. **Enum Yaklaşımı:** SQLite yerel ENUM tipini desteklemediği için tüm durum alanları `TEXT` tipinde `CHECK(status IN (...))` kısıtlaması ile kontrol edilmelidir.
-5. **JSON Format Doğrulaması:** JSON string depolayan alanlarda (`metadata`, `block_structure_json`, `theme_config_json`) API katmanında kayıt öncesi `JSON.parse()` doğrulaması yapılmalıdır.
-6. **Transaction Sınırları:** Birden fazla tabloyu ilgilendiren kritik veri yazma işlemlerinde (örn: bilet oluşturma ve ilk audit olayını yazma) veritabanı transaction (`BEGIN TRANSACTION ... COMMIT`) kullanılmalıdır.
+5. **JSON Format Doğrulaması:** JSON string depolayan alanlarda (`metadata`, `block_structure_json`, `theme_config_json`, `snapshot_json`, `validation_result_json`) API katmanında kayıt öncesi `JSON.parse()` ve şema doğrulaması yapılmalıdır.
+6. **Transaction Sınırları:** Birden fazla tabloyu ilgilendiren kritik veri yazma işlemlerinde (örn: bilet oluşturma ve ilk audit olayını yazma, revizyon oluşturma ve eski revizyon temizliği) veritabanı transaction (`BEGIN TRANSACTION ... COMMIT`) kullanılmalıdır.
 
 ---
 
@@ -407,62 +408,81 @@
 | `messages` | `idx_messages_status` | `status` | Admin panel bilet durum filtrelemesi |
 | `messages` | `idx_messages_created` | `created_at DESC` | Kronolojik bilet listeleme |
 | `comments` | `idx_comments_status` | `status` | Onay bekleyen yorum filtresi |
-| `subscribers` | `idx_subscribers_email` | `email` | Benzersiz abone kontrolü |
+| `subscribers` | `idx_subscribers_email` | `email` *(SQLite UNIQUE autoindex)* | Benzersiz abone kontrolü |
 | `email_queue` | `idx_email_queue_status_scheduled` | `status, scheduled_at` | Cron worker kuyruk taraması |
 | `blog_posts` | `idx_blog_posts_slug` | `slug` | Public blog detay sorgusu |
 | `blog_posts` | `idx_blog_posts_status_published` | `status, published_at DESC` | Yayınlanmış yazı akışı & pagination |
 | `apps` | `idx_apps_slug` | `slug` | Uygulama detay sorgusu |
 | `app_versions` | `idx_app_versions_app_current` | `app_id, is_current` | Aktif uygulama sürümü tespiti |
-| `push_subscriptions` | `idx_push_endpoint` | `endpoint` | Push abonelik arama ve tekilleştirme |
+| `push_subscriptions` | `idx_push_endpoint` | `endpoint` *(SQLite UNIQUE autoindex)* | Push abonelik arama ve tekilleştirme |
 | `push_subscriptions` | `idx_push_active` | `is_active` | Aktif bildirim alıcı listesi |
 | `ad_settings` | `idx_ad_slot_key` | `slot_key` | Reklam alanı ayarları çekimi |
 | `post_revisions` | `idx_revisions_post_id` | `post_id, revision_number DESC` | Yazı revizyon geçmişi |
 | `blog_layouts` | `idx_blog_layouts_post` | `post_id` | Yazıya özel blok düzeni çekimi |
-| `translation_cache` | `idx_translation_source_hash` | `source_hash` | O(1) Çeviri önbellek sorgusu |
+| `translation_cache` | `idx_translation_source_hash` | `source_hash` | İndeksli çeviri önbellek sorgusu |
 | `glossary` | `idx_glossary_lookup` | `source_lang, target_lang, is_active` | Sözlük terim eşleştirme |
 | `post_audio_assets` | `idx_audio_post_lang_status` | `post_id, language, status` | Hızlı ses oynatma sorgulaması |
+| `post_audio_assets` | `idx_audio_version_check` | `post_id, article_version, audio_version` | Sürüm uyum denetimi |
+
+*(Not: `UNIQUE` constraint'e sahip sütunlar için (`subscribers.email`, `push_subscriptions.endpoint`, `ad_settings.slot_key`, `blog_posts.slug`, `apps.slug`) SQLite tarafından otomatik oluşturulan unique indeksler (`sqlite_autoindex_*`) arama ve tekilleştirme için yeterlidir)*.
 
 ---
 
 ### Migration Dependency Map (Bağımlılık Haritası)
-- **Sıralı Migration Yolu:**
-  `0001_initial_schema.sql` (DATA-001) → `0002_cms_schema.sql` (DATA-002) → `0003_push_subscriptions.sql` (DATA-004) → `0004_ad_settings.sql` (DATA-005) → `0005_blog_layouts.sql` (DATA-006) → `0006_translation.sql` (DATA-007) → `0007_post_audio_assets.sql` (DATA-TTS-001) → `DATA-003 (Canlı D1 Binding & Remote Migration)`.
-- **Bağımlılık Gerekçesi:**
-  - [ ] `0002` dosyası `0001` içindeki `comments` tablosuna FK ilişkisi kurar.
-  - [ ] `0005`, `0006` ve `0007` dosyaları `0002` içindeki `blog_posts` tablosuna bağımlıdır.
-- **Forward-Fix Yaklaşımı:** Üretim ortamında uygulanan migration dosyaları doğrudan değiştirilmez; şema düzeltmeleri veya eklemeler yeni bir düzeltme migration'ı (`0008_fix_*.sql`) ile uygulanır.
+
+| Gerçek Migration Dosyası | Görev ID | Açıklama | Bağımlılık |
+|---|---|---|---|
+| `0001_devadmin_initial_schema.sql` | DATA-001 | Çekirdek D1 Veritabanı Şeması (10 Tablo) | Yok |
+| `0002_seed_devadmin.sql` | DATA-001 | DevAdmin Temel Seed Verileri | DATA-001 |
+| `0003_seed_tickets_comments.sql` | DATA-001 | Bilet ve Yorum Seed Verileri | DATA-001 |
+| `0004_add_broadcasts_table.sql` | DATA-001 | Duyuru ve Sistem Yayını Tablosu | DATA-001 |
+| `0005_cms_schema.sql` | DATA-002 | CMS & Uygulama Kataloğu Şeması | DATA-001 |
+| `0006_push_subscriptions.sql` | DATA-004 | Web Push Abonelikleri Tablosu | DATA-001 |
+| `0007_ad_settings.sql` | DATA-005 | Reklam Ayarları ve Seed Verileri | DATA-001 |
+| `Sıradaki numara (0008_...)` | DATA-006 | Blog Düzenleri ve Revizyon Şeması | DATA-002 |
+| `Sıradaki numara (0009_...)` | DATA-007 | Çeviri Önbelleği ve Terim Sözlüğü | DATA-002 |
+| `Sıradaki numara (0010_...)` | DATA-TTS-001 | TTS Ses Metadataları Şeması | DATA-002, DATA-006 |
+
+- **Forward-Fix Yaklaşımı:** Üretim ortamında uygulanan migration dosyaları doğrudan değiştirilmez; şema düzeltmeleri veya eklemeler yeni bir düzeltme migration'ı (`0008_fix_*.sql` vb.) ile uygulanır.
 
 ---
 
 ### Migration Test Strategy (Migration Test Stratejisi)
-Her veritabanı migration dosyası için aşağıdaki testler sırasıyla gerçekleştirilmelidir:
-1. **Temiz Veritabanı Testi:** Sıfır bir D1 SQLite veritabanında tüm migration'ların baştan sona hatasız çalıştırılması.
-2. **Idempotency / Idempotent Seed Testi:** Migration dosyalarının tekrar çalıştırılması durumunda hata vermediğinin ve seed verilerinin mükerrer eklenmediğinin (`INSERT OR IGNORE`) teyit edilmesi.
-3. **Kısıt Doğrulaması (Constraints Check):** `PRAGMA foreign_key_check;` komutu ile Foreign Key ihlallerinin, `UNIQUE` ve `CHECK` ihlallerinin doğrulanması.
-4. **İndeks Varlık Kontrolü:** `PRAGMA index_list(table_name);` ile tanımlanan indekslerin veritabanında aktifleştiğinin teyidi.
-5. **CRUD İşlem Testi:** Her tablo için örnek `INSERT`, `SELECT`, `UPDATE` ve `DELETE (CASCADE/SET NULL)` işlemlerinin simüle edilmesi.
+
+Veritabanı testleri iki ayrı kategoride gerçekleştirilmelidir:
+
+1. **Migration / Şema Testleri:**
+   - Sıfır bir D1 SQLite veritabanında tüm migration zincirinin baştan sona hatasız çalıştırılması.
+   - Foreign Key, `CHECK` ve `UNIQUE` kısıtlarının negatif birim testleri ile ayrı ayrı doğrulanması *(Not: `PRAGMA foreign_key_check` yalnızca FK bütünlüğünü doğrular, CHECK/UNIQUE kısıt ihlalleri için ayrıca birim testi yazılmalıdır)*.
+   - İndekslerin `PRAGMA index_list(table_name)` ile teyit edilmesi.
+   - Tablo silme/güncelleme işlemlerinde `CASCADE` ve `SET NULL` davranışlarının doğrulanması.
+
+2. **Seed / Idempotency Testleri:**
+   - Seed betiklerinin (`INSERT OR IGNORE` / `ON CONFLICT DO UPDATE`) tekrar çalıştırılması durumunda hata vermediğinin teyidi.
+   - Idempotent seed işlemlerinde mükerrer kayıt oluşmadığının ve toplam kayıt sayısının korunduğunun doğrulanması.
 
 ---
 
 ### Database Performance Strategy (Veritabanı Performans Stratejisi)
 - **Hacim Hedefi:** Aylık 50.000+ mesaj ve bilet trafiği altında performans kaybı yaşanmaması.
-- **Sayfalama (Pagination):** Public ve Admin listeleme API'lerinde `LIMIT / OFFSET` yerine Cursor-based pagination (`WHERE id < last_id ORDER BY id DESC LIMIT 20`) tercih edilmelidir.
+- **Sayfalama (Cursor Pagination):** Public ve Admin listeleme API'lerinde `LIMIT / OFFSET` yerine tabloya özel sıralama anahtarı ve tie-breaker ile Cursor-based pagination (örn: `WHERE created_at < :last_created_at AND id < :last_id ORDER BY created_at DESC, id DESC LIMIT 20`) tercih edilmelidir.
 - **Sorgu Optimizasyonu:** `SELECT *` kullanımından kaçınılmalı, sadece ihtiyaç duyulan sütunlar çekilmelidir.
 - **Bileşik İndeksler:** Filtreleme + Sıralama yapılan sorgularda (`status = 'PUBLISHED' ORDER BY published_at DESC`) bileşik indeks kullanılarak veritabanı tarama maliyeti düşürülmelidir.
-- **Audit Tablosu Büyümesi:** `message_events` gibi hızlı büyüyen tabloların boyutu izlenmeli ve eski loglar için zaman aralıklı arşivleme/temizlik stratejisi uygulanmalıdır.
+- **Audit Tablosu Büyümesi:** `message_events` ve `audit_logs` gibi hızlı büyüyen tabloların boyutu izlenmeli ve eski loglar için zaman aralıklı arşivleme/temizlik stratejisi uygulanmalıdır.
 
 ---
 
 ### Database Privacy & Retention (Gizlilik & Veri Saklama)
-- **Kişisel Veri (PII) Kapsamı:** `messages`, `replies`, `subscribers` ve `admins` tabloları e-posta, ad-soyad ve IP adresi gibi kişisel veriler içerebilir.
-- **Veri Saklama (Retention):** Çözümlenmiş biletler ve pasif abonelikler belirlenen saklama süresi sonunda anonimleştirilmeli veya silinmelidir.
-- **AI İşlem Verisi:** Çeviri önbelleği (`translation_cache`) yalnızca kamuya açık metinleri içermelidir; PII içeren bilet verileri çeviri önbelleğine kaydedilmemelidir.
+- **Kişisel Veri (PII) Kapsamı:** `messages`, `replies` ve `subscribers` tabloları e-posta, ad-soyad gibi kişisel veriler içerebilir. Güvenlik ve denetim loglarında tutulan IP adresleri `audit_logs` veya güvenlik loglarında geçici süreliğine saklanır.
+- **Veri Saklama (Retention):** Çözümlenmiş biletler ve pasif abonelikler belirlenen saklama süresi sonunda anonimleştirilmeli veya silinmelidir. Saklama süreleri `3. GÜVENLİK & VERİ KORUMA (SEC)` politikalarına bağlanır.
+- **AI İşlem Verisi:** Çeviri önbelleği (`translation_cache`) yalnızca kamuya açık metinleri içermelidir; PII içeren bilet verileri çeviri önbelleğine kaydedilmez.
 - **Hukuki Doğrulama Notu:** KVKK/GDPR hukuki uyum doğrulaması ve yasal süreç detaylandırması `3. GÜVENLİK & VERİ KORUMA (SEC)` bölümünde ele alınacaktır.
 
 ---
 
 ### Database Backup & Restore Compatibility (Yedekleme & Geri Yükleme Uyumluluğu)
-- **D1 Zaman Noktası Geri Yükleme (Point-in-Time Recovery):** Cloudflare D1 otomatik yedekleme ve `wrangler d1 backup` mekanizması ile felaket kurtarma senaryoları desteklenir.
+- **D1 ve R2 Depolama Ayrımı:** Cloudflare D1 veritabanı yedeklemesi ile R2 nesne depolama yedeklemesi mimari olarak ayrı mekanizmalardır. R2 nesneleri için bağımsız yetim dosya temizliği ve yedekleme kurgusu gerekir.
+- **D1 Otomatik Yedekleme:** Cloudflare D1 otomatik yedekleme ve `wrangler d1 backup` mekanizması ile felaket kurtarma senaryoları desteklenir *(üretim canlı ortamında doğrulanacaktır)*.
 - **Geri Dönüş Stratejisi (Rollback Approach):** Canlı veritabanı migration'larında veritabanı rollback işlemi veri kaybı riski taşıdığından, geriye dönük silme yerine **forward-fix / corrective migration** stratejisi uygulanacaktır.
 
 ---
