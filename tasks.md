@@ -102,29 +102,29 @@
 - **Amaç:** `index.ts` üzerindeki istek yönlendirme ve middleware mantığını ayrıştırarak backend kodunun bakımı kolay, ölçeklenebilir ve modüler bir mimariye kavuşturulmasını sağlamak.
 - **Kapsam:** `backend/src/routes/` (Public & Admin rotaları), `backend/src/middleware/` (Auth, RateLimit, CORS, ErrorHandler), `backend/src/utils/router.ts` (Hafif URL matcher).
 - **Teknik Gereksinimler:**
-  - [ ] İstek ön işleme middleware katmanı (CORS, Request ID üretimi, IP tespiti).
-  - [ ] Güvenlik ve yetki middleware katmanı (`requireAuth`, `requirePermission`).
-  - [ ] Hata yakalama middleware (`globalErrorHandler` — tip korumalı JSON hatası dönen).
-  - [ ] Rota dosyalarının alan bağımsız ayrıştırılması (`supportRoutes.ts`, `commentRoutes.ts`, `cmsRoutes.ts`, `adminRoutes.ts`).
+  - [x] İstek ön işleme middleware katmanı (CORS, Request ID üretimi, IP tespiti).
+  - [x] Güvenlik ve yetki middleware katmanı (`requireAuth`, `requirePermission`).
+  - [x] Hata yakalama middleware (`globalErrorHandler` — tip korumalı JSON hatası dönen).
+  - [x] Rota dosyalarının alan bağımsız ayrıştırılması (`supportRoutes.ts`, `commentRoutes.ts`, `cmsRoutes.ts`, `adminRoutes.ts`).
 - **Mimari Karar:** Mevcut ihtiyaçlar için ağır bir framework bağımlılığı (Express vb.) oluşturulması gerekli görülmemektedir; hafif, tip güvenli ve Workers runtime ile uyumlu bir router yaklaşımı tercih edilir.
 - **Etkilenecek Katmanlar:** Backend (API Routing & Middleware).
 - **Bağımlılıklar:** ARCH-001.
 - **Bağımlı Görevler:** API-006, API-007, SEC-REQ-001, SEC-RBAC-002.
 - **Güvenlik Gereksinimleri:**
-  - [ ] Hata durumunda (500 Internal Error) hassas sistem veya veritabanı detaylarının dışarıya sızdırılmaması (maskeleme).
-  - [ ] Yetkisiz isteklerin doğrudan middleware aşamasında (401/403) engellenmesi.
+  - [x] Hata durumunda (500 Internal Error) hassas sistem veya veritabanı detaylarının dışarıya sızdırılmaması (maskeleme).
+  - [x] Yetkisiz isteklerin doğrudan middleware aşamasında (401/403) engellenmesi.
 - **Performans Kriterleri:**
-  - [ ] *Teknik İlke:* Middleware katmanı gereksiz gecikme ve işlem yükü yaratmamalıdır.
+  - [x] *Teknik İlke:* Middleware katmanı gereksiz gecikme ve işlem yükü yaratmamalıdır.
   - [ ] *Performans Hedefleri (Benchmark ile Doğrulanacak Target):* Middleware yönlendirme ek süresi < 1ms.
 - **Test Gereksinimleri (Mimari Seviye):** Geçerli/geçersiz rotalar ve middleware zinciri için birim testleri (Vitest).
 - **Definition of Done (DoD):** *(Not: DoD altındaki [ ] işaretleri görev durumu değil, tamamlanma onay kriterleridir)*
-  - [ ] `index.ts` dosyasının satır sayısının 150 satırın altına düşmesi.
-  - [ ] Tüm public ve admin rotalarının modüler route dosyalarında tanımlanması.
-  - [ ] Global error handler'ın unhandled exception'ları güvenle yakalaması.
-  - [ ] Modüler router yapısının 450 satır kuralını ihlal etmemesi.
+  - [x] `index.ts` dosyasının satır sayısının 150 satırın altına düşmesi.
+  - [x] Tüm public ve admin rotalarının modüler route dosyalarında tanımlanması.
+  - [x] Global error handler'ın unhandled exception'ları güvenle yakalaması.
+  - [x] Modüler router yapısının 450 satır kuralını ihlal etmemesi.
 - **Hata / Risk Senaryoları:**
-  - [ ] Yönlendirilmeyen rota (404 Not Found) -> Standart JSON `404 Resource Not Found` yanıtı.
-  - [ ] Middleware zincirinde unhandled promise rejection -> Global catch bloğu.
+  - [x] Yönlendirilmeyen rota (404 Not Found) -> Standart JSON `404 Resource Not Found` yanıtı.
+  - [x] Middleware zincirinde unhandled promise rejection -> Global catch bloğu.
 - **Zero-Cost Constraint:** Ekstra sunucu veya paralı kütüphane gerektirmez ($0/Ay maliyet hedefi).
 - **Uygulama Notları:** `index.ts` yalnızca middleware kayıtlarını ve route dispatcher çağrısını içermelidir.
 
