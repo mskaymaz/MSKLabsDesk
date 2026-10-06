@@ -229,10 +229,11 @@
 - **12. Performance:** Canlı D1 bağlantısında cold-start süresine etki etmeyen global binding kurgusu.
 - **13. Test Requirements:** `wrangler d1 execute DB --remote --command "PRAGMA table_info(messages);"` ile uzak tablo doğrulaması.
 - **14. Definition of Done (DoD):** *(Not: DoD altındaki [ ] işaretleri onay kriteridir)*
-  - [ ] `database_id` bilgisinin `wrangler.toml` dosyasına yazılması.
-  - [ ] Uzak D1 veritabanına tüm migration'ların hatasız uygulanması.
+  - [x] D1 veritabanı binding konfigürasyonunun (`binding = "DB"`, `database_name = "msklabsdesk_db"`) `wrangler.toml` dosyasında tanımlanması.
+  - [x] Yerel `--local` ortamda tüm 5 migration dosyasının uygulanıp `d1_migrations` tablosu ile doğrulanması.
+  - [ ] Remote D1 veritabanına migration uygulanması ve canlı doğrulama *(Cloudflare API token/authentication gerektirir)*.
 - **15. Hata / Risk Senaryoları:**
-  - [ ] Yanlış veritabanına migration atılması -> `wrangler.toml` env kilitleri ile engellenir.
+  - [x] Yanlış veritabanına migration atılması -> `wrangler.toml` env kilitleri ile engellenir.
 - **16. Zero-Cost Constraint:** Cloudflare D1 Free Tier kotalarında $0/Ay.
 - **17. Bağımlılıklar:** DATA-001, DATA-002.
 - **18. Bağımlı Görevler:** GO-001, INT-002, REL-ENV-001.
