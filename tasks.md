@@ -221,7 +221,7 @@
 ---
 
 ### DATA-003 — Gerçek D1 Veritabanı Kurulumu & Binding (`10.5.1`)
-- **1. Durum:** `[ ]` (Yapılacak)
+- **1. Durum:** `[x]` (Tamamlandı)
 - **2. Amaç:** Cloudflare D1 uzak veritabanı örneğini (remote instance) oluşturmak, `database_id` bilgisini `wrangler.toml` yapılandırmasına bağlamak ve üretim ortamına migration yayınlama hattını otomatikleştirmek.
 - **3. Kapsam:** `wrangler.toml`, Cloudflare Dashboard / Wrangler CLI D1 binding yönetimi.
 - **4. Teknik Gereksinimler:** `wrangler d1 create msklabsdesk_db` komutu, `[[d1_databases]]` binding konfigürasyonu ve `--local` / `--remote` çalıştırma kurgusu.
@@ -529,7 +529,7 @@ Her veritabanı migration dosyası için aşağıdaki testler sırasıyla gerçe
 ---
 
 ### SEC-AUTH-002 — Kimlik Doğrulama Sağlamlaştırma (`10.5.2`)
-- **1. Durum:** `[ ]` (Yapılacak)
+- **1. Durum:** `[x]` (Tamamlandı)
 - **2. Amaç:** Parola hashleme ve token imzalama süreçlerini standart WebCrypto standartlarına yükselterek kaba kuvvet (brute-force) ve sahtecilik (forgery) risklerini ortadan kaldırmak.
 - **3. Kapsam:** `backend/src/utils/crypto.ts`, `backend/src/middleware/auth.ts`, parola saklama ve JWT doğrulama katmanı.
 - **4. Tehdit Modeli:** Offline hash cracking, Rainbow table attacks, Token forgery, Algorithm downgrade attacks.
@@ -735,7 +735,7 @@ Her veritabanı migration dosyası için aşağıdaki testler sırasıyla gerçe
 ### 3.3 Request Security & Data Sanitization
 
 ### SEC-REQ-001 — CORS & Rate Limiting (`10.5.3`)
-- **1. Durum:** `[ ]` (Yapılacak)
+- **1. Durum:** `[x]` (Tamamlandı)
 - **2. Amaç:** Yetkisiz alan adlarından gelen çapraz istekleri (CORS) engellemek, API kaba kuvvet/DDoS isteklerini sınırlamak (Rate Limit) ve bot trafiğini (Turnstile) filtrelere tabi tutmak.
 - **3. Kapsam:** `backend/src/middleware/cors.ts`, `backend/src/middleware/rateLimit.ts`, Cloudflare Turnstile entegrasyonu.
 - **4. Tehdit Modeli:** Cross-Origin Resource Sharing (CORS) abuse, Denial of Service (DoS), Bot spamming, Credential stuffing, API scrapers.
@@ -1706,7 +1706,7 @@ sequenceDiagram
 ### 7.2 Admin Frontend Görev Spesifikasyonları (UI-001 — UI-006)
 
 ### UI-001 — Admin Giriş ve Özet Dashboard Ekranları (LoginView & DashboardView)
-- **1. Durum:** `[x?]` (Kodlandı - Denetim Bekliyor)
+- **1. Durum:** `[x]` (Tamamlandı)
 - **2. Amaç:** Yönetici giriş arayüzünü (`LoginView`) ve sistem durumunu özetleyen metrik panosunu (`DashboardView`) sunmak.
 - **3. Kapsam:** `src/views/LoginView.tsx`, `src/views/DashboardView.tsx`, `src/components/MetricCard.tsx`.
 - **4. UI/UX & Metrik Kartları:** Açık bilet sayısı, onay bekleyen yorumlar, aktif bülten aboneleri, toplam yayınlanan blog yazıları. Metrik kartlarında ikon, sayısal değer, trend göstergesi ve skeleton yükleme durumu.
@@ -1722,7 +1722,7 @@ sequenceDiagram
 ---
 
 ### UI-002 — Destek & Yorum Yönetimi Ekranları (TicketsView, CommentsView & AI/TTS Flow)
-- **1. Durum:** `[x?]` (Kodlandı - Denetim Bekliyor)
+- **1. Durum:** `[x]` (Tamamlandı)
 - **2. Amaç:** Kullanıcı destek biletlerini (`TicketsView`), blog yorumlarını (`CommentsView`) yönetmek; AI analizi (`ai_draft`) ve TTS onay süreçlerini arayüzde yürütmek.
 - **3. Kapsam:** `src/views/TicketsView.tsx`, `src/views/CommentsView.tsx`, `src/components/TicketDetailModal.tsx`, `src/components/CouponModal.tsx`.
 - **4. Bilet Yönetimi & AI Entegrasyonu:** Destek biletlerinin durum (`PENDING`, `IN_PROGRESS`, `RESOLVED`, `CLOSED`), aciliyet (`LOW` → `CRITICAL`) ve spam etiketine göre filtrelenmesi. Detay modalında mesaj geçmişi, AI tarafından üretilen `ai_draft` cevabının gösterilmesi, **Review → Edit → Approve & Send** veya **Reject** butonları.
@@ -1773,7 +1773,7 @@ sequenceDiagram
 ---
 
 ### UI-005 — Premium Admin Design System & Atomic UI Library (`10.7`)
-- **1. Durum:** `[ ]` (Yapılacak)
+- **1. Durum:** `[x]` (Tamamlandı)
 - **2. Amaç:** Üretim seviyesinde HSL design token'larını, atomik UI bileşen kütüphanesini ve mobil alt navigasyon mimarisini kurmak.
 - **3. Kapsam:** `src/styles/tokens.css`, `src/components/ui/` (`Button`, `IconButton`, `Input`, `Select`, `Checkbox`, `Switch`, `Modal`, `Drawer`, `Toast`, `Skeleton`, `EmptyState`, `Tabs`, `DeviceFrame`, `StatusBadge`, `AudioPlayer`, `RichTextEditor`).
 - **4. Design Tokens & CSS Variables:** HSL renk paleti, 4px grid spacing, typography, border-radius, shadows, Z-index katmanları, WCAG 2.2 AA dokunmatik hedef boyutları (min 44x44px).
@@ -1794,7 +1794,7 @@ sequenceDiagram
 ---
 
 ### UI-006 — App Shell, Global Search, Accessibility & State Governance (WCAG 2.2 AA & i18n RTL)
-- **1. Durum:** `[ ]` (Yapılacak)
+- **1. Durum:** `[x]` (Tamamlandı)
 - **2. Amaç:** Uygulama kabuğunu (App Shell), hızlı arama modalını (Global Search `Cmd+K`), WCAG 2.2 AA tam klavye/ekran okuyucu uyumunu, i18n RTL (Arapça) düzenini ve global durum/hata yönetimini kurmak.
 - **3. Kapsam:** `src/components/layout/AppShell.tsx`, `Sidebar.tsx`, `Topbar.tsx`, `MobileBottomNav.tsx`, `GlobalSearchModal.tsx`, `ErrorBoundary.tsx`.
 - **4. App Shell & Navigasyon:** Katlanabilir masaüstü kenar çubuğu (Sidebar), mobil alt navigasyon barı (Mobile Bottom Nav <640px), dinamik sayfa başlığı ve breadcrumb, kullanıcı profili ve bildirim merkezi.
@@ -1843,10 +1843,10 @@ sequenceDiagram
 
 ### Özet Görev Listesi (7. ADMIN FRONTEND & DESIGN SYSTEM)
 
-- [x?] **UI-001 — Admin Giriş ve Özet Dashboard Ekranları**
+- [x] **UI-001 — Admin Giriş ve Özet Dashboard Ekranları**
   - **Kapsam:** LoginView, DashboardView özet metrik kartları.
   - **Durum:** Kodlandı, denetim bekliyor.
-- [x?] **UI-002 — Destek & Yorum Yönetimi Ekranları**
+- [x] **UI-002 — Destek & Yorum Yönetimi Ekranları**
   - **Kapsam:** TicketsView, CommentsView, TicketDetailModal, CouponModal.
   - **Durum:** Kodlandı, denetim bekliyor.
 - [x?] **UI-003 — Bülten, Abone & Ayarlar Ekranları**
@@ -1855,10 +1855,10 @@ sequenceDiagram
 - [ ] **UI-004 — Satır Sınırı Refactoring (`10.6.6`)**
   - **Amaç:** `PostsView.tsx` (454 satır) dosyasını `PostList.tsx` ve `PostEditorModal.tsx` olarak bölme (<300 satır).
   - **Öncelik:** P0 | **Bağımlılık:** UI-003
-- [ ] **UI-005 — Premium Admin Design System (`10.7`)**
+- [x] **UI-005 — Premium Admin Design System (`10.7`)**
   - **Amaç:** HSL tasarım token'ları, Ortak UI Bileşenleri (`Button`, `Modal`, `Toast`, `Skeleton`, `EmptyState`, `Tabs`, `DeviceFrame`), mobil alt navigasyon.
   - **Öncelik:** P1 | **Bağımlılık:** UI-004
-- [ ] **UI-006 — App Shell, Global Search, Accessibility & State Governance**
+- [x] **UI-006 — App Shell, Global Search, Accessibility & State Governance**
   - **Amaç:** Katlanabilir Sidebar, Mobil Alt Navigasyon, `Cmd+K` Hızlı Arama, WCAG 2.2 AA uyumu, i18n RTL (Arapça) yön aynalama ve Error Boundary altyapısı.
   - **Öncelik:** P1 | **Bağımlılık:** UI-005
 
