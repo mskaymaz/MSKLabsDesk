@@ -1256,11 +1256,12 @@ sequenceDiagram
 ---
 
 ### API-009 — Admin Kupon API (`10.6.2`)
+- **1. Durum:** **PASS** (Tamamlanma Tarihi: 07.10.2026 - 17:17)
 - **2. Amaç:** Yöneticilerin indirim/teşekkür kuponları oluşturmasını, tanımlamasını ve kullanım durumunu takip etmesini sağlamak.
 - **3. Kapsam:** `backend/src/routes/admin/coupons.ts`, `POST/GET/DELETE /api/v1/admin/coupons`.
 - **4. İstek / Yanıt Sözleşmesi:**
-  - [ ] *POST İstek:* `{ "code": "TESEKKUR2026", "discountPercent": 20, "maxUses": 100, "expiresAt": "2026-12-31T23:59:59Z" }`
-  - [ ] *POST Yanıt (201 Created):* `{ "success": true, "data": { "couponId": "coup_123", "code": "TESEKKUR2026" } }`
+  - [x] *POST İstek:* `{ "code": "TESEKKUR2026", "discountPercent": 20, "maxUses": 100, "expiresAt": "2026-12-31T23:59:59Z" }`
+  - [x] *POST Yanıt (201 Created):* `{ "success": true, "data": { "couponId": "coup_123", "code": "TESEKKUR2026" } }`
 - **5. Validasyon ve Şema Kuralları:** `code` (min 4, max 20, alfanümerik büyük harf), `discountPercent` (1-100 arası), `maxUses` (integer > 0).
 - **6. Veri İşlemleri / Sorgular:** `coupons` tablosuna `INSERT INTO coupons (...)`.
 - **7. Async / Event / Queue Akışı:** İsteğe bağlı bülten abonelerine kupon duyurusu kuyruğu.
@@ -1274,8 +1275,8 @@ sequenceDiagram
 - **15. Performance:** *Hedef:* Yanıt süresi < 100ms.
 - **16. Test Requirements:** Çifte kupon kodu ekleme denemesinde 409 yanıtı, tarih geçerlilik testi.
 - **17. Definition of Done (DoD):**
-  - [ ] Benzersiz kupon kodu kısıtının D1 seviyesinde doğrulanması.
-  - [ ] Admin rol kontrolünün aktif olması.
+  - [x] Benzersiz kupon kodu kısıtının D1 seviyesinde doğrulanması.
+  - [x] Admin rol kontrolünün aktif olması.
 - **18. Hata / Risk Senaryoları:** Süresi dolmuş kupon kullanımı -> Kullanım anında `expires_at` ve `current_uses < max_uses` kontrolü.
 - **19. Zero-Cost Constraint:** Sıfır ek maliyet.
 - **20. Bağımlılıklar:** DATA-001 (`coupons` tablosu), SEC-AUTH-001, SEC-RBAC-001.
