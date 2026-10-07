@@ -333,23 +333,23 @@
 - **3. Kapsam:** `migrations/0009_translation.sql` dosyası; `translation_cache` ve `glossary` tabloları.
 - **4. Teknik Gereksinimler:** Çeviri kaynağının canonical biçimde normalize edilip SHA-256 ile hash'lenerek (`source_hash`) indeksli aranabilmesi, dil çifti yönetimi (`source_lang`, `target_lang`), glossary terim eşleştirmesi.
 - **5. Schema / Table Design:**
-  - [ ] `translation_cache`: `id` (INTEGER PRIMARY KEY AUTOINCREMENT), `source_hash` (TEXT NOT NULL UNIQUE), `source_lang` (TEXT NOT NULL), `target_lang` (TEXT NOT NULL), `source_text` (TEXT NOT NULL), `translated_text` (TEXT NOT NULL), `provider` (TEXT DEFAULT 'GEMINI'), `quality_score` (REAL DEFAULT 1.0), `created_at` (DATETIME DEFAULT CURRENT_TIMESTAMP). *(Metin hash formatı: Önerilen / Uygulama sırasında doğrulanacak)*.
-  - [ ] `glossary`: `id` (INTEGER PRIMARY KEY AUTOINCREMENT), `source_term` (TEXT NOT NULL), `target_term` (TEXT NOT NULL), `source_lang` (TEXT DEFAULT 'TR'), `target_lang` (TEXT DEFAULT 'EN'), `category` (TEXT DEFAULT 'TECHNICAL'), `is_active` (INTEGER DEFAULT 1 CHECK(is_active IN (0,1))), `created_at` (DATETIME DEFAULT CURRENT_TIMESTAMP), UNIQUE(`source_term`, `source_lang`, `target_lang`).
+  - [x] `translation_cache`: `id` (INTEGER PRIMARY KEY AUTOINCREMENT), `source_hash` (TEXT NOT NULL UNIQUE), `source_lang` (TEXT NOT NULL), `target_lang` (TEXT NOT NULL), `source_text` (TEXT NOT NULL), `translated_text` (TEXT NOT NULL), `provider` (TEXT DEFAULT 'GEMINI'), `quality_score` (REAL DEFAULT 1.0), `created_at` (DATETIME DEFAULT CURRENT_TIMESTAMP). *(Metin hash formatı: Önerilen / Uygulama sırasında doğrulanacak)*.
+  - [x] `glossary`: `id` (INTEGER PRIMARY KEY AUTOINCREMENT), `source_term` (TEXT NOT NULL), `target_term` (TEXT NOT NULL), `source_lang` (TEXT DEFAULT 'TR'), `target_lang` (TEXT DEFAULT 'EN'), `category` (TEXT DEFAULT 'TECHNICAL'), `is_active` (INTEGER DEFAULT 1 CHECK(is_active IN (0,1))), `created_at` (DATETIME DEFAULT CURRENT_TIMESTAMP), UNIQUE(`source_term`, `source_lang`, `target_lang`).
 - **6. Primary Key / Foreign Key:** `translation_cache.id` (INTEGER PK), `glossary.id` (INTEGER PK). `source_hash` (TEXT UNIQUE) benzersiz arama anahtarıdır.
 - **7. Constraints:** `source_hash` UNIQUE, `glossary(source_term, source_lang, target_lang)` UNIQUE, `glossary.is_active IN (0,1)` CHECK kısıtı. Cache kimliği için provider/model bağımsız veya provider/model izole yaklaşım açıkça seçilmeli; `quality_score` 0–1 aralığında doğrulanmalıdır.
 - **8. Index Strategy:**
-  - [ ] `source_hash` için ayrıca manuel indeks gerekmez; `UNIQUE` kısıtının oluşturduğu SQLite otomatik indeks benzersiz arama için yeterlidir.
-  - [ ] `idx_glossary_lookup` ON `glossary(source_lang, target_lang, is_active)` (Sözlük terim çekimi).
+  - [x] `source_hash` için ayrıca manuel indeks gerekmez; `UNIQUE` kısıtının oluşturduğu SQLite otomatik indeks benzersiz arama için yeterlidir.
+  - [x] `idx_glossary_lookup` ON `glossary(source_lang, target_lang, is_active)` (Sözlük terim çekimi).
 - **9. Migration Strategy:** `DATA-002` sonrasında `0009_translation.sql` olarak uygulanır.
 - **10. Data Integrity:** Canonical hash girdisi `source_lang + ":" + target_lang + ":" + source_text` olarak normalize edilir; SHA-256 pratikte çakışma direnci sağlar ve `UNIQUE(source_hash)` veri bütünlüğünü uygular.
 - **11. Privacy / Retention:** Önbellekte yalnızca kamuya açık blog/doküman metinleri saklanır; PII içeren bilet metinleri çeviri önbelleğine kaydedilmez.
 - **12. Performance:** Hash bazlı indeks araması ile çeviri önbelleği < 2ms hızında döner, harici LLM API çağrılarını %80+ azaltır.
 - **13. Test Requirements:** Aynı metin ve dil çifti için türetilen `source_hash` kaydının tekrarlanamadığının doğrulanması ve `PRAGMA foreign_key_check` kontrolü.
 - **14. Definition of Done (DoD):** *(Not: DoD altındaki [ ] işaretleri onay kriteridir)*
-  - [ ] `translation_cache` ve `glossary` tablolarının D1 üzerinde hatasız oluşturulması.
-  - [ ] `source_hash` UNIQUE kısıtının doğrulanması.
+  - [x] `translation_cache` ve `glossary` tablolarının D1 üzerinde hatasız oluşturulması.
+  - [x] `source_hash` UNIQUE kısıtının doğrulanması.
 - **15. Hata / Risk Senaryoları:**
-  - [ ] Önbellek tablosunun aşırı büyüyerek D1 kotalarını zorlaması -> Zaman bazlı en eski önbellek verilerinin temizlenmesi (TTL/LRU stratejisi).
+  - [x] Önbellek tablosunun aşırı büyüyerek D1 kotalarını zorlaması -> Zaman bazlı en eski önbellek verilerinin temizlenmesi (TTL/LRU stratejisi).
 - **16. Zero-Cost Constraint:** Gemini Free Tier API kotalarını koruyarak %100 sıfır maliyet ($0/Ay) sağlar.
 - **17. Bağımlılıklar:** DATA-002.
 - **18. Bağımlı Görevler:** AI-004, AI-005, I18N-001.
