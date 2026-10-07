@@ -1052,11 +1052,11 @@ sequenceDiagram
 - **2. Amaç:** Ziyaretçilerin blog yazılarına yorum yapmasını (`POST`) ve onaylanmış yorumların listelenmesini (`GET`) sağlamak.
 - **3. Kapsam:** `backend/src/routes/comments.ts`, `GET /api/v1/comments?postSlug=...`, `POST /api/v1/comments`.
 - **4. İstek / Yanıt Sözleşmesi:**
-  - [ ] *POST İstek:* `{ "postSlug": "cloudflare-d1-rehberi", "authorName": "Canan Bakır", "authorEmail": "canan@example.com", "content": "Harika yazı!" }`
-  - [ ] *POST Yanıt (201 Created):* `{ "success": true, "data": { "commentId": "c_9981", "status": "PENDING_APPROVAL" } }`
-  - [ ] *GET Yanıt (200 OK):* `{ "success": true, "data": [ { "id": "c_12", "authorName": "Canan Bakır", "content": "...", "createdAt": "..." } ], "meta": { "cursor": "c_12", "hasMore": false } }`
+  - [x] *POST İstek:* `{ "postSlug": "cloudflare-d1-rehberi", "authorName": "Canan Bakır", "authorEmail": "canan@example.com", "content": "Harika yazı!" }`
+  - [x] *POST Yanıt (201 Created):* `{ "success": true, "data": { "commentId": "c_9981", "status": "PENDING_APPROVAL" } }`
+  - [x] *GET Yanıt (200 OK):* `{ "success": true, "data": [ { "id": "c_12", "authorName": "Canan Bakır", "content": "...", "createdAt": "..." } ], "meta": { "cursor": "c_12", "hasMore": false } }`
 - **5. Validasyon ve Şema Kuralları:** `postSlug` (string), `authorName` (max 50), `authorEmail` (valid email), `content` (min 5, max 1000). XSS önleme için sanitize.
-- **6. Veri İşlemleri / Sorgular:** `INSERT INTO comments (post_slug, author_name, author_email, content, is_approved) VALUES (...)` (varsayılan `is_approved = 0`). GET sorgusunda `WHERE post_slug = ? AND is_approved = 1`.
+- **6. Veri İşlemleri / Sorgular:** `INSERT INTO comments (post_slug, author_name, author_email, content, status) VALUES (...)` (varsayılan `status = 'PENDING'`). GET sorgusunda `WHERE post_slug = ? AND status = 'APPROVED'`.
 - **7. Async / Event / Queue Akışı:** Yorum gönderildiğinde admin bildirim kuyruğuna düşer.
 - **8. Authentication / Authorization:** Public `GET` ve `POST`. Admin onay modülü `SEC-RBAC-001` ile korunur.
 - **9. Rate Limit & WAF:** `POST` için IP bazlı 3 yorum/dakika.
@@ -1068,8 +1068,9 @@ sequenceDiagram
 - **15. Performance:** *Hedef:* GET önbellekten < 20ms, POST D1'e < 120ms.
 - **16. Test Requirements:** E-posta sızdırmazlık testi, onaylanmamış yorumların GET'te gözükmediği doğrulaması.
 - **17. Definition of Done (DoD):**
-  - [ ] Public GET isteğinde e-posta alanının dışarı verilmediğinin kesinleştirilmesi.
-  - [ ] XSS zararlı içeriklerin sanitize edildiğinin doğrulanması.
+  - [x] Public GET isteğinde e-posta alanının dışarı verilmediğinin kesinleştirilmesi.
+  - [x] XSS zararlı içeriklerin sanitize edildiğinin doğrulanması.
+  - [x] *(Sonuç: PASS. Public GET/POST rotaları, 3/min rate limit, HTML sanitization, PII e-posta gizliliği, 5 dk Cache-Control, Turnstile ve idempotency doğrulanmıştır)*.
 - **18. Hata / Risk Senaryoları:** Spam yorum akını -> Rate limit ve spam kelime süzgeci ile engellenir.
 - **19. Zero-Cost Constraint:** Cloudflare KV + D1 ücretsiz kotası.
 - **20. Bağımlılıklar:** DATA-001 (`comments` tablosu).
