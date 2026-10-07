@@ -1083,10 +1083,10 @@ sequenceDiagram
 - **2. Amaç:** Kullanıcıların e-bültene kaydolmasını, tercihlerini güncellemesini ve tek tıkla bültenden çıkmasını (Unsubscribe) sağlamak.
 - **3. Kapsam:** `backend/src/routes/subscribe.ts`, `POST /api/v1/subscribe`, `POST /api/v1/unsubscribe`, `POST /api/v1/subscribe/verify` (Double Opt-In E-Posta Doğrulama).
 - **4. İstek / Yanıt Sözleşmesi:**
-  - [ ] *Subscribe İstek:* `{ "email": "abone@example.com", "kvkkConsent": true }`
-  - [ ] *Subscribe Yanıt (200 OK):* `{ "success": true, "message": "Abonelik kaydınız alındı. Lütfen e-postanızı doğrulayın." }`
-  - [ ] *Unsubscribe İstek:* `{ "token": "unsub_token_xyz123" }`
-  - [ ] *Unsubscribe Yanıt (200 OK):* `{ "success": true, "message": "Aboneliğiniz başarıyla sonlandırıldı." }`
+  - [x] *Subscribe İstek:* `{ "email": "abone@example.com", "kvkkConsent": true }`
+  - [x] *Subscribe Yanıt (200 OK):* `{ "success": true, "message": "Abonelik kaydınız alındı. Lütfen e-postanızı doğrulayın." }`
+  - [x] *Unsubscribe İstek:* `{ "token": "unsub_token_xyz123" }`
+  - [x] *Unsubscribe Yanıt (200 OK):* `{ "success": true, "message": "Aboneliğiniz başarıyla sonlandırıldı." }`
 - **5. Validasyon ve Şema Kuralları:** `email` (valid format), `kvkkConsent` (boolean, mandatory `true`).
 - **6. Veri İşlemleri / Sorgular:** `subscribers` tablosuna `UPSERT` veya `INSERT ON CONFLICT(email) DO UPDATE`.
 - **7. Async / Event / Queue Akışı:** Hoş geldin e-postası ve doğrulama bağlantısı için e-posta kuyruğu tetiklenir.
@@ -1100,8 +1100,9 @@ sequenceDiagram
 - **15. Performance:** *Hedef:* Yanıt süresi < 100ms.
 - **16. Test Requirements:** KVKK onay kutusu olmadan abonelik reddi, Unsubscribe token doğrulama.
 - **17. Definition of Done (DoD):**
-  - [ ] KVKK onayı `false` ise kaydın reddedilmesi.
-  - [ ] Güvenli `unsubscribe_token` üretimi ve doğrulaması.
+  - [x] KVKK onayı `false` ise kaydın reddedilmesi.
+  - [x] Güvenli `unsubscribe_token` üretimi ve doğrulaması.
+  - [x] *(Sonuç: PASS. E-bülten abonelik, double opt-in doğrulama, tek tıkla unsubscribe, KVKK onayı, WebCrypto token güvenliği, rate limiting, idempotency ve birim/entegrasyon testleri %100 başarılıdır. MAIL-001 henüz tamamlanmadığından e-posta gönderimi pasiftir)*.
 - **18. Hata / Risk Senaryoları:** Sahte e-posta kaydı akını -> Double opt-in (doğrulama bağlantısı) ile koruma.
 - **19. Zero-Cost Constraint:** Cloudflare D1 sıfır maliyet.
 - **20. Bağımlılıklar:** DATA-001 (`subscribers` tablosu).
@@ -1114,8 +1115,8 @@ sequenceDiagram
 - **2. Amaç:** Yöneticilerin gelen destek biletlerini ve blog yorumlarını incelemesi, onaylaması, yanıtlaması veya silmesini sağlamak.
 - **3. Kapsam:** `backend/src/routes/admin/messages.ts`, `backend/src/routes/admin/comments.ts`, `GET/PATCH/DELETE /api/v1/admin/messages`, `PATCH /api/v1/admin/comments/:id`.
 - **4. İstek / Yanıt Sözleşmesi:**
-  - [ ] *Yorum Onay İstek:* `PATCH /api/v1/admin/comments/c_9981` -> `{ "isApproved": true }`
-  - [ ] *Mesaj Cevaplama İstek:* `POST /api/v1/admin/messages/MSK-2026-A8F2/reply` -> `{ "replyContent": "Merhaba, sorununuz çözüldü." }`
+  - [x] *Yorum Onay İstek:* `PATCH /api/v1/admin/comments/c_9981` -> `{ "isApproved": true }`
+  - [x] *Mesaj Cevaplama İstek:* `POST /api/v1/admin/messages/MSK-2026-A8F2/reply` -> `{ "replyContent": "Merhaba, sorununuz çözüldü." }`
 - **5. Validasyon ve Şema Kuralları:** `replyContent` (min 5, max 5000), `isApproved` (boolean).
 - **6. Veri İşlemleri / Sorgular:** `UPDATE comments SET is_approved = ? WHERE id = ?`, `INSERT INTO replies (message_id, sender_type, reply_text) VALUES (?, 'ADMIN', ?)` ve `UPDATE messages SET status = 'RESOLVED' WHERE id = ?`.
 - **7. Async / Event / Queue Akışı:** Mesaj yanıtlandığında kullanıcıya yanıt e-postası kuyruğa atılır.
@@ -1129,8 +1130,9 @@ sequenceDiagram
 - **15. Performance:** *Hedef:* Admin liste ve güncelleme yanıtları < 100ms.
 - **16. Test Requirements:** Admin yetkisi olmayan kullanıcının 403 alması, yorum onay durumunun güncellenmesi.
 - **17. Definition of Done (DoD):**
-  - [ ] `requireAuth` olmadan yapılan tüm isteklere 401 dönmesi.
-  - [ ] Mesaj yanıtlandığında durumun `RESOLVED` olarak güncellenmesi.
+  - [x] `requireAuth` olmadan yapılan tüm isteklere 401 dönmesi.
+  - [x] Mesaj yanıtlandığında durumun `RESOLVED` olarak güncellenmesi.
+  - [x] *(Sonuç: PASS. Admin destek biletleri ve blog yorumları GET/PATCH/POST reply/DELETE uç noktaları, Auth/RBAC yetkilendirme, BOLA/IDOR koruması, idempotency A/B senaryoları, cursor pagination, Zod/sanitization validasyonları, admin_audit_logs ve unit/integration testleri %100 başarılıdır)*.
 - **18. Hata / Risk Senaryoları:** Yanlışlıkla tüm yorumların silinmesi -> Toplu silme işlemlerinde onay mekanizması.
 - **19. Zero-Cost Constraint:** $0/Ay Cloudflare Worker + D1.
 - **20. Bağımlılıklar:** DATA-001, SEC-AUTH-001, SEC-RBAC-001.
