@@ -523,11 +523,11 @@ Her veritabanı migration dosyası için aşağıdaki testler sırasıyla gerçe
 - **3. Kapsam:** `backend/src/utils/crypto.ts`, `backend/src/middleware/auth.ts`, parola saklama ve JWT doğrulama katmanı.
 - **4. Tehdit Modeli:** Offline hash cracking, Rainbow table attacks, Token forgery, Algorithm downgrade attacks.
 - **5. Teknik Gereksinimler:**
-  - [ ] WebCrypto API `PBKDF2` algoritması kullanımı.
-  - [ ] Parola başına 16-byte rastgele kriptografik salt üretimi (`crypto.getRandomValues`).
-  - [ ] Minimum 100.000 (100k) iterasyon sayısı ve SHA-256 digest kullanımı.
-  - [ ] Token imzalama için HMAC-SHA256 ve 7 günlük (`7d`) geçerlilik süresi.
-  - [ ] `JWT_SECRET` eksikliğinde kontrollü ve güvenli sistem davranışı.
+  - [x] WebCrypto API `PBKDF2` algoritması kullanımı.
+  - [x] Parola başına 16-byte rastgele kriptografik salt üretimi (`crypto.getRandomValues`).
+  - [x] Minimum 100.000 (100k) iterasyon sayısı ve SHA-256 digest kullanımı.
+  - [x] Token imzalama için HMAC-SHA256 ve 7 günlük (`7d`) geçerlilik süresi.
+  - [x] `JWT_SECRET` eksikliğinde kontrollü ve güvenli sistem davranışı.
 - **6. Veri / Secret Gereksinimleri:** Salt verisi `admins.password_hash` içinde `$pbkdf2$v=1$i=100000$salt$hash` formatında saklanır. Secret'lar kod veya Git içinde kesinlikle yer alamaz.
 - **7. Authentication / Authorization Akışı:**
   1. Kullanıcı şifresi girer.
@@ -536,23 +536,23 @@ Her veritabanı migration dosyası için aşağıdaki testler sırasıyla gerçe
   4. Kriptografik sabit zamanlı karşılaştırma (`timingSafeEqual`) yapılır.
   5. Başarılıysa HMAC-SHA256 JWT üretilip istemciye iletilir.
 - **8. Hata ve Güvenlik Davranışları:**
-  - [ ] Eksik `JWT_SECRET` -> Uygulama ayağa kalkarken kilitlenir veya istek anında `500 Internal Error` detay vermeden güvenli hata döner.
-  - [ ] Desteklenmeyen hash versiyonu -> Hata loglanır ve `401 Unauthorized` dönülür.
+  - [x] Eksik `JWT_SECRET` -> Uygulama ayağa kalkarken kilitlenir veya istek anında `500 Internal Error` detay vermeden güvenli hata döner.
+  - [x] Desteklenmeyen hash versiyonu -> Hata loglanır ve `401 Unauthorized` dönülür.
 - **9. Güvenlik Kontrolleri:** Salt tekilleştirme, iterasyon sayısı doğrulaması, HMAC imza kontrolü.
 - **10. Audit / Logging:** Hash versiyon güncellemeleri ve şifreleme hataları loglanır; parola ve secret loglanmaz.
 - **11. Privacy / KVKK:** Parolalar hiçbir zaman açık metin (plain-text) saklanmaz veya iletilmez.
 - **12. Performance:** *Hedef:* PBKDF2 hash türetme süresi Cloudflare Workers CPU sınırları içinde (< 30ms; gerçek değer benchmark ile doğrulanacaktır).
 - **13. Test Requirements:**
-  - [ ] Doğru parola ile PBKDF2 eşleşme doğrulaması.
-  - [ ] Rastgele türetilen salt'ların benzersizliği.
-  - [ ] Değiştirilmiş JWT payload veya imzasında `401` reddi.
-  - [ ] 7 günü geçen token'ların geçersiz sayılması.
+  - [x] Doğru parola ile PBKDF2 eşleşme doğrulaması.
+  - [x] Rastgele türetilen salt'ların benzersizliği.
+  - [x] Değiştirilmiş JWT payload veya imzasında `401` reddi.
+  - [x] 7 günü geçen token'ların geçersiz sayılması.
 - **14. Definition of Done (DoD):** *(Not: DoD altındaki [ ] işaretleri onay kriteridir)*
-  - [ ] WebCrypto PBKDF2 (100k iterasyon, 16-byte salt) şifreleme modülünün yazılması.
-  - [ ] HMAC-SHA256 JWT doğrulamasının aktifleşmesi.
-  - [ ] Secret eksikliği testlerinin geçmesi.
+  - [x] WebCrypto PBKDF2 (100k iterasyon, 16-byte salt) şifreleme modülünün yazılması.
+  - [x] HMAC-SHA256 JWT doğrulamasının aktifleşmesi.
+  - [x] Secret eksikliği testlerinin geçmesi.
 - **15. Hata / Risk Senaryoları:**
-  - [ ] Düşük iterasyon sayısı riski -> Parametre 100k altına düşürülemez.
+  - [x] Düşük iterasyon sayısı riski -> Parametre 100k altına düşürülemez.
   - [ ] Secret'ın versiyon kontrolüne sızması -> `.gitignore` ve CI/CD taraması ile önlenir.
 - **16. Zero-Cost Constraint:** WebCrypto API standart Workers ortamında ücretsiz sunulur ($0/Ay). *(Mevcut ücretsiz kota ile doğrulanmalıdır)*.
 - **17. Bağımlılıklar:** SEC-AUTH-001.
