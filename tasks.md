@@ -805,7 +805,7 @@ Mevcut görevlerin kapsamını aşan ancak kapsamlı bir güvenlik mimarisi içi
 - **Hangi Tehdidi Çözüyor:** Clickjacking, Reflected XSS, Content Sniffing, Information Leakage.
 - **Mevcut Görevlerden Neden Ayrı olmalı:** CORS veya Auth görevleri HTTP response header politikalarını (CSP, HSTS, X-Frame-Options) doğrudan kapsamamaktadır.
 - **Öncelik:** P1 | **Teknik Detay:**
-  - [ ] `Content-Security-Policy`, `Strict-Transport-Security`, `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin` başlıklarının Worker yanıtlarına eklenmesi.
+  - [x] `Content-Security-Policy`, `Strict-Transport-Security`, `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin` başlıklarının Worker yanıtlarına eklenmesi. *(Not/Limitasyon: Canlı tarayıcı CSP doğrulaması henüz yapılmamıştır; mevcut uygulama stil uyumluluğu nedeniyle style-src 'unsafe-inline' içerir).*
 
 ### SEC-ADV-002 — Cookie Security & Session Fixation Protection
 - **Neden Gerekli:** Çerez tabanlı oturum yönetimi tercih edilirse:
