@@ -1020,12 +1020,12 @@ sequenceDiagram
 - **2. Amaç:** Kullanıcıların destek/iletişim formu göndermesini sağlamak, benzersiz bilet numarası üretmek ve mesajı D1 veritabanına kaydetmek.
 - **3. Kapsam:** `backend/src/routes/support.ts`, `POST /api/v1/support`.
 - **4. İstek / Yanıt Sözleşmesi:**
-  - [ ] *İstek:* `{ "name": "Ahmet Yılmaz", "email": "ahmet@example.com", "subject": "Teknik Destek", "message": "Detaylı mesaj..." }`
-  - [ ] *Başarılı Yanıt (201 Created):* `{ "success": true, "data": { "ticketNo": "MSK-2026-A8F2", "status": "PENDING", "createdAt": "2026-10-05T12:00:00Z" } }`
-  - [ ] *Hata Yanıtları:* `400 Bad Request` (Zod doğrulama hatası), `429 Too Many Requests`.
+  - [x] *İstek:* `{ "name": "Ahmet Yılmaz", "email": "ahmet@example.com", "subject": "Teknik Destek", "message": "Detaylı mesaj..." }`
+  - [x] *Başarılı Yanıt (201 Created):* `{ "success": true, "data": { "ticketNo": "MSK-2026-A8F2", "status": "PENDING", "createdAt": "2026-10-05T12:00:00Z" } }`
+  - [x] *Hata Yanıtları:* `400 Bad Request` (Zod doğrulama hatası), `429 Too Many Requests`.
 - **5. Validasyon ve Şema Kuralları:** Zod ile `name` (min 2, max 100), `email` (valid email format), `subject` (min 3, max 150), `message` (min 10, max 3000). HTML/Script etiketleri sanitized edilir.
 - **6. Veri İşlemleri / Sorgular:** Bilet no üretimi (`MSK-YYYY-XXXX`). `messages` tablosuna `INSERT INTO messages (id, ticket_no, name, email, subject, message, status, created_at) VALUES (...)`.
-- **7. Async / Event / Queue Akışı:** Destek isteği veritabanına yazıldıktan sonra arka planda AI özet analizi (`AI-002`) ve e-posta bildirimi (`MAIL-001`) için Cloudflare Queues / Event emisyonu tetiklenir.
+- **7. Async / Event / Queue Akışı:** Destek isteği veritabanına yazıldıktan sonra arka planda AI özet analizi (`AI-002`) ve e-posta bildirimi (`MAIL-001`) için Cloudflare Queues / Event emisyonu tetiklenir. *(Not: AI-002 ve MAIL-001 tamamlanmadığından asenkron yan-etkiler henüz bağlanmamıştır)*.
 - **8. Authentication / Authorization:** Public endpoint (Kimlik doğrulama gerektirmez).
 - **9. Rate Limit & WAF:** IP bazlı 5 istek/dakika (`support_rate_limit`).
 - **10. Hata Yönetimi & HTTP Kodları:** `400` (Geçersiz format), `429` (Kota aşımı), `500` (D1 yazma hatası).
@@ -1036,9 +1036,10 @@ sequenceDiagram
 - **15. Performance:** *Hedef:* Yanıt süresi p95 < 150ms.
 - **16. Test Requirements:** Zod validasyon testleri, bilet no format doğrulama, rate limit aşım testi.
 - **17. Definition of Done (DoD):**
-  - [ ] Bilet no benzersizliğinin test edilmesi.
-  - [ ] Sanitize edilmiş girdilerin D1'e eksiksiz yazılması.
-  - [ ] `/api/v1/support` rotasının 201 ve 400 durumlarını doğru döndürmesi.
+  - [x] Bilet no benzersizliğinin test edilmesi.
+  - [x] Sanitize edilmiş girdilerin D1'e eksiksiz yazılması.
+  - [x] `/api/v1/support` rotasının 201 ve 400 durumlarını doğru döndürmesi.
+  - [x] *(Sonuç: PASS WITH LIMITATION. Destek bileti oluşturma, Zod doğrulama, HTML sanitization, D1 kaydı, 5 req/min rate limit, idempotency ve unit/integration testleri %100 başarılıdır. AI-002 ve MAIL-001 henüz tamamlanmadığı için asenkron yan etkiler pasiftir)*.
 - **18. Hata / Risk Senaryoları:** D1 yazma çökmesi durumunda istemciye `500` döner ve isteğin tekrarı için idempotency key önerilir.
 - **19. Zero-Cost Constraint:** Cloudflare Workers & D1 ücretsiz kotaları ile sıfır maliyet.
 - **20. Bağımlılıklar:** DATA-001 (`messages` tablosu), SEC-AUTH-001.
