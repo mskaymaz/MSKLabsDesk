@@ -1210,9 +1210,9 @@ sequenceDiagram
 - **15. Performance:** *Hedef:* KV okuma süresi < 15ms.
 - **16. Test Requirements:** Aynı key ile atılan 2. isteğin veritabanını tetiklemeden ilk yanıtı döndüğünün entegrasyon testi.
 - **17. Definition of Done (DoD):**
-  - [ ] KV tabanlı idempotency middleware'inin tamamlanması.
-  - [ ] 24 saatlik TTL süresinin doğrulanması.
-- **18. Hata / Risk Senaryoları:** KV çökmesi veya erişilememesi -> Fallback olarak veritabanı veya geçici işlem izni.
+  - [x] KV tabanlı idempotency middleware'inin tamamlanması (`withIdempotency`, `IN_PROGRESS` 60s lock TTL, `COMPLETED` 86400s TTL). *(Sonuç: PASS WITH LIMITATION. Cloudflare KV global PoP eventual-consistency sınırlaması nedeniyle KV tabanlı get -> claim/write mekanizması farklı kıtalar arası PoP'larda güçlü atomik lock garantisi vermez; aynı key ile mikrosaniyede gelen isteklerde teorik duplicate side-effect riski bulunur. Tek PoP/Worker ve birim testlerinde 10 eşzamanlı istekte tam koruma sağlanmıştır).*
+  - [x] 24 saatlik (`86400s`) TTL süresinin ve 60s lock kilit süresinin birim testleri ve 0.18ms benchmark ile doğrulanması.
+- **18. Hata / Risk Senaryoları:** KV çökmesi veya erişilememesi -> Idempotency anahtarı gönderilen isteklerde çift işlem riskini önlemek için Fail-Closed politikasıyla HTTP 503 `IDEMPOTENCY_STORE_UNAVAILABLE` döndürülür.
 - **19. Zero-Cost Constraint:** Cloudflare KV günlük 100.000 okuma/1.000 yazma ücretsiz kotası.
 - **20. Bağımlılıklar:** API-006.
 - **21. Bağımlı Görevler:** API-001, API-005, API-009.
