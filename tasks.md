@@ -809,7 +809,7 @@ Mevcut görevlerin kapsamını aşan ancak kapsamlı bir güvenlik mimarisi içi
 
 ### SEC-ADV-002 — Cookie Security & Session Fixation Protection
 - **Neden Gerekli:** Çerez tabanlı oturum yönetimi tercih edilirse:
-  - [ ] `HttpOnly`, `Secure`, `SameSite=Strict` bayraklarının zorunlu kılınması gerekir.
+  - [x] `HttpOnly`, `Secure`, `SameSite=Strict` bayraklarının zorunlu kılınması gerekir. *(Sonuç: PASS WITH LIMITATION / NOT APPLICABLE TO CURRENT AUTH TRANSPORT. Mevcut mimari Bearer JWT + D1 session tabanlıdır ve çerez kullanılmamaktadır. Girişte fresh JWT/session türetilerek Session Fixation engellenmiş, logout ile D1 revocation sağlanmıştır. Admin JWT'sinin localStorage'da saklanması XSS teknik borcu/limitasyonu olarak korunmuştur).*
 - **Hangi Tehdidi Çözüyor:** Cookie Theft, CSRF, Session Fixation.
 - **Mevcut Görevlerden Neden Ayrı olmalı:** `SEC-AUTH-001` daha çok JWT/Bearer akışına odaklanmaktadır; çerez güvenliği izole bir politika gerektirir.
 - **Öncelik:** P1
@@ -1183,9 +1183,9 @@ sequenceDiagram
 - **15. Performance:** *Hedef:* Middleware ek yükü < 1ms.
 - **16. Test Requirements:** Yanıt zarfı yapısının tüm HTTP kodlarında standartlığının birim testi.
 - **17. Definition of Done (DoD):**
-  - [ ] `/api/v1/` önekinin tüm rotalarda etkinleştirilmesi.
-  - [ ] Standart yanıt formatının tüm API'lerde uygulanması.
-- **18. Hata / Risk Senaryoları:** Eski istemcilerin `/api/` rotalarına istek atması -> `/api/v1/` yollarına HTTP 301/308 yönlendirme.
+  - [x] `/api/v1/` önekinin tüm rotalarda kanonik olarak etkinleştirilmesi ve legacy `/api/` yollarının method-preserving alias olarak desteklenmesi.
+  - [x] Standart yanıt formatının (`success`, `data`/`error`, `meta: { timestamp, requestId }`) tüm API'lerde uygulanması, `X-Request-ID` süzgeci ve `< 1ms` middleware performans kriterinin birim testleriyle doğrulanması.
+- **18. Hata / Risk Senaryoları:** Eski istemcilerin `/api/` rotalarına istek atması -> POST gövde kaybını önlemek için HTTP 301/308 yerine router seviyesinde method-preserving alias desteği sağlanmıştır.
 - **19. Zero-Cost Constraint:** %100 kod seviyesinde sıfır maliyet.
 - **20. Bağımlılıklar:** ARCH-003.
 - **21. Bağımlı Görevler:** API-001..005, API-007..010.
