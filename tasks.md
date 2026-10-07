@@ -1229,8 +1229,8 @@ sequenceDiagram
 - **2. Amaç:** Sistemin canlılık (`liveness`) ve hizmete hazır olma (`readiness`) durumunu izlemek, D1 ve R2 erişilebilirliğini kontrol etmek.
 - **3. Kapsam:** `backend/src/routes/health.ts`, `GET /api/v1/health`, `GET /api/v1/readiness`.
 - **4. İstek / Yanıt Sözleşmesi:**
-  - [ ] *GET /api/v1/health Yanıt (200 OK):* `{ "status": "UP", "timestamp": 1700000000 }`
-  - [ ] *GET /api/v1/readiness Yanıt (200 OK):* `{ "status": "READY", "checks": { "d1": "UP", "r2": "UP" } }`
+  - [x] *GET /api/v1/health Yanıt (200 OK):* `{ "status": "UP", "timestamp": 1700000000 }`
+  - [x] *GET /api/v1/readiness Yanıt (200 OK):* `{ "status": "READY", "checks": { "d1": "UP", "r2": "UP" } }`
 - **5. Validasyon ve Şema Kuralları:** N/A.
 - **6. Veri İşlemleri / Sorgular:** D1 üzerinde `SELECT 1` hafif doğrulama sorgusu.
 - **7. Async / Event / Queue Akışı:** N/A.
@@ -1244,8 +1244,9 @@ sequenceDiagram
 - **15. Performance:** *Hedef:* Health check yanıtı < 30ms.
 - **16. Test Requirements:** D1 bağlantısı koparıldığında 503 döndüğünün testi.
 - **17. Definition of Done (DoD):**
-  - [ ] Uç noktaların 200 ve 503 durumlarını doğru döndürmesi.
-  - [ ] Cloudflare izleme servisleri ile entegre edilebilir olması.
+  - [x] Uç noktaların 200 ve 503 durumlarını doğru döndürmesi.
+  - [x] Cloudflare izleme servisleri ile entegre edilebilir olması.
+  - [x] *(Sonuç: PASS. GET /api/v1/health liveness ve GET /api/v1/readiness readiness uç noktaları, daraltılmış {status: "UP", timestamp} sözleşmesi, D1 SELECT 1 canlı sorgusu, R2 read-only MEDIA.list({limit:1}) canlı denetimi, 0-stale readiness, IP tabanlı 120 req/min rate limit, 10s liveness KV caching, HEALTH_CHECK_FAILED güvenli audit loglama ve unit/integration testleri %100 başarılıdır)*.
 - **18. Hata / Risk Senaryoları:** Sağlık kontrolünün sistemi yorması -> 10 saniyelik KV caching ile aşırı sorgu engellenir.
 - **19. Zero-Cost Constraint:** Sıfır ek maliyet.
 - **20. Bağımlılıklar:** API-006.
