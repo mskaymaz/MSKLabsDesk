@@ -362,27 +362,27 @@
 - **3. Kapsam:** `migrations/0010_post_audio_assets.sql` dosyası; `post_audio_assets` tablosu.
 - **4. Teknik Gereksinimler:** `post_id`, `language`, `article_version`, `audio_version`, `provider`, `model`, `r2_object_key`, `file_size`, `duration_seconds`, `status`, `validation_result_json` alanlarının depolanması.
 - **5. Schema / Table Design (Provider Abstraction & Domain Registry):**
-  - [ ] `post_audio_assets`: `id` (INTEGER PRIMARY KEY AUTOINCREMENT), `post_id` (INTEGER NOT NULL FK → `blog_posts(id)` ON DELETE CASCADE), `language` (TEXT NOT NULL CHECK(language IN ('TR', 'EN', 'AR'))), `article_version` (INTEGER NOT NULL), `audio_version` (INTEGER NOT NULL), `provider` (TEXT NOT NULL), `model` (TEXT NOT NULL), `r2_object_key` (TEXT NOT NULL UNIQUE), `file_size` (INTEGER NOT NULL), `duration_seconds` (INTEGER NOT NULL), `status` (TEXT DEFAULT 'DRAFT' CHECK(status IN ('GENERATING', 'DRAFT', 'APPROVED', 'FAILED', 'STALE'))), `validation_result_json` (TEXT), `created_at` (DATETIME DEFAULT CURRENT_TIMESTAMP), `updated_at` (DATETIME DEFAULT CURRENT_TIMESTAMP), UNIQUE(`post_id`, `language`, `audio_version`).
-  - [ ] *Mimari Açıklama (Seçenek A - Domain Metadata Registry):* `post_audio_assets` tablosu makale revizyonu ve onay süreçlerine özgü alanları tutar; R2 nesnesini `r2_object_key` ile doğrudan adresler. Genel medya galerisi (`DATA-002 media_assets`) ile gereksiz metadata tekrarı oluşturulmaz.
+  - [x] `post_audio_assets`: `id` (INTEGER PRIMARY KEY AUTOINCREMENT), `post_id` (INTEGER NOT NULL FK → `blog_posts(id)` ON DELETE CASCADE), `language` (TEXT NOT NULL CHECK(language IN ('TR', 'EN', 'AR'))), `article_version` (INTEGER NOT NULL), `audio_version` (INTEGER NOT NULL), `provider` (TEXT NOT NULL), `model` (TEXT NOT NULL), `r2_object_key` (TEXT NOT NULL UNIQUE), `file_size` (INTEGER NOT NULL), `duration_seconds` (INTEGER NOT NULL), `status` (TEXT DEFAULT 'DRAFT' CHECK(status IN ('GENERATING', 'DRAFT', 'APPROVED', 'FAILED', 'STALE'))), `validation_result_json` (TEXT), `created_at` (DATETIME DEFAULT CURRENT_TIMESTAMP), `updated_at` (DATETIME DEFAULT CURRENT_TIMESTAMP), UNIQUE(`post_id`, `language`, `audio_version`).
+  - [x] *Mimari Açıklama (Seçenek A - Domain Metadata Registry):* `post_audio_assets` tablosu makale revizyonu ve onay süreçlerine özgü alanları tutar; R2 nesnesini `r2_object_key` ile doğrudan adresler. Genel medya galerisi (`DATA-002 media_assets`) ile gereksiz metadata tekrarı oluşturulmaz.
 - **6. Primary Key / Foreign Key:** `post_id` → `blog_posts.id` (`ON DELETE CASCADE`). `(post_id, language, audio_version)` bileşik UNIQUE kısıtı.
 - **7. Revizyon & Sürüm Bağıntısı:**
-  - [ ] `article_version`: hizmet katmanında `post_revisions.revision_number` (DATA-006) değerini temsil eder. Makale metni canonical olarak değiştiğinde yeni revizyon numarası üretilir; bu alan DB foreign key değildir.
-  - [ ] `audio_version`: Sesin üretildiği anki `post_revisions.revision_number` değeridir; bu alan DB foreign key değildir ve audio üretim sürümünü temsil eder.
+  - [x] `article_version`: hizmet katmanında `post_revisions.revision_number` (DATA-006) değerini temsil eder. Makale metni canonical olarak değiştiğinde yeni revizyon numarası üretilir; bu alan DB foreign key değildir.
+  - [x] `audio_version`: Sesin üretildiği anki `post_revisions.revision_number` değeridir; bu alan DB foreign key değildir ve audio üretim sürümünü temsil eder.
 - **8. Index Strategy:**
-  - [ ] `idx_audio_post_lang_status` ON `post_audio_assets(post_id, language, status)` (Public player hızlı dinleme sorgusu).
-  - [ ] `idx_audio_version_check` ON `post_audio_assets(post_id, article_version, audio_version)` (Sürüm uyum denetimi).
+  - [x] `idx_audio_post_lang_status` ON `post_audio_assets(post_id, language, status)` (Public player hızlı dinleme sorgusu).
+  - [x] `idx_audio_version_check` ON `post_audio_assets(post_id, article_version, audio_version)` (Sürüm uyum denetimi).
 - **9. Migration Strategy:** `DATA-002` (`blog_posts`) ve `DATA-006` (`post_revisions`) oluştuktan sonra `0010_post_audio_assets.sql` olarak uygulanır.
 - **10. Data Integrity (SÜRÜM UYUM KURALI & STALE TEMİZLİĞİ):**
-  - [ ] **`article_version != audio_version`** durumunda servis/API katmanı sesi **`STALE`** kabul eder ve public API yalnızca güncel sürüm ile `APPROVED` sesleri sunar (metin değişikliğinin eski sesle uyumsuz oynaması engellenir).
-  - [ ] *Stale Audio Cleanup:* Stale olan R2 nesneleri geri alma (rollback) ihtimali için geçici tutulur (başlangıç retention politikası: konfigüre edilebilir / operasyonel olarak doğrulanacak saklama süresi), ardından zamanlanmış async temizlik işleyicisi ile güvenle R2'den silinir.
+  - [x] **`article_version != audio_version`** durumunda servis/API katmanı sesi **`STALE`** kabul eder ve public API yalnızca güncel sürüm ile `APPROVED` sesleri sunar (metin değişikliğinin eski sesle uyumsuz oynaması engellenir).
+  - [x] *Stale Audio Cleanup:* Stale olan R2 nesneleri geri alma (rollback) ihtimali için geçici tutulur (başlangıç retention politikası: konfigüre edilebilir / operasyonel olarak doğrulanacak saklama süresi), ardından zamanlanmış async temizlik işleyicisi ile güvenle R2'den silinir.
 - **11. Privacy / Retention:** Ses dosyaları Cloudflare R2 nesne depolamada saklanır (`r2_object_key`). PII tutulmaz.
 - **12. Performance:** *Benchmark Target:* Bileşik indeks ile public blog audio player metadata sorgusu < 3ms (Ölçüm yapılacaktır).
 - **13. Test Requirements:** Post silindiğinde audio kayıtlarının silindiğinin (`CASCADE`), sürüm uyumsuzluğunda servis/API katmanının `STALE` davranışını uyguladığının ve public API'nin güncel `APPROVED` sesleri filtrelediğinin doğrulanması.
 - **14. Definition of Done (DoD):**
-  - [ ] `post_audio_assets` tablosunun D1 üzerinde hatasız oluşturulması.
-  - [ ] Revizyon uyumsuzluğunda sesin gizlenme ve `STALE` olma mantığının doğrulama testi.
+  - [x] `post_audio_assets` tablosunun D1 üzerinde hatasız oluşturulması.
+  - [x] Revizyon uyumsuzluğunda sesin gizlenme ve `STALE` olma mantığının doğrulama testi.
 - **15. Hata / Risk Senaryoları:**
-  - [ ] Güncellenmiş makalede eski sesin oynatılması -> `article_version == audio_version AND status = 'APPROVED'` kısıtı ile önlenir.
+  - [x] Güncellenmiş makalede eski sesin oynatılması -> `article_version == audio_version AND status = 'APPROVED'` kısıtı ile önlenir.
 - **16. Zero-Cost Constraint:** Provider-agnostic mimari ile $0/Ay ilkesi korunur. Cache anahtarı provider bağımsız tutulacaksa provider/model kalite farklılıkları cache metadata ve kalite skoru ile yönetilir; provider izolasyonu tercih edilirse provider/model cache kimliğine dahil edilir. Hiçbir ücretli provider zorunlu kılınmaz.
 - **17. Bağımlılıklar:** DATA-002 (`blog_posts`), DATA-006 (`post_revisions`).
 - **18. Bağımlı Görevler:** AI-TTS-001, API-TTS-001, CMS-TTS-001.
