@@ -724,10 +724,10 @@ Her veritabanı migration dosyası için aşağıdaki testler sırasıyla gerçe
 - **3. Kapsam:** `backend/src/middleware/cors.ts`, `backend/src/middleware/rateLimit.ts`, Cloudflare Turnstile entegrasyonu.
 - **4. Tehdit Modeli:** Cross-Origin Resource Sharing (CORS) abuse, Denial of Service (DoS), Bot spamming, Credential stuffing, API scrapers.
 - **5. Teknik Gereksinimler:**
-  - [ ] `ALLOWED_ORIGINS` beyaz liste (allowlist) kontrolü. Wildcard (`*`) kullanımının engellenmesi (credentials açıkken).
-  - [ ] Preflight (`OPTIONS`) isteklerinin doğru yanıtlanması.
-  - [ ] D1 veya hafıza tabanlı IP + Rota bileşik Rate Limiting (`utils/rateLimit.ts`).
-  - [ ] Public uç noktalarda (örn: destek formu) Cloudflare Turnstile bot doğrulaması.
+  - [x] `ALLOWED_ORIGINS` beyaz liste (allowlist) kontrolü. Wildcard (`*`) kullanımının engellenmesi (credentials açıkken).
+  - [x] Preflight (`OPTIONS`) isteklerinin doğru yanıtlanması.
+  - [x] D1 veya hafıza tabanlı IP + Rota bileşik Rate Limiting (`utils/rateLimit.ts`).
+  - [x] Public uç noktalarda (örn: destek formu) Cloudflare Turnstile bot doğrulaması.
 - **6. Veri / Secret Gereksinimleri:** `TURNSTILE_SECRET_KEY` ortam değişkeni, `ALLOWED_ORIGINS` liste konfigürasyonu.
 - **7. Authentication / Authorization Akışı:**
   1. İstek gelir.
@@ -735,24 +735,24 @@ Her veritabanı migration dosyası için aşağıdaki testler sırasıyla gerçe
   3. Rate Limit Middleware IP + Rota anahtarını kontrol eder; sınır aşıldıysa `429` döner.
   4. Public formlarda Turnstile doğrulama token'ı Cloudflare API üzerinden doğrulanır.
 - **8. Hata ve Güvenlik Davranışları:**
-  - [ ] İzin verilmeyen Origin -> CORS engeli (`403 Forbidden` / Missing CORS headers).
-  - [ ] Rate limit aşımı -> `429 Too Many Requests` (`Retry-After` başlığıyla).
-  - [ ] Geçersiz Turnstile token -> `400 Bad Request` veya `422 Unprocessable Entity`.
+  - [x] İzin verilmeyen Origin -> CORS engeli (`403 Forbidden` / Missing CORS headers).
+  - [x] Rate limit aşımı -> `429 Too Many Requests` (`Retry-After` başlığıyla).
+  - [x] Geçersiz Turnstile token -> `400 Bad Request` veya `422 Unprocessable Entity`.
 - **9. Güvenlik Kontrolleri:** CORS allowlist denetimi, Rate limit sayaç kontrolü, Turnstile server-side verification.
 - **10. Audit / Logging:** CORS ihlalleri, rate limit aşımları ve bot engellemeleri güvenlik loguna kaydedilir.
 - **11. Privacy / KVKK:** İstemci IP adresleri rate limit takibi için anonimleştirilerek veya hashing ile işlenir. *(Hukuki saklama süresi: Hukuki doğrulama gerekli)*.
 - **12. Performance:** *Hedef:* Rate limit ve CORS kontrolü ek süresi < 1ms (gerçek değer benchmark ile doğrulanacaktır).
 - **13. Test Requirements:**
-  - [ ] İzin verilmeyen bir origin üzerinden yapılan isteğin tarayıcıda engellenmesi.
-  - [ ] Belirlenen limitin (örn: 1 dakikada 60 istek) üzerindeki isteklerin `429` alması.
-  - [ ] Sahte Turnstile token'ı ile form gönderiminin reddedilmesi.
+  - [x] İzin verilmeyen bir origin üzerinden yapılan isteğin tarayıcıda engellenmesi.
+  - [x] Belirlenen limitin (örn: 1 dakikada 60 istek) üzerindeki isteklerin `429` alması.
+  - [x] Sahte Turnstile token'ı ile form gönderiminin reddedilmesi.
 - **14. Definition of Done (DoD):** *(Not: DoD altındaki [ ] işaretleri onay kriteridir)*
-  - [ ] `ALLOWED_ORIGINS` konfigürasyonunun yapılması ve wildcard'ın kaldırılması.
-  - [ ] Rate Limit middleware'inin uç noktalara bağlanması.
-  - [ ] Turnstile sunucu doğrulamasının entegre edilmesi.
+  - [x] `ALLOWED_ORIGINS` konfigürasyonunun yapılması ve wildcard'ın kaldırılması.
+  - [x] Rate Limit middleware'inin uç noktalara bağlanması.
+  - [x] Turnstile sunucu doğrulamasının entegre edilmesi.
 - **15. Hata / Risk Senaryoları:**
-  - [ ] Rate Limit Race Condition -> Sayaç güncellemelerinin atomik işlemlerle yapılması.
-  - [ ] Turnstile API çökmesi -> Güvenli fail-open / fail-closed politikasının belirlenmesi.
+  - [x] Rate Limit Race Condition -> Sayaç güncellemelerinin atomik işlemlerle yapılması.
+  - [x] Turnstile API çökmesi -> Güvenli fail-open / fail-closed politikasının belirlenmesi.
 - **16. Zero-Cost Constraint:** Cloudflare Turnstile ve Workers kotaları ($0/Ay). *(Mevcut ücretsiz kota ile doğrulanmalıdır)*.
 - **17. Bağımlılıklar:** ARCH-001.
 - **18. Bağımlı Görevler:** API-001, API-002, API-003.
