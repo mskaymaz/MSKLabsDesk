@@ -765,10 +765,10 @@ Her veritabanı migration dosyası için aşağıdaki testler sırasıyla gerçe
 - **3. Kapsam:** `backend/src/utils/sanitize.ts`, CMS blog içerikleri, destek bileti mesajları, yorumlar.
 - **4. Tehdit Modeli:** Stored XSS, Reflected XSS, DOM-based XSS, HTML Injection, Malicious Redirects.
 - **5. Teknik Gereksinimler:**
-  - [ ] İzin verilen HTML etiketleri (allowlist) mantığı (`<p>`, `<b>`, `<i>`, `<a>`, `<ul>`, `<li>` vb.).
-  - [ ] Tehlikeli etiketlerin (`<script>`, `<iframe>`, `<object>`, `<embed>`, `<style>`, `<svg>`) temizlenmesi.
-  - [ ] Etkinlik işleyicilerinin (`onload=`, `onerror=`, `onclick=`) kaldırılması.
-  - [ ] URL protokol süzgeci (`javascript:`, `data:` protokollerinin engellenmesi; sadece `http:`, `https:`, `mailto:` izni).
+  - [x] İzin verilen HTML etiketleri (allowlist) mantığı (`<p>`, `<b>`, `<i>`, `<a>`, `<ul>`, `<li>` vb.).
+  - [x] Tehlikeli etiketlerin (`<script>`, `<iframe>`, `<object>`, `<embed>`, `<style>`, `<svg>`) temizlenmesi.
+  - [x] Etkinlik işleyicilerinin (`onload=`, `onerror=`, `onclick=`) kaldırılması.
+  - [x] URL protokol süzgeci (`javascript:`, `data:` protokollerinin engellenmesi; sadece `http:`, `https:`, `mailto:` izni).
 - **6. Veri / Secret Gereksinimleri:** Sanitization kuralları konfigürasyon nesnesi olarak tutulur. Secret içermez.
 - **7. Authentication / Authorization Akışı:**
   1. Kullanıcıdan zengin metin (rich-text) veya yorum girdisi alınır.
@@ -776,18 +776,18 @@ Her veritabanı migration dosyası için aşağıdaki testler sırasıyla gerçe
   3. Zararlı etiket ve öznitelikler soyulur.
   4. Temizlenmiş veri veritabanına yazılır.
 - **8. Hata ve Güvenlik Davranışları:**
-  - [ ] Zararlı XSS dizesi tespiti -> Zararlı kısmın temizlenerek kaydedilmesi veya isteğin `400 Bad Request` ile reddedilmesi.
+  - [x] Zararlı XSS dizesi tespiti -> Zararlı kısmın temizlenerek kaydedilmesi veya isteğin `400 Bad Request` ile reddedilmesi.
 - **9. Güvenlik Kontrolleri:** Allowlist etiket kontrolü, Attribute temizliği, URL protokol doğrulaması.
 - **10. Audit / Logging:** XSS saldırı teşebbüsleri loglanır (saldırı metni filtreli olarak saklanır).
 - **11. Privacy / KVKK:** Temizleme işlemi sadece veri güvenliği amacıyla çalışır, kişisel verileri değiştirmez.
-- **12. Performance:** *Hedef:* Metin temizleme süresi metin boyutuna bağlı olarak < 3ms (gerçek değer benchmark ile doğrulanacaktır).
+- **12. Performance:** *Hedef:* Metin temizleme süresi metin boyutuna bağlı olarak < 3ms (gerçek değer canlı benchmark ile doğrulanacaktır).
 - **13. Test Requirements:**
-  - [ ] `<script>alert(1)</script>` içeren girdinin `<script>` etiketinden arındırıldığının doğrulanması.
-  - [ ] `<img src=x onerror=alert(1)>` içeren girdide `onerror` özniteliğinin silindiğinin teyidi.
-  - [ ] `javascript:void(0)` bağlantılarının engellenmesi.
+  - [x] `<script>alert(1)</script>` içeren girdinin `<script>` etiketinden arındırıldığının doğrulanması.
+  - [x] `<img src=x onerror=alert(1)>` içeren girdide `onerror` özniteliğinin silindiğinin teyidi.
+  - [x] `javascript:void(0)` bağlantılarının engellenmesi.
 - **14. Definition of Done (DoD):** *(Not: DoD altındaki [ ] işaretleri onay kriteridir)*
-  - [ ] `sanitizeHTML` modülünün yazılması ve birim testlerinin geçmesi.
-  - [ ] Yorum, destek mesajı ve CMS içerik girişlerine entegre edilmesi.
+  - [x] `sanitizeHTML` modülünün yazılması ve birim testlerinin geçmesi.
+  - [x] Yorum, destek mesajı ve CMS içerik girişlerine entegre edilmesi.
 - **15. Hata / Risk Senaryoları:**
   - [ ] Eksik sanitizer kütüphanesi / regex açığı -> Sınanmış açık kaynak kütüphane veya sıkı allowlist kullanımı ile önlenir.
 - **16. Zero-Cost Constraint:** Hafif JS kütüphanesi / regex ($0/Ay). *(Mevcut ücretsiz kota ile doğrulanmalıdır)*.
