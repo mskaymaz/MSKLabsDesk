@@ -566,10 +566,10 @@ Her veritabanı migration dosyası için aşağıdaki testler sırasıyla gerçe
 - **3. Kapsam:** `backend/src/middleware/rateLimit.ts`, `admins` veya D1 kilit tablosu, `POST /api/admin/login`.
 - **4. Tehdit Modeli:** Password spraying, Automated brute-force attacks, Session fixation, Account lockout denial-of-service.
 - **5. Teknik Gereksinimler:**
-  - [ ] Hatalı giriş denemelerinde IP ve kullanıcı adı bileşimi üzerinden sayaç takibi.
-  - [ ] 15 dakikalık pencerede 5 hatalı deneme sonrası hesabın/IP'nin 15 dakika boyunca kilitlenmesi (lockout).
-  - [ ] Konfigüre edilebilir kilitlenme politikası (`MAX_ATTEMPTS`, `LOCKOUT_WINDOW`).
-  - [ ] Şüpheli giriş durumlarında oturum iptal (revocation) olanağı.
+  - [x] Hatalı giriş denemelerinde IP ve kullanıcı adı bileşimi üzerinden sayaç takibi.
+  - [x] 15 dakikalık pencerede 5 hatalı deneme sonrası hesabın/IP'nin 15 dakika boyunca kilitlenmesi (lockout).
+  - [x] Konfigüre edilebilir kilitlenme politikası (`MAX_ATTEMPTS`, `LOCKOUT_WINDOW`).
+  - [x] Şüpheli giriş durumlarında oturum iptal (revocation) olanağı.
 - **6. Veri / Secret Gereksinimleri:** Giriş deneme sayaçları ve kilit zaman damgaları D1 veritabanında veya bellek içi (in-memory rate limiter) tutulur. PII tutulmaz.
 - **7. Authentication / Authorization Akışı:**
   1. Giriş isteği gelir (IP + `username`).
@@ -578,22 +578,22 @@ Her veritabanı migration dosyası için aşağıdaki testler sırasıyla gerçe
   4. Başarısız ise sayaç 1 artırılır; 5'e ulaşırsa `locked_until` zamanı yazılır.
   5. Başarılı ise sayaç sıfırlanır.
 - **8. Hata ve Güvenlik Davranışları:**
-  - [ ] 5 hatalı deneme aşımı -> `429 Too Many Requests` (`Retry-After: 900` başlığı ile).
-  - [ ] Dağıtık (distributed) IP saldırısı -> Kullanıcı adı bazlı kilitleme ile hesabı koruma; meşru kullanıcı engellenmesine karşı uyarı e-postası.
+  - [x] 5 hatalı deneme aşımı -> `429 Too Many Requests` (`Retry-After: 900` başlığı ile).
+  - [x] Dağıtık (distributed) IP saldırısı -> Kullanıcı adı bazlı kilitleme ile hesabı koruma; meşru kullanıcı engellenmesine karşı uyarı e-postası.
 - **9. Güvenlik Kontrolleri:** Sayaç artırımı, kilit süresi denetimi, başarılı girişte sayaç sıfırlama.
 - **10. Audit / Logging:** Kilitlenme olayları (`ACCOUNT_LOCKED`, `IP_THROTTLED`) audit loglarına yazılır.
 - **11. Privacy / KVKK:** Saldırgan IP adresleri güvenlik ve sistem sağlığı gerekçesiyle geçici süreliğine işlenir. *(Hukuki saklama süresi: Hukuki doğrulama gerekli)*.
 - **12. Performance:** *Hedef:* Rate-limit kontrolü ek süresi < 1ms (D1 önbellekli sorgu; gerçek değer benchmark ile doğrulanacaktır).
 - **13. Test Requirements:**
-  - [ ] 5 kez üst üste hatalı şifre denemesinde 6. isteğin `429` ile engellenmesi.
-  - [ ] 15 dakika dolduktan sonra tekrar giriş yapılabilmesi.
-  - [ ] Başarılı girişte sayacın sıfırlanması.
+  - [x] 5 kez üst üste hatalı şifre denemesinde 6. isteğin `429` ile engellenmesi.
+  - [x] 15 dakika dolduktan sonra tekrar giriş yapılabilmesi.
+  - [x] Başarılı girişte sayacın sıfırlanması.
 - **14. Definition of Done (DoD):** *(Not: DoD altındaki [ ] işaretleri onay kriteridir)*
-  - [ ] 5 deneme / 15 dk lockout kuralının uygulanması.
-  - [ ] `Retry-After` HTTP başlığının dönülmesi.
-  - [ ] Başarılı girişte kilit sayacının temizlenmesi.
+  - [x] 5 deneme / 15 dk lockout kuralının uygulanması.
+  - [x] `Retry-After` HTTP başlığının dönülmesi.
+  - [x] Başarılı girişte kilit sayacının temizlenmesi.
 - **15. Hata / Risk Senaryoları:**
-  - [ ] Lockout Abuse (Meşru kullanıcının hesabını kasıtlı kilitletme) -> IP + Kullanıcı adı bileşik sınırlama politikası ile risk düşürülür.
+  - [x] Lockout Abuse (Meşru kullanıcının hesabını kasıtlı kilitletme) -> IP + Kullanıcı adı bileşik sınırlama politikası ile risk düşürülür.
 - **16. Zero-Cost Constraint:** D1 veya Workers KV varsayılan kotası kullanılır ($0/Ay). *(Mevcut ücretsiz kota ile doğrulanmalıdır)*.
 - **17. Bağımlılıklar:** SEC-AUTH-002, DATA-001.
 - **18. Bağımlı Görevler:** SEC-RBAC-002, API-004.
@@ -608,10 +608,10 @@ Her veritabanı migration dosyası için aşağıdaki testler sırasıyla gerçe
 - **3. Kapsam:** `backend/src/types/auth.ts`, `backend/src/config/permissions.ts`, Rol ve yetki matrisi.
 - **4. Tehdit Modeli:** Privilege escalation, Horizontal/Vertical unauthorized access, Insecure Direct Object Reference (IDOR).
 - **5. Teknik Gereksinimler:**
-  - [ ] 3 Ana Rol Tanımı: `SUPER_ADMIN`, `CONTENT_EDITOR`, `SUPPORT_AGENT`.
-  - [ ] Atomik Yetki (Permission) Tanımları: `messages.read`, `messages.reply`, `comments.approve`, `posts.create`, `posts.publish`, `media.upload`, `settings.manage`. *(Örnek / önerilen permission)*.
-  - [ ] Rol-Yetki haritası (Role-Permission Mapping).
-  - [ ] Varsayılan olarak tüm erişimlerin reddedilmesi (Deny-by-Default).
+  - [x] 3 Ana Rol Tanımı: `SUPER_ADMIN`, `CONTENT_EDITOR`, `SUPPORT_AGENT`.
+  - [x] Atomik Yetki (Permission) Tanımları: `messages.read`, `messages.reply`, `comments.approve`, `posts.create`, `posts.publish`, `media.upload`, `settings.manage`. *(Örnek / önerilen permission)*.
+  - [x] Rol-Yetki haritası (Role-Permission Mapping).
+  - [x] Varsayılan olarak tüm erişimlerin reddedilmesi (Deny-by-Default).
 - **6. Veri / Secret Gereksinimleri:** Kullanıcı rolü JWT veya veritabanından çekilir. Yetki haritası hafızada sabit nesne (constant object) olarak tutulur.
 - **7. Authentication / Authorization Akışı:**
   1. İstemci isteği atar.
@@ -620,21 +620,21 @@ Her veritabanı migration dosyası için aşağıdaki testler sırasıyla gerçe
   4. Rolün bu yetkiye sahip olup olmadığı matristen kontrol edilir.
   5. Yetki yoksa istek reddedilir (`403 Forbidden`).
 - **8. Hata ve Güvenlik Davranışları:**
-  - [ ] Yetkisiz rol -> `403 Forbidden` (`JSON: { error: "Insufficient permissions" }`).
-  - [ ] Tanımsız rol -> `403 Forbidden`.
+  - [x] Yetkisiz rol -> `403 Forbidden` (`JSON: { error: "Insufficient permissions" }`).
+  - [x] Tanımsız rol -> `403 Forbidden`.
 - **9. Güvenlik Kontrolleri:** Least privilege kontrolü, Deny-by-default kontrolü, Yetki yükseltme engellemesi.
 - **10. Audit / Logging:** Rol değişiklikleri ve yetki ihlali denemeleri (`PERMISSION_DENIED`) audit loguna yazılır.
 - **11. Privacy / KVKK:** Kullanıcı rolü ve yetki seviyesi sistem içi yetkilendirme amacıyla işlenir.
 - **12. Performance:** *Hedef:* Matris kontrolü hafıza içi arama ile < 0.1ms (gerçek değer benchmark ile doğrulanacaktır).
 - **13. Test Requirements:**
-  - [ ] `SUPPORT_AGENT` rolünün blog yazısı yayınlamaya çalıştığında `403` alması.
-  - [ ] `SUPER_ADMIN` rolünün tüm işlemleri hatasız yapabilmesi.
-  - [ ] Tanımsız bir yetki istendiğinde sistemin varsayılan olarak reddetmesi.
+  - [x] `SUPPORT_AGENT` rolünün blog yazısı yayınlamaya çalıştığında `403` alması.
+  - [x] `SUPER_ADMIN` rolünün tüm işlemleri hatasız yapabilmesi.
+  - [x] Tanımsız bir yetki istendiğinde sistemin varsayılan olarak reddetmesi.
 - **14. Definition of Done (DoD):** *(Not: DoD altındaki [ ] işaretleri onay kriteridir)*
-  - [ ] Rol ve Yetki haritasının TypeScript tipleriyle tanımlanması.
-  - [ ] Deny-by-default prensibinin kod seviyesinde doğrulanması.
+  - [x] Rol ve Yetki haritasının TypeScript tipleriyle tanımlanması.
+  - [x] Deny-by-default prensibinin kod seviyesinde doğrulanması.
 - **15. Hata / Risk Senaryoları:**
-  - [ ] Yetki yükseltme (Privilege Escalation) -> Rol atamalarının sadece `SUPER_ADMIN` tarafından yapılabilmesi ile önlenir.
+  - [x] Yetki yükseltme (Privilege Escalation) -> Rol atamalarının sadece `SUPER_ADMIN` tarafından yapılabilmesi ile önlenir.
 - **16. Zero-Cost Constraint:** Ek maliyet gerektirmez ($0/Ay). *(Mevcut ücretsiz kota ile doğrulanmalıdır)*.
 - **17. Bağımlılıklar:** SEC-AUTH-001.
 - **18. Bağımlı Görevler:** SEC-RBAC-002, SEC-RBAC-003.
@@ -647,10 +647,10 @@ Her veritabanı migration dosyası için aşağıdaki testler sırasıyla gerçe
 - **3. Kapsam:** `backend/src/middleware/authorize.ts`, tüm Admin API rotaları (`backend/src/routes/admin/`).
 - **4. Tehdit Modeli:** BOLA / IDOR, Broken Function Level Authorization, Privilege escalation, Parameter tampering.
 - **5. Teknik Gereksinimler:**
-  - [ ] `requirePermission(permission: Permission)` middleware fonksiyonu.
-  - [ ] Request bağlamından (`c.var.user`) kullanıcının rolünün ve yetkilerinin okunması.
-  - [ ] Kaynak seviyesinde (Resource-level / IDOR) sahiplik ve erişim kontrolleri.
-  - [ ] Frontend buton gizlemenin güvenlik kontrolü olmadığını beyan eden backend zorlaması.
+  - [x] `requirePermission(permission: Permission)` middleware fonksiyonu.
+  - [x] Request bağlamından (`c.var.user`) kullanıcının rolünün ve yetkilerinin okunması.
+  - [x] Kaynak seviyesinde (Resource-level / IDOR) sahiplik ve erişim kontrolleri.
+  - [x] Frontend buton gizlemenin güvenlik kontrolü olmadığını beyan eden backend zorlaması.
 - **6. Veri / Secret Gereksinimleri:** İsteği atan kullanıcının `admin_id` ve `role` bilgileri `c.var` context alanından okunur.
 - **7. Authentication / Authorization Akışı:**
   1. İstek `requireAuth` middleware'inden geçer (Kimlik doğrulanır).
@@ -658,22 +658,22 @@ Her veritabanı migration dosyası için aşağıdaki testler sırasıyla gerçe
   3. Kullanıcının rolü kontrol edilir; yetki varsa `next()` çağrılır.
   4. Yetki yoksa zincir sonlandırılır ve `403 Forbidden` yanıtı dönülür.
 - **8. Hata ve Güvenlik Davranışları:**
-  - [ ] Kimliği doğrulanmamış istek -> `401 Unauthorized`.
-  - [ ] Kimliği doğrulanmış fakat yetkisiz istek -> `403 Forbidden`.
-  - [ ] Yanlış veya eksik parametre -> `400 Bad Request`.
+  - [x] Kimliği doğrulanmamış istek -> `401 Unauthorized`.
+  - [x] Kimliği doğrulanmış fakat yetkisiz istek -> `403 Forbidden`.
+  - [x] Yanlış veya eksik parametre -> `400 Bad Request`.
 - **9. Güvenlik Kontrolleri:** Deny-by-default kontrolü, BOLA/IDOR parametre denetimi, Rota bazlı yetki kontrolü.
 - **10. Audit / Logging:** Engellenen yetkisiz erişim denemeleri (`UNAUTHORIZED_ACCESS_ATTEMPT`) detayları loglanır.
 - **11. Privacy / KVKK:** İhlal denemesinde bulunan kullanıcının `admin_id` ve IP bilgisi loglanır.
 - **12. Performance:** *Hedef:* Authorization middleware ek süresi < 0.5ms (gerçek değer benchmark ile doğrulanacaktır).
 - **13. Test Requirements:**
-  - [ ] Korumalı rotaya yetkisiz rol ile istek atıldığında `403` dönmesi.
-  - [ ] Korumalı rotaya geçerli rol ile istek atıldığında `200` dönmesi.
-  - [ ] BOLA testi: Başka bir admine ait özel kaynağa erişimin engellenmesi.
+  - [x] Korumalı rotaya yetkisiz rol ile istek atıldığında `403` dönmesi.
+  - [x] Korumalı rotaya geçerli rol ile istek atıldığında `200` dönmesi.
+  - [x] BOLA testi: Başka bir admine ait özel kaynağa erişimin engellenmesi.
 - **14. Definition of Done (DoD):** *(Not: DoD altındaki [ ] işaretleri onay kriteridir)*
-  - [ ] `requirePermission` middleware'inin yazılması ve test edilmesi.
-  - [ ] Tüm admin API uç noktalarına yetki kısıtlarının bağlanması.
+  - [x] `requirePermission` middleware'inin yazılması ve test edilmesi.
+  - [x] Tüm admin API uç noktalarına yetki kısıtlarının bağlanması.
 - **15. Hata / Risk Senaryoları:**
-  - [ ] Unutulan rota yetki kontrolü -> Rota kaydedicide varsayılan olarak yetki kontrolü zorunlu tutularak önlenir.
+  - [x] Unutulan rota yetki kontrolü -> Rota kaydedicide varsayılan olarak yetki kontrolü zorunlu tutularak önlenir.
 - **16. Zero-Cost Constraint:** Ek maliyet yok ($0/Ay). *(Mevcut ücretsiz kota ile doğrulanmalıdır)*.
 - **17. Bağımlılıklar:** SEC-RBAC-001, SEC-AUTH-002.
 - **18. Bağımlı Görevler:** SEC-RBAC-003, API-004, API-005, API-009, API-010.
@@ -686,28 +686,28 @@ Her veritabanı migration dosyası için aşağıdaki testler sırasıyla gerçe
 - **3. Kapsam:** `frontend/src/context/AuthContext.tsx`, `frontend/src/components/ProtectedComponent.tsx`, `frontend/src/routes/`.
 - **4. Tehdit Modeli:** Information disclosure, UI confusion, Unauthorized action attempts.
 - **5. Teknik Gereksinimler:**
-  - [ ] React `AuthContext` üzerinden kullanıcı rol ve yetkilerinin saklanması.
-  - [ ] `Can` veya `HasPermission` yardımcı bileşenleri ile buton/menü gizleme/pasif yapma.
-  - [ ] Yetkisiz rotaya doğrudan URL ile erişilmek istendiğinde `403 / Access Denied` yönlendirmesi.
-  - [ ] Stale yetki durumlarında (yetki kaldırıldığında) arka planda otomatik oturum yenileme / sayfayı kilitleme.
+  - [x] React `AuthContext` üzerinden kullanıcı rol ve yetkilerinin saklanması.
+  - [x] `Can` veya `HasPermission` yardımcı bileşenleri ile buton/menü gizleme/pasif yapma.
+  - [x] Yetkisiz rotaya doğrudan URL ile erişilmek istendiğinde `403 / Access Denied` yönlendirmesi.
+  - [x] Stale yetki durumlarında (yetki kaldırıldığında) arka planda otomatik oturum yenileme / sayfayı kilitleme.
 - **6. Veri / Secret Gereksinimleri:** İstemci tarafında yalnızca public kullanıcı bilgileri ve rolü saklanır. Secret tutulmaz.
 - **7. Authentication / Authorization Akışı:**
   1. Kullanıcı giriş yapar; kullanıcı rolü `AuthContext` içine yüklenir.
   2. Bileşen işlenirken (render): `hasPermission("posts.publish")` kontrol edilir.
   3. Yetki varsa "Yayınla" butonu gösterilir; yoksa buton gizlenir veya pasif (`disabled`) yapılır.
 - **8. Hata ve Güvenlik Davranışları:**
-  - [ ] Korumalı sayfaya yetkisiz URL erişimi -> `/admin/unauthorized` sayfasına yönlendirme.
-  - [ ] Backend `403` yanıtı döndüğünde -> Kullanıcıya "Bu işlem için yetkiniz bulunmamaktadır" uyarısı gösterilmesi.
+  - [x] Korumalı sayfaya yetkisiz URL erişimi -> `/admin/unauthorized` sayfasına yönlendirme.
+  - [x] Backend `403` yanıtı döndüğünde -> Kullanıcıya "Bu işlem için yetkiniz bulunmamaktadır" uyarısı gösterilmesi.
 - **9. Güvenlik Kontrolleri:** UI render yetki denetimi, Rota muhafızları (Route guards).
 - **10. Audit / Logging:** Kullanıcının istemci tarafındaki yetkisiz yönlendirmeleri konsol ve istemci günlüğüne yazılır.
 - **11. Privacy / KVKK:** Kullanıcının tarayıcı yerel depolamasında (localStorage/sessionStorage) hassas veri tutulmaz.
 - **12. Performance:** *Hedef:* İstemci tarafı yetki kontrolü < 1ms (gerçek değer benchmark ile doğrulanacaktır).
 - **13. Test Requirements:**
-  - [ ] `SUPPORT_AGENT` girişi ile "Sil" veya "Yayınla" butonlarının görünmediğinin doğrulanması.
-  - [ ] Doğrudan yetkisiz URL yazıldığında yönlendirmenin çalıştığının doğrulanması.
+  - [x] `SUPPORT_AGENT` girişi ile "Sil" veya "Yayınla" butonlarının görünmediğinin doğrulanması.
+  - [x] Doğrudan yetkisiz URL yazıldığında yönlendirmenin çalıştığının doğrulanması.
 - **14. Definition of Done (DoD):** *(Not: DoD altındaki [ ] işaretleri onay kriteridir)*
-  - [ ] `AuthContext` yetki kontrol fonksiyonlarının yazılması.
-  - [ ] Menü ve butonların rol bazlı dinamik görünürlüğünün sağlanması.
+  - [x] `AuthContext` yetki kontrol fonksiyonlarının yazılması.
+  - [x] Menü ve butonların rol bazlı dinamik görünürlüğünün sağlanması.
 - **15. Hata / Risk Senaryoları:**
   - [ ] İstemci tarafında yetki manipülasyonu -> Kullanıcı DOM müdahalesi ile butonu görünür yapsa bile backend isteği reddeder.
 - **16. Zero-Cost Constraint:** İstemci tarafı React kodu ($0/Ay). *(Mevcut ücretsiz kota ile doğrulanmalıdır)*.
