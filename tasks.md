@@ -477,11 +477,11 @@ Her veritabanı migration dosyası için aşağıdaki testler sırasıyla gerçe
 - **3. Kapsam:** `backend/src/routes/adminAuth.ts`, `backend/src/middleware/auth.ts`, `POST /api/admin/login`, `POST /api/admin/logout`, `GET /api/admin/me` uç noktaları.
 - **4. Tehdit Modeli:** Credential stuffing, Brute-force, Session hijacking, Token theft, Timing attacks, Replay attacks.
 - **5. Teknik Gereksinimler:**
-  - [ ] Login isteğinde `username` ve `password` alımı, tip ve format denetimi.
-  - [ ] Veritabanından admin kullanıcısının çekilmesi ve parola hash doğrulaması.
-  - [ ] Başarılı girişte JWT token üretimi ve istemciye iletilmesi.
-  - [ ] Rota bazlı `requireAuth` middleware'i ile `Authorization: Bearer <token>` başlığı doğrulaması.
-  - [ ] Oturum sonlandırma (`logout`) mekanizması.
+  - [x] Login isteğinde `username` ve `password` alımı, tip ve format denetimi.
+  - [x] Veritabanından admin kullanıcısının çekilmesi ve parola hash doğrulaması.
+  - [x] Başarılı girişte JWT token üretimi ve istemciye iletilmesi.
+  - [x] Rota bazlı `requireAuth` middleware'i ile `Authorization: Bearer <token>` başlığı doğrulaması.
+  - [x] Oturum sonlandırma (`logout`) mekanizması.
 - **6. Veri / Secret Gereksinimleri:** `JWT_SECRET` ortam değişkeni (secret koda gömülemez; `wrangler secret put` ile saklanır). Token payload'ında hassas veri (parola hash, PII) tutulmaz; sadece `admin_id`, `username`, `role` tutulur.
 - **7. Authentication / Authorization Akışı:**
   1. İstemci `POST /api/admin/login` isteği atar.
@@ -491,26 +491,26 @@ Her veritabanı migration dosyası için aşağıdaki testler sırasıyla gerçe
   5. İstemci sonraki isteklerde `Authorization: Bearer <token>` başlığını gönderir.
   6. `requireAuth` middleware'i token imzasını ve süresini doğrular; geçersizse `401` döner.
 - **8. Hata ve Güvenlik Davranışları:**
-  - [ ] Eksik/hatalı kimlik bilgisi -> `401 Unauthorized` (Kullanıcı var/yok ayrımı yapılmaksızın jenerik mesaj).
-  - [ ] Süresi dolmuş token -> `401 Unauthorized` (`TokenExpiredError`).
-  - [ ] Geçersiz imza -> `401 Unauthorized` (`InvalidSignature`).
-  - [ ] `JWT_SECRET` ortamda yoksa -> Sistemin 500 dönmesi yerine başlatmada güvenli hata kaydı ve kontrollü `500 Server Misconfiguration` yanıtı.
+  - [x] Eksik/hatalı kimlik bilgisi -> `401 Unauthorized` (Kullanıcı var/yok ayrımı yapılmaksızın jenerik mesaj).
+  - [x] Süresi dolmuş token -> `401 Unauthorized` (`TokenExpiredError`).
+  - [x] Geçersiz imza -> `401 Unauthorized` (`InvalidSignature`).
+  - [x] `JWT_SECRET` ortamda yoksa -> Sistemin 500 dönmesi yerine başlatmada güvenli hata kaydı ve kontrollü `500 Server Misconfiguration` yanıtı.
 - **9. Güvenlik Kontrolleri:** Timing attack önleme (sabit zamanlı parola karşılaştırma), JWT imza doğrulaması, payload şema kontrolü.
 - **10. Audit / Logging:** Giriş denemeleri (`SUCCESS` / `FAILED`), çıkış olayları loglanır. Loglarda parola veya token değerleri kesinlikle yer almaz.
 - **11. Privacy / KVKK:** Yönetici e-posta/kullanıcı adı ve giriş IP bilgileri güvenlik denetimi amacıyla saklanır. *(Hukuki saklama süresi: Hukuki doğrulama gerekli)*.
 - **12. Performance:** *Hedef:* Token doğrulama süresi < 2ms (WebCrypto API ile yerel CPU seviyesinde doğrulama; gerçek değer benchmark ile doğrulanacaktır).
 - **13. Test Requirements:**
-  - [ ] Başarılı giriş ile geçerli token alımı.
-  - [ ] Yanlış parola ile `401` reddi.
-  - [ ] Süresi dolmuş token ile korumalı rotaya erişim reddi (`401`).
-  - [ ] Eksik `Authorization` başlığı ile erişim reddi (`401`).
+  - [x] Başarılı giriş ile geçerli token alımı.
+  - [x] Yanlış parola ile `401` reddi.
+  - [x] Süresi dolmuş token ile korumalı rotaya erişim reddi (`401`).
+  - [x] Eksik `Authorization` başlığı ile erişim reddi (`401`).
 - **14. Definition of Done (DoD):** *(Not: DoD altındaki [ ] işaretleri onay kriteridir)*
-  - [ ] Login, logout ve me rotalarının tip güvenli çalışması.
-  - [ ] Jenerik hata mesajları ile kullanıcı varlığının sızdırılmaması.
-  - [ ] JWT doğrulama middleware'inin tüm admin rotalarında aktifleşmesi.
+  - [x] Login, logout ve me rotalarının tip güvenli çalışması.
+  - [x] Jenerik hata mesajları ile kullanıcı varlığının sızdırılmaması.
+  - [x] JWT doğrulama middleware'inin tüm admin rotalarında aktifleşmesi.
 - **15. Hata / Risk Senaryoları:**
-  - [ ] Timing Attack ile kullanıcı varlığının tespiti -> Sabit süreli hash doğrulama işlemi ile önlenir.
-  - [ ] Token Replay -> Kısa süreli JWT ve token iptal mekanizması ile risk düşürülür.
+  - [x] Timing Attack ile kullanıcı varlığının tespiti -> Sabit süreli hash doğrulama işlemi ile önlenir.
+  - [x] Token Replay -> Kısa süreli JWT ve token iptal mekanizması ile risk düşürülür.
 - **16. Zero-Cost Constraint:** Cloudflare Workers WebCrypto ve D1 altyapısı ile %100 sıfır maliyet ($0/Ay). *(Mevcut ücretsiz kota ile doğrulanmalıdır)*.
 - **17. Bağımlılıklar:** DATA-001 (`admins` tablosu), ARCH-001.
 - **18. Bağımlı Görevler:** SEC-AUTH-002, SEC-AUTH-003, SEC-RBAC-001, API-004, API-005.
