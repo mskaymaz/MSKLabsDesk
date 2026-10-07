@@ -1145,8 +1145,8 @@ sequenceDiagram
 - **2. Amaç:** Yöneticilerin aktif e-bülten abonelerine toplu duyuru veya bülten e-postası göndermesini sağlamak.
 - **3. Kapsam:** `backend/src/routes/admin/broadcast.ts`, `POST /api/v1/admin/broadcast`.
 - **4. İstek / Yanıt Sözleşmesi:**
-  - [ ] *İstek:* `{ "subject": "Yeni Özellik Yayınlandı", "contentHtml": "<h1>Merhaba</h1>...", "targetSegment": "ALL" }`
-  - [ ] *Yanıt (202 Accepted):* `{ "success": true, "data": { "broadcastId": "b_7712", "totalRecipients": 1450, "status": "QUEUED" } }`
+  - [x] *İstek:* `{ "subject": "Yeni Özellik Yayınlandı", "contentHtml": "<h1>Merhaba</h1>...", "targetSegment": "ALL" }`
+  - [x] *Yanıt (202 Accepted):* `{ "success": true, "data": { "broadcastId": "b_7712", "totalRecipients": 1450, "status": "QUEUED" } }`
 - **5. Validasyon ve Şema Kuralları:** `subject` (min 3, max 200), `contentHtml` (min 10), `targetSegment` (`ALL`, `VERIFIED_ONLY`).
 - **6. Veri İşlemleri / Sorgular:** `broadcasts` kaydı oluşturulur; aktif abonelerin listesi çekilip e-posta gönderim kuyruğuna toplu eklenir (batching).
 - **7. Async / Event / Queue Akışı:** Cloudflare Queues aracılığıyla e-postalar parçalı (rate-limited batch) olarak gönderilir.
@@ -1160,8 +1160,9 @@ sequenceDiagram
 - **15. Performance:** *Hedef:* 10.000 aboneye kuyruk oluşturma süresi < 500ms.
 - **16. Test Requirements:** Idempotency anahtarı olmadan 400 hatası, Unsubscribe bağlantısı varlığı testi.
 - **17. Definition of Done (DoD):**
-  - [ ] `X-Idempotency-Key` olmadan isteğin kabul edilmemesi.
-  - [ ] E-posta kuyruğuna toplu eklemenin hatasız yapılması.
+  - [x] `X-Idempotency-Key` olmadan isteğin kabul edilmemesi.
+  - [x] E-posta kuyruğuna toplu eklemenin hatasız yapılması.
+  - [x] *(Sonuç: PASS WITH LIMITATION. POST /api/v1/admin/broadcast uç noktası, requirePermission('settings.manage') RBAC yetki kontrolü, zorunlu X-Idempotency-Key, 2 req/min rate limit, çift onay (confirm: true / X-Broadcast-Confirm), HTML sanitization, otomatik unsubscribe linki, targetSegment ALL/VERIFIED_ONLY aktif abone sorgulama, D1 broadcasts ve email_queue toplu kayıt, admin_audit_logs ve unit/integration testleri %100 başarılıdır. Limitation: Projede gerçek Cloudflare Queues binding bulunmadığından kuyruklama D1 email_queue ve broadcasts tabloları üzerinden QUEUED/PENDING durumlarıyla yürütülmektedir)*.
 - **18. Hata / Risk Senaryoları:** Yanlışlıkla tüm aboneye spam gitmesi -> Çift onay (Confirmation header) gereksinimi.
 - **19. Zero-Cost Constraint:** Cloudflare Queues ücretsiz sınırı dahilinde kullanım.
 - **20. Bağımlılıklar:** DATA-001, API-003, SEC-AUTH-001, SEC-RBAC-001.
