@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { I18nProvider } from './context/I18nContext';
-import { Sidebar, type TabType } from './components/Sidebar';
+import { type TabType } from './components/Sidebar';
+import { AppShell } from './components/layout/AppShell';
 import { LoginView } from './views/LoginView';
 import { DashboardView } from './views/DashboardView';
 import { TicketsView } from './views/TicketsView';
@@ -25,7 +26,6 @@ const AdminPanelContent: React.FC = () => {
   const [comments, setComments] = useState<CommentItem[]>([]);
   const [subscribers, setSubscribers] = useState<Subscriber[]>([]);
 
-  // Coupon Modal State
   const [couponModalData, setCouponModalData] = useState<{
     isOpen: boolean;
     ticketNo: string;
@@ -78,55 +78,43 @@ const AdminPanelContent: React.FC = () => {
   };
 
   return (
-    <div className="app-container">
-      <Sidebar
-        activeTab={activeTab}
-        setActiveTab={setActiveTab}
-        pendingTicketCount={pendingTickets}
-        pendingCommentCount={pendingComments}
-      />
+    <AppShell
+      activeTab={activeTab}
+      setActiveTab={setActiveTab}
+      pendingTicketCount={pendingTickets}
+      pendingCommentCount={pendingComments}
+    >
+      {activeTab === 'dashboard' && (
+        <DashboardView
+          tickets={tickets}
+          comments={comments}
+          subscribers={subscribers}
+          onNavigate={setActiveTab}
+        />
+      )}
 
-      <main className="main-content">
-        <div className="page-content">
-          {activeTab === 'dashboard' && (
-            <DashboardView
-              tickets={tickets}
-              comments={comments}
-              subscribers={subscribers}
-              onNavigate={setActiveTab}
-            />
-          )}
+      {activeTab === 'tickets' && (
+        <TicketsView
+          tickets={tickets}
+          onRefresh={loadData}
+          onOpenCoupon={handleOpenCoupon}
+        />
+      )}
 
-          {activeTab === 'tickets' && (
-            <TicketsView
-              tickets={tickets}
-              onRefresh={loadData}
-              onOpenCoupon={handleOpenCoupon}
-            />
-          )}
+      {activeTab === 'comments' && (
+        <CommentsView
+          comments={comments}
+          onRefresh={loadData}
+        />
+      )}
 
-          {activeTab === 'comments' && (
-            <CommentsView
-              comments={comments}
-              onRefresh={loadData}
-            />
-          )}
-
-          {activeTab === 'channels' && <ChannelsView />}
-          {activeTab === 'posts' && <PostsView />}
-          {activeTab === 'apps' && <AppsCMSView />}
-          {activeTab === 'templates' && <TemplatesView />}
-
-          {activeTab === 'broadcast' && <BroadcastView />}
-
-          {activeTab === 'subscribers' && (
-            <SubscribersView subscribers={subscribers} />
-          )}
-
-          {activeTab === 'settings' && <SettingsView />}
-        </div>
-      </main>
-
+      {activeTab === 'channels' && <ChannelsView />}
+      {activeTab === 'posts' && <PostsView />}
+      {activeTab === 'apps' && <AppsCMSView />}
+      {activeTab === 'templates' && <TemplatesView />}
+      {activeTab === 'broadcast' && <BroadcastView />}
+      {activeTab === 'subscribers' && <SubscribersView subscribers={subscribers} />}
+      {activeTab === 'settings' && <SettingsView />}
 
       <CouponModal
         isOpen={couponModalData.isOpen}
@@ -135,7 +123,7 @@ const AdminPanelContent: React.FC = () => {
         userEmail={couponModalData.email}
         userName={couponModalData.name}
       />
-    </div>
+    </AppShell>
   );
 };
 
@@ -148,4 +136,3 @@ export default function App() {
     </I18nProvider>
   );
 }
-

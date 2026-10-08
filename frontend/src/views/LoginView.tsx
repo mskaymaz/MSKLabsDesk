@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { api } from '../services/api';
 import { useAuth } from '../context/AuthContext';
-import { ShieldCheck, Lock, User, AlertCircle } from 'lucide-react';
+import { ShieldCheck, Lock, User, AlertCircle, Clock } from 'lucide-react';
+import { Button } from '../components/ui/Button';
 
 async function hashSHA256(text: string): Promise<string> {
   const msgUint8 = new TextEncoder().encode(text);
@@ -16,49 +17,81 @@ export const LoginView: React.FC = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [lockoutTimer, setLockoutTimer] = useState<number>(0);
+
+  useEffect(() => {
+    let interval: ReturnType<typeof setInterval>;
+    if (lockoutTimer > 0) {
+      interval = setInterval(() => {
+        setLockoutTimer((prev) => (prev > 1 ? prev - 1 : 0));
+      }, 1000);
+    }
+    return () => clearInterval(interval);
+  }, [lockoutTimer]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+
+    if (username.trim().length < 3) {
+      setError('Kullanıcı adı en az 3 karakter olmalıdır.');
+      return;
+    }
+    if (password.length < 6) {
+      setError('Şifre en az 6 karakter olmalıdır.');
+      return;
+    }
+
     setLoading(true);
 
     try {
       const passwordHash = await hashSHA256(password);
       const res = await api.login(username, passwordHash);
       login(res.token, res.user);
-    } catch (err: unknown) {
-      if (err instanceof Error) {
-        setError(err.message);
+    } catch (err: any) {
+      if (err.status === 429 || err.message?.includes('429') || err.message?.includes('Çok fazla')) {
+        setLockoutTimer(900); // 15 minutes lockout
+        setError('Çok fazla başarısız giriş denemesi. Hesabınız 15 dakika kilitlendi.');
       } else {
-        setError('Giriş başarısız. Bilgilerinizi kontrol ediniz.');
+        setError('Geçersiz kullanıcı adı veya şifre.');
       }
     } finally {
       setLoading(false);
     }
   };
 
+  const formatLockout = (sec: number) => {
+    const mins = Math.floor(sec / 60);
+    const secs = sec % 60;
+    return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+  };
+
   return (
-    <div style={{
-      minHeight: '100vh',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      padding: '20px'
-    }}>
+    <div
+      style={{
+        minHeight: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '20px',
+      }}
+    >
       <div className="glass-card animate-fade-in" style={{ width: '100%', maxWidth: '420px', padding: '36px' }}>
         <div style={{ textAlign: 'center', marginBottom: '30px' }}>
-          <div style={{
-            width: '56px',
-            height: '56px',
-            borderRadius: '16px',
-            background: 'linear-gradient(135deg, var(--accent-primary), var(--accent-secondary))',
-            display: 'inline-flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: '#FFF',
-            marginBottom: '14px',
-            boxShadow: '0 8px 24px rgba(99, 102, 241, 0.4)'
-          }}>
+          <div
+            style={{
+              width: '56px',
+              height: '56px',
+              borderRadius: '16px',
+              background: 'linear-gradient(135deg, var(--accent-primary), var(--accent-secondary))',
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: '#FFF',
+              marginBottom: '14px',
+              boxShadow: '0 8px 24px rgba(99, 102, 241, 0.4)',
+            }}
+          >
             <ShieldCheck size={32} />
           </div>
           <h1 style={{ fontSize: '1.6rem', fontWeight: 800, color: '#FFF' }}>MSKLabsDesk</h1>
@@ -67,66 +100,89 @@ export const LoginView: React.FC = () => {
           </p>
         </div>
 
-        {error && (
-          <div style={{
-            background: 'rgba(239, 68, 68, 0.12)',
-            border: '1px solid rgba(239, 68, 68, 0.3)',
-            borderRadius: 'var(--radius-md)',
-            padding: '12px 14px',
-            color: '#FCA5A5',
-            fontSize: '0.85rem',
-            marginBottom: '20px',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '10px'
-          }}>
-            <AlertCircle size={18} style={{ flexShrink: 0 }} />
-            <span>{error}</span>
-          </div>
-        )}
-
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label className="form-label">Kullanıcı Adı</label>
-            <div style={{ position: 'relative' }}>
-              <User size={18} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
-              <input
-                type="text"
-                className="form-input"
-                style={{ paddingLeft: '38px' }}
-                placeholder="Örn: admin"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                required
-              />
-            </div>
-          </div>
-
-          <div className="form-group">
-            <label className="form-label">Şifre</label>
-            <div style={{ position: 'relative' }}>
-              <Lock size={18} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
-              <input
-                type="password"
-                className="form-input"
-                style={{ paddingLeft: '38px' }}
-                placeholder="••••••••"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-            </div>
-          </div>
-
-          <button
-            type="submit"
-            className="btn btn-primary"
-            disabled={loading}
-            style={{ width: '100%', marginTop: '12px', padding: '12px' }}
+        {lockoutTimer > 0 ? (
+          <div
+            style={{
+              background: 'rgba(239, 68, 68, 0.15)',
+              border: '1px solid rgba(239, 68, 68, 0.4)',
+              borderRadius: 'var(--radius-md)',
+              padding: '16px',
+              color: '#FCA5A5',
+              fontSize: '0.85rem',
+              marginBottom: '20px',
+              textAlign: 'center',
+            }}
           >
-            {loading ? 'Giriş yapılıyor...' : 'Oturum Aç'}
-          </button>
-        </form>
+            <Clock size={24} style={{ marginBottom: '8px' }} />
+            <div style={{ fontWeight: 700 }}>Çok Fazla Başarısız Deneme</div>
+            <div style={{ marginTop: '4px' }}>Lütfen bekleyin: {formatLockout(lockoutTimer)}</div>
+          </div>
+        ) : (
+          <>
+            {error && (
+              <div
+                style={{
+                  background: 'rgba(239, 68, 68, 0.12)',
+                  border: '1px solid rgba(239, 68, 68, 0.3)',
+                  borderRadius: 'var(--radius-md)',
+                  padding: '12px 14px',
+                  color: '#FCA5A5',
+                  fontSize: '0.85rem',
+                  marginBottom: '20px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '10px',
+                }}
+              >
+                <AlertCircle size={18} style={{ flexShrink: 0 }} />
+                <span>{error}</span>
+              </div>
+            )}
+
+            <form onSubmit={handleSubmit}>
+              <div className="form-group" style={{ marginBottom: '16px' }}>
+                <label className="form-label" style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', display: 'block', marginBottom: '6px' }}>Kullanıcı Adı</label>
+                <div style={{ position: 'relative' }}>
+                  <User size={18} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
+                  <input
+                    type="text"
+                    className="form-input"
+                    style={{ paddingLeft: '38px', minHeight: '44px', width: '100%', background: 'rgba(0,0,0,0.3)', border: '1px solid var(--border-subtle)', borderRadius: 'var(--radius-md)', color: '#FFF' }}
+                    placeholder="Örn: admin"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="form-group" style={{ marginBottom: '20px' }}>
+                <label className="form-label" style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', display: 'block', marginBottom: '6px' }}>Şifre</label>
+                <div style={{ position: 'relative' }}>
+                  <Lock size={18} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
+                  <input
+                    type="password"
+                    className="form-input"
+                    style={{ paddingLeft: '38px', minHeight: '44px', width: '100%', background: 'rgba(0,0,0,0.3)', border: '1px solid var(--border-subtle)', borderRadius: 'var(--radius-md)', color: '#FFF' }}
+                    placeholder="••••••••"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                  />
+                </div>
+              </div>
+
+              <Button
+                type="submit"
+                loading={loading}
+                disabled={lockoutTimer > 0}
+                style={{ width: '100%' }}
+              >
+                {loading ? 'Giriş yapılıyor...' : 'Oturum Aç'}
+              </Button>
+            </form>
+          </>
+        )}
       </div>
     </div>
   );

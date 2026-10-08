@@ -54,6 +54,8 @@ export interface Subscriber {
   id: string;
   email: string;
   is_verified: boolean;
+  kvkk_consent?: boolean;
+  unsubscribed_at?: string;
   preferences?: string;
   created_at: string;
 }
@@ -62,7 +64,7 @@ export interface AdminUser {
   id: string;
   username: string;
   name: string;
-  role: 'super_admin' | 'moderator';
+  role: 'super_admin' | 'moderator' | 'SUPER_ADMIN' | 'CONTENT_EDITOR' | 'SUPPORT_AGENT';
 }
 
 export interface BlogChannel {

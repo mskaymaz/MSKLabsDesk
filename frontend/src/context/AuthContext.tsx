@@ -7,6 +7,7 @@ interface AuthContextType {
   login: (token: string, user: AdminUser) => void;
   logout: () => void;
   isAuthenticated: boolean;
+  hasPermission: (permission: string) => boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -44,6 +45,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setUser(null);
   };
 
+  const hasPermission = (permission: string) => {
+    if (!user) return false;
+    if (user.role === 'super_admin' || user.role === 'SUPER_ADMIN') return true;
+    if (permission.startsWith('posts.') && user.role === 'CONTENT_EDITOR') return true;
+    if (permission.startsWith('messages.') && user.role === 'SUPPORT_AGENT') return true;
+    return false;
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -52,6 +61,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         login,
         logout,
         isAuthenticated: !!token,
+        hasPermission,
       }}
     >
       {children}

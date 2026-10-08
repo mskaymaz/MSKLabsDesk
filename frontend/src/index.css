@@ -1,13 +1,10 @@
+@import './styles/tokens.css';
 @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
 :root {
-  --bg-main: #0B0F19;
-  --bg-card: rgba(18, 24, 38, 0.75);
-  --bg-card-hover: rgba(26, 35, 56, 0.85);
-  --bg-sidebar: rgba(15, 21, 34, 0.95);
-  --border-color: rgba(255, 255, 255, 0.08);
-  --border-focus: #6366F1;
-  
+  --bg-main: var(--bg-primary);
+  --border-color: var(--border-subtle);
+
   --text-primary: #F3F4F6;
   --text-secondary: #9CA3AF;
   --text-muted: #6B7280;

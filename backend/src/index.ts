@@ -11,6 +11,7 @@ import { handleAdminGetTickets, handleAdminGetTicketDetail, handleAdminReplyTick
 import { handleAdminGetComments, handleAdminModerateComment } from './routes/adminComments';
 import { handleAdminGetSubscribers, handleAdminBroadcastNewsletter } from './routes/adminBroadcast';
 import { handleAdminMediaUpload, handleAdminMediaDelete } from './routes/adminMedia';
+import { handleAdminTTSGenerate, handleAdminTTSStatus, handleAdminTTSApprove, handleAdminTTSUnpublish, handleAdminTTSRegenerate, handlePublicAudioDelivery } from './routes/adminTts';
 import { handleCmsChannels } from './routes/cmsChannels';
 import { handleCmsPosts } from './routes/cmsPosts';
 import { handleCmsApps } from './routes/cmsApps';
@@ -98,6 +99,32 @@ export default {
     } else if ((path.startsWith('/api/v1/admin/media/') || path.startsWith('/api/admin/media/')) && request.method === 'DELETE') {
       const keyParam = path.startsWith('/api/v1/admin/media/') ? path.substring('/api/v1/admin/media/'.length) : path.substring('/api/admin/media/'.length);
       response = await handleAdminMediaDelete(keyParam, request, env);
+    } else if ((path === '/api/v1/admin/tts/generate' || path === '/api/admin/tts/generate') && request.method === 'POST') {
+      response = await handleAdminTTSGenerate(request, env);
+    } else if ((path === '/api/v1/admin/tts/regenerate' || path === '/api/admin/tts/regenerate') && request.method === 'POST') {
+      response = await handleAdminTTSRegenerate(request, env);
+    } else if ((path.startsWith('/api/v1/admin/tts/status/') || path.startsWith('/api/admin/tts/status/')) && request.method === 'GET') {
+      const postIdParam = path.startsWith('/api/v1/admin/tts/status/') ? path.substring('/api/v1/admin/tts/status/'.length) : path.substring('/api/admin/tts/status/'.length);
+      response = await handleAdminTTSStatus(postIdParam, request, env);
+    } else if ((path === '/api/v1/admin/tts/approve' || path === '/api/admin/tts/approve') && request.method === 'POST') {
+      response = await handleAdminTTSApprove(request, env);
+    } else if ((path === '/api/v1/admin/tts/unpublish' || path === '/api/admin/tts/unpublish') && request.method === 'POST') {
+      response = await handleAdminTTSUnpublish(request, env);
+    } else if ((path.startsWith('/api/v1/public/audio/') || path.startsWith('/api/public/audio/')) && request.method === 'GET') {
+      const parts = path.split('/').filter(Boolean);
+      const audioIdx = parts.indexOf('audio');
+      const param1 = parts[audioIdx + 1];
+      const param2 = parts[audioIdx + 2];
+
+      if (param2) {
+        const postId = parseInt(param1, 10);
+        response = await handlePublicAudioDelivery(request, env, { postId, language: param2 });
+      } else if (param1) {
+        const audioId = parseInt(param1, 10);
+        response = await handlePublicAudioDelivery(request, env, { audioId });
+      } else {
+        response = new Response(JSON.stringify({ error: 'Geçersiz audio parametreleri.' }), { status: 400 });
+      }
     } else {
       response = new Response(JSON.stringify({ error: 'Endpoint bulunamadı.' }), { status: 404, headers: { 'Content-Type': 'application/json' } });
     }

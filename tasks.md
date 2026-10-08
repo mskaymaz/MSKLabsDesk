@@ -1709,8 +1709,8 @@ sequenceDiagram
 - **6. Responsive & Accessibility:** DataTable ve kart görünümü geçişi, modal odak hapsi (Focus Trap), klavyeyle onay/red eylemleri.
 - **7. Performance:** *Acceptance Target:* Bilet detay modalı açılışı < 50ms.
 - **8. DoD:**
-  - [ ] AI taslak cevabının admin onayına sunulduğunun (otomatik gönderilmediğinin) doğrulanması.
-  - [ ] Yorum onay/silme aksiyonlarının sorunsuz çalışması.
+  - [x] AI taslak cevabının admin onayına sunulduğunun (otomatik gönderilmediğinin) doğrulanması.
+  - [x] Yorum onay/silme aksiyonlarının sorunsuz çalışması.
 - **9. Bağımlılıklar:** API-001, API-002, AI-002, UI-005.
 - **10. Bağımlı Görevler:** COM-001, OBS-002.
 
@@ -1725,8 +1725,8 @@ sequenceDiagram
 - **7. Responsive & Accessibility:** Çift panelli mobil/masaüstü duyarlı düzen, ekran okuyucu uyumlu form kontrolleri.
 - **8. Performance:** *Acceptance Target:* Canlı şablon önizleme derleme süresi < 10ms.
 - **9. DoD:**
-  - [ ] Bülten canlı önvizleme ve gönderim onay modalının sınanması.
-  - [ ] Abone arama ve filtreleme işlevlerinin doğrulanması.
+  - [x] Bülten canlı önvizleme ve gönderim onay modalının sınanması.
+  - [x] Abone arama ve filtreleme işlevlerinin doğrulanması.
 - **10. Bağımlılıklar:** API-003, COM-001, COM-002, UI-005.
 - **11. Bağımlı Görevler:** UI-004, GO-001.
 
@@ -1736,14 +1736,14 @@ sequenceDiagram
 - **2. Amaç:** 450 satır sınırını aşan `PostsView.tsx` (454 satır) bileşenini iş mantığı, API sözleşmesi veya UI davranışını bozmadan `<300` satırlık modüler parçalara bölmek.
 - **3. Kapsam:** `src/views/PostsView.tsx` refactoring → `src/components/posts/PostList.tsx`, `src/components/posts/PostEditorModal.tsx`, `src/components/posts/PostFilterBar.tsx`.
 - **4. Refactoring İlkeleri & Kabul Kriterleri:**
-  - [ ] *Business Logic Korunması:* Makale oluşturma, taslağa çekme, silme ve arama mantığı birebir korunur.
-  - [ ] *API & UI Davranış Uyumu:* API istek yapısı veya kullanıcı arayüzü görsel çıktısı kesinlikle değişmez.
-  - [ ] *Satır Sınırı Uyumu:* Bölünen hiçbir dosya 300 satırı (ve genel 450 satır kuralını) aşamaz (`check_line_limit.js` ile doğrulanır).
-  - [ ] *Tekrar Kullanılabilirlik:* `PostFilterBar` ve `PostList` bağımsız olarak test edilebilir ve tekrar kullanılabilir yapıda tasarlanır.
+  - [x] *Business Logic Korunması:* Makale oluşturma, taslağa çekme, silme ve arama mantığı birebir korunur.
+  - [x] *API & UI Davranış Uyumu:* API istek yapısı veya kullanıcı arayüzü görsel çıktısı kesinlikle değişmez.
+  - [x] *Satır Sınırı Uyumu:* Bölünen hiçbir dosya 300 satırı (ve genel 450 satır kuralını) aşamaz (`check_line_limit.js` ile doğrulanır).
+  - [x] *Tekrar Kullanılabilirlik:* `PostFilterBar` ve `PostList` bağımsız olarak test edilebilir ve tekrar kullanılabilir yapıda tasarlanır.
 - **5. Performance & Bundle Impact:** Refactoring sonrası bundle boyutunun artmaması ve gereksiz rerender'ların önlenmesi (`React.memo` / `useCallback` kullanımı).
 - **6. DoD:**
-  - [ ] `check_line_limit.js` betiğinin 0 ihlal ile geçmesi.
-  - [ ] `PostsView` işlevselliğinin eksiksiz çalıştığının doğrulanması.
+  - [x] `check_line_limit.js` betiğinin 0 ihlal ile geçmesi.
+  - [x] `PostsView` işlevselliğinin eksiksiz çalıştığının doğrulanması.
 - **7. Bağımlılıklar:** UI-003, CMS-002.
 - **8. Bağımlı Görevler:** UI-005, TEST-002.
 
@@ -1754,16 +1754,16 @@ sequenceDiagram
 - **3. Kapsam:** `src/styles/tokens.css`, `src/components/ui/` (`Button`, `IconButton`, `Input`, `Select`, `Checkbox`, `Switch`, `Modal`, `Drawer`, `Toast`, `Skeleton`, `EmptyState`, `Tabs`, `DeviceFrame`, `StatusBadge`, `AudioPlayer`, `RichTextEditor`).
 - **4. Design Tokens & CSS Variables:** HSL renk paleti, 4px grid spacing, typography, border-radius, shadows, Z-index katmanları, WCAG 2.2 AA dokunmatik hedef boyutları (min 44x44px).
 - **5. Atomik Bileşen Davranışları & Accessibility:**
-  - [ ] *Button / IconButton:* Loading durumu, disabled durumu, klavye odağı, minimum 44px touch target.
-  - [ ] *Modal / Drawer:* Odak hapsi (Focus Trap), ESC kapatma, backdrop tıklama, kaydırma kilidi, mobilde alt çekmeceye dönüşme.
-  - [ ] *Toast:* Erişilebilir canlı bölge (`aria-live="polite"`), otomatik kapanma zamanlayıcısı, manuel kapatma butonu.
-  - [ ] *Skeleton / EmptyState:* İçerik yüklenirken yapay iskelet gösterimi; veri yoksa anlamlı simge + metin + eylem butonu.
-  - [ ] *AudioPlayer:* HTML5 `<audio>` sarmalayıcısı, Play/Pause, Seek, süre göstergesi, hız kontrolü, klavye/ekran okuyucu uyumu, autoplay yasağı.
+  - [x] *Button / IconButton:* Loading durumu, disabled durumu, klavye odağı, minimum 44px touch target.
+  - [x] *Modal / Drawer:* Odak hapsi (Focus Trap), ESC kapatma, backdrop tıklama, kaydırma kilidi, mobilde alt çekmeceye dönüşme.
+  - [x] *Toast:* Erişilebilir canlı bölge (`aria-live="polite"`), otomatik kapanma zamanlayıcısı, manuel kapatma butonu.
+  - [x] *Skeleton / EmptyState:* İçerik yüklenirken yapay iskelet gösterimi; veri yoksa anlamlı simge + metin + eylem butonu.
+  - [x] *AudioPlayer:* HTML5 `<audio>` sarmalayıcısı, Play/Pause, Seek, süre göstergesi, hız kontrolü, klavye/ekran okuyucu uyumu, autoplay yasağı.
 - **6. Responsive & Theme Governance:** Dark/Light tema geçişi, CSS değişkenleri üzerinden sıfır JS maliyetli tema yönetimi.
 - **7. Performance:** *Acceptance Target:* Design System CSS boyutu < 15KB (Gzip).
 - **8. DoD:**
-  - [ ] Tüm atomik bileşenlerin dark/light tema ve mobil/masaüstü ortamlarında doğrulanması.
-  - [ ] WCAG 2.2 AA erişilebilirlik testlerinin geçmesi.
+  - [x] Tüm atomik bileşenlerin dark/light tema ve mobil/masaüstü ortamlarında doğrulanması.
+  - [x] WCAG 2.2 AA erişilebilirlik testlerinin geçmesi.
 - **9. Bağımlılıklar:** UI-004, ARCH-001.
 - **10. Bağımlı Görevler:** UI-006, CMS-006, CMS-TTS-001.
 
@@ -1778,8 +1778,8 @@ sequenceDiagram
 - **7. Error Boundary & Offline Handling:** Beklenmeyen React render hatalarında kullanıcıyı teknik detay vermeden güvenli hata ekranına (`ErrorBoundaryFallback`) yönlendirme; çevrimdışı olunduğunda `OfflineBanner` gösterimi ve ağ geri geldiğinde otomatik yeniden deneme (`Retry`).
 - **8. Performance:** *Acceptance Target:* `Cmd+K` arama modalı açılış süresi < 20ms.
 - **9. DoD:**
-  - [ ] Arapça (RTL) modunda tüm ekranların hatasız aynalandığının teyidi.
-  - [ ] Error Boundary ve Global Search kısayolunun sınanması.
+  - [x] Arapça (RTL) modunda tüm ekranların hatasız aynalandığının teyidi.
+  - [x] Error Boundary ve Global Search kısayolunun sınanması.
 - **10. Bağımlılıklar:** UI-005, I18N-001, SEC-AUTH-001.
 - **11. Bağımlı Görevler:** TEST-002, GO-001.
 
@@ -1802,35 +1802,35 @@ sequenceDiagram
 | **Performans** | Rota Seviyesinde Code Splitting | Sayfa geçişlerinde sadece ilgili rota kodu yüklenir; ilk JS paketi (Gzip) < 120KB kalır. |
 
 #### Section-Level Definition of Done (DoD)
-- [ ] Design System HSL token yapısının ve 4px grid spacing standartlarının tanımlanması.
-- [ ] Atomik UI bileşen kütüphanesinin (`Button`, `Modal`, `Toast`, `Skeleton`, `AudioPlayer` vb.) tanımlanması.
-- [ ] App Shell, Sidebar, Topbar ve Mobil Alt Navigasyon Barı mimarisinin doğrulanması.
-- [ ] WCAG 2.2 AA erişilebilirlik standartlarının (klavye, odak hapsi, ekran okuyucu, 44px touch target) tanımlanması.
-- [ ] 16 standart UI durumunun (`Loading`, `Skeleton`, `Empty`, `Error`, `Saving`, `Offline` vb.) belirlenmesi.
-- [ ] Form ve DataTable (Server-Side Cursor Pagination, debounced search, bulk actions) standartlarının tanımlanması.
-- [ ] AI (`ai_draft` onay akışı) ve TTS (ön dinleme, onay, `STALE` revizyon denetimi, HTML5 player) UI entegrasyonlarının doğrulanması.
-- [ ] TR/EN/AR i18n ve Arapça RTL yön duyarlı aynalama mimarisinin tanımlanması.
-- [ ] PWA/Offline hassas veri saklama yasağının ve frontend secret izolasyonunun teyit edilmesi.
-- [ ] Kod dosyalarında 400–450 satır üst sınırının ve `UI-004` refactoring hedeflerinin tanımlanması.
-- [ ] Zero-Cost Guard ($0/Ay) prensibinin ve UI test matrisinin tamamlanması.
+- [x] Design System HSL token yapısının ve 4px grid spacing standartlarının tanımlanması.
+- [x] Atomik UI bileşen kütüphanesinin (`Button`, `Modal`, `Toast`, `Skeleton`, `AudioPlayer` vb.) tanımlanması.
+- [x] App Shell, Sidebar, Topbar ve Mobil Alt Navigasyon Barı mimarisinin doğrulanması.
+- [x] WCAG 2.2 AA erişilebilirlik standartlarının (klavye, odak hapsi, ekran okuyucu, 44px touch target) tanımlanması.
+- [x] 16 standart UI durumunun (`Loading`, `Skeleton`, `Empty`, `Error`, `Saving`, `Offline` vb.) belirlenmesi.
+- [x] Form ve DataTable (Server-Side Cursor Pagination, debounced search, bulk actions) standartlarının tanımlanması.
+- [x] AI (`ai_draft` onay akışı) ve TTS (ön dinleme, onay, `STALE` revizyon denetimi, HTML5 player) UI entegrasyonlarının doğrulanması.
+- [x] TR/EN/AR i18n ve Arapça RTL yön duyarlı aynalama mimarisinin tanımlanması.
+- [x] PWA/Offline hassas veri saklama yasağının ve frontend secret izolasyonunun teyit edilmesi.
+- [x] Kod dosyalarında 400–450 satır üst sınırının ve `UI-004` refactoring hedeflerinin tanımlanması.
+- [x] Zero-Cost Guard ($0/Ay) prensibinin ve UI test matrisinin tamamlanması.
 
 ---
 
 ### Özet Görev Listesi (7. ADMIN FRONTEND & DESIGN SYSTEM)
 
-- [ ] **UI-001 — Admin Giriş ve Özet Dashboard Ekranları**
+- [x] **UI-001 — Admin Giriş ve Özet Dashboard Ekranları**
   - **Kapsam:** LoginView, DashboardView özet metrik kartları.
-- [ ] **UI-002 — Destek & Yorum Yönetimi Ekranları**
+- [x] **UI-002 — Destek & Yorum Yönetimi Ekranları**
   - **Kapsam:** TicketsView, CommentsView, TicketDetailModal, CouponModal.
-- [ ] **UI-003 — Bülten, Abone & Ayarlar Ekranları**
+- [x] **UI-003 — Bülten, Abone & Ayarlar Ekranları**
   - **Kapsam:** BroadcastView, SubscribersView, SettingsView.
-- [ ] **UI-004 — Satır Sınırı Refactoring (`10.6.6`)**
+- [x] **UI-004 — Satır Sınırı Refactoring (`10.6.6`)**
   - **Amaç:** `PostsView.tsx` (454 satır) dosyasını `PostList.tsx` ve `PostEditorModal.tsx` olarak bölme (<300 satır).
   - **Öncelik:** P0 | **Bağımlılık:** UI-003
-- [ ] **UI-005 — Premium Admin Design System (`10.7`)**
+- [x] **UI-005 — Premium Admin Design System (`10.7`)**
   - **Amaç:** HSL tasarım token'ları, Ortak UI Bileşenleri (`Button`, `Modal`, `Toast`, `Skeleton`, `EmptyState`, `Tabs`, `DeviceFrame`), mobil alt navigasyon.
   - **Öncelik:** P1 | **Bağımlılık:** UI-004
-- [ ] **UI-006 — App Shell, Global Search, Accessibility & State Governance**
+- [x] **UI-006 — App Shell, Global Search, Accessibility & State Governance**
   - **Amaç:** Katlanabilir Sidebar, Mobil Alt Navigasyon, `Cmd+K` Hızlı Arama, WCAG 2.2 AA uyumu, i18n RTL (Arapça) yön aynalama ve Error Boundary altyapısı.
   - **Öncelik:** P1 | **Bağımlılık:** UI-005
 
