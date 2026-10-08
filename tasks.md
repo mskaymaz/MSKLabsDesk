@@ -1445,6 +1445,7 @@ sequenceDiagram
 ---
 
 ### AI-005 — AI Abstraction Layer & Token/Maliyet Kontrolü (Cost Guard & Quota)
+- **1. Durum:** **PASS** (Tamamlanma Tarihi: 08.10.2026 - 11:57)
 - **2. Amaç:** LLM sağlayıcı bağımsız soyutlama katmanı kurmak, Cloudflare KV / D1 önbellekleme ile mükerrer API harcamalarını engellemek ve **ücretsiz kota bittiğinde KESİNLİKLE ücretli kullanıma geçmeyen Cost Guard** mekanizmasını devreye almak.
 - **3. Kapsam:** `backend/src/services/aiProvider.ts`, Cloudflare KV (`AI_CACHE`).
 - **4. Provider Abstraction:** `AIProvider` arabirimi (`GeminiProvider`, `FallbackProvider`). İleride farklı LLM sağlayıcılarına kolay geçiş.
@@ -1453,8 +1454,9 @@ sequenceDiagram
 - **7. Cache Invalidation Kuralları:** Önbellek geçersiz kılma mantığı girdi içeriği/versiyonu, model, prompt versiyonu, dil, konfigürasyon, terim sözlüğü versiyonu veya çıktı şeması versiyonu gibi AI girdisini ve davranışını etkileyen herhangi bir bileşenin değişmesi durumunda eski sonucun yanlışlıkla kullanılmasını engeller.
 - **8. Performance:** *Acceptance Target:* Önbellekten dönen AI isteği < 10ms.
 - **9. DoD:**
-  - [ ] Ücretsiz kota aşımında sistemin ücretli sürüme geçmeden zarif durmasının testi.
-  - [ ] Önbellek çakışmasızlığının `SHA-256` ile doğrulanması.
+  - [x] Ücretsiz kota aşımında sistemin ücretli sürüme geçmeden zarif durmasının testi (`503 QUOTA_EXHAUSTED`).
+  - [x] Önbellek çakışmasızlığının `SHA-256` ile doğrulanması (<10ms cache HIT).
+  - [x] *(Sonuç: PASS. backend/src/services/aiProvider.ts ve tests/ai005.test.ts üzerinden 12/12 test (toplam AI suite 81/81 test) başarıyla geçmiştir. AIProvider abstraction, GeminiProvider, FallbackProvider, Zero-Cost Guard $0/Mo kuralı, Cloudflare KV AI_CACHE, SHA-256 deterministik key ve AI-002/004 entegrasyonu doğrulanmıştır)*.
 - **10. Bağımlılıklar:** AI-001, DATA-007.
 - **11. Bağımlı Görevler:** AI-002, AI-004, AI-006, AI-TTS-001.
 
