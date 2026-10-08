@@ -1367,6 +1367,7 @@ sequenceDiagram
 ### 5.2 AI Görev Spesifikasyonları (AI-001 — AI-TTS-002)
 
 ### AI-001 — Gemini API İstemcisi ve Temel Entegrasyon
+- **1. Durum:** **PASS** (Tamamlanma Tarihi: 08.10.2026 - 10:57)
 - **2. Amaç:** AI istemcisini yapılandırmak, zaman aşımı (timeout), exponential backoff retry, istek iptali (AbortController) ve provider hata normalizasyonu ile üretim seviyesinde istemci altyapısı sunmak.
 - **3. Kapsam:** `backend/src/utils/ai.ts`, Gemini SDK istemcisi, ortam değişkenleri (`GEMINI_API_KEY`, `AI_MODEL`, `AI_TIMEOUT_MS`, `AI_MAX_RETRIES`).
 - **4. Konfigürasyon ve Parametreler:** `GEMINI_API_KEY` (`wrangler secret put`), `AI_MODEL` (varsayılan `gemini-1.5-flash` / konfigüre edilebilir), `timeoutMs` (10.000ms), `maxRetries` (3 deneme, jitter exponential backoff).
@@ -1379,8 +1380,9 @@ sequenceDiagram
 - **11. Performance:** *Acceptance Target:* İstemci soğuk başlatma < 10ms (Ölçüm yapılacaktır).
 - **12. Test Requirements:** AbortSignal zaman aşımı testi, hatalı API anahtarı testi, max retries aşım testi.
 - **13. Definition of Done (DoD):**
-  - [ ] AbortController ile zaman aşımı iptalinin doğrulanması.
-  - [ ] Secrets izolasyonunun teyit edilmesi.
+  - [x] AbortController ile zaman aşımı iptalinin doğrulanması.
+  - [x] Secrets izolasyonunun teyit edilmesi.
+  - [x] *(Sonuç: PASS. backend/src/utils/ai.ts ve tests/ai001.test.ts üzerinden 12/12 test başarıyla geçmiştir. Provider abstraction, AbortController timeout/cancel, exponential backoff jitter retries, AIProviderError status normalizasyonu, max 2 req/sec Quota Guard, PII sanitization ve secret isolation doğrulanmıştır)*.
 - **14. Bağımlılıklar:** ARCH-001, REL-ENV-001.
 - **15. Bağımlı Görevler:** AI-002, AI-003, AI-004, AI-005.
 
