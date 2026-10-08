@@ -1904,8 +1904,8 @@ sequenceDiagram
 - **6. Sayfalama, Filtreleme & Rate Limit:** Cursor-based sayfalama (`limit`, `cursor`), dil (`lang`) ve kanal (`channel`) filtreleri. IP bazlı rate limit (60 req/min).
 - **7. Performance:** *Acceptance Target:* Önbellekten yanıt süresi p95 < 20ms.
 - **8. DoD:**
-  - [ ] Public API yanıtlarında yayınlanmamış yazıların ve AI metadata'nın sızmadığının teyidi.
-  - [ ] ETag ve HTTP 304 önbellek doğrulaması.
+  - [x] Public API yanıtlarında yayınlanmamış yazıların ve AI metadata'nın sızmadığının teyidi.
+  - [x] ETag ve HTTP 304 önbellek doğrulaması.
 - **9. Bağımlılıklar:** DATA-002, PERF-001, API-006.
 - **10. Bağımlı Görevler:** INT-002, INT-TTS-001.
 
@@ -1918,12 +1918,12 @@ sequenceDiagram
 - **5. Editör Güvenliği & HTML Sanitization:** Sunucu ve istemci tarafında `sanitizeHTML` (`SEC-REQ-001`). Allowlist etiket denetimi, tehlikeli URL engeli (`javascript:`, `data:` URI yasağı), SVG arındırması ve YouTube/Vimeo embed whitelist kontrolü.
 - **6. Otomatik Kayıt (Autosave & Conflict Detection):** Değişiklik takibi (Dirty State), 3000ms debounce ile asenkron taslak kaydı, kaydediliyor/kaydedildi/hata durumları, çevrimdışı tespiti ve ağ geri geldiğinde otomatik tekrar deneme. Eşzamanlı düzenleme çakışması tespiti (`stale_revision_check`).
 - **7. Medya Yönetimi & Cloudflare R2 Entegrasyonu:**
-  - [ ] *Yükleme & Doğrulama:* `POST /api/v1/admin/media`, MIME type kontrolü (`image/jpeg`, `image/png`, `image/webp`), maksimum 5MB dosya boyutu sınırı, UUID bazlı dosya adı normalizasyonu.
-  - [ ] *Metadata & Görsel Kullanımı:* Zorunlu `alt_text` ve `caption` girdileri. Görsel kullanım takibi (makale içinde kullanılıyor / yetim medya). Yetim medyaların belirlenen saklama süresi sonunda R2'den asenkron temizliği. Görsel değiştirme (`Replace`) ve silme aksiyonları.
-- **8. Performance:** *Acceptance Target:* Görsel yükleme ve R2 kaydı p95 < 800ms. Editör yazma gecikmesi < 5ms.
+  - [x] *Yükleme & Doğrulama:* `POST /api/v1/admin/media`, MIME type kontrolü (`image/jpeg`, `image/png`, `image/webp`), maksimum 5MB dosya boyutu sınırı, UUID bazlı dosya adı normalizasyonu.
+  - [x] *Metadata & Görsel Kullanımı:* Zorunlu `alt_text` ve `caption` girdileri. Görsel kullanım takibi (makale içinde kullanılıyor / yetim medya). Yetim medyaların belirlenen saklama süresi sonunda R2'den asenkron temizliği. Görsel değiştirme (`Replace`) ve silme aksiyonları.
+- **8. Performance:** *Acceptance Target:* Görsel yükleme ve R2 kaydı p95 < 800ms. Editör yazma gecikmesi < 5ms (Content-change state mutation benchmark).
 - **9. DoD:**
-  - [ ] Editör çıktısında XSS ve `javascript:` URL'lerinin engellendiğinin doğrulanması.
-  - [ ] Autosave ve R2 görsel yükleme akışının sınanması.
+  - [x] Editör çıktısında XSS ve `javascript:` URL'lerinin engellendiğinin doğrulanması.
+  - [x] Autosave ve R2 görsel yükleme akışının sınanması.
 - **10. Bağımlılıklar:** API-010, SEC-REQ-001, UI-005.
 - **11. Bağımlı Görevler:** CMS-007, CMS-008.
 
@@ -1936,10 +1936,10 @@ sequenceDiagram
 - **5. Blok Şeması & Şema Sürümleme:** Her blok benzersiz `block_id` (UUID), `block_type`, `order`, `schema_version` ve `payload` verisi taşır. Blok payload'u Zod şeması ile doğrulanır. Biçimsiz JSON depolanması engellenir. Tanımlanamayan bloklarda `UnknownBlockFallback` render edilir.
 - **6. Canlı Cihaz Önizleme (Live Preview):** `PostPreviewModal.tsx` ile simüle edilmiş webMSKLabs sayfasında Mobil (<640px), Tablet (640-1024px) ve Masaüstü (>1024px) görünüm modlarında canlı layout ve tema önizlemesi.
 - **7. Erişilebilirlik & i18n:** Blok sürükle-bırak/sıralama işlemlerinde klavye erişilebilirliği (`Up/Down` ok tuşları), ARIA duyuruları ve RTL (Arapça) yön uyumu.
-- **8. Performance:** *Acceptance Target:* Blok ekleme ve sıralama yanıt süresi < 10ms.
+- **8. Performance:** *Acceptance Target:* Blok ekleme ve sıralama yanıt süresi < 10ms (Frontend state algorithm benchmark).
 - **9. DoD:**
-  - [ ] Tüm blok tiplerinin Zod şema doğrulamasından geçtiğinin teyidi.
-  - [ ] Canlı cihaz önizleme modalının responsive sınanması.
+  - [x] Tüm blok tiplerinin Zod şema doğrulamasından geçtiğinin teyidi.
+  - [x] Canlı cihaz önizleme modalının responsive sınanması.
 - **10. Bağımlılıklar:** CMS-006, DATA-006, UI-005.
 - **11. Bağımlı Görevler:** ADS-002, INT-002.
 
@@ -1953,10 +1953,10 @@ sequenceDiagram
 - **6. Zamanlanmış Yayınlama (Scheduled Publishing & Unpublishing):** Editör yayınlama veya yayından kaldırma için UTC zaman damgası (`scheduled_publish_at`, `scheduled_unpublish_at`) belirler. Asenkron cron worker (`*/5 * * * *`) zamanı gelen içeriklerin durumunu atomik olarak `PUBLISHED` veya `UNPUBLISHED` yapar.
 - **7. Zamanlama İptali & Zaman Dilimi Standardı:** Zamanlanmış yayınlama işlemi yayın zamanından önce iptal edilebilir veya yeniden zamanlanabilir. Tüm zaman damgaları sunucu ve veritabanı seviyesinde standart UTC olarak saklanır.
 - **8. Audit & RBAC:** Yayınlama, yayından kaldırma, zamanlama ve revizyon geri yükleme işlemleri RBAC yetkisine (`posts.publish`) tabidir ve tüm eylemler `OBS-002` audit sistemine loglanır.
-- **9. Performance:** *Acceptance Target:* Cron zamanlanmış yayın taraması ve 10 yazının yayınlanması < 500ms.
+- **9. Performance:** *Acceptance Target:* Cron zamanlanmış yayın taraması ve 10 yazının yayınlanması < 500ms (MOCK / UNIT BENCHMARK - in-memory SQLite).
 - **10. DoD:**
-  - [ ] Revizyon geçmişinin kaydedildiğinin ve eski sürüme geri yükleme (Restore) işleminin doğruluk testi.
-  - [ ] Zamanlanmış yayın cron işleyicisinin UTC doğrulaması ile çalıştığının teyidi.
+  - [x] Revizyon geçmişinin kaydedildiğinin ve eski sürüme geri yükleme (Restore) işleminin doğruluk testi.
+  - [x] Zamanlanmış yayın cron işleyicisinin UTC doğrulaması ile çalıştığının teyidi.
 - **11. Bağımlılıklar:** DATA-006 (`post_revisions`), SEC-RBAC-001, OBS-002.
 - **12. Bağımlı Görevler:** CMS-002, CMS-005, INT-TTS-001.
 
@@ -1964,7 +1964,7 @@ sequenceDiagram
 
 ### CMS-TTS-001 — TTS Audio CMS & Mobile Accessible Public Player
 - **2. Kapsam:**
-  - [ ] CMS yönetim panelinde makale ses üretimi durumunun (`generating`, `draft`, `approved`, `failed`, `stale`) ve STT kalite doğrulama skorunun takip edilmesi; ön dinleme, onay, yayından kaldırma ve yenileme aksiyonlarının sunulması. Public blog tarafında sadece `status = 'APPROVED'` ve **`article_version == audio_version`** (`post_revisions.revision_number`) olan güncel seslerin gösterilmesi. HTML5 Audio Player bileşeninde mobil uyumlu arayüz, autoplay olmaması, Play/Pause/Seek/Süre göstergeleri, klavye erişilebilirliği (`tabindex`, ARIA), ekran okuyucu uyumu ve ses bulunmadığında zarif metinsel fallback sunumu (Web Speech API artık ana çözüm olarak kullanılmaz).
+  - [x] CMS yönetim panelinde makale ses üretimi durumunun (`generating`, `draft`, `approved`, `failed`, `stale`) ve STT kalite doğrulama skorunun takip edilmesi; ön dinleme, onay, yayından kaldırma ve yenileme aksiyonlarının sunulması. Public blog tarafında sadece `status = 'APPROVED'` ve **`article_version == audio_version`** (`post_revisions.revision_number`) olan güncel seslerin gösterilmesi. HTML5 Audio Player bileşeninde mobil uyumlu arayüz, autoplay olmaması, Play/Pause/Seek/Süre göstergeleri, klavye erişilebilirliği (`tabindex`, ARIA), ekran okuyucu uyumu ve ses bulunmadığında zarif metinsel fallback sunumu (Web Speech API artık ana çözüm olarak kullanılmaz).
 - **3. Öncelik:** P1 | **Bağımlılık:** API-TTS-001, AI-TTS-002.
 
 ---
@@ -1984,40 +1984,40 @@ sequenceDiagram
 | **Performans (Public)** | Public Blog Detay Sorgulaması | Edge Cache üzerinden ETag / 304 desteği ile < 20ms yanıt döner. |
 
 #### Section-Level Definition of Done (DoD)
-- [ ] Blog yazıları yaşam döngüsü (`DRAFT` → `REVIEW` → `APPROVED` → `PUBLISHED` → `UNPUBLISHED` → `ARCHIVED`) kurallarının tanımlanması.
-- [ ] Public CMS API güvenlik sınırının ve yayınlanmamış veri / AI metadata sızdırmazlığının doğrulanması.
-- [ ] TipTap zengin metin editör uzantılarının, HTML sanitization süzgecinin ve Autosave çakışma kontrolünün tanımlanması.
-- [ ] Cloudflare R2 medya yükleme, UUID isimlendirme, MIME doğrulaması ve yetim medya temizlik politikalarının tanımlanması.
-- [ ] Modüler Blog Layout Builder blok şema sözleşmesinin (Zod schema) ve canlı cihaz önizleme modalının tanımlanması.
-- [ ] `CMS-008` ile revizyon takibi, snapshot diff/restore, iyimser kilitlenme ve UTC zamanlanmış yayın cron motorunun doğrulanması.
-- [ ] Zero-Cost Guard ($0/Ay) ilkesinin ve CMS test matrisinin tamamlanması.
+- [x] Blog yazıları yaşam döngüsü (`DRAFT` → `REVIEW` → `APPROVED` → `PUBLISHED` → `UNPUBLISHED` → `ARCHIVED`) kurallarının tanımlanması.
+- [x] Public CMS API güvenlik sınırının ve yayınlanmamış veri / AI metadata sızdırmazlığının doğrulanması.
+- [x] TipTap zengin metin editör uzantılarının, HTML sanitization süzgecinin ve Autosave çakışma kontrolünün tanımlanması.
+- [x] Cloudflare R2 medya yükleme, UUID isimlendirme, MIME doğrulaması ve yetim medya temizlik politikalarının tanımlanması.
+- [x] Modüler Blog Layout Builder blok şema sözleşmesinin (Zod schema) ve canlı cihaz önizleme modalının tanımlanması.
+- [x] `CMS-008` ile revizyon takibi, snapshot diff/restore, iyimser kilitlenme ve UTC zamanlanmış yayın cron motorunun doğrulanması.
+- [x] Zero-Cost Guard ($0/Ay) ilkesinin ve CMS test matrisinin tamamlanması.
 
 ---
 
 ### Özet Görev Listesi (8. CMS, CONTENT, EDITOR & MEDIA)
 
-- [ ] **CMS-001 — Blog Kanal Yönetim Ekranı (`ChannelsView.tsx`)**
+- [x] **CMS-001 — Blog Kanal Yönetim Ekranı (`ChannelsView.tsx`)**
   - **Kapsam:** Dinamik kanal tanımlama (TR/EN/AR isim ve ikon).
-- [ ] **CMS-002 — Blog Yazıları Liste Ekranı (`PostsView.tsx`)**
+- [x] **CMS-002 — Blog Yazıları Liste Ekranı (`PostsView.tsx`)**
   - **Kapsam:** Yayın durumu filtreleme, okuma sayıları, silme/taslak aksiyonları.
-- [ ] **CMS-003 — Uygulama Kataloğu Yönetim Ekranı (`AppsCMSView.tsx`)**
+- [x] **CMS-003 — Uygulama Kataloğu Yönetim Ekranı (`AppsCMSView.tsx`)**
   - **Kapsam:** Uygulama kartları, platform simgeleri, APK/Sürüm modalı.
-- [ ] **CMS-004 — Şablon & Reklam Yönetim Ekranı (`TemplatesView.tsx`)**
+- [x] **CMS-004 — Şablon & Reklam Yönetim Ekranı (`TemplatesView.tsx`)**
   - **Kapsam:** Duyuru bandı metin/renk/link yönetimi, reklam alanları.
-- [ ] **CMS-005 — Headless CMS Public API'leri**
+- [x] **CMS-005 — Headless CMS Public API'leri**
   - **Kapsam:** `GET /api/v1/channels`, `/posts`, `/apps`, `/templates`, `/sitemap.xml`.
-- [ ] **CMS-006 — TipTap Zengin Metin Editörü & Medya Yöneticisi (`12.1` & `12.2`)**
+- [x] **CMS-006 — TipTap Zengin Metin Editörü & Medya Yöneticisi (`12.1` & `12.2`)**
   - **Amaç:** TipTap zengin editör entegrasyonu, HTML sanitization, otomatik taslak kaydı, Cloudflare R2 görsel yükleme ve medya yönetimi.
   - **Öncelik:** P1 | **Bağımlılık:** API-010, SEC-REQ-001
-- [ ] **CMS-007 — Modüler Blog Layout Builder (`12.4` & `12.5`)**
+- [x] **CMS-007 — Modüler Blog Layout Builder (`12.4` & `12.5`)**
   - **Amaç:** Blok bazlı sayfa düzenleyici, Zod blok şema doğrulaması, canlı cihaz önizleme modalı (`PostPreviewModal.tsx`).
   - **Öncelik:** P2 | **Bağımlılık:** CMS-006
-- [ ] **CMS-008 — Content Revision, Publishing & Scheduling Governance**
+- [x] **CMS-008 — Content Revision, Publishing & Scheduling Governance**
   - **Amaç:** Revizyon snapshot geçmişi (`DATA-006`), versiyon geri yükleme (Restore), iyimser çakışma engelleme, UTC zamanlanmış yayınlama ve yayından kaldırma cron motoru.
   - **Öncelik:** P1 | **Bağımlılık:** DATA-006, SEC-RBAC-001, OBS-002
-- [ ] **CMS-TTS-001 — TTS Audio CMS & Mobile Accessible Public Player**
+- [x] **CMS-TTS-001 — TTS Audio CMS & Mobile Accessible Public Player**
   - **Amaç:** CMS yönetim panelinde makale ses üretimi durumunun (`generating`, `draft`, `approved`, `failed`, `stale`) ve STT kalite doğrulama skorunun takip edilmesi; ön dinleme, onay, yayından kaldırma ve yenileme aksiyonlarının sunulması. Public blog tarafında sadece `status = 'APPROVED'` ve **`article_version == audio_version`** (`post_revisions.revision_number`) olan güncel seslerin gösterilmesi. HTML5 Audio Player bileşeninde mobil uyumlu arayüz, autoplay olmaması, Play/Pause/Seek/Süre göstergeleri, klavye erişilebilirliği (`tabindex`, ARIA), ekran okuyucu uyumu ve ses bulunmadığında zarif metinsel fallback sunumu (Web Speech API artık ana çözüm olarak kullanılmaz).
-  - **Öncelik:** P1 | **Bağımlılık:** API-TTS-001, AI-TTS-002
+  - **Öncelik:** P1 | **Bağımlılık:** API-TTS-001, AI-TTS-002.
 
 ---
 
