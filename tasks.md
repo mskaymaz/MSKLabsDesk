@@ -1477,16 +1477,16 @@ sequenceDiagram
 | **Önbellek (Cache)** | Aynı Metin + Aynı Prompt Versiyonu | Gemini API çağrılmadan Cloudflare KV önbellekten O(1) döner (%80+ API tasarrufu). |
 
 #### Section-Level Definition of Done (DoD)
-- [ ] Gemini client mimarisinin ve AbortController timeout mekanizmasının tanımlanması.
-- [ ] Provider soyutlama katmanı (`AI-005`) ve $0/Ay Cost Guard kuralının doğrulanması.
-- [ ] Prompt versiyonlama ve metadata izlenebilirliğinin tanımlanması.
-- [ ] Tip güvenli Structured Output JSON şemalarının Zod ile zorunlu kılınması.
-- [ ] Prompt injection korumasında çok katmanlı güvenlik mimarisinin ve instruction/data ayrımının doğrulanması.
-- [ ] PII maskeleme ve veri minimization prensiplerinin teyit edilmesi.
-- [ ] Bounded exponential backoff retry ve idempotency önbelleklemesinin tanımlanması.
-- [ ] Geri çeviri doğrulama ve glossary koruma akışının tanımlanması.
-- [ ] Tüm AI işlemlerinin `OBS-002` audit loglama altyapısına bağlanması.
-- [ ] Human-In-The-Loop (HITL) kuralı ile otomatik karar ve yanıt gönderiminin engellenmesi.
+- [x] Gemini client mimarisinin ve AbortController timeout mekanizmasının tanımlanması.
+- [x] Provider soyutlama katmanı (`AI-005`) ve $0/Ay Cost Guard kuralının doğrulanması.
+- [x] Prompt versiyonlama ve metadata izlenebilirliğinin tanımlanması.
+- [x] Tip güvenli Structured Output JSON şemalarının Zod ile zorunlu kılınması.
+- [x] Prompt injection korumasında çok katmanlı güvenlik mimarisinin ve instruction/data ayrımının doğrulanması.
+- [x] PII maskeleme ve veri minimization prensiplerinin teyit edilmesi.
+- [x] Bounded exponential backoff retry ve idempotency önbelleklemesinin tanımlanması.
+- [x] Geri çeviri doğrulama ve glossary koruma akışının tanımlanması.
+- [x] Tüm AI işlemlerinin `OBS-002` audit loglama altyapısına bağlanması.
+- [x] Human-In-The-Loop (HITL) kuralı ile otomatik karar ve yanıt gönderiminin engellenmesi.
 
 ---
 
@@ -1537,21 +1537,21 @@ sequenceDiagram
 - **2. Amaç:** Çok dilli (TR/EN/AR) ve erişilebilir HTML/Düz Metin (plain-text fallback) e-posta şablon motorunu kurmak, kullanıcı girdilerini güvenle işleyerek e-posta şablon enjeksiyonlarını engellemek.
 - **3. Kapsam:** `backend/src/utils/emailTemplates.ts`, destek, bülten, duyuru ve sistem şablonları.
 - **4. Desteklenen E-Posta Şablon Tipleri:**
-  - [ ] `TICKET_RECEIVED`: Destek bileti alındı ve bilet no bildirimi.
-  - [ ] `TICKET_REPLIED`: Admin bilet yanıtı (transactional).
-  - [ ] `NEWSLETTER_CONFIRM`: Çift onay (Double Opt-In) doğrulama bağlantısı.
-  - [ ] `UNSUBSCRIBE_CONFIRM`: Abonelikten çıkış onay bildirimi.
-  - [ ] `BROADCAST_NEWSLETTER`: Toplu bülten/duyuru şablonu (marketing).
-  - [ ] `COUPON_REWARD`: Ödül/kupon e-postası (`API-009` ilişkili).
-  - [ ] `ADMIN_ALERT`: Sistem acil durum bildirimi.
+  - [x] `TICKET_RECEIVED`: Destek bileti alındı ve bilet no bildirimi.
+  - [x] `TICKET_REPLIED`: Admin bilet yanıtı (transactional).
+  - [x] `NEWSLETTER_CONFIRM`: Çift onay (Double Opt-In) doğrulama bağlantısı.
+  - [x] `UNSUBSCRIBE_CONFIRM`: Abonelikten çıkış onay bildirimi.
+  - [x] `BROADCAST_NEWSLETTER`: Toplu bülten/duyuru şablonu (marketing).
+  - [x] `COUPON_REWARD`: Ödül/kupon e-postası (`API-009` ilişkili).
+  - [x] `ADMIN_ALERT`: Sistem acil durum bildirimi.
 - **5. Şablon Yapısı & Sürümleme:** Her şablon `template_id`, `version`, `language` (TR/EN/AR), `subject`, `html_body`, `text_fallback`, `variables` parametreleri ile versiyonlanır.
 - **6. Güvenlik & Escaping:** Şablona yerleştirilecek dinamik değişkenler (`{{name}}`, `{{subject}}`, `{{message}}`) sunucu tarafında `escapeHTML()` süzgecinden geçirilir. XSS/HTML Injection önlenir.
 - **7. Erişilebilirlik & Mobil Uyum:** Mobil e-posta istemcileri ile uyumlu duyarlı (responsive) tablo/inline-CSS mimarisi, ekran okuyucu dostu yapay dokunma alanları ve altbilgide zorunlu Unsubscribe bağlantısı.
 - **8. Privacy & KVKK:** Pazarlama e-postalarında izin (consent) denetimi; destek yanıtlarında ise transactional iletişim sınıflandırması.
 - **9. Performance:** *Acceptance Target:* Şablon derleme ve dize değiştirme süresi < 1ms.
 - **10. DoD:**
-  - [ ] Tüm şablonların HTML ve plain-text çıktılarının doğrulanması.
-  - [ ] Kullanıcı girdilerinin e-posta şablonlarında kaçış karakteri ile arındırılmasının testi.
+  - [x] Tüm şablonların HTML ve plain-text çıktılarının doğrulanması.
+  - [x] Kullanıcı girdilerinin e-posta şablonlarında kaçış karakteri ile arındırılmasının testi.
 - **11. Bağımlılıklar:** ARCH-001, SEC-REQ-001.
 - **12. Bağımlı Görevler:** COM-002, COM-003.
 
@@ -1567,8 +1567,8 @@ sequenceDiagram
 - **8. Observability:** Başarılı/başarısız e-posta gönderimleri HTTP yanıt kodları ile `OBS-002` log altyapısına kaydedilir. E-posta içeriği loglanmaz.
 - **9. Performance:** *Acceptance Target:* Resend API çağrısı p95 < 400ms.
 - **10. DoD:**
-  - [ ] Dev ortamı simülasyonunun ve Prod Resend entegrasyonunun doğrulanması.
-  - [ ] Header injection engelleme testinin geçmesi.
+  - [x] Dev ortamı simülasyonunun ve Prod Resend entegrasyonunun doğrulanması.
+  - [x] Header injection engelleme testinin geçmesi.
 - **11. Bağımlılıklar:** COM-001, REL-ENV-001.
 - **12. Bağımlı Görevler:** COM-003.
 
@@ -1579,17 +1579,17 @@ sequenceDiagram
 - **3. Kapsam:** `backend/src/cron/emailQueueWorker.ts`, `email_queue` D1 tablosu.
 - **4. Queue Schema Uyumu (`DATA-001`):** `id`, `type`, `recipient`, `subject`, `template_id`, `payload_json`, `status`, `attempts`, `max_attempts`, `scheduled_at`, `sent_at`, `last_error`, `idempotency_key`.
 - **5. State Machine Geçişleri:**
-  - [ ] `PENDING` → `PROCESSING` → `SENT` (Başarılı gönderim).
-  - [ ] `PROCESSING` → `RETRY_WAIT` (Geçici hata: 429, 5xx, timeout) → `PROCESSING`.
-  - [ ] `PROCESSING` → `FAILED` (Kalıcı hata: geçersiz e-posta, 4xx reddi veya `attempts >= max_attempts`).
+  - [x] `PENDING` → `PROCESSING` → `SENT` (Başarılı gönderim).
+  - [x] `PROCESSING` → `RETRY_WAIT` (Geçici hata: 429, 5xx, timeout) → `PROCESSING`.
+  - [x] `PROCESSING` → `FAILED` (Kalıcı hata: geçersiz e-posta, 4xx reddi veya `attempts >= max_attempts`).
 - **6. Backoff & Retry Politikası:** Geçici hatalarda katlanarak artan bekleme süresi (Bounded Exponential Backoff: 1. retry 5dk, 2. retry 15dk, 3. retry 60dk; maks 3 deneme). Kalıcı hatalarda retry yapılmaz, doğrudan `FAILED` statüsüne çekilir.
 - **7. Eşzamanlı Çalışma Koruması (Atomic Claiming):** Worker çalıştığında `UPDATE email_queue SET status='PROCESSING', locked_at=CURRENT_TIMESTAMP WHERE id IN (SELECT id FROM email_queue WHERE status IN ('PENDING','RETRY_WAIT') AND scheduled_at <= CURRENT_TIMESTAMP ORDER BY id ASC LIMIT 10)` atomik sorgusu ile kayıtlar sahiplenilir.
 - **8. Idempotency & Duplicate Engelleme:** `idempotency_key` kontrolü ile aynı olay için 2. e-posta kesinlikle gönderilmez.
 - **9. Dead Letter & Failure Visibility:** Maksimum denemeyi aşan kayıtlarda `last_error` detaylandırılarak `FAILED` statüsünde saklanır; admin panelinde (`UI-003`) manuel yeniden tetikleme (`Retry Send`) olanağı sunulur.
 - **10. Performance:** *Acceptance Target:* Cron batch işleme süresi (10 kayıt için) < 1500ms.
 - **11. DoD:**
-  - [ ] Mükerrer cron çalışmasında aynı kuyruk kaydının çift işlenmediğinin doğrulanması.
-  - [ ] Katlanarak artan backoff retry mekanizmasının sınanması.
+  - [x] Mükerrer cron çalışmasında aynı kuyruk kaydının çift işlenmediğinin doğrulanması.
+  - [x] Katlanarak artan backoff retry mekanizmasının sınanması.
 - **12. Bağımlılıklar:** COM-002, DATA-001 (`email_queue`).
 - **13. Bağımlı Görevler:** UI-003, OBS-002.
 
@@ -1606,8 +1606,8 @@ sequenceDiagram
 - **9. Observability & Privacy:** Push başarı ve başarısızlık metrikleri `OBS-002` sistemine kaydedilir. Bildirim içeriğinde hassas PII (parola, tam müşteri mesajı) yer almaz.
 - **10. Performance:** *Acceptance Target:* Push bildirim iletim süresi < 500ms.
 - **11. DoD:**
-  - [ ] VAPID özel anahtarının istemciye sızmadığının doğrulanması.
-  - [ ] `410 Gone` dönen eski aboneliklerin otomatik silindiğinin teyidi.
+  - [x] VAPID özel anahtarının istemciye sızmadığının doğrulanması.
+  - [x] `410 Gone` dönen eski aboneliklerin otomatik silindiğinin teyidi.
 - **12. Bağımlılıklar:** DATA-004 (`push_subscriptions`), SEC-AUTH-001.
 - **13. Bağımlı Görevler:** UI-002, OBS-002.
 
@@ -1628,30 +1628,30 @@ sequenceDiagram
 | **Push (Güvenlik)** | Geçersiz / Süresi Dolmuş VAPID Endpoint | `410 Gone` yanıtında geçersiz abonelik kaydı `push_subscriptions` tablosundan silinir. |
 
 #### Section-Level Definition of Done (DoD)
-- [ ] E-posta şablon motorunun ve HTML/Plain-text güvenli kaçış mekanizmasının tanımlanması.
-- [ ] Resend e-posta sürücüsünün ve dev/prod simülasyon ayrımının tanımlanması.
-- [ ] SPF/DKIM/DMARC alan adı doğrulama gereksinimlerinin netleştirilmesi.
-- [ ] `email_queue` State Machine (`PENDING` → `PROCESSING` → `SENT` / `RETRY_WAIT` → `FAILED`) yapısının doğrulanması.
-- [ ] Atomic claim ile eşzamanlı worker çakışma korumasının tanımlanması.
-- [ ] Bounded exponential backoff retry ve idempotency anahtarı denetiminin tanımlanması.
-- [ ] Double Opt-In ve List-Unsubscribe yasal/teknik standartlarının tanımlanması.
-- [ ] Web Push VAPID anahtar izolasyonunun ve otomatik `410 Gone` temizliğinin tanımlanması.
-- [ ] Zero-Cost Guard ($0/Ay) ve ana backend işlemlerinden izole (non-blocking) çalışma garantisinin verilmesi.
-- [ ] İletişim test matrisinin ve `OBS-002` audit entegrasyonunun tamamlanması.
+- [x] E-posta şablon motorunun ve HTML/Plain-text güvenli kaçış mekanizmasının tanımlanması.
+- [x] Resend e-posta sürücüsünün ve dev/prod simülasyon ayrımının tanımlanması.
+- [x] SPF/DKIM/DMARC alan adı doğrulama gereksinimlerinin netleştirilmesi.
+- [x] `email_queue` State Machine (`PENDING` → `PROCESSING` → `SENT` / `RETRY_WAIT` → `FAILED`) yapısının doğrulanması.
+- [x] Atomic claim ile eşzamanlı worker çakışma korumasının tanımlanması.
+- [x] Bounded exponential backoff retry ve idempotency anahtarı denetiminin tanımlanması.
+- [x] Double Opt-In ve List-Unsubscribe yasal/teknik standartlarının tanımlanması.
+- [x] Web Push VAPID anahtar izolasyonunun ve otomatik `410 Gone` temizliğinin tanımlanması.
+- [x] Zero-Cost Guard ($0/Ay) ve ana backend işlemlerinden izole (non-blocking) çalışma garantisinin verilmesi.
+- [x] İletişim test matrisinin ve `OBS-002` audit entegrasyonunun tamamlanması.
 
 ---
 
 ### Özet Görev Listesi (6. COMMUNICATION, EMAIL, QUEUE & PUSH)
 
-- [ ] **COM-001 — Temel HTML E-Posta Şablonları**
+- [x] **COM-001 — Temel HTML E-Posta Şablonları**
   - **Kapsam:** Bilet Alındı ve Destek Cevap e-posta şablonları (TR/EN/AR).
-- [ ] **COM-002 — Resend E-Posta Motoru & Alan Adı Doğrulama (`10.6.1`)**
+- [x] **COM-002 — Resend E-Posta Motoru & Alan Adı Doğrulama (`10.6.1`)**
   - **Amaç:** Resend alan adı doğrulaması (SPF/DKIM), `noreply@` gönderici ayarı, `ENV=dev` simülasyon ayrımı.
   - **Öncelik:** P0 | **Bağımlılık:** API-001
-- [ ] **COM-003 — E-Posta Kuyruk İşleyici Cron Worker (`10.6.1`)**
+- [x] **COM-003 — E-Posta Kuyruk İşleyici Cron Worker (`10.6.1`)**
   - **Amaç:** `processQueue()` cron işleyicisi (`*/5 * * * *`), kupon ve duyuru e-posta şablonları.
   - **Öncelik:** P0 | **Bağımlılık:** COM-002
-- [ ] **COM-004 — Web Push Notification Altyapısı (`10.6.3`)**
+- [x] **COM-004 — Web Push Notification Altyapısı (`10.6.3`)**
   - **Amaç:** VAPID anahtar çifti, `push_subscriptions` rotası, yeni bilet/yorumda yöneticiye anlık push gönderimi.
   - **Öncelik:** P1 | **Bağımlılık:** DATA-004
 
