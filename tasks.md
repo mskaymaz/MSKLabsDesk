@@ -1389,6 +1389,7 @@ sequenceDiagram
 ---
 
 ### AI-002 — Otomatik Mesaj Analizi & Özet (Structured Output & HITL)
+- **1. Durum:** **PASS** (Tamamlanma Tarihi: 08.10.2026 - 11:04)
 - **2. Amaç:** Gelen destek biletlerini ve mesajları AI ile analiz ederek spam sınıflandırması, aciliyet seviyesi, kategori tespiti, özet ve `ai_draft` cevap önerisi üretmek.
 - **3. Kapsam:** `backend/src/services/aiAnalysis.ts`, `messages` ve `message_events` entegrasyonu.
 - **4. Structured Output Contract:** AI çıktısı JSON şeması ile zorunlu kılınır: `{ "spam": boolean, "urgency": "LOW"|"MEDIUM"|"HIGH"|"CRITICAL", "category": string, "summary": string, "suggestedReply": string, "confidence": number, "reasoning": string }`.
@@ -1398,8 +1399,9 @@ sequenceDiagram
 - **8. Privacy / PII Minimization:** Mesaj içeriği AI'a gönderilmeden önce e-posta ve telefon gibi kişisel veriler anonimleştirilir/maskelenir.
 - **9. Performance:** *Acceptance Target:* Analiz tamamlama süresi p95 < 2500ms (Asenkron kuyruk işleme).
 - **10. DoD:**
-  - [ ] Structured output Zod doğrulaması.
-  - [ ] HITL onay akışının korunması (otomatik yanıt gönderilmemesi).
+  - [x] Structured output Zod doğrulaması.
+  - [x] HITL onay akışının korunması (otomatik yanıt gönderilmemesi).
+  - [x] *(Sonuç: PASS. backend/src/services/aiAnalysis.ts ve tests/ai002.test.ts üzerinden 10/10 test başarıyla geçmiştir. Zod schema validation, createFallbackAnalysis, PII sanitization, DATA/INSTRUCTION ayrımı, HITL non-mutation, D1 SQLite ai_summary/ai_draft güncellemesi ve message_events audit kaydı doğrulanmıştır)*.
 - **11. Bağımlılıklar:** AI-001, AI-003, DATA-001.
 - **12. Bağımlı Görevler:** API-004, UI-002, OBS-002.
 
