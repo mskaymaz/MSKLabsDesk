@@ -1427,6 +1427,7 @@ sequenceDiagram
 ---
 
 ### AI-004 — Gemini AI Çeviri & SEO API (`POST /api/v1/admin/translate`)
+- **1. Durum:** **PASS** (Tamamlanma Tarihi: 08.10.2026 - 11:40)
 - **2. Amaç:** Türkçe blog içeriklerini Gemini ile EN ve AR dillerine çevirmek, HTML yapısını bozmadan SEO özeti ve slug önerisi üretmek.
 - **3. Kapsam:** `backend/src/routes/admin/translate.ts`, `POST /api/v1/admin/translate`.
 - **4. Çeviri Bütünlük Kuralları:** HTML etiketi (`<p>`, `<h1>`, `<img>`, `<code>`), script/style içerikleri, URL'ler, Markdown syntax ve terim sözlüğü (`glossary`) koruması. Çeviride HTML yapısı kesinlikle bozulmaz.
@@ -1435,8 +1436,9 @@ sequenceDiagram
 - **7. Validation & Fallback:** Çevrilen metindeki HTML etiket sayısı orijinal metinle eşleşmezse `HTML_STRUCTURE_MISMATCH` hatası döner ve taslak olarak saklanır.
 - **8. Performance:** *Acceptance Target:* Paragraf çevirisi < 3000ms.
 - **9. DoD:**
-  - [ ] HTML etiketlerinin ve linklerin çeviri sonrası bozulmadığının doğrulanması.
-  - [ ] Admin onay akışına sunulması.
+  - [x] HTML etiketlerinin ve linklerin çeviri sonrası bozulmadığının doğrulanması.
+  - [x] Admin onay akışına sunulması (`DRAFT_TRANSLATION`).
+  - [x] *(Sonuç: PASS. backend/src/routes/admin/translate.ts ve tests/ai004.test.ts üzerinden 16/16 test (toplam AI suite 69/69 test) başarıyla geçmiştir. TR->EN/AR çevirisi, SEO özeti/slug üretimi, HTML/Markdown/URL bütünlüğü, glossary desteği, DRAFT_TRANSLATION HITL akışı, 5 req/min rate limit, X-Idempotency-Key ve AI-003 prompt injection koruması doğrulanmıştır)*.
 - **10. Bağımlılıklar:** AI-001, AI-003, DATA-007 (`glossary`).
 - **11. Bağımlı Görevler:** AI-006, I18N-004, CMS-006.
 
