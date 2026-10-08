@@ -1408,6 +1408,7 @@ sequenceDiagram
 ---
 
 ### AI-003 — Prompt Injection & Güvenlik Koruması (DATA ≠ INSTRUCTION)
+- **1. Durum:** **PASS** (Tamamlanma Tarihi: 08.10.2026 - 11:16)
 - **2. Amaç:** Kullanıcı girdilerinin sistem promptunu bozmasını, rol değiştirmesini veya gizli verileri sızdırmasını engelleyen güvenlik katmanını kurmak.
 - **3. Kapsam:** `backend/src/utils/sanitizePrompt.ts`, prompt yapıcı (prompt builder) katmanı.
 - **4. Tehdit Modeli:** Direct Prompt Injection ("Ignore previous instructions"), System Prompt Leakage, Role Impersonation, Obfuscated/Encoded Injection (Base64, Unicode bypass), Indirect Injection (HTML/Markdown payload), Tool/Function Hijacking.
@@ -1417,8 +1418,9 @@ sequenceDiagram
 - **8. Performance:** *Acceptance Target:* Prompt sanitization ek yükü < 2ms.
 - **9. Test Requirements:** 15 farklı bilinen prompt injection saldırı vektörü ile sızdırmazlık testi.
 - **10. DoD:**
-  - [ ] Injection girişimlerinde isteğin AI'a gönderilmeden çok katmanlı modelle engellenmesi.
-  - [ ] Instruction/data ayrımının (CDATA/xml) ve politika filtrelerinin doğrulanması.
+  - [x] Injection girişimlerinde isteğin AI'a gönderilmeden çok katmanlı modelle engellenmesi.
+  - [x] Instruction/data ayrımının (CDATA/xml) ve politika filtrelerinin doğrulanması.
+  - [x] *(Sonuç: PASS. backend/src/utils/sanitizePrompt.ts ve tests/ai003.test.ts üzerinden 31/31 test (toplam AI suite 53/53 test) başarıyla geçmiştir. 19 farklı injection vektörü (EN/TR/AR, Homoglyph, Base64, Script, URI, Tool hijacking, Control chars), 10 meşru false-positive kontrolü, pre-fetch interception ve <0.5ms performans doğrulanmıştır)*.
 - **11. Bağımlılıklar:** AI-001.
 - **12. Bağımlı Görevler:** AI-002, AI-004.
 
