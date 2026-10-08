@@ -2155,8 +2155,8 @@ sequenceDiagram
 - **7. i18n & Responsiveness:** Reklam alanı başlığı/açıklaması TR/EN/AR dil sözlüğü ile sunulur. Masaüstü/tablet/mobil cihaz kırılımları ayrı ayrı ayarlanabilir.
 - **8. Performance:** *Acceptance Target:* Reklam ayarları kaydetme ve API yanıt süresi < 50ms.
 - **9. DoD:**
-  - [ ] Zod validasyonunun, `ca-pub-` regex denetiminin ve `OBS-002` audit kaydının doğrulanması.
-  - [ ] Ham JS enjeksiyonunun engellendiğinin teyidi.
+  - [x] Zod validasyonunun, `ca-pub-` regex denetiminin ve `OBS-002` audit kaydının doğrulanması.
+  - [x] Ham JS enjeksiyonunun engellendiğinin teyidi.
 - **10. Bağımlılıklar:** DATA-005, SEC-RBAC-001, OBS-002.
 - **11. Bağımlı Görevler:** ADS-002, CMS-004.
 
@@ -2171,8 +2171,8 @@ sequenceDiagram
 - **7. Accessible Modal & Responsiveness:** Focus trap, ESC kapatma, backdrop click, ARIA etiketleri (`aria-modal="true"`, `aria-labelledby`), mobil cihazlarda kaydırılabilir duyarlı modal düzeni.
 - **8. Performance:** *Acceptance Target:* Önizleme modalı açılış ve simülasyon derleme süresi < 15ms.
 - **9. DoD:**
-  - [ ] Mock creative sandbox izolasyonunun, cihaz geçişlerinin ve `DRAFT` vs `PRODUCTION` ayrımının teyit edilmesi.
-  - [ ] Odak hapsi (Focus Trap) ve ESC ile kapatma testlerinin geçmesi.
+  - [x] Mock creative sandbox izolasyonunun, cihaz geçişlerinin ve `DRAFT` vs `PRODUCTION` ayrımının teyit edilmesi.
+  - [x] Odak hapsi (Focus Trap) ve ESC ile kapatma testlerinin geçmesi.
 - **10. Bağımlılıklar:** ADS-001, UI-005, UI-006.
 - **11. Bağımlı Görevler:** CMS-007, INT-002.
 
@@ -2191,22 +2191,22 @@ sequenceDiagram
 | **Responsive (Mobile)** | <640px Mobilde 728x90 Reklam Alanı | Mobil kısıtlı alanda taşma önlenir, responsive mobile banner'a daralır. |
 
 #### Section-Level Definition of Done (DoD)
-- [ ] Reklam yapılandırmasında ham JS enjeksiyonunun engellenmesi ve Zod regex doğrulamasının tanımlanması.
-- [ ] 10 standart AdSense preset boyutunun ve responsive cihaz aralıklarının netleştirilmesi.
-- [ ] `AdPreviewModal.tsx` sandboxed iframe / mock creative izolasyonunun tanımlanması.
-- [ ] `DRAFT` yapılandırma ile `PRODUCTION` canlı yayını ayrımının doğrulanması.
-- [ ] `SUPER_ADMIN` / `settings.manage` RBAC yetkilendirmesinin ve `OBS-002` audit loglamasının tanımlanması.
-- [ ] Ödeme/abonelik/Stripe bağımlılığı oluşturulmadığının teyit edilmesi.
-- [ ] Zero-Cost Guard ($0/Ay) ilkesinin ve reklam test matrisinin tamamlanması.
+- [x] Reklam yapılandırmasında ham JS enjeksiyonunun engellenmesi ve Zod regex doğrulamasının tanımlanması.
+- [x] 10 standart AdSense preset boyutunun ve responsive cihaz aralıklarının netleştirilmesi.
+- [x] `AdPreviewModal.tsx` sandboxed iframe / mock creative izolasyonunun tanımlanması.
+- [x] `DRAFT` yapılandırma ile `PRODUCTION` canlı yayını ayrımının doğrulanması.
+- [x] `SUPER_ADMIN` / `settings.manage` RBAC yetkilendirmesinin ve `OBS-002` audit loglamasının tanımlanması.
+- [x] Ödeme/abonelik/Stripe bağımlılığı oluşturulmadığının teyit edilmesi.
+- [x] Zero-Cost Guard ($0/Ay) ilkesinin ve reklam test matrisinin tamamlanması.
 
 ---
 
 ### Özet Görev Listesi (10. ADS & MONETIZATION MANAGEMENT)
 
-- [ ] **ADS-001 — AdSense Ayar & Preset Paneli (`11.1` & `11.3`)**
+- [x] **ADS-001 — AdSense Ayar & Preset Paneli (`11.1` & `11.3`)**
   - **Amaç:** 10 standart AdSense ebadı preset'i, custom genişlik/yükseklik, marj slider'ları, sticky toggle, Zod regex güvenliği ve `OBS-002` audit kaydı.
   - **Öncelik:** P1 | **Bağımlılık:** DATA-005, SEC-RBAC-001, OBS-002
-- [ ] **ADS-002 — Canlı Reklam Önizleme Modalı (`11.4`)**
+- [x] **ADS-002 — Canlı Reklam Önizleme Modalı (`11.4`)**
   - **Amaç:** `AdPreviewModal.tsx` ile 3. taraf JS çalıştırmayan sandboxed iframe / mock creative önizlemesi, DRAFT vs PROD ayrımı ve responsive simülasyon.
   - **Öncelik:** P1 | **Bağımlılık:** ADS-001, UI-005, UI-006
 

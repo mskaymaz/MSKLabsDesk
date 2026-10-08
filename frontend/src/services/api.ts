@@ -228,5 +228,38 @@ export const api = {
     if (!res.ok) throw new Error('Şablon güncellenemedi.');
     return res.json();
   },
+
+  // Headless CMS — Ads Management (ADS-001 & ADS-002)
+  async getAds() {
+    const res = await fetch(`${API_BASE}/v1/admin/ads`, { headers: getHeaders() });
+    if (!res.ok) throw new Error('Reklam ayarları yüklenemedi.');
+    return res.json();
+  },
+
+  async updateAd(id: number | string, data: any) {
+    const res = await fetch(`${API_BASE}/v1/admin/ads/${id}`, {
+      method: 'PUT',
+      headers: getHeaders(),
+      body: JSON.stringify(data),
+    });
+    if (!res.ok) {
+      const errData = await res.json().catch(() => ({}));
+      throw new Error(errData.error || errData.message || 'Reklam ayarları güncellenemedi.');
+    }
+    return res.json();
+  },
+
+  async createAd(data: any) {
+    const res = await fetch(`${API_BASE}/v1/admin/ads`, {
+      method: 'POST',
+      headers: getHeaders(),
+      body: JSON.stringify(data),
+    });
+    if (!res.ok) {
+      const errData = await res.json().catch(() => ({}));
+      throw new Error(errData.error || errData.message || 'Reklam alanı oluşturulamadı.');
+    }
+    return res.json();
+  },
 };
 
