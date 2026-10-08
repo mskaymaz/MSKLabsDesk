@@ -4,8 +4,10 @@ import { api } from '../services/api';
 import { PostFilterBar } from '../components/posts/PostFilterBar';
 import { PostList } from '../components/posts/PostList';
 import { PostEditorModal, type PostFormData } from '../components/posts/PostEditorModal';
+import { useTranslation } from '../context/I18nContext';
 
 export const PostsView: React.FC = () => {
+  const { t } = useTranslation();
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [channels, setChannels] = useState<BlogChannel[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -55,7 +57,7 @@ export const PostsView: React.FC = () => {
 
   const handleAiTranslate = async () => {
     if (!formData.title_tr || !formData.content_tr) {
-      alert('Lütfen önce Türkçe başlık ve içerik alanlarını doldurun!');
+      alert(t('posts.fillTrFirst'));
       return;
     }
 
@@ -68,22 +70,22 @@ export const PostsView: React.FC = () => {
       });
 
       if (res.success && res.translation) {
-        const t = res.translation;
+        const trans = res.translation;
         setFormData((prev) => ({
           ...prev,
-          title_en: t.title_en || prev.title_en,
-          title_ar: t.title_ar || prev.title_ar,
-          summary_tr: t.summary_tr || prev.summary_tr,
-          summary_en: t.summary_en || prev.summary_en,
-          summary_ar: t.summary_ar || prev.summary_ar,
-          content_en: t.content_en || prev.content_en,
-          content_ar: t.content_ar || prev.content_ar,
-          meta_keywords: t.meta_keywords || prev.meta_keywords,
+          title_en: trans.title_en || prev.title_en,
+          title_ar: trans.title_ar || prev.title_ar,
+          summary_tr: trans.summary_tr || prev.summary_tr,
+          summary_en: trans.summary_en || prev.summary_en,
+          summary_ar: trans.summary_ar || prev.summary_ar,
+          content_en: trans.content_en || prev.content_en,
+          content_ar: trans.content_ar || prev.content_ar,
+          meta_keywords: trans.meta_keywords || prev.meta_keywords,
         }));
-        alert('✨ Gemini AI ile İngilizce ve Arapça çevirileri ile SEO özetleri başarıyla üretildi!');
+        alert(t('posts.aiSuccess'));
       }
     } catch (err: any) {
-      alert(err.message || 'AI Çevirisi başarısız oldu');
+      alert(err.message || t('common.error'));
     } finally {
       setAiTranslating(false);
     }
@@ -103,17 +105,17 @@ export const PostsView: React.FC = () => {
       setEditingPost(null);
       loadData();
     } catch (err: any) {
-      alert(err.message || 'Kaydedilemedi');
+      alert(err.message || t('common.error'));
     }
   };
 
   const handleDeletePost = async (id: string) => {
-    if (!confirm('Bu yazıyı silmek istediğinize emin misiniz?')) return;
+    if (!confirm(t('common.confirm'))) return;
     try {
       await api.deletePost(id);
       loadData();
     } catch (err: any) {
-      alert(err.message || 'Silinemedi');
+      alert(err.message || t('common.error'));
     }
   };
 

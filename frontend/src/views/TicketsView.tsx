@@ -3,6 +3,7 @@ import type { Ticket, TicketDetailResponse } from '../types';
 import { Search, Filter, Sparkles, Eye, Clock } from 'lucide-react';
 import { api } from '../services/api';
 import { TicketDetailModal } from '../components/TicketDetailModal';
+import { useTranslation } from '../context/I18nContext';
 
 interface TicketsViewProps {
   tickets: Ticket[];
@@ -15,18 +16,21 @@ export const TicketsView: React.FC<TicketsViewProps> = ({
   onRefresh,
   onOpenCoupon,
 }) => {
+  const { t, language } = useTranslation();
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [selectedTicketDetail, setSelectedTicketDetail] = useState<TicketDetailResponse | null>(null);
   const [loadingDetail, setLoadingDetail] = useState(false);
 
-  const filteredTickets = tickets.filter((t) => {
-    const matchesStatus = statusFilter === 'all' || t.status === statusFilter;
+  const locale = language === 'ar' ? 'ar-SA' : language === 'en' ? 'en-US' : 'tr-TR';
+
+  const filteredTickets = tickets.filter((tItem) => {
+    const matchesStatus = statusFilter === 'all' || tItem.status === statusFilter;
     const matchesSearch =
-      t.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      t.subject.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      t.sender_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      t.sender_email.toLowerCase().includes(searchQuery.toLowerCase());
+      tItem.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      tItem.subject.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      tItem.sender_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      tItem.sender_email.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesStatus && matchesSearch;
   });
 
@@ -36,7 +40,7 @@ export const TicketsView: React.FC<TicketsViewProps> = ({
       const res = await api.getTicketDetail(id);
       setSelectedTicketDetail(res);
     } catch (err) {
-      alert('Bilet detayı yüklenemedi.');
+      alert(t('tickets.loadError'));
     } finally {
       setLoadingDetail(false);
     }
@@ -53,8 +57,8 @@ export const TicketsView: React.FC<TicketsViewProps> = ({
   return (
     <div className="animate-fade-in">
       <div>
-        <h1 className="page-title">Destek & Talep Yönetimi</h1>
-        <p className="page-subtitle">Kullanıcılardan gelen destek taleplerini inceleyin, AI taslaklarıyla yanıtlayın.</p>
+        <h1 className="page-title">{t('common.tickets')}</h1>
+        <p className="page-subtitle">{t('tickets.count', { count: filteredTickets.length })}</p>
       </div>
 
       {/* Filter & Search Bar */}
@@ -64,7 +68,7 @@ export const TicketsView: React.FC<TicketsViewProps> = ({
           <input
             type="text"
             className="form-input"
-            placeholder="Bilet no, konu, kişi veya e-posta ile ara..."
+            placeholder={t('common.search')}
             style={{ paddingLeft: '38px' }}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
@@ -79,12 +83,11 @@ export const TicketsView: React.FC<TicketsViewProps> = ({
             onChange={(e) => setStatusFilter(e.target.value)}
             style={{ width: 'auto' }}
           >
-            <option value="all">Tüm Durumlar</option>
-            <option value="new">Yeni (New)</option>
-            <option value="in_progress">İşlemde (In Progress)</option>
-            <option value="resolved">Çözüldü (Resolved)</option>
-            <option value="rejected">Reddedildi (Rejected)</option>
-            <option value="closed">Kapatıldı (Closed)</option>
+            <option value="all">{t('common.all')}</option>
+            <option value="new">{t('tickets.pending')}</option>
+            <option value="in_progress">{t('tickets.inProgress')}</option>
+            <option value="resolved">{t('tickets.resolved')}</option>
+            <option value="rejected">{t('tickets.rejected')}</option>
           </select>
         </div>
       </div>
@@ -92,7 +95,7 @@ export const TicketsView: React.FC<TicketsViewProps> = ({
       {/* Tickets Table / Cards */}
       {filteredTickets.length === 0 ? (
         <div className="glass-card" style={{ textAlign: 'center', padding: '40px' }}>
-          <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>Filtrelere uygun destek bilet kaydı bulunamadı.</p>
+          <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>{t('common.loading')}</p>
         </div>
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
@@ -128,7 +131,7 @@ export const TicketsView: React.FC<TicketsViewProps> = ({
                   color: '#D1D5DB'
                 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '4px', color: 'var(--accent-cyan)', fontWeight: 700, fontSize: '0.75rem', marginBottom: '2px' }}>
-                    <Sparkles size={12} /> AI Özeti
+                    <Sparkles size={12} /> {t('tickets.aiAnalysis')}
                   </div>
                   {ticket.ai_summary}
                 </div>
@@ -136,14 +139,14 @@ export const TicketsView: React.FC<TicketsViewProps> = ({
 
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                 <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                  <Clock size={12} /> {new Date(ticket.created_at).toLocaleDateString('tr-TR')}
+                  <Clock size={12} /> {new Date(ticket.created_at).toLocaleDateString(locale)}
                 </span>
                 <button
                   className="btn btn-primary btn-sm"
                   onClick={() => handleOpenDetail(ticket.id)}
                   disabled={loadingDetail}
                 >
-                  <Eye size={14} /> İncele & Yanıtla
+                  <Eye size={14} /> {t('common.view')}
                 </button>
               </div>
             </div>

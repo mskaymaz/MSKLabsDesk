@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Megaphone, DollarSign, CheckCircle } from 'lucide-react';
 import type { SiteTemplate } from '../types';
 import { api } from '../services/api';
+import { useTranslation } from '../context/I18nContext';
 
 export const TemplatesView: React.FC = () => {
+  const { t } = useTranslation();
   const [loading, setLoading] = useState<boolean>(true);
   const [message, setMessage] = useState<string>('');
 
@@ -16,7 +18,7 @@ export const TemplatesView: React.FC = () => {
       const res = await api.getTemplates();
       const list: SiteTemplate[] = res.templates || [];
 
-      const ann = list.find((t) => t.key_name === 'announcement_bar');
+      const ann = list.find((tItem) => tItem.key_name === 'announcement_bar');
       if (ann) {
         setAnnouncementText({
           tr: ann.content_tr || '',
@@ -25,8 +27,7 @@ export const TemplatesView: React.FC = () => {
         });
       }
 
-
-      const ad = list.find((t) => t.key_name === 'ad_banner_top');
+      const ad = list.find((tItem) => tItem.key_name === 'ad_banner_top');
       if (ad) {
         setAdTopText({
           tr: ad.content_tr || '',
@@ -55,10 +56,10 @@ export const TemplatesView: React.FC = () => {
         content_ar: announcementText.ar,
         is_active: true,
       });
-      setMessage('Header Duyuru Bandı Kaydedildi!');
+      setMessage(t('common.success'));
       setTimeout(() => setMessage(''), 3000);
     } catch (err: any) {
-      alert(err.message || 'Hata oluştu');
+      alert(err.message || t('common.error'));
     }
   };
 
@@ -72,10 +73,10 @@ export const TemplatesView: React.FC = () => {
         content_ar: adTopText.ar,
         is_active: true,
       });
-      setMessage('Üst Reklam Alanı Kaydedildi!');
+      setMessage(t('common.success'));
       setTimeout(() => setMessage(''), 3000);
     } catch (err: any) {
-      alert(err.message || 'Hata oluştu');
+      alert(err.message || t('common.error'));
     }
   };
 
@@ -83,9 +84,9 @@ export const TemplatesView: React.FC = () => {
     <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
       {/* Header */}
       <div>
-        <h1 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#FFF' }}>Şablon & Reklam Alanları Yönetimi</h1>
+        <h1 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#FFF' }}>{t('templates.title')}</h1>
         <p style={{ fontSize: '0.88rem', color: 'var(--text-secondary)' }}>
-          Web sitenizin üst duyuru bantlarını, reklam kodlarını ve 3 dilli kurumsal alanlarını canlıda yönetin.
+          {t('templates.title')}
         </p>
       </div>
 
@@ -97,54 +98,74 @@ export const TemplatesView: React.FC = () => {
       )}
 
       {loading ? (
-        <p style={{ color: 'var(--text-muted)' }}>Şablonlar yükleniyor...</p>
+        <p style={{ color: 'var(--text-muted)' }}>{t('common.loading')}</p>
       ) : (
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: '20px' }}>
           {/* Announcement Bar Form */}
-          <div className="glass-card" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <div style={{ padding: '8px', background: 'rgba(245, 158, 11, 0.15)', borderRadius: '8px', color: 'var(--accent-amber)' }}>
-                <Megaphone size={20} />
-              </div>
-              <h3 style={{ fontSize: '1.1rem', fontWeight: 800, color: '#FFF' }}>Header Duyuru Bandı (Announcement Bar)</h3>
+          <div className="glass-card">
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
+              <Megaphone size={20} color="var(--accent-amber)" />
+              <h2 style={{ fontSize: '1.1rem', fontWeight: 800, color: '#FFF' }}>{t('templates.newTemplate')}</h2>
             </div>
 
             <form onSubmit={handleSaveAnnouncement} style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
               <div>
-                <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'block', marginBottom: '4px' }}>Türkçe Duyuru Metni (TR)</label>
-                <input type="text" placeholder="Örn: 🎉 Yeni mobil uygulamamız yayınlandı!" value={announcementText.tr} onChange={(e) => setAnnouncementText({ ...announcementText, tr: e.target.value })} style={{ width: '100%', padding: '10px', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border-color)', borderRadius: '6px', color: '#FFF' }} />
+                <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'block', marginBottom: '4px' }}>TR</label>
+                <input
+                  type="text"
+                  value={announcementText.tr}
+                  onChange={(e) => setAnnouncementText({ ...announcementText, tr: e.target.value })}
+                  style={{ width: '100%', padding: '8px', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border-color)', borderRadius: '6px', color: '#FFF' }}
+                />
               </div>
+
               <div>
-                <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'block', marginBottom: '4px' }}>İngilizce Duyuru Metni (EN)</label>
-                <input type="text" placeholder="Örn: 🎉 Our new mobile app is live!" value={announcementText.en} onChange={(e) => setAnnouncementText({ ...announcementText, en: e.target.value })} style={{ width: '100%', padding: '10px', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border-color)', borderRadius: '6px', color: '#FFF' }} />
+                <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'block', marginBottom: '4px' }}>EN</label>
+                <input
+                  type="text"
+                  value={announcementText.en}
+                  onChange={(e) => setAnnouncementText({ ...announcementText, en: e.target.value })}
+                  style={{ width: '100%', padding: '8px', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border-color)', borderRadius: '6px', color: '#FFF' }}
+                />
               </div>
-              <div dir="rtl">
-                <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'block', marginBottom: '4px' }}>Arapça Duyuru Metni (AR)</label>
-                <input type="text" placeholder="مثال: 🎉 تم إطلاق تطبيقنا الجديد!" value={announcementText.ar} onChange={(e) => setAnnouncementText({ ...announcementText, ar: e.target.value })} style={{ width: '100%', padding: '10px', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border-color)', borderRadius: '6px', color: '#FFF', fontFamily: 'Cairo' }} />
+
+              <div>
+                <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'block', marginBottom: '4px' }}>AR</label>
+                <input
+                  type="text"
+                  value={announcementText.ar}
+                  onChange={(e) => setAnnouncementText({ ...announcementText, ar: e.target.value })}
+                  style={{ width: '100%', padding: '8px', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border-color)', borderRadius: '6px', color: '#FFF' }}
+                />
               </div>
-              <button type="submit" style={{ padding: '10px', background: 'var(--accent-primary)', border: 'none', color: '#FFF', borderRadius: '6px', fontWeight: 700, cursor: 'pointer', marginTop: '8px' }}>Duyuru Bandını Kaydet</button>
+
+              <button type="submit" style={{ marginTop: '8px', padding: '10px', background: 'var(--accent-primary)', border: 'none', color: '#FFF', borderRadius: '6px', fontWeight: 700, cursor: 'pointer' }}>
+                {t('common.save')}
+              </button>
             </form>
           </div>
 
-          {/* Ad Banner Top Form */}
-          <div className="glass-card" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <div style={{ padding: '8px', background: 'rgba(16, 185, 129, 0.15)', borderRadius: '8px', color: 'var(--accent-emerald)' }}>
-                <DollarSign size={20} />
-              </div>
-              <h3 style={{ fontSize: '1.1rem', fontWeight: 800, color: '#FFF' }}>Üst Reklam Alanı (Ad Banner Top)</h3>
+          {/* Ad Top Form */}
+          <div className="glass-card">
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
+              <DollarSign size={20} color="var(--accent-emerald)" />
+              <h2 style={{ fontSize: '1.1rem', fontWeight: 800, color: '#FFF' }}>{t('templates.title')}</h2>
             </div>
 
             <form onSubmit={handleSaveAd} style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
               <div>
-                <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'block', marginBottom: '4px' }}>AdSense / HTML Reklam Kodu (TR)</label>
-                <textarea rows={4} placeholder="<script>...</script> veya <img> reklam kodu" value={adTopText.tr} onChange={(e) => setAdTopText({ ...adTopText, tr: e.target.value })} style={{ width: '100%', padding: '10px', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border-color)', borderRadius: '6px', color: '#FFF', fontFamily: 'monospace' }} />
+                <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'block', marginBottom: '4px' }}>TR HTML / Code</label>
+                <textarea
+                  rows={3}
+                  value={adTopText.tr}
+                  onChange={(e) => setAdTopText({ ...adTopText, tr: e.target.value })}
+                  style={{ width: '100%', padding: '8px', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border-color)', borderRadius: '6px', color: '#FFF' }}
+                />
               </div>
-              <div>
-                <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'block', marginBottom: '4px' }}>AdSense / HTML Reklam Kodu (EN)</label>
-                <textarea rows={4} placeholder="English Ad Banner HTML" value={adTopText.en} onChange={(e) => setAdTopText({ ...adTopText, en: e.target.value })} style={{ width: '100%', padding: '10px', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border-color)', borderRadius: '6px', color: '#FFF', fontFamily: 'monospace' }} />
-              </div>
-              <button type="submit" style={{ padding: '10px', background: 'var(--accent-emerald)', border: 'none', color: '#FFF', borderRadius: '6px', fontWeight: 700, cursor: 'pointer', marginTop: '8px' }}>Reklam Alanını Kaydet</button>
+
+              <button type="submit" style={{ marginTop: '8px', padding: '10px', background: 'var(--accent-emerald)', border: 'none', color: '#FFF', borderRadius: '6px', fontWeight: 700, cursor: 'pointer' }}>
+                {t('common.save')}
+              </button>
             </form>
           </div>
         </div>

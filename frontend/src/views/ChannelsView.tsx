@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { BookOpen, Plus, Trash2, CheckCircle } from 'lucide-react';
 import type { BlogChannel } from '../types';
 import { api } from '../services/api';
+import { useTranslation } from '../context/I18nContext';
 
 export const ChannelsView: React.FC = () => {
+  const { t } = useTranslation();
   const [channels, setChannels] = useState<BlogChannel[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [showModal, setShowModal] = useState<boolean>(false);
@@ -43,7 +45,7 @@ export const ChannelsView: React.FC = () => {
 
     try {
       await api.createChannel(formData);
-      setMessage('Blog Türü Başarıyla Oluşturuldu!');
+      setMessage(t('common.success'));
       setShowModal(false);
       setFormData({
         slug: '',
@@ -58,17 +60,17 @@ export const ChannelsView: React.FC = () => {
       });
       loadChannels();
     } catch (err: any) {
-      alert(err.message || 'Hata oluştu');
+      alert(err.message || t('common.error'));
     }
   };
 
   const handleDeleteChannel = async (id: string) => {
-    if (!confirm('Bu blog kanalını ve altındaki kategorileri silmek istediğinize emin misiniz?')) return;
+    if (!confirm(t('common.confirm'))) return;
     try {
       await api.deleteChannel(id);
       loadChannels();
     } catch (err: any) {
-      alert(err.message || 'Silinemedi');
+      alert(err.message || t('common.error'));
     }
   };
 
@@ -77,9 +79,9 @@ export const ChannelsView: React.FC = () => {
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div>
-          <h1 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#FFF' }}>Dinamik Blog Türleri & Kanalları</h1>
+          <h1 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#FFF' }}>{t('channels.title')}</h1>
           <p style={{ fontSize: '0.88rem', color: 'var(--text-secondary)' }}>
-            Sitede yayınlanacak yeni blog kanallarını (BİZCE, HİKAYELER, ŞİİRLER vb.) 3 dilde yönetin.
+            {t('channels.title')}
           </p>
         </div>
         <button
@@ -98,7 +100,7 @@ export const ChannelsView: React.FC = () => {
           }}
         >
           <Plus size={18} />
-          <span>Yeni Blog Türü Aç</span>
+          <span>{t('channels.addChannel')}</span>
         </button>
       </div>
 
@@ -111,7 +113,7 @@ export const ChannelsView: React.FC = () => {
 
       {/* Grid List */}
       {loading ? (
-        <p style={{ color: 'var(--text-muted)' }}>Kanallar yükleniyor...</p>
+        <p style={{ color: 'var(--text-muted)' }}>{t('common.loading')}</p>
       ) : (
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '16px' }}>
           {channels.map((ch) => (
@@ -136,12 +138,12 @@ export const ChannelsView: React.FC = () => {
                 </div>
 
                 <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', lineHeight: 1.5 }}>
-                  {ch.description_tr || 'Açıklama girilmedi.'}
+                  {ch.description_tr || t('common.error')}
                 </p>
 
                 <div style={{ display: 'flex', gap: '6px', marginTop: '12px' }}>
-                  <span style={{ fontSize: '0.7rem', padding: '2px 6px', background: 'rgba(255,255,255,0.05)', borderRadius: '4px', color: 'var(--text-muted)' }}>🇬🇧 {ch.name_en || 'Çeviri Yok'}</span>
-                  <span style={{ fontSize: '0.7rem', padding: '2px 6px', background: 'rgba(255,255,255,0.05)', borderRadius: '4px', color: 'var(--text-muted)' }}>🇸🇦 {ch.name_ar || 'لا يوجد'}</span>
+                  <span style={{ fontSize: '0.7rem', padding: '2px 6px', background: 'rgba(255,255,255,0.05)', borderRadius: '4px', color: 'var(--text-muted)' }}>🇬🇧 {ch.name_en || 'EN'}</span>
+                  <span style={{ fontSize: '0.7rem', padding: '2px 6px', background: 'rgba(255,255,255,0.05)', borderRadius: '4px', color: 'var(--text-muted)' }}>🇸🇦 {ch.name_ar || 'AR'}</span>
                 </div>
               </div>
             </div>
@@ -153,14 +155,14 @@ export const ChannelsView: React.FC = () => {
       {showModal && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(8px)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}>
           <div className="glass-card" style={{ width: '100%', maxWidth: '500px', background: '#0F1522' }}>
-            <h2 style={{ fontSize: '1.2rem', fontWeight: 800, color: '#FFF', marginBottom: '16px' }}>Sırfıdan Yeni Blog Türü Oluştur</h2>
+            <h2 style={{ fontSize: '1.2rem', fontWeight: 800, color: '#FFF', marginBottom: '16px' }}>{t('channels.addChannel')}</h2>
 
             <form onSubmit={handleCreateChannel} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
               <div>
-                <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'block', marginBottom: '4px' }}>Blog Adı (Türkçe - Zorunlu)</label>
+                <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'block', marginBottom: '4px' }}>{t('channels.channelName')} (TR)</label>
                 <input
                   type="text"
-                  placeholder="Örn: Hikayeler, Şiirler, Gezi Notları"
+                  placeholder="TR Name"
                   value={formData.name_tr}
                   onChange={(e) => {
                     const val = e.target.value;
@@ -173,7 +175,7 @@ export const ChannelsView: React.FC = () => {
               </div>
 
               <div>
-                <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'block', marginBottom: '4px' }}>URL Slug</label>
+                <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'block', marginBottom: '4px' }}>{t('channels.slug')}</label>
                 <input
                   type="text"
                   value={formData.slug}
@@ -185,20 +187,20 @@ export const ChannelsView: React.FC = () => {
 
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
                 <div>
-                  <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'block', marginBottom: '4px' }}>İngilizce Adı (EN)</label>
+                  <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'block', marginBottom: '4px' }}>{t('channels.channelName')} (EN)</label>
                   <input
                     type="text"
-                    placeholder="Örn: Stories"
+                    placeholder="EN Name"
                     value={formData.name_en}
                     onChange={(e) => setFormData({ ...formData, name_en: e.target.value })}
                     style={{ width: '100%', padding: '10px', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border-color)', borderRadius: '6px', color: '#FFF' }}
                   />
                 </div>
                 <div>
-                  <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'block', marginBottom: '4px' }}>Arapça Adı (AR)</label>
+                  <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'block', marginBottom: '4px' }}>{t('channels.channelName')} (AR)</label>
                   <input
                     type="text"
-                    placeholder="Örn: قصص"
+                    placeholder="AR Name"
                     value={formData.name_ar}
                     onChange={(e) => setFormData({ ...formData, name_ar: e.target.value })}
                     style={{ width: '100%', padding: '10px', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border-color)', borderRadius: '6px', color: '#FFF' }}
@@ -207,7 +209,7 @@ export const ChannelsView: React.FC = () => {
               </div>
 
               <div>
-                <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'block', marginBottom: '4px' }}>Kanal Açıklaması (TR)</label>
+                <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'block', marginBottom: '4px' }}>{t('channels.channelName')} (TR)</label>
                 <textarea
                   rows={2}
                   value={formData.description_tr}
@@ -217,8 +219,8 @@ export const ChannelsView: React.FC = () => {
               </div>
 
               <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', marginTop: '12px' }}>
-                <button type="button" onClick={() => setShowModal(false)} style={{ padding: '8px 16px', background: 'transparent', border: '1px solid var(--border-color)', color: 'var(--text-secondary)', borderRadius: '6px', cursor: 'pointer' }}>İptal</button>
-                <button type="submit" style={{ padding: '8px 16px', background: 'var(--accent-primary)', border: 'none', color: '#FFF', borderRadius: '6px', fontWeight: 700, cursor: 'pointer' }}>Oluştur</button>
+                <button type="button" onClick={() => setShowModal(false)} style={{ padding: '8px 16px', background: 'transparent', border: '1px solid var(--border-color)', color: 'var(--text-secondary)', borderRadius: '6px', cursor: 'pointer' }}>{t('common.cancel')}</button>
+                <button type="submit" style={{ padding: '8px 16px', background: 'var(--accent-primary)', border: 'none', color: '#FFF', borderRadius: '6px', fontWeight: 700, cursor: 'pointer' }}>{t('common.save')}</button>
               </div>
             </form>
           </div>

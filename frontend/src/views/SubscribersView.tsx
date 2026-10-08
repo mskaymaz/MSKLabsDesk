@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import type { Subscriber } from '../types';
 import { Mail, CheckCircle2, XCircle, Search, ShieldCheck } from 'lucide-react';
+import { useTranslation } from '../context/I18nContext';
 
 interface SubscribersViewProps {
   subscribers: Subscriber[];
 }
 
 export const SubscribersView: React.FC<SubscribersViewProps> = ({ subscribers }) => {
+  const { t } = useTranslation();
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState<'all' | 'verified' | 'unverified' | 'unsubscribed'>('all');
 
@@ -22,8 +24,8 @@ export const SubscribersView: React.FC<SubscribersViewProps> = ({ subscribers })
   return (
     <div className="animate-fade-in">
       <div>
-        <h1 className="page-title">Bülten Aboneleri</h1>
-        <p className="page-subtitle">Sisteme kayıtlı aktif e-posta aboneleri, KVKK onay durumu ve bülten ayrılma kayıtları.</p>
+        <h1 className="page-title">{t('subscribers.title')}</h1>
+        <p className="page-subtitle">{t('dashboard.totalSubscribers')}: {subscribers.length}</p>
       </div>
 
       <div className="glass-card" style={{ padding: '16px', marginBottom: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
@@ -32,7 +34,7 @@ export const SubscribersView: React.FC<SubscribersViewProps> = ({ subscribers })
           <input
             type="text"
             className="form-input"
-            placeholder="Abone e-postası ara..."
+            placeholder={t('common.search')}
             style={{ paddingLeft: '38px' }}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
@@ -46,13 +48,13 @@ export const SubscribersView: React.FC<SubscribersViewProps> = ({ subscribers })
             onChange={(e) => setStatusFilter(e.target.value as any)}
             style={{ width: '180px' }}
           >
-            <option value="all">Tüm Durumlar</option>
-            <option value="verified">Doğrulanmış (Aktif)</option>
+            <option value="all">{t('common.all')}</option>
+            <option value="verified">Doğrulanmış</option>
             <option value="unverified">Doğrulanmamış</option>
-            <option value="unsubscribed">Ayrılanlar (Pasif)</option>
+            <option value="unsubscribed">Ayrılanlar</option>
           </select>
           <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', fontWeight: 600 }}>
-            Toplam {filtered.length} Abone
+            {t('common.all')}: {filtered.length}
           </span>
         </div>
       </div>
@@ -61,10 +63,10 @@ export const SubscribersView: React.FC<SubscribersViewProps> = ({ subscribers })
         <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '0.88rem' }}>
           <thead>
             <tr style={{ background: 'rgba(255,255,255,0.03)', borderBottom: '1px solid var(--border-color)', color: 'var(--text-secondary)' }}>
-              <th style={{ padding: '14px 20px' }}>E-Posta Adresi</th>
-              <th style={{ padding: '14px 20px' }}>Doğrulama Durumu</th>
-              <th style={{ padding: '14px 20px' }}>KVKK Onayı</th>
-              <th style={{ padding: '14px 20px' }}>Kayıt Tarihi</th>
+              <th style={{ padding: '14px 20px' }}>{t('subscribers.email')}</th>
+              <th style={{ padding: '14px 20px' }}>{t('common.status')}</th>
+              <th style={{ padding: '14px 20px' }}>KVKK</th>
+              <th style={{ padding: '14px 20px' }}>{t('subscribers.subscribedAt')}</th>
               <th style={{ padding: '14px 20px' }}>Ayrılma Tarihi</th>
             </tr>
           </thead>
@@ -72,7 +74,7 @@ export const SubscribersView: React.FC<SubscribersViewProps> = ({ subscribers })
             {filtered.length === 0 ? (
               <tr>
                 <td colSpan={5} style={{ padding: '30px', textAlign: 'center', color: 'var(--text-muted)' }}>
-                  Kriterlere uygun abone bulunamadı.
+                  {t('common.loading')}
                 </td>
               </tr>
             ) : (
@@ -98,7 +100,7 @@ export const SubscribersView: React.FC<SubscribersViewProps> = ({ subscribers })
                   </td>
                   <td style={{ padding: '14px 20px' }}>
                     <span style={{ color: 'var(--accent-emerald)', fontSize: '0.8rem', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-                      <ShieldCheck size={14} /> Evet (Kabul)
+                      <ShieldCheck size={14} /> Evet
                     </span>
                   </td>
                   <td style={{ padding: '14px 20px', color: 'var(--text-muted)' }}>

@@ -1,5 +1,6 @@
 import React from 'react';
 import type { Ticket, CommentItem, Subscriber } from '../types';
+import { useTranslation } from '../context/I18nContext';
 import { 
   Inbox, 
   MessageSquare, 
@@ -24,14 +25,17 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
   subscribers,
   onNavigate,
 }) => {
+  const { t, language } = useTranslation();
   const pendingTickets = tickets.filter((t) => t.status === 'new' || t.status === 'in_progress');
   const pendingComments = comments.filter((c) => c.status === 'pending');
+
+  const locale = language === 'ar' ? 'ar-SA' : language === 'en' ? 'en-US' : 'tr-TR';
 
   return (
     <div className="animate-fade-in">
       <div>
-        <h1 className="page-title">Genel Bakış & Özet</h1>
-        <p className="page-subtitle">Sistem durumu, bekleyen bildirimler ve yapay zeka özetleri.</p>
+        <h1 className="page-title">{t('dashboard.quickStats')}</h1>
+        <p className="page-subtitle">{t('common.welcome', { name: 'Admin' })}</p>
       </div>
 
       {/* Metric Cards Grid */}
@@ -44,7 +48,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         <div className="glass-card glass-card-hover" onClick={() => onNavigate('tickets')} style={{ cursor: 'pointer' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
             <div>
-              <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', fontWeight: 600 }}>Bekleyen Biletler</span>
+              <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', fontWeight: 600 }}>{t('dashboard.totalTickets')}</span>
               <h3 style={{ fontSize: '2rem', fontWeight: 800, color: '#FFF', marginTop: '4px' }}>{pendingTickets.length}</h3>
             </div>
             <div style={{ padding: '10px', background: 'rgba(99, 102, 241, 0.15)', borderRadius: '12px', color: 'var(--accent-primary)' }}>
@@ -52,14 +56,14 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             </div>
           </div>
           <div style={{ marginTop: '12px', fontSize: '0.78rem', color: 'var(--accent-cyan)', fontWeight: 600 }}>
-            Toplam {tickets.length} bilet kaydı
+            {t('tickets.count', { count: tickets.length })}
           </div>
         </div>
 
         <div className="glass-card glass-card-hover" onClick={() => onNavigate('comments')} style={{ cursor: 'pointer' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
             <div>
-              <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', fontWeight: 600 }}>Onay Bekleyen Yorumlar</span>
+              <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', fontWeight: 600 }}>{t('dashboard.pendingComments')}</span>
               <h3 style={{ fontSize: '2rem', fontWeight: 800, color: '#FFF', marginTop: '4px' }}>{pendingComments.length}</h3>
             </div>
             <div style={{ padding: '10px', background: 'rgba(245, 158, 11, 0.15)', borderRadius: '12px', color: 'var(--accent-amber)' }}>
@@ -67,14 +71,14 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             </div>
           </div>
           <div style={{ marginTop: '12px', fontSize: '0.78rem', color: 'var(--text-muted)', fontWeight: 600 }}>
-            Toplam {comments.length} yorum
+            {t('comments.pendingCount', { count: comments.length })}
           </div>
         </div>
 
         <div className="glass-card glass-card-hover" onClick={() => onNavigate('subscribers')} style={{ cursor: 'pointer' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
             <div>
-              <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', fontWeight: 600 }}>Bülten Aboneleri</span>
+              <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', fontWeight: 600 }}>{t('dashboard.totalSubscribers')}</span>
               <h3 style={{ fontSize: '2rem', fontWeight: 800, color: '#FFF', marginTop: '4px' }}>{subscribers.length}</h3>
             </div>
             <div style={{ padding: '10px', background: 'rgba(16, 185, 129, 0.15)', borderRadius: '12px', color: 'var(--accent-emerald)' }}>
@@ -82,22 +86,22 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             </div>
           </div>
           <div style={{ marginTop: '12px', fontSize: '0.78rem', color: 'var(--accent-emerald)', fontWeight: 600 }}>
-            Aktif E-Posta Aboneleri
+            {t('subscribers.title')}
           </div>
         </div>
 
         <div className="glass-card glass-card-hover" onClick={() => onNavigate('broadcast')} style={{ cursor: 'pointer' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
             <div>
-              <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', fontWeight: 600 }}>Hızlı E-Posta Yayın</span>
-              <h3 style={{ fontSize: '1.2rem', fontWeight: 700, color: '#FFF', marginTop: '8px' }}>Duyuru Gönder</h3>
+              <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', fontWeight: 600 }}>{t('broadcast.broadcastTitle')}</span>
+              <h3 style={{ fontSize: '1.2rem', fontWeight: 700, color: '#FFF', marginTop: '8px' }}>{t('broadcast.sendBroadcast')}</h3>
             </div>
             <div style={{ padding: '10px', background: 'rgba(139, 92, 246, 0.15)', borderRadius: '12px', color: 'var(--accent-secondary)' }}>
               <Send size={24} />
             </div>
           </div>
           <div style={{ marginTop: '12px', fontSize: '0.78rem', color: 'var(--text-secondary)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '4px' }}>
-            Bülten Hazırla <ArrowRight size={14} />
+            {t('common.view')} <ArrowRight size={14} />
           </div>
         </div>
       </div>
@@ -106,12 +110,12 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '20px' }}>
         <div className="glass-card">
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '18px' }}>
-            <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: '#FFF' }}>Son Gelen Destek Talepleri</h3>
-            <button className="btn btn-secondary btn-sm" onClick={() => onNavigate('tickets')}>Tümünü Gör</button>
+            <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: '#FFF' }}>{t('dashboard.recentTickets')}</h3>
+            <button className="btn btn-secondary btn-sm" onClick={() => onNavigate('tickets')}>{t('common.all')}</button>
           </div>
 
           {pendingTickets.length === 0 ? (
-            <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Bekleyen destek talebi bulunmuyor.</p>
+            <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>{t('common.loading')}</p>
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
               {pendingTickets.slice(0, 4).map((ticket) => (
@@ -135,7 +139,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                   <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'flex', justifyContent: 'space-between' }}>
                     <span>{ticket.sender_name} ({ticket.sender_email})</span>
                     <span style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-                      <Clock size={12} /> {new Date(ticket.created_at).toLocaleDateString('tr-TR')}
+                      <Clock size={12} /> {new Date(ticket.created_at).toLocaleDateString(locale)}
                     </span>
                   </div>
                   {ticket.ai_summary && (
@@ -164,12 +168,12 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         {/* Pending Comments Overview */}
         <div className="glass-card">
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '18px' }}>
-            <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: '#FFF' }}>Bekleyen Blog Yorumları</h3>
-            <button className="btn btn-secondary btn-sm" onClick={() => onNavigate('comments')}>Yorum Yönetimi</button>
+            <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: '#FFF' }}>{t('dashboard.pendingComments')}</h3>
+            <button className="btn btn-secondary btn-sm" onClick={() => onNavigate('comments')}>{t('common.view')}</button>
           </div>
 
           {pendingComments.length === 0 ? (
-            <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Onay bekleyen yorum yok.</p>
+            <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>{t('comments.pendingCount', { count: 0 })}</p>
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
               {pendingComments.slice(0, 4).map((comment) => (
@@ -184,7 +188,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                 }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#FFF' }}>{comment.author_name}</span>
-                    <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{new Date(comment.created_at).toLocaleDateString('tr-TR')}</span>
+                    <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{new Date(comment.created_at).toLocaleDateString(locale)}</span>
                   </div>
                   <p style={{ fontSize: '0.82rem', color: 'var(--text-secondary)' }}>"{comment.content}"</p>
                 </div>

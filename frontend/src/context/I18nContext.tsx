@@ -1,14 +1,43 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { translations, type Language, type Translations } from '../i18n/translations';
+import { translations, type Language } from '../i18n/translations';
 
 interface I18nContextType {
   language: Language;
   setLanguage: (lang: Language) => void;
-  t: (key: keyof Translations) => string;
+  t: (key: string, params?: Record<string, any>) => string;
   dir: 'ltr' | 'rtl';
 }
 
 const I18nContext = createContext<I18nContextType | undefined>(undefined);
+
+function getNestedValue(obj: any, path: string): string | undefined {
+  if (!obj || typeof obj !== 'object') return undefined;
+  // Try direct key match first (flat key)
+  if (typeof obj[path] === 'string') return obj[path];
+
+  // Try dot path lookup
+  const parts = path.split('.');
+  let curr = obj;
+  for (const part of parts) {
+    if (curr && typeof curr === 'object' && part in curr) {
+      curr = curr[part];
+    } else {
+      return undefined;
+    }
+  }
+  return typeof curr === 'string' ? curr : undefined;
+}
+
+function interpolate(text: string, params?: Record<string, any>): string {
+  if (!params || typeof params !== 'object') return text;
+  let result = text;
+  for (const [k, v] of Object.entries(params)) {
+    const val = v !== undefined && v !== null ? String(v) : '';
+    result = result.replace(new RegExp(`\\{\\{${k}\\}\\}`, 'g'), val);
+    result = result.replace(new RegExp(`\\{${k}\\}`, 'g'), val);
+  }
+  return result;
+}
 
 export const I18nProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [language, setLanguageState] = useState<Language>(() => {
@@ -33,8 +62,18 @@ export const I18nProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setLanguageState(lang);
   };
 
-  const t = (key: keyof Translations): string => {
-    return translations[language][key] || translations.tr[key] || key;
+  const t = (key: string, params?: Record<string, any>): string => {
+    let raw = getNestedValue(translations[language], key);
+    if (!raw && language !== 'tr') {
+      raw = getNestedValue(translations.tr, key);
+    }
+    if (!raw) {
+      if (import.meta.env?.DEV) {
+        console.warn(`[i18n] Missing key: "${key}" in lang "${language}"`);
+      }
+      raw = key;
+    }
+    return interpolate(raw, params);
   };
 
   return (

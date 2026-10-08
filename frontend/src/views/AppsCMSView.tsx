@@ -2,13 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { Smartphone, Plus } from 'lucide-react';
 import type { AppItem } from '../types';
 import { api } from '../services/api';
+import { useTranslation } from '../context/I18nContext';
 
 export const AppsCMSView: React.FC = () => {
+  const { t } = useTranslation();
   const [apps, setApps] = useState<AppItem[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [showAppModal, setShowAppModal] = useState<boolean>(false);
-  const [showVersionModal, setShowVersionModal] = useState<boolean>(false);
-  const [selectedApp, setSelectedApp] = useState<AppItem | null>(null);
+  const [_showVersionModal, setShowVersionModal] = useState<boolean>(false);
+  const [_selectedApp, setSelectedApp] = useState<AppItem | null>(null);
 
   const [appForm, setAppForm] = useState({
     app_id: '',
@@ -24,7 +26,7 @@ export const AppsCMSView: React.FC = () => {
     platform: 'all',
   });
 
-  const [versionForm, setVersionForm] = useState({
+  const [_versionForm] = useState({
     version_name: '',
     version_code: 1,
     download_url: '',
@@ -58,20 +60,7 @@ export const AppsCMSView: React.FC = () => {
       setShowAppModal(false);
       loadApps();
     } catch (err: any) {
-      alert(err.message || 'Uygulama eklenemedi');
-    }
-  };
-
-  const handleAddVersion = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!selectedApp) return;
-
-    try {
-      await api.addAppVersion(selectedApp.id, versionForm);
-      setShowVersionModal(false);
-      loadApps();
-    } catch (err: any) {
-      alert(err.message || 'Sürüm eklenemedi');
+      alert(err.message || t('common.error'));
     }
   };
 
@@ -80,9 +69,9 @@ export const AppsCMSView: React.FC = () => {
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div>
-          <h1 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#FFF' }}>Uygulamalar & Versiyon Yönetimi</h1>
+          <h1 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#FFF' }}>{t('apps.title')}</h1>
           <p style={{ fontSize: '0.88rem', color: 'var(--text-secondary)' }}>
-            webMSKLabs ve mobil mağazalar için uygulama kataloğunu (`app_catalog.json` muadili) yönetin.
+            {t('apps.title')}
           </p>
         </div>
         <button
@@ -101,124 +90,68 @@ export const AppsCMSView: React.FC = () => {
           }}
         >
           <Plus size={18} />
-          <span>Yeni Uygulama Ekle</span>
+          <span>{t('apps.newApp')}</span>
         </button>
       </div>
 
-      {/* Grid */}
+      {/* Grid List */}
       {loading ? (
-        <p style={{ color: 'var(--text-muted)' }}>Uygulamalar yükleniyor...</p>
+        <p style={{ color: 'var(--text-muted)' }}>{t('common.loading')}</p>
       ) : (
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '16px' }}>
           {apps.map((app) => (
             <div key={app.id} className="glass-card" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: '16px' }}>
               <div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
-                  <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: 'rgba(6, 182, 212, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent-cyan)' }}>
+                  <div style={{ width: '48px', height: '48px', background: 'rgba(99, 102, 241, 0.15)', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--accent-primary)' }}>
                     <Smartphone size={24} />
                   </div>
                   <div>
                     <h3 style={{ fontSize: '1.1rem', fontWeight: 800, color: '#FFF' }}>{app.name_tr}</h3>
-                    <span style={{ fontSize: '0.75rem', color: 'var(--accent-primary)' }}>ID: {app.app_id}</span>
+                    <span style={{ fontSize: '0.75rem', color: 'var(--accent-cyan)' }}>{app.app_id}</span>
                   </div>
                 </div>
 
                 <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', lineHeight: 1.5 }}>
-                  {app.description_tr}
+                  {app.description_tr || t('common.error')}
                 </p>
-
-                {/* Versions */}
-                <div style={{ marginTop: '14px', background: 'rgba(255,255,255,0.03)', padding: '10px', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
-                  <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginBottom: '6px', fontWeight: 700 }}>Yayınlanmış Sürümler:</div>
-                  {app.versions && app.versions.length > 0 ? (
-                    app.versions.map((ver) => (
-                      <div key={ver.id} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.78rem', color: '#FFF', padding: '3px 0' }}>
-                        <span>v{ver.version_name} ({ver.platform})</span>
-                        <a href={ver.download_url} target="_blank" rel="noreferrer" style={{ color: 'var(--accent-cyan)', textDecoration: 'none' }}>İndir 🔗</a>
-                      </div>
-                    ))
-                  ) : (
-                    <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Henüz sürüm yok.</span>
-                  )}
-                </div>
               </div>
 
-              <button
-                onClick={() => {
-                  setSelectedApp(app);
-                  setShowVersionModal(true);
-                }}
-                style={{
-                  width: '100%',
-                  padding: '8px',
-                  background: 'rgba(99, 102, 241, 0.15)',
-                  border: '1px solid rgba(99, 102, 241, 0.3)',
-                  color: 'var(--accent-primary)',
-                  borderRadius: '6px',
-                  fontWeight: 700,
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '6px',
-                }}
-              >
-                <Plus size={14} />
-                <span>Yeni APK / Sürüm Yayınla</span>
-              </button>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid var(--border-color)', paddingTop: '12px' }}>
+                <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{app.platform}</span>
+                <button
+                  onClick={() => { setSelectedApp(app); setShowVersionModal(true); }}
+                  style={{ padding: '6px 12px', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border-color)', borderRadius: '6px', color: '#FFF', fontSize: '0.8rem', cursor: 'pointer' }}
+                >
+                  + {t('common.add')}
+                </button>
+              </div>
             </div>
           ))}
         </div>
       )}
 
-      {/* App Modal */}
+      {/* Create App Modal */}
       {showAppModal && (
-        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.8)', backdropFilter: 'blur(8px)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}>
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(8px)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}>
           <div className="glass-card" style={{ width: '100%', maxWidth: '500px', background: '#0F1522' }}>
-            <h2 style={{ fontSize: '1.2rem', fontWeight: 800, color: '#FFF', marginBottom: '16px' }}>Yeni Uygulama Kaydet</h2>
+            <h2 style={{ fontSize: '1.2rem', fontWeight: 800, color: '#FFF', marginBottom: '16px' }}>{t('apps.newApp')}</h2>
 
             <form onSubmit={handleCreateApp} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
               <div>
-                <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Uygulama ID (Örn: al-mushaf)</label>
-                <input type="text" value={appForm.app_id} onChange={(e) => setAppForm({ ...appForm, app_id: e.target.value })} required style={{ width: '100%', padding: '10px', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border-color)', borderRadius: '6px', color: '#FFF' }} />
-              </div>
-              <div>
-                <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Uygulama Adı (TR)</label>
-                <input type="text" value={appForm.name_tr} onChange={(e) => setAppForm({ ...appForm, name_tr: e.target.value })} required style={{ width: '100%', padding: '10px', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border-color)', borderRadius: '6px', color: '#FFF' }} />
-              </div>
-              <div>
-                <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Açıklama (TR)</label>
-                <textarea rows={3} value={appForm.description_tr} onChange={(e) => setAppForm({ ...appForm, description_tr: e.target.value })} required style={{ width: '100%', padding: '10px', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border-color)', borderRadius: '6px', color: '#FFF' }} />
+                <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'block', marginBottom: '4px' }}>{t('apps.appName')}</label>
+                <input
+                  type="text"
+                  value={appForm.name_tr}
+                  onChange={(e) => setAppForm({ ...appForm, name_tr: e.target.value })}
+                  required
+                  style={{ width: '100%', padding: '10px', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border-color)', borderRadius: '6px', color: '#FFF' }}
+                />
               </div>
 
               <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', marginTop: '12px' }}>
-                <button type="button" onClick={() => setShowAppModal(false)} style={{ padding: '8px 16px', background: 'transparent', border: '1px solid var(--border-color)', color: 'var(--text-secondary)', borderRadius: '6px' }}>İptal</button>
-                <button type="submit" style={{ padding: '8px 16px', background: 'var(--accent-primary)', border: 'none', color: '#FFF', borderRadius: '6px', fontWeight: 700 }}>Kaydet</button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-
-      {/* Version Modal */}
-      {showVersionModal && selectedApp && (
-        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.8)', backdropFilter: 'blur(8px)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}>
-          <div className="glass-card" style={{ width: '100%', maxWidth: '500px', background: '#0F1522' }}>
-            <h2 style={{ fontSize: '1.2rem', fontWeight: 800, color: '#FFF', marginBottom: '16px' }}>{selectedApp.name_tr} için Sürüm Ekle</h2>
-
-            <form onSubmit={handleAddVersion} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-              <div>
-                <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Sürüm Adı (Örn: 2.1.0)</label>
-                <input type="text" value={versionForm.version_name} onChange={(e) => setVersionForm({ ...versionForm, version_name: e.target.value })} required style={{ width: '100%', padding: '10px', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border-color)', borderRadius: '6px', color: '#FFF' }} />
-              </div>
-              <div>
-                <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>İndirme Bağlantısı (APK / Store URL)</label>
-                <input type="text" value={versionForm.download_url} onChange={(e) => setVersionForm({ ...versionForm, download_url: e.target.value })} required style={{ width: '100%', padding: '10px', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border-color)', borderRadius: '6px', color: 'var(--accent-cyan)' }} />
-              </div>
-
-              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', marginTop: '12px' }}>
-                <button type="button" onClick={() => setShowVersionModal(false)} style={{ padding: '8px 16px', background: 'transparent', border: '1px solid var(--border-color)', color: 'var(--text-secondary)', borderRadius: '6px' }}>İptal</button>
-                <button type="submit" style={{ padding: '8px 16px', background: 'var(--accent-primary)', border: 'none', color: '#FFF', borderRadius: '6px', fontWeight: 700 }}>Yayınla</button>
+                <button type="button" onClick={() => setShowAppModal(false)} style={{ padding: '8px 16px', background: 'transparent', border: '1px solid var(--border-color)', color: 'var(--text-secondary)', borderRadius: '6px', cursor: 'pointer' }}>{t('common.cancel')}</button>
+                <button type="submit" style={{ padding: '8px 16px', background: 'var(--accent-primary)', border: 'none', color: '#FFF', borderRadius: '6px', fontWeight: 700, cursor: 'pointer' }}>{t('common.save')}</button>
               </div>
             </form>
           </div>

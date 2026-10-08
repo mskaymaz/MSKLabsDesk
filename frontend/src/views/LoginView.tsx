@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { api } from '../services/api';
 import { useAuth } from '../context/AuthContext';
+import { useTranslation } from '../context/I18nContext';
 import { ShieldCheck, Lock, User, AlertCircle, Clock } from 'lucide-react';
 import { Button } from '../components/ui/Button';
 
@@ -13,6 +14,7 @@ async function hashSHA256(text: string): Promise<string> {
 
 export const LoginView: React.FC = () => {
   const { login } = useAuth();
+  const { t } = useTranslation();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -34,11 +36,11 @@ export const LoginView: React.FC = () => {
     setError(null);
 
     if (username.trim().length < 3) {
-      setError('Kullanıcı adı en az 3 karakter olmalıdır.');
+      setError(t('validation.minLength', { min: 3 }));
       return;
     }
     if (password.length < 6) {
-      setError('Şifre en az 6 karakter olmalıdır.');
+      setError(t('validation.minLength', { min: 6 }));
       return;
     }
 
@@ -50,10 +52,10 @@ export const LoginView: React.FC = () => {
       login(res.token, res.user);
     } catch (err: any) {
       if (err.status === 429 || err.message?.includes('429') || err.message?.includes('Çok fazla')) {
-        setLockoutTimer(900); // 15 minutes lockout
-        setError('Çok fazla başarısız giriş denemesi. Hesabınız 15 dakika kilitlendi.');
+        setLockoutTimer(900);
+        setError(t('auth.loginError'));
       } else {
-        setError('Geçersiz kullanıcı adı veya şifre.');
+        setError(t('auth.loginError'));
       }
     } finally {
       setLoading(false);
@@ -94,9 +96,9 @@ export const LoginView: React.FC = () => {
           >
             <ShieldCheck size={32} />
           </div>
-          <h1 style={{ fontSize: '1.6rem', fontWeight: 800, color: '#FFF' }}>MSKLabsDesk</h1>
+          <h1 style={{ fontSize: '1.6rem', fontWeight: 800, color: '#FFF' }}>{t('auth.loginTitle')}</h1>
           <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginTop: '4px' }}>
-            Yönetici Oturum Açma
+            {t('auth.loginSub')}
           </p>
         </div>
 
@@ -114,8 +116,8 @@ export const LoginView: React.FC = () => {
             }}
           >
             <Clock size={24} style={{ marginBottom: '8px' }} />
-            <div style={{ fontWeight: 700 }}>Çok Fazla Başarısız Deneme</div>
-            <div style={{ marginTop: '4px' }}>Lütfen bekleyin: {formatLockout(lockoutTimer)}</div>
+            <div style={{ fontWeight: 700 }}>{t('auth.loginError')}</div>
+            <div style={{ marginTop: '4px' }}>{formatLockout(lockoutTimer)}</div>
           </div>
         ) : (
           <>
@@ -141,14 +143,14 @@ export const LoginView: React.FC = () => {
 
             <form onSubmit={handleSubmit}>
               <div className="form-group" style={{ marginBottom: '16px' }}>
-                <label className="form-label" style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', display: 'block', marginBottom: '6px' }}>Kullanıcı Adı</label>
+                <label className="form-label" style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', display: 'block', marginBottom: '6px' }}>{t('auth.email')}</label>
                 <div style={{ position: 'relative' }}>
                   <User size={18} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
                   <input
                     type="text"
                     className="form-input"
                     style={{ paddingLeft: '38px', minHeight: '44px', width: '100%', background: 'rgba(0,0,0,0.3)', border: '1px solid var(--border-subtle)', borderRadius: 'var(--radius-md)', color: '#FFF' }}
-                    placeholder="Örn: admin"
+                    placeholder="admin@msklabs.com"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                     required
@@ -157,7 +159,7 @@ export const LoginView: React.FC = () => {
               </div>
 
               <div className="form-group" style={{ marginBottom: '20px' }}>
-                <label className="form-label" style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', display: 'block', marginBottom: '6px' }}>Şifre</label>
+                <label className="form-label" style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', display: 'block', marginBottom: '6px' }}>{t('auth.password')}</label>
                 <div style={{ position: 'relative' }}>
                   <Lock size={18} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
                   <input
@@ -178,7 +180,7 @@ export const LoginView: React.FC = () => {
                 disabled={lockoutTimer > 0}
                 style={{ width: '100%' }}
               >
-                {loading ? 'Giriş yapılıyor...' : 'Oturum Aç'}
+                {loading ? t('auth.loggingIn') : t('auth.loginButton')}
               </Button>
             </form>
           </>

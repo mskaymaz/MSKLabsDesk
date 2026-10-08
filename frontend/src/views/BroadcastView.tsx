@@ -1,47 +1,18 @@
 import React, { useState } from 'react';
 import { api } from '../services/api';
-import { Send, CheckCircle2, Eye, FileText, Globe } from 'lucide-react';
+import { Send, CheckCircle2, Eye } from 'lucide-react';
 import { ConfirmationDialog } from '../components/ui/Modal';
+import { useTranslation } from '../context/I18nContext';
 
 export const BroadcastView: React.FC = () => {
-  const [lang, setLang] = useState<'tr' | 'en' | 'ar'>('tr');
-  const [template, setTemplate] = useState('custom');
+  const { t } = useTranslation();
   const [title, setTitle] = useState('');
   const [contentHtml, setContentHtml] = useState('');
-  const [targetPreference, setTargetPreference] = useState('ALL');
+  const [targetPreference] = useState('ALL');
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [sending, setSending] = useState(false);
-  const [progress, setProgress] = useState(0);
+  const [, setProgress] = useState(0);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
-
-  const templates: Record<string, { title: string; body: string }> = {
-    custom: { title: '', body: '' },
-    announcement: {
-      title: 'MSK Labs — Yeni Özellik ve Sistem Duyurusu',
-      body: '<h2>Sayın Abonemiz,</h2><p>MSK Labs platformumuzda geliştirdiğimiz yeni özellikleri sizlere sunmaktan mutluluk duyuyoruz.</p><p>Detaylı bilgi için sitemizi ziyaret edebilirsiniz.</p>',
-    },
-    newsletter: {
-      title: 'MSK Labs Aylık Teknoloji ve Geliştirici Bülteni',
-      body: '<h2>Aylık Geliştirici Özeti</h2><p>Bu ay Cloudflare Workers, Edge Computing ve Gemini AI entegrasyonları konularında hazırladığımız blog yazıları yayında!</p>',
-    },
-  };
-
-  const handleTemplateChange = (tmplKey: string) => {
-    setTemplate(tmplKey);
-    if (tmplKey !== 'custom' && templates[tmplKey]) {
-      setTitle(templates[tmplKey].title);
-      setContentHtml(templates[tmplKey].body);
-    }
-  };
-
-  const audienceCounts: Record<string, number> = {
-    ALL: 1450,
-    VERIFIED_ONLY: 1200,
-    blog: 850,
-    apps: 600,
-  };
-
-  const targetCount = audienceCounts[targetPreference] || 1450;
 
   const handleConfirmSend = async () => {
     setShowConfirmModal(false);
@@ -61,14 +32,13 @@ export const BroadcastView: React.FC = () => {
       });
       clearInterval(interval);
       setProgress(100);
-      setSuccessMsg(`Bülten başarıyla kuyruğa eklendi. ${targetCount} aktif aboneye iletiliyor.`);
+      setSuccessMsg(t('common.success'));
       setTitle('');
       setContentHtml('');
-      setTemplate('custom');
     } catch {
       clearInterval(interval);
       setProgress(0);
-      alert('Bülten gönderilemedi.');
+      alert(t('broadcast.sendError'));
     } finally {
       setTimeout(() => setSending(false), 800);
     }
@@ -77,8 +47,8 @@ export const BroadcastView: React.FC = () => {
   return (
     <div className="animate-fade-in" style={{ maxWidth: '1000px' }}>
       <div>
-        <h1 className="page-title">Bülten & E-Posta Yayın Motoru</h1>
-        <p className="page-subtitle">Abonelerinize çok dilli duyuru, canlı şablon ve canlı HTML önizleme ile e-posta gönderin.</p>
+        <h1 className="page-title">{t('broadcast.broadcastTitle')}</h1>
+        <p className="page-subtitle">{t('broadcast.broadcastSubject')}</p>
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', alignItems: 'start' }}>
@@ -102,127 +72,74 @@ export const BroadcastView: React.FC = () => {
             </div>
           )}
 
-          <form onSubmit={(e) => { e.preventDefault(); setShowConfirmModal(true); }}>
-            <div style={{ display: 'flex', gap: '12px', marginBottom: '16px' }}>
-              <div style={{ flex: 1 }}>
-                <label className="form-label" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <Globe size={14} /> Dil Seçimi
-                </label>
-                <select className="form-select" value={lang} onChange={(e) => setLang(e.target.value as 'tr'|'en'|'ar')}>
-                  <option value="tr">Türkçe (TR)</option>
-                  <option value="en">English (EN)</option>
-                  <option value="ar">العربية (AR)</option>
-                </select>
-              </div>
-
-              <div style={{ flex: 1 }}>
-                <label className="form-label" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <FileText size={14} /> Hazır Şablon
-                </label>
-                <select className="form-select" value={template} onChange={(e) => handleTemplateChange(e.target.value)}>
-                  <option value="custom">Özel İçerik</option>
-                  <option value="announcement">Sistem Duyurusu</option>
-                  <option value="newsletter">Aylık Bülten</option>
-                </select>
-              </div>
-            </div>
-
-            <div className="form-group">
-              <label className="form-label">E-Posta Başlığı / Konusu</label>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            <div>
+              <label className="form-label" style={{ fontSize: '0.82rem', color: 'var(--text-secondary)' }}>{t('broadcast.broadcastSubject')}</label>
               <input
                 type="text"
                 className="form-input"
-                placeholder="Örn: MSK Labs Sürüm Notları"
+                style={{ width: '100%', marginTop: '4px' }}
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                required
               />
             </div>
 
-            <div className="form-group">
-              <label className="form-label">Hedef Kitle (Toplam: {targetCount} Alıcı)</label>
-              <select
-                className="form-select"
-                value={targetPreference}
-                onChange={(e) => setTargetPreference(e.target.value)}
-              >
-                <option value="ALL">Tüm Aboneler (1,450)</option>
-                <option value="VERIFIED_ONLY">Sadece Doğrulanmış Aboneler (1,200)</option>
-                <option value="blog">Blog Takipçileri (850)</option>
-                <option value="apps">Uygulama Kullanıcıları (600)</option>
-              </select>
-            </div>
-
-            <div className="form-group">
-              <label className="form-label">E-Posta HTML İçeriği</label>
+            <div>
+              <label className="form-label" style={{ fontSize: '0.82rem', color: 'var(--text-secondary)' }}>{t('broadcast.broadcastContent')}</label>
               <textarea
-                className="form-textarea"
-                rows={7}
-                placeholder="<h2>Başlık</h2><p>Mesaj içeriği...</p>"
+                className="form-input"
+                rows={8}
+                style={{ width: '100%', marginTop: '4px', fontFamily: 'monospace', fontSize: '0.85rem' }}
                 value={contentHtml}
                 onChange={(e) => setContentHtml(e.target.value)}
-                required
               />
             </div>
 
-            {sending && (
-              <div style={{ marginBottom: '20px' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', color: 'var(--text-secondary)', marginBottom: '6px' }}>
-                  <span>Gönderiliyor...</span>
-                  <span>%{progress}</span>
-                </div>
-                <div style={{ width: '100%', height: '8px', background: 'rgba(0,0,0,0.3)', borderRadius: '4px', overflow: 'hidden' }}>
-                  <div style={{ width: `${progress}%`, height: '100%', background: 'var(--accent-primary)', transition: 'width 0.3s ease' }} />
-                </div>
-              </div>
-            )}
-
-            <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-              <button type="submit" className="btn btn-primary" disabled={sending || !title || !contentHtml}>
-                <Send size={16} /> Gönderim Onayı İste
-              </button>
-            </div>
-          </form>
+            <button
+              className="btn btn-primary"
+              disabled={!title || !contentHtml || sending}
+              onClick={() => setShowConfirmModal(true)}
+              style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
+            >
+              <Send size={16} />
+              <span>{t('broadcast.sendBroadcast')}</span>
+            </button>
+          </div>
         </div>
 
-        {/* Sağ Panel: Canlı HTML Önizleme */}
+        {/* Sağ Panel: HTML Önizleme */}
         <div className="glass-card" style={{ padding: '24px' }}>
-          <h3 style={{ fontSize: '1rem', fontWeight: 700, color: '#FFF', marginBottom: '14px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <Eye size={18} color="var(--accent-cyan)" /> Canlı E-Posta Önizleme ({lang.toUpperCase()})
-          </h3>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px', color: 'var(--accent-cyan)' }}>
+            <Eye size={18} />
+            <h3 style={{ fontSize: '0.95rem', fontWeight: 700, color: '#FFF' }}>{t('posts.preview')}</h3>
+          </div>
+
           <div style={{
-            background: '#FFFFFF',
-            color: '#1F2937',
+            background: '#FFF',
+            color: '#111827',
             padding: '20px',
             borderRadius: 'var(--radius-md)',
-            minHeight: '300px',
-            boxShadow: 'var(--shadow-md)',
-            fontFamily: lang === 'ar' ? 'Cairo, sans-serif' : 'sans-serif',
-            direction: lang === 'ar' ? 'rtl' : 'ltr',
+            minHeight: '260px',
+            fontSize: '0.9rem',
+            lineHeight: 1.6
           }}>
-            <div style={{ borderBottom: '1px solid #E5E7EB', paddingBottom: '10px', marginBottom: '14px' }}>
-              <span style={{ fontSize: '0.75rem', color: '#6B7280', display: 'block' }}>Kime: {targetCount} Aktif Abone</span>
-              <h3 style={{ margin: '4px 0 0 0', fontSize: '1.1rem', color: '#111827' }}>{title || 'E-Posta Konu Başlığı'}</h3>
-            </div>
-            <div
-              style={{ fontSize: '0.9rem', lineHeight: '1.6' }}
-              dangerouslySetInnerHTML={{ __html: contentHtml || '<p style="color:#9CA3AF;">E-posta içeriği burada canlı olarak görüntülenecektir.</p>' }}
-            />
-            <div style={{ marginTop: '24px', paddingTop: '12px', borderTop: '1px solid #F3F4F6', fontSize: '0.75rem', color: '#9CA3AF' }}>
-              <p>Bu e-posta MSK Labs bülten aboneliğinize istinaden gönderilmiştir. <a href="#unsub" style={{ color: '#3B82F6' }}>Bültenden Çık</a></p>
-            </div>
+            <h2 style={{ fontSize: '1.2rem', fontWeight: 700, marginBottom: '12px', borderBottom: '1px solid #E5E7EB', paddingBottom: '8px' }}>
+              {title || t('broadcast.broadcastSubject')}
+            </h2>
+            <div dangerouslySetInnerHTML={{ __html: contentHtml || `<p style="color: #9CA3AF;">${t('broadcast.broadcastContent')}</p>` }} />
           </div>
         </div>
       </div>
 
       <ConfirmationDialog
         isOpen={showConfirmModal}
-        title="Duyuru Gönderim Onayı"
-        message={`"${title}" başlıklı bülteni ${targetCount} aktif aboneye toplu olarak göndermek istediğinizden emin misiniz?`}
-        confirmText="Evet, Gönder"
-        cancelText="İptal"
-        onConfirm={handleConfirmSend}
         onClose={() => setShowConfirmModal(false)}
+        onConfirm={handleConfirmSend}
+        title={t('broadcast.sendBroadcast')}
+        message={t('common.confirm')}
+        confirmText={t('common.confirm')}
+        cancelText={t('common.cancel')}
+        variant="warning"
       />
     </div>
   );

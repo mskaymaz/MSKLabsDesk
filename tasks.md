@@ -2103,27 +2103,27 @@ sequenceDiagram
 | **Maliyet ($0 Guard)** | Çeviri Servisi Kota Aşımı (429) | Cost Guard devreye girer, otomatik ücretli plana geçmez, istek kuyruğa alınır. |
 
 #### Section-Level Definition of Done (DoD)
-- [ ] Provider soyutlamasının (`TranslationProvider`) ve $0/Ay Cost Guard kuralının tanımlanması.
-- [ ] Human-In-The-Loop (HITL) onay akışının (`Generated → Review → Edit → Approve`) doğrulanması.
-- [ ] Placeholder (`{{name}}`), HTML etiket ve URL koruma mekanizmasının netleştirilmesi.
-- [ ] `TranslationAuditModal.tsx` paragraf bazlı kıyaslama ve yardımcı kalite skoru kurallarının tanımlanması.
-- [ ] 11 admin ekranının `t()` motoruna bağlanması ve `check_i18n_keys.js` CI doğrulamasının belirlenmesi.
-- [ ] Arapça (AR) RTL yön aynalama ve tarih/sayı/göreli zaman lokalizasyonunun teyit edilmesi.
-- [ ] SEO `hreflang`, `canonical`, localized `sitemap.xml` ve diller arası veri izlenebilirliğinin tanımlanması.
-- [ ] i18n & SEO test matrisinin tamamlanması.
+- [x] Provider soyutlamasının (`TranslationProvider`) ve $0/Ay Cost Guard kuralının tanımlanması.
+- [x] Human-In-The-Loop (HITL) onay akışının (`Generated → Review → Edit → Approve`) doğrulanması.
+- [x] Placeholder (`{{name}}`), HTML etiket ve URL koruma mekanizmasının netleştirilmesi.
+- [x] `TranslationAuditModal.tsx` paragraf bazlı kıyaslama ve yardımcı kalite skoru kurallarının tanımlanması.
+- [x] 11 admin ekranının `t()` motoruna bağlanması ve `check_i18n_keys.js` CI doğrulamasının belirlenmesi.
+- [x] Arapça (AR) RTL yön aynalama ve tarih/sayı/göreli zaman lokalizasyonunun teyit edilmesi.
+- [x] SEO `hreflang`, `canonical`, localized `sitemap.xml` ve diller arası veri izlenebilirliğinin tanımlanması.
+- [x] i18n & SEO test matrisinin tamamlanması.
 
 ---
 
 ### Özet Görev Listesi (9. SEO, TRANSLATION & INTERNATIONALIZATION (i18n))
 
-- [ ] **I18N-001 — PWA Panel i18n Temel Altyapısı**
+- [x] **I18N-001 — PWA Panel i18n Temel Altyapısı**
   - **Kapsam:** `translations.ts` (TR, EN, AR sözlükleri), `I18nContext.tsx`, Dil Seçici (`Sidebar.tsx`), Arapça (AR) RTL desteği (`index.css` Cairo font).
-- [ ] **I18N-002 — Embed Form & E-Posta i18n Desteği**
+- [x] **I18N-002 — Embed Form & E-Posta i18n Desteği**
   - **Kapsam:** `msklabs-desk-embed.js` otomatik dil algılama, 3 dilli HTML e-posta şablonları.
-- [ ] **I18N-003 — i18n Çevirilerinin Tüm Ekranlara Uygulanması & Statik Anahtar Doğrulaması (`10.6.4`)**
+- [x] **I18N-003 — i18n Çevirilerinin Tüm Ekranlara Uygulanması & Statik Anahtar Doğrulaması (`10.6.4`)**
   - **Amaç:** 11 sabit Türkçe ekranın, form validasyon mesajlarının ve ARIA etiketlerinin `t()` çeviri motoruna bağlanması, `check_i18n_keys.js` doğrulama betiği ile CI/CD denetimi.
   - **Öncelik:** P0 | **Bağımlılık:** I18N-001, UI-006
-- [ ] **I18N-004 — AI Destekli Çeviri, Kalite Denetim Ekranı & Provider Abstraction (`13.2`)**
+- [x] **I18N-004 — AI Destekli Çeviri, Kalite Denetim Ekranı & Provider Abstraction (`13.2`)**
   - **Amaç:** Provider-agnostic çeviri motoru, `TranslationAuditModal.tsx` ile paragraf/placeholder/glossary kıyaslaması, HITL onay akışı ve $0/Ay Cost Guard kontrolü.
   - **Öncelik:** P2 | **Bağımlılık:** I18N-003, AI-004, AI-006
 

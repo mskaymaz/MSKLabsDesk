@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import { Bell, Mail, Save, Check, Shield, Globe, Sun, Moon } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { Switch } from '../components/ui/Input';
+import { useTranslation } from '../context/I18nContext';
 
 export const SettingsView: React.FC = () => {
+  const { t } = useTranslation();
   const { user, hasPermission } = useAuth();
   const [theme, setTheme] = useState<'dark' | 'light' | 'system'>('dark');
   const [siteTitle, setSiteTitle] = useState('MSK Labs Desk');
@@ -29,11 +31,11 @@ export const SettingsView: React.FC = () => {
           if (perm === 'granted') {
             setPushEnabled(true);
           } else {
-            alert('Bildirim izni reddedildi.');
+            alert(t('settings.pushDenied'));
           }
         });
       } else {
-        alert('Bu tarayıcı Web Push bildirimlerini desteklemiyor.');
+        alert(t('settings.pushUnsupported'));
       }
     } else {
       setPushEnabled(false);
@@ -55,8 +57,8 @@ export const SettingsView: React.FC = () => {
   return (
     <div className="animate-fade-in" style={{ maxWidth: '800px' }}>
       <div>
-        <h1 className="page-title">Sistem Ayarları</h1>
-        <p className="page-subtitle">Site bilgileri, tema, Turnstile bot koruması ve e-posta gönderici ayarları.</p>
+        <h1 className="page-title">{t('settings.title')}</h1>
+        <p className="page-subtitle">{t('common.settings')}</p>
       </div>
 
       <div className="glass-card" style={{ padding: '28px' }}>
@@ -119,7 +121,7 @@ export const SettingsView: React.FC = () => {
             </h3>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
               <div className="form-group">
-                <label className="form-label">Gönderici Adı</label>
+                <label className="form-label">{t('settings.senderName')}</label>
                 <input
                   type="text"
                   className="form-input"
@@ -129,7 +131,7 @@ export const SettingsView: React.FC = () => {
               </div>
 
               <div className="form-group">
-                <label className="form-label">Gönderici E-Posta Adresi</label>
+                <label className="form-label">{t('settings.senderEmail')}</label>
                 <input
                   type="email"
                   className="form-input"
@@ -171,7 +173,7 @@ export const SettingsView: React.FC = () => {
           {/* Push Bildirimleri */}
           <div style={{ borderTop: '1px solid var(--border-color)', paddingTop: '24px', marginBottom: '24px' }}>
             <h3 style={{ fontSize: '1rem', fontWeight: 700, color: '#FFF', marginBottom: '14px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <Bell size={18} color="var(--accent-amber)" /> Web Push Bildirimleri (VAPID)
+              <Bell size={18} color="var(--accent-amber)" /> {t('settings.pushNotifications')}
             </h3>
             
             <div style={{
@@ -184,7 +186,7 @@ export const SettingsView: React.FC = () => {
               border: '1px solid var(--border-color)'
             }}>
               <div>
-                <strong style={{ fontSize: '0.9rem', color: '#FFF', display: 'block' }}>Yeni Bilet & Yorum Anlık Bildirimleri</strong>
+                <strong style={{ fontSize: '0.9rem', color: '#FFF', display: 'block' }}>{t('settings.enablePush')}</strong>
                 <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Masaüstü ve mobil PWA'ya anlık bildirimler gönderilir.</span>
               </div>
               <button
@@ -192,14 +194,14 @@ export const SettingsView: React.FC = () => {
                 className={`btn btn-sm ${pushEnabled ? 'btn-success' : 'btn-secondary'}`}
                 onClick={togglePush}
               >
-                {pushEnabled ? 'Etkin' : 'Etkinleştir'}
+                {pushEnabled ? 'Etkin' : t('settings.enablePush')}
               </button>
             </div>
           </div>
 
           <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
             <button type="submit" className="btn btn-primary">
-              {saved ? <Check size={16} /> : <Save size={16} />} {saved ? 'Kaydedildi' : 'Ayarları Kaydet'}
+              {saved ? <Check size={16} /> : <Save size={16} />} {saved ? t('common.save') : t('common.save')}
             </button>
           </div>
         </form>
