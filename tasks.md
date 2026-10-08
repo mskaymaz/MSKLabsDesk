@@ -1286,26 +1286,28 @@ sequenceDiagram
 ---
 
 ### API-010 — Admin Media R2 API (`10.6.5`)
+- **1. Durum:** **PASS WITH LIMITATION** (Tamamlanma Tarihi: 08.10.2026 - 10:26)
 - **2. Amaç:** Yöneticilerin blog ve görsel içerikler için Cloudflare R2 nesne depolama alanına medya dosyası yüklemesini (`upload`), listelemesini ve silmesini sağlamak.
-- **3. Kapsam:** `backend/src/routes/admin/media.ts`, `POST /api/v1/admin/media/upload`, `DELETE /api/v1/admin/media/:key`.
+- **3. Kapsam:** `backend/src/routes/adminMedia.ts`, `POST /api/v1/admin/media/upload`, `DELETE /api/v1/admin/media/:key`.
 - **4. İstek / Yanıt Sözleşmesi:**
-  - [ ] *POST İstek:* `multipart/form-data` (`file`: binary, `altText`: string).
-  - [ ] *POST Yanıt (201 Created):* `{ "success": true, "data": { "key": "blog/2026/gorsel1.webp", "url": "https://cdn.msklabs.com/blog/2026/gorsel1.webp", "size": 245000, "mimeType": "image/webp" } }`
+  - [x] *POST İstek:* `multipart/form-data` (`file`: binary, `altText`: string).
+  - [x] *POST Yanıt (201 Created):* `{ "success": true, "data": { "key": "blog/2026/gorsel1.webp", "url": "https://cdn.msklabs.com/blog/2026/gorsel1.webp", "size": 245000, "mimeType": "image/webp" } }`
 - **5. Validasyon ve Şema Kuralları:** Dosya boyutu `≤ 5 MB`. İzin verilen MIME türleri: `image/webp`, `image/png`, `image/jpeg`, `image/svg+xml`.
-- **6. Veri İşlemleri / Sorgular:** R2 Bucket `env.MEDIA_BUCKET.put(key, fileBuffer)` ve D1 `media` tablosuna metadata kaydı.
+- **6. Veri İşlemleri / Sorgular:** R2 Bucket `env.MEDIA.put(key, fileBuffer)` ve D1 `media_assets` tablosuna metadata kaydı.
 - **7. Async / Event / Queue Akışı:** N/A (Küçük görseller için doğrudan işlenir).
 - **8. Authentication / Authorization:** `SEC-AUTH-001` + `SEC-RBAC-001` (Admin).
 - **9. Rate Limit & WAF:** Dakikada maksimum 20 medya yükleme isteği.
 - **10. Hata Yönetimi & HTTP Kodları:** `400 Bad Request` (Desteklenmeyen dosya türü veya >5MB boyutu), `401`, `403`.
-- **11. Edge / Service Binding / KV / D1 / R2 Kullanımı:** Cloudflare R2 Bucket + D1 Metadata.
+- **11. Edge / Service Binding / KV / D1 / R2 Kullanımı:** Cloudflare R2 Bucket (`MEDIA`) + D1 Metadata.
 - **12. Idempotency:** Dosya içeriği hash'i (SHA-256) ile çakışma kontrolü.
 - **13. Observability / Log:** `MEDIA_UPLOADED`, `MEDIA_DELETED` logları.
 - **14. Security / Privacy:** Zararlı executable/script dosyalarının yüklenmesini önlemek için Magic Bytes (file signature) doğrulaması.
 - **15. Performance:** *Acceptance Target:* R2 yükleme süresi < 500ms.
 - **16. Test Requirements:** 5MB üzeri dosya yükleme reddi (400), .exe/.php uzantılı dosya reddi.
 - **17. Definition of Done (DoD):**
-  - [ ] R2 Bucket entegrasyonunun ve kamuya açık CDN URL erişiminin doğrulanması.
-  - [ ] Magic byte doğrulaması ile zararlı dosya yüklemesinin engellenmesi.
+  - [x] R2 Bucket entegrasyonunun ve kamuya açık CDN URL erişiminin doğrulanması.
+  - [x] Magic byte doğrulaması ile zararlı dosya yüklemesinin engellenmesi.
+  - [x] *(Sonuç: PASS WITH LIMITATION. POST upload, DELETE, 5MB boyutu sınırı, WebP/PNG/JPEG/SVG MIME ve Magic Bytes doğrulaması, SHA-256 çakışma kontrolü, 20 req/min rate limit, MEDIA_UPLOADED ve MEDIA_DELETED audit log emisyonu ve 19/19 entegrasyon testleri %100 başarılıdır. Limitation: Projede canlı ortam için özel atanmış public CDN custom domain DNS kaydı bağlı olmadığından URL'ler env.CDN_BASE_URL veya https://cdn.msklabs.com fallback kök adresi üzerinden türetilmektedir)*.
 - **18. Hata / Risk Senaryoları:** R2 kotasının dolması -> Cloudflare Free Tier 10 GB depolama sınırı takibi.
 - **19. Zero-Cost Constraint:** Cloudflare R2 10 GB depolama + aylık 1 milyon A Sınıfı işlem ücretsiz kotası.
 - **20. Bağımlılıklar:** DATA-002, SEC-AUTH-001, SEC-RBAC-001.

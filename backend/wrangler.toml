@@ -8,3 +8,8 @@ compatibility_flags = ["nodejs_compat"]
 binding = "DB"
 database_name = "msklabsdesk_db"
 database_id = "dummy-id-pending-creation"
+
+# Cloudflare R2 Object Storage Binding (API-010)
+[[r2_buckets]]
+binding = "MEDIA"
+bucket_name = "msklabsdesk_media"

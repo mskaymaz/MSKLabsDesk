@@ -10,6 +10,7 @@ import { handleAdminLogin } from './routes/adminAuth';
 import { handleAdminGetTickets, handleAdminGetTicketDetail, handleAdminReplyTicket, handleAdminUpdateTicketStatus } from './routes/adminTickets';
 import { handleAdminGetComments, handleAdminModerateComment } from './routes/adminComments';
 import { handleAdminGetSubscribers, handleAdminBroadcastNewsletter } from './routes/adminBroadcast';
+import { handleAdminMediaUpload, handleAdminMediaDelete } from './routes/adminMedia';
 import { handleCmsChannels } from './routes/cmsChannels';
 import { handleCmsPosts } from './routes/cmsPosts';
 import { handleCmsApps } from './routes/cmsApps';
@@ -21,6 +22,7 @@ import { AuthEnv } from './utils/auth';
 
 export interface Env extends EmailEnv, AIEnv, AuthEnv {
   DB: D1Database;
+  MEDIA: R2Bucket;
 }
 
 export default {
@@ -91,6 +93,11 @@ export default {
       response = await handleAdminGetSubscribers(request, env);
     } else if (path === '/api/admin/broadcast' && request.method === 'POST') {
       response = await handleAdminBroadcastNewsletter(request, env);
+    } else if ((path === '/api/v1/admin/media/upload' || path === '/api/admin/media/upload') && request.method === 'POST') {
+      response = await handleAdminMediaUpload(request, env);
+    } else if ((path.startsWith('/api/v1/admin/media/') || path.startsWith('/api/admin/media/')) && request.method === 'DELETE') {
+      const keyParam = path.startsWith('/api/v1/admin/media/') ? path.substring('/api/v1/admin/media/'.length) : path.substring('/api/admin/media/'.length);
+      response = await handleAdminMediaDelete(keyParam, request, env);
     } else {
       response = new Response(JSON.stringify({ error: 'Endpoint bulunamadı.' }), { status: 404, headers: { 'Content-Type': 'application/json' } });
     }
