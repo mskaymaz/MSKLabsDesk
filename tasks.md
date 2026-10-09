@@ -2262,14 +2262,14 @@ sequenceDiagram
   - **LOW:** Düşük hacimli bot taramaları, hafif konfigürasyon uyarıları. (Rutin takip).
 - **5. Olay Türleri & Müdahale Senaryoları:**
   - [ ] *Secret / API Key Sızıntısı (`GEMINI_API_KEY`, `RESEND_API_KEY`, `VAPID_PRIVATE_KEY`, `JWT_SECRET`):* Anında `wrangler secret put` ile rotation, eski key revokasyonu, etkilenen kuyruk işlemlerinin tecridi.
-  - [ ] *Yetkisiz Admin / Oturum Sızması:* `JWT_SECRET` yenileme ile tüm aktif oturumların anında düşürülmesi, compromised hesabın `locked_until` ile dondurulması (`SEC-AUTH-003`), IP WAF engeli.
+  - [x] *Yetkisiz Admin / Oturum Sızması:* `JWT_SECRET` yenileme ile tüm aktif oturumların anında düşürülmesi, compromised hesabın `locked_until` ile dondurulması (`SEC-AUTH-003`), IP WAF engeli.
   - [ ] *Veri / İçerik Manipülasyonu:* Zararlı içeriğin yayından kaldırılması (`UNPUBLISHED`), `post_revisions` (`DATA-006` / `CMS-008`) üzerinden bilinen en son temiz revizyona geri yükleme (Restore), veritabanı yedeğinin doğrulanması (`DR-001`).
   - [ ] *D1 Veri Çökmesi veya Bütünlük Kaybı:* `DR-001` Point-in-time recovery veya `DR-002` geri yükleme tatbikatı ile veritabanının temiz versiyona dönmesi.
 - **6. Olay Sonrası İnceleme (Post-Incident Review):** Olay anından itibaren kronolojik zaman akışının (`timeline`) `OBS-002` logları ile çıkarılması, kök neden analizi (RCA), zafiyet giderici yama ve `TEST-002` birim testlerine yeni saldırı vektörlerinin eklenmesi.
 - **7. Performance:** *Acceptance Target:* Secret rotation ve session revocation tamamlanma süresi < 5dk.
 - **8. DoD:**
-  - [ ] 7 adımlı Incident Response yaşam döngüsünün ve severity seviyelerinin doğrulanması.
-  - [ ] Kanıt silinmeden tecrit etme (Evidence Protection) ve Secret Rotation adımlarının sınanması.
+  - [x] 7 adımlı Incident Response yaşam döngüsünün ve severity seviyelerinin doğrulanması.
+  - [x] Kanıt silinmeden tecrit etme (Evidence Protection) ve Secret Rotation adımlarının sınanması.
 - **9. Bağımlılıklar:** SEC-AUTH-001, SEC-AUTH-003, SEC-RBAC-001, OBS-002, OBS-003, DR-001, COM-001.
 - **10. Bağımlı Görevler:** GO-001, OPS-002.
 
@@ -2288,13 +2288,13 @@ sequenceDiagram
 | **İletişim ($0 Alert)** | Critical Severity Güvenlik İhlali | `ADMIN_ALERT` e-postası ile yöneticilere anında olay özeti ve tecrit durumu iletilir. |
 
 #### Section-Level Definition of Done (DoD)
-- [ ] 7 adımlı Incident Response yaşam döngüsünün (`Detect → Triage → Contain → Eradicate → Recover → Verify → Post-Incident Review`) tanımlanması.
-- [ ] Severity seviyelerinin (Critical, High, Medium, Low) ve tecrit sürelerinin belirlenmesi.
-- [ ] Secret rotation prosedürünün (`Revoke → Replace → Deploy → Verify → Invalidate`) tanımlanması.
-- [ ] Acil durum oturum/erişim iptali (Session & Access Revocation) mekanizmasının netleştirilmesi.
-- [ ] Kriz anında log ve kanıtların korunması (Evidence Protection) ilkesinin doğrulanması.
-- [ ] `DR-001` veritabanı kurtarma ve `COM-001` e-posta uyarısı entegrasyonlarının tanımlanması.
-- [ ] Zero-Cost Guard ($0/Ay) prensibinin ve Incident Response test matrisinin tamamlanması.
+- [x] 7 adımlı Incident Response yaşam döngüsünün (`Detect → Triage → Contain → Eradicate → Recover → Verify → Post-Incident Review`) tanımlanması.
+- [x] Severity seviyelerinin (Critical, High, Medium, Low) ve tecrit sürelerinin belirlenmesi.
+- [x] Secret rotation prosedürünün (`Revoke → Replace → Deploy → Verify → Invalidate`) tanımlanması.
+- [x] Acil durum oturum/erişim iptali (Session & Access Revocation) mekanizmasının netleştirilmesi.
+- [x] Kriz anında log ve kanıtların korunması (Evidence Protection) ilkesinin doğrulanması.
+- [x] `DR-001` veritabanı kurtarma ve `COM-001` e-posta uyarısı entegrasyonlarının tanımlanması.
+- [x] Zero-Cost Guard ($0/Ay) prensibinin ve Incident Response test matrisinin tamamlanması.
 
 ---
 
