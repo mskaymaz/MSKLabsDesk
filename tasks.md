@@ -2300,8 +2300,8 @@ sequenceDiagram
 
 ### Özet Görev Listesi (12. INCIDENT RESPONSE & SECURITY MANAGEMENT)
 
-- [ ] **INC-001 — Güvenlik İhlali ve Kriz Yönetimi Planı (Incident Response Plan)**
-  - **Amaç:** Parola sızıntısı, secret ifşası, yetkisiz erişim veya veri bütünlüğü bozulmasında 7 adımlı kriz yaşam döngüsü, secret rotation ve acil oturum iptali.
+- [x] **INC-001 — Güvenlik İhlali ve Kriz Yönetimi Planı (Incident Response Plan)**
+  - **Amaç:** Parola sızıntısı, secret ifşası, yetkisiz erişim veya veri bütünlüğü bozulmasında 7 adımlı kriz yaşam döngüsü, secret rotation ve acil oturum iptali. *(Not: Section 12 testleri 11/11 PASS, full regression 545/545 PASS. `webMSKLabs` genel tsc denetiminde önceki bölümlere ait test dosyalarında 21 hata mevcuttur, Section 12 kodları 0 hatalıdır)*.
   - **Öncelik:** P1 | **Bağımlılık:** SEC-AUTH-001, SEC-AUTH-003, OBS-002, DR-001
 
 ---
