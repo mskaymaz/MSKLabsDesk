@@ -2214,13 +2214,13 @@ sequenceDiagram
 
 ## 11. AUDIT, LOGGING, OBSERVABILITY & MONITORING ($0 Cost)
 
-- [ ] **OBS-001 — Message Events Audit Trail**
-  - **Kapsam:** `message_events` tablosu ile bilet durum değişikliklerinin kayıt altına alınması.
-- [ ] **OBS-002 — Audit Log vs Application Log Ayrımı ve D1 Loglama Altyapısı**
-  - **Amaç:** Ücretli log servisleri yerine D1 üzerinde `system_logs` (hata/sistem) ve `audit_logs` (yönetici işlemleri) tablolarının kurulması, correlation ID ve PII redaction süzgeci ($0).
+- [x] **OBS-001 — Message Events Audit Trail**
+  - **Kapsam:** `message_events` tablosu ile bilet durum değişikliklerinin (`TICKET_CREATED`, `STATUS_CHANGED`) kayıt altına alınması.
+- [x] **OBS-002 — Audit Log vs Application Log Ayrımı ve D1 Loglama Altyapısı**
+  - **Amaç:** Ücretli log servisleri yerine D1 üzerinde `system_logs` (hata/sistem) ve `audit_logs` (yönetici işlemleri) tablolarının kurulması, correlation ID ve PII redaction süzgeci ($0). *(Not: Section 11 testleri 10/10 PASS, full regression 534/534 PASS. `webMSKLabs` genel tsc denetiminde önceki bölümlere ait test dosyalarında 21 hata mevcuttur, Section 11 kodları 0 hatalıdır)*.
   - **Öncelik:** P1 | **Bağımlılık:** DATA-001, SEC-REQ-001, ARCH-001
-- [ ] **OBS-003 — Cloudflare Workers Analytics, Health Monitoring & Alerting**
-  - **Amaç:** İstek sayıları ve latency'nin Cloudflare dashboard'dan takibi, `/api/v1/health` sağlık rotası ve sıfır maliyetli e-posta uyarısı (`COM-001`).
+- [x] **OBS-003 — Cloudflare Workers Analytics, Health Monitoring & Alerting**
+  - **Amaç:** İstek sayıları ve latency'nin Cloudflare dashboard'dan takibi, `/api/v1/health` & `/api/v1/readiness` (D1/R2 503) sağlık rotası, KV/in-memory 5dk cooldown deduplication ve sıfır maliyetli e-posta uyarısı (`COM-001`).
   - **Öncelik:** P1 | **Bağımlılık:** API-008, OBS-002, COM-001
 
 ---
