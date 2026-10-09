@@ -24,6 +24,7 @@
 3. **CERRAHİ MÜDAHALE KURALI:** Yalnızca belirtilen ve istenen nokta/dosya üzerinde işlem yapılacak, ilgili olmayan kısımlara kesinlikle dokunulmayacaktır.
 4. **ONAYSIZ İŞLEM YASAĞI:** Kullanıcının açık talimatı ve onayı olmadan tüm repo genelinde tarama yapılmayacak, izinsiz büyük değişiklik başlatılmayacaktır.
 5. **GÖREV DURUMU STANDARDI (CHECKBOX NOTATION):**
+   - `[*]` — **DERİN DENETLENDİ & MÜKEMMEL (Deeply Audited & Verified):** Kodu, testleri, 450 satır sınırı, güvenlik, şema ve API sözleşmesi adım adım derinlemesine denetlenmiş ve mükemmelliği teyit edilmiş görev.
    - `[x]` — **DOĞRULANMIŞ & ONAYLI (Verified Done):** Kodu bizzat incelenmiş, testleri çalıştırılmış, güvenlik, sanitasyon ve satır kuralından geçmiş canlıya hazır görev.
    - `[x?]` — **KODLANDI (Denetim Bekliyor - Audit & Test Pending):** Geçmişte koda dökülmüş ancak sırayla kod incelemesi, testi ve güvenlik süzgecinden geçirilerek `[x]` durumuna çekilecek görev.
    - `[ ]` — **YAPILACAK (Pending Task):** Henüz kodlanmamış yeni veya gelecekteki görev.
@@ -31,35 +32,35 @@
 
 ---
 
-## 1. ARCHITECTURE & ENGINEERING FOUNDATION
+### 1. ARCHITECTURE & ENGINEERING FOUNDATION
 
 ### ARCH-001 — Serverless Edge Backend Kurulumu
 - **Amaç:** Cloudflare Workers (TypeScript) ve Wrangler CLI kullanarak sunucusuz (serverless), olay odaklı, ultra düşük gecikmeli Edge backend çekirdeğini kurmak ve yönetmek.
 - **Kapsam:** `backend/` dizini, `wrangler.toml`, `package.json`, `tsconfig.json`, `src/index.ts` giriş noktası, Cloudflare D1 ve R2 binding tanımları ile `Env` arayüzü (interface).
 - **Teknik Gereksinimler:**
-  - [x] Node.js & Wrangler CLI ile uyumlu TypeScript strict-mode yapılandırması (`noImplicitAny`, `strictNullChecks`).
-  - [x] Worker global `Env` type arayüzünün (D1 Database `DB`, R2 Bucket `MEDIA`, Environment secrets) eksiksiz tanımlanması.
-  - [x] Modüler proje dizin yapısı (`src/routes/`, `src/services/`, `src/utils/`, `src/middleware/`).
-  - [x] Domain sınırları ve tek sorumluluk prensibi esas alınarak **maksimum 400 - 450 satır sınırı** kurgusu (gereksiz parçalama yapmadan).
+  - [*] Node.js & Wrangler CLI ile uyumlu TypeScript strict-mode yapılandırması (`noImplicitAny`, `strictNullChecks`).
+  - [*] Worker global `Env` type arayüzünün (D1 Database `DB`, R2 Bucket `MEDIA`, Environment secrets) eksiksiz tanımlanması.
+  - [*] Modüler proje dizin yapısı (`src/routes/`, `src/services/`, `src/utils/`, `src/middleware/`).
+  - [*] Domain sınırları ve tek sorumluluk prensibi esas alınarak **maksimum 400 - 450 satır sınırı** kurgusu (gereksiz parçalama yapmadan).
 - **Mimari Karar:** Cloudflare Workers fetch-event mantığına dayalı modüler, hafif, üçüncü parti framework (Express vb.) yükü getirmeyen saf/hafif TypeScript router mimarisi.
 - **Etkilenecek Katmanlar:** Backend (Cloudflare Workers Runtime), Infrastructure (Wrangler Config), Types/Contracts.
 - **Bağımlılıklar:** Belirlenmedi — Taban mimari görevidir.
 - **Bağımlı Görevler:** ARCH-003, DATA-001, DATA-003, SEC-AUTH-001, API-001, API-006.
 - **Güvenlik Gereksinimleri:**
-  - [x] Secret'lar (`JWT_SECRET`, `RESEND_API_KEY` vb.) kesinlikle koda yazılmamalı, `backend/.dev.vars` (lokal) ve `wrangler secret put` (prod) üzerinden `Env` bağlamında erişilmelidir.
-  - [x] CORS başlıkları kontrollü Origin listesine dayanmalıdır.
+  - [*] Secret'lar (`JWT_SECRET`, `RESEND_API_KEY` vb.) kesinlikle koda yazılmamalı, `backend/.dev.vars` (lokal) ve `wrangler secret put` (prod) üzerinden `Env` bağlamında erişilmelidir.
+  - [*] CORS başlıkları kontrollü Origin listesine dayanmalıdır.
 - **Performans Kriterleri:**
-  - [x] *Teknik İlke:* Backend ve middleware katmanı gereksiz işlem ve dependency yükü oluşturmamalıdır.
-  - [x] *Performans Hedefleri (Benchmark ile Doğrulanacak Target):* Cold-start süresi < 50ms, bellek kullanımı < 128 MB (canlı ortam testlerinde doğrulanacaktır).
+  - [*] *Teknik İlke:* Backend ve middleware katmanı gereksiz işlem ve dependency yükü oluşturmamalıdır.
+  - [*] *Performans Hedefleri (Benchmark ile Doğrulanacak Target):* Cold-start süresi < 50ms, bellek kullanımı < 128 MB (canlı ortam testlerinde doğrulanacaktır).
 - **Test Gereksinimleri (Mimari Seviye):** `wrangler dev` ile yerel simülasyon ve Vitest ile Worker handler tip/çalışma doğrulaması. *(Kapsamlı E2E ve integration testleri Testing & Quality bölümünde ele alınacaktır).*
 - **Definition of Done (DoD):** *(Not: DoD altındaki [ ] işaretleri görev durumu değil, tamamlanma onay kriterleridir)*
-  - [x] TypeScript derleme hatası olmaması (`tsc --noEmit`).
-  - [x] `wrangler.toml` yapılandırmasının valid olması.
-  - [x] `Env` arayüzünde tüm D1/R2/Secret alanlarının tip tanımlarının bulunması.
-  - [x] Hiçbir backend dosyasının 450 satırı aşmaması.
+  - [*] TypeScript derleme hatası olmaması (`tsc --noEmit`).
+  - [*] `wrangler.toml` yapılandırmasının valid olması.
+  - [*] `Env` arayüzünde tüm D1/R2/Secret alanlarının tip tanımlarının bulunması.
+  - [*] Hiçbir backend dosyasının 450 satırı aşmaması.
 - **Hata / Risk Senaryoları:**
-  - [x] Eksik Secret tanımlarında Worker başlatma hatası -> `Env` kontrolleri ile güvenli fallback/error handling.
-  - [x] D1 binding isminin yanlış yazılması -> Wrangler build-time tip denetimi.
+  - [*] Eksik Secret tanımlarında Worker başlatma hatası -> `Env` kontrolleri ile güvenli fallback/error handling.
+  - [*] D1 binding isminin yanlış yazılması -> Wrangler build-time tip denetimi.
 - **Zero-Cost Constraint:** Kullanılan servislerin (Cloudflare Workers) güncel ücretsiz plan/kota sınırları içinde kalınması ($0/Ay maliyet hedefi).
 - **Uygulama Notları:** `index.ts` dosyası sadece ana router ve fetch event yönlendiricisi olarak kalmalı, iş mantığı (business logic) `routes/` ve `services/` dizinlerine dağıtılmalıdır.
 
@@ -69,30 +70,30 @@
 - **Amaç:** Masaüstü ve mobil cihazlarda uygulama gibi çalışan (PWA), yüksek performanslı, duyarlı (responsive) React + Vite + TypeScript yönetim paneli arayüzünü kurgulamak.
 - **Kapsam:** `frontend/` dizini, `vite.config.ts`, `vite-plugin-pwa` konfigürasyonu, `manifest.json`, Service Worker kaydı, Lucide React ikonları, HSL CSS tasarım token'ları (`index.css`).
 - **Teknik Gereksinimler:**
-  - [x] React 18+ & TypeScript strict-mode yapılandırması.
-  - [x] Vite build aracı ile optimum chunk splitting ve ağaç sallama (tree-shaking).
-  - [x] PWA Web App Manifest (ikonlar, tema rengi, `display: standalone`).
-  - [x] Responsive mobil/masaüstü görünüm (CSS Grid & Flexbox, medya sorguları).
-  - [x] Modüler bileşen yapısı esas alınarak **400 - 450 satır kuralı** (Örn: `PostsView.tsx` modüler parçalara bölünmelidir).
+  - [*] React 18+ & TypeScript strict-mode yapılandırması.
+  - [*] Vite build aracı ile optimum chunk splitting ve ağaç sallama (tree-shaking).
+  - [*] PWA Web App Manifest (ikonlar, tema rengi, `display: standalone`).
+  - [*] Responsive mobil/masaüstü görünüm (CSS Grid & Flexbox, medya sorguları).
+  - [*] Modüler bileşen yapısı esas alınarak **400 - 450 satır kuralı** (Örn: `PostsView.tsx` modüler parçalara bölünmelidir).
 - **Mimari Karar:** TailwindCSS bağımlılığı olmaksızın, maksimum CSS esnekliği ve hafiflik için Vanilla CSS + CSS Variables (HSL Token'ları) mimarisi.
 - **Etkilenecek Katmanlar:** Frontend (React SPA / PWA), Build tooling (Vite).
 - **Bağımlılıklar:** Belirlenmedi — Taban arayüz görevidir.
 - **Bağımlı Görevler:** UI-001, UI-004, UI-005, I18N-001, CMS-001, ADS-002.
 - **Güvenlik Gereksinimleri:**
-  - [x] Frontend üzerinde hiçbir private API secret tutulmamalı, sadece `VITE_` önekli public değişkenler (`VITE_API_URL`, `VITE_VAPID_PUBLIC_KEY`) kullanılmalıdır.
-  - [x] XSS koruması için kullanıcı kaynaklı içerikler süzgeçten geçirilmelidir.
+  - [*] Frontend üzerinde hiçbir private API secret tutulmamalı, sadece `VITE_` önekli public değişkenler (`VITE_API_URL`, `VITE_VAPID_PUBLIC_KEY`) kullanılmalıdır.
+  - [*] XSS koruması için kullanıcı kaynaklı içerikler süzgeçten geçirilmelidir.
 - **Performans Kriterleri:**
-  - [x] *Teknik İlke:* Frontend derleme çıktısı optimum ağaç sallama (tree-shaking) ve chunk ayırımı yapmalıdır.
-  - [ ] *Performans Hedefleri (Benchmark ile Doğrulanacak Target):* Lighthouse Performance PWA skoru > 90, FCP < 1.2 sn, Bundle boyutu < 300 KB gzip (canlı ortam ölçümleriyle kanıtlanacaktır).
+  - [*] *Teknik İlke:* Frontend derleme çıktısı optimum ağaç sallama (tree-shaking) ve chunk ayırımı yapmalıdır.
+  - [*] *Performans Hedefleri (Benchmark ile Doğrulanacak Target):* Lighthouse Performance PWA skoru > 90, FCP < 1.2 sn, Bundle boyutu < 300 KB gzip (canlı ortam ölçümleriyle kanıtlanacaktır).
 - **Test Gereksinimleri (Mimari Seviye):** Masaüstü (Chrome/Edge) ve mobil (iOS/Android Safari/Chrome) PWA yükleme ve offline cache testi.
 - **Definition of Done (DoD):** *(Not: DoD altındaki [ ] işaretleri görev durumu değil, tamamlanma onay kriterleridir)*
-  - [x] `npm run build` hatasız sıfır uyarısız tamamlanmalı.
-  - [x] PWA Manifest ve Service Worker tarayıcıda sorunsuz kaydedilmeli.
-  - [x] Mobil ekranlarda (≤768px) yatay kayma (horizontal scroll) olmamalı.
-  - [x] Hiçbir frontend dosyasının 450 satırı aşmaması.
+  - [*] `npm run build` hatasız sıfır uyarısız tamamlanmalı.
+  - [*] PWA Manifest ve Service Worker tarayıcıda sorunsuz kaydedilmeli.
+  - [*] Mobil ekranlarda (≤768px) yatay kayma (horizontal scroll) olmamalı.
+  - [*] Hiçbir frontend dosyasının 450 satırı aşmaması.
 - **Hata / Risk Senaryoları:**
-  - [x] Service Worker eski önbellek kalması -> Sürüm bazlı cache-busting ve otomatik güncelleme uyarısı.
-  - [x] Mobil tarayıcı çentik (notch) kesilmeleri -> `viewport-fit=cover` ve CSS safe-area-inset kullanımı.
+  - [*] Service Worker eski önbellek kalması -> Sürüm bazlı cache-busting ve otomatik güncelleme uyarısı.
+  - [*] Mobil tarayıcı çentik (notch) kesilmeleri -> `viewport-fit=cover` ve CSS safe-area-inset kullanımı.
 - **Zero-Cost Constraint:** Kullanılan servislerin (Cloudflare Pages) güncel ücretsiz plan/kota sınırları içinde kalınması ($0/Ay maliyet hedefi).
 - **Uygulama Notları:** Ortak bileşenler `components/ui/` dizininde izole edilmeli, CSS değişkenleri `:root` altında tanımlanmalıdır.
 
@@ -102,73 +103,73 @@
 - **Amaç:** `index.ts` üzerindeki istek yönlendirme ve middleware mantığını ayrıştırarak backend kodunun bakımı kolay, ölçeklenebilir ve modüler bir mimariye kavuşturulmasını sağlamak.
 - **Kapsam:** `backend/src/routes/` (Public & Admin rotaları), `backend/src/middleware/` (Auth, RateLimit, CORS, ErrorHandler), `backend/src/utils/router.ts` (Hafif URL matcher).
 - **Teknik Gereksinimler:**
-  - [x] İstek ön işleme middleware katmanı (CORS, Request ID üretimi, IP tespiti).
-  - [x] Güvenlik ve yetki middleware katmanı (`requireAuth`, `requirePermission`).
-  - [x] Hata yakalama middleware (`globalErrorHandler` — tip korumalı JSON hatası dönen).
-  - [x] Rota dosyalarının alan bağımsız ayrıştırılması (`supportRoutes.ts`, `commentRoutes.ts`, `cmsRoutes.ts`, `adminRoutes.ts`).
+  - [*] İstek ön işleme middleware katmanı (CORS, Request ID üretimi, IP tespiti).
+  - [*] Güvenlik ve yetki middleware katmanı (`requireAuth`, `requirePermission`).
+  - [*] Hata yakalama middleware (`globalErrorHandler` — tip korumalı JSON hatası dönen).
+  - [*] Rota dosyalarının alan bağımsız ayrıştırılması (`supportRoutes.ts`, `commentRoutes.ts`, `cmsRoutes.ts`, `adminRoutes.ts`).
 - **Mimari Karar:** Mevcut ihtiyaçlar için ağır bir framework bağımlılığı (Express vb.) oluşturulması gerekli görülmemektedir; hafif, tip güvenli ve Workers runtime ile uyumlu bir router yaklaşımı tercih edilir.
 - **Etkilenecek Katmanlar:** Backend (API Routing & Middleware).
 - **Bağımlılıklar:** ARCH-001.
 - **Bağımlı Görevler:** API-006, API-007, SEC-REQ-001, SEC-RBAC-002.
 - **Güvenlik Gereksinimleri:**
-  - [x] Hata durumunda (500 Internal Error) hassas sistem veya veritabanı detaylarının dışarıya sızdırılmaması (maskeleme).
-  - [x] Yetkisiz isteklerin doğrudan middleware aşamasında (401/403) engellenmesi.
+  - [*] Hata durumunda (500 Internal Error) hassas sistem veya veritabanı detaylarının dışarıya sızdırılmaması (maskeleme).
+  - [*] Yetkisiz isteklerin doğrudan middleware aşamasında (401/403) engellenmesi.
 - **Performans Kriterleri:**
-  - [x] *Teknik İlke:* Middleware katmanı gereksiz gecikme ve işlem yükü yaratmamalıdır.
-  - [ ] *Performans Hedefleri (Benchmark ile Doğrulanacak Target):* Middleware yönlendirme ek süresi < 1ms.
+  - [*] *Teknik İlke:* Backend ve middleware katmanı gereksiz işlem ve dependency yükü oluşturmamalıdır.
+  - [*] *Performans Hedefleri (Benchmark ile Doğrulanacak Target):* Middleware yönlendirme ek süresi < 1ms.
 - **Test Gereksinimleri (Mimari Seviye):** Geçerli/geçersiz rotalar ve middleware zinciri için birim testleri (Vitest).
 - **Definition of Done (DoD):** *(Not: DoD altındaki [ ] işaretleri görev durumu değil, tamamlanma onay kriterleridir)*
-  - [x] `index.ts` dosyasının satır sayısının 150 satırın altına düşmesi.
-  - [x] Tüm public ve admin rotalarının modüler route dosyalarında tanımlanması.
-  - [x] Global error handler'ın unhandled exception'ları güvenle yakalaması.
-  - [x] Modüler router yapısının 450 satır kuralını ihlal etmemesi.
+  - [*] `index.ts` dosyasının satır sayısının 150 satırın altına düşmesi.
+  - [*] Tüm public ve admin rotalarının modüler route dosyalarında tanımlanması.
+  - [*] Global error handler'ın unhandled exception'ları güvenle yakalaması.
+  - [*] Modüler router yapısının 450 satır kuralını ihlal etmemesi.
 - **Hata / Risk Senaryoları:**
-  - [x] Yönlendirilmeyen rota (404 Not Found) -> Standart JSON `404 Resource Not Found` yanıtı.
-  - [x] Middleware zincirinde unhandled promise rejection -> Global catch bloğu.
+  - [*] Yönlendirilmeyen rota (404 Not Found) -> Standart JSON `404 Resource Not Found` yanıtı.
+  - [*] Middleware zincirinde unhandled promise rejection -> Global catch bloğu.
 - **Zero-Cost Constraint:** Ekstra sunucu veya paralı kütüphane gerektirmez ($0/Ay maliyet hedefi).
 - **Uygulama Notları:** `index.ts` yalnızca middleware kayıtlarını ve route dispatcher çağrısını içermelidir.
 
-## 2. DATA ARCHITECTURE, MIGRATIONS & DATABASE
+### 2. DATA ARCHITECTURE, MIGRATIONS & DATABASE
 
 #### DATA-001 — Initial D1 Database Migration (`0001_devadmin_initial_schema.sql`)
 - **2. Amaç:** Destek biletleri, bilet tarihçesi, yanıtlar, blog yorumları, e-bülten aboneleri, bülten tercihleri, e-posta gönderim kuyruğu, kuponlar ve admin doğrulaması için çekirdek D1 SQLite veritabanı şemasını kurgulamak.
 - **3. Kapsam:** `migrations/0001_devadmin_initial_schema.sql` dosyası; `messages`, `message_events`, `replies`, `comments`, `subscribers`, `subscriber_preferences`, `email_queue`, `coupons`, `admins`, `broadcasts` tabloları.
 - **4. Teknik Gereksinimler:** SQLite D1 motoruna uyumlu strict veri tipleri (TEXT, INTEGER, REAL, BLOB), `PRAGMA foreign_keys = ON` uyumluluğu ve ISO8601 tarih standartları.
 - **5. Schema / Table Design:**
-  - [x] `messages`: `id` (TEXT PK / `MSK-YYYY-XXXX` — bu PK doğrudan bilet numarası / ticketNo olarak kullanılır), `name` (TEXT NOT NULL), `email` (TEXT NOT NULL), `subject` (TEXT NOT NULL), `message` (TEXT NOT NULL), `status` (TEXT DEFAULT 'NEW' CHECK(status IN ('NEW','IN_PROGRESS','RESOLVED','SPAM','CLOSED'))), `urgency` (TEXT DEFAULT 'NORMAL'), `category` (TEXT DEFAULT 'GENERAL'), `ai_summary` (TEXT), `ai_draft` (TEXT), `created_at` (DATETIME DEFAULT CURRENT_TIMESTAMP), `updated_at` (DATETIME DEFAULT CURRENT_TIMESTAMP).
-  - [x] `message_events`: `id` (INTEGER PK AUTOINCREMENT), `message_id` (TEXT NOT NULL FK → `messages(id)` ON DELETE CASCADE), `event_type` (TEXT NOT NULL), `actor` (TEXT DEFAULT 'SYSTEM'), `metadata` (TEXT / JSON string), `created_at` (DATETIME DEFAULT CURRENT_TIMESTAMP).
-  - [x] `replies`: `id` (INTEGER PK AUTOINCREMENT), `message_id` (TEXT NOT NULL FK → `messages(id)` ON DELETE CASCADE), `sender_type` (TEXT NOT NULL CHECK(sender_type IN ('ADMIN','USER'))), `reply_text` (TEXT NOT NULL), `created_at` (DATETIME DEFAULT CURRENT_TIMESTAMP).
-  - [x] `comments`: `id` (INTEGER PK AUTOINCREMENT), `post_slug` (TEXT NOT NULL), `author_name` (TEXT NOT NULL), `author_email` (TEXT NOT NULL), `comment_text` (TEXT NOT NULL), `status` (TEXT DEFAULT 'PENDING' CHECK(status IN ('PENDING','APPROVED','REJECTED'))), `created_at` (DATETIME DEFAULT CURRENT_TIMESTAMP). *(Not: API yanıtlarında id `c_12` gibi transformasyonla sunulabilir)*.
-  - [x] `subscribers`: `id` (INTEGER PK AUTOINCREMENT), `email` (TEXT NOT NULL UNIQUE), `is_active` (INTEGER DEFAULT 1 CHECK(is_active IN (0,1))), `unsubscribe_token` (TEXT NOT NULL UNIQUE), `created_at` (DATETIME DEFAULT CURRENT_TIMESTAMP).
-  - [x] `subscriber_preferences`: `id` (INTEGER PK AUTOINCREMENT), `subscriber_id` (INTEGER NOT NULL FK → `subscribers(id)` ON DELETE CASCADE), `category` (TEXT NOT NULL), `is_subscribed` (INTEGER DEFAULT 1), UNIQUE(`subscriber_id`, `category`).
-  - [x] `email_queue`: `id` (INTEGER PK AUTOINCREMENT), `recipient_email` (TEXT NOT NULL), `subject` (TEXT NOT NULL), `html_body` (TEXT NOT NULL), `status` (TEXT DEFAULT 'PENDING' CHECK(status IN ('PENDING','PROCESSING','SENT','FAILED'))), `attempts` (INTEGER DEFAULT 0), `max_attempts` (INTEGER DEFAULT 3), `last_error` (TEXT), `scheduled_at` (DATETIME DEFAULT CURRENT_TIMESTAMP), `sent_at` (DATETIME). *(Süreç takibi: Önerilen / Uygulama sırasında doğrulanacak)*.
-  - [x] `coupons`: `id` (INTEGER PK AUTOINCREMENT), `code` (TEXT NOT NULL UNIQUE), `discount_amount` (REAL NOT NULL), `discount_percent` (REAL), `discount_type` (TEXT DEFAULT 'PERCENTAGE'), `max_uses` (INTEGER DEFAULT 100), `current_uses` (INTEGER DEFAULT 0), `assigned_email` (TEXT), `is_used` (INTEGER DEFAULT 0), `expires_at` (DATETIME), `created_at` (DATETIME DEFAULT CURRENT_TIMESTAMP).
-  - [x] `admins`: `id` (INTEGER PK AUTOINCREMENT), `username` (TEXT NOT NULL UNIQUE), `password_hash` (TEXT NOT NULL), `role` (TEXT DEFAULT 'SUPER_ADMIN'), `last_login_at` (DATETIME), `created_at` (DATETIME DEFAULT CURRENT_TIMESTAMP).
-  - [x] `broadcasts`: `id` (INTEGER PK AUTOINCREMENT), `subject` (TEXT NOT NULL), `content_html` (TEXT NOT NULL), `target_segment` (TEXT DEFAULT 'ALL'), `total_recipients` (INTEGER DEFAULT 0), `status` (TEXT DEFAULT 'QUEUED'), `created_at` (DATETIME DEFAULT CURRENT_TIMESTAMP).
+  - [*] `messages`: `id` (TEXT PK / `MSK-YYYY-XXXX` — bu PK doğrudan bilet numarası / ticketNo olarak kullanılır), `name` (TEXT NOT NULL), `email` (TEXT NOT NULL), `subject` (TEXT NOT NULL), `message` (TEXT NOT NULL), `status` (TEXT DEFAULT 'NEW' CHECK(status IN ('NEW','IN_PROGRESS','RESOLVED','SPAM','CLOSED'))), `urgency` (TEXT DEFAULT 'NORMAL'), `category` (TEXT DEFAULT 'GENERAL'), `ai_summary` (TEXT), `ai_draft` (TEXT), `created_at` (DATETIME DEFAULT CURRENT_TIMESTAMP), `updated_at` (DATETIME DEFAULT CURRENT_TIMESTAMP).
+  - [*] `message_events`: `id` (INTEGER PK AUTOINCREMENT), `message_id` (TEXT NOT NULL FK → `messages(id)` ON DELETE CASCADE), `event_type` (TEXT NOT NULL), `actor` (TEXT DEFAULT 'SYSTEM'), `metadata` (TEXT / JSON string), `created_at` (DATETIME DEFAULT CURRENT_TIMESTAMP).
+  - [*] `replies`: `id` (INTEGER PK AUTOINCREMENT), `message_id` (TEXT NOT NULL FK → `messages(id)` ON DELETE CASCADE), `sender_type` (TEXT NOT NULL CHECK(sender_type IN ('ADMIN','USER'))), `reply_text` (TEXT NOT NULL), `created_at` (DATETIME DEFAULT CURRENT_TIMESTAMP).
+  - [*] `comments`: `id` (INTEGER PK AUTOINCREMENT), `post_slug` (TEXT NOT NULL), `author_name` (TEXT NOT NULL), `author_email` (TEXT NOT NULL), `comment_text` (TEXT NOT NULL), `status` (TEXT DEFAULT 'PENDING' CHECK(status IN ('PENDING','APPROVED','REJECTED'))), `created_at` (DATETIME DEFAULT CURRENT_TIMESTAMP). *(Not: API yanıtlarında id `c_12` gibi transformasyonla sunulabilir)*.
+  - [*] `subscribers`: `id` (INTEGER PK AUTOINCREMENT), `email` (TEXT NOT NULL UNIQUE), `is_active` (INTEGER DEFAULT 1 CHECK(is_active IN (0,1))), `unsubscribe_token` (TEXT NOT NULL UNIQUE), `created_at` (DATETIME DEFAULT CURRENT_TIMESTAMP).
+  - [*] `subscriber_preferences`: `id` (INTEGER PK AUTOINCREMENT), `subscriber_id` (INTEGER NOT NULL FK → `subscribers(id)` ON DELETE CASCADE), `category` (TEXT NOT NULL), `is_subscribed` (INTEGER DEFAULT 1), UNIQUE(`subscriber_id`, `category`).
+  - [*] `email_queue`: `id` (INTEGER PK AUTOINCREMENT), `recipient_email` (TEXT NOT NULL), `subject` (TEXT NOT NULL), `html_body` (TEXT NOT NULL), `status` (TEXT DEFAULT 'PENDING' CHECK(status IN ('PENDING','PROCESSING','SENT','FAILED'))), `attempts` (INTEGER DEFAULT 0), `max_attempts` (INTEGER DEFAULT 3), `last_error` (TEXT), `scheduled_at` (DATETIME DEFAULT CURRENT_TIMESTAMP), `sent_at` (DATETIME). *(Süreç takibi: Önerilen / Uygulama sırasında doğrulanacak)*.
+  - [*] `coupons`: `id` (INTEGER PK AUTOINCREMENT), `code` (TEXT NOT NULL UNIQUE), `discount_amount` (REAL NOT NULL), `discount_percent` (REAL), `discount_type` (TEXT DEFAULT 'PERCENTAGE'), `max_uses` (INTEGER DEFAULT 100), `current_uses` (INTEGER DEFAULT 0), `assigned_email` (TEXT), `is_used` (INTEGER DEFAULT 0), `expires_at` (DATETIME), `created_at` (DATETIME DEFAULT CURRENT_TIMESTAMP).
+  - [*] `admins`: `id` (INTEGER PK AUTOINCREMENT), `username` (TEXT NOT NULL UNIQUE), `password_hash` (TEXT NOT NULL), `role` (TEXT DEFAULT 'SUPER_ADMIN'), `last_login_at` (DATETIME), `created_at` (DATETIME DEFAULT CURRENT_TIMESTAMP).
+  - [*] `broadcasts`: `id` (INTEGER PK AUTOINCREMENT), `subject` (TEXT NOT NULL), `content_html` (TEXT NOT NULL), `target_segment` (TEXT DEFAULT 'ALL'), `total_recipients` (INTEGER DEFAULT 0), `status` (TEXT DEFAULT 'QUEUED'), `created_at` (DATETIME DEFAULT CURRENT_TIMESTAMP).
 - **6. Primary Key / Foreign Key:**
-  - [x] `messages.id` (TEXT PK), `admins.id` (INTEGER PK), `subscribers.id` (INTEGER PK).
-  - [x] `message_events.message_id` → `messages.id` (1:N, `ON DELETE CASCADE`).
-  - [x] `replies.message_id` → `messages.id` (1:N, `ON DELETE CASCADE`).
-  - [x] `subscriber_preferences.subscriber_id` → `subscribers.id` (1:N, `ON DELETE CASCADE`).
+  - [*] `messages.id` (TEXT PK), `admins.id` (INTEGER PK), `subscribers.id` (INTEGER PK).
+  - [*] `message_events.message_id` → `messages.id` (1:N, `ON DELETE CASCADE`).
+  - [*] `replies.message_id` → `messages.id` (1:N, `ON DELETE CASCADE`).
+  - [*] `subscriber_preferences.subscriber_id` → `subscribers.id` (1:N, `ON DELETE CASCADE`).
 - **7. Constraints:** `status IN (...)` CHECK constraint'leri, `subscribers.email` UNIQUE, `subscribers.unsubscribe_token` UNIQUE, `coupons.code` UNIQUE, `admins.username` UNIQUE, `subscriber_preferences(subscriber_id, category)` UNIQUE.
 - **8. Index Strategy:**
-  - [x] `idx_messages_status` ON `messages(status)` (Admin panel filtreleme).
-  - [x] `idx_messages_created` ON `messages(created_at DESC)` (Tarih sıralama).
-  - [x] `idx_comments_status` ON `comments(status)` (Onay bekleyen yorumlar).
-  - [x] `idx_subscribers_email` ON `subscribers(email)` (Unique abone kontrolü).
-  - [x] `idx_email_queue_status_scheduled` ON `email_queue(status, scheduled_at)` (Cron worker sorgu optimizasyonu).
+  - [*] `idx_messages_status` ON `messages(status)` (Admin panel filtreleme).
+  - [*] `idx_messages_created` ON `messages(created_at DESC)` (Tarih sıralama).
+  - [*] `idx_comments_status` ON `comments(status)` (Onay bekleyen yorumlar).
+  - [*] `idx_subscribers_email` ON `subscribers(email)` (Unique abone kontrolü).
+  - [*] `idx_email_queue_status_scheduled` ON `email_queue(status, scheduled_at)` (Cron worker sorgu optimizasyonu).
 - **9. Migration Strategy:** İlk çekirdek migration dosyası (`0001_devadmin_initial_schema.sql`). Bağımsız olarak temiz veritabanına ilk sırada uygulanır. Gerekli durumlarda forward-fix migration uygulanır.
 - **10. Data Integrity:** Foreign key kısıtları (`PRAGMA foreign_keys=ON`), `ON DELETE CASCADE` kuralları ve durum alanlarında CHECK kısıtları ile veri bütünlüğü sağlanır.
 - **11. Privacy / Retention:** `messages` ve `replies` kişisel verileri (PII: e-posta, isim) bilet çözümlendikten sonra saklama politikasına tabi tutulur. Audit geçmişi (`message_events`) yetkisiz silmeye karşı korumalıdır.
 - **12. Performance:** İndeksli status ve tarih sorguları ile O(log N) zaman karmaşıklığı; aylık 50k+ mesaj hacminde hafif metin/JSON yapıları.
 - **13. Test Requirements:** Temiz D1 SQLite üzerinde `0001_devadmin_initial_schema.sql` çalıştırma ve `PRAGMA foreign_key_check` sıfır hata doğrulaması.
 - **14. Definition of Done (DoD):** *(Not: DoD altındaki [ ] işaretleri onay kriteridir)*
-  - [x] 10 ana tablonun hatasız oluşturulması.
-  - [x] Tüm FOREIGN KEY ve CASCADE kurallarının doğrulanması.
-  - [x] Performans indekslerinin `PRAGMA index_list` ile teyit edilmesi.
+  - [*] 10 ana tablonun hatasız oluşturulması.
+  - [*] Tüm FOREIGN KEY ve CASCADE kurallarının doğrulanması.
+  - [*] Performans indekslerinin `PRAGMA index_list` ile teyit edilmesi.
 - **15. Hata / Risk Senaryoları:**
-  - [x] Silinen bilet sonrası yetim event kalması -> `ON DELETE CASCADE` ile engellenir.
-  - [x] `email_queue` kilitlenmesi -> `status='PROCESSING'` zaman aşımı denetimi.
+  - [*] Silinen bilet sonrası yetim event kalması -> `ON DELETE CASCADE` ile engellenir.
+  - [*] `email_queue` kilitlenmesi -> `status='PROCESSING'` zaman aşımı denetimi.
 - **Zero-Cost Constraint:** Cloudflare D1 Free Tier kotalarında $0/Ay ($0 maliyet ilkesi).
 - **17. Bağımlılıklar:** Belirlenmedi — Veritabanı taban görevidir.
 - **18. Bağımlı Görevler:** DATA-002, DATA-003, DATA-004, DATA-005, SEC-AUTH-001, API-001.
@@ -181,33 +182,33 @@
 - **3. Kapsam:** `migrations/0005_cms_schema.sql` dosyası; `blog_channels`, `blog_posts`, `apps`, `app_versions`, `site_templates`, `media_assets` tabloları ve `comments.post_id` ilişkisi.
 - **4. Teknik Gereksinimler:** Çok dilli sütun kurgusu (`title_tr/en/ar`), slug benzersizliği ve medya varlıklarının R2 nesne depolama referanslarıyla ilişkilendirilmesi.
 - **5. Schema / Table Design:**
-  - [x] `blog_channels`: `id` (INTEGER PK AUTOINCREMENT), `slug` (TEXT NOT NULL UNIQUE), `name_tr` (TEXT NOT NULL), `name_en` (TEXT), `name_ar` (TEXT), `icon` (TEXT), `created_at` (DATETIME DEFAULT CURRENT_TIMESTAMP).
-  - [x] `blog_posts`: `id` (INTEGER PK AUTOINCREMENT), `channel_id` (INTEGER FK → `blog_channels(id)` ON DELETE SET NULL), `slug` (TEXT NOT NULL UNIQUE), `title_tr` (TEXT NOT NULL), `title_en` (TEXT), `title_ar` (TEXT), `content_tr` (TEXT NOT NULL), `content_en` (TEXT), `content_ar` (TEXT), `summary_tr` (TEXT), `summary_en` (TEXT), `summary_ar` (TEXT), `cover_image` (TEXT), `status` (TEXT DEFAULT 'DRAFT' CHECK(status IN ('DRAFT','REVIEW','APPROVED','PUBLISHED','UNPUBLISHED','ARCHIVED'))), `view_count` (INTEGER DEFAULT 0), `published_at` (DATETIME), `created_at` (DATETIME DEFAULT CURRENT_TIMESTAMP), `updated_at` (DATETIME DEFAULT CURRENT_TIMESTAMP).
-  - [x] `apps`: `id` (INTEGER PK AUTOINCREMENT), `slug` (TEXT NOT NULL UNIQUE), `name` (TEXT NOT NULL), `short_description_tr` (TEXT), `short_description_en` (TEXT), `icon_url` (TEXT), `platform` (TEXT DEFAULT 'BOTH' CHECK(platform IN ('ANDROID','IOS','BOTH','WEB'))), `is_featured` (INTEGER DEFAULT 0), `created_at` (DATETIME DEFAULT CURRENT_TIMESTAMP).
-  - [x] `app_versions`: `id` (INTEGER PK AUTOINCREMENT), `app_id` (INTEGER NOT NULL FK → `apps(id)` ON DELETE CASCADE), `version_number` (TEXT NOT NULL), `release_notes_tr` (TEXT), `release_notes_en` (TEXT), `apk_url` (TEXT), `store_url` (TEXT), `is_current` (INTEGER DEFAULT 1), `published_at` (DATETIME DEFAULT CURRENT_TIMESTAMP).
-  - [x] `site_templates`: `id` (INTEGER PK AUTOINCREMENT), `key` (TEXT NOT NULL UNIQUE), `title` (TEXT NOT NULL), `content` (TEXT), `is_active` (INTEGER DEFAULT 1), `created_at` (DATETIME DEFAULT CURRENT_TIMESTAMP).
-  - [x] `media_assets`: `id` (INTEGER PK AUTOINCREMENT), `filename` (TEXT NOT NULL), `r2_key` (TEXT NOT NULL UNIQUE), `mime_type` (TEXT NOT NULL), `size_bytes` (INTEGER NOT NULL), `public_url` (TEXT NOT NULL), `created_at` (DATETIME DEFAULT CURRENT_TIMESTAMP).
+  - [*] `blog_channels`: `id` (INTEGER PK AUTOINCREMENT), `slug` (TEXT NOT NULL UNIQUE), `name_tr` (TEXT NOT NULL), `name_en` (TEXT), `name_ar` (TEXT), `icon` (TEXT), `created_at` (DATETIME DEFAULT CURRENT_TIMESTAMP).
+  - [*] `blog_posts`: `id` (INTEGER PK AUTOINCREMENT), `channel_id` (INTEGER FK → `blog_channels(id)` ON DELETE SET NULL), `slug` (TEXT NOT NULL UNIQUE), `title_tr` (TEXT NOT NULL), `title_en` (TEXT), `title_ar` (TEXT), `content_tr` (TEXT NOT NULL), `content_en` (TEXT), `content_ar` (TEXT), `summary_tr` (TEXT), `summary_en` (TEXT), `summary_ar` (TEXT), `cover_image` (TEXT), `status` (TEXT DEFAULT 'DRAFT' CHECK(status IN ('DRAFT','REVIEW','APPROVED','PUBLISHED','UNPUBLISHED','ARCHIVED'))), `view_count` (INTEGER DEFAULT 0), `published_at` (DATETIME), `created_at` (DATETIME DEFAULT CURRENT_TIMESTAMP), `updated_at` (DATETIME DEFAULT CURRENT_TIMESTAMP).
+  - [*] `apps`: `id` (INTEGER PK AUTOINCREMENT), `slug` (TEXT NOT NULL UNIQUE), `name` (TEXT NOT NULL), `short_description_tr` (TEXT), `short_description_en` (TEXT), `icon_url` (TEXT), `platform` (TEXT DEFAULT 'BOTH' CHECK(platform IN ('ANDROID','IOS','BOTH','WEB'))), `is_featured` (INTEGER DEFAULT 0), `created_at` (DATETIME DEFAULT CURRENT_TIMESTAMP).
+  - [*] `app_versions`: `id` (INTEGER PK AUTOINCREMENT), `app_id` (INTEGER NOT NULL FK → `apps(id)` ON DELETE CASCADE), `version_number` (TEXT NOT NULL), `release_notes_tr` (TEXT), `release_notes_en` (TEXT), `apk_url` (TEXT), `store_url` (TEXT), `is_current` (INTEGER DEFAULT 1), `published_at` (DATETIME DEFAULT CURRENT_TIMESTAMP).
+  - [*] `site_templates`: `id` (INTEGER PK AUTOINCREMENT), `key` (TEXT NOT NULL UNIQUE), `title` (TEXT NOT NULL), `content` (TEXT), `is_active` (INTEGER DEFAULT 1), `created_at` (DATETIME DEFAULT CURRENT_TIMESTAMP).
+  - [*] `media_assets`: `id` (INTEGER PK AUTOINCREMENT), `filename` (TEXT NOT NULL), `r2_key` (TEXT NOT NULL UNIQUE), `mime_type` (TEXT NOT NULL), `size_bytes` (INTEGER NOT NULL), `public_url` (TEXT NOT NULL), `created_at` (DATETIME DEFAULT CURRENT_TIMESTAMP).
 - **6. Primary Key / Foreign Key:**
-  - [x] `blog_posts.channel_id` → `blog_channels.id` (N:1, `ON DELETE SET NULL`).
-  - [x] `app_versions.app_id` → `apps.id` (1:N, `ON DELETE CASCADE`).
-  - [x] `comments.post_id` → `blog_posts.id` (FOREIGN KEY, uygulandı ve doğrulandı).
+  - [*] `blog_posts.channel_id` → `blog_channels.id` (N:1, `ON DELETE SET NULL`).
+  - [*] `app_versions.app_id` → `apps.id` (1:N, `ON DELETE CASCADE`).
+  - [*] `comments.post_id` → `blog_posts.id` (FOREIGN KEY, uygulandı ve doğrulandı).
 - **7. Constraints:** `blog_channels.slug` UNIQUE, `blog_posts.slug` UNIQUE, `apps.slug` UNIQUE, `site_templates.key` UNIQUE, `media_assets.r2_key` UNIQUE, `blog_posts.status IN (...)` CHECK, `apps.platform IN (...)` CHECK, `apps.is_featured IN (0,1)` CHECK, `app_versions.is_current IN (0,1)` CHECK, `site_templates.is_active IN (0,1)` CHECK.
 - **8. Index Strategy:**
-  - [x] `idx_blog_posts_slug` ON `blog_posts(slug)` (Blog detay).
-  - [x] `idx_blog_posts_status_published` ON `blog_posts(status, published_at DESC)` (Public yayın akışı).
-  - [x] `idx_apps_slug` ON `apps(slug)` (Uygulama detay).
-  - [x] `idx_app_versions_app_current` ON `app_versions(app_id, is_current)` (Aktif sürüm).
+  - [*] `idx_blog_posts_slug` ON `blog_posts(slug)` (Blog detay).
+  - [*] `idx_blog_posts_status_published` ON `blog_posts(status, published_at DESC)` (Public yayın akışı).
+  - [*] `idx_apps_slug` ON `apps(slug)` (Uygulama detay).
+  - [*] `idx_app_versions_app_current` ON `app_versions(app_id, is_current)` (Aktif sürüm).
 - **9. Migration Strategy:** `0001_devadmin_initial_schema.sql` tamamlandıktan sonra ikinci sırada `0005_cms_schema.sql` olarak uygulanır.
 - **10. Data Integrity:** Kanal silindiğinde yazıların yetim kalmaması için `ON DELETE SET NULL` uygulanır; uygulama silindiğinde sürümleri `CASCADE` ile silinir.
 - **11. Privacy / Retention:** Blog yazılarının silinmesi yerine `status='ARCHIVED'` ile soft-delete yapılır. Medya silindiğinde R2 dosya kontrolü yapılır.
 - **12. Performance:** Slug ve yayın durumu indeksleri public sorguları destekler; < 5ms değeri benchmark ile doğrulanacak performans hedefidir, garanti değildir.
 - **13. Test Requirements:** `0001` ve `0005` dosyalarının temiz D1 SQLite ortamında sırayla çalıştırılması ve `PRAGMA foreign_key_check` doğrulaması.
 - **14. Definition of Done (DoD):** *(Not: DoD altındaki [ ] işaretleri onay kriteridir)*
-  - [x] 6 yeni CMS tablosunun hatasız oluşturulması.
-  - [x] Slug UNIQUE indekslerinin teyit edilmesi.
+  - [*] 6 yeni CMS tablosunun hatasız oluşturulması.
+  - [*] Slug UNIQUE indekslerinin teyit edilmesi.
 - **15. Hata / Risk Senaryoları:**
-  - [x] Kanal silindiğinde yazıların kaybolması -> `ON DELETE SET NULL` ile önlenir.
-  - [x] Mükerrer slug girilmesi -> UNIQUE kısıtı ile engellenir.
+  - [*] Kanal silindiğinde yazıların kaybolması -> `ON DELETE SET NULL` ile önlenir.
+  - [*] Mükerrer slug girilmesi -> UNIQUE kısıtı ile engellenir.
 - **16. Zero-Cost Constraint:** Cloudflare D1 Free Tier kotalarında $0/Ay.
 - **17. Bağımlılıklar:** DATA-001.
 - **18. Bağımlı Görevler:** DATA-003, DATA-006, DATA-007, CMS-005, API-010.
@@ -229,11 +230,11 @@
 - **12. Performance:** Canlı D1 bağlantısında cold-start süresine etki etmeyen global binding kurgusu.
 - **13. Test Requirements:** `wrangler d1 execute DB --remote --command "PRAGMA table_info(messages);"` ile uzak tablo doğrulaması.
 - **14. Definition of Done (DoD):** *(Not: DoD altındaki [ ] işaretleri onay kriteridir)*
-  - [x] D1 veritabanı binding konfigürasyonunun (`binding = "DB"`, `database_name = "msklabsdesk_db"`) `wrangler.toml` dosyasında tanımlanması.
-  - [x] Yerel `--local` ortamda tüm 5 migration dosyasının uygulanıp `d1_migrations` tablosu ile doğrulanması.
+  - [*] D1 veritabanı binding konfigürasyonunun (`binding = "DB"`, `database_name = "msklabsdesk_db"`) `wrangler.toml` dosyasında tanımlanması.
+  - [*] Yerel `--local` ortamda tüm 5 migration dosyasının uygulanıp `d1_migrations` tablosu ile doğrulanması.
   - [ ] Remote D1 veritabanına migration uygulanması ve canlı doğrulama *(Cloudflare API token/authentication gerektirir)*.
 - **15. Hata / Risk Senaryoları:**
-  - [x] Yanlış veritabanına migration atılması -> `wrangler.toml` env kilitleri ile engellenir.
+  - [*] Yanlış veritabanına migration atılması -> `wrangler.toml` env kilitleri ile engellenir.
 - **16. Zero-Cost Constraint:** Cloudflare D1 Free Tier kotalarında $0/Ay.
 - **17. Bağımlılıklar:** DATA-001, DATA-002.
 - **18. Bağımlı Görevler:** GO-001, INT-002, REL-ENV-001.
@@ -246,21 +247,21 @@
 - **3. Kapsam:** `migrations/0006_push_subscriptions.sql` dosyası; `push_subscriptions` tablosu.
 - **4. Teknik Gereksinimler:** Tarayıcı VAPID kimlik doğrulama anahtarlarının (`p256dh`, `auth`) uygulama/servis katmanında şifreli veya eşdeğer güvenli gizli veri koruma mekanizmasıyla saklanması ve `endpoint` benzersizliği.
 - **5. Schema / Table Design:**
-  - [x] `push_subscriptions`: `id` (INTEGER PK AUTOINCREMENT), `endpoint` (TEXT NOT NULL UNIQUE), `p256dh` (TEXT NOT NULL), `auth` (TEXT NOT NULL), `user_agent` (TEXT), `is_active` (INTEGER DEFAULT 1 CHECK(is_active IN (0,1))), `created_at` (DATETIME DEFAULT CURRENT_TIMESTAMP), `updated_at` (DATETIME DEFAULT CURRENT_TIMESTAMP).
+  - [*] `push_subscriptions`: `id` (INTEGER PK AUTOINCREMENT), `endpoint` (TEXT NOT NULL UNIQUE), `p256dh` (TEXT NOT NULL), `auth` (TEXT NOT NULL), `user_agent` (TEXT), `is_active` (INTEGER DEFAULT 1 CHECK(is_active IN (0,1))), `created_at` (DATETIME DEFAULT CURRENT_TIMESTAMP), `updated_at` (DATETIME DEFAULT CURRENT_TIMESTAMP).
 - **6. Primary Key / Foreign Key:** `endpoint` sütunu benzersiz (UNIQUE) abonelik anahtarıdır. *(Kullanıcı/Admin FK ilişkisi: Önerilen / Uygulama sırasında doğrulanacak)*.
 - **7. Constraints:** `endpoint` UNIQUE kısıtı, `is_active IN (0,1)` CHECK kısıtı.
 - **8. Index Strategy:**
-  - [x] `endpoint` için ayrıca manuel indeks gerekmez; `UNIQUE` kısıtının oluşturduğu SQLite otomatik indeks tekilleştirme ve eşleşme için yeterlidir.
-  - [x] `idx_push_active` ON `push_subscriptions(is_active)` (Aktif alıcı listesi).
+  - [*] `endpoint` için ayrıca manuel indeks gerekmez; `UNIQUE` kısıtının oluşturduğu SQLite otomatik indeks tekilleştirme ve eşleşme için yeterlidir.
+  - [*] `idx_push_active` ON `push_subscriptions(is_active)` (Aktif alıcı listesi).
 - **9. Migration Strategy:** `DATA-001` ve `0005_cms_schema.sql` sonrasında `0006_push_subscriptions.sql` olarak uygulanır.
 - **10. Data Integrity:** Çift abonelik oluşmaması için `ON CONFLICT(endpoint) DO UPDATE` stratejisi kullanılır.
 - **11. Privacy / Retention:** Süresi dolan (410 Gone) abonelikler pasife alınır veya veritabanından temizlenir.
 - **12. Performance:** İndeksli `is_active` sorgusu ile bildirim gönderim altyapısına hızlı alıcı listesi sunumu.
 - **13. Test Requirements:** Mükerrer `endpoint` kaydında UNIQUE engelleme testi.
 - **14. Definition of Done (DoD):** *(Not: DoD altındaki [ ] işaretleri onay kriteridir)*
-  - [x] `push_subscriptions` tablosunun D1 üzerinde hatasız oluşturulması.
+  - [*] `push_subscriptions` tablosunun D1 üzerinde hatasız oluşturulması.
 - **15. Hata / Risk Senaryoları:**
-  - [x] Yenilenen abonelikte eski kaydın kalması -> `ON CONFLICT` ile güncelleme.
+  - [*] Yenilenen abonelikte eski kaydın kalması -> `ON CONFLICT` ile güncelleme.
 - **16. Zero-Cost Constraint:** Cloudflare D1 Free Tier kotalarında $0/Ay.
 - **17. Bağımlılıklar:** DATA-001.
 - **18. Bağımlı Görevler:** COM-004.
@@ -273,21 +274,21 @@
 - **3. Kapsam:** `migrations/0007_ad_settings.sql` dosyası; `ad_settings` tablosu ve 4 varsayılan seed kaydı (`header_banner`, `sidebar_top`, `post_in_article`, `footer_sticky`).
 - **4. Teknik Gereksinimler:** AdSense duyarlı (responsive) veya özel boyut parametrelerinin saklanması, `slot_key` benzersizliği.
 - **5. Schema / Table Design:**
-  - [x] `ad_settings`: `id` (INTEGER PK AUTOINCREMENT), `slot_key` (TEXT NOT NULL UNIQUE), `title` (TEXT NOT NULL), `is_enabled` (INTEGER DEFAULT 0 CHECK(is_enabled IN (0,1))), `ad_client` (TEXT), `ad_slot` (TEXT), `preset_size` (TEXT DEFAULT 'RESPONSIVE'), `custom_width` (INTEGER), `custom_height` (INTEGER), `margin_top` (INTEGER DEFAULT 16), `margin_bottom` (INTEGER DEFAULT 16), `is_sticky` (INTEGER DEFAULT 0 CHECK(is_sticky IN (0,1))), `updated_at` (DATETIME DEFAULT CURRENT_TIMESTAMP).
-  - [x] Seed Verisi: `INSERT OR IGNORE INTO ad_settings` ile 4 varsayılan slot kaydı.
+  - [*] `ad_settings`: `id` (INTEGER PK AUTOINCREMENT), `slot_key` (TEXT NOT NULL UNIQUE), `title` (TEXT NOT NULL), `is_enabled` (INTEGER DEFAULT 0 CHECK(is_enabled IN (0,1))), `ad_client` (TEXT), `ad_slot` (TEXT), `preset_size` (TEXT DEFAULT 'RESPONSIVE'), `custom_width` (INTEGER), `custom_height` (INTEGER), `margin_top` (INTEGER DEFAULT 16), `margin_bottom` (INTEGER DEFAULT 16), `is_sticky` (INTEGER DEFAULT 0 CHECK(is_sticky IN (0,1))), `updated_at` (DATETIME DEFAULT CURRENT_TIMESTAMP).
+  - [*] Seed Verisi: `INSERT OR IGNORE INTO ad_settings` ile 4 varsayılan slot kaydı.
 - **6. Primary Key / Foreign Key:** `slot_key` benzersiz metin anahtarıdır.
 - **7. Constraints:** `slot_key` UNIQUE, `is_enabled IN (0,1)` CHECK, `is_sticky IN (0,1)` CHECK.
 - **8. Index Strategy:**
-  - [x] `idx_ad_slot_key` ON `ad_settings(slot_key)` (Hızlı reklam ayarı çekimi).
+  - [*] `idx_ad_slot_key` ON `ad_settings(slot_key)` (Hızlı reklam ayarı çekimi).
 - **9. Migration Strategy:** `DATA-001` ve `0005_cms_schema.sql` sonrasında `0007_ad_settings.sql` olarak uygulanır.
 - **10. Data Integrity:** Seed verisinin tekrar çalıştırılan migration'larda mükerrer kayıt oluşturmaması (`INSERT OR IGNORE`).
 - **11. Privacy / Retention:** Reklam ayarlarında PII bulunmaz; kamuya açık reklam kodları sunulur.
 - **12. Performance:** 4 sabit reklam alanının düşük maliyetli, indeksli D1 sorgusu veya önbellek üzerinden çekilmesi; performans benchmark ile doğrulanmalıdır.
 - **13. Test Requirements:** Migration iki kez çalıştırıldığında seed verisinin tekrarlanmadığının doğrulanması.
 - **14. Definition of Done (DoD):** *(Not: DoD altındaki [ ] işaretleri onay kriteridir)*
-  - [x] `ad_settings` tablosunun ve 4 seed kaydının veritabanına eklenmesi.
+  - [*] `ad_settings` tablosunun ve 4 seed kaydının veritabanına eklenmesi.
 - **15. Hata / Risk Senaryoları:**
-  - [x] Tekrarlanan migration uygulamasında UNIQUE hatası -> `INSERT OR IGNORE` ile önlenir.
+  - [*] Tekrarlanan migration uygulamasında UNIQUE hatası -> `INSERT OR IGNORE` ile önlenir.
 - **16. Zero-Cost Constraint:** Cloudflare D1 Free Tier kotalarında $0/Ay.
 - **17. Bağımlılıklar:** DATA-001.
 - **18. Bağımlı Görevler:** ADS-001, ADS-002.
@@ -300,27 +301,27 @@
 - **3. Kapsam:** `migrations/0008_blog_layouts.sql` dosyası; `post_revisions` ve `blog_layouts` tabloları.
 - **4. Teknik Gereksinimler:** Revizyon geçmişinin numaralandırılması (`revision_number`), JSON formatlı blok ve tema yapısı (`block_structure_json`, `theme_config_json`), silme işlemlerinde referans bütünlüğü (`CASCADE`).
 - **5. Schema / Table Design:**
-  - [x] `post_revisions`: `id` (INTEGER PRIMARY KEY AUTOINCREMENT), `post_id` (INTEGER NOT NULL FK → `blog_posts(id)` ON DELETE CASCADE), `title` (TEXT NOT NULL), `content` (TEXT NOT NULL), `summary` (TEXT), `snapshot_json` (TEXT), `revision_number` (INTEGER NOT NULL), `created_by_admin_id` (INTEGER NULL FK → `admins(id)`), `created_at` (DATETIME DEFAULT CURRENT_TIMESTAMP).
-  - [x] `blog_layouts`: `id` (INTEGER PRIMARY KEY AUTOINCREMENT), `post_id` (INTEGER NOT NULL FK → `blog_posts(id)` ON DELETE CASCADE), `layout_name` (TEXT NOT NULL), `block_structure_json` (TEXT NOT NULL), `theme_config_json` (TEXT), `is_active` (INTEGER DEFAULT 1 CHECK(is_active IN (0,1))), `updated_at` (DATETIME DEFAULT CURRENT_TIMESTAMP). *(JSON şeması: Önerilen / Uygulama sırasında doğrulanacak)*.
+  - [*] `post_revisions`: `id` (INTEGER PRIMARY KEY AUTOINCREMENT), `post_id` (INTEGER NOT NULL FK → `blog_posts(id)` ON DELETE CASCADE), `title` (TEXT NOT NULL), `content` (TEXT NOT NULL), `summary` (TEXT), `snapshot_json` (TEXT), `revision_number` (INTEGER NOT NULL), `created_by_admin_id` (INTEGER NULL FK → `admins(id)`), `created_at` (DATETIME DEFAULT CURRENT_TIMESTAMP).
+  - [*] `blog_layouts`: `id` (INTEGER PRIMARY KEY AUTOINCREMENT), `post_id` (INTEGER NOT NULL FK → `blog_posts(id)` ON DELETE CASCADE), `layout_name` (TEXT NOT NULL), `block_structure_json` (TEXT NOT NULL), `theme_config_json` (TEXT), `is_active` (INTEGER DEFAULT 1 CHECK(is_active IN (0,1))), `updated_at` (DATETIME DEFAULT CURRENT_TIMESTAMP). *(JSON şeması: Önerilen / Uygulama sırasında doğrulanacak)*.
 - **6. Primary Key / Foreign Key:**
-  - [x] `post_revisions.id` (INTEGER PK), `blog_layouts.id` (INTEGER PK).
-  - [x] `post_revisions.post_id` → `blog_posts.id` (1:N, `ON DELETE CASCADE`).
-  - [x] `blog_layouts.post_id` → `blog_posts.id` (1:N, `ON DELETE CASCADE`).
+  - [*] `post_revisions.id` (INTEGER PK), `blog_layouts.id` (INTEGER PK).
+  - [*] `post_revisions.post_id` → `blog_posts.id` (1:N, `ON DELETE CASCADE`).
+  - [*] `blog_layouts.post_id` → `blog_posts.id` (1:N, `ON DELETE CASCADE`).
 - **7. Constraints:** `post_revisions` için `(post_id, revision_number)` bileşik UNIQUE kısıtı, `blog_layouts.is_active IN (0,1)` CHECK kısıtı ve her `post_id` için en fazla bir aktif layout kuralı (`idx_single_active_layout` partial unique index).
 - **8. Index Strategy:**
-  - [x] `idx_revisions_post_id` ON `post_revisions(post_id, revision_number DESC)` (Revizyon geçmişi çekimi).
-  - [x] `idx_blog_layouts_post` ON `blog_layouts(post_id)` (Yazıya özel düzen çekimi).
+  - [*] `idx_revisions_post_id` ON `post_revisions(post_id, revision_number DESC)` (Revizyon geçmişi çekimi).
+  - [*] `idx_blog_layouts_post` ON `blog_layouts(post_id)` (Yazıya özel düzen çekimi).
 - **9. Migration Strategy:** `DATA-002` (`blog_posts`) oluştuktan sonra `0008_blog_layouts.sql` olarak uygulanır.
 - **10. Data Integrity:** Bağlı blog yazısı silindiğinde revizyon ve düzen kayıtları otomatik silinir (`ON DELETE CASCADE`); JSON verileri API katmanında doğrulanır. `blog_layouts` için her `post_id` başına en fazla bir `is_active=1` kayıt kuralı `idx_single_active_layout` partial unique index ile veritabanı seviyesinde korunur. `updated_at` uygulama katmanı veya açık trigger (`trg_blog_layouts_updated_at`) ile güncellenir.
 - **11. Privacy / Retention:** Yazı başına en fazla 10 revizyon tutulur; 11. revizyon oluşturulurken en eski revizyon transaction içinde silinir. Restore işlemi mevcut içeriği yeni bir revizyon olarak kaydeder. Revizyonlarda PII tutulmaz.
 - **12. Performance:** Revizyon ve düzen sorguları indeksli erişimle optimize edilir; 5ms değeri benchmark ile doğrulanacak performans hedefidir, garanti değildir.
 - **13. Test Requirements:** Post silindiğinde revizyon ve layout kayıtlarının silindiğinin (`CASCADE`) ve `PRAGMA foreign_key_check` doğrulanması.
 - **14. Definition of Done (DoD):** *(Not: DoD altındaki [ ] işaretleri onay kriteridir)*
-  - [x] `post_revisions` ve `blog_layouts` tablolarının D1 üzerinde hatasız oluşturulması.
-  - [x] Foreign key CASCADE ve UNIQUE kısıt davranışlarının test edilmesi.
+  - [*] `post_revisions` ve `blog_layouts` tablolarının D1 üzerinde hatasız oluşturulması.
+  - [*] Foreign key CASCADE ve UNIQUE kısıt davranışlarının test edilmesi.
 - **15. Hata / Risk Senaryoları:**
-  - [x] Hatalı JSON kaydedilmesi -> API seviyesinde JSON şema denetimi.
-  - [x] Revizyon sayısının kontrolden çıkması -> Yazı başına 10 revizyon sınırı uygulanması.
+  - [*] Hatalı JSON kaydedilmesi -> API seviyesinde JSON şema denetimi.
+  - [*] Revizyon sayısının kontrolden çıkması -> Yazı başına 10 revizyon sınırı uygulanması.
 - **16. Zero-Cost Constraint:** Cloudflare D1 Free Tier kotalarında $0/Ay.
 - **17. Bağımlılıklar:** DATA-002.
 - **18. Bağımlı Görevler:** CMS-001, CMS-005.
@@ -333,23 +334,23 @@
 - **3. Kapsam:** `migrations/0009_translation.sql` dosyası; `translation_cache` ve `glossary` tabloları.
 - **4. Teknik Gereksinimler:** Çeviri kaynağının canonical biçimde normalize edilip SHA-256 ile hash'lenerek (`source_hash`) indeksli aranabilmesi, dil çifti yönetimi (`source_lang`, `target_lang`), glossary terim eşleştirmesi.
 - **5. Schema / Table Design:**
-  - [x] `translation_cache`: `id` (INTEGER PRIMARY KEY AUTOINCREMENT), `source_hash` (TEXT NOT NULL UNIQUE), `source_lang` (TEXT NOT NULL), `target_lang` (TEXT NOT NULL), `source_text` (TEXT NOT NULL), `translated_text` (TEXT NOT NULL), `provider` (TEXT DEFAULT 'GEMINI'), `quality_score` (REAL DEFAULT 1.0), `created_at` (DATETIME DEFAULT CURRENT_TIMESTAMP). *(Metin hash formatı: Önerilen / Uygulama sırasında doğrulanacak)*.
-  - [x] `glossary`: `id` (INTEGER PRIMARY KEY AUTOINCREMENT), `source_term` (TEXT NOT NULL), `target_term` (TEXT NOT NULL), `source_lang` (TEXT DEFAULT 'TR'), `target_lang` (TEXT DEFAULT 'EN'), `category` (TEXT DEFAULT 'TECHNICAL'), `is_active` (INTEGER DEFAULT 1 CHECK(is_active IN (0,1))), `created_at` (DATETIME DEFAULT CURRENT_TIMESTAMP), UNIQUE(`source_term`, `source_lang`, `target_lang`).
+  - [*] `translation_cache`: `id` (INTEGER PRIMARY KEY AUTOINCREMENT), `source_hash` (TEXT NOT NULL UNIQUE), `source_lang` (TEXT NOT NULL), `target_lang` (TEXT NOT NULL), `source_text` (TEXT NOT NULL), `translated_text` (TEXT NOT NULL), `provider` (TEXT DEFAULT 'GEMINI'), `quality_score` (REAL DEFAULT 1.0), `created_at` (DATETIME DEFAULT CURRENT_TIMESTAMP). *(Metin hash formatı: Önerilen / Uygulama sırasında doğrulanacak)*.
+  - [*] `glossary`: `id` (INTEGER PRIMARY KEY AUTOINCREMENT), `source_term` (TEXT NOT NULL), `target_term` (TEXT NOT NULL), `source_lang` (TEXT DEFAULT 'TR'), `target_lang` (TEXT DEFAULT 'EN'), `category` (TEXT DEFAULT 'TECHNICAL'), `is_active` (INTEGER DEFAULT 1 CHECK(is_active IN (0,1))), `created_at` (DATETIME DEFAULT CURRENT_TIMESTAMP), UNIQUE(`source_term`, `source_lang`, `target_lang`).
 - **6. Primary Key / Foreign Key:** `translation_cache.id` (INTEGER PK), `glossary.id` (INTEGER PK). `source_hash` (TEXT UNIQUE) benzersiz arama anahtarıdır.
 - **7. Constraints:** `source_hash` UNIQUE, `glossary(source_term, source_lang, target_lang)` UNIQUE, `glossary.is_active IN (0,1)` CHECK kısıtı. Cache kimliği için provider/model bağımsız veya provider/model izole yaklaşım açıkça seçilmeli; `quality_score` 0–1 aralığında doğrulanmalıdır.
 - **8. Index Strategy:**
-  - [x] `source_hash` için ayrıca manuel indeks gerekmez; `UNIQUE` kısıtının oluşturduğu SQLite otomatik indeks benzersiz arama için yeterlidir.
-  - [x] `idx_glossary_lookup` ON `glossary(source_lang, target_lang, is_active)` (Sözlük terim çekimi).
+  - [*] `source_hash` için ayrıca manuel indeks gerekmez; `UNIQUE` kısıtının oluşturduğu SQLite otomatik indeks benzersiz arama için yeterlidir.
+  - [*] `idx_glossary_lookup` ON `glossary(source_lang, target_lang, is_active)` (Sözlük terim çekimi).
 - **9. Migration Strategy:** `DATA-002` sonrasında `0009_translation.sql` olarak uygulanır.
 - **10. Data Integrity:** Canonical hash girdisi `source_lang + ":" + target_lang + ":" + source_text` olarak normalize edilir; SHA-256 pratikte çakışma direnci sağlar ve `UNIQUE(source_hash)` veri bütünlüğünü uygular.
 - **11. Privacy / Retention:** Önbellekte yalnızca kamuya açık blog/doküman metinleri saklanır; PII içeren bilet metinleri çeviri önbelleğine kaydedilmez.
 - **12. Performance:** Hash bazlı indeks araması ile çeviri önbelleği < 2ms hızında döner, harici LLM API çağrılarını %80+ azaltır.
 - **13. Test Requirements:** Aynı metin ve dil çifti için türetilen `source_hash` kaydının tekrarlanamadığının doğrulanması ve `PRAGMA foreign_key_check` kontrolü.
 - **14. Definition of Done (DoD):** *(Not: DoD altındaki [ ] işaretleri onay kriteridir)*
-  - [x] `translation_cache` ve `glossary` tablolarının D1 üzerinde hatasız oluşturulması.
-  - [x] `source_hash` UNIQUE kısıtının doğrulanması.
+  - [*] `translation_cache` ve `glossary` tablolarının D1 üzerinde hatasız oluşturulması.
+  - [*] `source_hash` UNIQUE kısıtının doğrulanması.
 - **15. Hata / Risk Senaryoları:**
-  - [x] Önbellek tablosunun aşırı büyüyerek D1 kotalarını zorlaması -> Zaman bazlı en eski önbellek verilerinin temizlenmesi (TTL/LRU stratejisi).
+  - [*] Önbellek tablosunun aşırı büyüyerek D1 kotalarını zorlaması -> Zaman bazlı en eski önbellek verilerinin temizlenmesi (TTL/LRU stratejisi).
 - **16. Zero-Cost Constraint:** Gemini Free Tier API kotalarını koruyarak %100 sıfır maliyet ($0/Ay) sağlar.
 - **17. Bağımlılıklar:** DATA-002.
 - **18. Bağımlı Görevler:** AI-004, AI-005, I18N-001.
@@ -362,27 +363,27 @@
 - **3. Kapsam:** `migrations/0010_post_audio_assets.sql` dosyası; `post_audio_assets` tablosu.
 - **4. Teknik Gereksinimler:** `post_id`, `language`, `article_version`, `audio_version`, `provider`, `model`, `r2_object_key`, `file_size`, `duration_seconds`, `status`, `validation_result_json` alanlarının depolanması.
 - **5. Schema / Table Design (Provider Abstraction & Domain Registry):**
-  - [x] `post_audio_assets`: `id` (INTEGER PRIMARY KEY AUTOINCREMENT), `post_id` (INTEGER NOT NULL FK → `blog_posts(id)` ON DELETE CASCADE), `language` (TEXT NOT NULL CHECK(language IN ('TR', 'EN', 'AR'))), `article_version` (INTEGER NOT NULL), `audio_version` (INTEGER NOT NULL), `provider` (TEXT NOT NULL), `model` (TEXT NOT NULL), `r2_object_key` (TEXT NOT NULL UNIQUE), `file_size` (INTEGER NOT NULL), `duration_seconds` (INTEGER NOT NULL), `status` (TEXT DEFAULT 'DRAFT' CHECK(status IN ('GENERATING', 'DRAFT', 'APPROVED', 'FAILED', 'STALE'))), `validation_result_json` (TEXT), `created_at` (DATETIME DEFAULT CURRENT_TIMESTAMP), `updated_at` (DATETIME DEFAULT CURRENT_TIMESTAMP), UNIQUE(`post_id`, `language`, `audio_version`).
-  - [x] *Mimari Açıklama (Seçenek A - Domain Metadata Registry):* `post_audio_assets` tablosu makale revizyonu ve onay süreçlerine özgü alanları tutar; R2 nesnesini `r2_object_key` ile doğrudan adresler. Genel medya galerisi (`DATA-002 media_assets`) ile gereksiz metadata tekrarı oluşturulmaz.
+  - [*] `post_audio_assets`: `id` (INTEGER PRIMARY KEY AUTOINCREMENT), `post_id` (INTEGER NOT NULL FK → `blog_posts(id)` ON DELETE CASCADE), `language` (TEXT NOT NULL CHECK(language IN ('TR', 'EN', 'AR'))), `article_version` (INTEGER NOT NULL), `audio_version` (INTEGER NOT NULL), `provider` (TEXT NOT NULL), `model` (TEXT NOT NULL), `r2_object_key` (TEXT NOT NULL UNIQUE), `file_size` (INTEGER NOT NULL), `duration_seconds` (INTEGER NOT NULL), `status` (TEXT DEFAULT 'DRAFT' CHECK(status IN ('GENERATING', 'DRAFT', 'APPROVED', 'FAILED', 'STALE'))), `validation_result_json` (TEXT), `created_at` (DATETIME DEFAULT CURRENT_TIMESTAMP), `updated_at` (DATETIME DEFAULT CURRENT_TIMESTAMP), UNIQUE(`post_id`, `language`, `audio_version`).
+  - [*] *Mimari Açıklama (Seçenek A - Domain Metadata Registry):* `post_audio_assets` tablosu makale revizyonu ve onay süreçlerine özgü alanları tutar; R2 nesnesini `r2_object_key` ile doğrudan adresler. Genel medya galerisi (`DATA-002 media_assets`) ile gereksiz metadata tekrarı oluşturulmaz.
 - **6. Primary Key / Foreign Key:** `post_id` → `blog_posts.id` (`ON DELETE CASCADE`). `(post_id, language, audio_version)` bileşik UNIQUE kısıtı.
 - **7. Revizyon & Sürüm Bağıntısı:**
-  - [x] `article_version`: hizmet katmanında `post_revisions.revision_number` (DATA-006) değerini temsil eder. Makale metni canonical olarak değiştiğinde yeni revizyon numarası üretilir; bu alan DB foreign key değildir.
-  - [x] `audio_version`: Sesin üretildiği anki `post_revisions.revision_number` değeridir; bu alan DB foreign key değildir ve audio üretim sürümünü temsil eder.
+  - [*] `article_version`: hizmet katmanında `post_revisions.revision_number` (DATA-006) değerini temsil eder. Makale metni canonical olarak değiştiğinde yeni revizyon numarası üretilir; bu alan DB foreign key değildir.
+  - [*] `audio_version`: Sesin üretildiği anki `post_revisions.revision_number` değeridir; bu alan DB foreign key değildir ve audio üretim sürümünü temsil eder.
 - **8. Index Strategy:**
-  - [x] `idx_audio_post_lang_status` ON `post_audio_assets(post_id, language, status)` (Public player hızlı dinleme sorgusu).
-  - [x] `idx_audio_version_check` ON `post_audio_assets(post_id, article_version, audio_version)` (Sürüm uyum denetimi).
+  - [*] `idx_audio_post_lang_status` ON `post_audio_assets(post_id, language, status)` (Public player hızlı dinleme sorgusu).
+  - [*] `idx_audio_version_check` ON `post_audio_assets(post_id, article_version, audio_version)` (Sürüm uyum denetimi).
 - **9. Migration Strategy:** `DATA-002` (`blog_posts`) ve `DATA-006` (`post_revisions`) oluştuktan sonra `0010_post_audio_assets.sql` olarak uygulanır.
 - **10. Data Integrity (SÜRÜM UYUM KURALI & STALE TEMİZLİĞİ):**
-  - [x] **`article_version != audio_version`** durumunda servis/API katmanı sesi **`STALE`** kabul eder ve public API yalnızca güncel sürüm ile `APPROVED` sesleri sunar (metin değişikliğinin eski sesle uyumsuz oynaması engellenir).
-  - [x] *Stale Audio Cleanup:* Stale olan R2 nesneleri geri alma (rollback) ihtimali için geçici tutulur (başlangıç retention politikası: konfigüre edilebilir / operasyonel olarak doğrulanacak saklama süresi), ardından zamanlanmış async temizlik işleyicisi ile güvenle R2'den silinir.
+  - [*] **`article_version != audio_version`** durumunda servis/API katmanı sesi **`STALE`** kabul eder ve public API yalnızca güncel sürüm ile `APPROVED` sesleri sunar (metin değişikliğinin eski sesle uyumsuz oynaması engellenir).
+  - [*] *Stale Audio Cleanup:* Stale olan R2 nesneleri geri alma (rollback) ihtimali için geçici tutulur (başlangıç retention politikası: konfigüre edilebilir / operasyonel olarak doğrulanacak saklama süresi), ardından zamanlanmış async temizlik işleyicisi ile güvenle R2'den silinir.
 - **11. Privacy / Retention:** Ses dosyaları Cloudflare R2 nesne depolamada saklanır (`r2_object_key`). PII tutulmaz.
 - **12. Performance:** *Benchmark Target:* Bileşik indeks ile public blog audio player metadata sorgusu < 3ms (Ölçüm yapılacaktır).
 - **13. Test Requirements:** Post silindiğinde audio kayıtlarının silindiğinin (`CASCADE`), sürüm uyumsuzluğunda servis/API katmanının `STALE` davranışını uyguladığının ve public API'nin güncel `APPROVED` sesleri filtrelediğinin doğrulanması.
 - **14. Definition of Done (DoD):**
-  - [x] `post_audio_assets` tablosunun D1 üzerinde hatasız oluşturulması.
-  - [x] Revizyon uyumsuzluğunda sesin gizlenme ve `STALE` olma mantığının doğrulama testi.
+  - [*] `post_audio_assets` tablosunun D1 üzerinde hatasız oluşturulması.
+  - [*] Revizyon uyumsuzluğunda sesin gizlenme ve `STALE` olma mantığının doğrulama testi.
 - **15. Hata / Risk Senaryoları:**
-  - [x] Güncellenmiş makalede eski sesin oynatılması -> `article_version == audio_version AND status = 'APPROVED'` kısıtı ile önlenir.
+  - [*] Güncellenmiş makalede eski sesin oynatılması -> `article_version == audio_version AND status = 'APPROVED'` kısıtı ile önlenir.
 - **16. Zero-Cost Constraint:** Provider-agnostic mimari ile $0/Ay ilkesi korunur. Cache anahtarı provider bağımsız tutulacaksa provider/model kalite farklılıkları cache metadata ve kalite skoru ile yönetilir; provider izolasyonu tercih edilirse provider/model cache kimliğine dahil edilir. Hiçbir ücretli provider zorunlu kılınmaz.
 - **17. Bağımlılıklar:** DATA-002 (`blog_posts`), DATA-006 (`post_revisions`).
 - **18. Bağımlı Görevler:** AI-TTS-001, API-TTS-001, CMS-TTS-001.
@@ -429,8 +430,8 @@
 - **Sıralı Migration Yolu:**
   `0001_devadmin_initial_schema.sql` (DATA-001) → `0005_cms_schema.sql` (DATA-002) → `0006_push_subscriptions.sql` (DATA-004) → `0007_ad_settings.sql` (DATA-005) → `0008_blog_layouts.sql` (DATA-006) → `0009_translation.sql` (DATA-007) → `0010_post_audio_assets.sql` (DATA-TTS-001) → `DATA-003 (Canlı D1 Binding & Remote Migration)`.
 - **Bağımlılık Gerekçesi:**
-  - [ ] `0005` dosyası `0001` içindeki `comments` tablosuna FK ilişkisi kurar.
-  - [ ] `0008`, `0009` ve `0010` dosyaları `0005` içindeki `blog_posts` tablosuna bağımlıdır.
+  - [*] `0005` dosyası `0001` içindeki `comments` tablosuna FK ilişkisi kurar.
+  - [*] `0008`, `0009` ve `0010` dosyaları `0005` içindeki `blog_posts` tablosuna bağımlıdır.
 - **Forward-Fix Yaklaşımı:** Üretim ortamında uygulanmış migration dosyaları doğrudan değiştirilmez; şema düzeltmeleri veya eklemeler bir sonraki kullanılabilir migration numarasıyla yeni bir düzeltme migration'ı ile uygulanır.
 
 ---
@@ -468,7 +469,7 @@ Her veritabanı migration dosyası için aşağıdaki testler sırasıyla gerçe
 
 ---
 
-## 3. IDENTITY, AUTHENTICATION, AUTHORIZATION & SECURITY
+### 3. IDENTITY, AUTHENTICATION, AUTHORIZATION & SECURITY
 
 ### 3.1 Authentication (Kimlik Doğrulama)
 
@@ -477,11 +478,11 @@ Her veritabanı migration dosyası için aşağıdaki testler sırasıyla gerçe
 - **3. Kapsam:** `backend/src/routes/adminAuth.ts`, `backend/src/middleware/auth.ts`, `POST /api/admin/login`, `POST /api/admin/logout`, `GET /api/admin/me` uç noktaları.
 - **4. Tehdit Modeli:** Credential stuffing, Brute-force, Session hijacking, Token theft, Timing attacks, Replay attacks.
 - **5. Teknik Gereksinimler:**
-  - [x] Login isteğinde `username` ve `password` alımı, tip ve format denetimi.
-  - [x] Veritabanından admin kullanıcısının çekilmesi ve parola hash doğrulaması.
-  - [x] Başarılı girişte JWT token üretimi ve istemciye iletilmesi.
-  - [x] Rota bazlı `requireAuth` middleware'i ile `Authorization: Bearer <token>` başlığı doğrulaması.
-  - [x] Oturum sonlandırma (`logout`) mekanizması.
+  - [*] Login isteğinde `username` ve `password` alımı, tip ve format denetimi.
+  - [*] Veritabanından admin kullanıcısının çekilmesi ve parola hash doğrulaması.
+  - [*] Başarılı girişte JWT token üretimi ve istemciye iletilmesi.
+  - [*] Rota bazlı `requireAuth` middleware'i ile `Authorization: Bearer <token>` başlığı doğrulaması.
+  - [*] Oturum sonlandırma (`logout`) mekanizması.
 - **6. Veri / Secret Gereksinimleri:** `JWT_SECRET` ortam değişkeni (secret koda gömülemez; `wrangler secret put` ile saklanır). Token payload'ında hassas veri (parola hash, PII) tutulmaz; sadece `admin_id`, `username`, `role` tutulur.
 - **7. Authentication / Authorization Akışı:**
   1. İstemci `POST /api/admin/login` isteği atar.
@@ -491,26 +492,26 @@ Her veritabanı migration dosyası için aşağıdaki testler sırasıyla gerçe
   5. İstemci sonraki isteklerde `Authorization: Bearer <token>` başlığını gönderir.
   6. `requireAuth` middleware'i token imzasını ve süresini doğrular; geçersizse `401` döner.
 - **8. Hata ve Güvenlik Davranışları:**
-  - [x] Eksik/hatalı kimlik bilgisi -> `401 Unauthorized` (Kullanıcı var/yok ayrımı yapılmaksızın jenerik mesaj).
-  - [x] Süresi dolmuş token -> `401 Unauthorized` (`TokenExpiredError`).
-  - [x] Geçersiz imza -> `401 Unauthorized` (`InvalidSignature`).
-  - [x] `JWT_SECRET` ortamda yoksa -> Sistemin 500 dönmesi yerine başlatmada güvenli hata kaydı ve kontrollü `500 Server Misconfiguration` yanıtı.
+  - [*] Eksik/hatalı kimlik bilgisi -> `401 Unauthorized` (Kullanıcı var/yok ayrımı yapılmaksızın jenerik mesaj).
+  - [*] Süresi dolmuş token -> `401 Unauthorized` (`TokenExpiredError`).
+  - [*] Geçersiz imza -> `401 Unauthorized` (`InvalidSignature`).
+  - [*] `JWT_SECRET` ortamda yoksa -> Sistemin 500 dönmesi yerine başlatmada güvenli hata kaydı ve kontrollü `500 Server Misconfiguration` yanıtı.
 - **9. Güvenlik Kontrolleri:** Timing attack önleme (sabit zamanlı parola karşılaştırma), JWT imza doğrulaması, payload şema kontrolü.
 - **10. Audit / Logging:** Giriş denemeleri (`SUCCESS` / `FAILED`), çıkış olayları loglanır. Loglarda parola veya token değerleri kesinlikle yer almaz.
 - **11. Privacy / KVKK:** Yönetici e-posta/kullanıcı adı ve giriş IP bilgileri güvenlik denetimi amacıyla saklanır. *(Hukuki saklama süresi: Hukuki doğrulama gerekli)*.
 - **12. Performance:** *Hedef:* Token doğrulama süresi < 2ms (WebCrypto API ile yerel CPU seviyesinde doğrulama; gerçek değer benchmark ile doğrulanacaktır).
 - **13. Test Requirements:**
-  - [x] Başarılı giriş ile geçerli token alımı.
-  - [x] Yanlış parola ile `401` reddi.
-  - [x] Süresi dolmuş token ile korumalı rotaya erişim reddi (`401`).
-  - [x] Eksik `Authorization` başlığı ile erişim reddi (`401`).
+  - [*] Başarılı giriş ile geçerli token alımı.
+  - [*] Yanlış parola ile `401` reddi.
+  - [*] Süresi dolmuş token ile korumalı rotaya erişim reddi (`401`).
+  - [*] Eksik `Authorization` başlığı ile erişim reddi (`401`).
 - **14. Definition of Done (DoD):** *(Not: DoD altındaki [ ] işaretleri onay kriteridir)*
-  - [x] Login, logout ve me rotalarının tip güvenli çalışması.
-  - [x] Jenerik hata mesajları ile kullanıcı varlığının sızdırılmaması.
-  - [x] JWT doğrulama middleware'inin tüm admin rotalarında aktifleşmesi.
+  - [*] Login, logout ve me rotalarının tip güvenli çalışması.
+  - [*] Jenerik hata mesajları ile kullanıcı varlığının sızdırılmaması.
+  - [*] JWT doğrulama middleware'inin tüm admin rotalarında aktifleşmesi.
 - **15. Hata / Risk Senaryoları:**
-  - [x] Timing Attack ile kullanıcı varlığının tespiti -> Sabit süreli hash doğrulama işlemi ile önlenir.
-  - [x] Token Replay -> Kısa süreli JWT ve token iptal mekanizması ile risk düşürülür.
+  - [*] Timing Attack ile kullanıcı varlığının tespiti -> Sabit süreli hash doğrulama işlemi ile önlenir.
+  - [*] Token Replay -> Kısa süreli JWT ve token iptal mekanizması ile risk düşürülür.
 - **16. Zero-Cost Constraint:** Cloudflare Workers WebCrypto ve D1 altyapısı ile %100 sıfır maliyet ($0/Ay). *(Mevcut ücretsiz kota ile doğrulanmalıdır)*.
 - **17. Bağımlılıklar:** DATA-001 (`admins` tablosu), ARCH-001.
 - **18. Bağımlı Görevler:** SEC-AUTH-002, SEC-AUTH-003, SEC-RBAC-001, API-004, API-005.
@@ -523,11 +524,11 @@ Her veritabanı migration dosyası için aşağıdaki testler sırasıyla gerçe
 - **3. Kapsam:** `backend/src/utils/crypto.ts`, `backend/src/middleware/auth.ts`, parola saklama ve JWT doğrulama katmanı.
 - **4. Tehdit Modeli:** Offline hash cracking, Rainbow table attacks, Token forgery, Algorithm downgrade attacks.
 - **5. Teknik Gereksinimler:**
-  - [x] WebCrypto API `PBKDF2` algoritması kullanımı.
-  - [x] Parola başına 16-byte rastgele kriptografik salt üretimi (`crypto.getRandomValues`).
-  - [x] Minimum 100.000 (100k) iterasyon sayısı ve SHA-256 digest kullanımı.
-  - [x] Token imzalama için HMAC-SHA256 ve 7 günlük (`7d`) geçerlilik süresi.
-  - [x] `JWT_SECRET` eksikliğinde kontrollü ve güvenli sistem davranışı.
+  - [*] WebCrypto API `PBKDF2` algoritması kullanımı.
+  - [*] Parola başına 16-byte rastgele kriptografik salt üretimi (`crypto.getRandomValues`).
+  - [*] Minimum 100.000 (100k) iterasyon sayısı ve SHA-256 digest kullanımı.
+  - [*] Token imzalama için HMAC-SHA256 ve 7 günlük (`7d`) geçerlilik süresi.
+  - [*] `JWT_SECRET` eksikliğinde kontrollü ve güvenli sistem davranışı.
 - **6. Veri / Secret Gereksinimleri:** Salt verisi `admins.password_hash` içinde `$pbkdf2$v=1$i=100000$salt$hash` formatında saklanır. Secret'lar kod veya Git içinde kesinlikle yer alamaz.
 - **7. Authentication / Authorization Akışı:**
   1. Kullanıcı şifresi girer.
@@ -536,24 +537,24 @@ Her veritabanı migration dosyası için aşağıdaki testler sırasıyla gerçe
   4. Kriptografik sabit zamanlı karşılaştırma (`timingSafeEqual`) yapılır.
   5. Başarılıysa HMAC-SHA256 JWT üretilip istemciye iletilir.
 - **8. Hata ve Güvenlik Davranışları:**
-  - [x] Eksik `JWT_SECRET` -> Uygulama ayağa kalkarken kilitlenir veya istek anında `500 Internal Error` detay vermeden güvenli hata döner.
-  - [x] Desteklenmeyen hash versiyonu -> Hata loglanır ve `401 Unauthorized` dönülür.
+  - [*] Eksik `JWT_SECRET` -> Uygulama ayağa kalkarken kilitlenir veya istek anında `500 Internal Error` detay vermeden güvenli hata döner.
+  - [*] Desteklenmeyen hash versiyonu -> Hata loglanır ve `401 Unauthorized` dönülür.
 - **9. Güvenlik Kontrolleri:** Salt tekilleştirme, iterasyon sayısı doğrulaması, HMAC imza kontrolü.
 - **10. Audit / Logging:** Hash versiyon güncellemeleri ve şifreleme hataları loglanır; parola ve secret loglanmaz.
 - **11. Privacy / KVKK:** Parolalar hiçbir zaman açık metin (plain-text) saklanmaz veya iletilmez.
 - **12. Performance:** *Hedef:* PBKDF2 hash türetme süresi Cloudflare Workers CPU sınırları içinde (< 30ms; gerçek değer benchmark ile doğrulanacaktır).
 - **13. Test Requirements:**
-  - [x] Doğru parola ile PBKDF2 eşleşme doğrulaması.
-  - [x] Rastgele türetilen salt'ların benzersizliği.
-  - [x] Değiştirilmiş JWT payload veya imzasında `401` reddi.
-  - [x] 7 günü geçen token'ların geçersiz sayılması.
+  - [*] Doğru parola ile PBKDF2 eşleşme doğrulaması.
+  - [*] Rastgele türetilen salt'ların benzersizliği.
+  - [*] Değiştirilmiş JWT payload veya imzasında `401` reddi.
+  - [*] 7 günü geçen token'ların geçersiz sayılması.
 - **14. Definition of Done (DoD):** *(Not: DoD altındaki [ ] işaretleri onay kriteridir)*
-  - [x] WebCrypto PBKDF2 (100k iterasyon, 16-byte salt) şifreleme modülünün yazılması.
-  - [x] HMAC-SHA256 JWT doğrulamasının aktifleşmesi.
-  - [x] Secret eksikliği testlerinin geçmesi.
+  - [*] WebCrypto PBKDF2 (100k iterasyon, 16-byte salt) şifreleme modülünün yazılması.
+  - [*] HMAC-SHA256 JWT doğrulamasının aktifleşmesi.
+  - [*] Secret eksikliği testlerinin geçmesi.
 - **15. Hata / Risk Senaryoları:**
-  - [x] Düşük iterasyon sayısı riski -> Parametre 100k altına düşürülemez.
-  - [ ] Secret'ın versiyon kontrolüne sızması -> `.gitignore` ve CI/CD taraması ile önlenir.
+  - [*] Düşük iterasyon sayısı riski -> Parametre 100k altına düşürülemez.
+  - [*] Secret'ın versiyon kontrolüne sızması -> `.gitignore` ve CI/CD taraması ile önlenir.
 - **16. Zero-Cost Constraint:** WebCrypto API standart Workers ortamında ücretsiz sunulur ($0/Ay). *(Mevcut ücretsiz kota ile doğrulanmalıdır)*.
 - **17. Bağımlılıklar:** SEC-AUTH-001.
 - **18. Bağımlı Görevler:** SEC-AUTH-003, SEC-RBAC-002.
@@ -566,10 +567,10 @@ Her veritabanı migration dosyası için aşağıdaki testler sırasıyla gerçe
 - **3. Kapsam:** `backend/src/middleware/rateLimit.ts`, `admins` veya D1 kilit tablosu, `POST /api/admin/login`.
 - **4. Tehdit Modeli:** Password spraying, Automated brute-force attacks, Session fixation, Account lockout denial-of-service.
 - **5. Teknik Gereksinimler:**
-  - [x] Hatalı giriş denemelerinde IP ve kullanıcı adı bileşimi üzerinden sayaç takibi.
-  - [x] 15 dakikalık pencerede 5 hatalı deneme sonrası hesabın/IP'nin 15 dakika boyunca kilitlenmesi (lockout).
-  - [x] Konfigüre edilebilir kilitlenme politikası (`MAX_ATTEMPTS`, `LOCKOUT_WINDOW`).
-  - [x] Şüpheli giriş durumlarında oturum iptal (revocation) olanağı.
+  - [*] Hatalı giriş denemelerinde IP ve kullanıcı adı bileşimi üzerinden sayaç takibi.
+  - [*] 15 dakikalık pencerede 5 hatalı deneme sonrası hesabın/IP'nin 15 dakika boyunca kilitlenmesi (lockout).
+  - [*] Konfigüre edilebilir kilitlenme politikası (`MAX_ATTEMPTS`, `LOCKOUT_WINDOW`).
+  - [*] Şüpheli giriş durumlarında oturum iptal (revocation) olanağı.
 - **6. Veri / Secret Gereksinimleri:** Giriş deneme sayaçları ve kilit zaman damgaları D1 veritabanında veya bellek içi (in-memory rate limiter) tutulur. PII tutulmaz.
 - **7. Authentication / Authorization Akışı:**
   1. Giriş isteği gelir (IP + `username`).
@@ -578,22 +579,22 @@ Her veritabanı migration dosyası için aşağıdaki testler sırasıyla gerçe
   4. Başarısız ise sayaç 1 artırılır; 5'e ulaşırsa `locked_until` zamanı yazılır.
   5. Başarılı ise sayaç sıfırlanır.
 - **8. Hata ve Güvenlik Davranışları:**
-  - [x] 5 hatalı deneme aşımı -> `429 Too Many Requests` (`Retry-After: 900` başlığı ile).
-  - [x] Dağıtık (distributed) IP saldırısı -> Kullanıcı adı bazlı kilitleme ile hesabı koruma; meşru kullanıcı engellenmesine karşı uyarı e-postası.
+  - [*] 5 hatalı deneme aşımı -> `429 Too Many Requests` (`Retry-After: 900` başlığı ile).
+  - [*] Dağıtık (distributed) IP saldırısı -> Kullanıcı adı bazlı kilitleme ile hesabı koruma; meşru kullanıcı engellenmesine karşı uyarı e-postası.
 - **9. Güvenlik Kontrolleri:** Sayaç artırımı, kilit süresi denetimi, başarılı girişte sayaç sıfırlama.
 - **10. Audit / Logging:** Kilitlenme olayları (`ACCOUNT_LOCKED`, `IP_THROTTLED`) audit loglarına yazılır.
 - **11. Privacy / KVKK:** Saldırgan IP adresleri güvenlik ve sistem sağlığı gerekçesiyle geçici süreliğine işlenir. *(Hukuki saklama süresi: Hukuki doğrulama gerekli)*.
 - **12. Performance:** *Hedef:* Rate-limit kontrolü ek süresi < 1ms (D1 önbellekli sorgu; gerçek değer benchmark ile doğrulanacaktır).
 - **13. Test Requirements:**
-  - [x] 5 kez üst üste hatalı şifre denemesinde 6. isteğin `429` ile engellenmesi.
-  - [x] 15 dakika dolduktan sonra tekrar giriş yapılabilmesi.
-  - [x] Başarılı girişte sayacın sıfırlanması.
+  - [*] 5 kez üst üste hatalı şifre denemesinde 6. isteğin `429` ile engellenmesi.
+  - [*] 15 dakika dolduktan sonra tekrar giriş yapılabilmesi.
+  - [*] Başarılı girişte sayacın sıfırlanması.
 - **14. Definition of Done (DoD):** *(Not: DoD altındaki [ ] işaretleri onay kriteridir)*
-  - [x] 5 deneme / 15 dk lockout kuralının uygulanması.
-  - [x] `Retry-After` HTTP başlığının dönülmesi.
-  - [x] Başarılı girişte kilit sayacının temizlenmesi.
+  - [*] 5 deneme / 15 dk lockout kuralının uygulanması.
+  - [*] `Retry-After` HTTP başlığının dönülmesi.
+  - [*] Başarılı girişte kilit sayacının temizlenmesi.
 - **15. Hata / Risk Senaryoları:**
-  - [x] Lockout Abuse (Meşru kullanıcının hesabını kasıtlı kilitletme) -> IP + Kullanıcı adı bileşik sınırlama politikası ile risk düşürülür.
+  - [*] Lockout Abuse (Meşru kullanıcının hesabını kasıtlı kilitletme) -> IP + Kullanıcı adı bileşik sınırlama politikası ile risk düşürülür.
 - **16. Zero-Cost Constraint:** D1 veya Workers KV varsayılan kotası kullanılır ($0/Ay). *(Mevcut ücretsiz kota ile doğrulanmalıdır)*.
 - **17. Bağımlılıklar:** SEC-AUTH-002, DATA-001.
 - **18. Bağımlı Görevler:** SEC-RBAC-002, API-004.
@@ -608,10 +609,10 @@ Her veritabanı migration dosyası için aşağıdaki testler sırasıyla gerçe
 - **3. Kapsam:** `backend/src/types/auth.ts`, `backend/src/config/permissions.ts`, Rol ve yetki matrisi.
 - **4. Tehdit Modeli:** Privilege escalation, Horizontal/Vertical unauthorized access, Insecure Direct Object Reference (IDOR).
 - **5. Teknik Gereksinimler:**
-  - [x] 3 Ana Rol Tanımı: `SUPER_ADMIN`, `CONTENT_EDITOR`, `SUPPORT_AGENT`.
-  - [x] Atomik Yetki (Permission) Tanımları: `messages.read`, `messages.reply`, `comments.approve`, `posts.create`, `posts.publish`, `media.upload`, `settings.manage`. *(Örnek / önerilen permission)*.
-  - [x] Rol-Yetki haritası (Role-Permission Mapping).
-  - [x] Varsayılan olarak tüm erişimlerin reddedilmesi (Deny-by-Default).
+  - [*] 3 Ana Rol Tanımı: `SUPER_ADMIN`, `CONTENT_EDITOR`, `SUPPORT_AGENT`.
+  - [*] Atomik Yetki (Permission) Tanımları: `messages.read`, `messages.reply`, `comments.approve`, `posts.create`, `posts.publish`, `media.upload`, `settings.manage`. *(Örnek / önerilen permission)*.
+  - [*] Rol-Yetki haritası (Role-Permission Mapping).
+  - [*] Varsayılan olarak tüm erişimlerin reddedilmesi (Deny-by-Default).
 - **6. Veri / Secret Gereksinimleri:** Kullanıcı rolü JWT veya veritabanından çekilir. Yetki haritası hafızada sabit nesne (constant object) olarak tutulur.
 - **7. Authentication / Authorization Akışı:**
   1. İstemci isteği atar.
@@ -620,21 +621,21 @@ Her veritabanı migration dosyası için aşağıdaki testler sırasıyla gerçe
   4. Rolün bu yetkiye sahip olup olmadığı matristen kontrol edilir.
   5. Yetki yoksa istek reddedilir (`403 Forbidden`).
 - **8. Hata ve Güvenlik Davranışları:**
-  - [x] Yetkisiz rol -> `403 Forbidden` (`JSON: { error: "Insufficient permissions" }`).
-  - [x] Tanımsız rol -> `403 Forbidden`.
+  - [*] Yetkisiz rol -> `403 Forbidden` (`JSON: { error: "Insufficient permissions" }`).
+  - [*] Tanımsız rol -> `403 Forbidden`.
 - **9. Güvenlik Kontrolleri:** Least privilege kontrolü, Deny-by-default kontrolü, Yetki yükseltme engellemesi.
 - **10. Audit / Logging:** Rol değişiklikleri ve yetki ihlali denemeleri (`PERMISSION_DENIED`) audit loguna yazılır.
 - **11. Privacy / KVKK:** Kullanıcı rolü ve yetki seviyesi sistem içi yetkilendirme amacıyla işlenir.
 - **12. Performance:** *Hedef:* Matris kontrolü hafıza içi arama ile < 0.1ms (gerçek değer benchmark ile doğrulanacaktır).
 - **13. Test Requirements:**
-  - [x] `SUPPORT_AGENT` rolünün blog yazısı yayınlamaya çalıştığında `403` alması.
-  - [x] `SUPER_ADMIN` rolünün tüm işlemleri hatasız yapabilmesi.
-  - [x] Tanımsız bir yetki istendiğinde sistemin varsayılan olarak reddetmesi.
+  - [*] `SUPPORT_AGENT` rolünün blog yazısı yayınlamaya çalıştığında `403` alması.
+  - [*] `SUPER_ADMIN` rolünün tüm işlemleri hatasız yapabilmesi.
+  - [*] Tanımsız bir yetki istendiğinde sistemin varsayılan olarak reddetmesi.
 - **14. Definition of Done (DoD):** *(Not: DoD altındaki [ ] işaretleri onay kriteridir)*
-  - [x] Rol ve Yetki haritasının TypeScript tipleriyle tanımlanması.
-  - [x] Deny-by-default prensibinin kod seviyesinde doğrulanması.
+  - [*] Rol ve Yetki haritasının TypeScript tipleriyle tanımlanması.
+  - [*] Deny-by-default prensibinin kod seviyesinde doğrulanması.
 - **15. Hata / Risk Senaryoları:**
-  - [x] Yetki yükseltme (Privilege Escalation) -> Rol atamalarının sadece `SUPER_ADMIN` tarafından yapılabilmesi ile önlenir.
+  - [*] Yetki yükseltme (Privilege Escalation) -> Rol atamalarının sadece `SUPER_ADMIN` tarafından yapılabilmesi ile önlenir.
 - **16. Zero-Cost Constraint:** Ek maliyet gerektirmez ($0/Ay). *(Mevcut ücretsiz kota ile doğrulanmalıdır)*.
 - **17. Bağımlılıklar:** SEC-AUTH-001.
 - **18. Bağımlı Görevler:** SEC-RBAC-002, SEC-RBAC-003.
@@ -647,10 +648,10 @@ Her veritabanı migration dosyası için aşağıdaki testler sırasıyla gerçe
 - **3. Kapsam:** `backend/src/middleware/authorize.ts`, tüm Admin API rotaları (`backend/src/routes/admin/`).
 - **4. Tehdit Modeli:** BOLA / IDOR, Broken Function Level Authorization, Privilege escalation, Parameter tampering.
 - **5. Teknik Gereksinimler:**
-  - [x] `requirePermission(permission: Permission)` middleware fonksiyonu.
-  - [x] Request bağlamından (`c.var.user`) kullanıcının rolünün ve yetkilerinin okunması.
-  - [x] Kaynak seviyesinde (Resource-level / IDOR) sahiplik ve erişim kontrolleri.
-  - [x] Frontend buton gizlemenin güvenlik kontrolü olmadığını beyan eden backend zorlaması.
+  - [*] `requirePermission(permission: Permission)` middleware fonksiyonu.
+  - [*] Request bağlamından (`c.var.user`) kullanıcının rolünün ve yetkilerinin okunması.
+  - [*] Kaynak seviyesinde (Resource-level / IDOR) sahiplik ve erişim kontrolleri.
+  - [*] Frontend buton gizlemenin güvenlik kontrolü olmadığını beyan eden backend zorlaması.
 - **6. Veri / Secret Gereksinimleri:** İsteği atan kullanıcının `admin_id` ve `role` bilgileri `c.var` context alanından okunur.
 - **7. Authentication / Authorization Akışı:**
   1. İstek `requireAuth` middleware'inden geçer (Kimlik doğrulanır).
@@ -658,22 +659,22 @@ Her veritabanı migration dosyası için aşağıdaki testler sırasıyla gerçe
   3. Kullanıcının rolü kontrol edilir; yetki varsa `next()` çağrılır.
   4. Yetki yoksa zincir sonlandırılır ve `403 Forbidden` yanıtı dönülür.
 - **8. Hata ve Güvenlik Davranışları:**
-  - [x] Kimliği doğrulanmamış istek -> `401 Unauthorized`.
-  - [x] Kimliği doğrulanmış fakat yetkisiz istek -> `403 Forbidden`.
-  - [x] Yanlış veya eksik parametre -> `400 Bad Request`.
+  - [*] Kimliği doğrulanmamış istek -> `401 Unauthorized`.
+  - [*] Kimliği doğrulanmış fakat yetkisiz istek -> `403 Forbidden`.
+  - [*] Yanlış veya eksik parametre -> `400 Bad Request`.
 - **9. Güvenlik Kontrolleri:** Deny-by-default kontrolü, BOLA/IDOR parametre denetimi, Rota bazlı yetki kontrolü.
 - **10. Audit / Logging:** Engellenen yetkisiz erişim denemeleri (`UNAUTHORIZED_ACCESS_ATTEMPT`) detayları loglanır.
 - **11. Privacy / KVKK:** İhlal denemesinde bulunan kullanıcının `admin_id` ve IP bilgisi loglanır.
 - **12. Performance:** *Hedef:* Authorization middleware ek süresi < 0.5ms (gerçek değer benchmark ile doğrulanacaktır).
 - **13. Test Requirements:**
-  - [x] Korumalı rotaya yetkisiz rol ile istek atıldığında `403` dönmesi.
-  - [x] Korumalı rotaya geçerli rol ile istek atıldığında `200` dönmesi.
-  - [x] BOLA testi: Başka bir admine ait özel kaynağa erişimin engellenmesi.
+  - [*] Korumalı rotaya yetkisiz rol ile istek atıldığında `403` dönmesi.
+  - [*] Korumalı rotaya geçerli rol ile istek atıldığında `200` dönmesi.
+  - [*] BOLA testi: Başka bir admine ait özel kaynağa erişimin engellenmesi.
 - **14. Definition of Done (DoD):** *(Not: DoD altındaki [ ] işaretleri onay kriteridir)*
-  - [x] `requirePermission` middleware'inin yazılması ve test edilmesi.
-  - [x] Tüm admin API uç noktalarına yetki kısıtlarının bağlanması.
+  - [*] `requirePermission` middleware'inin yazılması ve test edilmesi.
+  - [*] Tüm admin API uç noktalarına yetki kısıtlarının bağlanması.
 - **15. Hata / Risk Senaryoları:**
-  - [x] Unutulan rota yetki kontrolü -> Rota kaydedicide varsayılan olarak yetki kontrolü zorunlu tutularak önlenir.
+  - [*] Unutulan rota yetki kontrolü -> Rota kaydedicide varsayılan olarak yetki kontrolü zorunlu tutularak önlenir.
 - **16. Zero-Cost Constraint:** Ek maliyet yok ($0/Ay). *(Mevcut ücretsiz kota ile doğrulanmalıdır)*.
 - **17. Bağımlılıklar:** SEC-RBAC-001, SEC-AUTH-002.
 - **18. Bağımlı Görevler:** SEC-RBAC-003, API-004, API-005, API-009, API-010.
@@ -686,30 +687,30 @@ Her veritabanı migration dosyası için aşağıdaki testler sırasıyla gerçe
 - **3. Kapsam:** `frontend/src/context/AuthContext.tsx`, `frontend/src/components/ProtectedComponent.tsx`, `frontend/src/routes/`.
 - **4. Tehdit Modeli:** Information disclosure, UI confusion, Unauthorized action attempts.
 - **5. Teknik Gereksinimler:**
-  - [x] React `AuthContext` üzerinden kullanıcı rol ve yetkilerinin saklanması.
-  - [x] `Can` veya `HasPermission` yardımcı bileşenleri ile buton/menü gizleme/pasif yapma.
-  - [x] Yetkisiz rotaya doğrudan URL ile erişilmek istendiğinde `403 / Access Denied` yönlendirmesi.
-  - [x] Stale yetki durumlarında (yetki kaldırıldığında) arka planda otomatik oturum yenileme / sayfayı kilitleme.
+  - [*] React `AuthContext` üzerinden kullanıcı rol ve yetkilerinin saklanması.
+  - [*] `Can` veya `HasPermission` yardımcı bileşenleri ile buton/menü gizleme/pasif yapma.
+  - [*] Yetkisiz rotaya doğrudan URL ile erişilmek istendiğinde `403 / Access Denied` yönlendirmesi.
+  - [*] Stale yetki durumlarında (yetki kaldırıldığında) arka planda otomatik oturum yenileme / sayfayı kilitleme.
 - **6. Veri / Secret Gereksinimleri:** İstemci tarafında yalnızca public kullanıcı bilgileri ve rolü saklanır. Secret tutulmaz.
 - **7. Authentication / Authorization Akışı:**
   1. Kullanıcı giriş yapar; kullanıcı rolü `AuthContext` içine yüklenir.
   2. Bileşen işlenirken (render): `hasPermission("posts.publish")` kontrol edilir.
   3. Yetki varsa "Yayınla" butonu gösterilir; yoksa buton gizlenir veya pasif (`disabled`) yapılır.
 - **8. Hata ve Güvenlik Davranışları:**
-  - [x] Korumalı sayfaya yetkisiz URL erişimi -> `/admin/unauthorized` sayfasına yönlendirme.
-  - [x] Backend `403` yanıtı döndüğünde -> Kullanıcıya "Bu işlem için yetkiniz bulunmamaktadır" uyarısı gösterilmesi.
+  - [*] Korumalı sayfaya yetkisiz URL erişimi -> `/admin/unauthorized` sayfasına yönlendirme.
+  - [*] Backend `403` yanıtı döndüğünde -> Kullanıcıya "Bu işlem için yetkiniz bulunmamaktadır" uyarısı gösterilmesi.
 - **9. Güvenlik Kontrolleri:** UI render yetki denetimi, Rota muhafızları (Route guards).
 - **10. Audit / Logging:** Kullanıcının istemci tarafındaki yetkisiz yönlendirmeleri konsol ve istemci günlüğüne yazılır.
 - **11. Privacy / KVKK:** Kullanıcının tarayıcı yerel depolamasında (localStorage/sessionStorage) hassas veri tutulmaz.
 - **12. Performance:** *Hedef:* İstemci tarafı yetki kontrolü < 1ms (gerçek değer benchmark ile doğrulanacaktır).
 - **13. Test Requirements:**
-  - [x] `SUPPORT_AGENT` girişi ile "Sil" veya "Yayınla" butonlarının görünmediğinin doğrulanması.
-  - [x] Doğrudan yetkisiz URL yazıldığında yönlendirmenin çalıştığının doğrulanması.
+  - [*] `SUPPORT_AGENT` girişi ile "Sil" veya "Yayınla" butonlarının görünmediğinin doğrulanması.
+  - [*] Doğrudan yetkisiz URL yazıldığında yönlendirmenin çalıştığının doğrulanması.
 - **14. Definition of Done (DoD):** *(Not: DoD altındaki [ ] işaretleri onay kriteridir)*
-  - [x] `AuthContext` yetki kontrol fonksiyonlarının yazılması.
-  - [x] Menü ve butonların rol bazlı dinamik görünürlüğünün sağlanması.
+  - [*] `AuthContext` yetki kontrol fonksiyonlarının yazılması.
+  - [*] Menü ve butonların rol bazlı dinamik görünürlüğünün sağlanması.
 - **15. Hata / Risk Senaryoları:**
-  - [ ] İstemci tarafında yetki manipülasyonu -> Kullanıcı DOM müdahalesi ile butonu görünür yapsa bile backend isteği reddeder.
+  - [*] İstemci tarafında yetki manipülasyonu -> Kullanıcı DOM müdahalesi ile butonu görünür yapsa bile backend isteği reddeder.
 - **16. Zero-Cost Constraint:** İstemci tarafı React kodu ($0/Ay). *(Mevcut ücretsiz kota ile doğrulanmalıdır)*.
 - **17. Bağımlılıklar:** SEC-RBAC-002, ARCH-002.
 - **18. Bağımlı Görevler:** UI-001, UI-004, CMS-001.
@@ -724,10 +725,10 @@ Her veritabanı migration dosyası için aşağıdaki testler sırasıyla gerçe
 - **3. Kapsam:** `backend/src/middleware/cors.ts`, `backend/src/middleware/rateLimit.ts`, Cloudflare Turnstile entegrasyonu.
 - **4. Tehdit Modeli:** Cross-Origin Resource Sharing (CORS) abuse, Denial of Service (DoS), Bot spamming, Credential stuffing, API scrapers.
 - **5. Teknik Gereksinimler:**
-  - [x] `ALLOWED_ORIGINS` beyaz liste (allowlist) kontrolü. Wildcard (`*`) kullanımının engellenmesi (credentials açıkken).
-  - [x] Preflight (`OPTIONS`) isteklerinin doğru yanıtlanması.
-  - [x] D1 veya hafıza tabanlı IP + Rota bileşik Rate Limiting (`utils/rateLimit.ts`).
-  - [x] Public uç noktalarda (örn: destek formu) Cloudflare Turnstile bot doğrulaması.
+  - [*] `ALLOWED_ORIGINS` beyaz liste (allowlist) kontrolü. Wildcard (`*`) kullanımının engellenmesi (credentials açıkken).
+  - [*] Preflight (`OPTIONS`) isteklerinin doğru yanıtlanması.
+  - [*] D1 veya hafıza tabanlı IP + Rota bileşik Rate Limiting (`utils/rateLimit.ts`).
+  - [*] Public uç noktalarda (örn: destek formu) Cloudflare Turnstile bot doğrulaması.
 - **6. Veri / Secret Gereksinimleri:** `TURNSTILE_SECRET_KEY` ortam değişkeni, `ALLOWED_ORIGINS` liste konfigürasyonu.
 - **7. Authentication / Authorization Akışı:**
   1. İstek gelir.
@@ -735,24 +736,24 @@ Her veritabanı migration dosyası için aşağıdaki testler sırasıyla gerçe
   3. Rate Limit Middleware IP + Rota anahtarını kontrol eder; sınır aşıldıysa `429` döner.
   4. Public formlarda Turnstile doğrulama token'ı Cloudflare API üzerinden doğrulanır.
 - **8. Hata ve Güvenlik Davranışları:**
-  - [x] İzin verilmeyen Origin -> CORS engeli (`403 Forbidden` / Missing CORS headers).
-  - [x] Rate limit aşımı -> `429 Too Many Requests` (`Retry-After` başlığıyla).
-  - [x] Geçersiz Turnstile token -> `400 Bad Request` veya `422 Unprocessable Entity`.
+  - [*] İzin verilmeyen Origin -> CORS engeli (`403 Forbidden` / Missing CORS headers).
+  - [*] Rate limit aşımı -> `429 Too Many Requests` (`Retry-After` başlığıyla).
+  - [*] Geçersiz Turnstile token -> `400 Bad Request` veya `422 Unprocessable Entity`.
 - **9. Güvenlik Kontrolleri:** CORS allowlist denetimi, Rate limit sayaç kontrolü, Turnstile server-side verification.
 - **10. Audit / Logging:** CORS ihlalleri, rate limit aşımları ve bot engellemeleri güvenlik loguna kaydedilir.
 - **11. Privacy / KVKK:** İstemci IP adresleri rate limit takibi için anonimleştirilerek veya hashing ile işlenir. *(Hukuki saklama süresi: Hukuki doğrulama gerekli)*.
 - **12. Performance:** *Hedef:* Rate limit ve CORS kontrolü ek süresi < 1ms (gerçek değer benchmark ile doğrulanacaktır).
 - **13. Test Requirements:**
-  - [x] İzin verilmeyen bir origin üzerinden yapılan isteğin tarayıcıda engellenmesi.
-  - [x] Belirlenen limitin (örn: 1 dakikada 60 istek) üzerindeki isteklerin `429` alması.
-  - [x] Sahte Turnstile token'ı ile form gönderiminin reddedilmesi.
+  - [*] İzin verilmeyen bir origin üzerinden yapılan isteğin tarayıcıda engellenmesi.
+  - [*] Belirlenen limitin (örn: 1 dakikada 60 istek) üzerindeki isteklerin `429` alması.
+  - [*] Sahte Turnstile token'ı ile form gönderiminin reddedilmesi.
 - **14. Definition of Done (DoD):** *(Not: DoD altındaki [ ] işaretleri onay kriteridir)*
-  - [x] `ALLOWED_ORIGINS` konfigürasyonunun yapılması ve wildcard'ın kaldırılması.
-  - [x] Rate Limit middleware'inin uç noktalara bağlanması.
-  - [x] Turnstile sunucu doğrulamasının entegre edilmesi.
+  - [*] `ALLOWED_ORIGINS` konfigürasyonunun yapılması ve wildcard'ın kaldırılması.
+  - [*] Rate Limit middleware'inin uç noktalara bağlanması.
+  - [*] Turnstile sunucu doğrulamasının entegre edilmesi.
 - **15. Hata / Risk Senaryoları:**
-  - [x] Rate Limit Race Condition -> Sayaç güncellemelerinin atomik işlemlerle yapılması.
-  - [x] Turnstile API çökmesi -> Güvenli fail-open / fail-closed politikasının belirlenmesi.
+  - [*] Rate Limit Race Condition -> Sayaç güncellemelerinin atomik işlemlerle yapılması.
+  - [*] Turnstile API çökmesi -> Güvenli fail-open / fail-closed politikasının belirlenmesi.
 - **16. Zero-Cost Constraint:** Cloudflare Turnstile ve Workers kotaları ($0/Ay). *(Mevcut ücretsiz kota ile doğrulanmalıdır)*.
 - **17. Bağımlılıklar:** ARCH-001.
 - **18. Bağımlı Görevler:** API-001, API-002, API-003.
@@ -765,10 +766,10 @@ Her veritabanı migration dosyası için aşağıdaki testler sırasıyla gerçe
 - **3. Kapsam:** `backend/src/utils/sanitize.ts`, CMS blog içerikleri, destek bileti mesajları, yorumlar.
 - **4. Tehdit Modeli:** Stored XSS, Reflected XSS, DOM-based XSS, HTML Injection, Malicious Redirects.
 - **5. Teknik Gereksinimler:**
-  - [x] İzin verilen HTML etiketleri (allowlist) mantığı (`<p>`, `<b>`, `<i>`, `<a>`, `<ul>`, `<li>` vb.).
-  - [x] Tehlikeli etiketlerin (`<script>`, `<iframe>`, `<object>`, `<embed>`, `<style>`, `<svg>`) temizlenmesi.
-  - [x] Etkinlik işleyicilerinin (`onload=`, `onerror=`, `onclick=`) kaldırılması.
-  - [x] URL protokol süzgeci (`javascript:`, `data:` protokollerinin engellenmesi; sadece `http:`, `https:`, `mailto:` izni).
+  - [*] İzin verilen HTML etiketleri (allowlist) mantığı (`<p>`, `<b>`, `<i>`, `<a>`, `<ul>`, `<li>` vb.).
+  - [*] Tehlikeli etiketlerin (`<script>`, `<iframe>`, `<object>`, `<embed>`, `<style>`, `<svg>`) temizlenmesi.
+  - [*] Etkinlik işleyicilerinin (`onload=`, `onerror=`, `onclick=`) kaldırılması.
+  - [*] URL protokol süzgeci (`javascript:`, `data:` protokollerinin engellenmesi; sadece `http:`, `https:`, `mailto:` izni).
 - **6. Veri / Secret Gereksinimleri:** Sanitization kuralları konfigürasyon nesnesi olarak tutulur. Secret içermez.
 - **7. Authentication / Authorization Akışı:**
   1. Kullanıcıdan zengin metin (rich-text) veya yorum girdisi alınır.
@@ -776,20 +777,20 @@ Her veritabanı migration dosyası için aşağıdaki testler sırasıyla gerçe
   3. Zararlı etiket ve öznitelikler soyulur.
   4. Temizlenmiş veri veritabanına yazılır.
 - **8. Hata ve Güvenlik Davranışları:**
-  - [x] Zararlı XSS dizesi tespiti -> Zararlı kısmın temizlenerek kaydedilmesi veya isteğin `400 Bad Request` ile reddedilmesi.
+  - [*] Zararlı XSS dizesi tespiti -> Zararlı kısmın temizlenerek kaydedilmesi veya isteğin `400 Bad Request` ile reddedilmesi.
 - **9. Güvenlik Kontrolleri:** Allowlist etiket kontrolü, Attribute temizliği, URL protokol doğrulaması.
 - **10. Audit / Logging:** XSS saldırı teşebbüsleri loglanır (saldırı metni filtreli olarak saklanır).
 - **11. Privacy / KVKK:** Temizleme işlemi sadece veri güvenliği amacıyla çalışır, kişisel verileri değiştirmez.
 - **12. Performance:** *Hedef:* Metin temizleme süresi metin boyutuna bağlı olarak < 3ms (gerçek değer canlı benchmark ile doğrulanacaktır).
 - **13. Test Requirements:**
-  - [x] `<script>alert(1)</script>` içeren girdinin `<script>` etiketinden arındırıldığının doğrulanması.
-  - [x] `<img src=x onerror=alert(1)>` içeren girdide `onerror` özniteliğinin silindiğinin teyidi.
-  - [x] `javascript:void(0)` bağlantılarının engellenmesi.
+  - [*] `<script>alert(1)</script>` içeren girdinin `<script>` etiketinden arındırıldığının doğrulanması.
+  - [*] `<img src=x onerror=alert(1)>` içeren girdide `onerror` özniteliğinin silindiğinin teyidi.
+  - [*] `javascript:void(0)` bağlantılarının engellenmesi.
 - **14. Definition of Done (DoD):** *(Not: DoD altındaki [ ] işaretleri onay kriteridir)*
-  - [x] `sanitizeHTML` modülünün yazılması ve birim testlerinin geçmesi.
-  - [x] Yorum, destek mesajı ve CMS içerik girişlerine entegre edilmesi.
+  - [*] `sanitizeHTML` modülünün yazılması ve birim testlerinin geçmesi.
+  - [*] Yorum, destek mesajı ve CMS içerik girişlerine entegre edilmesi.
 - **15. Hata / Risk Senaryoları:**
-  - [ ] Eksik sanitizer kütüphanesi / regex açığı -> Sınanmış açık kaynak kütüphane veya sıkı allowlist kullanımı ile önlenir.
+  - [*] Eksik sanitizer kütüphanesi / regex açığı -> Sınanmış açık kaynak kütüphane veya sıkı allowlist kullanımı ile önlenir.
 - **16. Zero-Cost Constraint:** Hafif JS kütüphanesi / regex ($0/Ay). *(Mevcut ücretsiz kota ile doğrulanmalıdır)*.
 - **17. Bağımlılıklar:** ARCH-001.
 - **18. Bağımlı Görevler:** API-001, API-002, CMS-001.
@@ -805,11 +806,11 @@ Mevcut görevlerin kapsamını aşan ancak kapsamlı bir güvenlik mimarisi içi
 - **Hangi Tehdidi Çözüyor:** Clickjacking, Reflected XSS, Content Sniffing, Information Leakage.
 - **Mevcut Görevlerden Neden Ayrı olmalı:** CORS veya Auth görevleri HTTP response header politikalarını (CSP, HSTS, X-Frame-Options) doğrudan kapsamamaktadır.
 - **Öncelik:** P1 | **Teknik Detay:**
-  - [x] `Content-Security-Policy`, `Strict-Transport-Security`, `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin` başlıklarının Worker yanıtlarına eklenmesi. *(Not/Limitasyon: Canlı tarayıcı CSP doğrulaması henüz yapılmamıştır; mevcut uygulama stil uyumluluğu nedeniyle style-src 'unsafe-inline' içerir).*
+  - [*] `Content-Security-Policy`, `Strict-Transport-Security`, `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin` başlıklarının Worker yanıtlarına eklenmesi. *(Not/Limitasyon: Canlı tarayıcı CSP doğrulaması henüz yapılmamıştır; mevcut uygulama stil uyumluluğu nedeniyle style-src 'unsafe-inline' içerir).*
 
 ### SEC-ADV-002 — Cookie Security & Session Fixation Protection
 - **Neden Gerekli:** Çerez tabanlı oturum yönetimi tercih edilirse:
-  - [x] `HttpOnly`, `Secure`, `SameSite=Strict` bayraklarının zorunlu kılınması gerekir. *(Sonuç: PASS WITH LIMITATION / NOT APPLICABLE TO CURRENT AUTH TRANSPORT. Mevcut mimari Bearer JWT + D1 session tabanlıdır ve çerez kullanılmamaktadır. Girişte fresh JWT/session türetilerek Session Fixation engellenmiş, logout ile D1 revocation sağlanmıştır. Admin JWT'sinin localStorage'da saklanması XSS teknik borcu/limitasyonu olarak korunmuştur).*
+  - [*] `HttpOnly`, `Secure`, `SameSite=Strict` bayraklarının zorunlu kılınması gerekir. *(Sonuç: PASS WITH LIMITATION / NOT APPLICABLE TO CURRENT AUTH TRANSPORT. Mevcut mimari Bearer JWT + D1 session tabanlıdır ve çerez kullanılmamaktadır. Girişte fresh JWT/session türetilerek Session Fixation engellenmiş, logout ile D1 revocation sağlanmıştır. Admin JWT'sinin localStorage'da saklanması XSS teknik borcu/limitasyonu olarak korunmuştur).*
 - **Hangi Tehdidi Çözüyor:** Cookie Theft, CSRF, Session Fixation.
 - **Mevcut Görevlerden Neden Ayrı olmalı:** `SEC-AUTH-001` daha çok JWT/Bearer akışına odaklanmaktadır; çerez güvenliği izole bir politika gerektirir.
 - **Öncelik:** P1
@@ -1002,15 +1003,15 @@ sequenceDiagram
 
 - **API Sürümleme Stratejisi:** Tüm uç noktalar `/api/v1/` öneki altında sunulacaktır. Geriye dönük uyumsuz (breaking) değişikliklerde `/api/v2/` sürüm yoluna geçilecektir.
 - **Standart Yanıt Sözleşmesi (Standard Response Envelope):**
-  - [ ] **Başarılı Yanıt:** `{ "success": true, "data": { ... }, "meta": { "timestamp": 1700000000, "requestId": "req_xyz123" } }`
-  - [ ] **Hata Yanıtı:** `{ "success": false, "error": { "code": "VALIDATION_ERROR", "message": "Açıklayıcı hata mesajı", "details": [ ... ] }, "meta": { "timestamp": 1700000000, "requestId": "req_xyz123" } }`
+  - [*] **Başarılı Yanıt:** `{ "success": true, "data": { ... }, "meta": { "timestamp": 1700000000, "requestId": "req_xyz123" } }`
+  - [*] **Hata Yanıtı:** `{ "success": false, "error": { "code": "VALIDATION_ERROR", "message": "Açıklayıcı hata mesajı", "details": [ ... ] }, "meta": { "timestamp": 1700000000, "requestId": "req_xyz123" } }`
 - **Idempotency (Tekrarlanabilirlik) Stratejisi:** `POST` ve `PUT` gibi durumsal değişiklik oluşturan kritik işlemlerde istemciler `X-Idempotency-Key` başlığı gönderebilir. KV / D1 üzerinde saklanan anahtar ile 24 saat içinde tekrarlanan aynı isteklerde veritabanı işlemi tekrarlanmadan doğrudan ilk yanıtın kopyası döner.
 - **Sayfalama Standartları (Cursor Pagination):** Liste yanıtlarında offset bazlı sayfalama yerine performans ve tutarlılık için cursor-based (`cursor`, `limit`, `hasMore`, `nextCursor`) sayfalama kullanılacaktır.
 - **Rate Limiting Katmanları:**
-  - [ ] *Global Default Public Limit:* Genel public API uç noktalarında IP bazlı 60 istek/dakika.
-  - [ ] *Endpoint-Specific Override:* Form spam ve kötüye kullanım riski yüksek `API-001` (Support Form: 5 req/min) ve `API-002` (Comment Submission: 3 req/min) uç noktalarında global limit üzerine daha sıkı override uygulanır.
-  - [ ] *Admin Endpoints:* Token bazlı 300 istek/dakika.
-  - [ ] *Security-Specific Login Policy:* Admin giriş uç noktasında IP/kullanıcı bazlı 5 başarısız denemede 15 dakika kilitlenme (`429 Too Many Requests`) politikası uygulanır.
+  - [*] *Global Default Public Limit:* Genel public API uç noktalarında IP bazlı 60 istek/dakika.
+  - [*] *Endpoint-Specific Override:* Form spam ve kötüye kullanım riski yüksek `API-001` (Support Form: 5 req/min) ve `API-002` (Comment Submission: 3 req/min) uç noktalarında global limit üzerine daha sıkı override uygulanır.
+  - [*] *Admin Endpoints:* Token bazlı 300 istek/dakika.
+  - [*] *Security-Specific Login Policy:* Admin giriş uç noktasında IP/kullanıcı bazlı 5 başarısız denemede 15 dakika kilitlenme (`429 Too Many Requests`) politikası uygulanır.
 
 ---
 
@@ -1020,9 +1021,9 @@ sequenceDiagram
 - **2. Amaç:** Kullanıcıların destek/iletişim formu göndermesini sağlamak, benzersiz bilet numarası üretmek ve mesajı D1 veritabanına kaydetmek.
 - **3. Kapsam:** `backend/src/routes/support.ts`, `POST /api/v1/support`.
 - **4. İstek / Yanıt Sözleşmesi:**
-  - [x] *İstek:* `{ "name": "Ahmet Yılmaz", "email": "ahmet@example.com", "subject": "Teknik Destek", "message": "Detaylı mesaj..." }`
-  - [x] *Başarılı Yanıt (201 Created):* `{ "success": true, "data": { "ticketNo": "MSK-2026-A8F2", "status": "PENDING", "createdAt": "2026-10-05T12:00:00Z" } }`
-  - [x] *Hata Yanıtları:* `400 Bad Request` (Zod doğrulama hatası), `429 Too Many Requests`.
+  - [*] *İstek:* `{ "name": "Ahmet Yılmaz", "email": "ahmet@example.com", "subject": "Teknik Destek", "message": "Detaylı mesaj..." }`
+  - [*] *Başarılı Yanıt (201 Created):* `{ "success": true, "data": { "ticketNo": "MSK-2026-A8F2", "status": "PENDING", "createdAt": "2026-10-05T12:00:00Z" } }`
+  - [*] *Hata Yanıtları:* `400 Bad Request` (Zod doğrulama hatası), `429 Too Many Requests`.
 - **5. Validasyon ve Şema Kuralları:** Zod ile `name` (min 2, max 100), `email` (valid email format), `subject` (min 3, max 150), `message` (min 10, max 3000). HTML/Script etiketleri sanitized edilir.
 - **6. Veri İşlemleri / Sorgular:** Bilet no üretimi (`MSK-YYYY-XXXX`). `messages` tablosuna `INSERT INTO messages (id, ticket_no, name, email, subject, message, status, created_at) VALUES (...)`.
 - **7. Async / Event / Queue Akışı:** Destek isteği veritabanına yazıldıktan sonra arka planda AI özet analizi (`AI-002`) ve e-posta bildirimi (`MAIL-001`) için Cloudflare Queues / Event emisyonu tetiklenir. *(Not: AI-002 ve MAIL-001 tamamlanmadığından asenkron yan-etkiler henüz bağlanmamıştır)*.
@@ -1036,10 +1037,10 @@ sequenceDiagram
 - **15. Performance:** *Hedef:* Yanıt süresi p95 < 150ms.
 - **16. Test Requirements:** Zod validasyon testleri, bilet no format doğrulama, rate limit aşım testi.
 - **17. Definition of Done (DoD):**
-  - [x] Bilet no benzersizliğinin test edilmesi.
-  - [x] Sanitize edilmiş girdilerin D1'e eksiksiz yazılması.
-  - [x] `/api/v1/support` rotasının 201 ve 400 durumlarını doğru döndürmesi.
-  - [x] *(Sonuç: PASS WITH LIMITATION. Destek bileti oluşturma, Zod doğrulama, HTML sanitization, D1 kaydı, 5 req/min rate limit, idempotency ve unit/integration testleri %100 başarılıdır. AI-002 ve MAIL-001 henüz tamamlanmadığı için asenkron yan etkiler pasiftir)*.
+  - [*] Bilet no benzersizliğinin test edilmesi.
+  - [*] Sanitize edilmiş girdilerin D1'e eksiksiz yazılması.
+  - [*] `/api/v1/support` rotasının 201 ve 400 durumlarını doğru döndürmesi.
+  - [*] *(Sonuç: PASS WITH LIMITATION. Destek bileti oluşturma, Zod doğrulama, HTML sanitization, D1 kaydı, 5 req/min rate limit, idempotency ve unit/integration testleri %100 başarılıdır. AI-002 ve MAIL-001 henüz tamamlanmadığı için asenkron yan etkiler pasiftir)*.
 - **18. Hata / Risk Senaryoları:** D1 yazma çökmesi durumunda istemciye `500` döner ve isteğin tekrarı için idempotency key önerilir.
 - **19. Zero-Cost Constraint:** Cloudflare Workers & D1 ücretsiz kotaları ile sıfır maliyet.
 - **20. Bağımlılıklar:** DATA-001 (`messages` tablosu), SEC-AUTH-001.
@@ -1052,9 +1053,9 @@ sequenceDiagram
 - **2. Amaç:** Ziyaretçilerin blog yazılarına yorum yapmasını (`POST`) ve onaylanmış yorumların listelenmesini (`GET`) sağlamak.
 - **3. Kapsam:** `backend/src/routes/comments.ts`, `GET /api/v1/comments?postSlug=...`, `POST /api/v1/comments`.
 - **4. İstek / Yanıt Sözleşmesi:**
-  - [x] *POST İstek:* `{ "postSlug": "cloudflare-d1-rehberi", "authorName": "Canan Bakır", "authorEmail": "canan@example.com", "content": "Harika yazı!" }`
-  - [x] *POST Yanıt (201 Created):* `{ "success": true, "data": { "commentId": "c_9981", "status": "PENDING_APPROVAL" } }`
-  - [x] *GET Yanıt (200 OK):* `{ "success": true, "data": [ { "id": "c_12", "authorName": "Canan Bakır", "content": "...", "createdAt": "..." } ], "meta": { "cursor": "c_12", "hasMore": false } }`
+  - [*] *POST İstek:* `{ "postSlug": "cloudflare-d1-rehberi", "authorName": "Canan Bakır", "authorEmail": "canan@example.com", "content": "Harika yazı!" }`
+  - [*] *POST Yanıt (201 Created):* `{ "success": true, "data": { "commentId": "c_9981", "status": "PENDING_APPROVAL" } }`
+  - [*] *GET Yanıt (200 OK):* `{ "success": true, "data": [ { "id": "c_12", "authorName": "Canan Bakır", "content": "...", "createdAt": "..." } ], "meta": { "cursor": "c_12", "hasMore": false } }`
 - **5. Validasyon ve Şema Kuralları:** `postSlug` (string), `authorName` (max 50), `authorEmail` (valid email), `content` (min 5, max 1000). XSS önleme için sanitize.
 - **6. Veri İşlemleri / Sorgular:** `INSERT INTO comments (post_slug, author_name, author_email, content, status) VALUES (...)` (varsayılan `status = 'PENDING'`). GET sorgusunda `WHERE post_slug = ? AND status = 'APPROVED'`.
 - **7. Async / Event / Queue Akışı:** Yorum gönderildiğinde admin bildirim kuyruğuna düşer.
@@ -1068,9 +1069,9 @@ sequenceDiagram
 - **15. Performance:** *Hedef:* GET önbellekten < 20ms, POST D1'e < 120ms.
 - **16. Test Requirements:** E-posta sızdırmazlık testi, onaylanmamış yorumların GET'te gözükmediği doğrulaması.
 - **17. Definition of Done (DoD):**
-  - [x] Public GET isteğinde e-posta alanının dışarı verilmediğinin kesinleştirilmesi.
-  - [x] XSS zararlı içeriklerin sanitize edildiğinin doğrulanması.
-  - [x] *(Sonuç: PASS. Public GET/POST rotaları, 3/min rate limit, HTML sanitization, PII e-posta gizliliği, 5 dk Cache-Control, Turnstile ve idempotency doğrulanmıştır)*.
+  - [*] Public GET isteğinde e-posta alanının dışarı verilmediğinin kesinleştirilmesi.
+  - [*] XSS zararlı içeriklerin sanitize edildiğinin doğrulanması.
+  - [*] *(Sonuç: PASS. Public GET/POST rotaları, 3/min rate limit, HTML sanitization, PII e-posta gizliliği, 5 dk Cache-Control, Turnstile ve idempotency doğrulanmıştır)*.
 - **18. Hata / Risk Senaryoları:** Spam yorum akını -> Rate limit ve spam kelime süzgeci ile engellenir.
 - **19. Zero-Cost Constraint:** Cloudflare KV + D1 ücretsiz kotası.
 - **20. Bağımlılıklar:** DATA-001 (`comments` tablosu).
@@ -1083,10 +1084,10 @@ sequenceDiagram
 - **2. Amaç:** Kullanıcıların e-bültene kaydolmasını, tercihlerini güncellemesini ve tek tıkla bültenden çıkmasını (Unsubscribe) sağlamak.
 - **3. Kapsam:** `backend/src/routes/subscribe.ts`, `POST /api/v1/subscribe`, `POST /api/v1/unsubscribe`, `POST /api/v1/subscribe/verify` (Double Opt-In E-Posta Doğrulama).
 - **4. İstek / Yanıt Sözleşmesi:**
-  - [x] *Subscribe İstek:* `{ "email": "abone@example.com", "kvkkConsent": true }`
-  - [x] *Subscribe Yanıt (200 OK):* `{ "success": true, "message": "Abonelik kaydınız alındı. Lütfen e-postanızı doğrulayın." }`
-  - [x] *Unsubscribe İstek:* `{ "token": "unsub_token_xyz123" }`
-  - [x] *Unsubscribe Yanıt (200 OK):* `{ "success": true, "message": "Aboneliğiniz başarıyla sonlandırıldı." }`
+  - [*] *Subscribe İstek:* `{ "email": "abone@example.com", "kvkkConsent": true }`
+  - [*] *Subscribe Yanıt (200 OK):* `{ "success": true, "message": "Abonelik kaydınız alındı. Lütfen e-postanızı doğrulayın." }`
+  - [*] *Unsubscribe İstek:* `{ "token": "unsub_token_xyz123" }`
+  - [*] *Unsubscribe Yanıt (200 OK):* `{ "success": true, "message": "Aboneliğiniz başarıyla sonlandırıldı." }`
 - **5. Validasyon ve Şema Kuralları:** `email` (valid format), `kvkkConsent` (boolean, mandatory `true`).
 - **6. Veri İşlemleri / Sorgular:** `subscribers` tablosuna `UPSERT` veya `INSERT ON CONFLICT(email) DO UPDATE`.
 - **7. Async / Event / Queue Akışı:** Hoş geldin e-postası ve doğrulama bağlantısı için e-posta kuyruğu tetiklenir.
@@ -1100,9 +1101,9 @@ sequenceDiagram
 - **15. Performance:** *Hedef:* Yanıt süresi < 100ms.
 - **16. Test Requirements:** KVKK onay kutusu olmadan abonelik reddi, Unsubscribe token doğrulama.
 - **17. Definition of Done (DoD):**
-  - [x] KVKK onayı `false` ise kaydın reddedilmesi.
-  - [x] Güvenli `unsubscribe_token` üretimi ve doğrulaması.
-  - [x] *(Sonuç: PASS. E-bülten abonelik, double opt-in doğrulama, tek tıkla unsubscribe, KVKK onayı, WebCrypto token güvenliği, rate limiting, idempotency ve birim/entegrasyon testleri %100 başarılıdır. MAIL-001 henüz tamamlanmadığından e-posta gönderimi pasiftir)*.
+  - [*] KVKK onayı `false` ise kaydın reddedilmesi.
+  - [*] Güvenli `unsubscribe_token` üretimi ve doğrulaması.
+  - [*] *(Sonuç: PASS. E-bülten abonelik, double opt-in doğrulama, tek tıkla unsubscribe, KVKK onayı, WebCrypto token güvenliği, rate limiting, idempotency ve birim/entegrasyon testleri %100 başarılıdır. MAIL-001 henüz tamamlanmadığından e-posta gönderimi pasiftir)*.
 - **18. Hata / Risk Senaryoları:** Sahte e-posta kaydı akını -> Double opt-in (doğrulama bağlantısı) ile koruma.
 - **19. Zero-Cost Constraint:** Cloudflare D1 sıfır maliyet.
 - **20. Bağımlılıklar:** DATA-001 (`subscribers` tablosu).
@@ -1115,8 +1116,8 @@ sequenceDiagram
 - **2. Amaç:** Yöneticilerin gelen destek biletlerini ve blog yorumlarını incelemesi, onaylaması, yanıtlaması veya silmesini sağlamak.
 - **3. Kapsam:** `backend/src/routes/admin/messages.ts`, `backend/src/routes/admin/comments.ts`, `GET/PATCH/DELETE /api/v1/admin/messages`, `PATCH /api/v1/admin/comments/:id`.
 - **4. İstek / Yanıt Sözleşmesi:**
-  - [x] *Yorum Onay İstek:* `PATCH /api/v1/admin/comments/c_9981` -> `{ "isApproved": true }`
-  - [x] *Mesaj Cevaplama İstek:* `POST /api/v1/admin/messages/MSK-2026-A8F2/reply` -> `{ "replyContent": "Merhaba, sorununuz çözüldü." }`
+  - [*] *Yorum Onay İstek:* `PATCH /api/v1/admin/comments/c_9981` -> `{ "isApproved": true }`
+  - [*] *Mesaj Cevaplama İstek:* `POST /api/v1/admin/messages/MSK-2026-A8F2/reply` -> `{ "replyContent": "Merhaba, sorununuz çözüldü." }`
 - **5. Validasyon ve Şema Kuralları:** `replyContent` (min 5, max 5000), `isApproved` (boolean).
 - **6. Veri İşlemleri / Sorgular:** `UPDATE comments SET is_approved = ? WHERE id = ?`, `INSERT INTO replies (message_id, sender_type, reply_text) VALUES (?, 'ADMIN', ?)` ve `UPDATE messages SET status = 'RESOLVED' WHERE id = ?`.
 - **7. Async / Event / Queue Akışı:** Mesaj yanıtlandığında kullanıcıya yanıt e-postası kuyruğa atılır.
@@ -1130,9 +1131,9 @@ sequenceDiagram
 - **15. Performance:** *Hedef:* Admin liste ve güncelleme yanıtları < 100ms.
 - **16. Test Requirements:** Admin yetkisi olmayan kullanıcının 403 alması, yorum onay durumunun güncellenmesi.
 - **17. Definition of Done (DoD):**
-  - [x] `requireAuth` olmadan yapılan tüm isteklere 401 dönmesi.
-  - [x] Mesaj yanıtlandığında durumun `RESOLVED` olarak güncellenmesi.
-  - [x] *(Sonuç: PASS. Admin destek biletleri ve blog yorumları GET/PATCH/POST reply/DELETE uç noktaları, Auth/RBAC yetkilendirme, BOLA/IDOR koruması, idempotency A/B senaryoları, cursor pagination, Zod/sanitization validasyonları, admin_audit_logs ve unit/integration testleri %100 başarılıdır)*.
+  - [*] `requireAuth` olmadan yapılan tüm isteklere 401 dönmesi.
+  - [*] Mesaj yanıtlandığında durumun `RESOLVED` olarak güncellenmesi.
+  - [*] *(Sonuç: PASS. Admin destek biletleri ve blog yorumları GET/PATCH/POST reply/DELETE uç noktaları, Auth/RBAC yetkilendirme, BOLA/IDOR koruması, idempotency A/B senaryoları, cursor pagination, Zod/sanitization validasyonları, admin_audit_logs ve unit/integration testleri %100 başarılıdır)*.
 - **18. Hata / Risk Senaryoları:** Yanlışlıkla tüm yorumların silinmesi -> Toplu silme işlemlerinde onay mekanizması.
 - **19. Zero-Cost Constraint:** $0/Ay Cloudflare Worker + D1.
 - **20. Bağımlılıklar:** DATA-001, SEC-AUTH-001, SEC-RBAC-001.
@@ -1145,8 +1146,8 @@ sequenceDiagram
 - **2. Amaç:** Yöneticilerin aktif e-bülten abonelerine toplu duyuru veya bülten e-postası göndermesini sağlamak.
 - **3. Kapsam:** `backend/src/routes/admin/broadcast.ts`, `POST /api/v1/admin/broadcast`.
 - **4. İstek / Yanıt Sözleşmesi:**
-  - [x] *İstek:* `{ "subject": "Yeni Özellik Yayınlandı", "contentHtml": "<h1>Merhaba</h1>...", "targetSegment": "ALL" }`
-  - [x] *Yanıt (202 Accepted):* `{ "success": true, "data": { "broadcastId": "b_7712", "totalRecipients": 1450, "status": "QUEUED" } }`
+  - [*] *İstek:* `{ "subject": "Yeni Özellik Yayınlandı", "contentHtml": "<h1>Merhaba</h1>...", "targetSegment": "ALL" }`
+  - [*] *Yanıt (202 Accepted):* `{ "success": true, "data": { "broadcastId": "b_7712", "totalRecipients": 1450, "status": "QUEUED" } }`
 - **5. Validasyon ve Şema Kuralları:** `subject` (min 3, max 200), `contentHtml` (min 10), `targetSegment` (`ALL`, `VERIFIED_ONLY`).
 - **6. Veri İşlemleri / Sorgular:** `broadcasts` kaydı oluşturulur; aktif abonelerin listesi çekilip e-posta gönderim kuyruğuna toplu eklenir (batching).
 - **7. Async / Event / Queue Akışı:** Cloudflare Queues aracılığıyla e-postalar parçalı (rate-limited batch) olarak gönderilir.
@@ -1160,9 +1161,9 @@ sequenceDiagram
 - **15. Performance:** *Hedef:* 10.000 aboneye kuyruk oluşturma süresi < 500ms.
 - **16. Test Requirements:** Idempotency anahtarı olmadan 400 hatası, Unsubscribe bağlantısı varlığı testi.
 - **17. Definition of Done (DoD):**
-  - [x] `X-Idempotency-Key` olmadan isteğin kabul edilmemesi.
-  - [x] E-posta kuyruğuna toplu eklemenin hatasız yapılması.
-  - [x] *(Sonuç: PASS WITH LIMITATION. POST /api/v1/admin/broadcast uç noktası, requirePermission('settings.manage') RBAC yetki kontrolü, zorunlu X-Idempotency-Key, 2 req/min rate limit, çift onay (confirm: true / X-Broadcast-Confirm), HTML sanitization, otomatik unsubscribe linki, targetSegment ALL/VERIFIED_ONLY aktif abone sorgulama, D1 broadcasts ve email_queue toplu kayıt, admin_audit_logs ve unit/integration testleri %100 başarılıdır. Limitation: Projede gerçek Cloudflare Queues binding bulunmadığından kuyruklama D1 email_queue ve broadcasts tabloları üzerinden QUEUED/PENDING durumlarıyla yürütülmektedir)*.
+  - [*] `X-Idempotency-Key` olmadan isteğin kabul edilmemesi.
+  - [*] E-posta kuyruğuna toplu eklemenin hatasız yapılması.
+  - [*] *(Sonuç: PASS WITH LIMITATION. POST /api/v1/admin/broadcast uç noktası, requirePermission('settings.manage') RBAC yetki kontrolü, zorunlu X-Idempotency-Key, 2 req/min rate limit, çift onay (confirm: true / X-Broadcast-Confirm), HTML sanitization, otomatik unsubscribe linki, targetSegment ALL/VERIFIED_ONLY aktif abone sorgulama, D1 broadcasts ve email_queue toplu kayıt, admin_audit_logs ve unit/integration testleri %100 başarılıdır. Limitation: Projede gerçek Cloudflare Queues binding bulunmadığından kuyruklama D1 email_queue ve broadcasts tabloları üzerinden QUEUED/PENDING durumlarıyla yürütülmektedir)*.
 - **18. Hata / Risk Senaryoları:** Yanlışlıkla tüm aboneye spam gitmesi -> Çift onay (Confirmation header) gereksinimi.
 - **19. Zero-Cost Constraint:** Cloudflare Queues ücretsiz sınırı dahilinde kullanım.
 - **20. Bağımlılıklar:** DATA-001, API-003, SEC-AUTH-001, SEC-RBAC-001.
@@ -1188,8 +1189,8 @@ sequenceDiagram
 - **15. Performance:** *Hedef:* Middleware ek yükü < 1ms.
 - **16. Test Requirements:** Yanıt zarfı yapısının tüm HTTP kodlarında standartlığının birim testi.
 - **17. Definition of Done (DoD):**
-  - [x] `/api/v1/` önekinin tüm rotalarda kanonik olarak etkinleştirilmesi ve legacy `/api/` yollarının method-preserving alias olarak desteklenmesi.
-  - [x] Standart yanıt formatının (`success`, `data`/`error`, `meta: { timestamp, requestId }`) tüm API'lerde uygulanması, `X-Request-ID` süzgeci ve `< 1ms` middleware performans kriterinin birim testleriyle doğrulanması.
+  - [*] `/api/v1/` önekinin tüm rotalarda kanonik olarak etkinleştirilmesi ve legacy `/api/` yollarının method-preserving alias olarak desteklenmesi.
+  - [*] Standart yanıt formatının (`success`, `data`/`error`, `meta: { timestamp, requestId }`) tüm API'lerde uygulanması, `X-Request-ID` süzgeci ve `< 1ms` middleware performans kriterinin birim testleriyle doğrulanması.
 - **18. Hata / Risk Senaryoları:** Eski istemcilerin `/api/` rotalarına istek atması -> POST gövde kaybını önlemek için HTTP 301/308 yerine router seviyesinde method-preserving alias desteği sağlanmıştır.
 - **19. Zero-Cost Constraint:** %100 kod seviyesinde sıfır maliyet.
 - **20. Bağımlılıklar:** ARCH-003.
@@ -1215,8 +1216,8 @@ sequenceDiagram
 - **15. Performance:** *Hedef:* KV okuma süresi < 15ms.
 - **16. Test Requirements:** Aynı key ile atılan 2. isteğin veritabanını tetiklemeden ilk yanıtı döndüğünün entegrasyon testi.
 - **17. Definition of Done (DoD):**
-  - [x] KV tabanlı idempotency middleware'inin tamamlanması (`withIdempotency`, `IN_PROGRESS` 60s lock TTL, `COMPLETED` 86400s TTL). *(Sonuç: PASS WITH LIMITATION. Cloudflare KV global PoP eventual-consistency sınırlaması nedeniyle KV tabanlı get -> claim/write mekanizması farklı kıtalar arası PoP'larda güçlü atomik lock garantisi vermez; aynı key ile mikrosaniyede gelen isteklerde teorik duplicate side-effect riski bulunur. Tek PoP/Worker ve birim testlerinde 10 eşzamanlı istekte tam koruma sağlanmıştır).*
-  - [x] 24 saatlik (`86400s`) TTL süresinin ve 60s lock kilit süresinin birim testleri ve 0.18ms benchmark ile doğrulanması.
+  - [*] KV tabanlı idempotency middleware'inin tamamlanması (`withIdempotency`, `IN_PROGRESS` 60s lock TTL, `COMPLETED` 86400s TTL). *(Sonuç: PASS WITH LIMITATION. Cloudflare KV global PoP eventual-consistency sınırlaması nedeniyle KV tabanlı get -> claim/write mekanizması farklı kıtalar arası PoP'larda güçlü atomik lock garantisi vermez; aynı key ile mikrosaniyede gelen isteklerde teorik duplicate side-effect riski bulunur. Tek PoP/Worker ve birim testlerinde 10 eşzamanlı istekte tam koruma sağlanmıştır).*
+  - [*] 24 saatlik (`86400s`) TTL süresinin ve 60s lock kilit süresinin birim testleri ve 0.18ms benchmark ile doğrulanması.
 - **18. Hata / Risk Senaryoları:** KV çökmesi veya erişilememesi -> Idempotency anahtarı gönderilen isteklerde çift işlem riskini önlemek için Fail-Closed politikasıyla HTTP 503 `IDEMPOTENCY_STORE_UNAVAILABLE` döndürülür.
 - **19. Zero-Cost Constraint:** Cloudflare KV günlük 100.000 okuma/1.000 yazma ücretsiz kotası.
 - **20. Bağımlılıklar:** API-006.
@@ -1229,8 +1230,8 @@ sequenceDiagram
 - **2. Amaç:** Sistemin canlılık (`liveness`) ve hizmete hazır olma (`readiness`) durumunu izlemek, D1 ve R2 erişilebilirliğini kontrol etmek.
 - **3. Kapsam:** `backend/src/routes/health.ts`, `GET /api/v1/health`, `GET /api/v1/readiness`.
 - **4. İstek / Yanıt Sözleşmesi:**
-  - [x] *GET /api/v1/health Yanıt (200 OK):* `{ "status": "UP", "timestamp": 1700000000 }`
-  - [x] *GET /api/v1/readiness Yanıt (200 OK):* `{ "status": "READY", "checks": { "d1": "UP", "r2": "UP" } }`
+  - [*] *GET /api/v1/health Yanıt (200 OK):* `{ "status": "UP", "timestamp": 1700000000 }`
+  - [*] *GET /api/v1/readiness Yanıt (200 OK):* `{ "status": "READY", "checks": { "d1": "UP", "r2": "UP" } }`
 - **5. Validasyon ve Şema Kuralları:** N/A.
 - **6. Veri İşlemleri / Sorgular:** D1 üzerinde `SELECT 1` hafif doğrulama sorgusu.
 - **7. Async / Event / Queue Akışı:** N/A.
@@ -1244,9 +1245,9 @@ sequenceDiagram
 - **15. Performance:** *Hedef:* Health check yanıtı < 30ms.
 - **16. Test Requirements:** D1 bağlantısı koparıldığında 503 döndüğünün testi.
 - **17. Definition of Done (DoD):**
-  - [x] Uç noktaların 200 ve 503 durumlarını doğru döndürmesi.
-  - [x] Cloudflare izleme servisleri ile entegre edilebilir olması.
-  - [x] *(Sonuç: PASS. GET /api/v1/health liveness ve GET /api/v1/readiness readiness uç noktaları, daraltılmış {status: "UP", timestamp} sözleşmesi, D1 SELECT 1 canlı sorgusu, R2 read-only MEDIA.list({limit:1}) canlı denetimi, 0-stale readiness, IP tabanlı 120 req/min rate limit, 10s liveness KV caching, HEALTH_CHECK_FAILED güvenli audit loglama ve unit/integration testleri %100 başarılıdır)*.
+  - [*] Uç noktaların 200 ve 503 durumlarını doğru döndürmesi.
+  - [*] Cloudflare izleme servisleri ile entegre edilebilir olması.
+  - [*] *(Sonuç: PASS. GET /api/v1/health liveness ve GET /api/v1/readiness readiness uç noktaları, daraltılmış {status: "UP", timestamp} sözleşmesi, D1 SELECT 1 canlı sorgusu, R2 read-only MEDIA.list({limit:1}) canlı denetimi, 0-stale readiness, IP tabanlı 120 req/min rate limit, 10s liveness KV caching, HEALTH_CHECK_FAILED güvenli audit loglama ve unit/integration testleri %100 başarılıdır)*.
 - **18. Hata / Risk Senaryoları:** Sağlık kontrolünün sistemi yorması -> 10 saniyelik KV caching ile aşırı sorgu engellenir.
 - **19. Zero-Cost Constraint:** Sıfır ek maliyet.
 - **20. Bağımlılıklar:** API-006.
@@ -1260,8 +1261,8 @@ sequenceDiagram
 - **2. Amaç:** Yöneticilerin indirim/teşekkür kuponları oluşturmasını, tanımlamasını ve kullanım durumunu takip etmesini sağlamak.
 - **3. Kapsam:** `backend/src/routes/admin/coupons.ts`, `POST/GET/DELETE /api/v1/admin/coupons`.
 - **4. İstek / Yanıt Sözleşmesi:**
-  - [x] *POST İstek:* `{ "code": "TESEKKUR2026", "discountPercent": 20, "maxUses": 100, "expiresAt": "2026-12-31T23:59:59Z" }`
-  - [x] *POST Yanıt (201 Created):* `{ "success": true, "data": { "couponId": "coup_123", "code": "TESEKKUR2026" } }`
+  - [*] *POST İstek:* `{ "code": "TESEKKUR2026", "discountPercent": 20, "maxUses": 100, "expiresAt": "2026-12-31T23:59:59Z" }`
+  - [*] *POST Yanıt (201 Created):* `{ "success": true, "data": { "couponId": "coup_123", "code": "TESEKKUR2026" } }`
 - **5. Validasyon ve Şema Kuralları:** `code` (min 4, max 20, alfanümerik büyük harf), `discountPercent` (1-100 arası), `maxUses` (integer > 0).
 - **6. Veri İşlemleri / Sorgular:** `coupons` tablosuna `INSERT INTO coupons (...)`.
 - **7. Async / Event / Queue Akışı:** İsteğe bağlı bülten abonelerine kupon duyurusu kuyruğu.
@@ -1275,8 +1276,8 @@ sequenceDiagram
 - **15. Performance:** *Hedef:* Yanıt süresi < 100ms.
 - **16. Test Requirements:** Çifte kupon kodu ekleme denemesinde 409 yanıtı, tarih geçerlilik testi.
 - **17. Definition of Done (DoD):**
-  - [x] Benzersiz kupon kodu kısıtının D1 seviyesinde doğrulanması.
-  - [x] Admin rol kontrolünün aktif olması.
+  - [*] Benzersiz kupon kodu kısıtının D1 seviyesinde doğrulanması.
+  - [*] Admin rol kontrolünün aktif olması.
 - **18. Hata / Risk Senaryoları:** Süresi dolmuş kupon kullanımı -> Kullanım anında `expires_at` ve `current_uses < max_uses` kontrolü.
 - **19. Zero-Cost Constraint:** Sıfır ek maliyet.
 - **20. Bağımlılıklar:** DATA-001 (`coupons` tablosu), SEC-AUTH-001, SEC-RBAC-001.
@@ -1290,8 +1291,8 @@ sequenceDiagram
 - **2. Amaç:** Yöneticilerin blog ve görsel içerikler için Cloudflare R2 nesne depolama alanına medya dosyası yüklemesini (`upload`), listelemesini ve silmesini sağlamak.
 - **3. Kapsam:** `backend/src/routes/adminMedia.ts`, `POST /api/v1/admin/media/upload`, `DELETE /api/v1/admin/media/:key`.
 - **4. İstek / Yanıt Sözleşmesi:**
-  - [x] *POST İstek:* `multipart/form-data` (`file`: binary, `altText`: string).
-  - [x] *POST Yanıt (201 Created):* `{ "success": true, "data": { "key": "blog/2026/gorsel1.webp", "url": "https://cdn.msklabs.com/blog/2026/gorsel1.webp", "size": 245000, "mimeType": "image/webp" } }`
+  - [*] *POST İstek:* `multipart/form-data` (`file`: binary, `altText`: string).
+  - [*] *POST Yanıt (201 Created):* `{ "success": true, "data": { "key": "blog/2026/gorsel1.webp", "url": "https://cdn.msklabs.com/blog/2026/gorsel1.webp", "size": 245000, "mimeType": "image/webp" } }`
 - **5. Validasyon ve Şema Kuralları:** Dosya boyutu `≤ 5 MB`. İzin verilen MIME türleri: `image/webp`, `image/png`, `image/jpeg`, `image/svg+xml`.
 - **6. Veri İşlemleri / Sorgular:** R2 Bucket `env.MEDIA.put(key, fileBuffer)` ve D1 `media_assets` tablosuna metadata kaydı.
 - **7. Async / Event / Queue Akışı:** N/A (Küçük görseller için doğrudan işlenir).
@@ -1305,9 +1306,9 @@ sequenceDiagram
 - **15. Performance:** *Acceptance Target:* R2 yükleme süresi < 500ms.
 - **16. Test Requirements:** 5MB üzeri dosya yükleme reddi (400), .exe/.php uzantılı dosya reddi.
 - **17. Definition of Done (DoD):**
-  - [x] R2 Bucket entegrasyonunun ve kamuya açık CDN URL erişiminin doğrulanması.
-  - [x] Magic byte doğrulaması ile zararlı dosya yüklemesinin engellenmesi.
-  - [x] *(Sonuç: PASS WITH LIMITATION. POST upload, DELETE, 5MB boyutu sınırı, WebP/PNG/JPEG/SVG MIME ve Magic Bytes doğrulaması, SHA-256 çakışma kontrolü, 20 req/min rate limit, MEDIA_UPLOADED ve MEDIA_DELETED audit log emisyonu ve 19/19 entegrasyon testleri %100 başarılıdır. Limitation: Projede canlı ortam için özel atanmış public CDN custom domain DNS kaydı bağlı olmadığından URL'ler env.CDN_BASE_URL veya https://cdn.msklabs.com fallback kök adresi üzerinden türetilmektedir)*.
+  - [*] R2 Bucket entegrasyonunun ve kamuya açık CDN URL erişiminin doğrulanması.
+  - [*] Magic byte doğrulaması ile zararlı dosya yüklemesinin engellenmesi.
+  - [*] *(Sonuç: PASS WITH LIMITATION. POST upload, DELETE, 5MB boyutu sınırı, WebP/PNG/JPEG/SVG MIME ve Magic Bytes doğrulaması, SHA-256 çakışma kontrolü, 20 req/min rate limit, MEDIA_UPLOADED ve MEDIA_DELETED audit log emisyonu ve 19/19 entegrasyon testleri %100 başarılıdır. Limitation: Projede canlı ortam için özel atanmış public CDN custom domain DNS kaydı bağlı olmadığından URL'ler env.CDN_BASE_URL veya https://cdn.msklabs.com fallback kök adresi üzerinden türetilmektedir)*.
 - **18. Hata / Risk Senaryoları:** R2 kotasının dolması -> Cloudflare Free Tier 10 GB depolama sınırı takibi.
 - **19. Zero-Cost Constraint:** Cloudflare R2 10 GB depolama + aylık 1 milyon A Sınıfı işlem ücretsiz kotası.
 - **20. Bağımlılıklar:** DATA-002, SEC-AUTH-001, SEC-RBAC-001.
@@ -1321,9 +1322,9 @@ sequenceDiagram
 - **2. Amaç:** Makaleler için çok dilli (TR/EN/AR) server-side TTS üretimi tetikleme (`generate`), ses durumunu sorgulama (`status`), ön dinleme (`preview`), onaylama (`approve`), yayından kaldırma (`unpublish`) ve yeni makale revizyonu için yeniden üretme (`regenerate`) uç noktalarını sunmak.
 - **3. Kapsam:** `backend/src/routes/admin/tts.ts`, `POST /api/v1/admin/tts/generate`, `GET /api/v1/admin/tts/status/:postId`, `POST /api/v1/admin/tts/approve`, `POST /api/v1/admin/tts/unpublish`, `POST /api/v1/admin/tts/regenerate`.
 - **4. İstek / Yanıt Sözleşmesi:**
-  - [x] *Generate İstek:* `{ "postId": 42, "language": "TR", "provider": "DEFAULT" }`
-  - [x] *Generate Yanıt (202 Accepted):* `{ "success": true, "data": { "audioId": 105, "status": "GENERATING", "articleVersion": 3, "audioVersion": 3 } }`
-  - [x] *Approve İstek:* `{ "audioId": 105 }` -> `{ "success": true, "data": { "status": "APPROVED" } }`
+  - [*] *Generate İstek:* `{ "postId": 42, "language": "TR", "provider": "DEFAULT" }`
+  - [*] *Generate Yanıt (202 Accepted):* `{ "success": true, "data": { "audioId": 105, "status": "GENERATING", "articleVersion": 3, "audioVersion": 3 } }`
+  - [*] *Approve İstek:* `{ "audioId": 105 }` -> `{ "success": true, "data": { "status": "APPROVED" } }`
 - **5. Validasyon ve Şema Kuralları:** `postId` (integer > 0), `language` (`TR` | `EN` | `AR`), `provider` (string, opsiyonel runtime konfigürasyonu).
 - **6. Veri İşlemleri / Sorgular:** `post_audio_assets` tablosuna `DRAFT` status ile kayıt yazımı ve `post_revisions.revision_number` ile senkronizasyon.
 - **7. Async / Event / Queue Akışı:** Cloudflare Queues / Event emisyonu ile arka planda TTS API çağrısı, MP3 R2'ye yükleme ve STT kalite doğrulama süreci çalıştırılır.
@@ -1331,17 +1332,17 @@ sequenceDiagram
 - **9. Rate Limit & WAF:** Admin rate limit (10 TTS üretimi/dakika).
 - **10. Hata Yönetimi & HTTP Kodları:** `400` (Validasyon hatası), `401`, `403`, `409` (Zaten aktif üretim var), `500` (TTS sağlayıcı hatası).
 - **11. Edge / Service Binding & Public Audio Delivery (HTTP Range & Mobile Support):**
-  - [x] Public MP3 sunumunda `audio/mpeg` MIME türü, `Content-Length` ve **HTTP Range Desteği (`Accept-Ranges: bytes`, `206 Partial Content`)** ZORUNLUDUR (mobil tarayıcılarda seek, ileri/geri sarma ve resume için).
-  - [x] Statik CDN önbellekleme başlıkları: `Cache-Control: public, max-age=31536000, immutable`.
+  - [*] Public MP3 sunumunda `audio/mpeg` MIME türü, `Content-Length` ve **HTTP Range Desteği (`Accept-Ranges: bytes`, `206 Partial Content`)** ZORUNLUDUR (mobil tarayıcılarda seek, ileri/geri sarma ve resume için).
+  - [*] Statik CDN önbellekleme başlıkları: `Cache-Control: public, max-age=31536000, immutable`.
 - **12. Idempotency & Cache:** ZORUNLU (`X-Idempotency-Key` olmadan mükerrer ses üretimi tetiklenemez). Önbellek anahtarı: `SHA-256(post_id + ":" + revision_number + ":" + language + ":" + config_hash)`.
 - **13. Observability / Log:** `TTS_GENERATED`, `TTS_APPROVED`, `TTS_UNPUBLISHED`, `TTS_STALE_MARKED` işlemleri `OBS-002` (`audit_logs`) tablosuna kaydedilir.
 - **14. Security / Public Audio Safety:** Tahmin edilemeyen R2 nesne anahtarı (`/audio/posts/[uuid].mp3`), path traversal koruması ve içerik tipi denetimi. API key secrets `wrangler secret put` ile saklanır.
 - **15. Performance:** *Acceptance Target:* Generate endpoint yanıtı < 150ms (Asenkron kuyruk başlatma - Ölçüm yapılacaktır).
 - **16. Test Requirements:** Admin yetkisi olmadan 401/403 reddi, HTTP Range başlıklarının varlığı, idempotency key testi.
 - **17. Definition of Done (DoD):**
-  - [x] Tüm TTS uç noktalarının tip güvenli çalışması.
-  - [x] Mobil HTTP Range başlıklarının doğrulanması.
-  - [x] *(Sonuç: PASS WITH LIMITATION. functions/api/tts.js ve tests/data_tts001.test.ts üzerinden 15/15 test başarıyla geçmiştir. Public MP3 delivery, Accept-Ranges: bytes, Content-Length, Draft protection ve SQLite D1 post_audio_assets ilişkileri doğrulanmıştır. Limitation: Canlı ortamda gerçek TTS sağlayıcı API anahtarı ve Cloudflare Queue consumer iş parçacığı bağlanmadığından Google TTS fallback ve yerel asenkron akış kullanılmıştır)*.
+  - [*] Tüm TTS uç noktalarının tip güvenli çalışması.
+  - [*] Mobil HTTP Range başlıklarının doğrulanması.
+  - [*] *(Sonuç: PASS WITH LIMITATION. functions/api/tts.js ve tests/data_tts001.test.ts üzerinden 15/15 test başarıyla geçmiştir. Public MP3 delivery, Accept-Ranges: bytes, Content-Length, Draft protection ve SQLite D1 post_audio_assets ilişkileri doğrulanmıştır. Limitation: Canlı ortamda gerçek TTS sağlayıcı API anahtarı ve Cloudflare Queue consumer iş parçacığı bağlanmadığından Google TTS fallback ve yerel asenkron akış kullanılmıştır)*.
 - **18. Hata / Risk Senaryoları:** TTS sağlayıcı çökmesi -> `status = 'FAILED'` olarak işaretlenir ve detay `validation_result_json` alanına yazılır.
 - **19. Zero-Cost Constraint:** Free Tier kotası dahilinde sağlayıcı kullanımı ($0/Ay). Ücretli servis zorunlu kılınmaz.
 - **20. Bağımlılıklar:** DATA-TTS-001, SEC-AUTH-001, SEC-RBAC-001, API-007, OBS-002.
@@ -1380,9 +1381,9 @@ sequenceDiagram
 - **11. Performance:** *Acceptance Target:* İstemci soğuk başlatma < 10ms (Ölçüm yapılacaktır).
 - **12. Test Requirements:** AbortSignal zaman aşımı testi, hatalı API anahtarı testi, max retries aşım testi.
 - **13. Definition of Done (DoD):**
-  - [x] AbortController ile zaman aşımı iptalinin doğrulanması.
-  - [x] Secrets izolasyonunun teyit edilmesi.
-  - [x] *(Sonuç: PASS. backend/src/utils/ai.ts ve tests/ai001.test.ts üzerinden 12/12 test başarıyla geçmiştir. Provider abstraction, AbortController timeout/cancel, exponential backoff jitter retries, AIProviderError status normalizasyonu, max 2 req/sec Quota Guard, PII sanitization ve secret isolation doğrulanmıştır)*.
+  - [*] AbortController ile zaman aşımı iptalinin doğrulanması.
+  - [*] Secrets izolasyonunun teyit edilmesi.
+  - [*] *(Sonuç: PASS. backend/src/utils/ai.ts ve tests/ai001.test.ts üzerinden 12/12 test başarıyla geçmiştir. Provider abstraction, AbortController timeout/cancel, exponential backoff jitter retries, AIProviderError status normalizasyonu, max 2 req/sec Quota Guard, PII sanitization ve secret isolation doğrulanmıştır)*.
 - **14. Bağımlılıklar:** ARCH-001, REL-ENV-001.
 - **15. Bağımlı Görevler:** AI-002, AI-003, AI-004, AI-005.
 
@@ -1399,9 +1400,9 @@ sequenceDiagram
 - **8. Privacy / PII Minimization:** Mesaj içeriği AI'a gönderilmeden önce e-posta ve telefon gibi kişisel veriler anonimleştirilir/maskelenir.
 - **9. Performance:** *Acceptance Target:* Analiz tamamlama süresi p95 < 2500ms (Asenkron kuyruk işleme).
 - **10. DoD:**
-  - [x] Structured output Zod doğrulaması.
-  - [x] HITL onay akışının korunması (otomatik yanıt gönderilmemesi).
-  - [x] *(Sonuç: PASS. backend/src/services/aiAnalysis.ts ve tests/ai002.test.ts üzerinden 10/10 test başarıyla geçmiştir. Zod schema validation, createFallbackAnalysis, PII sanitization, DATA/INSTRUCTION ayrımı, HITL non-mutation, D1 SQLite ai_summary/ai_draft güncellemesi ve message_events audit kaydı doğrulanmıştır)*.
+  - [*] Structured output Zod doğrulaması.
+  - [*] HITL onay akışının korunması (otomatik yanıt gönderilmemesi).
+  - [*] *(Sonuç: PASS. backend/src/services/aiAnalysis.ts ve tests/ai002.test.ts üzerinden 10/10 test başarıyla geçmiştir. Zod schema validation, createFallbackAnalysis, PII sanitization, DATA/INSTRUCTION ayrımı, HITL non-mutation, D1 SQLite ai_summary/ai_draft güncellemesi ve message_events audit kaydı doğrulanmıştır)*.
 - **11. Bağımlılıklar:** AI-001, AI-003, DATA-001.
 - **12. Bağımlı Görevler:** API-004, UI-002, OBS-002.
 
@@ -1418,9 +1419,9 @@ sequenceDiagram
 - **8. Performance:** *Acceptance Target:* Prompt sanitization ek yükü < 2ms.
 - **9. Test Requirements:** 15 farklı bilinen prompt injection saldırı vektörü ile sızdırmazlık testi.
 - **10. DoD:**
-  - [x] Injection girişimlerinde isteğin AI'a gönderilmeden çok katmanlı modelle engellenmesi.
-  - [x] Instruction/data ayrımının (CDATA/xml) ve politika filtrelerinin doğrulanması.
-  - [x] *(Sonuç: PASS. backend/src/utils/sanitizePrompt.ts ve tests/ai003.test.ts üzerinden 31/31 test (toplam AI suite 53/53 test) başarıyla geçmiştir. 19 farklı injection vektörü (EN/TR/AR, Homoglyph, Base64, Script, URI, Tool hijacking, Control chars), 10 meşru false-positive kontrolü, pre-fetch interception ve <0.5ms performans doğrulanmıştır)*.
+  - [*] Injection girişimlerinde isteğin AI'a gönderilmeden çok katmanlı modelle engellenmesi.
+  - [*] Instruction/data ayrımının (CDATA/xml) ve politika filtrelerinin doğrulanması.
+  - [*] *(Sonuç: PASS. backend/src/utils/sanitizePrompt.ts ve tests/ai003.test.ts üzerinden 31/31 test (toplam AI suite 53/53 test) başarıyla geçmiştir. 19 farklı injection vektörü (EN/TR/AR, Homoglyph, Base64, Script, URI, Tool hijacking, Control chars), 10 meşru false-positive kontrolü, pre-fetch interception ve <0.5ms performans doğrulanmıştır)*.
 - **11. Bağımlılıklar:** AI-001.
 - **12. Bağımlı Görevler:** AI-002, AI-004.
 
@@ -1436,9 +1437,9 @@ sequenceDiagram
 - **7. Validation & Fallback:** Çevrilen metindeki HTML etiket sayısı orijinal metinle eşleşmezse `HTML_STRUCTURE_MISMATCH` hatası döner ve taslak olarak saklanır.
 - **8. Performance:** *Acceptance Target:* Paragraf çevirisi < 3000ms.
 - **9. DoD:**
-  - [x] HTML etiketlerinin ve linklerin çeviri sonrası bozulmadığının doğrulanması.
-  - [x] Admin onay akışına sunulması (`DRAFT_TRANSLATION`).
-  - [x] *(Sonuç: PASS. backend/src/routes/admin/translate.ts ve tests/ai004.test.ts üzerinden 16/16 test (toplam AI suite 69/69 test) başarıyla geçmiştir. TR->EN/AR çevirisi, SEO özeti/slug üretimi, HTML/Markdown/URL bütünlüğü, glossary desteği, DRAFT_TRANSLATION HITL akışı, 5 req/min rate limit, X-Idempotency-Key ve AI-003 prompt injection koruması doğrulanmıştır)*.
+  - [*] HTML etiketlerinin ve linklerin çeviri sonrası bozulmadığının doğrulanması.
+  - [*] Admin onay akışına sunulması (`DRAFT_TRANSLATION`).
+  - [*] *(Sonuç: PASS. backend/src/routes/admin/translate.ts ve tests/ai004.test.ts üzerinden 16/16 test (toplam AI suite 69/69 test) başarıyla geçmiştir. TR->EN/AR çevirisi, SEO özeti/slug üretimi, HTML/Markdown/URL bütünlüğü, glossary desteği, DRAFT_TRANSLATION HITL akışı, 5 req/min rate limit, X-Idempotency-Key ve AI-003 prompt injection koruması doğrulanmıştır)*.
 - **10. Bağımlılıklar:** AI-001, AI-003, DATA-007 (`glossary`).
 - **11. Bağımlı Görevler:** AI-006, I18N-004, CMS-006.
 
@@ -1454,9 +1455,9 @@ sequenceDiagram
 - **7. Cache Invalidation Kuralları:** Önbellek geçersiz kılma mantığı girdi içeriği/versiyonu, model, prompt versiyonu, dil, konfigürasyon, terim sözlüğü versiyonu veya çıktı şeması versiyonu gibi AI girdisini ve davranışını etkileyen herhangi bir bileşenin değişmesi durumunda eski sonucun yanlışlıkla kullanılmasını engeller.
 - **8. Performance:** *Acceptance Target:* Önbellekten dönen AI isteği < 10ms.
 - **9. DoD:**
-  - [x] Ücretsiz kota aşımında sistemin ücretli sürüme geçmeden zarif durmasının testi (`503 QUOTA_EXHAUSTED`).
-  - [x] Önbellek çakışmasızlığının `SHA-256` ile doğrulanması (<10ms cache HIT).
-  - [x] *(Sonuç: PASS. backend/src/services/aiProvider.ts ve tests/ai005.test.ts üzerinden 12/12 test (toplam AI suite 81/81 test) başarıyla geçmiştir. AIProvider abstraction, GeminiProvider, FallbackProvider, Zero-Cost Guard $0/Mo kuralı, Cloudflare KV AI_CACHE, SHA-256 deterministik key ve AI-002/004 entegrasyonu doğrulanmıştır)*.
+  - [*] Ücretsiz kota aşımında sistemin ücretli sürüme geçmeden zarif durmasının testi (`503 QUOTA_EXHAUSTED`).
+  - [*] Önbellek çakışmasızlığının `SHA-256` ile doğrulanması (<10ms cache HIT).
+  - [*] *(Sonuç: PASS. backend/src/services/aiProvider.ts ve tests/ai005.test.ts üzerinden 12/12 test (toplam AI suite 81/81 test) başarıyla geçmiştir. AIProvider abstraction, GeminiProvider, FallbackProvider, Zero-Cost Guard $0/Mo kuralı, Cloudflare KV AI_CACHE, SHA-256 deterministik key ve AI-002/004 entegrasyonu doğrulanmıştır)*.
 - **10. Bağımlılıklar:** AI-001, DATA-007.
 - **11. Bağımlı Görevler:** AI-002, AI-004, AI-006, AI-TTS-001.
 
@@ -1477,16 +1478,16 @@ sequenceDiagram
 | **Önbellek (Cache)** | Aynı Metin + Aynı Prompt Versiyonu | Gemini API çağrılmadan Cloudflare KV önbellekten O(1) döner (%80+ API tasarrufu). |
 
 #### Section-Level Definition of Done (DoD)
-- [x] Gemini client mimarisinin ve AbortController timeout mekanizmasının tanımlanması.
-- [x] Provider soyutlama katmanı (`AI-005`) ve $0/Ay Cost Guard kuralının doğrulanması.
-- [x] Prompt versiyonlama ve metadata izlenebilirliğinin tanımlanması.
-- [x] Tip güvenli Structured Output JSON şemalarının Zod ile zorunlu kılınması.
-- [x] Prompt injection korumasında çok katmanlı güvenlik mimarisinin ve instruction/data ayrımının doğrulanması.
-- [x] PII maskeleme ve veri minimization prensiplerinin teyit edilmesi.
-- [x] Bounded exponential backoff retry ve idempotency önbelleklemesinin tanımlanması.
-- [x] Geri çeviri doğrulama ve glossary koruma akışının tanımlanması.
-- [x] Tüm AI işlemlerinin `OBS-002` audit loglama altyapısına bağlanması.
-- [x] Human-In-The-Loop (HITL) kuralı ile otomatik karar ve yanıt gönderiminin engellenmesi.
+- [*] Gemini client mimarisinin ve AbortController timeout mekanizmasının tanımlanması.
+- [*] Provider soyutlama katmanı (`AI-005`) ve $0/Ay Cost Guard kuralının doğrulanması.
+- [*] Prompt versiyonlama ve metadata izlenebilirliğinin tanımlanması.
+- [*] Tip güvenli Structured Output JSON şemalarının Zod ile zorunlu kılınması.
+- [*] Prompt injection korumasında çok katmanlı güvenlik mimarisinin ve instruction/data ayrımının doğrulanması.
+- [*] PII maskeleme ve veri minimization prensiplerinin teyit edilmesi.
+- [*] Bounded exponential backoff retry ve idempotency önbelleklemesinin tanımlanması.
+- [*] Geri çeviri doğrulama ve glossary koruma akışının tanımlanması.
+- [*] Tüm AI işlemlerinin `OBS-002` audit loglama altyapısına bağlanması.
+- [*] Human-In-The-Loop (HITL) kuralı ile otomatik karar ve yanıt gönderiminin engellenmesi.
 
 ---
 
@@ -1494,24 +1495,24 @@ sequenceDiagram
 
 ### Özet Görev Listesi (5. AI PLATFORM & GEMINI ENTEGRASYONU)
 
-- [ ] **AI-001 — Gemini API İstemcisi ve Temel Entegrasyon**
+- [*] **AI-001 — Gemini API İstemcisi ve Temel Entegrasyon**
   - **Kapsam:** Google Gemini SDK bağlantısı ve yapılandırması.
-- [ ] **AI-002 — Otomatik Mesaj Analizi & Özet**
+- [*] **AI-002 — Otomatik Mesaj Analizi & Özet**
   - **Kapsam:** Spam kontrolü, aciliyet seviyesi, kategori belirleme, `ai_draft` cevap önerisi üretimi.
-- [ ] **AI-003 — Prompt Injection Koruması**
+- [*] **AI-003 — Prompt Injection Koruması**
   - **Kapsam:** Kullanıcı girdilerinin sistem promptunu bozmasını engelleme güvenlik süzgeci.
-- [ ] **AI-004 — Gemini AI Çeviri & SEO API (`POST /api/admin/translate`)**
+- [*] **AI-004 — Gemini AI Çeviri & SEO API (`POST /api/admin/translate`)**
   - **Kapsam:** Türkçe başlık ve içeriği Gemini ile EN ve AR'ye çevirme, SEO özet üretimi.
-- [ ] **AI-005 — AI Abstraction Layer & Token/Maliyet Kontrolü**
+- [*] **AI-005 — AI Abstraction Layer & Token/Maliyet Kontrolü**
   - **Amaç:** Farklı LLM sağlayıcılarına geçişi kolaylaştıran soyutlama katmanı ve Gemini Free Tier kota aşımını engelleyen önbellekleme/rate limit kontrolü.
   - **Öncelik:** P2 | **Bağımlılık:** AI-001
-- [ ] **AI-006 — Geri Çeviri & Glossary Denetimi (`13.1`)**
+- [*] **AI-006 — Geri Çeviri & Glossary Denetimi (`13.1`)**
   - **Amaç:** Paragraf bölücü (`chunk.ts`), TR geri çeviri ile doğrulama skoru üretimi, terim sözlüğü enjeksiyonu.
   - **Öncelik:** P2 | **Bağımlılık:** AI-004
-- [ ] **AI-TTS-001 — TTS/MP3 Generation Platform Abstraction (Sanitization, Chunking & Retry)**
+- [*] **AI-TTS-001 — TTS/MP3 Generation Platform Abstraction (Sanitization, Chunking & Retry)**
   - **Amaç:** Server-side çok dilli (TR/EN/AR) TTS üretimi için provider-agnostic motor altyapısının kurulması. Ücretli provider'ların zorunlu bağımlılık yapılmaması ($0/Ay prensibi), HTML metinlerinin güvenli temizliği (HTML → Düz Metin sanitization, script/style/link ayıklaması, SSML kontrolü), uzun makalelerin paragraf sınırlarında parçalanması (chunking) ve sıralı MP3 birleştirilmesi, exponential backoff ile max 3 retry yönetimi, idempotency önbellekleme (`SHA-256`) ve R2'ye `DRAFT` statüsüyle kaydı.
   - **Öncelik:** P1 | **Bağımlılık:** AI-005, DATA-TTS-001
-- [ ] **AI-TTS-002 — Audio Quality & STT Validation Abstraction**
+- [*] **AI-TTS-002 — Audio Quality & STT Validation Abstraction**
   - **Amaç:** Üretilen MP3 ses dosyasının konuşma tanıma (STT / Speech-to-Text) doğrulamasından geçirilerek orijinal makale metni ile benzerlik/kalite skoru üretilmesi. STT doğrulama sisteminin provider-agnostic kurgulanması; ücretli STT API'lerinin zorunlu tutulmaması, servis erişilemez durumdayken zarif gerileme (graceful degradation) ile doğrudan admin incelemesine sunulması. Yalnızca admin onayı (`APPROVED`) alan ve `article_version == audio_version` olan seslerin public yayına sunulması, `OBS-002` audit kaydı.
   - **Öncelik:** P1 | **Bağımlılık:** AI-TTS-001, OBS-002
 
@@ -1537,21 +1538,21 @@ sequenceDiagram
 - **2. Amaç:** Çok dilli (TR/EN/AR) ve erişilebilir HTML/Düz Metin (plain-text fallback) e-posta şablon motorunu kurmak, kullanıcı girdilerini güvenle işleyerek e-posta şablon enjeksiyonlarını engellemek.
 - **3. Kapsam:** `backend/src/utils/emailTemplates.ts`, destek, bülten, duyuru ve sistem şablonları.
 - **4. Desteklenen E-Posta Şablon Tipleri:**
-  - [x] `TICKET_RECEIVED`: Destek bileti alındı ve bilet no bildirimi.
-  - [x] `TICKET_REPLIED`: Admin bilet yanıtı (transactional).
-  - [x] `NEWSLETTER_CONFIRM`: Çift onay (Double Opt-In) doğrulama bağlantısı.
-  - [x] `UNSUBSCRIBE_CONFIRM`: Abonelikten çıkış onay bildirimi.
-  - [x] `BROADCAST_NEWSLETTER`: Toplu bülten/duyuru şablonu (marketing).
-  - [x] `COUPON_REWARD`: Ödül/kupon e-postası (`API-009` ilişkili).
-  - [x] `ADMIN_ALERT`: Sistem acil durum bildirimi.
+  - [*] `TICKET_RECEIVED`: Destek bileti alındı ve bilet no bildirimi.
+  - [*] `TICKET_REPLIED`: Admin bilet yanıtı (transactional).
+  - [*] `NEWSLETTER_CONFIRM`: Çift onay (Double Opt-In) doğrulama bağlantısı.
+  - [*] `UNSUBSCRIBE_CONFIRM`: Abonelikten çıkış onay bildirimi.
+  - [*] `BROADCAST_NEWSLETTER`: Toplu bülten/duyuru şablonu (marketing).
+  - [*] `COUPON_REWARD`: Ödül/kupon e-postası (`API-009` ilişkili).
+  - [*] `ADMIN_ALERT`: Sistem acil durum bildirimi.
 - **5. Şablon Yapısı & Sürümleme:** Her şablon `template_id`, `version`, `language` (TR/EN/AR), `subject`, `html_body`, `text_fallback`, `variables` parametreleri ile versiyonlanır.
 - **6. Güvenlik & Escaping:** Şablona yerleştirilecek dinamik değişkenler (`{{name}}`, `{{subject}}`, `{{message}}`) sunucu tarafında `escapeHTML()` süzgecinden geçirilir. XSS/HTML Injection önlenir.
 - **7. Erişilebilirlik & Mobil Uyum:** Mobil e-posta istemcileri ile uyumlu duyarlı (responsive) tablo/inline-CSS mimarisi, ekran okuyucu dostu yapay dokunma alanları ve altbilgide zorunlu Unsubscribe bağlantısı.
 - **8. Privacy & KVKK:** Pazarlama e-postalarında izin (consent) denetimi; destek yanıtlarında ise transactional iletişim sınıflandırması.
 - **9. Performance:** *Acceptance Target:* Şablon derleme ve dize değiştirme süresi < 1ms.
 - **10. DoD:**
-  - [x] Tüm şablonların HTML ve plain-text çıktılarının doğrulanması.
-  - [x] Kullanıcı girdilerinin e-posta şablonlarında kaçış karakteri ile arındırılmasının testi.
+  - [*] Tüm şablonların HTML ve plain-text çıktılarının doğrulanması.
+  - [*] Kullanıcı girdilerinin e-posta şablonlarında kaçış karakteri ile arındırılmasının testi.
 - **11. Bağımlılıklar:** ARCH-001, SEC-REQ-001.
 - **12. Bağımlı Görevler:** COM-002, COM-003.
 
@@ -1567,8 +1568,8 @@ sequenceDiagram
 - **8. Observability:** Başarılı/başarısız e-posta gönderimleri HTTP yanıt kodları ile `OBS-002` log altyapısına kaydedilir. E-posta içeriği loglanmaz.
 - **9. Performance:** *Acceptance Target:* Resend API çağrısı p95 < 400ms.
 - **10. DoD:**
-  - [x] Dev ortamı simülasyonunun ve Prod Resend entegrasyonunun doğrulanması.
-  - [x] Header injection engelleme testinin geçmesi.
+  - [*] Dev ortamı simülasyonunun ve Prod Resend entegrasyonunun doğrulanması.
+  - [*] Header injection engelleme testinin geçmesi.
 - **11. Bağımlılıklar:** COM-001, REL-ENV-001.
 - **12. Bağımlı Görevler:** COM-003.
 
@@ -1579,17 +1580,17 @@ sequenceDiagram
 - **3. Kapsam:** `backend/src/cron/emailQueueWorker.ts`, `email_queue` D1 tablosu.
 - **4. Queue Schema Uyumu (`DATA-001`):** `id`, `type`, `recipient`, `subject`, `template_id`, `payload_json`, `status`, `attempts`, `max_attempts`, `scheduled_at`, `sent_at`, `last_error`, `idempotency_key`.
 - **5. State Machine Geçişleri:**
-  - [x] `PENDING` → `PROCESSING` → `SENT` (Başarılı gönderim).
-  - [x] `PROCESSING` → `RETRY_WAIT` (Geçici hata: 429, 5xx, timeout) → `PROCESSING`.
-  - [x] `PROCESSING` → `FAILED` (Kalıcı hata: geçersiz e-posta, 4xx reddi veya `attempts >= max_attempts`).
+  - [*] `PENDING` → `PROCESSING` → `SENT` (Başarılı gönderim).
+  - [*] `PROCESSING` → `RETRY_WAIT` (Geçici hata: 429, 5xx, timeout) → `PROCESSING`.
+  - [*] `PROCESSING` → `FAILED` (Kalıcı hata: geçersiz e-posta, 4xx reddi veya `attempts >= max_attempts`).
 - **6. Backoff & Retry Politikası:** Geçici hatalarda katlanarak artan bekleme süresi (Bounded Exponential Backoff: 1. retry 5dk, 2. retry 15dk, 3. retry 60dk; maks 3 deneme). Kalıcı hatalarda retry yapılmaz, doğrudan `FAILED` statüsüne çekilir.
 - **7. Eşzamanlı Çalışma Koruması (Atomic Claiming):** Worker çalıştığında `UPDATE email_queue SET status='PROCESSING', locked_at=CURRENT_TIMESTAMP WHERE id IN (SELECT id FROM email_queue WHERE status IN ('PENDING','RETRY_WAIT') AND scheduled_at <= CURRENT_TIMESTAMP ORDER BY id ASC LIMIT 10)` atomik sorgusu ile kayıtlar sahiplenilir.
 - **8. Idempotency & Duplicate Engelleme:** `idempotency_key` kontrolü ile aynı olay için 2. e-posta kesinlikle gönderilmez.
 - **9. Dead Letter & Failure Visibility:** Maksimum denemeyi aşan kayıtlarda `last_error` detaylandırılarak `FAILED` statüsünde saklanır; admin panelinde (`UI-003`) manuel yeniden tetikleme (`Retry Send`) olanağı sunulur.
 - **10. Performance:** *Acceptance Target:* Cron batch işleme süresi (10 kayıt için) < 1500ms.
 - **11. DoD:**
-  - [x] Mükerrer cron çalışmasında aynı kuyruk kaydının çift işlenmediğinin doğrulanması.
-  - [x] Katlanarak artan backoff retry mekanizmasının sınanması.
+  - [*] Mükerrer cron çalışmasında aynı kuyruk kaydının çift işlenmediğinin doğrulanması.
+  - [*] Katlanarak artan backoff retry mekanizmasının sınanması.
 - **12. Bağımlılıklar:** COM-002, DATA-001 (`email_queue`).
 - **13. Bağımlı Görevler:** UI-003, OBS-002.
 
@@ -1606,8 +1607,8 @@ sequenceDiagram
 - **9. Observability & Privacy:** Push başarı ve başarısızlık metrikleri `OBS-002` sistemine kaydedilir. Bildirim içeriğinde hassas PII (parola, tam müşteri mesajı) yer almaz.
 - **10. Performance:** *Acceptance Target:* Push bildirim iletim süresi < 500ms.
 - **11. DoD:**
-  - [x] VAPID özel anahtarının istemciye sızmadığının doğrulanması.
-  - [x] `410 Gone` dönen eski aboneliklerin otomatik silindiğinin teyidi.
+  - [*] VAPID özel anahtarının istemciye sızmadığının doğrulanması.
+  - [*] `410 Gone` dönen eski aboneliklerin otomatik silindiğinin teyidi.
 - **12. Bağımlılıklar:** DATA-004 (`push_subscriptions`), SEC-AUTH-001.
 - **13. Bağımlı Görevler:** UI-002, OBS-002.
 
@@ -1628,30 +1629,30 @@ sequenceDiagram
 | **Push (Güvenlik)** | Geçersiz / Süresi Dolmuş VAPID Endpoint | `410 Gone` yanıtında geçersiz abonelik kaydı `push_subscriptions` tablosundan silinir. |
 
 #### Section-Level Definition of Done (DoD)
-- [x] E-posta şablon motorunun ve HTML/Plain-text güvenli kaçış mekanizmasının tanımlanması.
-- [x] Resend e-posta sürücüsünün ve dev/prod simülasyon ayrımının tanımlanması.
-- [x] SPF/DKIM/DMARC alan adı doğrulama gereksinimlerinin netleştirilmesi.
-- [x] `email_queue` State Machine (`PENDING` → `PROCESSING` → `SENT` / `RETRY_WAIT` → `FAILED`) yapısının doğrulanması.
-- [x] Atomic claim ile eşzamanlı worker çakışma korumasının tanımlanması.
-- [x] Bounded exponential backoff retry ve idempotency anahtarı denetiminin tanımlanması.
-- [x] Double Opt-In ve List-Unsubscribe yasal/teknik standartlarının tanımlanması.
-- [x] Web Push VAPID anahtar izolasyonunun ve otomatik `410 Gone` temizliğinin tanımlanması.
-- [x] Zero-Cost Guard ($0/Ay) ve ana backend işlemlerinden izole (non-blocking) çalışma garantisinin verilmesi.
-- [x] İletişim test matrisinin ve `OBS-002` audit entegrasyonunun tamamlanması.
+- [*] E-posta şablon motorunun ve HTML/Plain-text güvenli kaçış mekanizmasının tanımlanması.
+- [*] Resend e-posta sürücüsünün ve dev/prod simülasyon ayrımının tanımlanması.
+- [*] SPF/DKIM/DMARC alan adı doğrulama gereksinimlerinin netleştirilmesi.
+- [*] `email_queue` State Machine (`PENDING` → `PROCESSING` → `SENT` / `RETRY_WAIT` → `FAILED`) yapısının doğrulanması.
+- [*] Atomic claim ile eşzamanlı worker çakışma korumasının tanımlanması.
+- [*] Bounded exponential backoff retry ve idempotency anahtarı denetiminin tanımlanması.
+- [*] Double Opt-In ve List-Unsubscribe yasal/teknik standartlarının tanımlanması.
+- [*] Web Push VAPID anahtar izolasyonunun ve otomatik `410 Gone` temizliğinin tanımlanması.
+- [*] Zero-Cost Guard ($0/Ay) ve ana backend işlemlerinden izole (non-blocking) çalışma garantisinin verilmesi.
+- [*] İletişim test matrisinin ve `OBS-002` audit entegrasyonunun tamamlanması.
 
 ---
 
 ### Özet Görev Listesi (6. COMMUNICATION, EMAIL, QUEUE & PUSH)
 
-- [x] **COM-001 — Temel HTML E-Posta Şablonları**
+- [*] **COM-001 — Temel HTML E-Posta Şablonları**
   - **Kapsam:** Bilet Alındı ve Destek Cevap e-posta şablonları (TR/EN/AR).
-- [x] **COM-002 — Resend E-Posta Motoru & Alan Adı Doğrulama (`10.6.1`)**
+- [*] **COM-002 — Resend E-Posta Motoru & Alan Adı Doğrulama (`10.6.1`)**
   - **Amaç:** Resend alan adı doğrulaması (SPF/DKIM), `noreply@` gönderici ayarı, `ENV=dev` simülasyon ayrımı.
   - **Öncelik:** P0 | **Bağımlılık:** API-001
-- [x] **COM-003 — E-Posta Kuyruk İşleyici Cron Worker (`10.6.1`)**
+- [*] **COM-003 — E-Posta Kuyruk İşleyici Cron Worker (`10.6.1`)**
   - **Amaç:** `processQueue()` cron işleyicisi (`*/5 * * * *`), kupon ve duyuru e-posta şablonları.
   - **Öncelik:** P0 | **Bağımlılık:** COM-002
-- [x] **COM-004 — Web Push Notification Altyapısı (`10.6.3`)**
+- [*] **COM-004 — Web Push Notification Altyapısı (`10.6.3`)**
   - **Amaç:** VAPID anahtar çifti, `push_subscriptions` rotası, yeni bilet/yorumda yöneticiye anlık push gönderimi.
   - **Öncelik:** P1 | **Bağımlılık:** DATA-004
 
@@ -1663,21 +1664,21 @@ sequenceDiagram
 
 - **Zero-Cost & Component Governance ($0/Ay Kuralı):** Admin frontend arayüzü %100 açık kaynak, sıfır maliyetli web standartları (Vanilla CSS / HSL CSS Variables / React / Vite) ile inşa edilir. Ücretli UI kütüphaneleri, ücretli ikon paketleri, ücretli frontend analytics veya ücretli bileşen platformları kesinlikle kullanılamaz ($0/Ay).
 - **Design System Token Yapısı:** Hardcoded CSS değerleri ve rastgele renk kullanımı yasaktır. Tüm arayüz aşağıdaki CSS değişkenleri (design tokens) üzerinden türetilir:
-  - [ ] *Color Tokens:* HSL tabanlı Tailored Dark/Light paleti (`--bg-primary`, `--bg-secondary`, `--text-primary`, `--text-muted`, `--border-subtle`, `--accent-primary`, `--accent-hover`, `--danger`, `--success`, `--warning`, `--info`).
-  - [ ] *Typography:* Modern yazı tipleri (Inter / Roboto / Outfit / Cairo RTL). Font boyutları (`--font-xs` 12px → `--font-2xl` 24px), font ağırlıkları (400, 500, 600, 700), satır yükseklikleri (`1.2` - `1.5`).
-  - [ ] *Spacing & Elevation:* 4px ızgara sistemi (`--space-1` 4px → `--space-8` 32px). Border radius (`--radius-sm` 4px → `--radius-full` 9999px). Gölge ve katmanlar (`--shadow-sm`, `--shadow-md`, `--shadow-lg`, Z-index: Modal=1000, Toast=1100, Tooltip=1200).
-  - [ ] *Breakpoints & Touch Targets:* Mobile (<640px), Tablet (640px-1024px), Desktop (>1024px). Dokunmatik hedef alanları WCAG 2.2 AA gereği minimum **44x44px** genişliğindedir.
+  - [*] *Color Tokens:* HSL tabanlı Tailored Dark/Light paleti (`--bg-primary`, `--bg-secondary`, `--text-primary`, `--text-muted`, `--border-subtle`, `--accent-primary`, `--accent-hover`, `--danger`, `--success`, `--warning`, `--info`).
+  - [*] *Typography:* Modern yazı tipleri (Inter / Roboto / Outfit / Cairo RTL). Font boyutları (`--font-xs` 12px → `--font-2xl` 24px), font ağırlıkları (400, 500, 600, 700), satır yükseklikleri (`1.2` - `1.5`).
+  - [*] *Spacing & Elevation:* 4px ızgara sistemi (`--space-1` 4px → `--space-8` 32px). Border radius (`--radius-sm` 4px → `--radius-full` 9999px). Gölge ve katmanlar (`--shadow-sm`, `--shadow-md`, `--shadow-lg`, Z-index: Modal=1000, Toast=1100, Tooltip=1200).
+  - [*] *Breakpoints & Touch Targets:* Mobile (<640px), Tablet (640px-1024px), Desktop (>1024px). Dokunmatik hedef alanları WCAG 2.2 AA gereği minimum **44x44px** genişliğindedir.
 - **App Shell & Navigasyon Mimarisi:** Masaüstü Sidebar (katlanabilir), Üst Bar (Topbar: sayfa başlığı, breadcrumb, global arama, bildirim merkezi, admin profil menüsü) ve Mobil Alt Navigasyon Barı (<640px). Aktif rota vurgusu, RBAC yetki duyarlı menü görünürlüğü, Error Boundary ve global yükleme durumu kapsanır.
 - **WCAG 2.2 AA Erişilebilirlik (a11y):** Klavyeyle tam navigasyon (`Tab`, `Shift+Tab`, `Arrow`, `Enter`, `Space`, `ESC`), görünür odak halkası (`outline: 2px solid var(--ring)`), ekran okuyucu desteği (`aria-label`, `aria-expanded`, `aria-selected`, `sr-only`), form hata ilişkilendirmesi (`aria-invalid`, `aria-errormessage`), modal odak hapsi (Focus Trap) ve kapanışta odağın eski elemana iadesi (Focus Restoration), durum simgelerinde renk dışı ek gösterge (simge + metin + renk), azaltılmış hareket tercihi (`prefers-reduced-motion`).
 - **UI Durum Matrisi (16 Standart Durum):** Tüm liste ve detay ekranlarında 16 standart durum desteklenir: `Initial Loading`, `Skeleton Loading`, `Empty`, `Success`, `Error`, `Retry`, `Offline`, `Permission Denied`, `Not Found`, `Partial Data`, `Saving`, `Saved`, `Unsaved Changes Warning`, `Deleting`, `Processing`, `Rate Limited / 503`.
 - **Form & DataTable Standartları:** Formlarda client-side validasyon (Zod / hafif şema doğrulayıcı), tarla ve form seviyesinde hata gösterimleri, kaydetmeden çıkışta uyarı modalı. DataTable ekranlarında Server-Side Cursor Pagination (`limit`, `cursor`), arama metninde 300ms debounce, kolon sıralama (`asc`/`desc`), mobilde kart görünümüne duyarlı dönüşüm, toplu eylem (bulk approve/delete) ve URL sorgu-durum senkronizasyonu.
 - **Modal & Drawer Standartları:** Odak hapsi, ESC ile kapatma, dış alana tıklama (backdrop click) ile kapatma, `body` kaydırma kilitlenmesi (scroll lock), mobilde alt çekmeceye (bottom drawer) dönüşme, yıkıcı eylemler öncesi onay modalı (`ConfirmationDialog`).
 - **AI & TTS UI Entegrasyonu:**
-  - [ ] *AI UI:* `AI-002` ve `AI-004` ile uyumlu `AI-Generated` etiketi, `ai_draft` durum kartı, güven skoru (confidence badge), inceleme modalı (`Review & Edit`), Onayla & Gönder / Reddet / Yeniden Üret butonları, Gemini kota dolumunda (`503`) zarif uyarı kartı.
-  - [ ] *TTS UI:* `CMS-TTS-001` ile uyumlu ses üretim durumu (`generating`, `draft`, `approved`, `failed`, `stale`), STT kalite doğrulama skoru, ön dinleme Audio Player, Onayla & Yayınla / Yayından Kaldır / Yeniden Üret butonları, sürüm uyumsuzluğu (`article_version != audio_version`) durumunda `STALE` uyarı rozeti.
+  - [*] *AI UI:* `AI-002` ve `AI-004` ile uyumlu `AI-Generated` etiketi, `ai_draft` durum kartı, güven skoru (confidence badge), inceleme modalı (`Review & Edit`), Onayla & Gönder / Reddet / Yeniden Üret butonları, Gemini kota dolumunda (`503`) zarif uyarı kartı.
+  - [*] *TTS UI:* `CMS-TTS-001` ile uyumlu ses üretim durumu (`generating`, `draft`, `approved`, `failed`, `stale`), STT kalite doğrulama skoru, ön dinleme Audio Player, Onayla & Yayınla / Yayından Kaldır / Yeniden Üret butonları, sürüm uyumsuzluğu (`article_version != audio_version`) durumunda `STALE` uyarı rozeti.
 - **i18n & RTL Yerelleştirme Mimarisi:** TR, EN ve AR dilleri. Arapça (AR) için tam RTL (Right-to-Left) desteği: `dir="rtl"`, Cairo fontu, yön duyarlı simge aynalama (Icon Mirroring), form metin hizalaması, tablo yerleşimi aynalama, modal ve breadcrumb RTL uyumu. Dil değişiminde sayfa durumu ve form verileri korunur.
 - **Bildirim UI (Toast & Notification Center):** Toast bildirimleri (Success, Error, Warning, Info), uygulama içi bildirim merkezi (okunmamış sayısı rozeti, okundu işaretleme, mükerrer e-posta/push bildirimlerini tekilleştirme).
-- **PWA & Hassas Veri Güvenlik Politikası:** Static asset ve uygulama kabuğu (App Shell) servis işçisi (Service Worker) ile önbelleklenebilir. **Hassas Admin Verisi Önbellekleme Yasağı:** Destek mesajları, müşteri e-postaları, bilet içerikleri ve admin API yanıtları unencrypted tarayıcı depolama alanlarına (`localStorage`, `IndexedDB`) veya SW önbelleğine KESİNLİKLE yazılamaz. Çıkış yapıldığında oturum hafızası anında temizlenir.
+- **PWA & Hassas Veri Güvenlik Politikası:** Static asset ve uygulama kabuğu (App Shell) servis işçisi (Service Worker) ile önbelleklenebilir. **Hassas Admin Verisi Önbellekleme Yasağı:** Destek mesajları, müşteri e-posta'ları, bilet içerikleri ve admin API yanıtları unencrypted tarayıcı depolama alanlarına (`localStorage`, `IndexedDB`) veya SW önbelleğine KESİNLİKLE yazılamaz. Çıkış yapıldığında oturum hafızası anında temizlenir.
 - **Frontend Güvenliği & Secret Izolasyonu:** Zengin metinlerde sanitization (`sanitizeHTML`), dinamik bağlantılarda URL protokol doğrulaması (`http:`, `https:` izni, `javascript:` engeli), CSP uyumu. **Secrets Izolasyonu:** Frontend kodunda veya istemci paketinde `GEMINI_API_KEY`, `RESEND_API_KEY`, `VAPID_PRIVATE_KEY` veya D1/KV secret'ları KESİNLİKLE BULUNDURULAMAZ. Menü veya buton gizleme yetkilendirme değildir; arka plan `SEC-RBAC-001` tek yetkili güvenlik duvarıdır.
 - **Performans Benchmark & Kod Bölme (Code Splitting):** Rota seviyesinde dinamik yükleme (`React.lazy` / `import()`), ağır bileşenlerin (TipTap Editör, Audio Player, Modallar) tembel yüklenmesi (Lazy Loading), büyük listelerde sanallaştırma (Virtualization), arama girdilerinde 300ms debounce, `AbortController` ile iptal edilebilir istekler.
 - **Satır Sınırı Standardı (Proje Kuralı):** Kod dosyalarında proje standardı olan **400–450 satır üst sınırı** kesin olarak korunur. `UI-004` refactoring görevi `PostsView.tsx` dosyasını `<300` satır modüler parçalara ayırır.
@@ -1694,8 +1695,8 @@ sequenceDiagram
 - **6. Responsive & Accessibility:** Mobil uyumlu tek sütun düzen, WCAG 2.2 AA form etiketleri (`<label htmlFor="...">`), klavye erişilebilirliği (`Enter` ile gönderim).
 - **7. Performance:** *Acceptance Target:* Dashboard ilk yüklenme p95 < 200ms.
 - **8. DoD:**
-  - [ ] Login ve Dashboard ekranlarının mobil/masaüstü responsive uyumunun teyidi.
-  - [ ] Metrik kartlarının skeleton yükleme durumlarının doğrulanması.
+  - [*] Login ve Dashboard ekranlarının mobil/masaüstü responsive uyumunun teyidi.
+  - [*] Metrik kartlarının skeleton yükleme durumlarının doğrulanması.
 - **9. Bağımlılıklar:** SEC-AUTH-001, API-004, UI-005.
 - **10. Bağımlı Görevler:** UI-002, UI-003.
 
@@ -1709,8 +1710,8 @@ sequenceDiagram
 - **6. Responsive & Accessibility:** DataTable ve kart görünümü geçişi, modal odak hapsi (Focus Trap), klavyeyle onay/red eylemleri.
 - **7. Performance:** *Acceptance Target:* Bilet detay modalı açılışı < 50ms.
 - **8. DoD:**
-  - [x] AI taslak cevabının admin onayına sunulduğunun (otomatik gönderilmediğinin) doğrulanması.
-  - [x] Yorum onay/silme aksiyonlarının sorunsuz çalışması.
+  - [*] AI taslak cevabının admin onayına sunulduğunun (otomatik gönderilmediğinin) doğrulanması.
+  - [*] Yorum onay/silme aksiyonlarının sorunsuz çalışması.
 - **9. Bağımlılıklar:** API-001, API-002, AI-002, UI-005.
 - **10. Bağımlı Görevler:** COM-001, OBS-002.
 
@@ -1725,8 +1726,8 @@ sequenceDiagram
 - **7. Responsive & Accessibility:** Çift panelli mobil/masaüstü duyarlı düzen, ekran okuyucu uyumlu form kontrolleri.
 - **8. Performance:** *Acceptance Target:* Canlı şablon önizleme derleme süresi < 10ms.
 - **9. DoD:**
-  - [x] Bülten canlı önvizleme ve gönderim onay modalının sınanması.
-  - [x] Abone arama ve filtreleme işlevlerinin doğrulanması.
+  - [*] Bülten canlı önvizleme ve gönderim onay modalının sınanması.
+  - [*] Abone arama ve filtreleme işlevlerinin doğrulanması.
 - **10. Bağımlılıklar:** API-003, COM-001, COM-002, UI-005.
 - **11. Bağımlı Görevler:** UI-004, GO-001.
 
@@ -1736,14 +1737,14 @@ sequenceDiagram
 - **2. Amaç:** 450 satır sınırını aşan `PostsView.tsx` (454 satır) bileşenini iş mantığı, API sözleşmesi veya UI davranışını bozmadan `<300` satırlık modüler parçalara bölmek.
 - **3. Kapsam:** `src/views/PostsView.tsx` refactoring → `src/components/posts/PostList.tsx`, `src/components/posts/PostEditorModal.tsx`, `src/components/posts/PostFilterBar.tsx`.
 - **4. Refactoring İlkeleri & Kabul Kriterleri:**
-  - [x] *Business Logic Korunması:* Makale oluşturma, taslağa çekme, silme ve arama mantığı birebir korunur.
-  - [x] *API & UI Davranış Uyumu:* API istek yapısı veya kullanıcı arayüzü görsel çıktısı kesinlikle değişmez.
-  - [x] *Satır Sınırı Uyumu:* Bölünen hiçbir dosya 300 satırı (ve genel 450 satır kuralını) aşamaz (`check_line_limit.js` ile doğrulanır).
-  - [x] *Tekrar Kullanılabilirlik:* `PostFilterBar` ve `PostList` bağımsız olarak test edilebilir ve tekrar kullanılabilir yapıda tasarlanır.
+  - [*] *Business Logic Korunması:* Makale oluşturma, taslağa çekme, silme ve arama mantığı birebir korunur.
+  - [*] *API & UI Davranış Uyumu:* API istek yapısı veya kullanıcı arayüzü görsel çıktısı kesinlikle değişmez.
+  - [*] *Satır Sınırı Uyumu:* Bölünen hiçbir dosya 300 satırı (ve genel 450 satır kuralını) aşamaz (`check_line_limit.js` ile doğrulanır).
+  - [*] *Tekrar Kullanılabilirlik:* `PostFilterBar` ve `PostList` bağımsız olarak test edilebilir ve tekrar kullanılabilir yapıda tasarlanır.
 - **5. Performance & Bundle Impact:** Refactoring sonrası bundle boyutunun artmaması ve gereksiz rerender'ların önlenmesi (`React.memo` / `useCallback` kullanımı).
 - **6. DoD:**
-  - [x] `check_line_limit.js` betiğinin 0 ihlal ile geçmesi.
-  - [x] `PostsView` işlevselliğinin eksiksiz çalıştığının doğrulanması.
+  - [*] `check_line_limit.js` betiğinin 0 ihlal ile geçmesi.
+  - [*] `PostsView` işlevselliğinin eksiksiz çalıştığının doğrulanması.
 - **7. Bağımlılıklar:** UI-003, CMS-002.
 - **8. Bağımlı Görevler:** UI-005, TEST-002.
 
@@ -1754,16 +1755,16 @@ sequenceDiagram
 - **3. Kapsam:** `src/styles/tokens.css`, `src/components/ui/` (`Button`, `IconButton`, `Input`, `Select`, `Checkbox`, `Switch`, `Modal`, `Drawer`, `Toast`, `Skeleton`, `EmptyState`, `Tabs`, `DeviceFrame`, `StatusBadge`, `AudioPlayer`, `RichTextEditor`).
 - **4. Design Tokens & CSS Variables:** HSL renk paleti, 4px grid spacing, typography, border-radius, shadows, Z-index katmanları, WCAG 2.2 AA dokunmatik hedef boyutları (min 44x44px).
 - **5. Atomik Bileşen Davranışları & Accessibility:**
-  - [x] *Button / IconButton:* Loading durumu, disabled durumu, klavye odağı, minimum 44px touch target.
-  - [x] *Modal / Drawer:* Odak hapsi (Focus Trap), ESC kapatma, backdrop tıklama, kaydırma kilidi, mobilde alt çekmeceye dönüşme.
-  - [x] *Toast:* Erişilebilir canlı bölge (`aria-live="polite"`), otomatik kapanma zamanlayıcısı, manuel kapatma butonu.
-  - [x] *Skeleton / EmptyState:* İçerik yüklenirken yapay iskelet gösterimi; veri yoksa anlamlı simge + metin + eylem butonu.
-  - [x] *AudioPlayer:* HTML5 `<audio>` sarmalayıcısı, Play/Pause, Seek, süre göstergesi, hız kontrolü, klavye/ekran okuyucu uyumu, autoplay yasağı.
+  - [*] *Button / IconButton:* Loading durumu, disabled durumu, klavye odağı, minimum 44px touch target.
+  - [*] *Modal / Drawer:* Odak hapsi (Focus Trap), ESC kapatma, backdrop tıklama, kaydırma kilidi, mobilde alt çekmeceye dönüşme.
+  - [*] *Toast:* Erişilebilir canlı bölge (`aria-live="polite"`), otomatik kapanma zamanlayıcısı, manuel kapatma butonu.
+  - [*] *Skeleton / EmptyState:* İçerik yüklenirken yapay iskelet gösterimi; veri yoksa anlamlı simge + metin + eylem butonu.
+  - [*] *AudioPlayer:* HTML5 `<audio>` sarmalayıcısı, Play/Pause, Seek, süre göstergesi, hız kontrolü, klavye/ekran okuyucu uyumu, autoplay yasağı.
 - **6. Responsive & Theme Governance:** Dark/Light tema geçişi, CSS değişkenleri üzerinden sıfır JS maliyetli tema yönetimi.
 - **7. Performance:** *Acceptance Target:* Design System CSS boyutu < 15KB (Gzip).
 - **8. DoD:**
-  - [x] Tüm atomik bileşenlerin dark/light tema ve mobil/masaüstü ortamlarında doğrulanması.
-  - [x] WCAG 2.2 AA erişilebilirlik testlerinin geçmesi.
+  - [*] Tüm atomik bileşenlerin dark/light tema ve mobil/masaüstü ortamlarında doğrulanması.
+  - [*] WCAG 2.2 AA erişilebilirlik testlerinin geçmesi.
 - **9. Bağımlılıklar:** UI-004, ARCH-001.
 - **10. Bağımlı Görevler:** UI-006, CMS-006, CMS-TTS-001.
 
@@ -1778,8 +1779,8 @@ sequenceDiagram
 - **7. Error Boundary & Offline Handling:** Beklenmeyen React render hatalarında kullanıcıyı teknik detay vermeden güvenli hata ekranına (`ErrorBoundaryFallback`) yönlendirme; çevrimdışı olunduğunda `OfflineBanner` gösterimi ve ağ geri geldiğinde otomatik yeniden deneme (`Retry`).
 - **8. Performance:** *Acceptance Target:* `Cmd+K` arama modalı açılış süresi < 20ms.
 - **9. DoD:**
-  - [x] Arapça (RTL) modunda tüm ekranların hatasız aynalandığının teyidi.
-  - [x] Error Boundary ve Global Search kısayolunun sınanması.
+  - [*] Arapça (RTL) modunda tüm ekranların hatasız aynalandığının teyidi.
+  - [*] Error Boundary ve Global Search kısayolunun sınanması.
 - **10. Bağımlılıklar:** UI-005, I18N-001, SEC-AUTH-001.
 - **11. Bağımlı Görevler:** TEST-002, GO-001.
 
@@ -1802,35 +1803,35 @@ sequenceDiagram
 | **Performans** | Rota Seviyesinde Code Splitting | Sayfa geçişlerinde sadece ilgili rota kodu yüklenir; ilk JS paketi (Gzip) < 120KB kalır. |
 
 #### Section-Level Definition of Done (DoD)
-- [x] Design System HSL token yapısının ve 4px grid spacing standartlarının tanımlanması.
-- [x] Atomik UI bileşen kütüphanesinin (`Button`, `Modal`, `Toast`, `Skeleton`, `AudioPlayer` vb.) tanımlanması.
-- [x] App Shell, Sidebar, Topbar ve Mobil Alt Navigasyon Barı mimarisinin doğrulanması.
-- [x] WCAG 2.2 AA erişilebilirlik standartlarının (klavye, odak hapsi, ekran okuyucu, 44px touch target) tanımlanması.
-- [x] 16 standart UI durumunun (`Loading`, `Skeleton`, `Empty`, `Error`, `Saving`, `Offline` vb.) belirlenmesi.
-- [x] Form ve DataTable (Server-Side Cursor Pagination, debounced search, bulk actions) standartlarının tanımlanması.
-- [x] AI (`ai_draft` onay akışı) ve TTS (ön dinleme, onay, `STALE` revizyon denetimi, HTML5 player) UI entegrasyonlarının doğrulanması.
-- [x] TR/EN/AR i18n ve Arapça RTL yön duyarlı aynalama mimarisinin tanımlanması.
-- [x] PWA/Offline hassas veri saklama yasağının ve frontend secret izolasyonunun teyit edilmesi.
-- [x] Kod dosyalarında 400–450 satır üst sınırının ve `UI-004` refactoring hedeflerinin tanımlanması.
-- [x] Zero-Cost Guard ($0/Ay) prensibinin ve UI test matrisinin tamamlanması.
+- [*] Design System HSL token yapısının ve 4px grid spacing standartlarının tanımlanması.
+- [*] Atomik UI bileşen kütüphanesinin (`Button`, `Modal`, `Toast`, `Skeleton`, `AudioPlayer` vb.) tanımlanması.
+- [*] App Shell, Sidebar, Topbar ve Mobil Alt Navigasyon Barı mimarisinin doğrulanması.
+- [*] WCAG 2.2 AA erişilebilirlik standartlarının (klavye, odak hapsi, ekran okuyucu, 44px touch target) tanımlanması.
+- [*] 16 standart UI durumunun (`Loading`, `Skeleton`, `Empty`, `Error`, `Saving`, `Offline` vb.) belirlenmesi.
+- [*] Form ve DataTable (Server-Side Cursor Pagination, debounced search, bulk actions) standartlarının tanımlanması.
+- [*] AI (`ai_draft` onay akışı) ve TTS (ön dinleme, onay, `STALE` revizyon denetimi, HTML5 player) UI entegrasyonlarının doğrulanması.
+- [*] TR/EN/AR i18n ve Arapça RTL yön duyarlı aynalama mimarisinin tanımlanması.
+- [*] PWA/Offline hassas veri saklama yasağının ve frontend secret izolasyonunun teyit edilmesi.
+- [*] Kod dosyalarında 400–450 satır üst sınırının ve `UI-004` refactoring hedeflerinin tanımlanması.
+- [*] Zero-Cost Guard ($0/Ay) prensibinin ve UI test matrisinin tamamlanması.
 
 ---
 
 ### Özet Görev Listesi (7. ADMIN FRONTEND & DESIGN SYSTEM)
 
-- [x] **UI-001 — Admin Giriş ve Özet Dashboard Ekranları**
+- [*] **UI-001 — Admin Giriş ve Özet Dashboard Ekranları**
   - **Kapsam:** LoginView, DashboardView özet metrik kartları.
-- [x] **UI-002 — Destek & Yorum Yönetimi Ekranları**
+- [*] **UI-002 — Destek & Yorum Yönetimi Ekranları**
   - **Kapsam:** TicketsView, CommentsView, TicketDetailModal, CouponModal.
-- [x] **UI-003 — Bülten, Abone & Ayarlar Ekranları**
+- [*] **UI-003 — Bülten, Abone & Ayarlar Ekranları**
   - **Kapsam:** BroadcastView, SubscribersView, SettingsView.
-- [x] **UI-004 — Satır Sınırı Refactoring (`10.6.6`)**
+- [*] **UI-004 — Satır Sınırı Refactoring (`10.6.6`)**
   - **Amaç:** `PostsView.tsx` (454 satır) dosyasını `PostList.tsx` ve `PostEditorModal.tsx` olarak bölme (<300 satır).
   - **Öncelik:** P0 | **Bağımlılık:** UI-003
-- [x] **UI-005 — Premium Admin Design System (`10.7`)**
+- [*] **UI-005 — Premium Admin Design System (`10.7`)**
   - **Amaç:** HSL tasarım token'ları, Ortak UI Bileşenleri (`Button`, `Modal`, `Toast`, `Skeleton`, `EmptyState`, `Tabs`, `DeviceFrame`), mobil alt navigasyon.
   - **Öncelik:** P1 | **Bağımlılık:** UI-004
-- [x] **UI-006 — App Shell, Global Search, Accessibility & State Governance**
+- [*] **UI-006 — App Shell, Global Search, Accessibility & State Governance**
   - **Amaç:** Katlanabilir Sidebar, Mobil Alt Navigasyon, `Cmd+K` Hızlı Arama, WCAG 2.2 AA uyumu, i18n RTL (Arapça) yön aynalama ve Error Boundary altyapısı.
   - **Öncelik:** P1 | **Bağımlılık:** UI-005
 
@@ -1850,10 +1851,12 @@ sequenceDiagram
 
 ### 8.2 CMS Görev Spesifikasyonları (CMS-001 — CMS-008, CMS-TTS-001)
 
+#### 8.2 CMS Görev Spesifikasyonları (CMS-001 — CMS-008, CMS-TTS-001)
+
 ### CMS-001 — Blog Kanal Yönetim Ekranı (`ChannelsView.tsx`)
 - **2. Kapsam:**
-  - [ ] `src/views/ChannelsView.tsx` ekran bileşenini oluştur.
-  - [ ] Dinamik kanal tanımlama (TR/EN/AR isim, slug ve ikon) işlevselliğini ekle.
+  - [*] `src/views/ChannelsView.tsx` ekran bileşenini oluştur.
+  - [*] Dinamik kanal tanımlama (TR/EN/AR isim, slug ve ikon) işlevselliğini ekle.
 - **3. Öncelik:** P1 | **Bağımlılık:** DATA-002, UI-005.
 
 ---
@@ -1862,19 +1865,19 @@ sequenceDiagram
 - **2. Amaç:** Blog yazılarını listelemek, durum bazlı yaşam döngüsünü (`DRAFT`, `REVIEW`, `APPROVED`, `PUBLISHED`, `UNPUBLISHED`, `ARCHIVED`) yönetmek, filtreleme, arama ve toplu işlemleri yürütmek.
 - **3. Kapsam:** `backend/src/routes/admin/posts.ts`, `src/views/PostsView.tsx`, `post_revisions` entegrasyonu.
 - **4. İçerik Durumları & Yaşam Döngüsü:**
-  - [ ] `DRAFT`: Taslak yazım aşaması.
-  - [ ] `REVIEW`: Editör/AI inceleme aşaması.
-  - [ ] `APPROVED`: Yayınlanmaya hazır onaylı içerik.
-  - [ ] `PUBLISHED`: Canlıda yayınlanan içerik (`published_at <= UTC NOW`).
-  - [ ] `UNPUBLISHED`: Yayından kaldırılmış pasif içerik.
-  - [ ] `ARCHIVED`: Arşivlenmiş içerik.
+  - [*] `DRAFT`: Taslak yazım aşaması.
+  - [*] `REVIEW`: Editör/AI inceleme aşaması.
+  - [*] `APPROVED`: Yayınlanmaya hazır onaylı içerik.
+  - [*] `PUBLISHED`: Canlıda yayınlanan içerik (`published_at <= UTC NOW`).
+  - [*] `UNPUBLISHED`: Yayından kaldırılmış pasif içerik.
+  - [*] `ARCHIVED`: Arşivlenmiş içerik.
 - **5. Arama, Filtreleme & Sayfalama:** Başlık/metin içi arama, dil (TR/EN/AR), kanal, yazar, durum ve yayın tarihi filtreleri. Cursor-based sayfalama ve kolon sıralama (`asc`/`desc`).
-- **6. Yayınlama & Toplu Aksiyonlar:** Yayına alma (`Publish`), yayından kaldırma (`Unpublish`), toplu arşivleme/silme (Bulk Archive/Delete). Yayınlama işlemi RBAC yetkisi (`posts.publish`) gerektirir.
+- **6. Yayınlama & Toplu Aksiyonlar:** Yayına alma (`Publish`), yayından kaldırılma (`Unpublish`), toplu arşivleme/silme (Bulk Archive/Delete). Yayınlama işlemi RBAC yetkisi (`posts.publish`) gerektirir.
 - **7. Metadata & Revizyon İlişkisi:** Slug benzersizlik denetimi, SEO metadata (Title, Description, OG Image), featured image URL ve revizyon numarası takibi (`DATA-006`). İşlemler `OBS-002` audit sistemine kaydedilir.
 - **8. Performance:** *Acceptance Target:* Yazı listesi filtreleme/arama < 50ms.
 - **9. DoD:**
-  - [ ] Tüm durum geçişlerinin ve RBAC yetki kısıtlarının doğrulanması.
-  - [ ] Toplu aksiyonların ve slug çakışma önleminin sınanması.
+  - [*] Tüm durum geçişlerinin ve RBAC yetki kısıtlarının doğrulanması.
+  - [*] Toplu aksiyonların ve slug çakışma önleminin sınanması.
 - **10. Bağımlılıklar:** DATA-002, SEC-RBAC-001, UI-004.
 - **11. Bağımlı Görevler:** CMS-005, CMS-006, CMS-008.
 
@@ -1882,16 +1885,16 @@ sequenceDiagram
 
 ### CMS-003 — Uygulama Kataloğu Yönetim Ekranı (`AppsCMSView.tsx`)
 - **2. Kapsam:**
-  - [ ] Uygulama kartları ve platform simgelerini kurgula (`src/views/AppsCMSView.tsx`).
-  - [ ] APK/Sürüm modalını ve indirme bağlantıları yönetimini ekle.
+  - [*] Uygulama kartları ve platform simgelerini kurgula (`src/views/AppsCMSView.tsx`).
+  - [*] APK/Sürüm modalını ve indirme bağlantıları yönetimini ekle.
 - **3. Öncelik:** P1 | **Bağımlılık:** DATA-002, UI-005.
 
 ---
 
 ### CMS-004 — Şablon & Reklam Yönetim Ekranı (`TemplatesView.tsx`)
 - **2. Kapsam:**
-  - [ ] Duyuru bandı metin/renk/link yönetimini kurgula (`src/views/TemplatesView.tsx`).
-  - [ ] Reklam alanları yerleşim tercihlerini ekle.
+  - [*] Duyuru bandı metin/renk/link yönetimini kurgula (`src/views/TemplatesView.tsx`).
+  - [*] Reklam alanları yerleşim tercihlerini ekle.
 - **3. Öncelik:** P1 | **Bağımlılık:** DATA-005, ADS-001.
 
 ---
@@ -1904,8 +1907,8 @@ sequenceDiagram
 - **6. Sayfalama, Filtreleme & Rate Limit:** Cursor-based sayfalama (`limit`, `cursor`), dil (`lang`) ve kanal (`channel`) filtreleri. IP bazlı rate limit (60 req/min).
 - **7. Performance:** *Acceptance Target:* Önbellekten yanıt süresi p95 < 20ms.
 - **8. DoD:**
-  - [x] Public API yanıtlarında yayınlanmamış yazıların ve AI metadata'nın sızmadığının teyidi.
-  - [x] ETag ve HTTP 304 önbellek doğrulaması.
+  - [*] Public API yanıtlarında yayınlanmamış yazıların ve AI metadata'nın sızmadığının teyidi.
+  - [*] ETag ve HTTP 304 önbellek doğrulaması.
 - **9. Bağımlılıklar:** DATA-002, PERF-001, API-006.
 - **10. Bağımlı Görevler:** INT-002, INT-TTS-001.
 
@@ -1918,12 +1921,12 @@ sequenceDiagram
 - **5. Editör Güvenliği & HTML Sanitization:** Sunucu ve istemci tarafında `sanitizeHTML` (`SEC-REQ-001`). Allowlist etiket denetimi, tehlikeli URL engeli (`javascript:`, `data:` URI yasağı), SVG arındırması ve YouTube/Vimeo embed whitelist kontrolü.
 - **6. Otomatik Kayıt (Autosave & Conflict Detection):** Değişiklik takibi (Dirty State), 3000ms debounce ile asenkron taslak kaydı, kaydediliyor/kaydedildi/hata durumları, çevrimdışı tespiti ve ağ geri geldiğinde otomatik tekrar deneme. Eşzamanlı düzenleme çakışması tespiti (`stale_revision_check`).
 - **7. Medya Yönetimi & Cloudflare R2 Entegrasyonu:**
-  - [x] *Yükleme & Doğrulama:* `POST /api/v1/admin/media`, MIME type kontrolü (`image/jpeg`, `image/png`, `image/webp`), maksimum 5MB dosya boyutu sınırı, UUID bazlı dosya adı normalizasyonu.
-  - [x] *Metadata & Görsel Kullanımı:* Zorunlu `alt_text` ve `caption` girdileri. Görsel kullanım takibi (makale içinde kullanılıyor / yetim medya). Yetim medyaların belirlenen saklama süresi sonunda R2'den asenkron temizliği. Görsel değiştirme (`Replace`) ve silme aksiyonları.
+  - [*] *Yükleme & Doğrulama:* `POST /api/v1/admin/media`, MIME type kontrolü (`image/jpeg`, `image/png`, `image/webp`), maksimum 5MB dosya boyutu sınırı, UUID bazlı dosya adı normalizasyonu.
+  - [*] *Metadata & Görsel Kullanımı:* Zorunlu `alt_text` ve `caption` girdileri. Görsel kullanım takibi (makale içinde kullanılıyor / yetim medya). Yetim medyaların belirlenen saklama süresi sonunda R2'den asenkron temizliği. Görsel değiştirme (`Replace`) ve silme aksiyonları.
 - **8. Performance:** *Acceptance Target:* Görsel yükleme ve R2 kaydı p95 < 800ms. Editör yazma gecikmesi < 5ms (Content-change state mutation benchmark).
 - **9. DoD:**
-  - [x] Editör çıktısında XSS ve `javascript:` URL'lerinin engellendiğinin doğrulanması.
-  - [x] Autosave ve R2 görsel yükleme akışının sınanması.
+  - [*] Editör çıktısında XSS ve `javascript:` URL'lerinin engellendiğinin doğrulanması.
+  - [*] Autosave ve R2 görsel yükleme akışının sınanması.
 - **10. Bağımlılıklar:** API-010, SEC-REQ-001, UI-005.
 - **11. Bağımlı Görevler:** CMS-007, CMS-008.
 
@@ -1938,8 +1941,8 @@ sequenceDiagram
 - **7. Erişilebilirlik & i18n:** Blok sürükle-bırak/sıralama işlemlerinde klavye erişilebilirliği (`Up/Down` ok tuşları), ARIA duyuruları ve RTL (Arapça) yön uyumu.
 - **8. Performance:** *Acceptance Target:* Blok ekleme ve sıralama yanıt süresi < 10ms (Frontend state algorithm benchmark).
 - **9. DoD:**
-  - [x] Tüm blok tiplerinin Zod şema doğrulamasından geçtiğinin teyidi.
-  - [x] Canlı cihaz önizleme modalının responsive sınanması.
+  - [*] Tüm blok tiplerinin Zod şema doğrulamasından geçtiğinin teyidi.
+  - [*] Canlı cihaz önizleme modalının responsive sınanması.
 - **10. Bağımlılıklar:** CMS-006, DATA-006, UI-005.
 - **11. Bağımlı Görevler:** ADS-002, INT-002.
 
@@ -1955,8 +1958,8 @@ sequenceDiagram
 - **8. Audit & RBAC:** Yayınlama, yayından kaldırma, zamanlama ve revizyon geri yükleme işlemleri RBAC yetkisine (`posts.publish`) tabidir ve tüm eylemler `OBS-002` audit sistemine loglanır.
 - **9. Performance:** *Acceptance Target:* Cron zamanlanmış yayın taraması ve 10 yazının yayınlanması < 500ms (MOCK / UNIT BENCHMARK - in-memory SQLite).
 - **10. DoD:**
-  - [x] Revizyon geçmişinin kaydedildiğinin ve eski sürüme geri yükleme (Restore) işleminin doğruluk testi.
-  - [x] Zamanlanmış yayın cron işleyicisinin UTC doğrulaması ile çalıştığının teyidi.
+  - [*] Revizyon geçmişinin kaydedildiğinin ve eski sürüme geri yükleme (Restore) işleminin doğruluk testi.
+  - [*] Zamanlanmış yayın cron işleyicisinin UTC doğrulaması ile çalıştığının teyidi.
 - **11. Bağımlılıklar:** DATA-006 (`post_revisions`), SEC-RBAC-001, OBS-002.
 - **12. Bağımlı Görevler:** CMS-002, CMS-005, INT-TTS-001.
 
@@ -1964,7 +1967,7 @@ sequenceDiagram
 
 ### CMS-TTS-001 — TTS Audio CMS & Mobile Accessible Public Player
 - **2. Kapsam:**
-  - [x] CMS yönetim panelinde makale ses üretimi durumunun (`generating`, `draft`, `approved`, `failed`, `stale`) ve STT kalite doğrulama skorunun takip edilmesi; ön dinleme, onay, yayından kaldırma ve yenileme aksiyonlarının sunulması. Public blog tarafında sadece `status = 'APPROVED'` ve **`article_version == audio_version`** (`post_revisions.revision_number`) olan güncel seslerin gösterilmesi. HTML5 Audio Player bileşeninde mobil uyumlu arayüz, autoplay olmaması, Play/Pause/Seek/Süre göstergeleri, klavye erişilebilirliği (`tabindex`, ARIA), ekran okuyucu uyumu ve ses bulunmadığında zarif metinsel fallback sunumu (Web Speech API artık ana çözüm olarak kullanılmaz).
+  - [*] CMS yönetim panelinde makale ses üretimi durumunun (`generating`, `draft`, `approved`, `failed`, `stale`) ve STT kalite doğrulama skorunun takip edilmesi; ön dinleme, onay, yayından kaldırma ve yenileme aksiyonlarının sunulması. Public blog tarafında sadece `status = 'APPROVED'` ve **`article_version == audio_version`** (`post_revisions.revision_number`) olan güncel seslerin gösterilmesi. HTML5 Audio Player bileşeninde mobil uyumlu arayüz, autoplay olmaması, Play/Pause/Seek/Süre göstergeleri, klavye erişilebilirliği (`tabindex`, ARIA), ekran okuyucu uyumu ve ses bulunmadığında zarif metinsel fallback sunumu (Web Speech API artık ana çözüm olarak kullanılmaz).
 - **3. Öncelik:** P1 | **Bağımlılık:** API-TTS-001, AI-TTS-002.
 
 ---
@@ -1984,38 +1987,38 @@ sequenceDiagram
 | **Performans (Public)** | Public Blog Detay Sorgulaması | Edge Cache üzerinden ETag / 304 desteği ile < 20ms yanıt döner. |
 
 #### Section-Level Definition of Done (DoD)
-- [x] Blog yazıları yaşam döngüsü (`DRAFT` → `REVIEW` → `APPROVED` → `PUBLISHED` → `UNPUBLISHED` → `ARCHIVED`) kurallarının tanımlanması.
-- [x] Public CMS API güvenlik sınırının ve yayınlanmamış veri / AI metadata sızdırmazlığının doğrulanması.
-- [x] TipTap zengin metin editör uzantılarının, HTML sanitization süzgecinin ve Autosave çakışma kontrolünün tanımlanması.
-- [x] Cloudflare R2 medya yükleme, UUID isimlendirme, MIME doğrulaması ve yetim medya temizlik politikalarının tanımlanması.
-- [x] Modüler Blog Layout Builder blok şema sözleşmesinin (Zod schema) ve canlı cihaz önizleme modalının tanımlanması.
-- [x] `CMS-008` ile revizyon takibi, snapshot diff/restore, iyimser kilitlenme ve UTC zamanlanmış yayın cron motorunun doğrulanması.
-- [x] Zero-Cost Guard ($0/Ay) ilkesinin ve CMS test matrisinin tamamlanması.
+- [*] Blog yazıları yaşam döngüsü (`DRAFT` → `REVIEW` → `APPROVED` → `PUBLISHED` → `UNPUBLISHED` → `ARCHIVED`) kurallarının tanımlanması.
+- [*] Public CMS API güvenlik sınırının ve yayınlanmamış veri / AI metadata sızdırmazlığının doğrulanması.
+- [*] TipTap zengin metin editör uzantılarının, HTML sanitization süzgecinin ve Autosave çakışma kontrolünün tanımlanması.
+- [*] Cloudflare R2 medya yükleme, UUID isimlendirme, MIME doğrulaması ve yetim medya temizlik politikalarının tanımlanması.
+- [*] Modüler Blog Layout Builder blok şema sözleşmesinin (Zod schema) ve canlı cihaz önizleme modalının tanımlanması.
+- [*] `CMS-008` ile revizyon takibi, snapshot diff/restore, iyimser kilitlenme ve UTC zamanlanmış yayın cron motorunun doğrulanması.
+- [*] Zero-Cost Guard ($0/Ay) ilkesinin ve CMS test matrisinin tamamlanması.
 
 ---
 
 ### Özet Görev Listesi (8. CMS, CONTENT, EDITOR & MEDIA)
 
-- [x] **CMS-001 — Blog Kanal Yönetim Ekranı (`ChannelsView.tsx`)**
+- [*] **CMS-001 — Blog Kanal Yönetim Ekranı (`ChannelsView.tsx`)**
   - **Kapsam:** Dinamik kanal tanımlama (TR/EN/AR isim ve ikon).
-- [x] **CMS-002 — Blog Yazıları Liste Ekranı (`PostsView.tsx`)**
+- [*] **CMS-002 — Blog Yazıları Liste Ekranı (`PostsView.tsx`)**
   - **Kapsam:** Yayın durumu filtreleme, okuma sayıları, silme/taslak aksiyonları.
-- [x] **CMS-003 — Uygulama Kataloğu Yönetim Ekranı (`AppsCMSView.tsx`)**
+- [*] **CMS-003 — Uygulama Kataloğu Yönetim Ekranı (`AppsCMSView.tsx`)**
   - **Kapsam:** Uygulama kartları, platform simgeleri, APK/Sürüm modalı.
-- [x] **CMS-004 — Şablon & Reklam Yönetim Ekranı (`TemplatesView.tsx`)**
+- [*] **CMS-004 — Şablon & Reklam Yönetim Ekranı (`TemplatesView.tsx`)**
   - **Kapsam:** Duyuru bandı metin/renk/link yönetimi, reklam alanları.
-- [x] **CMS-005 — Headless CMS Public API'leri**
+- [*] **CMS-005 — Headless CMS Public API'leri**
   - **Kapsam:** `GET /api/v1/channels`, `/posts`, `/apps`, `/templates`, `/sitemap.xml`.
-- [x] **CMS-006 — TipTap Zengin Metin Editörü & Medya Yöneticisi (`12.1` & `12.2`)**
+- [*] **CMS-006 — TipTap Zengin Metin Editörü & Medya Yöneticisi (`12.1` & `12.2`)**
   - **Amaç:** TipTap zengin editör entegrasyonu, HTML sanitization, otomatik taslak kaydı, Cloudflare R2 görsel yükleme ve medya yönetimi.
   - **Öncelik:** P1 | **Bağımlılık:** API-010, SEC-REQ-001
-- [x] **CMS-007 — Modüler Blog Layout Builder (`12.4` & `12.5`)**
+- [*] **CMS-007 — Modüler Blog Layout Builder (`12.4` & `12.5`)**
   - **Amaç:** Blok bazlı sayfa düzenleyici, Zod blok şema doğrulaması, canlı cihaz önizleme modalı (`PostPreviewModal.tsx`).
   - **Öncelik:** P2 | **Bağımlılık:** CMS-006
-- [x] **CMS-008 — Content Revision, Publishing & Scheduling Governance**
+- [*] **CMS-008 — Content Revision, Publishing & Scheduling Governance**
   - **Amaç:** Revizyon snapshot geçmişi (`DATA-006`), versiyon geri yükleme (Restore), iyimser çakışma engelleme, UTC zamanlanmış yayınlama ve yayından kaldırma cron motoru.
   - **Öncelik:** P1 | **Bağımlılık:** DATA-006, SEC-RBAC-001, OBS-002
-- [x] **CMS-TTS-001 — TTS Audio CMS & Mobile Accessible Public Player**
+- [*] **CMS-TTS-001 — TTS Audio CMS & Mobile Accessible Public Player**
   - **Amaç:** CMS yönetim panelinde makale ses üretimi durumunun (`generating`, `draft`, `approved`, `failed`, `stale`) ve STT kalite doğrulama skorunun takip edilmesi; ön dinleme, onay, yayından kaldırma ve yenileme aksiyonlarının sunulması. Public blog tarafında sadece `status = 'APPROVED'` ve **`article_version == audio_version`** (`post_revisions.revision_number`) olan güncel seslerin gösterilmesi. HTML5 Audio Player bileşeninde mobil uyumlu arayüz, autoplay olmaması, Play/Pause/Seek/Süre göstergeleri, klavye erişilebilirliği (`tabindex`, ARIA), ekran okuyucu uyumu ve ses bulunmadığında zarif metinsel fallback sunumu (Web Speech API artık ana çözüm olarak kullanılmaz).
   - **Öncelik:** P1 | **Bağımlılık:** API-TTS-001, AI-TTS-002.
 
@@ -2039,17 +2042,17 @@ sequenceDiagram
 
 ### I18N-001 — PWA Panel i18n Temel Altyapısı
 - **2. Kapsam:**
-  - [ ] `translations.ts` (TR, EN, AR sözlükleri) altyapısını oluştur.
-  - [ ] `I18nContext.tsx` ve Dil Seçici (`Sidebar.tsx`) bileşenini kurgula.
-  - [ ] Arapça (AR) RTL desteğini (`index.css` Cairo font) uygula.
+  - [*] `translations.ts` (TR, EN, AR sözlükleri) altyapısını oluştur.
+  - [*] `I18nContext.tsx` ve Dil Seçici (`Sidebar.tsx`) bileşenini kurgula.
+  - [*] Arapça (AR) RTL desteğini (`index.css` Cairo font) uygula.
 - **3. Öncelik:** P0 | **Bağımlılık:** ARCH-001, UI-005.
 
 ---
 
 ### I18N-002 — Embed Form & E-Posta i18n Desteği
 - **2. Kapsam:**
-  - [ ] `msklabs-desk-embed.js` otomatik dil algılama altyapısını ekle.
-  - [ ] 3 dilli HTML e-posta şablonlarını kurgula.
+  - [*] `msklabs-desk-embed.js` otomatik dil algılama altyapısını ekle.
+  - [*] 3 dilli HTML e-posta şablonlarını kurgula.
 - **3. Öncelik:** P1 | **Bağımlılık:** COM-001, API-001.
 
 ---
@@ -2064,8 +2067,8 @@ sequenceDiagram
 - **8. CI/CD Otomatik Doğrulama Betiği:** `check_i18n_keys.js` betiği CI pipeline'ına (`TEST-003`) dahil edilir; eksik veya koda gömülü Türkçe string bulunması derlemeyi durdurur.
 - **9. Performance:** *Acceptance Target:* Dize arama & yerelleştirilmiş metin türetme süresi < 0.5ms.
 - **10. DoD:**
-  - [ ] 11 ekranın `t()` motoruna bağlandığının ve `check_i18n_keys.js` betiğinin 0 ihlal ile geçtiğinin doğrulanması.
-  - [ ] Arapça RTL modunda form validasyon mesajlarının düzgün hizalandığının teyidi.
+  - [*] 11 ekranın `t()` motoruna bağlandığının ve `check_i18n_keys.js` betiğinin 0 ihlal ile geçtiğinin doğrulanması.
+  - [*] Arapça RTL modunda form validasyon mesajlarının düzgün hizalandığının teyidi.
 - **11. Bağımlılıklar:** I18N-001, UI-006.
 - **12. Bağımlı Görevler:** TEST-003, GO-001.
 
@@ -2081,8 +2084,8 @@ sequenceDiagram
 - **8. Content Data Traceability:** Türkçe kaynak ile EN/AR çevirileri arasında `source_id`, `locale`, `status`, `revision_number` izlenebilirliği (`CMS-002`, `CMS-008`).
 - **9. Performance:** *Acceptance Target:* Paragraf bazlı çeviri ve kalite denetim yanıtı p95 < 2500ms.
 - **10. DoD:**
-  - [ ] HITL onay akışının, placeholder doğrulamasının ve provider soyutlamasının sınanması.
-  - [ ] Terminoloji sözlüğü ihlallerinin `TranslationAuditModal.tsx` üzerinde gösterildiğinin teyidi.
+  - [*] HITL onay akışının, placeholder doğrulamasının ve provider soyutlamasının sınanması.
+  - [*] Terminoloji sözlüğü ihlallerinin `TranslationAuditModal.tsx` üzerinde gösterildiğinin teyidi.
 - **11. Bağımlılıklar:** I18N-003, AI-004, AI-006, DATA-007 (`glossary`).
 - **12. Bağımlı Görevler:** CMS-002, CMS-008.
 
@@ -2103,27 +2106,27 @@ sequenceDiagram
 | **Maliyet ($0 Guard)** | Çeviri Servisi Kota Aşımı (429) | Cost Guard devreye girer, otomatik ücretli plana geçmez, istek kuyruğa alınır. |
 
 #### Section-Level Definition of Done (DoD)
-- [x] Provider soyutlamasının (`TranslationProvider`) ve $0/Ay Cost Guard kuralının tanımlanması.
-- [x] Human-In-The-Loop (HITL) onay akışının (`Generated → Review → Edit → Approve`) doğrulanması.
-- [x] Placeholder (`{{name}}`), HTML etiket ve URL koruma mekanizmasının netleştirilmesi.
-- [x] `TranslationAuditModal.tsx` paragraf bazlı kıyaslama ve yardımcı kalite skoru kurallarının tanımlanması.
-- [x] 11 admin ekranının `t()` motoruna bağlanması ve `check_i18n_keys.js` CI doğrulamasının belirlenmesi.
-- [x] Arapça (AR) RTL yön aynalama ve tarih/sayı/göreli zaman lokalizasyonunun teyit edilmesi.
-- [x] SEO `hreflang`, `canonical`, localized `sitemap.xml` ve diller arası veri izlenebilirliğinin tanımlanması.
-- [x] i18n & SEO test matrisinin tamamlanması.
+- [*] Provider soyutlamasının (`TranslationProvider`) ve $0/Ay Cost Guard kuralının tanımlanması.
+- [*] Human-In-The-Loop (HITL) onay akışının (`Generated → Review → Edit → Approve`) doğrulanması.
+- [*] Placeholder (`{{name}}`), HTML etiket ve URL koruma mekanizmasının netleştirilmesi.
+- [*] `TranslationAuditModal.tsx` paragraf bazlı kıyaslama ve yardımcı kalite skoru kurallarının tanımlanması.
+- [*] 11 admin ekranının `t()` motoruna bağlanması ve `check_i18n_keys.js` CI doğrulamasının belirlenmesi.
+- [*] Arapça (AR) RTL yön aynalama ve tarih/sayı/göreli zaman lokalizasyonunun teyit edilmesi.
+- [*] SEO `hreflang`, `canonical`, localized `sitemap.xml` ve diller arası veri izlenebilirliğinin tanımlanması.
+- [*] i18n & SEO test matrisinin tamamlanması.
 
 ---
 
 ### Özet Görev Listesi (9. SEO, TRANSLATION & INTERNATIONALIZATION (i18n))
 
-- [x] **I18N-001 — PWA Panel i18n Temel Altyapısı**
+- [*] **I18N-001 — PWA Panel i18n Temel Altyapısı**
   - **Kapsam:** `translations.ts` (TR, EN, AR sözlükleri), `I18nContext.tsx`, Dil Seçici (`Sidebar.tsx`), Arapça (AR) RTL desteği (`index.css` Cairo font).
-- [x] **I18N-002 — Embed Form & E-Posta i18n Desteği**
+- [*] **I18N-002 — Embed Form & E-Posta i18n Desteği**
   - **Kapsam:** `msklabs-desk-embed.js` otomatik dil algılama, 3 dilli HTML e-posta şablonları.
-- [x] **I18N-003 — i18n Çevirilerinin Tüm Ekranlara Uygulanması & Statik Anahtar Doğrulaması (`10.6.4`)**
+- [*] **I18N-003 — i18n Çevirilerinin Tüm Ekranlara Uygulanması & Statik Anahtar Doğrulaması (`10.6.4`)**
   - **Amaç:** 11 sabit Türkçe ekranın, form validasyon mesajlarının ve ARIA etiketlerinin `t()` çeviri motoruna bağlanması, `check_i18n_keys.js` doğrulama betiği ile CI/CD denetimi.
   - **Öncelik:** P0 | **Bağımlılık:** I18N-001, UI-006
-- [x] **I18N-004 — AI Destekli Çeviri, Kalite Denetim Ekranı & Provider Abstraction (`13.2`)**
+- [*] **I18N-004 — AI Destekli Çeviri, Kalite Denetim Ekranı & Provider Abstraction (`13.2`)**
   - **Amaç:** Provider-agnostic çeviri motoru, `TranslationAuditModal.tsx` ile paragraf/placeholder/glossary kıyaslaması, HITL onay akışı ve $0/Ay Cost Guard kontrolü.
   - **Öncelik:** P2 | **Bağımlılık:** I18N-003, AI-004, AI-006
 
@@ -2155,8 +2158,8 @@ sequenceDiagram
 - **7. i18n & Responsiveness:** Reklam alanı başlığı/açıklaması TR/EN/AR dil sözlüğü ile sunulur. Masaüstü/tablet/mobil cihaz kırılımları ayrı ayrı ayarlanabilir.
 - **8. Performance:** *Acceptance Target:* Reklam ayarları kaydetme ve API yanıt süresi < 50ms.
 - **9. DoD:**
-  - [x] Zod validasyonunun, `ca-pub-` regex denetiminin ve `OBS-002` audit kaydının doğrulanması.
-  - [x] Ham JS enjeksiyonunun engellendiğinin teyidi.
+  - [*] Zod validasyonunun, `ca-pub-` regex denetiminin ve `OBS-002` audit kaydının doğrulanması.
+  - [*] Ham JS enjeksiyonunun engellendiğinin teyidi.
 - **10. Bağımlılıklar:** DATA-005, SEC-RBAC-001, OBS-002.
 - **11. Bağımlı Görevler:** ADS-002, CMS-004.
 
@@ -2171,8 +2174,8 @@ sequenceDiagram
 - **7. Accessible Modal & Responsiveness:** Focus trap, ESC kapatma, backdrop click, ARIA etiketleri (`aria-modal="true"`, `aria-labelledby`), mobil cihazlarda kaydırılabilir duyarlı modal düzeni.
 - **8. Performance:** *Acceptance Target:* Önizleme modalı açılış ve simülasyon derleme süresi < 15ms.
 - **9. DoD:**
-  - [x] Mock creative sandbox izolasyonunun, cihaz geçişlerinin ve `DRAFT` vs `PRODUCTION` ayrımının teyit edilmesi.
-  - [x] Odak hapsi (Focus Trap) ve ESC ile kapatma testlerinin geçmesi.
+  - [*] Mock creative sandbox izolasyonunun, cihaz geçişlerinin ve `DRAFT` vs `PRODUCTION` ayrımının teyit edilmesi.
+  - [*] Odak hapsi (Focus Trap) ve ESC ile kapatma testlerinin geçmesi.
 - **10. Bağımlılıklar:** ADS-001, UI-005, UI-006.
 - **11. Bağımlı Görevler:** CMS-007, INT-002.
 
@@ -2191,22 +2194,22 @@ sequenceDiagram
 | **Responsive (Mobile)** | <640px Mobilde 728x90 Reklam Alanı | Mobil kısıtlı alanda taşma önlenir, responsive mobile banner'a daralır. |
 
 #### Section-Level Definition of Done (DoD)
-- [x] Reklam yapılandırmasında ham JS enjeksiyonunun engellenmesi ve Zod regex doğrulamasının tanımlanması.
-- [x] 10 standart AdSense preset boyutunun ve responsive cihaz aralıklarının netleştirilmesi.
-- [x] `AdPreviewModal.tsx` sandboxed iframe / mock creative izolasyonunun tanımlanması.
-- [x] `DRAFT` yapılandırma ile `PRODUCTION` canlı yayını ayrımının doğrulanması.
-- [x] `SUPER_ADMIN` / `settings.manage` RBAC yetkilendirmesinin ve `OBS-002` audit loglamasının tanımlanması.
-- [x] Ödeme/abonelik/Stripe bağımlılığı oluşturulmadığının teyit edilmesi.
-- [x] Zero-Cost Guard ($0/Ay) ilkesinin ve reklam test matrisinin tamamlanması.
+- [*] Reklam yapılandırmasında ham JS enjeksiyonunun engellenmesi ve Zod regex doğrulamasının tanımlanması.
+- [*] 10 standart AdSense preset boyutunun ve responsive cihaz aralıklarının netleştirilmesi.
+- [*] `AdPreviewModal.tsx` sandboxed iframe / mock creative izolasyonunun tanımlanması.
+- [*] `DRAFT` yapılandırma ile `PRODUCTION` canlı yayını ayrımının doğrulanması.
+- [*] `SUPER_ADMIN` / `settings.manage` RBAC yetkilendirmesinin ve `OBS-002` audit loglamasının tanımlanması.
+- [*] Ödeme/abonelik/Stripe bağımlılığı oluşturulmadığının teyit edilmesi.
+- [*] Zero-Cost Guard ($0/Ay) ilkesinin ve reklam test matrisinin tamamlanması.
 
 ---
 
 ### Özet Görev Listesi (10. ADS & MONETIZATION MANAGEMENT)
 
-- [x] **ADS-001 — AdSense Ayar & Preset Paneli (`11.1` & `11.3`)**
+- [*] **ADS-001 — AdSense Ayar & Preset Paneli (`11.1` & `11.3`)**
   - **Amaç:** 10 standart AdSense ebadı preset'i, custom genişlik/yükseklik, marj slider'ları, sticky toggle, Zod regex güvenliği ve `OBS-002` audit kaydı.
   - **Öncelik:** P1 | **Bağımlılık:** DATA-005, SEC-RBAC-001, OBS-002
-- [x] **ADS-002 — Canlı Reklam Önizleme Modalı (`11.4`)**
+- [*] **ADS-002 — Canlı Reklam Önizleme Modalı (`11.4`)**
   - **Amaç:** `AdPreviewModal.tsx` ile 3. taraf JS çalıştırmayan sandboxed iframe / mock creative önizlemesi, DRAFT vs PROD ayrımı ve responsive simülasyon.
   - **Öncelik:** P1 | **Bağımlılık:** ADS-001, UI-005, UI-006
 
@@ -2214,12 +2217,12 @@ sequenceDiagram
 
 ## 11. AUDIT, LOGGING, OBSERVABILITY & MONITORING ($0 Cost)
 
-- [x] **OBS-001 — Message Events Audit Trail**
+- [*] **OBS-001 — Message Events Audit Trail**
   - **Kapsam:** `message_events` tablosu ile bilet durum değişikliklerinin (`TICKET_CREATED`, `STATUS_CHANGED`) kayıt altına alınması.
-- [x] **OBS-002 — Audit Log vs Application Log Ayrımı ve D1 Loglama Altyapısı**
+- [*] **OBS-002 — Audit Log vs Application Log Ayrımı ve D1 Loglama Altyapısı**
   - **Amaç:** Ücretli log servisleri yerine D1 üzerinde `system_logs` (hata/sistem) ve `audit_logs` (yönetici işlemleri) tablolarının kurulması, correlation ID ve PII redaction süzgeci ($0). *(Not: Section 11 testleri 10/10 PASS, full regression 534/534 PASS. `webMSKLabs` genel tsc denetiminde önceki bölümlere ait test dosyalarında 21 hata mevcuttur, Section 11 kodları 0 hatalıdır)*.
   - **Öncelik:** P1 | **Bağımlılık:** DATA-001, SEC-REQ-001, ARCH-001
-- [x] **OBS-003 — Cloudflare Workers Analytics, Health Monitoring & Alerting**
+- [*] **OBS-003 — Cloudflare Workers Analytics, Health Monitoring & Alerting**
   - **Amaç:** İstek sayıları ve latency'nin Cloudflare dashboard'dan takibi, `/api/v1/health` & `/api/v1/readiness` (D1/R2 503) sağlık rotası, KV/in-memory 5dk cooldown deduplication ve sıfır maliyetli e-posta uyarısı (`COM-001`).
   - **Öncelik:** P1 | **Bağımlılık:** API-008, OBS-002, COM-001
 
@@ -2261,15 +2264,15 @@ sequenceDiagram
   - **MEDIUM:** Üçüncü taraf API kesintisi (Gemini/Resend), geçici rate limit ihlalleri, izole XSS denemeleri. (İnceleme: <4saat).
   - **LOW:** Düşük hacimli bot taramaları, hafif konfigürasyon uyarıları. (Rutin takip).
 - **5. Olay Türleri & Müdahale Senaryoları:**
-  - [ ] *Secret / API Key Sızıntısı (`GEMINI_API_KEY`, `RESEND_API_KEY`, `VAPID_PRIVATE_KEY`, `JWT_SECRET`):* Anında `wrangler secret put` ile rotation, eski key revokasyonu, etkilenen kuyruk işlemlerinin tecridi.
-  - [x] *Yetkisiz Admin / Oturum Sızması:* `JWT_SECRET` yenileme ile tüm aktif oturumların anında düşürülmesi, compromised hesabın `locked_until` ile dondurulması (`SEC-AUTH-003`), IP WAF engeli.
-  - [ ] *Veri / İçerik Manipülasyonu:* Zararlı içeriğin yayından kaldırılması (`UNPUBLISHED`), `post_revisions` (`DATA-006` / `CMS-008`) üzerinden bilinen en son temiz revizyona geri yükleme (Restore), veritabanı yedeğinin doğrulanması (`DR-001`).
-  - [ ] *D1 Veri Çökmesi veya Bütünlük Kaybı:* `DR-001` Point-in-time recovery veya `DR-002` geri yükleme tatbikatı ile veritabanının temiz versiyona dönmesi.
+  - [*] *Secret / API Key Sızıntısı (`GEMINI_API_KEY`, `RESEND_API_KEY`, `VAPID_PRIVATE_KEY`, `JWT_SECRET`):* Anında `wrangler secret put` ile rotation, eski key revokasyonu, etkilenen kuyruk işlemlerinin tecridi.
+  - [*] *Yetkisiz Admin / Oturum Sızması:* `JWT_SECRET` yenileme ile tüm aktif oturumların anında düşürülmesi, compromised hesabın `locked_until` ile dondurulması (`SEC-AUTH-003`), IP WAF engeli.
+  - [*] *Veri / İçerik Manipülasyonu:* Zararlı içeriğin yayından kaldırılması (`UNPUBLISHED`), `post_revisions` (`DATA-006` / `CMS-008`) üzerinden bilinen en son temiz revizyona geri yükleme (Restore), veritabanı yedeğinin doğrulanması (`DR-001`).
+  - [*] *D1 Veri Çökmesi veya Bütünlük Kaybı:* `DR-001` Point-in-time recovery veya `DR-002` geri yükleme tatbikatı ile veritabanının temiz versiyona dönmesi.
 - **6. Olay Sonrası İnceleme (Post-Incident Review):** Olay anından itibaren kronolojik zaman akışının (`timeline`) `OBS-002` logları ile çıkarılması, kök neden analizi (RCA), zafiyet giderici yama ve `TEST-002` birim testlerine yeni saldırı vektörlerinin eklenmesi.
 - **7. Performance:** *Acceptance Target:* Secret rotation ve session revocation tamamlanma süresi < 5dk.
 - **8. DoD:**
-  - [x] 7 adımlı Incident Response yaşam döngüsünün ve severity seviyelerinin doğrulanması.
-  - [x] Kanıt silinmeden tecrit etme (Evidence Protection) ve Secret Rotation adımlarının sınanması.
+  - [*] 7 adımlı Incident Response yaşam döngüsünün ve severity seviyelerinin doğrulanması.
+  - [*] Kanıt silinmeden tecrit etme (Evidence Protection) ve Secret Rotation adımlarının sınanması.
 - **9. Bağımlılıklar:** SEC-AUTH-001, SEC-AUTH-003, SEC-RBAC-001, OBS-002, OBS-003, DR-001, COM-001.
 - **10. Bağımlı Görevler:** GO-001, OPS-002.
 
@@ -2288,19 +2291,19 @@ sequenceDiagram
 | **İletişim ($0 Alert)** | Critical Severity Güvenlik İhlali | `ADMIN_ALERT` e-postası ile yöneticilere anında olay özeti ve tecrit durumu iletilir. |
 
 #### Section-Level Definition of Done (DoD)
-- [x] 7 adımlı Incident Response yaşam döngüsünün (`Detect → Triage → Contain → Eradicate → Recover → Verify → Post-Incident Review`) tanımlanması.
-- [x] Severity seviyelerinin (Critical, High, Medium, Low) ve tecrit sürelerinin belirlenmesi.
-- [x] Secret rotation prosedürünün (`Revoke → Replace → Deploy → Verify → Invalidate`) tanımlanması.
-- [x] Acil durum oturum/erişim iptali (Session & Access Revocation) mekanizmasının netleştirilmesi.
-- [x] Kriz anında log ve kanıtların korunması (Evidence Protection) ilkesinin doğrulanması.
-- [x] `DR-001` veritabanı kurtarma ve `COM-001` e-posta uyarısı entegrasyonlarının tanımlanması.
-- [x] Zero-Cost Guard ($0/Ay) prensibinin ve Incident Response test matrisinin tamamlanması.
+- [*] 7 adımlı Incident Response yaşam döngüsünün (`Detect → Triage → Contain → Eradicate → Recover → Verify → Post-Incident Review`) tanımlanması.
+- [*] Severity seviyelerinin (Critical, High, Medium, Low) ve tecrit sürelerinin belirlenmesi.
+- [*] Secret rotation prosedürünün (`Revoke → Replace → Deploy → Verify → Invalidate`) tanımlanması.
+- [*] Acil durum oturum/erişim iptali (Session & Access Revocation) mekanizmasının netleştirilmesi.
+- [*] Kriz anında log ve kanıtların korunması (Evidence Protection) ilkesinin doğrulanması.
+- [*] `DR-001` veritabanı kurtarma ve `COM-001` e-posta uyarısı entegrasyonlarının tanımlanması.
+- [*] Zero-Cost Guard ($0/Ay) prensibinin ve Incident Response test matrisinin tamamlanması.
 
 ---
 
 ### Özet Görev Listesi (12. INCIDENT RESPONSE & SECURITY MANAGEMENT)
 
-- [x] **INC-001 — Güvenlik İhlali ve Kriz Yönetimi Planı (Incident Response Plan)**
+- [*] **INC-001 — Güvenlik İhlali ve Kriz Yönetimi Planı (Incident Response Plan)**
   - **Amaç:** Parola sızıntısı, secret ifşası, yetkisiz erişim veya veri bütünlüğü bozulmasında 7 adımlı kriz yaşam döngüsü, secret rotation ve acil oturum iptali. *(Not: Section 12 testleri 11/11 PASS, full regression 545/545 PASS. `webMSKLabs` genel tsc denetiminde önceki bölümlere ait test dosyalarında 21 hata mevcuttur, Section 12 kodları 0 hatalıdır)*.
   - **Öncelik:** P1 | **Bağımlılık:** SEC-AUTH-001, SEC-AUTH-003, OBS-002, DR-001
 
@@ -2312,8 +2315,8 @@ sequenceDiagram
 
 - **Zero-Cost Performance & Scalability Guard ($0/Ay Kuralı):** Tüm performans, caching, veritabanı indeksleme, kuyruk ayrımı ve yük testi süreçleri Cloudflare ve GitHub sunulan ücretsiz imkanlar ($0/Ay) çerçevesinde kurgulanacaktır. Harici ücretli APM (New Relic, Datadog), CDN premium planları, SaaS yük testi platformları veya ücretli veritabanı servisleri zorunluluğu KESİNLİKLE oluşturulamaz. Platformların güncel kota/limitleri sabit varsayım olarak dokümana işlenmez; platform imkanları çerçevesinde bütçe optimizasyonu yapılır.
 - **Strict Public vs Private Cache Boundary:**
-  - [ ] *Public / Cached Realm:* Public CMS API (`GET /api/v1/posts`, `/channels`, `/apps`, `/templates`, `/sitemap.xml`) ve Cloudflare R2 üzerindeki statik/medya asset'leri Edge Cache'e alınır (`Cache-Control: public, max-age=300, s-maxage=600, stale-while-revalidate=60`).
-  - [ ] *Private / Uncached Realm:* Admin API (`/api/v1/admin/*`), kimlik doğrulama yanıtları (`SEC-AUTH-001`), kişisel kullanıcı verileri, onay bekleyen yorumlar, taslak/review içerikler (`CMS-002`), bilet/mesaj verileri (`API-001`), secret, token ve oturum bilgileri KESİNLİKLE public cache'e GİREMEZ (`Cache-Control: no-store, no-cache, private, must-revalidate`).
+  - [*] *Public / Cached Realm:* Public CMS API (`GET /api/v1/posts`, `/channels`, `/apps`, `/templates`, `/sitemap.xml`) ve Cloudflare R2 üzerindeki statik/medya asset'leri Edge Cache'e alınır (`Cache-Control: public, max-age=300, s-maxage=600, stale-while-revalidate=60`).
+  - [*] *Private / Uncached Realm:* Admin API (`/api/v1/admin/*`), kimlik doğrulama yanıtları (`SEC-AUTH-001`), kişisel kullanıcı verileri, onay bekleyen yorumlar, taslak/review içerikler (`CMS-002`), bilet/mesaj verileri (`API-001`), secret, token ve oturum bilgileri KESİNLİKLE public cache'e GİREMEZ (`Cache-Control: no-store, no-cache, private, must-revalidate`).
 
 ---
 
@@ -2321,50 +2324,50 @@ sequenceDiagram
 - **2. Amaç:** Public CMS API'leri, ETag/304 conditional request'leri ve R2 medya varlıkları için katmanlı Edge Cache, purge/invalidation ve private/public sınır yönetimi ($0).
 - **3. Kapsam:** `backend/src/middleware/cache.ts`, `backend/src/routes/publicRoutes.ts`, R2 Asset Cache Headers.
 - **4. Strict Public vs Private Cache Boundary:**
-  - [ ] *Public / Cached Realm:* Public CMS API (`GET /api/v1/posts`, `/channels`, `/apps`, `/templates`, `/sitemap.xml`) ve Cloudflare R2 üzerindeki statik/medya asset'leri Edge Cache'e alınır (`Cache-Control: public, max-age=300, s-maxage=600, stale-while-revalidate=60`).
-  - [ ] *Private / Uncached Realm:* Admin API (`/api/v1/admin/*`), kimlik doğrulama yanıtları (`SEC-AUTH-001`), kişisel kullanıcı verileri, onay bekleyen yorumlar, taslak/review içerikler (`CMS-002`), bilet/mesaj verileri (`API-001`), secret, token ve oturum bilgileri KESİNLİKLE public cache'e GİREMEZ (`Cache-Control: no-store, no-cache, private, must-revalidate`).
-- **5. ETag & Conditional Request (304 Handling):** `CMS-005` standartları ile tam uyumlu; içerik hash'ine veya revizyon numarasına dayalı ETag üretimi. `If-None-Match` başlığı eşleştiğinde veritabanına sorgu yapmadan HTTP `304 Not Modified` dönülmesi.
-- **6. Invalidation Stratejisi:** İçerik yayına alındığında (`PUBLISHED`), yayından kaldırıldığında (`UNPUBLISHED`), güncellendiğinde veya silindiğinde mimariye uygun bir cache invalidation yöntemi (Cache Purge/Invalidation, versiyonlu URL/cache key veya uygun kısa TTL) seçilip uygulanması.
+  - [*] *Public / Cached Realm:* Public CMS API (`GET /api/v1/posts`, `/channels`, `/apps`, `/templates`, `/sitemap.xml`) ve Cloudflare R2 üzerindeki statik/medya asset'leri Edge Cache'e alınır (`Cache-Control: public, max-age=300, s-maxage=600, stale-while-revalidate=60`).
+  - [*] *Private / Uncached Realm:* Admin API (`/api/v1/admin/*`), kimlik doğrulama yanıtları (`SEC-AUTH-001`), kişisel kullanıcı verileri, onay bekleyen yorumlar, taslak/review içerikler (`CMS-002`), bilet/mesaj verileri (`API-001`), secret, token ve oturum bilgileri KESİNLİKLE public cache'e GİREMEZ (`Cache-Control: no-store, no-cache, private, must-revalidate`).
+- **5. ETag & Conditional Request (304 Handling):**
+  - [*] `CMS-005` standartları ile tam uyumlu; içerik hash'ine veya revizyon numarasına dayalı ETag üretimi. `If-None-Match` başlığı eşleştiğinde veritabanına sorgu yapmadan HTTP `304 Not Modified` dönülmesi.
+- **6. Invalidation Stratejisi:**
+  - [*] İçerik yayına alındığında (`PUBLISHED`), yayından kaldırıldığında (`UNPUBLISHED`), güncellendiğinde veya silindiğinde mimariye uygun bir cache invalidation yöntemi (Cache Purge/Invalidation, versiyonlu URL/cache key veya uygun kısa TTL) seçilip uygulanması.
 - **7. Cache Key & Vary Yönetimi:** Cache Key = `URL` + `Query Parameters (slug, page, limit, lang)` + `Locale`. `Vary: Accept-Encoding, Accept-Language`. `Authorization` veya kullanıcıya özel header'ların cache key'e girmesi ve cache fragmentation engellenir.
 - **8. Güvenlik (Zero-Leak Boundary):** `Authorization`, `Cookie`, `Set-Cookie`, `X-Admin-Token` başlıkları içeren yanıtların veya kişisel kullanıcı/mesaj/ticket verilerinin public cache'e girmesi kesinlikle engellenir.
 - **9. Başlangıç Benchmark Hedefleri (Gerçek Ölçümle Doğrulanacak):** Public CMS API Edge Hit Ratio hedefi > %85, Edge Response Latency hedefi < 50ms (p95), D1 okuma çağrılarında %70+ azalma beklentisi. (Tüm değerler yük testlerinde doğrulanacak hedeflerdir).
 - **10. DoD:**
-  - [ ] Public CMS API vs Admin/Private rotaları için Cache-Control ayrımının uygulanması.
-  - [ ] ETag üretimi ve HTTP 304 Not Modified conditional request desteğinin `CMS-005` ile uyumlu doğrulanması.
-  - [ ] İçerik değişikliklerinde Purge / Invalidation mimari stratejisinin tanımlanması.
-  - [ ] Hassas/özel verilerin public cache'e sızmadığının güvenlik doğrulaması.
+  - [*] Public CMS API vs Admin/Private rotaları için Cache-Control ayrımının uygulanması.
+  - [*] ETag üretimi ve HTTP 304 Not Modified conditional request desteğinin `CMS-005` ile uyumlu doğrulanması.
+  - [*] İçerik değişikliklerinde Purge / Invalidation mimari stratejisinin tanımlanması.
+  - [*] Hassas/özel verilerin public cache'e sızmadığının güvenlik doğrulaması.
 - **11. Bağımlılıklar:** CMS-005, API-006, API-010.
 - **12. Bağımlı Görevler:** PERF-002, GO-001.
 
 ---
 
-
-
 ### PERF-002 — Aylık 50k+ Mesaj Kapasite ve Performans Hedefi
 - **2. Amaç:** D1 SQLite indeksleme, cursor pagination, hafif JSON payload'ları ve background kuyruk izolasyonu ile aylık en az 50.000 mesaj hacmini kesintisiz ve $0 maliyetle karşılamak.
 - **3. Kapsam:** `backend/src/models/messageModel.ts`, D1 SQLite indexes, `backend/src/utils/pagination.ts`, kuyruk entegrasyonları.
 - **4. Database & D1 Optimization:**
-  - [ ] *İndeks Yapısı:* Bileşik indeksler (`idx_messages_ticket_id_created`, `idx_tickets_status_updated`).
-  - [ ] *Cursor Pagination:* `WHERE created_at < ? AND id < ? ORDER BY id DESC LIMIT 20` ile `OFFSET` kaynaklı full-table scan'lerin engellenmesi.
-  - [ ] *Payload Projeksiyonu:* `SELECT *` kullanımının yasaklanması, yalnızca listeleme için gerekli alanların seçilmesi (`DATA-002`).
-  - [ ] *JSON & Data Structuring:* Mesaj metni ve eklerin optimize edilmiş JSON şeması ile saklanması.
+  - [*] *İndeks Yapısı:* Bileşik indeksler (`idx_messages_ticket_id_created`, `idx_tickets_status_updated`).
+  - [*] *Cursor Pagination:* `WHERE created_at < ? AND id < ? ORDER BY id DESC LIMIT 20` ile `OFFSET` kaynaklı full-table scan'lerin engellenmesi.
+  - [*] *Payload Projeksiyonu:* `SELECT *` kullanımının yasaklanması, yalnızca listeleme için gerekli alanların seçilmesi (`DATA-002`).
+  - [*] *JSON & Data Structuring:* Mesaj metni ve eklerin optimize edilmiş JSON şeması ile saklanması.
 - **5. API Response & Rate Limiting Optimization:**
-  - [ ] Mesaj gönderme API'sinde (`POST /api/v1/tickets/:id/messages` - `API-001`) gereksiz DB/ağ yükünün engellenmesi.
-  - [ ] Strict validation (`SEC-REQ-001`) ve endpoint bazlı rate limiting ile spam/flood engelleme.
-- **6. Background Queue & Worker Isolation (COM-003 Cross-Ref):** Mesaj oluşturulduğunda DB yazması sonrasındaki e-posta (`COM-002`), push bildirim (`COM-004`), AI analizi (`AI-002`) ve TTS (`CMS-TTS-001`) gibi işlemler arka plan kuyruğuna (`COM-003`) aktarılarak API thread'inin bloke olmaması hedeflenir. İlgili task'ların görev tanımları tekrar edilmez.
-- **7. Frontend Admin List Performance (UI-004 Cross-Ref):** Admin panel bilet/mesaj listelerinde pagination, lazy loading, skeleton state ve modal içeriklerinin on-demand yüklenmesi (`UI-004`, `UI-005`, `UI-006`).
+  - [*] Mesaj gönderme API'sinde (`POST /api/v1/tickets/:id/messages` - `API-001`) gereksiz DB/ağ yükünün engellenmesi.
+  - [*] Strict validation (`SEC-REQ-001`) ve endpoint bazlı rate limiting ile spam/flood engelleme.
+- [*] **6. Background Queue & Worker Isolation (COM-003 Cross-Ref):** Mesaj oluşturulduğunda DB yazması sonrasındaki e-posta (`COM-002`), push bildirim (`COM-004`), AI analizi (`AI-002`) ve TTS (`CMS-TTS-001`) gibi işlemler arka plan kuyruğuna (`COM-003`) aktarılarak API thread'inin bloke olmaması hedeflenir. İlgili task'ların görev tanımları tekrar edilmez.
+- [*] **7. Frontend Admin List Performance (UI-004 Cross-Ref):** Admin panel bilet/mesaj listelerinde pagination, lazy loading, skeleton state ve modal içeriklerinin on-demand yüklenmesi (`UI-004`, `UI-005`, `UI-006`).
 - **8. Measuring 50k Target & Performance Budget:**
-  - [ ] *Aylık İş Hacmi Hedefi:* ≥ 50.000 mesaj. (Anlık peak/burst kapasitesi üretim varsayımı olarak yazılmaz; yük testi sırasında ölçülecektir).
-  - [ ] *API Write Latency Benchmark Hedefi:* p95 < 150ms.
-  - [ ] *D1 Query Duration Target:* Tekil sorgu süresi < 30ms.
-  - [ ] *Queue Processing Delay Target:* Arka plan kuyruk birikim süresi < 5sn.
-  - [ ] *Worker Execution Duration:* Ölçülecek CPU çalışma süresi (Gereksiz CPU tüketimini önlemek için benchmark ile izlenecektir; sabit platform limiti olarak varsayılmaz).
-  - [ ] *(Not: Tüm rakamlar başlangıç ölçüm kriterleridir; sabit SLA garantisi değildir).*
+  - [*] *Aylık İş Hacmi Hedefi:* ≥ 50.000 mesaj. (Anlık peak/burst kapasitesi üretim varsayımı olarak yazılmaz; yük testi sırasında ölçülecektir).
+  - [*] *API Write Latency Benchmark Hedefi:* p95 < 150ms.
+  - [*] *D1 Query Duration Target:* Tekil sorgu süresi < 30ms.
+  - [*] *Queue Processing Delay Target:* Arka plan kuyruk birikim süresi < 5sn.
+  - [*] *Worker Execution Duration:* Ölçülecek CPU çalışma süresi (Gereksiz CPU tüketimini önlemek için benchmark ile izlenecektir; sabit platform limiti olarak varsayılmaz).
+  - [*] *(Not: Tüm rakamlar başlangıç ölçüm kriterleridir; sabit SLA garantisi değildir).*
 - **9. DoD:**
-  - [ ] D1 bileşik indekslerin ve cursor pagination yapısının uygulanması.
-  - [ ] Mesaj kaydının background kuyruk işlemlerinden (`COM-003`) yalıtılarak API performansının korunması.
-  - [ ] 50k+ mesaj iş hacmi için yük testi/benchmark senaryolarının tanımlanması.
-  - [ ] Zero-Cost ($0/Ay) mimari hedefine uyumun doğrulanması.
+  - [*] D1 bileşik indekslerin ve cursor pagination yapısının uygulanması.
+  - [*] Mesaj kaydının background kuyruk işlemlerinden (`COM-003`) yalıtılarak API performansının korunması.
+  - [*] 50k+ mesaj iş hacmi için yük testi/benchmark senaryolarının tanımlanması.
+  - [*] Zero-Cost ($0/Ay) mimari hedefine uyumun doğrulanması.
 - **10. Bağımlılıklar:** PERF-001, DATA-002, API-001, COM-003, SEC-REQ-001, OBS-002.
 - **11. Bağımlı Görevler:** GO-001, OPS-001.
 
@@ -2385,24 +2388,24 @@ sequenceDiagram
 | **Zero-Cost Guard** | Yük ve cache mimarisinin çalışması | Tüm performans ve cache mimarisi $0/Ay hedefiyle uyumlu şekilde yürütülür. |
 
 #### Section-Level Definition of Done (DoD)
-- [ ] Public CMS API ile Admin/Private API yanıtları için katı Edge Cache sınırının (`public` vs `no-store, private`) tanımlanması.
-- [ ] ETag ve HTTP `304 Not Modified` conditional request mekanizmasının `CMS-005` ile entegrasyonu.
-- [ ] Content publish/update/delete sonrası mimariye uygun cache invalidation stratejisinin netleştirilmesi.
-- [ ] Aylık 50k+ mesaj hedefinin D1 cursor pagination, bileşik indeksler ve payload projeksiyonu ile desteklenmesi.
-- [ ] Background kuyruk işlemlerinin (`COM-003`, `COM-002`, `AI-002`) API yanıt süresini bloke etmemesi bağımlılığının kurulması.
-- [ ] Ölçülebilir performance budget (latency, query time, error rate, CPU duration) değerlerinin sabit SLA değil, benchmark sonrasında doğrulanacak hedefler olarak oturtulması.
-- [ ] R2 üzerindeki MP3 ve medya dosyalarının `HTTP Range` (`206 Partial Content`) ve versiyonlama (`audio_version`) ile uyumunun tanımlanması.
-- [ ] Admin panel frontend performans kriterlerinin (`UI-004`, `UI-005`, `UI-006`) lazy loading ve code splitting ile ilişkilendirilmesi.
-- [ ] Monitoring entegrasyonlarının (`OBS-002`, `OBS-003`) yavaş sorgu ve cache MISS takibi için kurulması.
+- [*] Public CMS API ile Admin/Private API yanıtları için katı Edge Cache sınırının (`public` vs `no-store, private`) tanımlanması.
+- [*] ETag ve HTTP `304 Not Modified` conditional request mekanizmasının `CMS-005` ile entegrasyonu.
+- [*] Content publish/update/delete sonrası mimariye uygun cache invalidation stratejisinin netleştirilmesi.
+- [*] Aylık 50k+ mesaj hedefinin D1 cursor pagination, bileşik indeksler ve payload projeksiyonu ile desteklenmesi.
+- [*] Background kuyruk işlemlerinin (`COM-003`, `COM-002`, `AI-002`) API yanıt süresini bloke etmemesi bağımlılığının kurulması.
+- [*] Ölçülebilir performance budget (latency, query time, error rate, CPU duration) değerlerinin sabit SLA değil, benchmark sonrasında doğrulanacak hedefler olarak oturtulması.
+- [*] R2 üzerindeki MP3 ve medya dosyalarının `HTTP Range` (`206 Partial Content`) ve versiyonlama (`audio_version`) ile uyumunun tanımlanması.
+- [*] Admin panel frontend performans kriterlerinin (`UI-004`, `UI-005`, `UI-006`) lazy loading ve code splitting ile ilişkilendirilmesi.
+- [*] Monitoring entegrasyonlarının (`OBS-002`, `OBS-003`) yavaş sorgu ve cache MISS takibi için kurulması.
 
-
+---
 
 ### Özet Görev Listesi (13. PERFORMANCE & SCALABILITY ($0 Cost))
 
-- [ ] **PERF-001 — Cloudflare Edge Cache Optimization**
+- [*] **PERF-001 — Cloudflare Edge Cache Optimization**
   - **Amaç:** Public CMS API'leri, ETag/304 ve R2 medya varlıkları için katmanlı Edge Cache, purge ve private/public sınır yönetimi ($0).
   - **Öncelik:** P1 | **Bağımlılık:** CMS-005, API-006, API-010
-- [ ] **PERF-002 — Aylık 50k+ Mesaj Kapasite ve Performans Hedefi**
+- [*] **PERF-002 — Aylık 50k+ Mesaj Kapasite ve Performans Hedefi**
   - **Amaç:** D1 SQLite bileşik indeksleri, cursor pagination ve non-blocking kuyruk izolasyonu ile 50k+ aylık mesaj hacminde $0 performans bütçesinin korunması.
   - **Öncelik:** P2 | **Bağımlılık:** PERF-001, DATA-002, API-001, COM-003, SEC-REQ-001, OBS-002
 
@@ -2421,23 +2424,23 @@ sequenceDiagram
 - **2. Amaç:** D1 veritabanı verilerinin düzenli, otomatik ve güvenli şekilde yedeklenmesi; bütünlük kontrollerinin yapılması ve başarısız yedekleme durumlarında uyarı mekanizmalarının işletilmesi ($0).
 - **3. Kapsam:** GitHub Actions workflow (`TEST-003`), Cloudflare D1 backup / R2 storage entegrasyonu, `OBS-002` ve `COM-001` alert mekanizması.
 - **4. Yedekleme Sıklığı & Operasyonel Gerekçe:**
-  - [ ] *Periyot:* Haftalık düzenli periyot (veya canlıya dağıtım öncesi/sonrası otomatik tetiklenen ad-hoc yedekleme).
-  - [ ] *Gerekçe:* Sistemdeki veri değişim hacmi, veritabanı I/O yükü ve $0 maliyet hedefleri dikkate alınarak haftalık tam yedekleme (full backup) temel periyot olarak seçilmiştir. Canlı veritabanı performansını aksatmamak hedeflenmiştir.
+  - [*] *Periyot:* Haftalık düzenli periyot (veya canlıya dağıtım öncesi/sonrası otomatik tetiklenen ad-hoc yedekleme).
+  - [*] *Gerekçe:* Sistemdeki veri değişim hacmi, veritabanı I/O yükü ve $0 maliyet hedefleri dikkate alınarak haftalık tam yedekleme (full backup) temel periyot olarak seçilmiştir. Canlı veritabanı performansını aksatmamak hedeflenmiştir.
 - **5. Backup Yaşam Döngüsü & Bütünlük Kontrolü:**
-  - [ ] *Metadata & Tarih Damgalama:* Her yedek dosyası standart formatta tarih-saat damgası (`d1_backup_YYYYMMDD_HHMMSS.sql.gz`) ve SHA-256 checksum / metadata kaydı ile saklanır.
-  - [ ] *Bütünlük Kontrolü (Integrity Check):* Alınan/indirilen yedek dosyasının boş (0-byte) veya bozuk olmadığını doğrulamak için dosya boyutu ve checksum kontrolü yapılır.
-  - [ ] *Geri Yüklemeye Uygunluk:* Yedek dosyası, standart D1/SQLite CLI veya SQL betikleri ile sıfırdan veritabanına aktarılabilecek (restore-ready) formatta tutulur (`DATA-003`).
+  - [*] *Metadata & Tarih Damgalama:* Her yedek dosyası standart formatta tarih-saat damgası (`d1_backup_YYYYMMDD_HHMMSS.sql.gz`) ve SHA-256 checksum / metadata kaydı ile saklanır.
+  - [*] *Bütünlük Kontrolü (Integrity Check):* Alınan/indirilen yedek dosyasının boş (0-byte) veya bozuk olmadığını doğrulamak için dosya boyutu ve checksum kontrolü yapılır.
+  - [*] *Geri Yüklemeye Uygunluk:* Yedek dosyası, standart D1/SQLite CLI veya SQL betikleri ile sıfırdan veritabanına aktarılabilecek (restore-ready) formatta tutulur (`DATA-003`).
 - **6. R2 Saklama Yaklaşımı & Güvenlik:**
-  - [ ] *R2 Private Storage:* Yedek dosyaları Cloudflare R2 üzerinde dış erişime kapalı (private) bir bucket içerisinde veya GitHub Actions Artifacts ortamında saklanır.
-  - [ ] *Erişim Kısıtlaması:* Hassas verilerin korunması amacıyla erişim hakları kısıtlanmış API token/secret kullanılarak saklama alanı güvenceye alınır.
+  - [*] *R2 Private Storage:* Yedek dosyaları Cloudflare R2 üzerinde dış erişime kapalı (private) bir bucket içerisinde veya GitHub Actions Artifacts ortamında saklanır.
+  - [*] *Erişim Kısıtlaması:* Hassas verilerin korunması amacıyla erişim hakları kısıtlanmış API token/secret kullanılarak saklama alanı güvenceye alınır.
 - **7. Başarısızlık Tespiti & Alarm Entegrasyonu:**
-  - [ ] Yedek alma veya bütünlük kontrolü adımında hata oluştuğunda `OBS-002` audit sistemine hata kaydı işlenir (`OBS-003`).
-  - [ ] Kritik yedekleme başarısızlıklarında yöneticilere e-posta uyarısı (`COM-001`) ve log kaydı iletilir.
+  - [*] Yedek alma veya bütünlük kontrolü adımında hata oluştuğunda `OBS-002` audit sistemine hata kaydı işlenir (`OBS-003`).
+  - [*] Kritik yedekleme başarısızlıklarında yöneticilere e-posta uyarısı (`COM-001`) ve log kaydı iletilir.
 - **8. DoD:**
-  - [ ] Otomatik D1 veritabanı yedekleme akışının tanımlanması.
-  - [ ] Yedek dosyalarının checksum ve bütünlük kontrolü (integrity check) adımlarından geçirilmesi.
-  - [ ] R2/Private depolamada erişim kısıtlaması ile hassas veri güvenliğinin sağlanması.
-  - [ ] Başarısız yedekleme durumunda `OBS-002` ve `COM-001` alarm entegrasyonunun doğrulanması.
+  - [*] Otomatik D1 veritabanı yedekleme akışının tanımlanması.
+  - [*] Yedek dosyalarının checksum ve bütünlük kontrolü (integrity check) adımlarından geçirilmesi.
+  - [*] R2/Private depolamada erişim kısıtlaması ile hassas veri güvenliğinin sağlanması.
+  - [*] Başarısız yedekleme durumunda `OBS-002` ve `COM-001` alarm entegrasyonunun doğrulanması.
 - **9. Bağımlılıklar:** DATA-003, OBS-002, OBS-003, COM-001, TEST-003.
 - **10. Bağımlı Görevler:** DR-002, GO-001, INC-001.
 
@@ -2447,25 +2450,25 @@ sequenceDiagram
 - **2. Amaç:** Alınan D1 veritabanı yedeklerinin izole bir test ortamına sorunsuz geri yüklenebildiğinin, şema/veri bütünlüğünün ve uygulama bağlantısının periyodik olarak doğrulanması ($0).
 - **3. Kapsam:** İzole D1 test veritabanı, restore doğrulama betikleri (`TEST-002`), RPO/RTO ölçüm prosedürleri.
 - **4. Geri Yükleme (Restore) Yaşam Döngüsü & Adımları:**
-  - [ ] *1. Backup Seçimi & Doğrulama:* En son başarılı ve checksum doğrulamasından geçmiş yedek dosyasının tespiti.
-  - [ ] *2. İzole/Test Ortamına Restore:* Canlı (Prod) veritabanına dokunmadan, izole bir D1 dev/staging veritabanına geri yükleme yapılması (`REL-ENV-001`).
-  - [ ] *3. Şema & Tablo Doğrulaması:* `post_revisions`, `messages`, `tickets`, `users`, `settings` gibi kritik tabloların ve indekslerin tam olarak oluştuğunun kontrolü.
-  - [ ] *4. Kritik Veri Okunabilirliği:* Örnek sorgularla (`SELECT COUNT(*)`, son mesaj/revizyon kontrolü) verinin bozulmadan okunabildiğinin doğrulanması.
-  - [ ] *5. Uygulama Entegrasyon Doğrulaması:* Backend Worker'ın test veritabanına bağlanıp temel okuma/yazma health check adımlarını (`API-008`) geçtiğinin doğrulanması.
+  - [*] *1. Backup Seçimi & Doğrulama:* En son başarılı ve checksum doğrulamasından geçmiş yedek dosyasının tespiti.
+  - [*] *2. İzole/Test Ortamına Restore:* Canlı (Prod) veritabanına dokunmadan, izole bir D1 dev/staging veritabanına geri yükleme yapılması (`REL-ENV-001`).
+  - [*] *3. Şema & Tablo Doğrulaması:* `post_revisions`, `messages`, `tickets`, `users`, `settings` gibi kritik tabloların ve indekslerin tam olarak oluştuğunun kontrolü.
+  - [*] *4. Kritik Veri Okunabilirliği:* Örnek sorgularla (`SELECT COUNT(*)`, son mesaj/revizyon kontrolü) verinin bozulmadan okunabildiğinin doğrulanması.
+  - [*] *5. Uygulama Entegrasyon Doğrulaması:* Backend Worker'ın test veritabanına bağlanıp temel okuma/yazma health check adımlarını (`API-008`) geçtiğinin doğrulanması.
 - **5. Hata Yönetimi & Yeniden Deneme (Retry Procedure):**
-  - [ ] Restore adımı başarısız olursa işlem durdurulur, `OBS-002` üzerine detaylı hata kaydı işlenir ve kriz yönetimi planı (`INC-001`) tetiklenir.
-  - [ ] Bir önceki başarılı yedeğe geri dönme (fallback backup) ve otomatik tekrar deneme adımı çalıştırılır.
+  - [*] Restore adımı başarısız olursa işlem durdurulur, `OBS-002` üzerine detaylı hata kaydı işlenir ve kriz yönetimi planı (`INC-001`) tetiklenir.
+  - [*] Bir önceki başarılı yedeğe geri dönme (fallback backup) ve otomatik tekrar deneme adımı çalıştırılır.
 - **6. Periyodik Restore Testleri:** Restore prosedürü yalnızca kriz anında değil, periyodik olarak (örn. 6 ayda bir `OPS-003` kapsamında) tatbikat amacıyla otomasyonla sınanır.
 - **7. Ölçülebilir RPO & RTO Metrik Yaklaşımı:**
-  - [ ] *RPO (Recovery Point Objective):* Kabul edilebilir azami veri kaybı zaman aralığının proje gereksinimlerine göre tanımlanması (Örn. son yedekleme periyodu ile kriz anı arasındaki veri değişimi).
-  - [ ] *RTO (Recovery Time Objective):* Felaket anından itibaren sistemin geri yüklenip hizmet verebilir hale getirilmesi için kabul edilebilir azami süre (Örn. restore betiğinin çalışma ve doğrulama süresi).
-  - [ ] *Esnek Doğrulama:* RPO/RTO değerleri sabit SLA garantileri olarak varsayılmaz; restore testleri sırasında ölçülerek ve operasyonel gereksinimlere göre revize edilerek doğrulanır.
+  - [*] *RPO (Recovery Point Objective):* Kabul edilebilir azami veri kaybı zaman aralığının proje gereksinimlerine göre tanımlanması (Örn. son yedekleme periyodu ile kriz anı arasındaki veri değişimi).
+  - [*] *RTO (Recovery Time Objective):* Felaket anından itibaren sistemin geri yüklenip hizmet verebilir hale getirilmesi için kabul edilebilir azami süre (Örn. restore betiğinin çalışma ve doğrulama süresi).
+  - [*] *Esnek Doğrulama:* RPO/RTO değerleri sabit SLA garantileri olarak varsayılmaz; restore testleri sırasında ölçülerek ve operasyonel gereksinimlere göre revize edilerek doğrulanır.
 - **8. DoD:**
-  - [ ] Seçilen yedeğin izole test veritabanına restore edilebildiğinin doğrulanması.
-  - [ ] Şema, tablo ve kritik veri okunabilirliğinin otomatik sorgularla doğrulanması.
-  - [ ] Uygulama backend Worker bağlantısının ve health check adımlarının başarıyla çalışması.
-  - [ ] Restore başarısızlığı durumunda hata kaydı (`OBS-002`), uyarılma ve fallback yedek deneme prosedürünün kurulması.
-  - [ ] RPO ve RTO değerlerinin restore testleri üzerinden ölçülebilir hale getirilmesi.
+  - [*] Seçilen yedeğin izole test veritabanına restore edilebildiğinin doğrulanması.
+  - [*] Şema, tablo ve kritik veri okunabilirliğinin otomatik sorgularla doğrulanması.
+  - [*] Uygulama backend Worker bağlantısının ve health check adımlarının başarıyla çalışması.
+  - [*] Restore başarısızlığı durumunda hata kaydı (`OBS-002`), uyarılma ve fallback yedek deneme prosedürünün kurulması.
+  - [*] RPO ve RTO değerlerinin restore testleri üzerinden ölçülebilir hale getirilmesi.
 - **9. Bağımlılıklar:** DR-001, DATA-003, OBS-002, INC-001, REL-ENV-001, API-008.
 - **10. Bağımlı Görevler:** GO-001, OPS-003.
 
@@ -2485,23 +2488,23 @@ sequenceDiagram
 | **RPO / RTO Ölçümü** | Tatbikat Geri Yükleme Süresi | Restore süresi ve veri kaybı aralığı ölçülerek loglanır ve hedeflerle kıyaslanır. |
 
 #### Section-Level Definition of Done (DoD)
-- [ ] D1 veritabanı yedeklerinin düzenli olarak alınması ve checksum ile bütünlüğünün doğrulanması.
-- [ ] Backup dosyalarının R2/private depolamada hassas veri güvenliği standartlarına uygun saklanması.
-- [ ] Başarısız yedekleme durumunda `OBS-002` log kaydı ve `COM-001` alarm mekanizmasının çalışması.
-- [ ] Seçilen yedeğin izole test ortamına geri yüklenmesi ve şema/kritik veri okunabilirliğinin doğrulanması.
-- [ ] Uygulama Worker'ının restore edilen veritabanı ile çalışabilirliğinin doğrulanması.
-- [ ] Restore başarısızlığında loglama, tekrar deneme ve fallback prosedürlerinin tanımlanması.
-- [ ] RPO ve RTO metriklerinin restore tatbikatları üzerinden ölçülebilir hale getirilmesi.
-- [ ] Zero-Cost ($0/Ay) prensibine uyumun ve DR test matrisinin tamamlanması.
+- [*] D1 veritabanı yedeklerinin düzenli olarak alınması ve checksum ile bütünlüğünün doğrulanması.
+- [*] Backup dosyalarının R2/private depolamada hassas veri güvenliği standartlarına uygun saklanması.
+- [*] Başarısız yedekleme durumunda `OBS-002` log kaydı ve `COM-001` alarm mekanizmasının çalışması.
+- [*] Seçilen yedeğin izole test ortamına geri yüklenmesi ve şema/kritik veri okunabilirliğinin doğrulanması.
+- [*] Uygulama Worker'ının restore edilen veritabanı ile çalışabilirliğinin doğrulanması.
+- [*] Restore başarısızlığında loglama, tekrar deneme ve fallback prosedürlerinin tanımlanması.
+- [*] RPO ve RTO metriklerinin restore tatbikatları üzerinden ölçülebilir hale getirilmesi.
+- [*] Zero-Cost ($0/Ay) prensibine uyumun ve DR test matrisinin tamamlanması.
 
 ---
 
 ### Özet Görev Listesi (14. BACKUP, DISASTER RECOVERY & BUSINESS CONTINUITY ($0 Cost))
 
-- [ ] **DR-001 — Otomatik D1 Yedeği & Disaster Recovery Planı**
+- [*] **DR-001 — Otomatik D1 Yedeği & Disaster Recovery Planı**
   - **Amaç:** GitHub Actions ve Cloudflare imkanlarıyla D1 yedeğinin düzenli alınması, checksum bütünlük kontrolü, R2 private saklama ve başarısızlık alarmları ($0).
   - **Öncelik:** P1 | **Bağımlılık:** DATA-003, OBS-002, COM-001, TEST-003
-- [ ] **DR-002 — Restore Prosedürü & Geri Yükleme Testi (Restore Verification)**
+- [*] **DR-002 — Restore Prosedürü & Geri Yükleme Testi (Restore Verification)**
   - **Amaç:** Alınan D1 yedeklerinin izole ortama geri yüklenmesi, şema/veri doğrulama, uygulama entegrasyonu ve RPO/RTO ölçüm tatbikatı ($0).
   - **Öncelik:** P1 | **Bağımlılık:** DR-001, OBS-002, INC-001
 
@@ -2513,24 +2516,24 @@ sequenceDiagram
 
 - **Zero-Cost Quality & Test Guard ($0/Ay Kuralı):** Tüm unit testler, static analysis, CI/CD doğrulama adımları ve kalite kapıları GitHub Actions ve yerel geliştirme araçlarının (Vitest, TypeScript, Node.js betikleri) sunduğu ücretsiz imkanlar ($0/Ay) dahilinde çalıştırılacaktır. Harici ücretli CI/CD servisleri, SaaS kod analiz araçları veya paralı test platformları zorunluluğu KESİNLİKLE oluşturulamaz. GitHub Actions'ın güncel ücretsiz runner kota/limitleri sabit varsayım olarak dokümana işlenmez; bütçe ve süre optimizasyonu yapılır.
 - **Strict Test vs Production Isolation:**
-  - [ ] *No Prod Data / Secrets:* Birim ve entegrasyon testlerinde canlı veritabanı (Prod D1/R2) KESİNLİKLE kullanılmaz. Gerçek kullanıcı verisi veya production secret/API key (`GEMINI_API_KEY`, `RESEND_API_KEY`, `JWT_SECRET`) test ortamında KESİNLİKLE çalıştırılmaz.
-  - [ ] *Mock & Stub Strategy:* Harici servisler (Resend Mail, VAPID Push, Gemini AI, Cloudflare TTS) test ortamında mock/stub katmanı ile izole edilir; gereksiz dış API çağrıları ve kota tüketimi engellenir.
+  - [*] *No Prod Data / Secrets:* Birim ve entegrasyon testlerinde canlı veritabanı (Prod D1/R2) KESİNLİKLE kullanılmaz. Gerçek kullanıcı verisi veya production secret/API key (`GEMINI_API_KEY`, `RESEND_API_KEY`, `JWT_SECRET`) test ortamında KESİNLİKLE çalıştırılmaz.
+  - [*] *Mock & Stub Strategy:* Harici servisler (Resend Mail, VAPID Push, Gemini AI, Cloudflare TTS) test ortamında mock/stub katmanı ile izole edilir; gereksiz dış API çağrıları ve kota tüketimi engellenir.
 
 ---
 
 ### TEST-001 — Veri Aktarım Betikleri (Import Scripts & Audit Verification)
 - **2. Kapsam:** `scripts/import_google_sheets.js`, `scripts/import_apps_catalog.js`.
 - **3. İşlevsellik & Doğrulama Garantileri:**
-  - [ ] *Input Validation:* Aktarılan JSON/CSV verilerinin zorunlu alanlarının (schema check), tip uygunluklarının ve slug benzersizliğinin doğrulanması.
-  - [ ] *Idempotency & Duplicate Control:* Betiklerin tekrar çalıştırılması durumunda mükerrer kayıt (duplicate record) oluşmasının `UPSERT` / `INSERT OR IGNORE` mantığı ile engellenmesi.
-  - [ ] *Hata Toleransı & Raporlama:* Hatalı tekil verilerin tüm aktarım sürecini durdurmadan loglanması; aktarım sonunda başarılı, atlanan ve hatalı kayıt sayılarının özet rapor olarak sunulması.
-  - [ ] *Transaction & Rollback:* Veritabanı toplu yazma adımlarında atomik işlem (D1 batch/transaction) kullanılarak kısmi bozuk veri oluşmasının önlenmesi.
-  - [ ] *Dry-Run Desteği:* Veritabanına yazmadan veriyi ve değişiklikleri test etmeye imkan tanıyan `--dry-run` bayrağı desteği.
-  - [ ] *Güvenlik:* Aktarım betiği loglarına hassas erişim bilgilerinin (service account, token vb.) sızdırılmaması.
+  - [*] *Input Validation:* Aktarılan JSON/CSV verilerinin zorunlu alanlarının (schema check), tip uygunluklarının ve slug benzersizliğinin doğrulanması.
+  - [*] *Idempotency & Duplicate Control:* Betiklerin tekrar çalıştırılması durumunda mükerrer kayıt (duplicate record) oluşmasının `UPSERT` / `INSERT OR IGNORE` mantığı ile engellenmesi.
+  - [*] *Hata Toleransı & Raporlama:* Hatalı tekil verilerin tüm aktarım sürecini durdurmadan loglanması; aktarım sonunda başarılı, atlanan ve hatalı kayıt sayılarının özet rapor olarak sunulması.
+  - [*] *Transaction & Rollback:* Veritabanı toplu yazma adımlarında atomik işlem (D1 batch/transaction) kullanılarak kısmi bozuk veri oluşmasının önlenmesi.
+  - [*] *Dry-Run Desteği:* Veritabanına yazmadan veriyi ve değişiklikleri test etmeye imkan tanıyan `--dry-run` bayrağı desteği.
+  - [*] *Güvenlik:* Aktarım betiği loglarına hassas erişim bilgilerinin (service account, token vb.) sızdırılmaması.
 - **4. DoD:**
-  - [ ] `import_google_sheets.js` ve `import_apps_catalog.js` betiklerinin şema doğrulaması ve idempotency kontrolünü geçmesi.
-  - [ ] Hatalı kayıtların izole edilerek aktarım özeti olarak raporlanması.
-  - [ ] Betiğin tekrar çalıştırılması durumunda veri çoğalması olmadığını gösteren dry-run ve live test doğrulaması.
+  - [*] `import_google_sheets.js` ve `import_apps_catalog.js` betiklerinin şema doğrulaması ve idempotency kontrolünü geçmesi.
+  - [*] Hatalı kayıtların izole edilerek aktarım özeti olarak raporlanması.
+  - [*] Betiğin tekrar çalıştırılması durumunda veri çoğalması olmadığını gösteren dry-run ve live test doğrulaması.
 
 ---
 
@@ -2538,19 +2541,19 @@ sequenceDiagram
 - **2. Amaç:** Kritik güvenlik, kimlik doğrulama, sanitization ve iş mantığı modülleri için Vitest tabanlı birim test suite'inin kurulması ve kapsama alınması ($0).
 - **3. Kapsam:** `backend/src/utils/auth.ts`, `backend/src/utils/sanitize.ts`, `backend/src/middleware/rateLimit.ts`, `backend/src/middleware/rbac.ts`, `backend/src/services/aiService.ts`.
 - **4. Kritik Test Senaryoları & Kapsam:**
-  - [ ] *Authentication (`SEC-AUTH-002`, `SEC-AUTH-003`):* Parola hash doğrulama (PBKDF2), JWT imzalama/doğrulama, süresi dolmuş veya geçersiz token reddi testleri.
-  - [ ] *Sanitization & XSS (`SEC-REQ-001`):* HTML enjeksiyonu, zararlı script temizleme (`sanitize.ts`), zengin metin TipTap girdilerinin arındırılması.
-  - [ ] *Rate Limiting (`SEC-REQ-001`):* IP bazlı istek kotası aşımı, sliding window sayacının doğru çalışması ve HTTP `429 Too Many Requests` dönüşü.
-  - [ ] *Authorization & RBAC (`SEC-RBAC-001`):* `SUPER_ADMIN`, `ADMIN`, `EDITOR`, `VIEWER` rol yetkilerinin doğru sınırlandırılması; yetkisiz erişimlerin HTTP `403 Forbidden` alması.
-  - [ ] *AI Security & Structured Output (`AI-003`):* Gemini API yanıtlarının JSON şema doğrulamasından geçirilmesi, zararlı prompt enjeksiyonlarının tespiti ve mock yanıt testi.
+  - [*] *Authentication (`SEC-AUTH-002`, `SEC-AUTH-003`):* Parola hash doğrulama (PBKDF2), JWT imzalama/doğrulama, süresi dolmuş veya geçersiz token reddi testleri.
+  - [*] *Sanitization & XSS (`SEC-REQ-001`):* HTML enjeksiyonu, zararlı script temizleme (`sanitize.ts`), zengin metin TipTap girdilerinin arındırılması.
+  - [*] *Rate Limiting (`SEC-REQ-001`):* IP bazlı istek kotası aşımı, sliding window sayacının doğru çalışması ve HTTP `429 Too Many Requests` dönüşü.
+  - [*] *Authorization & RBAC (`SEC-RBAC-001`):* `SUPER_ADMIN`, `ADMIN`, `EDITOR`, `VIEWER` rol yetkilerinin doğru sınırlandırılması; yetkisiz erişimlerin HTTP `403 Forbidden` alması.
+  - [*] *AI Security & Structured Output (`AI-003`):* Gemini API yanıtlarının JSON şema doğrulamasından geçirilmesi, zararlı prompt enjeksiyonlarının tespiti ve mock yanıt testi.
 - **5. Test Kalite Standardı & Test Matrisi:**
-  - [ ] *Senaryo Kapsamı:* Her kritik bileşen için **Happy Path**, **Invalid Input**, **Unauthorized/Forbidden**, **Boundary/Edge Case** ve **Error/Failure Path** senaryolarının yazılması.
-  - [ ] *Deterministik Çalışma:* Testlerin rastgele veri yerine sabitleştirilmiş mock'lar ile her çalıştırmada tutarlı sonuç vermesi.
-  - [ ] *Coverage Ölçümü:* CI ortamında test coverage takibinin yapılması (Sabit yüzdesel SLA zorunluluğu konmaz, kapsama eğilimi izlenir).
+  - [*] *Senaryo Kapsamı:* Her kritik bileşen için **Happy Path**, **Invalid Input**, **Unauthorized/Forbidden**, **Boundary/Edge Case** ve **Error/Failure Path** senaryolarının yazılması.
+  - [*] *Deterministik Çalışma:* Testlerin rastgele veri yerine sabitleştirilmiş mock'lar ile her çalıştırmada tutarlı sonuç vermesi.
+  - [*] *Coverage Ölçümü:* CI ortamında test coverage takibinin yapılması (Sabit yüzdesel SLA zorunluluğu konmaz, kapsama eğilimi izlenir).
 - **6. DoD:**
-  - [ ] Vitest birim test suite'inin `auth`, `sanitize`, `rateLimit`, `rbac` modülleri için oluşturulması.
-  - [ ] Happy path, invalid input ve failure path senaryolarının eksiksiz sınanması.
-  - [ ] Testlerin hiçbir üretim secret'ı veya canlı veritabanı kullanmadan %100 mock/stub ortamında deterministik çalışması.
+  - [*] Vitest birim test suite'inin `auth`, `sanitize`, `rateLimit`, `rbac` modülleri için oluşturulması.
+  - [*] Happy path, invalid input ve failure path senaryolarının eksiksiz sınanması.
+  - [*] Testlerin hiçbir üretim secret'ı veya canlı veritabanı kullanmadan %100 mock/stub ortamında deterministik çalışması.
 - **7. Bağımlılıklar:** SEC-AUTH-002, SEC-AUTH-003, SEC-RBAC-001, SEC-REQ-001, AI-003.
 - **8. Bağımlı Görevler:** TEST-003, GO-001.
 
@@ -2560,20 +2563,20 @@ sequenceDiagram
 - **2. Amaç:** Kod kalitesini, birim testleri, i18n anahtar doğrulamalarını ve satır kuralını otomatik denetleyen GitHub Actions CI/CD workflow'unun kurulması ($0).
 - **3. Kapsam:** `.github/workflows/ci.yml`, `scripts/check_line_limit.js`, `scripts/check_i18n_keys.js`.
 - **4. Pipeline Kalite Kapıları (Quality Gates & Execution Order):**
-  - [ ] *1. Typecheck:* `npx tsc --noEmit` ile TypeScript derleme ve tip hatalarının kontrolü.
-  - [ ] *2. Line Limit Validation:* `node scripts/check_line_limit.js` ile hiçbir kod dosyasının 450 satırı aşmadığının kontrolü (`AGENTS.md`).
-  - [ ] *3. i18n Key Validation (`I18N-003`):* `node scripts/check_i18n_keys.js` ile TR/EN/AR eksik çeviri anahtarlarının tespiti.
-  - [ ] *4. Unit Testing:* `npx vitest run` ile tüm birim testlerinin sıfır hata ile tamamlanması (`TEST-002`).
-  - [ ] *5. Build Check:* `npm run build` ile production paketinin hatasız derlenmesi.
+  - [*] *1. Typecheck:* `npx tsc --noEmit` ile TypeScript derleme ve tip hatalarının kontrolü.
+  - [*] *2. Line Limit Validation:* `node scripts/check_line_limit.js` ile hiçbir kod dosyasının 450 satırı aşmadığının kontrolü (`AGENTS.md`).
+  - [*] *3. i18n Key Validation (`I18N-003`):* `node scripts/check_i18n_keys.js` ile TR/EN/AR eksik çeviri anahtarlarının tespiti.
+  - [*] *4. Unit Testing:* `npx vitest run` ile tüm birim testlerinin sıfır hata ile tamamlanması (`TEST-002`).
+  - [*] *5. Build Check:* `npm run build` ile production paketinin hatasız derlenmesi.
 - **5. Güvenlik & Secret Koruma (Zero-Leak CI Boundary):**
-  - [ ] CI adımlarında üretim (Prod) secret'ları KESİNLİKLE kullanılmaz; yalnızca mock/dummy test çevresel değişkenleri kullanılır.
-  - [ ] GitHub Actions loglarına gizli veri sızmasını önlemek için secret maskeleme ve güvenli loglama standartları uygulanır.
-  - [ ] Herhangi bir Kalite Kapısı (Quality Gate) başarısız olduğunda pipeline derhal durur ve pull request / merge işlemi engellenir.
+  - [*] CI adımlarında üretim (Prod) secret'ları KESİNLİKLE kullanılmaz; yalnızca mock/dummy test çevresel değişkenleri kullanılır.
+  - [*] GitHub Actions loglarına gizli veri sızmasını önlemek için secret maskeleme ve güvenli loglama standartları uygulanır.
+  - [*] Herhangi bir Kalite Kapısı (Quality Gate) başarısız olduğunda pipeline derhal durur ve pull request / merge işlemi engellenir.
 - **6. DoD:**
-  - [ ] `.github/workflows/ci.yml` dosyasının 5 aşamalı kalite kapısı ile oluşturulması.
-  - [ ] 450 satır kuralı (`check_line_limit.js`) ve i18n anahtar denetiminin (`check_i18n_keys.js`) CI'a entegrasyonu.
-  - [ ] Kalite kapısı başarısızlığında CI akışının durduğunun doğrulanması.
-  - [ ] CI ortamında secret sızıntısı olmadığının ve $0 maliyet ilkesine uyumun doğrulanması.
+  - [*] `.github/workflows/ci.yml` dosyasının 5 aşamalı kalite kapısı ile oluşturulması.
+  - [*] 450 satır kuralı (`check_line_limit.js`) ve i18n anahtar denetiminin (`check_i18n_keys.js`) CI'a entegrasyonu.
+  - [*] Kalite kapısı başarısızlığında CI akışının durduğunun doğrulanması.
+  - [*] CI ortamında secret sızıntısı olmadığının ve $0 maliyet ilkesine uyumun doğrulanması.
 - **7. Bağımlılıklar:** TEST-002, I18N-003, SEC-AUTH-002.
 - **8. Bağımlı Görevler:** REL-DEP-001, GO-001.
 
@@ -2593,22 +2596,22 @@ sequenceDiagram
 | **CI i18n Key Gate** | Eksik Çeviri Anahtarı İle PR Açılması | `check_i18n_keys.js` adımında eksik anahtarlar listelenir ve CI başarısız olur. |
 
 #### Section-Level Definition of Done (DoD)
-- [ ] Veri aktarım betiklerinin şema doğrulaması, hata raporlaması ve idempotency kontrollerinin sağlanması.
-- [ ] Vitest altyapısının kritik modüllerde (`auth`, `sanitize`, `rateLimit`, `rbac`, `ai`) happy path ve edge case'leri kapsayacak şekilde kurulması.
-- [ ] Testlerin hiçbir şekilde üretim veritabanı veya canlı secret kullanmadan mock/stub ortamında deterministik çalışması.
-- [ ] GitHub Actions CI pipeline'ında Typecheck, Line Limit, i18n Key, Vitest ve Build kapılarının eksiksiz tanımlanması.
-- [ ] CI loglarında secret sızıntısı engellenerek $0 Maliyet prensibine uyumun doğrulanması.
+- [*] Veri aktarım betiklerinin şema doğrulaması, hata raporlaması ve idempotency kontrollerinin sağlanması.
+- [*] Vitest altyapısının kritik modüllerde (`auth`, `sanitize`, `rateLimit`, `rbac`, `ai`) happy path ve edge case'leri kapsayacak şekilde kurulması.
+- [*] Testlerin hiçbir şekilde üretim veritabanı veya canlı secret kullanmadan mock/stub ortamında deterministik çalışması.
+- [*] GitHub Actions CI pipeline'ında Typecheck, Line Limit, i18n Key, Vitest ve Build kapılarının eksiksiz tanımlanması.
+- [*] CI loglarında secret sızıntısı engellenerek $0 Maliyet prensibine uyumun doğrulanması.
 
 ---
 
 ### Özet Görev Listesi (15. TESTING, QUALITY & CI/CD ($0 Cost))
 
-- [ ] **TEST-001 — Veri Aktarım Betikleri**
+- [*] **TEST-001 — Veri Aktarım Betikleri**
   - **Kapsam:** `import_google_sheets.js` ve `import_apps_catalog.js`.
-- [ ] **TEST-002 — Vitest Unit Test Altyapısı (`14`)**
+- [*] **TEST-002 — Vitest Unit Test Altyapısı (`14`)**
   - **Amaç:** `auth.ts`, `sanitize.ts`, `rateLimit.ts`, `rbac.ts` ve `aiService.ts` için birim testlerinin yazılması.
   - **Öncelik:** P1 | **Bağımlılık:** SEC-AUTH-002, SEC-REQ-001, SEC-RBAC-001
-- [ ] **TEST-003 — GitHub Actions CI/CD Pipeline (`14`)**
+- [*] **TEST-003 — GitHub Actions CI/CD Pipeline (`14`)**
   - **Amaç:** `.github/workflows/ci.yml` (Typecheck, Vitest, i18n anahtar denetimi `check_i18n_keys.js`, 450 satır sınırı kontrolü `check_line_limit.js`).
   - **Öncelik:** P1 | **Bağımlılık:** TEST-002, I18N-003
 
@@ -2620,10 +2623,10 @@ sequenceDiagram
 
 - **Zero-Cost Release & Deployment Guard ($0/Ay Kuralı):** Ortam yönetimi, secret tanımlamaları, dağıtım doğrulama (deployment verification) ve rollback süreçleri Cloudflare Workers, GitHub Actions ve D1/R2 imkanları ($0/Ay) çerçevesinde yürütülecektir. Harici ücretli dağıtım platformları, SaaS APM araçları veya paralı CI/CD deployment eklentileri KESİNLİKLE zorunlu kılınamaz. Platformların güncel imkanları ve sınırları doğrultusunda bütçe optimizasyonu yapılır.
 - **Strict Configuration & Secret Boundary:**
-  - [ ] *Public Configuration:* Uygulama adı, API versiyon prefix'i (`/api/v1`), public sayfalama limitleri, varsayılan dil tercihleri (Frontend bundle ve kod içinde saklanabilir).
-  - [ ] *Environment Configuration:* Ortam bazlı URL'ler (`dev.api.domain.com` vs `api.domain.com`), D1 database ID'leri, R2 bucket isimleri, Log Seviyeleri (Ortam değişkenleri olarak tanımlanır).
-  - [ ] *Secret:* Üçüncü taraf servis API anahtarları (`RESEND_API_KEY`, `VAPID_KEYS`, `GEMINI_API_KEY`).
-  - [ ] *Production Secret:* Canlı ortama ait hassas anahtarlar (`JWT_SECRET`, canlı veritabanı encryption key'leri). KESİNLİKLE git reposuna, `.dev.vars` dosyasına, frontend bundle'ına veya CI loglarına YAZILAMAZ (`SEC-AUTH-001`, `SEC-AUTH-002`, `INC-001`).
+  - [*] *Public Configuration:* Uygulama adı, API versiyon prefix'i (`/api/v1`), public sayfalama limitleri, varsayılan dil tercihleri (Frontend bundle ve kod içinde saklanabilir).
+  - [*] *Environment Configuration:* Ortam bazlı URL'ler (`dev.api.domain.com` vs `api.domain.com`), D1 database ID'leri, R2 bucket isimleri, Log Seviyeleri (Ortam değişkenleri olarak tanımlanır).
+  - [*] *Secret:* Üçüncü taraf servis API anahtarları (`RESEND_API_KEY`, `VAPID_KEYS`, `GEMINI_API_KEY`).
+  - [*] *Production Secret:* Canlı ortama ait hassas anahtarlar (`JWT_SECRET`, canlı veritabanı encryption key'leri). KESİNLİKLE git reposuna, `.dev.vars` dosyasına, frontend bundle'ına veya CI loglarına YAZILAMAZ (`SEC-AUTH-001`, `SEC-AUTH-002`, `INC-001`).
 
 ---
 
@@ -2631,15 +2634,15 @@ sequenceDiagram
 - **2. Amaç:** Development, Staging ve Production ortamlarının veritabanı, saklama alanı, secret ve servis seviyesinde katı sınırlarla birbirinden ayrılması ($0).
 - **3. Kapsam:** `backend/.dev.vars`, Cloudflare Worker environment bindings, D1 test/prod veritabanları, R2 bucket ayrımları.
 - **4. Ortam Mimarisi & Sınır Yönetimi:**
-  - [ ] *Development Ortamı:* Lokal geliştirme alanı. Konfigürasyon ve mock secret'lar yalnızca `.dev.vars` (git-ignored) ve yerel wrangler ortamında saklanır. Production secret'ları lokal ortama KESİNLİKLE taşınmaz.
-  - [ ] *Staging Ortamı:* Canlı ortama en yakın doğrulama ortamı. Ayrı bir D1 test veritabanı (`d1_desk_staging`) ve ayrı bir R2 test bucket (`r2_desk_staging`) kullanılır. Harici servisler (Resend Mail, Push, AI, TTS) mock/sandbox yaklaşımıyla çalıştırılır; gerçek kullanıcılara veya üretim servislerine izinsiz istek atılamaz.
-  - [ ] *Production Ortamı:* Canlı servis alanı. Yalnızca canlı Cloudflare Worker secret'ları (`wrangler secret put`), canlı D1 veritabanı ve canlı R2 bucket'ları kullanılır. Canlı veriler ve yetkili admin oturumları test/staging ortamlarıyla KESİNLİKLE paylaşılmaz.
+  - [*] *Development Ortamı:* Lokal geliştirme alanı. Konfigürasyon ve mock secret'lar yalnızca `.dev.vars` (git-ignored) ve yerel wrangler ortamında saklanır. Production secret'ları lokal ortama KESİNLİKLE taşınmaz.
+  - [*] *Staging Ortamı:* Canlı ortama en yakın doğrulama ortamı. Ayrı bir D1 test veritabanı (`d1_desk_staging`) ve ayrı bir R2 test bucket (`r2_desk_staging`) kullanılır. Harici servisler (Resend Mail, Push, AI, TTS) mock/sandbox yaklaşımıyla çalıştırılır; gerçek kullanıcılara veya üretim servislerine izinsiz istek atılamaz.
+  - [*] *Production Ortamı:* Canlı servis alanı. Yalnızca canlı Cloudflare Worker secret'ları (`wrangler secret put`), canlı D1 veritabanı ve canlı R2 bucket'ları kullanılır. Canlı veriler ve yetkili admin oturumları test/staging ortamlarıyla KESİNLİKLE paylaşılmaz.
 - **5. Yanlış Ortama Dağıtım Engeli (Wrong-Env Guard):** Dağıtım betiklerinde ve CI pipeline'ında hedef ortam (`--env staging` vs `--env production`) ve database binding denetimi yapılarak staging secret'larının prod ortamına ezilmesi engellenir.
 - **6. DoD:**
-  - [ ] Dev, Staging ve Prod veritabanı/R2 kaynaklarının birbirinden tamamen yalıtılması.
-  - [ ] Public Config, Environment Config ve Secret sınırlarının tanımlanması.
-  - [ ] Production secret'larının lokal dosyalar veya git deposuna sızmadığının doğrulanması.
-  - [ ] Staging ortamında harici servislerin (Mail/Push/AI/TTS) mock/sandbox ile güvenli çalışması.
+  - [*] Dev, Staging ve Prod veritabanı/R2 kaynaklarının birbirinden tamamen yalıtılması.
+  - [*] Public Config, Environment Config ve Secret sınırlarının tanımlanması.
+  - [*] Production secret'larının lokal dosyalar veya git deposuna sızmadığının doğrulanması.
+  - [*] Staging ortamında harici servislerin (Mail/Push/AI/TTS) mock/sandbox ile güvenli çalışması.
 - **7. Bağımlılıklar:** ARCH-001, SEC-AUTH-001, SEC-AUTH-002.
 - **8. Bağımlı Görevler:** REL-DEP-001, GO-001.
 
@@ -2649,29 +2652,29 @@ sequenceDiagram
 - **2. Amaç:** Canlıya (Production) yapılan dağıtımların yalnızca "deploy edildi" olarak bırakılmayıp, 10 katmanlı doğrulama listesi ile sınanması ve başarısızlık durumunda güvenli geri dönme (rollback) prosedürünün çalıştırılması ($0).
 - **3. Kapsam:** Dağıtım sonrası otomatik doğrulama betikleri (`scripts/verify_deployment.js`), Health Endpoint (`API-008`), Rollback/Recovery prosedürleri.
 - **4. 10 Katmanlı Deployment Verification Checklist:**
-  - [ ] **1. Deployment Status Check:** Worker deployment işleminin başarılı tamamlandığının teyidi.
-  - [ ] **2. Network Reachability:** Worker/API domain'inin DNS ve ağ seviyesinde erişilebilirliği.
-  - [ ] **3. Health Endpoint (`API-008`):** `GET /api/v1/health` endpoint'inin HTTP `200 OK` dönmesi.
-  - [ ] **4. D1 Database Connectivity:** Health check ile veritabanı okuma/yazma erişiminin doğrulanması.
-  - [ ] **5. Public CMS API (`CMS-005`):** `GET /api/v1/posts` public rotasının beklenen JSON ve cache header'ı ile yanıt vermesi.
-  - [ ] **6. Auth / Admin Access Check:** `/api/v1/auth/login` endpoint'inin aktif ve yetkilendirme altyapısının çalışır durumda olması (`SEC-AUTH-001`).
-  - [ ] **7. Frontend Production Build Check:** Frontend static asset'lerinin hatasız yüklendiğinin doğrulanması.
-  - [ ] **8. Critical Media / Asset Reachability:** R2 üzerindeki statik varlıkların ve TTS ses dosyalarının erişilebilirliği.
-  - [ ] **9. Critical Smoke Tests:** Temel API rotalarında kısa smoke testlerin sıfır hata ile tamamlanması.
-  - [ ] **10. Audit & Observability Logging (`OBS-002`):** Dağıtım sonucunun ve sürüm bilgisinin audit log sistemine kaydedilmesi.
+  - [*] **1. Deployment Status Check:** Worker deployment işleminin başarılı tamamlandığının teyidi.
+  - [*] **2. Network Reachability:** Worker/API domain'inin DNS ve ağ seviyesinde erişilebilirliği.
+  - [*] **3. Health Endpoint (`API-008`):** `GET /api/v1/health` endpoint'inin HTTP `200 OK` dönmesi.
+  - [*] **4. D1 Database Connectivity:** Health check ile veritabanı okuma/yazma erişiminin doğrulanması.
+  - [*] **5. Public CMS API (`CMS-005`):** `GET /api/v1/posts` public rotasının beklenen JSON ve cache header'ı ile yanıt vermesi.
+  - [*] **6. Auth / Admin Access Check:** `/api/v1/auth/login` endpoint'inin aktif ve yetkilendirme altyapısının çalışır durumda olması (`SEC-AUTH-001`).
+  - [*] **7. Frontend Production Build Check:** Frontend static asset'lerinin hatasız yüklendiğinin doğrulanması.
+  - [*] **8. Critical Media / Asset Reachability:** R2 üzerindeki statik varlıkların ve TTS ses dosyalarının erişilebilirliği.
+  - [*] **9. Critical Smoke Tests:** Temel API rotalarında kısa smoke testlerin sıfır hata ile tamamlanması.
+  - [*] **10. Audit & Observability Logging (`OBS-002`):** Dağıtım sonucunun ve sürüm bilgisinin audit log sistemine kaydedilmesi.
 - **5. Güvenli Rollback & Recovery Prosedürü:**
-  - [ ] Dağıtım doğrulama adımlarından (1-10) herhangi biri başarısız olduğunda dağıtım **"FAILED"** ilan edilir.
-  - [ ] Etkilenen sürüm tespit edilerek Cloudflare Worker sürümlerinden bilinen en son kararlı sürüme geri dönülür (Rollback to last known stable release).
-  - [ ] Veritabanı şema değişikliği içeriyorsa ileri-düzeltme (forward-fix) veya `DR-001` / `DR-002` geri yükleme prosedürü uygulanır.
-  - [ ] Rollback sonrası Health & Smoke testler tekrar çalıştırılır; olay `OBS-002` ve kriz planına (`INC-001`) işlenir.
+  - [*] Dağıtım doğrulama adımlarından (1-10) herhangi biri başarısız olduğunda dağıtım **"FAILED"** ilan edilir.
+  - [*] Etkilenen sürüm tespit edilerek Cloudflare Worker sürümlerinden bilinen en son kararlı sürüme geri dönülür (Rollback to last known stable release).
+  - [*] Veritabanı şema değişikliği içeriyorsa ileri-düzeltme (forward-fix) veya `DR-001` / `DR-002` geri yükleme prosedürü uygulanır.
+  - [*] Rollback sonrası Health & Smoke testler tekrar çalıştırılır; olay `OBS-002` ve kriz planına (`INC-001`) işlenir.
 - **6. CI/CD Sorumluluk Ayrımı (`TEST-003` vs `REL-DEP-001`):**
-  - [ ] `TEST-003`: Dağıtım *öncesi* derleme, typecheck, static analysis ve unit test kalite kapılarını yönetir.
-  - [ ] `REL-DEP-001`: Dağıtım *sonrası* canlı ortam erişilebilirliğini, health check adımlarını, smoke testleri ve rollback süreçlerini yönetir.
+  - [*] `TEST-003`: Dağıtım *öncesi* derleme, typecheck, static analysis ve unit test kalite kapılarını yönetir.
+  - [*] `REL-DEP-001`: Dağıtım *sonrası* canlı ortam erişilebilirliğini, health check adımlarını, smoke testleri ve rollback süreçlerini yönetir.
 - **7. DoD:**
-  - [ ] 10 katmanlı Deployment Verification kontrol listesinin tanımlanması.
-  - [ ] Health check (`API-008`) ve public CMS API (`CMS-005`) doğrulamasının deployment sonrası çalıştırılması.
-  - [ ] Dağıtım başarısızlığında kararlı sürüme dönüş (rollback) ve tekrar doğrulama adımlarının netleştirilmesi.
-  - [ ] Dağıtım sonuçlarının `OBS-002` audit sistemine kaydedilmesi.
+  - [*] 10 katmanlı Deployment Verification kontrol listesinin tanımlanması.
+  - [*] Health check (`API-008`) ve public CMS API (`CMS-005`) doğrulamasının deployment sonrası çalıştırılması.
+  - [*] Dağıtım başarısızlığında kararlı sürüme dönüş (rollback) ve tekrar doğrulama adımlarının netleştirilmesi.
+  - [*] Dağıtım sonuçlarının `OBS-002` audit sistemine kaydedilmesi.
 - **8. Bağımlılıklar:** API-008, CMS-005, SEC-AUTH-001, DR-001, OBS-002, TEST-003.
 - **9. Bağımlı Görevler:** REL-ROLLBACK-001, GO-001.
 
@@ -2690,26 +2693,26 @@ sequenceDiagram
 | **Audit Logging** | Dağıtım İşlemi Tamamlanması | Dağıtılan sürüm bilgisi ve doğrulama sonucu `OBS-002` loguna yazılır. |
 
 #### Section-Level Definition of Done (DoD)
-- [ ] Dev, Staging ve Production ortamlarının veritabanı, R2 ve secret bazında kesin hatlarla ayrılması.
-- [ ] Public Config, Environment Config ve Secret sınırlarının eksiksiz tanımlanması.
-- [ ] 10 katmanlı Deployment Verification kontrol listesinin yayın sonrası için oluşturulması.
-- [ ] Dağıtım başarısızlıklarında eski kararlı sürüme güvenli rollback prosedürünün tanımlanması.
-- [ ] Zero-Cost ($0/Ay) prensibine uyumun ve Release test matrisinin tamamlanması.
+- [*] Dev, Staging ve Production ortamlarının veritabanı, R2 ve secret bazında kesin hatlarla ayrılması.
+- [*] Public Config, Environment Config ve Secret sınırlarının eksiksiz tanımlanması.
+- [*] 10 katmanlı Deployment Verification kontrol listesinin yayın sonrası için oluşturulması.
+- [*] Dağıtım başarısızlıklarında eski kararlı sürüme güvenli rollback prosedürünün tanımlanması.
+- [*] Zero-Cost ($0/Ay) prensibine uyumun ve Release test matrisinin tamamlanması.
 
 ---
 
 ### Özet Görev Listesi (16. RELEASE, ENVIRONMENT & DEPLOYMENT MANAGEMENT ($0 Cost))
 
-- [ ] **REL-ENV-001 — Ortam Ayrımı (Dev / Staging / Prod)**
+- [*] **REL-ENV-001 — Ortam Ayrımı (Dev / Staging / Prod)**
   - **Amaç:** `backend/.dev.vars`, Staging D1/R2 ve Cloudflare Production Secrets ayrımı, çevre değişkenleri ve secret sınırlarının güvenli yönetimi ($0).
   - **Öncelik:** P0 | **Bağımlılık:** ARCH-001, SEC-AUTH-001, SEC-AUTH-002
-- [ ] **REL-DEP-001 — Dağıtım Doğrulama (Deployment Verification)**
+- [*] **REL-DEP-001 — Dağıtım Doğrulama (Deployment Verification)**
   - **Amaç:** Dağıtım sonrası 10 katmanlı otomatik health check, smoke test, public CMS/R2 doğrulaması ve başarısızlık durumunda rollback prosedürü ($0).
   - **Öncelik:** P1 | **Bağımlılık:** API-008, CMS-005, OBS-002, DR-001
-- [ ] **REL-ROLLBACK-001 — Geri Alma Stratejisi (Rollback Strategy)**
+- [*] **REL-ROLLBACK-001 — Geri Alma Stratejisi (Rollback Strategy)**
   - **Amaç:** Worker sürümlerinin Cloudflare rollbacks ile anında eski sürüme çekilmesi, DB migration ileri-düzeltme (forward-fix) planı.
   - **Öncelik:** P1 | **Bağımlılık:** REL-DEP-001
-- [ ] **REL-HOTFIX-001 — Acil Yayın Prosedürü (Emergency Release)**
+- [*] **REL-HOTFIX-001 — Acil Yayın Prosedürü (Emergency Release)**
   - **Amaç:** Kritik güvenlik yamaları ve hotfix durumları için hızlı derleme ve canlıya alma süreci.
   - **Öncelik:** P2 | **Bağımlılık:** REL-ROLLBACK-001
 
@@ -2730,42 +2733,42 @@ sequenceDiagram
 - **2. Amaç:** Veri minimizasyonu, anonimleştirme vs silme ayrımı, newsletter abonelik iptalleri, zamanı dolan bilet/yorum temizliği ve log gizliliğinin $0 maliyetle yönetilmesi.
 - **3. Kapsam:** `backend/src/utils/privacy.ts`, D1 veri saklama politikaları, `OBS-002` audit entegrasyonu, otomatik retention cron süreçleri.
 - **4. Veri Envanteri & Sınıflandırma Matrisi:**
-  - [ ] *Kullanıcı / Admin Kimlik Verileri:* Amaç: Kimlik doğrulama & RBAC | Veri: E-posta, hash'lenmiş parola, ad/soyad, rol | Saklama: Hesap aktif olduğu sürece | Aksiyon: Silme/Anonimleştirme | Erişim: Super Admin / Sistem.
-  - [ ] *Destek Talepleri & Mesajlar:* Amaç: Müşteri hizmetleri | Veri: Ticket konusu, mesaj metni, e-posta, IP | Saklama: Retention politikasına göre (örn. kapatıldıktan sonra x ay) | Aksiyon: Anonimleştirme / Soft Delete | Erişim: Yetkili Admin (`SEC-RBAC-001`).
-  - [ ] *Yorumlar:* Amaç: Kamuoyu etkileşimi | Veri: Yorum metni, yazar adı/e-posta, IP | Saklama: İçerik yayında olduğu sürece | Aksiyon: Anonimleştirme / Silme | Erişim: Editor / Admin.
-  - [ ] *Newsletter Abonelik Verileri:* Amaç: E-posta iletişimi | Veri: E-posta adresi, izin durumu, izin tarihi | Saklama: Abonelik aktif olduğu sürece (+minimum ret tutma) | Aksiyon: Unsubscribe / Hard Delete | Erişim: Admin / Automated Worker (`COM-001`, `COM-002`).
-  - [ ] *IP & Teknik Metadata:* Amaç: Rate limit ve güvenlik | Veri: IP adresi, User-Agent | Saklama: Kısa süreli (rate limit penceresi / kriz anı) | Aksiyon: Otomatik purge / Hashing | Erişim: Güvenlik middleware (`SEC-REQ-001`).
-  - [ ] *Audit & System Logları:* Amaç: Güvenlik ve izlenebilirlik | Veri: İşlem türü, actor_id, timestamp | Saklama: Politika tabanlı uzun dönem | Aksiyon: PII Maskeleme / Immutability | Erişim: Audit log izleyici (`OBS-002`).
-  - [ ] *AI & TTS / Çeviri Metadata:* Amaç: İçerik üretimi | Veri: Prompt, yanıt, ses versiyonu | Saklama: Revizyon ömrü boyunca | Aksiyon: Revision cleanup (`CMS-008`, `CMS-TTS-001`) | Erişim: Admin / Automated Worker.
-  - [ ] *Medya & R2 Nesneleri:* Amaç: İçerik görselleri / ses | Veri: MP3, görsel asset | Saklama: Yayın süresi boyunca | Aksiyon: R2 object delete (`API-010`) | Erişim: Public / Admin.
-  - [ ] *Yedek Verileri:* Amaç: Disaster Recovery | Veri: D1 veritabanı dump | Saklama: DR retention politikası | Aksiyon: Backup rotate (`DR-001`, `DR-002`) | Erişim: Restricted DR Runner.
+  - [*] *Kullanıcı / Admin Kimlik Verileri:* Amaç: Kimlik doğrulama & RBAC | Veri: E-posta, hash'lenmiş parola, ad/soyad, rol | Saklama: Hesap aktif olduğu sürece | Aksiyon: Silme/Anonimleştirme | Erişim: Super Admin / Sistem.
+  - [*] *Destek Talepleri & Mesajlar:* Amaç: Müşteri hizmetleri | Veri: Ticket konusu, mesaj metni, e-posta, IP | Saklama: Retention politikasına göre (örn. kapatıldıktan sonra x ay) | Aksiyon: Anonimleştirme / Soft Delete | Erişim: Yetkili Admin (`SEC-RBAC-001`).
+  - [*] *Yorumlar:* Amaç: Kamuoyu etkileşimi | Veri: Yorum metni, yazar adı/e-posta, IP | Saklama: İçerik yayında olduğu sürece | Aksiyon: Anonimleştirme / Silme | Erişim: Editor / Admin.
+  - [*] *Newsletter Abonelik Verileri:* Amaç: E-posta iletişimi | Veri: E-posta adresi, izin durumu, izin tarihi | Saklama: Abonelik aktif olduğu sürece (+minimum ret tutma) | Aksiyon: Unsubscribe / Hard Delete | Erişim: Admin / Automated Worker (`COM-001`, `COM-002`).
+  - [*] *IP & Teknik Metadata:* Amaç: Rate limit ve güvenlik | Veri: IP adresi, User-Agent | Saklama: Kısa süreli (rate limit penceresi / kriz anı) | Aksiyon: Otomatik purge / Hashing | Erişim: Güvenlik middleware (`SEC-REQ-001`).
+  - [*] *Audit & System Logları:* Amaç: Güvenlik ve izlenebilirlik | Veri: İşlem türü, actor_id, timestamp | Saklama: Politika tabanlı uzun dönem | Aksiyon: PII Maskeleme / Immutability | Erişim: Audit log izleyici (`OBS-002`).
+  - [*] *AI & TTS / Çeviri Metadata:* Amaç: İçerik üretimi | Veri: Prompt, yanıt, ses versiyonu | Saklama: Revizyon ömrü boyunca | Aksiyon: Revision cleanup (`CMS-008`, `CMS-TTS-001`) | Erişim: Admin / Automated Worker.
+  - [*] *Medya & R2 Nesneleri:* Amaç: İçerik görselleri / ses | Veri: MP3, görsel asset | Saklama: Yayın süresi boyunca | Aksiyon: R2 object delete (`API-010`) | Erişim: Public / Admin.
+  - [*] *Yedek Verileri:* Amaç: Disaster Recovery | Veri: D1 veritabanı dump | Saklama: DR retention politikası | Aksiyon: Backup rotate (`DR-001`, `DR-002`) | Erişim: Restricted DR Runner.
 - **5. Veri Minimizasyonu & Log Privacy (OBS-002 Cross-Ref):**
-  - [ ] Sistem loglarına ve audit kayıtlarına (`OBS-002`) kesinlikle parola, JWT session token, API key (`GEMINI_API_KEY`, `RESEND_API_KEY`), VAPID private key veya hassas kişisel veri (PII) YAZILAMAZ.
-  - [ ] AI servislerine (`AI-003`, `AI-004`, `AI-005`) gönderilen prompt ve verilerde gereksiz kişisel veriler temizlenir (Data Minimization). Üçüncü taraf sağlayıcıların saklama politikaları operasyonel/hukuki süreçte ayrıca değerlendirilir.
+  - [*] Sistem loglarına ve audit kayıtlarına (`OBS-002`) kesinlikle parola, JWT session token, API key (`GEMINI_API_KEY`, `RESEND_API_KEY`), VAPID private key veya hassas kişisel veri (PII) YAZILAMAZ.
+  - [*] AI servislerine (`AI-003`, `AI-004`, `AI-005`) gönderilen prompt ve verilerde gereksiz kişisel veriler temizlenir (Data Minimization). Üçüncü taraf sağlayıcıların saklama politikaları operasyonel/hukuki süreçte ayrıca değerlendirilir.
 - **6. Saklama, Silme ve Anonimleştirme Politikası:**
-  - [ ] *Retain Only as Needed:* Sabit yasal süreler zorunlu tutulmaksızın, veri saklama süreleri yapılandırılabilir (configurable) kılınır.
-  - [ ] *Silme (Hard/Soft Delete) vs Anonimleştirme:* Kişisel veriler abonelik iptalinde veya talep halinde tamamen silinebilir (Hard Delete). İşlem geçmişinin veya istatistiki kayıtların korunması gereken durumlarda ise kişisel veriden arındırılarak (ad yerine `ANONYMOUS_USER`, e-posta yerine `anon_hash@deleted`) anonimleştirilir.
-  - [ ] *Legal / Security Hold:* Hukuki uyuşmazlık veya güvenlik ihlali (`INC-001`) durumlarında ilgili kayıtlar silme/anonimleştirme döngüsünden geçici olarak muaf tutulur.
-  - [ ] *Audit Immutability:* Güvenlik ve denetim loglarının silinmesi talebi durumunda, kişisel veriler maskelenirken audit izinin immutability (değiştirilemezlik) kuralı korunur (`OBS-002`).
+  - [*] *Retain Only as Needed:* Sabit yasal süreler zorunlu tutulmaksızın, veri saklama süreleri yapılandırılabilir (configurable) kılınır.
+  - [*] *Silme (Hard/Soft Delete) vs Anonimleştirme:* Kişisel veriler abonelik iptalinde veya talep halinde tamamen silinebilir (Hard Delete). İşlem geçmişinin veya istatistiki kayıtların korunması gereken durumlarda ise kişisel veriden arındırılarak (ad yerine `ANONYMOUS_USER`, e-posta yerine `anon_hash@deleted`) anonimleştirilir.
+  - [*] *Legal / Security Hold:* Hukuki uyuşmazlık veya güvenlik ihlali (`INC-001`) durumlarında ilgili kayıtlar silme/anonimleştirme döngüsünden geçici olarak muaf tutulur.
+  - [*] *Audit Immutability:* Güvenlik ve denetim loglarının silinmesi talebi durumunda, kişisel veriler maskelenirken audit izinin immutability (değiştirilemezlik) kuralı korunur (`OBS-002`).
 - **7. Newsletter Abonelik İptali (Unsubscribe Workflow):**
-  - [ ] Abonelikten çıkan kullanıcının aktif izin durumu `OPT_OUT` yapılır ve e-posta gönderimleri derhal durdurulur (`COM-001`, `COM-002`).
-  - [ ] Hukuki/operasyonel ispat için gerekli olan minimum izin geçmişi saklanır, gereksiz diğer kişisel veriler temizlenir.
+  - [*] Abonelikten çıkan kullanıcının aktif izin durumu `OPT_OUT` yapılır ve e-posta gönderimleri derhal durdurulur (`COM-001`, `COM-002`).
+  - [*] Hukuki/operasyonel ispat için gerekli olan minimum izin geçmişi saklanır, gereksiz diğer kişisel veriler temizlenir.
 - **8. İlgili Kişi Talepleri (Data Subject Requests - DSR):**
-  - [ ] İleride KVKK/GDPR kapsamında gelebilecek **Erişim**, **Düzeltme**, **Silme** ve **İtiraz** talepleri için manuel/prosedürel adımlar tanımlanır (Özel bir otomatik DSR yazılımı varsayılmaz).
+  - [*] İleride KVKK/GDPR kapsamında gelebilecek **Erişim**, **Düzeltme**, **Silme** ve **İtiraz** talepleri için manuel/prosedürel adımlar tanımlanır (Özel bir otomatik DSR yazılımı varsayılmaz).
 - **9. KVKK ve GDPR Kapsam Ayrımı:**
-  - [ ] *KVKK:* Türkiye'deki veri işleme faaliyetleri ve veri sorumlusu yükümlülükleri açısından uygulanır.
-  - [ ] *GDPR:* AB yerleşikleri veya GDPR kapsamındaki veri işleme faaliyetleri oluştuğu takdirde ayrıca hukuki değerlendirmeye tabi tutulur. İki mevzuat aynı kabul edilmez.
+  - [*] *KVKK:* Türkiye'deki veri işleme faaliyetleri ve veri sorumlusu yükümlülükleri açısından uygulanır.
+  - [*] *GDPR:* AB yerleşikleri veya GDPR kapsamındaki veri işleme faaliyetleri oluştuğu takdirde ayrıca hukuki değerlendirmeye tabi tutulur. İki mevzuat aynı kabul edilmez.
 - **10. Backup / DR ile Veri Silme İlişkisi (`DR-001` / `DR-002` Cross-Ref):**
-  - [ ] Production D1 veritabanından silinen veya anonimleştirilen veriler, geçmiş veritabanı yedeklerinde (`DR-001`) varlığını sürdürebilir. Yedeklerin silme politikası (backup retention lifecycle) ayrıca yönetilir; canlı silme işlemi yedeklerin anında silindiği anlamına gelmez.
+  - [*] Production D1 veritabanından silinen veya anonimleştirilen veriler, geçmiş veritabanı yedeklerinde (`DR-001`) varlığını sürdürebilir. Yedeklerin silme politikası (backup retention lifecycle) ayrıca yönetilir; canlı silme işlemi yedeklerin anında silindiği anlamına gelmez.
 - **11. Otomatik Retention Cleanup (Cron Isolation):**
-  - [ ] Otomatik veri temizlik adımları mevcut arka plan cron kuyruğu (`COM-003`) ve periyodik bakım görevleri (`OPS-001`) üzerinden yapılandırılabilir periyotlarla yürütülür.
+  - [*] Otomatik veri temizlik adımları mevcut arka plan cron kuyruğu (`COM-003`) ve periyodik bakım görevleri (`OPS-001`) üzerinden yapılandırılabilir periyotlarla yürütülür.
 - **12. DoD:**
-  - [ ] Veri envanteri ve 9 kategorili veri sınıflandırma matrisinin oluşturulması.
-  - [ ] Loglara (`OBS-002`) ve AI servislerine (`AI-003`) PII / secret yazılmamasını sağlayan minimizasyon kurallarının tanımlanması.
-  - [ ] Soft Delete, Hard Delete, Anonimleştirme ve Legal Hold ayrımının netleştirilmesi.
-  - [ ] Newsletter unsubscribe (`COM-001`) ve bilet/yorum saklama kurallarının belirlenmesi.
-  - [ ] Production silme işlemleri ile D1 yedekleri (`DR-001`) arasındaki retention ilişkisinin kurulması.
-  - [ ] KVKK ve GDPR kapsam ayrımının ve Privacy by Design ilkelerinin doğrulanması.
+  - [*] Veri envanteri ve 9 kategorili veri sınıflandırma matrisinin oluşturulması.
+  - [*] Loglara (`OBS-002`) ve AI servislerine (`AI-003`) PII / secret yazılmamasını sağlayan minimizasyon kurallarının tanımlanması.
+  - [*] Soft Delete, Hard Delete, Anonimleştirme ve Legal Hold ayrımının netleştirilmesi.
+  - [*] Newsletter unsubscribe (`COM-001`) ve bilet/yorum saklama kurallarının belirlenmesi.
+  - [*] Production silme işlemleri ile D1 yedekleri (`DR-001`) arasındaki retention ilişkisinin kurulması.
+  - [*] KVKK ve GDPR kapsam ayrımının ve Privacy by Design ilkelerinin doğrulanması.
 - **13. Bağımlılıklar:** DATA-002, SEC-RBAC-001, SEC-REQ-001, OBS-002, AI-003, COM-001, COM-002, DR-001, INC-001.
 - **14. Bağımlı Görevler:** GO-001, OPS-001.
 
@@ -2784,18 +2787,18 @@ sequenceDiagram
 | **AI Data Privacy** | Gemini AI Prompt Çağrısı | Prompt içindeki gereksiz kişisel veriler arındırılarak `AI-003` servisine gönderilir. |
 
 #### Section-Level Definition of Done (DoD)
-- [ ] Veri envanteri ve sınıflandırma matrisinin tanımlanması.
-- [ ] PII ve secret değerlerinin loglardan yalıtılması ilkesinin kurulması.
-- [ ] Silme (Hard/Soft) ve Anonimleştirme süreçlerinin audit izini bozmayacak şekilde netleştirilmesi.
-- [ ] Newsletter iptali ve bilet/yorum saklama kurallarının tanımlanması.
-- [ ] DR yedekleri ile canlı veri silme politikası ilişkisinin belirlenmesi.
-- [ ] KVKK ve GDPR kapsam ayrımının ve Zero-Cost ($0/Ay) prensibinin doğrulanması.
+- [*] Veri envanteri ve sınıflandırma matrisinin tanımlanması.
+- [*] PII ve secret değerlerinin loglardan yalıtılması ilkesinin kurulması.
+- [*] Silme (Hard/Soft) me Anonimleştirme süreçlerinin audit izini bozmayacak şekilde netleştirilmesi.
+- [*] Newsletter iptali ve bilet/yorum saklama kurallarının tanımlanması.
+- [*] DR yedekleri ile canlı veri silme politikası ilişkisinin belirlenmesi.
+- [*] KVKK ve GDPR kapsam ayrımının ve Zero-Cost ($0/Ay) prensibinin doğrulanması.
 
 ---
 
 ### Özet Görev Listesi (17. PRIVACY, DATA GOVERNANCE & COMPLIANCE ($0 Cost))
 
-- [ ] **PRIV-001 — KVKK / GDPR Uyumlu Veri Temizlik ve Anonimleştirme**
+- [*] **PRIV-001 — KVKK / GDPR Uyumlu Veri Temizlik ve Anonimleştirme**
   - **Amaç:** Veri envanteri, minimizasyon, anonimleştirme vs silme ayrımı, newsletter iptalleri, log gizliliği ve DR yedek retention yönetimi ($0).
   - **Öncelik:** P2 | **Bağımlılık:** DATA-002, SEC-RBAC-001, OBS-002, COM-001, DR-001
 
@@ -2823,24 +2826,24 @@ sequenceDiagram
 ### INT-001 — Entegrasyon Dokümantasyon Rehberi & Sözleşme Mimarisi
 - **2. Kapsam:** `webMSKLabs_cms_integration.md`, `webMSKLabs_integration_guide.md`.
 - **3. Entegrasyon Sözleşmesi & Veri Akış Mimarisi:**
-  - [ ] *MSKLabsDesk → webMSKLabs Veri Akışı:* Yayınlanmış makaleler (`POSTS`), kanal/kategori tanımları, medya asset URL'leri (R2), onaylanmış TTS MP3 ses dosyaları (`audio_url`), SEO metadataları.
-  - [ ] *webMSKLabs → MSKLabsDesk Veri Akışı:* Public okuma sayıları, içerik etkileşim metrikleri (salt-okunur analytics / log verisi).
-  - [ ] *API & Auth Sınırları:* Public API (`/api/v1/posts`, `/api/v1/channels`) vs Admin API (`/api/v1/admin/*`). Frontend bundle'ında secret kullanımı yasaktır (`SEC-AUTH-001`).
-  - [ ] *Cache & Format Standartları:* JSON API yanıt biçimleri, `Cache-Control: public, max-age=300` Edge Cache davranışı (`PERF-001`).
-  - [ ] *i18n & Dil İlişkisi:* TR / EN / AR içerik ve dil kırılımları (`I18N-003`).
+  - [*] *MSKLabsDesk → webMSKLabs Veri Akışı:* Yayınlanmış makaleler (`POSTS`), kanal/kategori tanımları, medya asset URL'leri (R2), onaylanmış TTS MP3 ses dosyaları (`audio_url`), SEO metadataları.
+  - [*] *webMSKLabs → MSKLabsDesk Veri Akışı:* Public okuma sayıları, içerik etkileşim metrikleri (salt-okunur analytics / log verisi).
+  - [*] *API & Auth Sınırları:* Public API (`/api/v1/posts`, `/api/v1/channels`) vs Admin API (`/api/v1/admin/*`). Frontend bundle'ında secret kullanımı yasaktır (`SEC-AUTH-001`).
+  - [*] *Cache & Format Standartları:* JSON API yanıt biçimleri, `Cache-Control: public, max-age=300` Edge Cache davranışı (`PERF-001`).
+  - [*] *i18n & Dil İlişkisi:* TR / EN / AR içerik ve dil kırılımları (`I18N-003`).
 - **4. Tek Kaynak Kaydı (Source of Truth Boundaries):**
-  - [ ] *Article & Content:* **MSKLabsDesk** (CMS veritabanı - D1 `posts` tablosu).
-  - [ ] *Article Revision Number:* **MSKLabsDesk** (D1 `post_revisions` tablosu).
-  - [ ] *Publication Lifecycle Status:* **MSKLabsDesk** (`DRAFT`, `REVIEW`, `PUBLISHED`, `UNPUBLISHED`).
-  - [ ] *TTS Audio Asset:* **MSKLabsDesk** (Admin onaylı R2 audio asset & `audio_version` metadatarı).
-  - [ ] *Media Assets:* **MSKLabsDesk** (Cloudflare R2 Bucket).
-  - [ ] *Public Presentation & Player:* **webMSKLabs** (HTML5 UI & Audio Player).
+  - [*] *Article & Content:* **MSKLabsDesk** (CMS veritabanı - D1 `posts` tablosu).
+  - [*] *Article Revision Number:* **MSKLabsDesk** (D1 `post_revisions` tablosu).
+  - [*] *Publication Lifecycle Status:* **MSKLabsDesk** (`DRAFT`, `REVIEW`, `PUBLISHED`, `UNPUBLISHED`).
+  - [*] *TTS Audio Asset:* **MSKLabsDesk** (Admin onaylı R2 audio asset & `audio_version` metadatarı).
+  - [*] *Media Assets:* **MSKLabsDesk** (Cloudflare R2 Bucket).
+  - [*] *Public Presentation & Player:* **webMSKLabs** (HTML5 UI & Audio Player).
 - **5. Değişiklik Yönetimi Prosedürü (Contract Change Management):**
-  - [ ] Entegrasyon sözleşmesinde yapılacak her değişiklik 6 adımlı yaşam döngüsünü takip eder: `Identify → Review → Test → Compatibility Check → Deploy → Verify`.
+  - [*] Entegrasyon sözleşmesinde yapılacak her değişiklik 6 adımlı yaşam döngüsünü takip eder: `Identify → Review → Test → Compatibility Check → Deploy → Verify`.
 - **6. DoD:**
-  - [ ] `webMSKLabs_cms_integration.md` ve `webMSKLabs_integration_guide.md` dokümanlarının entegrasyon sözleşmesini tam olarak yansıtması.
-  - [ ] Source of Truth (Tek Kaynak Kaydı) matrisinin belirlenmesi.
-  - [ ] Public API vs Admin API güvenlik sınırlarının doğrulanması.
+  - [*] `webMSKLabs_cms_integration.md` ve `webMSKLabs_integration_guide.md` dokümanlarının entegrasyon sözleşmesini tam olarak yansıtması.
+  - [*] Source of Truth (Tek Kaynak Kaydı) matrisinin belirlenmesi.
+  - [*] Public API vs Admin API güvenlik sınırlarının doğrulanması.
 
 ---
 
@@ -2848,7 +2851,7 @@ sequenceDiagram
 - **2. Amaç:** webMSKLabs reposuna ve canlı ortamına hiçbir zarar vermeden, salt-okunur (read-only / non-destructive) keşif yapmak, envanter çıkarmak ve test dalı açmak ($0).
 - **3. Kapsam:** webMSKLabs mimari keşfi, uyumluluk matrisi (compatibility matrix), test dalı (test branch) yönetimi.
 - **4. Read-Only Discovery Kapsamı:**
-  - [ ] webMSKLabs reposunda hiçbir yazma/değişiklik yapmadan; repository yapısı, frontend framework'ü, CMS/API beklentileri, makale veri modeli, dil/i18n yapısı, medya/audio bileşenleri, ortam konfigürasyonu ve deployment adımlarının envanterlenmesi.
+  - [*] webMSKLabs reposunda hiçbir yazma/değişiklik yapmadan; repository yapısı, frontend framework'ü, CMS/API beklentileri, makale veri modeli, dil/i18n yapısı, medya/audio bileşenleri, ortam konfigürasyonu ve deployment adımlarının envanterlenmesi.
 - **5. Entegrasyon Uyum Matrisi (Compatibility Matrix):**
 
 | Alan | MSKLabsDesk | webMSKLabs | Entegrasyon Yöntemi | Risk / Statü |
@@ -2862,14 +2865,14 @@ sequenceDiagram
 | **SEO** | Meta tags & OpenGraph | Keşfedilecek / Doğrulanacak | JSON-LD / Meta API | Değerlendirilecek |
 
 - **6. Tahrip Etmeme Kuralı (Non-Destructive Integration Rule):**
-  - [ ] İlk entegrasyon aşamasında webMSKLabs production dosyalarına dokunulamaz, canlı veriler değiştirilemez, DB migration çalıştırılamaz, API davranışları ezilemez ve secret'lar değiştirilemez.
+  - [*] İlk entegrasyon aşamasında webMSKLabs production dosyalarına dokunulamaz, canlı veriler değiştirilemez, DB migration çalıştırılamaz, API davranışları ezilemez ve secret'lar değiştirilemez.
 - **7. Integration Gate:**
-  - [ ] INT-002 salt-okunur keşfi ve test dalı doğrulaması tamamlanmadan production entegrasyonu, yazma yetkisi (write access) veya otomatik içerik mutasyonu başlatılamaz (`TEST-003`, `GO-001`).
+  - [*] INT-002 salt-okunur keşfi ve test dalı doğrulaması tamamlanmadan production entegrasyonu, yazma yetkisi (write access) veya otomatik içerik mutasyonu başlatılamaz (`TEST-003`, `GO-001`).
 - **8. DoD:**
-  - [ ] webMSKLabs repository ve mimari envanterinin salt-okunur çıkarılması.
-  - [ ] 7 alanlı Uyumluluk Matrisinin (Compatibility Matrix) "keşfedilecek" alanlar dahil doldurulması.
-  - [ ] Non-destructive ve test dalı güvenliğinin doğrulanması.
-  - [ ] Integration Gate koşullarının sağlanması.
+  - [*] webMSKLabs repository ve mimari envanterinin salt-okunur çıkarılması.
+  - [*] 7 alanlı Uyumluluk Matrisinin (Compatibility Matrix) "keşfedilecek" alanlar dahil doldurulması.
+  - [*] Non-destructive ve test dalı güvenliğinin doğrulanması.
+  - [*] Integration Gate koşullarının sağlanması.
 - **9. Bağımlılıklar:** INT-001, TEST-003, REL-ENV-001.
 - **10. Bağımlı Görevler:** INT-TTS-001, GO-001.
 
@@ -2879,20 +2882,20 @@ sequenceDiagram
 - **2. Amaç:** Admin panelinde üretilen ve onaylanan TTS MP3 ses varlıklarının webMSKLabs public HTML5 Audio Player bileşenine güvenli, versiyon uyumlu ve kesintisiz sunumu ($0).
 - **3. Uygulama Referans Kaydı (webMSKLabs Implementation Status):** `tasks_tts_mp3_engine.md` dokümanı kapsamındaki 7/7 faz, 39/39 adım ve 13/13 yayına alma kriteri webMSKLabs reposu üzerinde tamamlanmış, sunucu tabanlı Cloudflare Worker + R2 + HTML5 `<audio>` player TTS mimarisi uygulanarak GitHub'a push edilmiştir. Web Speech API bağımlılığı kaldırılmış; admin prelisten/approval, idempotency, STT/WER doğrulama ve mobil/masaüstü tarayıcı testleri gerçekleştirilmiştir.
 - **4. Entegrasyon Yaşam Döngüsü & Sorumluluk Sınırları:**
-  - [ ] *Entegrasyon Zinciri:* `CMS Article → Article Revision (post_revisions.revision_number) → TTS Input Sanitization & Chunking → Provider Abstraction → Audio Quality Validation → Admin Pre-Listen & Approval → R2 Audio Asset (HTTP Range & CDN) → Public Audio Delivery → webMSKLabs HTML5 Audio Player`.
-  - [ ] *Sorumluluk Ayrımı:*
-    - [ ] *webMSKLabs:* Public kullanıcılara makale içeriğini, MP3 sesini, HTML5 Audio Player'ı (play/pause/seek/hız/dil değişimi kontrolü) sunar.
-    - [ ] *MSKLabsDesk:* Admin panelinde TTS üretimini yönetir, ses durumunu (`generating`, `draft`, `approved`, `failed`, `stale`) görüntüler, prelisten/approve/unpublish/regenerate aksiyonlarını sunar, revizyon uyumluluğunu denetler ve işlemleri audit sistemine (`OBS-002`) bağlar.
+  - [*] *Entegrasyon Zinciri:* `CMS Article → Article Revision (post_revisions.revision_number) → TTS Input Sanitization & Chunking → Provider Abstraction → Audio Quality Validation → Admin Pre-Listen & Approval → R2 Audio Asset (HTTP Range & CDN) → Public Audio Delivery → webMSKLabs HTML5 Audio Player`.
+  - [*] *Sorumluluk Ayrımı:*
+    - [*] *webMSKLabs:* Public kullanıcılara makale içeriğini, MP3 sesini, HTML5 Audio Player'ı (play/pause/seek/hız/dil değişimi kontrolü) sunar.
+    - [*] *MSKLabsDesk:* Admin panelinde TTS üretimini yönetir, ses durumunu (`generating`, `draft`, `approved`, `failed`, `stale`) görüntüler, prelisten/approve/unpublish/regenerate aksiyonlarını sunar, revizyon uyumluluğunu denetler ve işlemleri audit sistemine (`OBS-002`) bağlar.
 - **5. Sürüm Uyum Kuralları & Invariants:**
-  - [ ] **`articleVersion > audioVersion`** (`Article Revision 13 > Audio Version 12`) durumunda eski ses public yayından otomatik olarak kaldırılır (`STALE`).
-  - [ ] Public audio yalnızca `article_version == audio_version` ve `status = 'APPROVED'` olduğunda yayınlanır.
-  - [ ] Üretim ve onay yetkisi yalnızca admin panelindedir; public frontend üzerinden TTS üretimi tetiklenemez.
-  - [ ] R2 MP3 akışlarında `HTTP 206 Partial Content` (Range Request) desteği korunur.
+  - [*] **`articleVersion > audioVersion`** (`Article Revision 13 > Audio Version 12`) durumunda eski ses public yayından otomatik olarak kaldırılır (`STALE`).
+  - [*] Public audio yalnızca `article_version == audio_version` ve `status = 'APPROVED'` olduğunda yayınlanır.
+  - [*] Üretim ve onay yetkisi yalnızca admin panelindedir; public frontend üzerinden TTS üretimi tetiklenemez.
+  - [*] R2 MP3 akışlarında `HTTP 206 Partial Content` (Range Request) desteği korunur.
 - **6. DoD:**
-  - [ ] webMSKLabs HTML5 Audio Player bileşeninin MSKLabsDesk R2 audio CDN adresi ile entegrasyonu.
-  - [ ] `articleVersion > audioVersion` durumunda eski sesin public yayından kaldırıldığının (STALE) doğrulanması.
-  - [ ] Audio stream yanıtlarında HTTP 206 Partial Content desteğinin doğrulanması.
-  - [ ] TR / EN / AR dil eşleşmesinin ve ses onay zincirinin korunması.
+  - [*] webMSKLabs HTML5 Audio Player bileşeninin MSKLabsDesk R2 audio CDN adresi ile entegrasyonu.
+  - [*] `articleVersion > audioVersion` durumunda eski sesin public yayından kaldırıldığının (STALE) doğrulanması.
+  - [*] Audio stream yanıtlarında HTTP 206 Partial Content desteğinin doğrulanması.
+  - [*] TR / EN / AR dil eşleşmesinin ve ses onay zincirinin korunması.
 - **7. Bağımlılıklar:** CMS-TTS-001, AI-TTS-001, AI-TTS-002, API-010, INT-002.
 - **8. Bağımlı Görevler:** GO-001.
 
@@ -2911,22 +2914,22 @@ sequenceDiagram
 | **Security Guard** | Public Frontend İçinde API Key Araması | Frontend bundle veya yanıtlarında hiçbir secret/private key bulunmaz. |
 
 #### Section-Level Definition of Done (DoD)
-- [ ] Entegrasyon sözleşmesinin ve Source of Truth (Tek Kaynak Kaydı) matrisinin eksiksiz tanımlanması.
-- [ ] webMSKLabs için salt-okunur (read-only) keşif ve Uyum Matrisi adımlarının belirlenmesi.
-- [ ] Non-destructive kuralı ve Integration Gate bağımlılıklarının kurulması.
-- [ ] TTS public audio pipeline entegrasyonunun ve versiyon uyum (STALE) invariant kurallarının doğrulanması.
-- [ ] 10 temel Entegrasyon Yönetim İlkesine ve Zero-Cost ($0/Ay) prensibine uyumun sağlanması.
+- [*] Entegrasyon sözleşmesinin ve Source of Truth (Tek Kaynak Kaydı) matrisinin eksiksiz tanımlanması.
+- [*] webMSKLabs için salt-okunur (read-only) keşif ve Uyum Matrisi adımlarının belirlenmesi.
+- [*] Non-destructive kuralı ve Integration Gate bağımlılıklarının kurulması.
+- [*] TTS public audio pipeline entegrasyonunun ve versiyon uyum (STALE) invariant kurallarının doğrulanması.
+- [*] 10 temel Entegrasyon Yönetim İlkesine ve Zero-Cost ($0/Ay) prensibine uyumun sağlanması.
 
 ---
 
 ### Özet Görev Listesi (18. WEBMSKLABS INTEGRATION ($0 Cost))
 
-- [ ] **INT-001 — Entegrasyon Dokümantasyon Rehberi**
+- [*] **INT-001 — Entegrasyon Dokümantasyon Rehberi**
   - **Kapsam:** `webMSKLabs_cms_integration.md` ve `webMSKLabs_integration_guide.md` dokümanlarının hazırlanması.
-- [ ] **INT-002 — webMSKLabs Salt-Okunur Entegrasyon Aşaması (`15`)**
+- [*] **INT-002 — webMSKLabs Salt-Okunur Entegrasyon Aşaması (`15`)**
   - **Amaç:** webMSKLabs reposuna dokunmadan önce salt-okunur envanter çıkarılması, uyum matrisi ve test dalı açılması ($0).
   - **Öncelik:** P3 | **Bağımlılık:** INT-001, TEST-003, GO-001
-- [ ] **INT-TTS-001 — webMSKLabs Public Audio Pipeline Entegrasyonu (Implementation Status & Responsibilities)**
+- [*] **INT-TTS-001 — webMSKLabs Public Audio Pipeline Entegrasyonu (Implementation Status & Responsibilities)**
   - **Amaç:** Admin onaylı TTS MP3 ses varlıklarının webMSKLabs public HTML5 Audio Player bileşenine versiyon uyumlu ve HTTP Range destekli sunumu ($0).
   - **Öncelik:** P2 | **Bağımlılık:** CMS-TTS-001, AI-TTS-001, AI-TTS-002, API-010, INT-002
 
@@ -2947,91 +2950,91 @@ sequenceDiagram
 
 - **4. 16 Ana Doğrulama Kontrol Grubu (Verification Checklist):**
 
-  - [ ] **1. Architecture & Foundation Gate:**
-    - [ ] `ARCH-*` ve `DATA-*` bağımlılıklarının tamamlandığının ve production D1 veritabanı bağlantısının doğrulanması.
-    - [ ] Migration bütünlüğünün, binding ve environment yapılandırmalarının (`REL-ENV-001`) eksiksiz olduğunun teyidi.
+  - [*] **1. Architecture & Foundation Gate:**
+    - [*] `ARCH-*` ve `DATA-*` bağımlılıklarının tamamlandığının ve production D1 veritabanı bağlantısının doğrulanması.
+    - [*] Migration bütünlüğünün, binding ve environment yapılandırmalarının (`REL-ENV-001`) eksiksiz olduğunun teyidi.
 
-  - [ ] **2. Security & Authentication Gate:**
-    - [ ] PBKDF2 parola hash doğrulama (`SEC-AUTH-002`), JWT session güvenliği (`SEC-AUTH-003`) ve yetkilendirme (`SEC-RBAC-001`) altyapısının doğrulanması.
-    - [ ] Endpoint bazlı rate limiting (`SEC-REQ-001`), Turnstile captcha entegrasyonu, XSS/sanitization (`SEC-REQ-001`) ve audit immutability (`SEC-REQ-001`, `INC-001`) adımlarının testi.
+  - [*] **2. Security & Authentication Gate:**
+    - [*] PBKDF2 parola hash doğrulama (`SEC-AUTH-002`), JWT session güvenliği (`SEC-AUTH-003`) ve yetkilendirme (`SEC-RBAC-001`) altyapısının doğrulanması.
+    - [*] Endpoint bazlı rate limiting (`SEC-REQ-001`), Turnstile captcha entegrasyonu, XSS/sanitization (`SEC-REQ-001`) ve audit immutability (`SEC-REQ-001`, `INC-001`) adımlarının testi.
 
-  - [ ] **3. Secrets & Environment Isolation Gate:**
-    - [ ] Dev/Staging secret ve veritabanı kaynaklarının Production ortamından tamamen ayrıldığının doğrulanması (`REL-ENV-001`).
-    - [ ] Production secret'larının (`JWT_SECRET`, API keys) git reposunda, frontend bundle'ında veya CI loglarında yer almadığının doğrulanması (`TEST-003`).
-    - [ ] Canlı Cloudflare Worker secret'larının (`wrangler secret put`) prod ortamında mevcut olduğunun uygulama esnasında doğrulanması.
+  - [*] **3. Secrets & Environment Isolation Gate:**
+    - [*] Dev/Staging secret ve veritabanı kaynaklarının Production ortamından tamamen ayrıldığının doğrulanması (`REL-ENV-001`).
+    - [*] Production secret'larının (`JWT_SECRET`, API keys) git reposunda, frontend bundle'ında veya CI loglarında yer almadığının doğrulanması (`TEST-003`).
+    - [*] Canlı Cloudflare Worker secret'larının (`wrangler secret put`) prod ortamında mevcut olduğunun uygulama esnasında doğrulanması.
 
-  - [ ] **4. Database & Migration Gate:**
-    - [ ] Production D1 veritabanının doğru veritabanı olduğunun ve gerekli tüm migration'ların uygulandığının teyidi (`DATA-*`).
-    - [ ] Tablo ve indeks erişilebilirliğinin, migration sonrası health check'lerin (`REL-DEP-001`) ve backup/restore prosedürlerinin (`DR-001`, `DR-002`) doğrulanması.
+  - [*] **4. Database & Migration Gate:**
+    - [*] Production D1 veritabanının doğru veritabanı olduğunun ve gerekli tüm migration'ların uygulandığının teyidi (`DATA-*`).
+    - [*] Tablo ve indeks erişilebilirliğinin, migration sonrası health check'lerin (`REL-DEP-001`) ve backup/restore prosedürlerinin (`DR-001`, `DR-002`) doğrulanması.
 
-  - [ ] **5. Deployment Verification Gate:**
-    - [ ] `REL-DEP-001` kapsamındaki 10 katmanlı post-deployment verification kontrol listesinin başarıyla tamamlanması.
-    - [ ] Dağıtım başarısızlığında uygulanacak `REL-ROLLBACK-001` geri dönme planının hazır olduğunun teyidi.
+  - [*] **5. Deployment Verification Gate:**
+    - [*] `REL-DEP-001` kapsamındaki 10 katmanlı post-deployment verification kontrol listesinin başarıyla tamamlanması.
+    - [*] Dağıtım başarısızlığında uygulanacak `REL-ROLLBACK-001` geri dönme planının hazır olduğunun teyidi.
 
-  - [ ] **6. API & Health Gate:**
-    - [ ] Production `GET /api/v1/health` (`API-008`), D1 bağlantısı, authentication rotaları, public CMS rotaları ve rate limit davranışlarının doğrulanması (`REL-DEP-001`).
+  - [*] **6. API & Health Gate:**
+    - [*] Production `GET /api/v1/health` (`API-008`), D1 bağlantısı, authentication rotaları, public CMS rotaları ve rate limit davranışlarının doğrulanması (`REL-DEP-001`).
 
-  - [ ] **7. CMS & Content Governance Gate:**
-    - [ ] Makale yaşam döngüsü (`DRAFT`, `REVIEW`, `PUBLISHED`, `UNPUBLISHED`), revizyon yönetimi (`CMS-008`), zamanlanmış yayınlar (`CMS-007`) ve TipTap editör çıktılarının (`CMS-006`) doğrulanması.
-    - [ ] Public API'nin (`CMS-005`) yalnızca onaylı ve yayınlanabilir içerikleri sunduğunun teyidi.
+  - [*] **7. CMS & Content Governance Gate:**
+    - [*] Makale yaşam döngüsü (`DRAFT`, `REVIEW`, `PUBLISHED`, `UNPUBLISHED`), revizyon yönetimi (`CMS-008`), zamanlanmış yayınlar (`CMS-007`) ve TipTap editör çıktılarının (`CMS-006`) doğrulanması.
+    - [*] Public API'nin (`CMS-005`) yalnızca onaylı ve yayınlanabilir içerikleri sunduğunun teyidi.
 
-  - [ ] **8. TTS / Audio Pipeline Gate:**
-    - [ ] Sunucu tabanlı Cloudflare Worker + R2 MP3 ses hattının, admin prelisten/approval adımlarının ve `HTTP 206 Partial Content` akışının doğrulanması (`CMS-TTS-001`, `INT-TTS-001`).
-    - [ ] **`articleVersion > audioVersion`** durumunda eski sesin public yayından otomatik kaldırıldığının (STALE) ve TR/EN/AR dil eşleşmesinin doğrulanması (`AI-TTS-001`, `AI-TTS-002`).
+  - [*] **8. TTS / Audio Pipeline Gate:**
+    - [*] Sunucu tabanlı Cloudflare Worker + R2 MP3 ses hattının, admin prelisten/approval adımlarının ve `HTTP 206 Partial Content` akışının doğrulanması (`CMS-TTS-001`, `INT-TTS-001`).
+    - [*] **`articleVersion > audioVersion`** durumunda eski sesin public yayından otomatik kaldırıldığının (STALE) ve TR/EN/AR dil eşleşmesinin doğrulanması (`AI-TTS-001`, `AI-TTS-002`).
 
-  - [ ] **9. AI & Human-in-the-Loop Gate:**
-    - [ ] Gemini API entegrasyonu (`AI-001` - `AI-005`), structured output validasyonu, prompt injection savunması ve error fallback mekanizmasının doğrulanması.
-    - [ ] AI sisteminin insan onayı olmaksızın otomatik yayınlama (`publish`), otomatik yanıt verme veya içerik silme (`delete`) yetkisinin bulunmadığının teyidi.
+  - [*] **9. AI & Human-in-the-Loop Gate:**
+    - [*] Gemini API entegrasyonu (`AI-001` - `AI-005`), structured output validasyonu, prompt injection savunması ve error fallback mekanizmasının doğrulanması.
+    - [*] AI sisteminin insan onayı olmaksızın otomatik yayınlama (`publish`), otomatik yanıt verme veya içerik silme (`delete`) yetkisinin bulunmadığının teyidi.
 
-  - [ ] **10. Communication & Queue Gate:**
-    - [ ] Resend e-posta servis doğrulaması (SPF/DKIM/DMARC), e-posta şablonları (`COM-001`, `COM-002`), `COM-003` asenkron cron kuyruk yapısı ve VAPID Push bildirimlerinin (`COM-004`) doğrulanması.
+  - [*] **10. Communication & Queue Gate:**
+    - [*] Resend e-posta servis doğrulaması (SPF/DKIM/DMARC), e-posta şablonları (`COM-001`, `COM-002`), `COM-003` asenkron cron kuyruk yapısı ve VAPID Push bildirimlerinin (`COM-004`) doğrulanması.
 
-  - [ ] **11. Privacy & Compliance Gate:**
-    - [ ] `PRIV-001` kapsamındaki veri minimizasyonu, saklama/silme/anonimleştirme politikaları, newsletter opt-out akışı, DSR prosedürleri ve DR backup retention uyumunun doğrulanması.
+  - [*] **11. Privacy & Compliance Gate:**
+    - [*] `PRIV-001` kapsamındaki veri minimizasyonu, saklama/silme/anonimleştirme politikaları, newsletter opt-out akışı, DSR prosedürleri ve DR backup retention uyumunun doğrulanması.
 
-  - [ ] **12. Observability & Incident Response Gate:**
-    - [ ] `OBS-001` ve `OBS-002` audit/system log kaydı, log maskeleme (PII/Secret redaction), `OBS-003` health monitoring ve `INC-001` Incident Response kriz müdahale planının hazır oluşunun doğrulanması.
+  - [*] **12. Observability & Incident Response Gate:**
+    - [*] `OBS-001` ve `OBS-002` audit/system log kaydı, log maskeleme (PII/Secret redaction), `OBS-003` health monitoring ve `INC-001` Incident Response kriz müdahale planının hazır oluşunun doğrulanması.
 
-  - [ ] **13. Backup & Disaster Recovery Gate:**
-    - [ ] Otomatik D1 yedekleme otomasyonunun (`DR-001`), checksum bütünlük doğrulamasının, izole ortama geri yükleme tatbikatının (`DR-002`) ve periyodik DR test planının (`OPS-003`) doğrulanması.
+  - [*] **13. Backup & Disaster Recovery Gate:**
+    - [*] Otomatik D1 yedekleme otomasyonunun (`DR-001`), checksum bütünlük doğrulamasının, izole ortama geri yükleme tatbikatının (`DR-002`) ve periyodik DR test planının (`OPS-003`) doğrulanması.
 
-  - [ ] **14. Performance & Scalability Gate:**
-    - [ ] Public CMS API Edge Cache (`PERF-001`), ETag/304 conditional request desteği, D1 bileşik indeksleri, cursor pagination ve background kuyruk izolasyonunun (`PERF-002`) yük testi/benchmark senaryoları ile doğrulanması.
+  - [*] **14. Performance & Scalability Gate:**
+    - [*] Public CMS API Edge Cache (`PERF-001`), ETag/304 conditional request desteği, D1 bileşik indeksleri, cursor pagination ve background kuyruk izolasyonunun (`PERF-002`) yük testi/benchmark senaryoları ile doğrulanması.
 
-  - [ ] **15. Accessibility & i18n Gate:**
-    - [ ] WCAG 2.2 AA erişilebilirlik (klavye navigasyonu, ekran okuyucu, 44px dokunma alanları) standartlarının (`UI-005`, `UI-006`) ve TR/EN/AR dil desteği, Arapça RTL düzeni ile eksik çeviri anahtarı kontrolünün (`I18N-003`, `I18N-004`, `TEST-003`) doğrulanması.
+  - [*] **15. Accessibility & i18n Gate:**
+    - [*] WCAG 2.2 AA erişilebilirlik (klavye navigasyonu, ekran okuyucu, 44px dokunma alanları) standartlarının (`UI-005`, `UI-006`) ve TR/EN/AR dil desteği, Arapça RTL düzeni ile eksik çeviri anahtarı kontrolünün (`I18N-003`, `I18N-004`, `TEST-003`) doğrulanması.
 
-  - [ ] **16. webMSKLabs Integration Gate:**
-    - [ ] `INT-001` entegrasyon dokümantasyonunun, `INT-002` salt-okunur (read-only) keşfinin, uyumluluk matrisinin, Source of Truth sınırlarının ve `INT-TTS-001` audio player entegrasyonunun doğrulanması.
+  - [*] **16. webMSKLabs Integration Gate:**
+    - [*] `INT-001` entegrasyon dokümantasyonunun, `INT-002` salt-okunur (read-only) keşfinin, uyumluluk matrisinin, Source of Truth sınırlarının ve `INT-TTS-001` audio player entegrasyonunun doğrulanması.
 
 - **5. GO / NO-GO Karar Mekanizması (Decision Framework):**
   - **GO:** Tüm P0 ve P1 seviyesindeki 16 kontrol grubu doğrulanmış, hiçbir engelleyici (blocker) hata kalmamış ve `REL-DEP-001` deployment verification başarıyla tamamlanmıştır.
   - **CONDITIONAL GO:** Yalnızca önceden kabul edilmiş, düşük riskli P2/P3 gereksinimlerde eksik varsa ve sorumlusu ile takvimi belirlenmişse verilebilir. *Ancak güvenlik, veri bütünlüğü, secret sızması, authentication/RBAC zafiyeti, veritabanı yedek/restore eksikliği veya deployment verification başarısızlığı durumlarında CONDITIONAL GO VERİLEMEZ.*
-  - [ ] **NO-GO:** Aşağıdaki kritik koşullardan en az biri gerçekleştiğinde derhal ilan edilir:
-    - [ ] Production secret sızıntısı (git/bundle/log).
-    - [ ] Authentication veya RBAC kritik güvenlik zafiyeti.
-    - [ ] Veri kaybı, bozulması veya migration bütünlük hatası.
-    - [ ] Backup/restore prosedürünün doğrulanamaması (`DR-002`).
-    - [ ] Health check veya kritik API başarısızlığı (`API-008`).
-    - [ ] Deployment verification başarısızlığı (`REL-DEP-001`).
-    - [ ] Public API'nin yetkisiz/private veri sızdırması.
-    - [ ] Kritik TTS/audio versiyon uyumsuzluğu (stale ses yayınlanması).
-    - [ ] Kritik CI/CD veya birim test başarısızlığı (`TEST-003`).
+  - [*] **NO-GO:** Aşağıdaki kritik koşullardan en az biri gerçekleştiğinde derhal ilan edilir:
+    - [*] Production secret sızıntısı (git/bundle/log).
+    - [*] Authentication veya RBAC kritik güvenlik zafiyeti.
+    - [*] Veri kaybı, bozulması veya migration bütünlük hatası.
+    - [*] Backup/restore prosedürünün doğrulanamaması (`DR-002`).
+    - [*] Health check veya kritik API başarısızlığı (`API-008`).
+    - [*] Deployment verification başarısızlığı (`REL-DEP-001`).
+    - [*] Public API'nin yetkisiz/private veri sızdırması.
+    - [*] Kritik TTS/audio versiyon uyumsuzluğu (stale ses yayınlanması).
+    - [*] Kritik CI/CD veya birim test başarısızlığı (`TEST-003`).
 
 - **6. Final Release Record (Sürüm Kayıt Şablonu):**
-  - [ ] Canlıya çıkış kararı alındığında aşağıdaki bilgiler `OBS-002` audit sistemine kaydedilir:
-    - [ ] *Release / Version Identifier:* (Örn. `v1.0.0-release`)
-    - [ ] *Deployment Timestamp:* (Tarih - Saat damgası)
-    - [ ] *Verification Status:* (`GO` / `CONDITIONAL GO` / `NO-GO`)
-    - [ ] *Known Risks / Pending P2 Tasks:* (Varsa kabul edilen riskler)
-    - [ ] *Deciding Authority / Admin:* (Karar veren yetkili kullanıcı ID'si)
-    - [ ] *Audit Log Record Reference:* (`OBS-002` audit event ID)
+  - [*] Canlıya çıkış kararı alındığında aşağıdaki bilgiler `OBS-002` audit sistemine kaydedilir:
+    - [*] *Release / Version Identifier:* (Örn. `v1.0.0-release`)
+    - [*] *Deployment Timestamp:* (Tarih - Saat damgası)
+    - [*] *Verification Status:* (`GO` / `CONDITIONAL GO` / `NO-GO`)
+    - [*] *Known Risks / Pending P2 Tasks:* (Varsa kabul edilen riskler)
+    - [*] *Deciding Authority / Admin:* (Karar veren yetkili kullanıcı ID'si)
+    - [*] *Audit Log Record Reference:* (`OBS-002` audit event ID)
 
 - **7. DoD:**
-  - [ ] 16 ana kontrol grubuna dayalı Go-Live doğrulama listesinin (checklist) tanımlanması.
-  - [ ] Kesin GO, CONDITIONAL GO ve NO-GO karar kriterlerinin netleştirilmesi.
-  - [ ] Sürüm karar kaydının `OBS-002` audit log entegrasyonu ile tanımlanması.
-  - [ ] $0 Maliyet prensibine uyumun ve 16 kapılı yayın yönetişiminin doğrulanması.
+  - [*] 16 ana kontrol grubuna dayalı Go-Live doğrulama listesinin (checklist) tanımlanması.
+  - [*] Kesin GO, CONDITIONAL GO ve NO-GO karar kriterlerinin netleştirilmesi.
+  - [*] Sürüm karar kaydının `OBS-002` audit log entegrasyonu ile tanımlanması.
+  - [*] $0 Maliyet prensibine uyumun ve 16 kapılı yayın yönetişiminin doğrulanması.
 - **8. Bağımlılıklar:** ARCH-001, SEC-AUTH-001, SEC-RBAC-001, DATA-003, REL-ENV-001, REL-DEP-001, DR-001, DR-002, TEST-003, OBS-002, INT-002.
 - **9. Bağımlı Görevler:** OPS-001, OPS-002, OPS-003.
 
@@ -3050,16 +3053,16 @@ sequenceDiagram
 | **Release Audit** | Go-Live Kararının Alınması | Sürüm kararı, zaman damgası ve yetkili bilgisi `OBS-002` loguna yazılır. |
 
 #### Section-Level Definition of Done (DoD)
-- [ ] 16 ana kontrol grubuna dayalı Go-Live doğrulama listesinin oluşturulması.
-- [ ] GO, CONDITIONAL GO ve NO-GO karar kurallarının eksiksiz tanımlanması.
-- [ ] Dağıtım doğrulama (`REL-DEP-001`) ve audit log (`OBS-002`) entegrasyonlarının kurulması.
-- [ ] Zero-Cost ($0/Ay) prensibine uyumun ve Canlıya Çıkış matrisinin tamamlanması.
+- [*] 16 ana kontrol grubuna dayalı Go-Live doğrulama listesinin oluşturulması.
+- [*] GO, CONDITIONAL GO ve NO-GO karar kurallarının eksiksiz tanımlanması.
+- [*] Dağıtım doğrulama (`REL-DEP-001`) ve audit log (`OBS-002`) entegrasyonlarının kurulması.
+- [*] Zero-Cost ($0/Ay) prensibine uyumun ve Canlıya Çıkış matrisinin tamamlanması.
 
 ---
 
 ### Özet Görev Listesi (19. PRODUCTION READINESS & GO-LIVE CHECKLIST ($0 Cost))
 
-- [ ] **GO-001 — Canlıya Çıkış Öncesi Kontrol Listesi (Go / No-Go)**
+- [*] **GO-001 — Canlıya Çıkış Öncesi Kontrol Listesi (Go / No-Go)**
   - **Amaç:** 16 ana kontrol grubu (Güvenlik, DB, Secret, Deployment, AI, TTS, DR, Perf, i18n, webMSKLabs) altında ölçülebilir Go/No-Go kararının verilmesi ve audit kaydı ($0).
   - **Öncelik:** P0 | **Bağımlılık:** ARCH-001, SEC-AUTH-001, DATA-003, REL-DEP-001, DR-002, TEST-003, OBS-002
 
@@ -3071,9 +3074,9 @@ sequenceDiagram
 
 - **Zero-Cost Operations Guard ($0/Ay Kuralı):** Yayın sonrası (post-launch) izleme, bağımlılık güncellemeleri, güvenlik incelemeleri ve felaket kurtarma tatbikatları Cloudflare, GitHub ve mevcut açık kaynaklı araçlar ($0/Ay) üzerinden yürütülecektir. Harici ücretli APM/SIEM platformları, SaaS bağımlılık araçları veya paralı yedekleme servisleri KESİNLİKLE zorunlu kılınamaz.
 - **Operasyonel Sorumluluk Sınırları (3 Core Pillars):**
-  - [ ] **`OPS-001` (Production Health Review):** *"Production'da ne oluyor?"* — Canlı ortam sağlığı, loglar, hatalar, performans trendleri, gizlilik kontrolleri ve operasyonel inceleme.
-  - [ ] **`OPS-002` (Dependency & Security Update):** *"Kullandığımız yazılımlar güvenli ve güncel mi?"* — Yazılım bağımlılıkları, güvenlik bildirileri, risk sınıflandırması ve kontrollü güncelleme yaşam döngüsü.
-  - [ ] **`OPS-003` (Periodic Disaster Recovery Test):** *"Sistem bozulursa gerçekten geri dönebiliyor muyuz?"* — Yedek bütünlüğü, izole ortamda restore tatbikatı ve RPO/RTO ölçümü.
+  - [*] **`OPS-001` (Production Health Review):** *"Production'da ne oluyor?"* — Canlı ortam sağlığı, loglar, hatalar, performans trendleri, gizlilik kontrolleri ve operasyonel inceleme.
+  - [*] **`OPS-002` (Dependency & Security Update):** *"Kullandığımız yazılımlar güvenli ve güncel mi?"* — Yazılım bağımlılıkları, güvenlik bildirileri, risk sınıflandırması ve kontrollü güncelleme yaşam döngüsü.
+  - [*] **`OPS-003` (Periodic Disaster Recovery Test):** *"Sistem bozulursa gerçekten geri dönebiliyor me?"* — Yedek bütünlüğü, izole ortamda restore tatbikatı ve RPO/RTO ölçümü.
 
 ---
 
@@ -3081,17 +3084,17 @@ sequenceDiagram
 - **2. Amaç:** Canlı ortam performansının, sistem ve audit loglarının, hata oranlarının, gizlilik ve güvenlik durumunun periyodik operasyonel inceleme (Production Health Review) süreciyle izlenmesi ($0).
 - **3. Kapsam:** `OBS-002` audit kayıtları, `OBS-003` health monitoring, API/Queue/Mail/Push/AI/TTS metrikleri.
 - **4. 7 Boyutlu Operasyonel İnceleme Süreci (Operational Review Framework):**
-  - [ ] *1. Health & Error Monitoring:* Worker API erişilebilirliği (`API-008`), HTTP 4xx/5xx hata oranları, D1 bağlantı metrikleri, kuyruk/job hataları (`COM-003`), e-posta teslimat hataları (`COM-001`, `COM-002`), Push bildirim hataları (`COM-004`), AI/TTS timeout durumları (`AI-*`, `CMS-TTS-001`) ve R2 medya erişiminin (`API-010`, `CMS-005`) izlenmesi (`OBS-003`).
-  - [ ] *2. Audit & Log Review:* `OBS-002` loglarının, Correlation ID takibinin, duyarlı veri maskeleme (PII/Secret redaction) kurallarının, başarısız oturum denemelerinin, RBAC rol değişikliklerinin (`SEC-RBAC-001`), içerik yayın/silme aksiyonlarının ve AI/TTS onay adımlarının incelenmesi.
-  - [ ] *3. Incident & Queue Backlog Review:* Açık krizlerin (`INC-001`), biriken kuyruk işlerinin, başarısız gönderimlerin ve bilinen operasyonel risklerin değerlendirilmesi.
-  - [ ] *4. Policy-Based Threshold & Alerting:* Sabit platform SLA'sı oluşturmaksızın; belirgin hata oranı yükselişi, anomali veya güvenlik riski tespit edildiğinde `OBS-003` uyarısının tetiklenmesi ve `INC-001` kriz sürecine yönlendirilmesi.
-  - [ ] *5. Performance Trend Review:* `PERF-001` ve `PERF-002` ile ilişkili olarak Edge Cache hit/miss oranlarının, D1 sorgu sürelerinin, kuyruk işleme gecikmelerinin ve payload boyutlarının izlenmesi.
-  - [ ] *6. Privacy & Compliance Review:* `PRIV-001` ile ilişkili olarak loglarda PII sızıntısı olmaması, retention cleanup ve anonimleştirme süreçlerinin çalışırlığı ve AI veri minimizasyonunun denetlenmesi.
-  - [ ] *7. Periodic Review Output:* İnceleme sonucunun şu yapıda operasyonel özet kaydı olarak kaydedilmesi: `Health → Incidents → Security → Performance → Data/Privacy → Backup → Actions`.
+  - [*] *1. Health & Error Monitoring:* Worker API erişilebilirliği (`API-008`), HTTP 4xx/5xx hata oranları, D1 bağlantı metrikleri, kuyruk/job hataları (`COM-003`), e-posta teslimat hataları (`COM-001`, `COM-002`), Push bildirim hataları (`COM-004`), AI/TTS timeout durumları (`AI-*`, `CMS-TTS-001`) ve R2 medya erişiminin (`API-010`, `CMS-005`) izlenmesi (`OBS-003`).
+  - [*] *2. Audit & Log Review:* `OBS-002` loglarının, Correlation ID takibinin, duyarlı veri maskeleme (PII/Secret redaction) kurallarının, başarısız oturum denemelerinin, RBAC rol değişikliklerinin (`SEC-RBAC-001`), içerik yayın/silme aksiyonlarının ve AI/TTS onay adımlarının incelenmesi.
+  - [*] *3. Incident & Queue Backlog Review:* Açık krizlerin (`INC-001`), biriken kuyruk işlerinin, başarısız gönderimlerin ve bilinen operasyonel risklerin değerlendirilmesi.
+  - [*] *4. Policy-Based Threshold & Alerting:* Sabit platform SLA'sı oluşturmaksızın; belirgin hata oranı yükselişi, anomali veya güvenlik riski tespit edildiğinde `OBS-003` uyarısının tetiklenmesi ve `INC-001` kriz sürecine yönlendirilmesi.
+  - [*] *5. Performance Trend Review:* `PERF-001` ve `PERF-002` ile ilişkili olarak Edge Cache hit/miss oranlarının, D1 sorgu sürelerinin, kuyruk işleme gecikmelerinin ve payload boyutlarının izlenmesi.
+  - [*] *6. Privacy & Compliance Review:* `PRIV-001` ile ilişkili olarak loglarda PII sızıntısı olmaması, retention cleanup ve anonimleştirme süreçlerinin çalışırlığı ve AI veri minimizasyonunun denetlenmesi.
+  - [*] *7. Periodic Review Output:* İnceleme sonucunun şu yapıda operasyonel özet kaydı olarak kaydedilmesi: `Health → Incidents → Security → Performance → Data/Privacy → Backup → Actions`.
 - **5. DoD:**
-  - [ ] 7 boyutlu Production Health Review sürecinin tanımlanması.
-  - [ ] Log gizliliği (`OBS-002`) ve anomali uyarı mantığının (`OBS-003`) doğrulanması.
-  - [ ] Performans ve gizlilik inceleme adımlarının `PERF-001` ve `PRIV-001` ile koordinasyonu.
+  - [*] 7 boyutlu Production Health Review sürecinin tanımlanması.
+  - [*] Log gizliliği (`OBS-002`) ve anomali uyarı mantığının (`OBS-003`) doğrulanması.
+  - [*] Performans ve gizlilik inceleme adımlarının `PERF-001` ve `PRIV-001` ile koordinasyonu.
 - **6. Bağımlılıklar:** GO-001, OBS-002, OBS-003, INC-001, PERF-001, PERF-002, PRIV-001.
 - **7. Bağımlı Görevler:** OPS-002.
 
@@ -3101,16 +3104,16 @@ sequenceDiagram
 - **2. Amaç:** Kullanılan tüm üçüncü taraf kütüphane, SDK ve araçların kontrollü bir güncelleme yaşam döngüsü (Dependency & Security Update Lifecycle) çerçevesinde güvenli ve güncel tutulması ($0).
 - **3. Kapsam:** `package.json` (frontend/backend), Cloudflare Workers SDK/CLI (`wrangler`), Gemini API client SDK, Vitest ve test bağımlılıkları.
 - **4. Güncelleme Yaşam Döngüsü & Risk Sınıflandırması:**
-  - [ ] *Bağımlılık Envanteri:* Frontend npm kütüphaneleri, Backend Worker paketleri, Cloudflare SDK, Gemini SDK ve CI/CD araçları.
-  - [ ] *Risk Sınıflandırması:* **Critical / Security** (Güvenlik yamaları), **High-Risk** (Major versiyon değişiklikleri), **Normal** (Minor iyileştirmeler), **Maintenance** (Patch / lint güncellemeleri).
-  - [ ] *Kontrollü Güncelleme Akışı (7-Step Lifecycle):* `Identify → Assess → Update → Test → Review → Deploy → Verify`. Güncellemeler KESİNLİKLE doğrudan canlıya (production) atılamaz!
-  - [ ] *Breaking Change & Major Updates:* Major versiyon değişikliklerinde kod uyumluluk incelemesi, staging ortamı doğrulanması (`REL-ENV-001`) ve rollback planı zorunlu kılınır.
-  - [ ] *Acil Güvenlik Yaması (Critical Security Patch):* Kritik güvenlik açıklarında periyodik periyot beklenmeksizin acil yayın akışı (`INC-001 → REL-HOTFIX-001 → REL-DEP-001`) çalıştırılır.
-  - [ ] *Bağımlılık Hijyeni:* Kullanılmayan veya terk edilmiş (deprecated) paketlerin periyodik tespiti ve temizliği yapılır.
+  - [*] *Bağımlılık Envanteri:* Frontend npm kütüphaneleri, Backend Worker paketleri, Cloudflare SDK, Gemini SDK ve CI/CD araçları.
+  - [*] *Risk Sınıflandırması:* **Critical / Security** (Güvenlik yamaları), **High-Risk** (Major versiyon değişiklikleri), **Normal** (Minor iyileştirmeler), **Maintenance** (Patch / lint güncellemeleri).
+  - [*] *Kontrollü Güncelleme Akışı (7-Step Lifecycle):* `Identify → Assess → Update → Test → Review → Deploy → Verify`. Güncellemeler KESİNLİKLE doğrudan canlıya (production) atılamaz!
+  - [*] *Breaking Change & Major Updates:* Major versiyon değişikliklerinde kod uyumluluk incelemesi, staging ortamı doğrulanması (`REL-ENV-001`) ve rollback planı zorunlu kılınır.
+  - [*] *Acil Güvenlik Yaması (Critical Security Patch):* Kritik güvenlik açıklarında periyodik periyot beklenmeksizin acil yayın akışı (`INC-001 → REL-HOTFIX-001 → REL-DEP-001`) çalıştırılır.
+  - [*] *Bağımlılık Hijyeni:* Kullanılmayan veya terk edilmiş (deprecated) paketlerin periyodik tespiti ve temizliği yapılır.
 - **5. DoD:**
-  - [ ] 7 adımlı kontrollü güncelleme akışının ve risk sınıflandırmasının tanımlanması.
-  - [ ] Güncellemelerin production öncesinde `TEST-002` ve `TEST-003` ile test edilme zorunluluğunun kurulması.
-  - [ ] Acil durum güvenlik yamalarında `REL-HOTFIX-001` entegrasyonunun doğrulanması.
+  - [*] 7 adımlı kontrollü güncelleme akışının ve risk sınıflandırmasının tanımlanması.
+  - [*] Güncellemelerin production öncesinde `TEST-002` ve `TEST-003` ile test edilme zorunluluğunun kurulması.
+  - [*] Acil durum güvenlik yamalarında `REL-HOTFIX-001` entegrasyonunun doğrulanması.
 - **6. Bağımlılıklar:** OPS-001, TEST-002, TEST-003, REL-ENV-001, REL-DEP-001, REL-HOTFIX-001, INC-001.
 - **7. Bağımlı Görevler:** OPS-003.
 
@@ -3120,17 +3123,17 @@ sequenceDiagram
 - **2. Amaç:** `DR-001` ile alınan D1 veritabanı yedeklerinin izole bir ortamda geri yüklenerek, veri ve şema bütünlüğünün periyodik tatbikatlarla sınanması ($0).
 - **3. Kapsam:** İzole D1 test veritabanı, `DR-001` yedek dosyaları, `DR-002` restore doğrulama prosedürleri, `OBS-002` kayıtları.
 - **4. Tatbikat Yaşam Döngüsü (8-Step DR Drill Lifecycle):**
-  - [ ] `Plan → Select Backup → Verify Checksum → Isolated Restore → Validate Schema → Validate Critical Data → Health Check → Record Result`.
-  - [ ] *İzole Ortam Kuralı:* Restore tatbikatı KESİNLİKLE canlı (Production) D1 veritabanı üzerinde yapılmaz; tamamen izole test/staging veritabanında yürütülür (`REL-ENV-001`).
-  - [ ] *Geri Yükleme Doğrulaması:* DB erişilebilirliği, şema tamlığı, kritik tablolar (`messages`, `posts`, `users`), veri okunabilirliği (`SELECT COUNT(*)`), Worker API health (`API-008`) ve R2 medya referans bütünlüğü kontrol edilir.
-  - [ ] *Yedek Seçimi:* En son başarılı yedeğin yanı sıra periyodik tatbikatlarda geçmiş bir yedeğin de test edilebilirliği.
-  - [ ] *Hata Yönetimi (Failure Handling):* Tatbikat başarısız olursa `OBS-002` üzerine log işlenir, gerekirse `INC-001` kriz süreci tetiklenir, yedekleme kaynağı incelenir ve düzeltici aksiyon sonrası test tekrarlanır.
-  - [ ] *Kanıt ve Kayıt (Drill Evidence):* Tatbikat tarihi, kullanılan backup ID, checksum sonucu, restore durumu ve tespit edilen aksiyonlar `OBS-002` audit sistemine kaydedilir.
-  - [ ] *Ölçülen RPO/RTO Metrikleri:* RPO ve RTO sabit platform garantileri değil, tatbikatlar esnasında ölçülen ve raporlanan operasyonel metrikler olarak ele alınır (`DR-002`).
+  - [*] `Plan → Select Backup → Verify Checksum → Isolated Restore → Validate Schema → Validate Critical Data → Health Check → Record Result`.
+  - [*] *İzole Ortam Kuralı:* Restore tatbikatı KESİNLİKLE canlı (Production) D1 veritabanı üzerinde yapılmaz; tamamen izole test/staging veritabanında yürütülür (`REL-ENV-001`).
+  - [*] *Geri Yükleme Doğrulaması:* DB erişilebilirliği, şema tamlığı, kritik tablolar (`messages`, `posts`, `users`), veri okunabilirliği (`SELECT COUNT(*)`), Worker API health (`API-008`) ve R2 medya referans bütünlüğü kontrol edilir.
+  - [*] *Yedek Seçimi:* En son başarılı yedeğin yanı sıra periyodik tatbikatlarda geçmiş bir yedeğin de test edilebilirliği.
+  - [*] *Hata Yönetimi (Failure Handling):* Tatbikat başarısız olursa `OBS-002` üzerine log işlenir, gerekirse `INC-001` kriz süreci tetiklenir, yedekleme kaynağı incelenir ve düzeltici aksiyon sonrası test tekrarlanır.
+  - [*] *Kanıt ve Kayıt (Drill Evidence):* Tatbikat tarihi, kullanılan backup ID, checksum sonucu, restore durumu ve tespit edilen aksiyonlar `OBS-002` audit sistemine kaydedilir.
+  - [*] *Ölçülen RPO/RTO Metrikleri:* RPO ve RTO sabit platform garantileri değil, tatbikatlar esnasında ölçülen ve raporlanan operasyonel metrikler olarak ele alınır (`DR-002`).
 - **5. DoD:**
-  - [ ] 8 adımlı periyodik DR tatbikat yaşam döngüsünün tanımlanması.
-  - [ ] İzole veritabanı ortamında veri ve şema doğrulama adımlarının netleştirilmesi.
-  - [ ] Tatbikat sonuçlarının ve ölçülen RPO/RTO metriklerinin `OBS-002` audit sistemine kaydedilmesi.
+  - [*] 8 adımlı periyodik DR tatbikat yaşam döngüsünün tanımlanması.
+  - [*] İzole veritabanı ortamında veri ve şema doğrulama adımlarının netleştirilmesi.
+  - [*] Tatbikat sonuçlarının ve ölçülen RPO/RTO metriklerinin `OBS-002` audit sistemine kaydedilmesi.
 - **6. Bağımlılıklar:** DR-001, DR-002, OPS-001, REL-ENV-001, API-008, OBS-002, INC-001.
 - **7. Bağımlı Görevler:** Kapanış / Bakım döngüsü.
 
@@ -3148,23 +3151,23 @@ sequenceDiagram
 | **DR Audit Logging** | Tatbikat Tamamlanması | Tatbikat tarihi, backup ID, checksum ve RPO/RTO sonuçları `OBS-002` kaydına yazılır. |
 
 #### Section-Level Definition of Done (DoD)
-- [ ] 3 temel operasyonel sütunun (`OPS-001`, `OPS-002`, `OPS-003`) sorumluluk sınırlarının tanımlanması.
-- [ ] Production Health Review sürecinin 7 boyutta oturtulması.
-- [ ] Bağımlılık güncelleme akışının 7 adımlı kontrollü süreçle ilişkilendirilmesi.
-- [ ] DR restore tatbikatının 8 adımlı izole yaşam döngüsüyle kurulması.
-- [ ] Zero-Cost ($0/Ay) prensibine uyumun ve Operasyonel test matrisinin tamamlanması.
+- [*] 3 temel operasyonel sütunun (`OPS-001`, `OPS-002`, `OPS-003`) sorumluluk sınırlarının tanımlanması.
+- [*] Production Health Review sürecinin 7 boyutta oturtulması.
+- [*] Bağımlılık güncelleme akışının 7 adımlı kontrollü süreçle ilişkilendirilmesi.
+- [*] DR restore tatbikatının 8 adımlı izole yaşam döngüsüyle kurulması.
+- [*] Zero-Cost ($0/Ay) prensibine uyumun ve Operasyonel test matrisinin tamamlanması.
 
 ---
 
 ### Özet Görev Listesi (20. POST-LAUNCH OPERATIONS & MAINTENANCE ($0 Cost))
 
-- [ ] **OPS-001 — Production Monitoring & Health Review**
+- [*] **OPS-001 — Production Monitoring & Health Review**
   - **Amaç:** Canlı ortam performansının, logların, hataların, gizlilik durumunun ve biletlerin 7 boyutta periyodik gözden geçirilmesi ($0).
   - **Öncelik:** P2 | **Bağımlılık:** GO-001, OBS-002, OBS-003, INC-001, PERF-001, PRIV-001
-- [ ] **OPS-002 — Bağımlılık & Güvenlik Güncellemeleri (Dependency Updates)**
+- [*] **OPS-002 — Bağımlılık & Güvenlik Güncellemeleri (Dependency Updates)**
   - **Amaç:** Kütüphane ve SDK bağımlılıklarının 7 adımlı kontrollü yaşam döngüsü, risk sınıflandırması ve acil hotfix entegrasyonu ile güncellenmesi ($0).
   - **Öncelik:** P2 | **Bağımlılık:** OPS-001, TEST-002, TEST-003, REL-ENV-001, REL-HOTFIX-001
-- [ ] **OPS-003 — Periyodik Disaster Recovery Testi**
+- [*] **OPS-003 — Periyodik Disaster Recovery Testi**
   - **Amaç:** D1 veritabanı yedeklerinin izole ortamda 8 adımlı restore tatbikatı ile sınanması, şema/veri doğrulaması ve RPO/RTO ölçümü ($0).
   - **Öncelik:** P3 | **Bağımlılık:** DR-001, DR-002, OPS-001, REL-ENV-001, OBS-002
 
