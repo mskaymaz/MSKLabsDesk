@@ -6,13 +6,13 @@ import { AuthEnv, createSessionToken, hashPassword } from '../utils/auth';
 
 export async function handleAdminLogin(request: Request, env: { DB: D1Database } & AuthEnv): Promise<Response> {
   try {
-    const body = await request.json() as { email?: string; password?: string };
-    const email = body.email?.trim().toLowerCase();
-    const password = body.password;
+    const body = await request.json() as { email?: string; username?: string; password?: string; password_hash?: string };
+    const identifier = (body.email || body.username || '').trim().toLowerCase();
+    const passwordInput = body.password || body.password_hash;
 
-    if (!email || !password) {
+    if (!identifier || !passwordInput) {
       return new Response(
-        JSON.stringify({ error: 'E-posta ve şifre zorunludur.' }),
+        JSON.stringify({ error: 'Kullanıcı adı/e-posta ve şifre zorunludur.' }),
         { status: 400, headers: { 'Content-Type': 'application/json; charset=utf-8' } }
       );
     }
@@ -28,10 +28,12 @@ export async function handleAdminLogin(request: Request, env: { DB: D1Database }
     }
 
     // 2. Hesabı Sorgula
-    const hashedPassword = await hashPassword(password);
+    const hashedPassword = body.password_hash || await hashPassword(body.password || '');
     const admin = await env.DB.prepare(`
-      SELECT id, email, name, role FROM admins WHERE email = ? AND password_hash = ?
-    `).bind(email, hashedPassword).first<{ id: string; email: string; name: string; role: string }>();
+      SELECT id, email, name, role FROM admins
+      WHERE (email = ? OR (id = 'admin_primary' AND ? IN ('admin', 'msklabs.org@gmail.com')))
+        AND password_hash = ?
+    `).bind(identifier, identifier, hashedPassword).first<{ id: string; email: string; name: string; role: string }>();
 
     if (!admin) {
       return new Response(
@@ -51,6 +53,13 @@ export async function handleAdminLogin(request: Request, env: { DB: D1Database }
         admin: {
           id: admin.id,
           email: admin.email,
+          name: admin.name,
+          role: admin.role,
+        },
+        user: {
+          id: admin.id,
+          email: admin.email,
+          username: admin.email.split('@')[0],
           name: admin.name,
           role: admin.role,
         },
