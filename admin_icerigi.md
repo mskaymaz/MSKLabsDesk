@@ -18,11 +18,11 @@ Yönetim paneline giriş yapıldığında sol menüde günlük operasyonları y�
 İşletmenizin ve web sitenizin anlık nabzını tuttuğunuz ana kontrol merkezidir.
 
 * **Ekranda Ne Görür?**
-  * [ ] **Canlı Durum Kartları:** *"Bekleyen Destek Talepleri"*, *"Onay Bekleyen Yorumlar"*, *"Yayınlanmış Makaleler"*, *"Toplam Bülten Aboneleri"* ve *"Aktif Uygulamalar"*.
-  * [ ] **Hızlı Uyarı Göstergeleri:** Yanıt bekleyen acil biletler ve onaylanmamış yorumlar için renkli bildirim rozetleri.
+  * [-] **Canlı Durum Kartları:** *"Bekleyen Destek Talepleri"*, *"Onay Bekleyen Yorumlar"*, *"Kayıtlı E-Bülten Aboneleri"*, *"Toplu E-Posta / Duyuru Gönder"*.
+  * [-] **Hızlı Uyarı Göstergeleri:** Yanıt bekleyen acil biletler ve onaylanmamış yorumlar için renkli bildirim rozetleri.
 * **Neler Yapabilir / Hangi Ayarları Değiştirir?**
-  * [ ] **Hızlı Zıplama:** İstatistik kartına tıklayarak doğrudan ilgili modülün detayına geçiş (Örn: "Onay Bekleyen Yorumlar"a basıp yorum listesine gitme).
-  * [ ] **İş Akışı İzleme:** Sistem genelindeki güncel iş akışını tek ekranda anlık kontrol etme.
+  * [-] **Hızlı Zıplama:** İstatistik kartına tıklayarak doğrudan ilgili modülün detayına geçiş (Örn: "Onay Bekleyen Yorumlar"a basıp yorum listesine gitme).
+  * [-] **İş Akışı İzleme:** Sistem genelindeki güncel iş akışını tek ekranda anlık kontrol etme.
 
 ---
 

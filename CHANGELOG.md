@@ -1,6 +1,11 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [12.10.2026 - 11:39] - Admin Arayüzü İlk Aşamadan Kontrollü Düzeltmeye Başlıyoruz
+- `admin_icerigi.md`: 1. Aşama (Ana Gösterge Paneli / Dashboard) test kutuları işlemde (`[-]`) olarak işaretlendi.
+- Admin arayüzünün ilk aşamadan (Özet Ekranı) başlayarak adım adım ve kontrollü olarak denetlenmesi ve doğal Türkçe ifadelere dönüştürülmesi süreci başlatıldı.
+- Yalnızca `DevAdmin` dalında çalışıldı, `main` korundu.
+
 ## [12.10.2026 - 11:25] - Özet Ekranı ve Destek Talepleri Doğal Türkçe Arayüz Dönüşümü
 - `createMergedDictionary` ve `I18nContext.tsx`: Sözlük birleştirmede namespace nesnelerini string ile ezen çakışma giderildi; dot-notation araması önceliklendirilerek ham kod anahtarlarının ekrana düşmesi engellendi.
 - `DashboardView.tsx`: Ham anahtarlar yerine "Genel Bakış & Hızlı İstatistikler", "Bekleyen Destek Talepleri", "Kayıtlı E-Bülten Aboneleri" gibi net Türkçe başlıklar bağlandı. Bilet kartlarındaki statü rozetleri Türkçe'ye dönüştürüldü.

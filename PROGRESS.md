@@ -1,6 +1,13 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 🟢 Son Güncelleme [12.10.2026 - 11:39] — ADMİN ARAYÜZÜ İLK AŞAMADAN KONTROLLÜ DÜZELTMEYE BAŞLIYORUZ [-]
+* **Yapılan İşlem:** 
+  1. `admin_icerigi.md` üzerinde 1. Aşama (Ana Gösterge Paneli / Dashboard) işlemde (`[-]`) olarak işaretlendi.
+  2. Kullanıcı onayıyla admin arayüzünün ilk aşamadan (Özet Ekranı) başlayarak adım adım ve kontrollü olarak denetlenmesi ve doğal Türkçe ifadelerle düzeltilmesi süreci resmen başlatıldı.
+* **Sonuçlar:** `admin_icerigi.md` güncellendi, `DevAdmin` dalında çalışıldı, `main` korundu.
+* **Durum:** 1. Aşama Özet Ekranı canlı incelemesinde.
+
 ## 🟢 Son Güncelleme [12.10.2026 - 11:25] — ÖZET EKRANI VE DESTEK FİLTRELERİ DOĞAL TÜRKÇE ÇEVİRİ DÖNÜŞÜMÜ [*]
 * **Yapılan İşlem:** 
   1. **Sözlük Çakışması Giderildi:** `createMergedDictionary` fonksiyonunun namespace nesnelerini (`dashboard`, `tickets` vb.) string ile ezmesi ve `getNestedValue` arama sırası düzeltildi.
