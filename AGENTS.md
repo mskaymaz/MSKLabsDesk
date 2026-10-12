@@ -22,3 +22,7 @@
 * **Yalnızca DevAdmin:** Tüm geliştirmeler, entegrasyonlar ve testler yalnızca `DevAdmin` dalında yürütülür. İşlem öncesinde her iki repository'de dal doğrulanır.
 * **Ana Dal Koruması (Main Protection):** `main` dalına geçiş yapılmaz, merge/PR/rebase veya otomatik entegrasyon tetiklenmez. `main` entegrasyonu ancak tüm sistem `DevAdmin` üzerinde hazırlandıktan, kabul raporu sunulduktan ve kullanıcıdan açık onay alındıktan sonra yapılır.
 * **Kabul Kriteri:** Görevler ancak kod uygulandığında, arayüz-API-veritabanı entegrasyonu gerçek veriyle doğrulandığında ve regresyon testleri geçtiğinde `DoD` kriterini sağlar. Mock veri veya yüzeysel PASS yeterli kabul edilmez.
+
+## 5. Dil ve Arayüz Kuralı (Admin UI vs. Web İçeriği)
+* **Admin Paneli Arayüzü:** Yönetici panelinin kendi menüleri, butonları, bildirimleri ve yönetim ekranları tamamen **Türkçe** olarak sunulur (panel yöneticileri Türkçe bilen ekiptir).
+* **Web İçerik Çoklu Dil Desteği:** Web arayüzüne sunulacak tüm içerikler (blog yazıları, SEO başlık/açıklamaları, bildirim şablonları vb.) TR, EN, AR dillerini destekleyen çok dilli CMS altyapısını ve AI çeviri yeteneklerini eksiksiz korur.

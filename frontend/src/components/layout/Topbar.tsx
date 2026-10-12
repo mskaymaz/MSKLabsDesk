@@ -1,7 +1,8 @@
 import React from 'react';
-import { Search, Bell, User } from 'lucide-react';
+import { Search, Bell, User, Sun, Moon } from 'lucide-react';
 import type { TabType } from '../Sidebar';
 import { useAuth } from '../../context/AuthContext';
+import { useTheme } from '../../context/ThemeContext';
 
 export interface TopbarProps {
   activeTab: TabType;
@@ -11,6 +12,7 @@ export interface TopbarProps {
 
 export const Topbar: React.FC<TopbarProps> = ({ activeTab, onOpenSearch, pendingCount = 0 }) => {
   const { user } = useAuth();
+  const { theme, toggleTheme } = useTheme();
 
   return (
     <header
@@ -20,7 +22,7 @@ export const Topbar: React.FC<TopbarProps> = ({ activeTab, onOpenSearch, pending
         justifyContent: 'space-between',
         padding: '16px 24px',
         borderBottom: '1px solid var(--border-subtle)',
-        background: 'rgba(15, 21, 34, 0.6)',
+        background: 'var(--bg-topbar)',
         backdropFilter: 'blur(8px)',
       }}
     >
@@ -83,6 +85,33 @@ export const Topbar: React.FC<TopbarProps> = ({ activeTab, onOpenSearch, pending
             )}
           </button>
         </div>
+
+        <button
+          type="button"
+          onClick={toggleTheme}
+          aria-label={theme === 'dark' ? 'Açık Mod' : 'Koyu Mod'}
+          title={theme === 'dark' ? 'Açık Mod / Light Mode' : 'Koyu Mod / Dark Mode'}
+          style={{
+            background: 'transparent',
+            border: 'none',
+            color: 'var(--text-secondary)',
+            cursor: 'pointer',
+            padding: '8px',
+            minWidth: '44px',
+            minHeight: '44px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            borderRadius: 'var(--radius-md)',
+            transition: 'transform 0.2s ease',
+          }}
+        >
+          {theme === 'dark' ? (
+            <Sun size={20} color="var(--accent-amber)" />
+          ) : (
+            <Moon size={20} color="var(--accent-primary)" />
+          )}
+        </button>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <div

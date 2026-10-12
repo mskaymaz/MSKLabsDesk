@@ -1,6 +1,14 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 🟢 Son Güncelleme [12.10.2026 - 10:55] — AÇIK/KOYU TEMA GEÇİŞİ & ADMİN TÜRKÇE ARAYÜZ (DİL SEÇİCİ PASİF) ENTEGRASYONU [*]
+* **Yapılan İşlem:** 
+  1. **Açık/Koyu Tema Geçişi:** `ThemeContext.tsx` oluşturuldu (`user_theme` localStorage senkronu), `tokens.css` ve `index.css` dosyalarına `[data-theme="light"]` tokenları eklendi. `Topbar.tsx` (üst bar), `Sidebar.tsx` (sol menü altı), `SettingsView.tsx` (ayarlar) ve `LoginView.tsx` (giriş ekranı sağ üstü) bileşenlerine Güneş/Ay (Sun/Moon) toggle ikonu entegre edildi.
+  2. **Admin Türkçe Arayüz & Gizli Dil Altyapısı:** Kullanıcı talebi doğrultusunda admin paneli kullanıcılarının tamamen Türkçe bilen ekip olması nedeniyle panel dili Türkçe'ye sabitlendi. Çoklu dil altyapısı (`translations.ts`, TR/EN/AR sözlükleri, public CMS içerik çevirileri) silinmeden eksiksiz korundu; ancak sol menüdeki dil seçici arayüzde görünmez/pasif (`display: 'none'`) hale getirildi.
+  3. **Kural Güncellemesi:** `AGENTS.md` dosyasına Madde 5 (Dil ve Arayüz Kuralı: Admin UI vs Web İçeriği) eklendi.
+* **Sonuçlar:** Frontend Vite Build (PWA) %100 PASS, 61 test dosyası 604 Vitest testi %100 PASS, tüm dosyalar <= 450 satır sınırında.
+* **Durum:** `DevAdmin` dalında tamamlandı, tarayıcıda canlı teste hazır.
+
 ## 🟢 Son Güncelleme [12.10.2026 - 10:32] — YÖNETİCİ HARİTASI (`admin_icerigi.md`) İŞARETLENEBİLİR TEST KUTULARI VE YENİ ÖZELLİKLERLE GÜNCELLENDİ
 * **Yapılan İşlem:** Kullanıcının talebi doğrultusunda `admin_icerigi.md` dosyasına son eklenen iki bileşen (Gelen E-Posta Destek Masası ve Kamusal Blog Yorum Arayüzü) özet olarak eklendi. Tüm modül ve alt fonksiyonlara adım adım görsel test sürecinde kullanılmak üzere işaretlenebilir kutucuklar (`[ ]` beklemede, `[-]` işlemde, `[x]` tamamlandı) entegre edildi.
 * **Sonuçlar:** `admin_icerigi.md` güncellendi (223 satır), `DevAdmin` dalında çalışıldı, `main` korundu.

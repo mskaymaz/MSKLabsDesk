@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { api } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import { useTranslation } from '../context/I18nContext';
-import { ShieldCheck, Lock, User, AlertCircle, Clock } from 'lucide-react';
+import { useTheme } from '../context/ThemeContext';
+import { ShieldCheck, Lock, User, AlertCircle, Clock, Sun, Moon } from 'lucide-react';
 import { Button } from '../components/ui/Button';
 
 async function hashSHA256(text: string): Promise<string> {
@@ -15,6 +16,7 @@ async function hashSHA256(text: string): Promise<string> {
 export const LoginView: React.FC = () => {
   const { login } = useAuth();
   const { t } = useTranslation();
+  const { theme, toggleTheme } = useTheme();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -76,8 +78,38 @@ export const LoginView: React.FC = () => {
         alignItems: 'center',
         justifyContent: 'center',
         padding: '20px',
+        position: 'relative',
       }}
     >
+      <div style={{ position: 'fixed', top: '20px', right: '20px', zIndex: 10 }}>
+        <button
+          type="button"
+          onClick={toggleTheme}
+          aria-label={theme === 'dark' ? 'Açık Mod' : 'Koyu Mod'}
+          title={theme === 'dark' ? 'Açık Mod / Light Mode' : 'Koyu Mod / Dark Mode'}
+          style={{
+            background: 'var(--bg-card)',
+            border: '1px solid var(--border-color)',
+            borderRadius: 'var(--radius-md)',
+            padding: '10px',
+            color: 'var(--text-secondary)',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            boxShadow: 'var(--shadow-sm)',
+            minWidth: '44px',
+            minHeight: '44px',
+          }}
+        >
+          {theme === 'dark' ? (
+            <Sun size={20} color="var(--accent-amber)" />
+          ) : (
+            <Moon size={20} color="var(--accent-primary)" />
+          )}
+        </button>
+      </div>
+
       <div className="glass-card animate-fade-in" style={{ width: '100%', maxWidth: '420px', padding: '36px' }}>
         <div style={{ textAlign: 'center', marginBottom: '30px' }}>
           <div
@@ -96,7 +128,7 @@ export const LoginView: React.FC = () => {
           >
             <ShieldCheck size={32} />
           </div>
-          <h1 style={{ fontSize: '1.6rem', fontWeight: 800, color: '#FFF' }}>{t('auth.loginTitle')}</h1>
+          <h1 style={{ fontSize: '1.6rem', fontWeight: 800, color: 'var(--text-primary)' }}>{t('auth.loginTitle')}</h1>
           <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginTop: '4px' }}>
             {t('auth.loginSub')}
           </p>
@@ -149,7 +181,7 @@ export const LoginView: React.FC = () => {
                   <input
                     type="text"
                     className="form-input"
-                    style={{ paddingLeft: '38px', minHeight: '44px', width: '100%', background: 'rgba(0,0,0,0.3)', border: '1px solid var(--border-subtle)', borderRadius: 'var(--radius-md)', color: '#FFF' }}
+                    style={{ paddingLeft: '38px', minHeight: '44px', width: '100%', background: 'var(--bg-input)', border: '1px solid var(--border-subtle)', borderRadius: 'var(--radius-md)', color: 'var(--text-primary)' }}
                     placeholder="admin@msklabs.com"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
@@ -165,7 +197,7 @@ export const LoginView: React.FC = () => {
                   <input
                     type="password"
                     className="form-input"
-                    style={{ paddingLeft: '38px', minHeight: '44px', width: '100%', background: 'rgba(0,0,0,0.3)', border: '1px solid var(--border-subtle)', borderRadius: 'var(--radius-md)', color: '#FFF' }}
+                    style={{ paddingLeft: '38px', minHeight: '44px', width: '100%', background: 'var(--bg-input)', border: '1px solid var(--border-subtle)', borderRadius: 'var(--radius-md)', color: 'var(--text-primary)' }}
                     placeholder="••••••••"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}

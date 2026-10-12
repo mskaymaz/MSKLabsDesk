@@ -1,6 +1,14 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [12.10.2026 - 10:55] - Açık/Koyu Tema Geçişi & Admin Paneli Türkçe Modu (Dil Seçici Pasif)
+- **Tema Entegrasyonu (`ThemeContext.tsx`):** Kullanıcının web arayüzünde olduğu gibi koyu/açık temayı anlık değiştirebilmesi için `user_theme` (localStorage) senkronlu tema yönetim sistemi kodlandı.
+- **CSS Tokenları & Arayüz Desteği (`tokens.css`, `index.css`):** Aydınlık mod için `[data-theme="light"]` değişkenleri, kart, modal ve form girdi stilleri tanımlandı.
+- **Güneş/Ay İkon Butonları:** `Topbar.tsx` (bildirimlerin yanında), `Sidebar.tsx` (kullanıcı kutusunda), `LoginView.tsx` (sağ üst köşede) ve `SettingsView.tsx` ekranlarına dinamik `Sun`/`Moon` ikonu eklendi.
+- **Admin Paneli Türkçe Yapılandırması:** Dil altyapısı (TR/EN/AR sözlükleri ve public web CMS çeviri yetenekleri) silinmeden korunarak, admin paneli arayüz dili 'tr' olarak sabitlendi ve sol menüdeki dil seçici buton grubu görünmez/pasif (`display: 'none'`) hale getirildi.
+- **Kural Güncellemesi:** `AGENTS.md` içerisine Dil ve Arayüz Kuralı (Madde 5) kaydedildi.
+- Yalnızca `DevAdmin` dalında çalışıldı, `main` korundu.
+
 ## [12.10.2026 - 10:32] - Yönetici Kullanım Haritası (`admin_icerigi.md`) Test Kontrol Kutuları & Yeni Modüller
 - `admin_icerigi.md` dokümanına gelen e-posta destek köprüsü ve kamusal blog yorum arayüzü fonksiyonları eklendi.
 - Görsel test sürecinde adım adım takip edilmek üzere tüm modül ve alt fonksiyonlara durum kutucukları (`[ ]`, `[-]`, `[x]`) entegre edildi.

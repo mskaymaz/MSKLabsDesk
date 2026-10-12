@@ -12,9 +12,12 @@ import {
   BookOpen,
   FileText,
   Smartphone,
-  Layout
+  Layout,
+  Sun,
+  Moon
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { useTheme } from '../context/ThemeContext';
 import { useTranslation } from '../context/I18nContext';
 import type { Language } from '../i18n/translations';
 
@@ -35,6 +38,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 }) => {
   const { user, logout } = useAuth();
   const { language, setLanguage, t } = useTranslation();
+  const { theme, toggleTheme } = useTheme();
 
   const menuItems = [
     { id: 'dashboard' as TabType, label: t('dashboard'), icon: LayoutDashboard },
@@ -95,18 +99,18 @@ export const Sidebar: React.FC<SidebarProps> = ({
           <ShieldCheck size={22} />
         </div>
         <div>
-          <h2 style={{ fontSize: '1.1rem', fontWeight: 800, color: '#FFF', letterSpacing: '-0.01em' }}>MSKLabsDesk</h2>
+          <h2 style={{ fontSize: '1.1rem', fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.01em' }}>MSKLabsDesk</h2>
           <span style={{ fontSize: '0.75rem', color: 'var(--accent-cyan)', fontWeight: 600 }}>{user?.name || 'Admin'}</span>
         </div>
       </div>
 
-      {/* Language Switcher */}
+      {/* Language Switcher (Pasif/Gizli - İleride ihtiyaç halinde display: flex yapılabilir) */}
       <div style={{
-        display: 'flex',
+        display: 'none',
         alignItems: 'center',
         justifyContent: 'space-between',
         padding: '6px 10px',
-        background: 'rgba(255, 255, 255, 0.04)',
+        background: 'var(--bg-secondary)',
         borderRadius: 'var(--radius-md)',
         marginBottom: '20px',
         border: '1px solid var(--border-color)'
@@ -189,8 +193,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
       {/* User Footer */}
       <div style={{
-        padding: '14px',
-        background: 'rgba(255, 255, 255, 0.03)',
+        padding: '12px 14px',
+        background: 'var(--bg-secondary)',
         borderRadius: 'var(--radius-md)',
         border: '1px solid var(--border-color)',
         display: 'flex',
@@ -198,25 +202,44 @@ export const Sidebar: React.FC<SidebarProps> = ({
         justifyContent: 'space-between'
       }}>
         <div style={{ display: 'flex', flexDirection: 'column' }}>
-          <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#FFF' }}>{user?.name || 'Yönetici'}</span>
+          <span style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-primary)' }}>{user?.name || 'Yönetici'}</span>
           <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>@{user?.username || 'admin'}</span>
         </div>
-        <button
-          onClick={logout}
-          title={t('logout')}
-          style={{
-            background: 'transparent',
-            border: 'none',
-            color: 'var(--accent-rose)',
-            cursor: 'pointer',
-            padding: '6px',
-            borderRadius: '6px',
-            display: 'flex',
-            alignItems: 'center'
-          }}
-        >
-          <LogOut size={18} />
-        </button>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+          <button
+            onClick={toggleTheme}
+            title={theme === 'dark' ? 'Açık Mod / Light Mode' : 'Koyu Mod / Dark Mode'}
+            aria-label={theme === 'dark' ? 'Açık Mod' : 'Koyu Mod'}
+            style={{
+              background: 'transparent',
+              border: 'none',
+              color: 'var(--text-secondary)',
+              cursor: 'pointer',
+              padding: '6px',
+              borderRadius: '6px',
+              display: 'flex',
+              alignItems: 'center'
+            }}
+          >
+            {theme === 'dark' ? <Sun size={17} color="var(--accent-amber)" /> : <Moon size={17} color="var(--accent-primary)" />}
+          </button>
+          <button
+            onClick={logout}
+            title={t('logout')}
+            style={{
+              background: 'transparent',
+              border: 'none',
+              color: 'var(--accent-rose)',
+              cursor: 'pointer',
+              padding: '6px',
+              borderRadius: '6px',
+              display: 'flex',
+              alignItems: 'center'
+            }}
+          >
+            <LogOut size={18} />
+          </button>
+        </div>
       </div>
     </aside>
   );

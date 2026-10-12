@@ -41,8 +41,8 @@ function interpolate(text: string, params?: Record<string, any>): string {
 
 export const I18nProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [language, setLanguageState] = useState<Language>(() => {
-    const saved = localStorage.getItem('msk_admin_lang') as Language;
-    return (saved && ['tr', 'en', 'ar'].includes(saved)) ? saved : 'tr';
+    // Admin arayüzü varsayılan olarak Türkçe çalışır; altyapı ileride açılmak üzere eksiksiz korunmaktadır.
+    return 'tr';
   });
 
   const dir: 'ltr' | 'rtl' = language === 'ar' ? 'rtl' : 'ltr';

@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { Bell, Mail, Save, Check, Shield, Globe, Sun, Moon } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { useTheme } from '../context/ThemeContext';
 import { Switch } from '../components/ui/Input';
 import { useTranslation } from '../context/I18nContext';
 
 export const SettingsView: React.FC = () => {
   const { t } = useTranslation();
   const { user, hasPermission } = useAuth();
-  const [theme, setTheme] = useState<'dark' | 'light' | 'system'>('dark');
+  const { theme, setTheme } = useTheme();
   const [siteTitle, setSiteTitle] = useState('MSK Labs Desk');
   const [siteUrl, setSiteUrl] = useState('https://msklabs.org');
   const [senderName, setSenderName] = useState('MSK Labs');
@@ -46,7 +47,7 @@ export const SettingsView: React.FC = () => {
     return (
       <div className="glass-card" style={{ padding: '32px', textAlign: 'center', margin: '40px auto', maxWidth: '600px' }}>
         <Shield size={48} color="var(--danger)" style={{ marginBottom: '16px' }} />
-        <h2 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#FFF' }}>Erişim Engellendi</h2>
+        <h2 style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--text-primary)' }}>Erişim Engellendi</h2>
         <p style={{ color: 'var(--text-secondary)', marginTop: '8px' }}>
           Sistem ayarlarını değiştirme yetkiniz (`settings.manage`) bulunmamaktadır. Lütfen Super Admin ile iletişime geçin.
         </p>
@@ -65,7 +66,7 @@ export const SettingsView: React.FC = () => {
         <form onSubmit={handleSave}>
           {/* Site Bilgileri */}
           <div style={{ marginBottom: '24px' }}>
-            <h3 style={{ fontSize: '1rem', fontWeight: 700, color: '#FFF', marginBottom: '14px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <h3 style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '14px', display: 'flex', alignItems: 'center', gap: '8px' }}>
               <Globe size={18} color="var(--accent-primary)" /> Genel Site Bilgileri
             </h3>
             
@@ -116,7 +117,7 @@ export const SettingsView: React.FC = () => {
 
           {/* E-Posta Servisi */}
           <div style={{ borderTop: '1px solid var(--border-color)', paddingTop: '24px', marginBottom: '24px' }}>
-            <h3 style={{ fontSize: '1rem', fontWeight: 700, color: '#FFF', marginBottom: '14px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <h3 style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '14px', display: 'flex', alignItems: 'center', gap: '8px' }}>
               <Mail size={18} color="var(--accent-cyan)" /> E-Posta Servis Ayarları
             </h3>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
@@ -144,7 +145,7 @@ export const SettingsView: React.FC = () => {
 
           {/* Güvenlik & Turnstile */}
           <div style={{ borderTop: '1px solid var(--border-color)', paddingTop: '24px', marginBottom: '24px' }}>
-            <h3 style={{ fontSize: '1rem', fontWeight: 700, color: '#FFF', marginBottom: '14px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <h3 style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '14px', display: 'flex', alignItems: 'center', gap: '8px' }}>
               <Shield size={18} color="var(--accent-emerald)" /> Bot Koruması & Güvenlik
             </h3>
 
@@ -153,13 +154,13 @@ export const SettingsView: React.FC = () => {
               justifyContent: 'space-between',
               alignItems: 'center',
               padding: '16px',
-              background: 'rgba(0,0,0,0.2)',
+              background: 'var(--bg-secondary)',
               borderRadius: 'var(--radius-md)',
               border: '1px solid var(--border-color)',
               marginBottom: '14px'
             }}>
               <div>
-                <strong style={{ fontSize: '0.9rem', color: '#FFF', display: 'block' }}>Cloudflare Turnstile Bot Koruması</strong>
+                <strong style={{ fontSize: '0.9rem', color: 'var(--text-primary)', display: 'block' }}>Cloudflare Turnstile Bot Koruması</strong>
                 <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Destek ve yorum formlarında otomatik bot doğrulama filtresini etkinleştirir.</span>
               </div>
               <Switch
@@ -172,7 +173,7 @@ export const SettingsView: React.FC = () => {
 
           {/* Push Bildirimleri */}
           <div style={{ borderTop: '1px solid var(--border-color)', paddingTop: '24px', marginBottom: '24px' }}>
-            <h3 style={{ fontSize: '1rem', fontWeight: 700, color: '#FFF', marginBottom: '14px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <h3 style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '14px', display: 'flex', alignItems: 'center', gap: '8px' }}>
               <Bell size={18} color="var(--accent-amber)" /> {t('settings.pushNotifications')}
             </h3>
             
@@ -181,12 +182,12 @@ export const SettingsView: React.FC = () => {
               justifyContent: 'space-between',
               alignItems: 'center',
               padding: '16px',
-              background: 'rgba(0,0,0,0.2)',
+              background: 'var(--bg-secondary)',
               borderRadius: 'var(--radius-md)',
               border: '1px solid var(--border-color)'
             }}>
               <div>
-                <strong style={{ fontSize: '0.9rem', color: '#FFF', display: 'block' }}>{t('settings.enablePush')}</strong>
+                <strong style={{ fontSize: '0.9rem', color: 'var(--text-primary)', display: 'block' }}>{t('settings.enablePush')}</strong>
                 <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Masaüstü ve mobil PWA'ya anlık bildirimler gönderilir.</span>
               </div>
               <button

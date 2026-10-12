@@ -7,6 +7,9 @@
   --bg-card: rgba(18, 24, 38, 0.75);
   --bg-card-hover: rgba(26, 35, 56, 0.85);
   --bg-sidebar: rgba(15, 21, 34, 0.95);
+  --bg-topbar: rgba(15, 21, 34, 0.6);
+  --bg-modal: #121826;
+  --bg-input: rgba(0, 0, 0, 0.3);
 
   --text-primary: hsl(210, 40%, 98%);
   --text-secondary: hsl(215, 20%, 75%);
@@ -76,4 +79,28 @@ html[dir="rtl"] {
   font-family: 'Cairo', system-ui, sans-serif;
   direction: rtl;
   text-align: right;
+}
+
+/* Light Theme Overrides */
+[data-theme="light"],
+.theme-light {
+  --bg-primary: hsl(210, 20%, 98%);
+  --bg-secondary: hsl(210, 24%, 94%);
+  --bg-card: rgba(255, 255, 255, 0.95);
+  --bg-card-hover: #FFFFFF;
+  --bg-sidebar: #FFFFFF;
+  --bg-topbar: rgba(255, 255, 255, 0.92);
+  --bg-modal: #FFFFFF;
+  --bg-input: #FFFFFF;
+
+  --text-primary: hsl(222, 47%, 11%);
+  --text-secondary: hsl(215, 16%, 35%);
+  --text-muted: hsl(215, 14%, 55%);
+
+  --border-subtle: hsl(214, 32%, 91%);
+  --border-focus: hsl(239, 84%, 67%);
+
+  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
 }
