@@ -71,14 +71,14 @@ export const Sidebar: React.FC<SidebarProps> = ({
   ];
 
   return (
-    <aside style={{
+    <aside className="app-sidebar" style={{
       width: '260px',
       background: 'var(--bg-sidebar)',
       borderRight: '1px solid var(--border-color)',
       borderLeft: language === 'ar' ? '1px solid var(--border-color)' : 'none',
       display: 'flex',
       flexDirection: 'column',
-      padding: '20px 16px',
+      padding: '20px 16px 24px 16px',
       height: '100vh',
       position: 'sticky',
       top: 0
@@ -193,6 +193,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
       {/* User Footer */}
       <div style={{
+        marginTop: 'auto',
+        marginBottom: '6px',
         padding: '12px 14px',
         background: 'var(--bg-secondary)',
         borderRadius: 'var(--radius-md)',

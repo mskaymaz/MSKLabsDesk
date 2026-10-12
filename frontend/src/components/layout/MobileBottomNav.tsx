@@ -20,15 +20,10 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ activeTab, set
     <nav
       className="mobile-bottom-nav"
       style={{
-        position: 'fixed',
-        bottom: 0,
-        left: 0,
-        right: 0,
-        background: '#0F1522',
-        borderTop: '1px solid var(--border-subtle)',
-        display: 'flex',
-        justifyContent: 'space-around',
-        alignItems: 'center',
+        background: 'var(--bg-topbar)',
+        backdropFilter: 'blur(12px)',
+        WebkitBackdropFilter: 'blur(12px)',
+        borderTop: '1px solid var(--border-color)',
         padding: '6px 0',
         zIndex: 900,
       }}

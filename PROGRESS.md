@@ -1,6 +1,14 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 🟢 Son Güncelleme [12.10.2026 - 11:08] — SOL MENÜ YÖNETİCİ KUTUSU & RESPONSİVE MOBİL MENÜ DÜZENLEMESİ [*]
+* **Yapılan İşlem:** 
+  1. Masaüstü ekranda sol menünün altındaki "Yönetici" kutusunun üzerine binen mobil alt çubuk (`MobileBottomNav`) masaüstü ekranlarda (`>= 768px`) tamamen gizlendi (`display: none !important`), sadece dar mobil ekranlarda (`< 768px`) görüntülenecek şekilde responsive CSS kuralları eklendi.
+  2. `Sidebar.tsx` içerisinde Yönetici kutucuğu (`User Footer`) `marginTop: 'auto'` ve `marginBottom: '6px'` ile sol menünün alt sınırına ferah biçimde sabitlendi; sol menüye `24px` alt padding verildi.
+  3. Mobil menünün arka planı açık/koyu temaya duyarlı `var(--bg-topbar)` ve blur efektiyle güncellendi.
+* **Sonuçlar:** Frontend Vite Build %100 PASS, tüm dosyalar <= 450 satır sınırında.
+* **Durum:** `DevAdmin` dalında tamamlandı, arayüzde ferah ve engelsiz görünüm sağlandı.
+
 ## 🟢 Son Güncelleme [12.10.2026 - 10:55] — AÇIK/KOYU TEMA GEÇİŞİ & ADMİN TÜRKÇE ARAYÜZ (DİL SEÇİCİ PASİF) ENTEGRASYONU [*]
 * **Yapılan İşlem:** 
   1. **Açık/Koyu Tema Geçişi:** `ThemeContext.tsx` oluşturuldu (`user_theme` localStorage senkronu), `tokens.css` ve `index.css` dosyalarına `[data-theme="light"]` tokenları eklendi. `Topbar.tsx` (üst bar), `Sidebar.tsx` (sol menü altı), `SettingsView.tsx` (ayarlar) ve `LoginView.tsx` (giriş ekranı sağ üstü) bileşenlerine Güneş/Ay (Sun/Moon) toggle ikonu entegre edildi.

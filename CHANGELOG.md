@@ -1,6 +1,11 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [12.10.2026 - 11:08] - Sol Menü Yönetici Kutusu & Responsive Mobil Menü İyileştirmesi
+- `MobileBottomNav.tsx` ve `index.css`: Mobil alt menünün masaüstü ekranda gereksiz yere sol panelin altını kapatması sorunu giderildi; masaüstü ekranda (`>= 768px`) çubuk gizlendi (`display: none !important`), mobil telefon boyutunda (`< 768px`) devreye girecek şekilde yapılandırıldı.
+- `Sidebar.tsx`: Sol menünün en altındaki Yönetici kutusuna (`User Footer`) `marginTop: 'auto'` ve `marginBottom: '6px'` eklenerek 24px alt boşlukla kusursuz görünüm sağlandı.
+- Yalnızca `DevAdmin` dalında çalışıldı, `main` korundu.
+
 ## [12.10.2026 - 10:55] - Açık/Koyu Tema Geçişi & Admin Paneli Türkçe Modu (Dil Seçici Pasif)
 - **Tema Entegrasyonu (`ThemeContext.tsx`):** Kullanıcının web arayüzünde olduğu gibi koyu/açık temayı anlık değiştirebilmesi için `user_theme` (localStorage) senkronlu tema yönetim sistemi kodlandı.
 - **CSS Tokenları & Arayüz Desteği (`tokens.css`, `index.css`):** Aydınlık mod için `[data-theme="light"]` değişkenleri, kart, modal ve form girdi stilleri tanımlandı.
