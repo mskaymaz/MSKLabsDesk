@@ -23,6 +23,16 @@ export const TicketDetailModal: React.FC<TicketDetailModalProps> = ({
   if (!ticketDetail) return null;
   const { ticket, replies } = ticketDetail;
 
+  const getStatusBadgeLabel = (status: string) => {
+    switch (status) {
+      case 'new': return 'Yeni';
+      case 'in_progress': return 'İşlemde';
+      case 'resolved': return 'Çözüldü';
+      case 'rejected': return 'Reddedildi';
+      default: return status;
+    }
+  };
+
   const handleUseAiDraft = () => {
     if (ticket.ai_suggested_reply) {
       setReplyMessage(ticket.ai_suggested_reply);
@@ -63,7 +73,7 @@ export const TicketDetailModal: React.FC<TicketDetailModalProps> = ({
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
               <span style={{ fontSize: '0.9rem', fontWeight: 800, color: 'var(--accent-cyan)' }}>{ticket.id}</span>
-              <span className={`badge badge-${ticket.status}`}>{ticket.status}</span>
+              <span className={`badge badge-${ticket.status}`}>{getStatusBadgeLabel(ticket.status)}</span>
               {ticket.category === 'email' ? (
                 <span style={{ fontSize: '0.78rem', color: '#38bdf8', background: 'rgba(56, 189, 248, 0.15)', border: '1px solid rgba(56, 189, 248, 0.3)', padding: '2px 8px', borderRadius: '4px', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
                   ✉️ E-Posta
@@ -72,7 +82,7 @@ export const TicketDetailModal: React.FC<TicketDetailModalProps> = ({
                 <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>{ticket.category}</span>
               )}
             </div>
-            <h2 style={{ fontSize: '1.25rem', fontWeight: 800, color: '#FFF' }}>{ticket.subject}</h2>
+            <h2 style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--text-primary)' }}>{ticket.subject}</h2>
           </div>
           <button onClick={onClose} style={{ background: 'transparent', border: 'none', color: 'var(--text-muted)', cursor: 'pointer' }}>
             <X size={22} />

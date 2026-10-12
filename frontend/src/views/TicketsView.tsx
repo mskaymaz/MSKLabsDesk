@@ -24,6 +24,16 @@ export const TicketsView: React.FC<TicketsViewProps> = ({
 
   const locale = language === 'ar' ? 'ar-SA' : language === 'en' ? 'en-US' : 'tr-TR';
 
+  const getStatusBadgeLabel = (status: string) => {
+    switch (status) {
+      case 'new': return 'Yeni';
+      case 'in_progress': return 'İşlemde';
+      case 'resolved': return 'Çözüldü';
+      case 'rejected': return 'Reddedildi';
+      default: return status;
+    }
+  };
+
   const filteredTickets = tickets.filter((tItem) => {
     const matchesStatus = statusFilter === 'all' || tItem.status === statusFilter;
     const matchesSearch =
@@ -108,7 +118,7 @@ export const TicketsView: React.FC<TicketsViewProps> = ({
               <div style={{ flex: 1, minWidth: '260px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '6px' }}>
                   <span style={{ fontSize: '0.85rem', fontWeight: 800, color: 'var(--accent-cyan)' }}>{ticket.id}</span>
-                  <span className={`badge badge-${ticket.status}`}>{ticket.status}</span>
+                  <span className={`badge badge-${ticket.status}`}>{getStatusBadgeLabel(ticket.status)}</span>
                   {ticket.category === 'email' ? (
                     <span style={{ fontSize: '0.75rem', color: '#38bdf8', background: 'rgba(56, 189, 248, 0.15)', border: '1px solid rgba(56, 189, 248, 0.3)', padding: '2px 8px', borderRadius: '4px', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
                       ✉️ E-Posta
@@ -119,7 +129,7 @@ export const TicketsView: React.FC<TicketsViewProps> = ({
                     </span>
                   )}
                 </div>
-                <h3 style={{ fontSize: '1rem', fontWeight: 700, color: '#FFF', marginBottom: '4px' }}>{ticket.subject}</h3>
+                <h3 style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '4px' }}>{ticket.subject}</h3>
                 <div style={{ fontSize: '0.82rem', color: 'var(--text-secondary)' }}>
                   <strong>{ticket.sender_name}</strong> • {ticket.sender_email}
                 </div>

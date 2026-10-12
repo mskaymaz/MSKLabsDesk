@@ -12,20 +12,29 @@ const I18nContext = createContext<I18nContextType | undefined>(undefined);
 
 function getNestedValue(obj: any, path: string): string | undefined {
   if (!obj || typeof obj !== 'object') return undefined;
-  // Try direct key match first (flat key)
+
+  // 1. Try dot path lookup for namespaced keys (e.g. 'dashboard.quickStats')
+  if (path.includes('.')) {
+    const parts = path.split('.');
+    let curr = obj;
+    for (const part of parts) {
+      if (curr && typeof curr === 'object' && part in curr) {
+        curr = curr[part];
+      } else {
+        curr = undefined;
+        break;
+      }
+    }
+    if (typeof curr === 'string') return curr;
+  }
+
+  // 2. Try direct key match (flat key)
   if (typeof obj[path] === 'string') return obj[path];
 
-  // Try dot path lookup
-  const parts = path.split('.');
-  let curr = obj;
-  for (const part of parts) {
-    if (curr && typeof curr === 'object' && part in curr) {
-      curr = curr[part];
-    } else {
-      return undefined;
-    }
-  }
-  return typeof curr === 'string' ? curr : undefined;
+  // 3. Fallback: check inside common namespace
+  if (obj.common && typeof obj.common[path] === 'string') return obj.common[path];
+
+  return undefined;
 }
 
 function interpolate(text: string, params?: Record<string, any>): string {

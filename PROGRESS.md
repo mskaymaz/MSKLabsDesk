@@ -1,6 +1,15 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 🟢 Son Güncelleme [12.10.2026 - 11:25] — ÖZET EKRANI VE DESTEK FİLTRELERİ DOĞAL TÜRKÇE ÇEVİRİ DÖNÜŞÜMÜ [*]
+* **Yapılan İşlem:** 
+  1. **Sözlük Çakışması Giderildi:** `createMergedDictionary` fonksiyonunun namespace nesnelerini (`dashboard`, `tickets` vb.) string ile ezmesi ve `getNestedValue` arama sırası düzeltildi.
+  2. **Doğal Türkçe İfadeler:** Ham kod anahtarları (`dashboard.quickStats`, `dashboard.totalTickets`, `tickets.pending` vb.) tamamen kaldırıldı. Yerine "Genel Bakış & Hızlı İstatistikler", "Bekleyen Destek Talepleri", "Kayıtlı E-Bülten Aboneleri", "Yeni / İncelenmeyi Bekleyen", "İşlemde / İnceleniyor", "Çözüldü / Yanıtlandı", "Kapatıldı / Reddedildi" gibi son kullanıcı dostu Türkçe kelimeler getirildi.
+  3. **Durum Rozetleri & Arayüz Renkleri:** Destek biletleri ve detay pencerelerindeki İngilizce `new`, `in_progress` statüleri Türkçe rozetlere çevrildi; metin renkleri temaya duyarlı `var(--text-primary)` yapıldı.
+  4. **Modüler Dil Mimarisi:** `translations.ts` dosyası modüler hale getirilerek `types.ts`, `locales/tr.ts`, `locales/en.ts`, `locales/ar.ts` parçalarına bölündü; her dosya 150 satırın altına indirildi (450 satır kuralına %100 uyum).
+* **Sonuçlar:** 61 test dosyası 604 test %100 PASS, Vite build hatasız tamamlandı.
+* **Durum:** `DevAdmin` dalında tamamlandı, arayüzde Türkçe canlı kontrole hazır.
+
 ## 🟢 Son Güncelleme [12.10.2026 - 11:08] — SOL MENÜ YÖNETİCİ KUTUSU & RESPONSİVE MOBİL MENÜ DÜZENLEMESİ [*]
 * **Yapılan İşlem:** 
   1. Masaüstü ekranda sol menünün altındaki "Yönetici" kutusunun üzerine binen mobil alt çubuk (`MobileBottomNav`) masaüstü ekranlarda (`>= 768px`) tamamen gizlendi (`display: none !important`), sadece dar mobil ekranlarda (`< 768px`) görüntülenecek şekilde responsive CSS kuralları eklendi.

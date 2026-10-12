@@ -31,6 +31,16 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
 
   const locale = language === 'ar' ? 'ar-SA' : language === 'en' ? 'en-US' : 'tr-TR';
 
+  const getStatusBadgeLabel = (status: string) => {
+    switch (status) {
+      case 'new': return 'Yeni';
+      case 'in_progress': return 'İşlemde';
+      case 'resolved': return 'Çözüldü';
+      case 'rejected': return 'Reddedildi';
+      default: return status;
+    }
+  };
+
   return (
     <div className="animate-fade-in">
       <div>
@@ -49,7 +59,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
             <div>
               <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', fontWeight: 600 }}>{t('dashboard.totalTickets')}</span>
-              <h3 style={{ fontSize: '2rem', fontWeight: 800, color: '#FFF', marginTop: '4px' }}>{pendingTickets.length}</h3>
+              <h3 style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--text-primary)', marginTop: '4px' }}>{pendingTickets.length}</h3>
             </div>
             <div style={{ padding: '10px', background: 'rgba(99, 102, 241, 0.15)', borderRadius: '12px', color: 'var(--accent-primary)' }}>
               <Inbox size={24} />
@@ -64,7 +74,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
             <div>
               <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', fontWeight: 600 }}>{t('dashboard.pendingComments')}</span>
-              <h3 style={{ fontSize: '2rem', fontWeight: 800, color: '#FFF', marginTop: '4px' }}>{pendingComments.length}</h3>
+              <h3 style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--text-primary)', marginTop: '4px' }}>{pendingComments.length}</h3>
             </div>
             <div style={{ padding: '10px', background: 'rgba(245, 158, 11, 0.15)', borderRadius: '12px', color: 'var(--accent-amber)' }}>
               <MessageSquare size={24} />
@@ -79,7 +89,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
             <div>
               <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', fontWeight: 600 }}>{t('dashboard.totalSubscribers')}</span>
-              <h3 style={{ fontSize: '2rem', fontWeight: 800, color: '#FFF', marginTop: '4px' }}>{subscribers.length}</h3>
+              <h3 style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--text-primary)', marginTop: '4px' }}>{subscribers.length}</h3>
             </div>
             <div style={{ padding: '10px', background: 'rgba(16, 185, 129, 0.15)', borderRadius: '12px', color: 'var(--accent-emerald)' }}>
               <Users size={24} />
@@ -94,7 +104,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
             <div>
               <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', fontWeight: 600 }}>{t('broadcast.broadcastTitle')}</span>
-              <h3 style={{ fontSize: '1.2rem', fontWeight: 700, color: '#FFF', marginTop: '8px' }}>{t('broadcast.sendBroadcast')}</h3>
+              <h3 style={{ fontSize: '1.2rem', fontWeight: 700, color: 'var(--text-primary)', marginTop: '8px' }}>{t('broadcast.sendBroadcast')}</h3>
             </div>
             <div style={{ padding: '10px', background: 'rgba(139, 92, 246, 0.15)', borderRadius: '12px', color: 'var(--accent-secondary)' }}>
               <Send size={24} />
@@ -110,7 +120,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '20px' }}>
         <div className="glass-card">
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '18px' }}>
-            <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: '#FFF' }}>{t('dashboard.recentTickets')}</h3>
+            <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--text-primary)' }}>{t('dashboard.recentTickets')}</h3>
             <button className="btn btn-secondary btn-sm" onClick={() => onNavigate('tickets')}>{t('common.all')}</button>
           </div>
 
@@ -123,7 +133,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                   key={ticket.id} 
                   style={{
                     padding: '12px',
-                    background: 'rgba(0,0,0,0.2)',
+                    background: 'var(--bg-secondary)',
                     borderRadius: 'var(--radius-md)',
                     border: '1px solid var(--border-color)',
                     display: 'flex',
@@ -133,9 +143,9 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                 >
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <span style={{ fontSize: '0.78rem', fontWeight: 800, color: 'var(--accent-cyan)' }}>{ticket.id}</span>
-                    <span className={`badge badge-${ticket.status}`}>{ticket.status}</span>
+                    <span className={`badge badge-${ticket.status}`}>{getStatusBadgeLabel(ticket.status)}</span>
                   </div>
-                  <h4 style={{ fontSize: '0.9rem', fontWeight: 700, color: '#FFF' }}>{ticket.subject}</h4>
+                  <h4 style={{ fontSize: '0.9rem', fontWeight: 700, color: 'var(--text-primary)' }}>{ticket.subject}</h4>
                   <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'flex', justifyContent: 'space-between' }}>
                     <span>{ticket.sender_name} ({ticket.sender_email})</span>
                     <span style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.75rem', color: 'var(--text-muted)' }}>
@@ -149,7 +159,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                       borderLeft: '3px solid var(--accent-primary)',
                       padding: '6px 10px',
                       borderRadius: '4px',
-                      color: '#D1D5DB',
+                      color: 'var(--text-secondary)',
                       display: 'flex',
                       alignItems: 'center',
                       gap: '6px',
@@ -168,7 +178,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         {/* Pending Comments Overview */}
         <div className="glass-card">
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '18px' }}>
-            <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: '#FFF' }}>{t('dashboard.pendingComments')}</h3>
+            <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--text-primary)' }}>{t('dashboard.pendingComments')}</h3>
             <button className="btn btn-secondary btn-sm" onClick={() => onNavigate('comments')}>{t('common.view')}</button>
           </div>
 
@@ -179,7 +189,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
               {pendingComments.slice(0, 4).map((comment) => (
                 <div key={comment.id} style={{
                   padding: '12px',
-                  background: 'rgba(0,0,0,0.2)',
+                  background: 'var(--bg-secondary)',
                   borderRadius: 'var(--radius-md)',
                   border: '1px solid var(--border-color)',
                   display: 'flex',
@@ -187,7 +197,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                   gap: '6px'
                 }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#FFF' }}>{comment.author_name}</span>
+                    <span style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-primary)' }}>{comment.author_name}</span>
                     <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{new Date(comment.created_at).toLocaleDateString(locale)}</span>
                   </div>
                   <p style={{ fontSize: '0.82rem', color: 'var(--text-secondary)' }}>"{comment.content}"</p>
