@@ -1,6 +1,11 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [12.10.2026 - 10:32] - Yönetici Kullanım Haritası (`admin_icerigi.md`) Test Kontrol Kutuları & Yeni Modüller
+- `admin_icerigi.md` dokümanına gelen e-posta destek köprüsü ve kamusal blog yorum arayüzü fonksiyonları eklendi.
+- Görsel test sürecinde adım adım takip edilmek üzere tüm modül ve alt fonksiyonlara durum kutucukları (`[ ]`, `[-]`, `[x]`) entegre edildi.
+- `DevAdmin` dalında çalışıldı, `main` korundu.
+
 ## [12.10.2026 - 10:25] - INT-COM-001 Blog Yorum Arayüzü & COM-INBOUND-001 Email Destek Köprüsü Tamamlandı
 - `INT-COM-001`: `webMSKLabs/blog/blog.html` içerisine duyarlı yorum formu ve onaylı yorum akışı (#commentsSection) entegre edildi. `blog/comments.js` modülü kodlandı; TR/EN/AR localization, honeypot anti-bot koruması, API köprüsü (`POST/GET /api/v1/comments`) ve XSS güvenliği sağlandı (`tests/int_com001.test.ts` 5/5 PASS).
 - `COM-INBOUND-001`: Cloudflare Email Routing gelen e-posta destek bileti köprüsü (`destek@msklabs.org`) Workers `email(message, env, ctx)` handler ve `emailInboundService.ts` servisiyle tamamlandı. D1 `messages` tablosuna `category = 'email'` ile kaydedilmesi sağlandı. Admin paneli `TicketsView.tsx` ve `TicketDetailModal.tsx` üzerinde ✉️ E-Posta rozeti eklendi (`tests/com_inbound001.test.ts` 7/7 PASS).

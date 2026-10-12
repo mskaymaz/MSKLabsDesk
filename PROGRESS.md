@@ -1,6 +1,11 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 🟢 Son Güncelleme [12.10.2026 - 10:32] — YÖNETİCİ HARİTASI (`admin_icerigi.md`) İŞARETLENEBİLİR TEST KUTULARI VE YENİ ÖZELLİKLERLE GÜNCELLENDİ
+* **Yapılan İşlem:** Kullanıcının talebi doğrultusunda `admin_icerigi.md` dosyasına son eklenen iki bileşen (Gelen E-Posta Destek Masası ve Kamusal Blog Yorum Arayüzü) özet olarak eklendi. Tüm modül ve alt fonksiyonlara adım adım görsel test sürecinde kullanılmak üzere işaretlenebilir kutucuklar (`[ ]` beklemede, `[-]` işlemde, `[x]` tamamlandı) entegre edildi.
+* **Sonuçlar:** `admin_icerigi.md` güncellendi (223 satır), `DevAdmin` dalında çalışıldı, `main` korundu.
+* **Durum:** Görsel test adımlarına geçmeye hazırdır.
+
 ## 🟢 Son Güncelleme [12.10.2026 - 10:25] — ÖNCELİKLİ GÖREVLER (INT-COM-001 & COM-INBOUND-001) TAMAMLANDI [*] 🎉
 * **Yapılan İşlem:** Eksikliği tespit edilen iki kritik bileşen uçtan uca kodlandı, test edildi ve sisteme entegre edildi:
   1. `INT-COM-001` Kamusal Blog Yorum Arayüzü: `webMSKLabs/blog/blog.html` içerisine duyarlı yorum formu ve onaylı yorum akışı (#commentsSection) eklendi. `blog/comments.js` modülü ile TR/EN/AR çok dilli destek, honeypot anti-bot koruması, API entegrasyonu ve XSS koruması sağlandı. `tests/int_com001.test.ts` (5/5 PASS).
