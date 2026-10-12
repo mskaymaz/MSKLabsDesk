@@ -1,6 +1,12 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [12.10.2026 - 10:25] - INT-COM-001 Blog Yorum Arayüzü & COM-INBOUND-001 Email Destek Köprüsü Tamamlandı
+- `INT-COM-001`: `webMSKLabs/blog/blog.html` içerisine duyarlı yorum formu ve onaylı yorum akışı (#commentsSection) entegre edildi. `blog/comments.js` modülü kodlandı; TR/EN/AR localization, honeypot anti-bot koruması, API köprüsü (`POST/GET /api/v1/comments`) ve XSS güvenliği sağlandı (`tests/int_com001.test.ts` 5/5 PASS).
+- `COM-INBOUND-001`: Cloudflare Email Routing gelen e-posta destek bileti köprüsü (`destek@msklabs.org`) Workers `email(message, env, ctx)` handler ve `emailInboundService.ts` servisiyle tamamlandı. D1 `messages` tablosuna `category = 'email'` ile kaydedilmesi sağlandı. Admin paneli `TicketsView.tsx` ve `TicketDetailModal.tsx` üzerinde ✉️ E-Posta rozeti eklendi (`tests/com_inbound001.test.ts` 7/7 PASS).
+- 61 test dosyası, 604 Vitest testi %100 PASS; 88 kaynak dosyada 450 satır sınırı ve $0 maliyet ilkesi korundu.
+- Yalnızca `DevAdmin` dalında çalışıldı, `main` korundu.
+
 ## [12.10.2026 - 09:54] - Yönetici Kullanım & Fonksiyon Haritası (`admin_icerigi.md`) Dokümantasyonu
 - Yazılım/kodlama terimlerinden arındırılmış, son kullanıcı yöneticisinin gözünden panel ekranlarını ve yapılabilecek tüm ayarları detaylandıran `admin_icerigi.md` oluşturuldu.
 - Destek Biletleri (AI analizi, kupon tanımlama), Blog & TipTap Editör, Mobil/Web Uygulama Kataloğu (sürüm ve mağaza linkleri), AdSense Reklam Yönetimi (boyut, yapışkanlık, margin), Yorum Moderasyonu, Sesli Makale (TTS) ve Sistem Ayarları kapsamlı şekilde belgelendi.

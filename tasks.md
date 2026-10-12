@@ -32,6 +32,46 @@
 
 ---
 
+## 🚨 ÖNCELİKLİ YENİ GÖREVLER (IMMEDIATE ACTION BACKLOG)
+
+### INT-COM-001 — Kamusal Blog Yorum Formu & Onaylı Yorum Akışı Arayüzü [*]
+- **Amaç:** `webMSKLabs` blog okuyucu arayüzünde (`blog/blog.html`) kullanıcıların makalelere yorum yapabilmesi için duyarlı (responsive) bir yorum formu ve ilgili yazıya ait moderatör onayından geçmiş yorumları listeleyen Vanilla JS bileşeninin entegrasyonu.
+- **Kapsam:** `webMSKLabs/blog/blog.html`, `webMSKLabs/blog/blog.js`, `webMSKLabs/blog/comments.js`, `webMSKLabs/src/routes/publicRoutes.ts`.
+- **Teknik Gereksinimler:**
+  - [*] `#readerView` makale okuma modunda makalenin altında şık ve erişilebilir yorum yazma formu (`#commentsSection`): Yazar adı (`authorName`), e-posta (`authorEmail` - gizli tutulur, kamuya açılmaz), honeypot anti-spam gizli alanı (`website`), yorum metni (`content`, 5-1000 karakter).
+  - [*] Form gönderildiğinde `POST /api/v1/comments` API çağrısının yapılması, honeypot ve validasyon kontrolleri, başarılı gönderimde "Yorumunuz yönetici onayına gönderildi" bilgilendirmesi.
+  - [*] Makale açıldığında (`openPost(id)`) `GET /api/v1/comments?postSlug=...` çağrısı ile onaylı yorumların `#commentsList` alanında listelenmesi; yorum yoksa kullanıcıyı teşvik eden nazik bir boş durum (empty state) mesajı gösterilmesi.
+  - [*] Gönderim esnasında loading/spinner ve çift tıklamayı önleyen buton kilidi (debouncing/idempotency).
+- **Mimari Karar:** $0 maliyet ilkesine ve Vanilla JS yapısına tam uyumlu; harici kütüphane eklenmeden mevcut Cloudflare D1 + Workers API entegrasyonu.
+- **Etkilenecek Katmanlar:** Frontend (`webMSKLabs/blog`), Backend API (`webMSKLabs/src/routes/publicRoutes.ts`).
+- **Bağımlılıklar:** API-002 (tamamlandı), SEC-SAN-001 (tamamlandı).
+- **Bağımlı Görevler:** Yok — Kullanıcı etkileşimi köprüsüdür.
+- **Güvenlik Gereksinimleri:**
+  - [*] E-posta adresi asla kamuya açık render edilmez.
+  - [*] XSS saldırılarına karşı DOM enjeksiyonu temizliği (`textContent` / sanitize kullanımı).
+  - [*] Honeypot gizli input ile bot engeli.
+- **Definition of Done (DoD):**
+  - [*] `blog.html` içerisine yorum formu ve yorum listesi container'larının eklenmesi.
+  - [*] `comments.js` ile `loadComments` ve `submitComment` fonksiyonlarının entegre edilmesi.
+  - [*] Vitest testi (`tests/int_com001.test.ts` 5/5 PASS) ve satır sınırı ile doğrulanması.
+
+### COM-INBOUND-001 — Cloudflare Email Routing & Gelen E-Posta Destek Bileti Köprüsü [*]
+- **Amaç:** `destek@msklabs.org` veya `msklabs.org@gmail.com` adreslerine dışarıdan gelen e-postaların Cloudflare Email Routing kuralları ve Cloudflare Workers `email(message, env, ctx)` event handler ile yakalanarak D1 `messages` tablosunda destek bileti (`channel = 'EMAIL'`) olarak oluşturulması.
+- **Kapsam:** `backend/src/index.ts`, `backend/src/services/emailInbound.ts`, `webMSKLabs/src/services/emailInboundService.ts`, `MSKLabsDesk/frontend/src/views/TicketsView.tsx`.
+- **Teknik Gereksinimler:**
+  - [*] Cloudflare Worker için `email(message: ForwardableEmailMessage, env: Env, ctx: ExecutionContext)` handler tanımı.
+  - [*] Gelen e-postanın kimden (`from`), kime (`to`), konu (`subject`) ve metin gövdesi (`raw` stream veya text parser) okunarak D1 `messages` tablosuna `status = 'open'`, `category = 'email'` ile eklenmesi.
+  - [*] Admin panelinde (`TicketsView.tsx` ve `TicketDetailModal.tsx`) bilet listesinde e-posta kaynaklı biletlerin özel rozetle (Badge: "✉️ E-Posta") ayırt edilmesi.
+  - [*] Gmail yönlendirmesi veya Cloudflare DNS Email Routing ile $0/ay maliyetin korunması.
+- **Mimari Karar:** Harici ücretli IMAP/POP3 sunucu tutmak yerine Cloudflare Workers Free Tier'da yer alan dahili Email Routing Worker tetikleyicisi kullanılarak sıfır maliyetle e-posta bilet köprüsü kurulur.
+- **Etkilenecek Katmanlar:** Backend (`backend/src/index.ts`, services), Admin Frontend (`TicketsView.tsx`).
+- **Definition of Done (DoD):**
+  - [*] Worker `email` handler ve inbound email servisi kodlanıp testlerinin yazılması (`tests/com_inbound001.test.ts` 7/7 PASS).
+  - [*] Admin arayüzünde gelen e-posta biletlerinin listelenip yanıtlanabilmesi.
+  - [*] 450 satır sınırı ve $0 maliyet ilkesinin korunması.
+
+---
+
 ### 1. ARCHITECTURE & ENGINEERING FOUNDATION
 
 ### ARCH-001 — Serverless Edge Backend Kurulumu

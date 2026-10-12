@@ -109,9 +109,15 @@ export const TicketsView: React.FC<TicketsViewProps> = ({
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '6px' }}>
                   <span style={{ fontSize: '0.85rem', fontWeight: 800, color: 'var(--accent-cyan)' }}>{ticket.id}</span>
                   <span className={`badge badge-${ticket.status}`}>{ticket.status}</span>
-                  <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', background: 'rgba(255,255,255,0.05)', padding: '2px 8px', borderRadius: '4px' }}>
-                    {ticket.category}
-                  </span>
+                  {ticket.category === 'email' ? (
+                    <span style={{ fontSize: '0.75rem', color: '#38bdf8', background: 'rgba(56, 189, 248, 0.15)', border: '1px solid rgba(56, 189, 248, 0.3)', padding: '2px 8px', borderRadius: '4px', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                      ✉️ E-Posta
+                    </span>
+                  ) : (
+                    <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', background: 'rgba(255,255,255,0.05)', padding: '2px 8px', borderRadius: '4px' }}>
+                      {ticket.category}
+                    </span>
+                  )}
                 </div>
                 <h3 style={{ fontSize: '1rem', fontWeight: 700, color: '#FFF', marginBottom: '4px' }}>{ticket.subject}</h3>
                 <div style={{ fontSize: '0.82rem', color: 'var(--text-secondary)' }}>

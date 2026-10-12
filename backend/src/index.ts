@@ -20,6 +20,7 @@ import { handleCmsPublic } from './routes/cmsPublic';
 import { EmailEnv } from './utils/email';
 import { AIEnv } from './utils/ai';
 import { AuthEnv } from './utils/auth';
+import { handleInboundEmail } from './services/emailInbound';
 
 export interface Env extends EmailEnv, AIEnv, AuthEnv {
   DB: D1Database;
@@ -131,6 +132,10 @@ export default {
 
     Object.entries(corsHeaders).forEach(([k, v]) => response.headers.set(k, v));
     return response;
+  },
+
+  async email(message: any, env: Env, ctx: ExecutionContext): Promise<void> {
+    await handleInboundEmail(message, env, ctx);
   },
 };
 

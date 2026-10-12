@@ -1,7 +1,18 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
-## 🟢 Son Güncelleme [12.10.2026 - 09:54] — YÖNETİCİ KULLANIM & FONKSİYON HARİTASI (`admin_icerigi.md`) OLUŞTURULDU
+## 🟢 Son Güncelleme [12.10.2026 - 10:25] — ÖNCELİKLİ GÖREVLER (INT-COM-001 & COM-INBOUND-001) TAMAMLANDI [*] 🎉
+* **Yapılan İşlem:** Eksikliği tespit edilen iki kritik bileşen uçtan uca kodlandı, test edildi ve sisteme entegre edildi:
+  1. `INT-COM-001` Kamusal Blog Yorum Arayüzü: `webMSKLabs/blog/blog.html` içerisine duyarlı yorum formu ve onaylı yorum akışı (#commentsSection) eklendi. `blog/comments.js` modülü ile TR/EN/AR çok dilli destek, honeypot anti-bot koruması, API entegrasyonu ve XSS koruması sağlandı. `tests/int_com001.test.ts` (5/5 PASS).
+  2. `COM-INBOUND-001` Gelen E-Posta Destek Bileti Köprüsü: Cloudflare Workers için `email(message, env, ctx)` handler ve `emailInboundService.ts` servisi kodlandı. `destek@msklabs.org` adresine gelen postalar otomatik D1 `messages` tablosuna aktarılarak destek bileti oluşturuluyor. `TicketsView.tsx` ve `TicketDetailModal.tsx` paneline ✉️ E-Posta rozeti eklendi. `tests/com_inbound001.test.ts` (7/7 PASS).
+* **Sonuçlar:**
+  - `tasks.md` üzerinde her iki görev `[*] (Derin Denetlendi & Doğrulandı)` olarak güncellendi.
+  - Vitest test suite 61 test dosyası, 604 test %100 PASS (0 HATA).
+  - Backend `tsc --noEmit` ve Frontend Vite Build (PWA) %100 PASS.
+  - Line Limit Gate (88 dosya) %100 PASS (tüm dosyalar <= 450 satır).
+  - $0/Ay sıfır maliyet ilkesi korundu.
+  - Yalnızca `DevAdmin` dalında çalışıldı, `main` korundu.
+* **Durum:** Öncelikli iki eksik görev başarıyla tamamlandı. Canlı/gerçek testlere hazırdır.
 * **Yapılan İşlem:** Yazılımdan anlamayan bir panel yöneticisinin gözünden ekranda göreceği tüm arayüzleri, yapabileceği ayarları ve butonları kapsayan 15 ana modüllü `admin_icerigi.md` dokümanı oluşturuldu.
 * **Kapsanan Modüller:** Dashboard, Destek/Biletler (AI Analiz & Kupon/Hediye), Blog & TipTap Editör, Kanallar, Yorum Moderasyonu, Sesli Makale (TTS), Mobil/Web Uygulama Kataloğu (Apps Showcase & Sürüm Yönetimi), AdSense Reklam Yerleşimi (10 Standart/Özel Boyut, Boşluk, Yapışkanlık), Üst Duyuru Bandı, Toplu E-Posta Bülteni (Broadcast), Abone Yönetimi (KVKK), Çok Dilli Çeviri & RTL, Sistem Ayarları, Güvenlik Denetim Logları ve Rol Yetkilendirme (RBAC).
 * **Sonuçlar:**
