@@ -1,4 +1,4 @@
-export type TicketStatus = 'new' | 'in_progress' | 'resolved' | 'closed' | 'rejected';
+export type TicketStatus = 'new' | 'open' | 'in_progress' | 'resolved' | 'closed' | 'rejected';
 export type TicketPriority = 'low' | 'medium' | 'high' | 'urgent';
 
 export interface Ticket {
@@ -9,8 +9,10 @@ export interface Ticket {
   category: string;
   priority: TicketPriority;
   status: TicketStatus;
-  message_content: string;
+  message_content?: string;
+  content?: string;
   ai_summary?: string;
+  ai_draft?: string;
   ai_suggested_reply?: string;
   created_at: string;
   updated_at: string;

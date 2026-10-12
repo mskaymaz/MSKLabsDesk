@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import type { Ticket, TicketDetailResponse } from '../types';
-import { Search, Filter, Sparkles, Eye, Clock } from 'lucide-react';
+import { Search, Filter, Sparkles, Eye, Clock, RotateCw } from 'lucide-react';
 import { api } from '../services/api';
 import { TicketDetailModal } from '../components/TicketDetailModal';
 import { useTranslation } from '../context/I18nContext';
@@ -19,32 +19,96 @@ export const TicketsView: React.FC<TicketsViewProps> = ({
   const { t, language } = useTranslation();
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
+  const [categoryFilter, setCategoryFilter] = useState<string>('all');
   const [selectedTicketDetail, setSelectedTicketDetail] = useState<TicketDetailResponse | null>(null);
   const [loadingDetail, setLoadingDetail] = useState(false);
+  const [loadingAnalyze, setLoadingAnalyze] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const [openedIds, setOpenedIds] = useState<string[]>(() => {
+    try {
+      const saved = localStorage.getItem('msk_opened_tickets');
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  });
+
+  const markAsOpened = (id: string) => {
+    setOpenedIds((prev) => {
+      if (!prev.includes(id)) {
+        const next = [...prev, id];
+        try { localStorage.setItem('msk_opened_tickets', JSON.stringify(next)); } catch {}
+        return next;
+      }
+      return prev;
+    });
+  };
 
   const locale = language === 'ar' ? 'ar-SA' : language === 'en' ? 'en-US' : 'tr-TR';
 
+  const normalizeCategory = (category?: string): string => {
+    const cat = (category || '').toLowerCase();
+    if (cat === 'hata' || cat === 'bug') return 'hata';
+    if (cat === 'istek' || cat === 'feature') return 'istek';
+    if (cat === 'tesekkur' || cat === 'feedback' || cat === 'general') return 'tesekkur';
+    if (cat === 'fikir' || cat === 'idea') return 'fikir';
+    if (cat === 'email') return 'email';
+    return 'diger';
+  };
+
+  const getCategoryBadge = (category?: string) => {
+    const norm = normalizeCategory(category);
+    switch (norm) {
+      case 'hata':
+        return { label: '🐛 Hata Bildirimi', bg: 'rgba(239, 68, 68, 0.15)', border: 'rgba(239, 68, 68, 0.35)', color: '#F87171' };
+      case 'istek':
+        return { label: '✨ Özellik Talebi', bg: 'rgba(99, 102, 241, 0.15)', border: 'rgba(99, 102, 241, 0.35)', color: '#818CF8' };
+      case 'tesekkur':
+        return { label: '❤️ Teşekkür & Övgü', bg: 'rgba(16, 185, 129, 0.15)', border: 'rgba(16, 185, 129, 0.35)', color: '#34D399' };
+      case 'fikir':
+        return { label: '💡 Yeni Fikir', bg: 'rgba(245, 158, 11, 0.15)', border: 'rgba(245, 158, 11, 0.35)', color: '#FBBF24' };
+      case 'email':
+        return { label: '✉️ E-Posta', bg: 'rgba(56, 189, 248, 0.15)', border: 'rgba(56, 189, 248, 0.35)', color: '#38BDF8' };
+      default:
+        return { label: '💬 Genel Talep', bg: 'rgba(156, 163, 175, 0.15)', border: 'rgba(156, 163, 175, 0.35)', color: '#D1D5DB' };
+    }
+  };
+
   const getStatusBadgeLabel = (status: string) => {
     switch (status) {
-      case 'new': return 'Yeni';
-      case 'in_progress': return 'İşlemde';
-      case 'resolved': return 'Çözüldü';
-      case 'rejected': return 'Reddedildi';
-      default: return status;
+      case 'new':
+      case 'open':
+        return 'Yeni';
+      case 'in_progress':
+        return 'Okundu / İşlemde';
+      case 'resolved':
+        return 'Çözüldü';
+      case 'rejected':
+      case 'closed':
+        return 'Reddedildi';
+      default:
+        return status;
     }
   };
 
   const filteredTickets = tickets.filter((tItem) => {
-    const matchesStatus = statusFilter === 'all' || tItem.status === statusFilter;
+    const matchesCategory =
+      categoryFilter === 'all' || normalizeCategory(tItem.category) === categoryFilter;
+    const matchesStatus =
+      statusFilter === 'all' ||
+      tItem.status === statusFilter ||
+      (statusFilter === 'new' && tItem.status === 'open');
     const matchesSearch =
       tItem.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
       tItem.subject.toLowerCase().includes(searchQuery.toLowerCase()) ||
       tItem.sender_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       tItem.sender_email.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesStatus && matchesSearch;
+    return matchesCategory && matchesStatus && matchesSearch;
   });
 
   const handleOpenDetail = async (id: string) => {
+    markAsOpened(id);
     setLoadingDetail(true);
     try {
       const res = await api.getTicketDetail(id);
@@ -64,105 +128,303 @@ export const TicketsView: React.FC<TicketsViewProps> = ({
     onRefresh();
   };
 
+  const handleAnalyzeAll = async () => {
+    setLoadingAnalyze(true);
+    try {
+      const res = await api.analyzeAllTickets();
+      alert(res.message || 'Tüm bekleyen biletler yapay zeka ile analiz edildi.');
+      onRefresh();
+    } catch {
+      alert('Toplu analiz sırasında bir hata oluştu.');
+    } finally {
+      setLoadingAnalyze(false);
+    }
+  };
+
+  const handleManualRefresh = async () => {
+    setRefreshing(true);
+    try {
+      await onRefresh();
+    } finally {
+      setTimeout(() => setRefreshing(false), 350);
+    }
+  };
+
   return (
     <div className="animate-fade-in">
-      <div>
-        <h1 className="page-title">{t('common.tickets')}</h1>
-        <p className="page-subtitle">{t('tickets.count', { count: filteredTickets.length })}</p>
-      </div>
+      {/* Sticky Ultra-Compact Header & Control Cluster */}
+      <div style={{
+        position: 'sticky',
+        top: '40px',
+        zIndex: 20,
+        background: 'var(--bg-main)',
+        backdropFilter: 'blur(16px)',
+        padding: '1px 0 6px 0',
+        marginBottom: '8px',
+        borderBottom: '1px solid var(--border-color)',
+        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.25)'
+      }}>
+        {/* Row 1: Title + Counter + Category Dropdown (Left) & Actions (Right) */}
+        <div style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          padding: '1px 2px',
+          marginBottom: '4px',
+          flexWrap: 'wrap',
+          gap: '6px'
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+            <h1 style={{ fontSize: '1.05rem', fontWeight: 800, margin: 0, color: 'var(--text-primary)', lineHeight: 1.2 }}>
+              {t('common.tickets')}
+            </h1>
+            <span style={{
+              fontSize: '0.72rem',
+              color: 'var(--accent-cyan)',
+              background: 'rgba(6, 182, 212, 0.12)',
+              border: '1px solid rgba(6, 182, 212, 0.25)',
+              padding: '1px 6px',
+              borderRadius: '10px',
+              fontWeight: 700
+            }}>
+              {filteredTickets.length} talep
+            </span>
 
-      {/* Filter & Search Bar */}
-      <div className="glass-card" style={{ padding: '16px', marginBottom: '24px', display: 'flex', gap: '16px', flexWrap: 'wrap', alignItems: 'center' }}>
-        <div style={{ position: 'relative', flex: 1, minWidth: '240px' }}>
-          <Search size={18} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
-          <input
-            type="text"
-            className="form-input"
-            placeholder={t('common.search')}
-            style={{ paddingLeft: '38px' }}
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
+            {/* Kategori Açılır Listesi (Destek & Talepler Başlığı Hizasında) */}
+            <select
+              className="form-select"
+              value={categoryFilter}
+              onChange={(e) => setCategoryFilter(e.target.value)}
+              style={{
+                width: 'auto',
+                paddingTop: '2px',
+                paddingBottom: '2px',
+                paddingLeft: '8px',
+                paddingRight: '22px',
+                fontSize: '0.78rem',
+                height: '26px',
+                marginLeft: '4px'
+              }}
+              title="Talep Konusuna Göre Filtrele"
+            >
+              <option value="all">📋 Tüm Konular ({tickets.length})</option>
+              <option value="hata">🐛 Hata Bildirimleri ({tickets.filter((t) => normalizeCategory(t.category) === 'hata').length})</option>
+              <option value="istek">✨ Özellik Talepleri ({tickets.filter((t) => normalizeCategory(t.category) === 'istek').length})</option>
+              <option value="tesekkur">❤️ Teşekkür / Övgü ({tickets.filter((t) => normalizeCategory(t.category) === 'tesekkur').length})</option>
+              <option value="fikir">💡 Yeni Fikirler ({tickets.filter((t) => normalizeCategory(t.category) === 'fikir').length})</option>
+              <option value="email">✉️ E-Postalar ({tickets.filter((t) => normalizeCategory(t.category) === 'email').length})</option>
+            </select>
+          </div>
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <button
+              type="button"
+              className="btn btn-sm btn-secondary"
+              style={{
+                padding: '3px 9px',
+                fontSize: '0.74rem',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '4px',
+                borderRadius: '6px',
+                fontWeight: 600,
+                color: 'var(--text-secondary)'
+              }}
+              onClick={handleManualRefresh}
+              disabled={refreshing}
+              title="Mesajları Yenile (Yalnızca Listeyi Günceller)"
+            >
+              <RotateCw size={12} className={refreshing ? 'spin' : ''} />
+              {refreshing ? 'Yenileniyor...' : 'Yenile'}
+            </button>
+
+            <button
+              type="button"
+              className="btn btn-sm"
+              style={{
+                background: 'linear-gradient(135deg, #A78BFA, #38BDF8)',
+                color: '#000000',
+                fontWeight: 700,
+                border: 'none',
+                boxShadow: '0 2px 8px rgba(56, 189, 248, 0.35)',
+                padding: '3px 10px',
+                fontSize: '0.76rem',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '5px',
+                borderRadius: '6px'
+              }}
+              onClick={handleAnalyzeAll}
+              disabled={loadingAnalyze}
+            >
+              <Sparkles size={13} color="#000000" /> {loadingAnalyze ? 'Analiz Ediliyor...' : '🤖 Tümünü AI ile Analiz Et'}
+            </button>
+          </div>
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <Filter size={18} color="var(--text-muted)" />
-          <select
-            className="form-select"
-            value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
-            style={{ width: 'auto' }}
-          >
-            <option value="all">{t('common.all')}</option>
-            <option value="new">{t('tickets.pending')}</option>
-            <option value="in_progress">{t('tickets.inProgress')}</option>
-            <option value="resolved">{t('tickets.resolved')}</option>
-            <option value="rejected">{t('tickets.rejected')}</option>
-          </select>
+        {/* Row 2: Search Bar & Status Filter */}
+        <div style={{
+          display: 'flex',
+          gap: '8px',
+          alignItems: 'center',
+          padding: '1px 0'
+        }}>
+          <div style={{ position: 'relative', flex: 1 }}>
+            <Search size={14} style={{ position: 'absolute', left: '8px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
+            <input
+              type="text"
+              className="form-input"
+              placeholder="Taleplerde hızlı ara (konu, mesaj, gönderen)..."
+              style={{
+                paddingLeft: '28px',
+                paddingTop: '3px',
+                paddingBottom: '3px',
+                fontSize: '0.78rem',
+                height: '28px'
+              }}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
+
+          {/* Durum Açılır Listesi */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+            <Filter size={14} color="var(--text-muted)" />
+            <select
+              className="form-select"
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+              style={{
+                width: 'auto',
+                paddingTop: '2px',
+                paddingBottom: '2px',
+                paddingLeft: '8px',
+                paddingRight: '22px',
+                fontSize: '0.78rem',
+                height: '28px'
+              }}
+              title="İşlem Durumuna Göre Filtrele"
+            >
+              <option value="all">Tüm Durumlar</option>
+              <option value="new">Yeni / İncelenmeyi Bekleyen</option>
+              <option value="in_progress">İşlemde / İnceleniyor</option>
+              <option value="resolved">Çözüldü / Yanıtlandı</option>
+              <option value="rejected">Kapatıldı / Reddedildi</option>
+            </select>
+          </div>
         </div>
       </div>
 
       {/* Tickets Table / Cards */}
       {filteredTickets.length === 0 ? (
-        <div className="glass-card" style={{ textAlign: 'center', padding: '40px' }}>
-          <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>{t('common.loading')}</p>
+        <div className="glass-card" style={{ textAlign: 'center', padding: '48px 24px' }}>
+          <div style={{ fontSize: '2.5rem', marginBottom: '12px' }}>📭</div>
+          <h3 style={{ fontSize: '1.05rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '8px' }}>
+            {searchQuery || statusFilter !== 'all' || categoryFilter !== 'all' ? 'Arama Kriterine Uygun Destek Talebi Bulunamadı' : 'Henüz Kayıtlı Destek Talebi Bulunmuyor'}
+          </h3>
+          <p style={{ color: 'var(--text-muted)', fontSize: '0.88rem', maxWidth: '440px', margin: '0 auto', lineHeight: 1.5 }}>
+            {searchQuery || statusFilter !== 'all' || categoryFilter !== 'all'
+              ? 'Arama kelimesini, konu grubunu veya durum filtresini temizleyerek tüm talepleri tekrar listeleyebilirsiniz.'
+              : 'Web sitemizin Destek & Talep Formu üzerinden veya kurumsal e-postadan gelen tüm talepler anlık olarak burada listelenecektir.'}
+          </p>
         </div>
       ) : (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
           {filteredTickets.map((ticket) => (
             <div
               key={ticket.id}
               className="glass-card glass-card-hover"
-              style={{ padding: '18px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap' }}
+              style={{
+                padding: '3px 14px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                gap: '10px',
+                flexWrap: 'wrap',
+                borderRadius: '8px'
+              }}
             >
-              <div style={{ flex: 1, minWidth: '260px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '6px' }}>
-                  <span style={{ fontSize: '0.85rem', fontWeight: 800, color: 'var(--accent-cyan)' }}>{ticket.id}</span>
-                  <span className={`badge badge-${ticket.status}`}>{getStatusBadgeLabel(ticket.status)}</span>
-                  {ticket.category === 'email' ? (
-                    <span style={{ fontSize: '0.75rem', color: '#38bdf8', background: 'rgba(56, 189, 248, 0.15)', border: '1px solid rgba(56, 189, 248, 0.3)', padding: '2px 8px', borderRadius: '4px', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-                      ✉️ E-Posta
+              <div style={{ flex: 1, minWidth: '240px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap', marginBottom: '2px' }}>
+                  <span style={{ fontSize: '0.8rem', fontWeight: 800, color: 'var(--accent-cyan)' }}>{ticket.id}</span>
+                  <span className={`badge badge-${ticket.status}`} style={{ padding: '1px 5px', fontSize: '0.68rem' }}>
+                    {getStatusBadgeLabel(ticket.status)}
+                  </span>
+                  {(() => {
+                    const cBadge = getCategoryBadge(ticket.category);
+                    return (
+                      <span style={{
+                        fontSize: '0.68rem',
+                        color: cBadge.color,
+                        background: cBadge.bg,
+                        border: `1px solid ${cBadge.border}`,
+                        padding: '1px 5px',
+                        borderRadius: '4px',
+                        fontWeight: 600,
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '3px'
+                      }}>
+                        {cBadge.label}
+                      </span>
+                    );
+                  })()}
+                  {openedIds.includes(ticket.id) ? (
+                    <span style={{ fontSize: '0.68rem', color: 'var(--text-muted)', background: 'rgba(255,255,255,0.06)', padding: '1px 5px', borderRadius: '4px' }}>
+                      👁️ Açıldı
                     </span>
                   ) : (
-                    <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', background: 'rgba(255,255,255,0.05)', padding: '2px 8px', borderRadius: '4px' }}>
-                      {ticket.category}
+                    <span style={{ fontSize: '0.68rem', color: '#38BDF8', background: 'rgba(56, 189, 248, 0.15)', border: '1px solid rgba(56, 189, 248, 0.35)', padding: '1px 5px', borderRadius: '4px', fontWeight: 700 }}>
+                      🔔 Yeni
                     </span>
                   )}
                 </div>
-                <h3 style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '4px' }}>{ticket.subject}</h3>
-                <div style={{ fontSize: '0.82rem', color: 'var(--text-secondary)' }}>
+                <h3 style={{ fontSize: '0.88rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '1px', lineHeight: 1.25 }}>
+                  {ticket.subject}
+                </h3>
+                <div style={{ fontSize: '0.74rem', color: 'var(--text-secondary)' }}>
                   <strong>{ticket.sender_name}</strong> • {ticket.sender_email}
                 </div>
               </div>
 
-              {ticket.ai_summary && (
+              {/* Middle Section: Message Preview */}
+              <div style={{
+                flex: 1,
+                minWidth: '200px',
+                maxWidth: '460px',
+                padding: '0 4px'
+              }}>
                 <div style={{
-                  flex: 1,
-                  minWidth: '240px',
-                  background: 'rgba(99, 102, 241, 0.08)',
-                  borderLeft: '3px solid var(--accent-primary)',
-                  padding: '8px 12px',
-                  borderRadius: '6px',
-                  fontSize: '0.8rem',
-                  color: '#D1D5DB'
+                  fontSize: '0.75rem',
+                  color: 'var(--text-secondary)',
+                  lineHeight: '1.3',
+                  display: '-webkit-box',
+                  WebkitLineClamp: 3,
+                  WebkitBoxOrient: 'vertical',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  background: 'rgba(255, 255, 255, 0.03)',
+                  padding: '3px 6px',
+                  borderRadius: '5px',
+                  border: '1px solid rgba(255, 255, 255, 0.06)',
+                  maxHeight: '50px'
                 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '4px', color: 'var(--accent-cyan)', fontWeight: 700, fontSize: '0.75rem', marginBottom: '2px' }}>
-                    <Sparkles size={12} /> {t('tickets.aiAnalysis')}
-                  </div>
-                  {ticket.ai_summary}
+                  <span style={{ color: 'var(--text-muted)', marginRight: '4px' }}>💬</span>
+                  {ticket.message_content || (ticket as any).content || '(İçerik belirtilmemiş)'}
                 </div>
-              )}
+              </div>
 
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                  <Clock size={12} /> {new Date(ticket.created_at).toLocaleDateString(locale)}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '3px' }}>
+                  <Clock size={11} /> {new Date(ticket.created_at).toLocaleDateString(locale)}
                 </span>
                 <button
                   className="btn btn-primary btn-sm"
+                  style={{ padding: '2px 8px', fontSize: '0.74rem', borderRadius: '5px' }}
                   onClick={() => handleOpenDetail(ticket.id)}
                   disabled={loadingDetail}
                 >
-                  <Eye size={14} /> {t('common.view')}
+                  <Eye size={12} /> {t('common.view')}
                 </button>
               </div>
             </div>

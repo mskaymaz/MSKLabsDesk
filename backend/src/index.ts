@@ -7,7 +7,7 @@ import { handleSupportSubmission } from './routes/support';
 import { handleCommentSubmission, handleGetApprovedComments } from './routes/comments';
 import { handleSubscribe, handleUnsubscribe } from './routes/subscribe';
 import { handleAdminLogin } from './routes/adminAuth';
-import { handleAdminGetTickets, handleAdminGetTicketDetail, handleAdminReplyTicket, handleAdminUpdateTicketStatus } from './routes/adminTickets';
+import { handleAdminGetTickets, handleAdminGetTicketDetail, handleAdminReplyTicket, handleAdminUpdateTicketStatus, handleAdminAnalyzeTicket, handleAdminAnalyzeAllTickets, handleAdminTranslateTicket } from './routes/adminTickets';
 import { handleAdminGetComments, handleAdminModerateComment } from './routes/adminComments';
 import { handleAdminGetSubscribers, handleAdminBroadcastNewsletter } from './routes/adminBroadcast';
 import { handleAdminMediaUpload, handleAdminMediaDelete } from './routes/adminMedia';
@@ -77,9 +77,17 @@ export default {
       response = await handleAdminLogin(request, env);
     } else if (path === '/api/admin/tickets' && request.method === 'GET') {
       response = await handleAdminGetTickets(request, env);
+    } else if (path === '/api/admin/tickets/analyze-all' && request.method === 'POST') {
+      response = await handleAdminAnalyzeAllTickets(request, env);
+    } else if (path.startsWith('/api/admin/tickets/') && path.endsWith('/analyze') && request.method === 'POST') {
+      const ticketId = path.split('/')[4];
+      response = await handleAdminAnalyzeTicket(ticketId, request, env);
     } else if (path.startsWith('/api/admin/tickets/') && path.endsWith('/reply') && request.method === 'POST') {
       const ticketId = path.split('/')[4];
       response = await handleAdminReplyTicket(ticketId, request, env);
+    } else if (path.startsWith('/api/admin/tickets/') && path.endsWith('/translate') && request.method === 'POST') {
+      const ticketId = path.split('/')[4];
+      response = await handleAdminTranslateTicket(ticketId, request, env);
     } else if (path.startsWith('/api/admin/tickets/') && path.endsWith('/status') && request.method === 'POST') {
       const ticketId = path.split('/')[4];
       response = await handleAdminUpdateTicketStatus(ticketId, request, env);

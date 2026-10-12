@@ -31,17 +31,22 @@ export function generateTicketId(): string {
  */
 export async function handleSupportSubmission(request: Request, env: { DB: D1Database } & EmailEnv & AIEnv): Promise<Response> {
   try {
-    const payload = await request.json() as SupportTicketPayload;
+    const rawPayload = await request.json() as any;
 
-    if (!payload.sender_name || !payload.sender_email || !payload.subject || !payload.content) {
+    const sender_name = (rawPayload.sender_name || rawPayload.name || rawPayload.senderName || (rawPayload.app ? `${rawPayload.app} Kullanıcısı` : 'Web Ziyaretçisi')).trim();
+    const sender_email = (rawPayload.sender_email || rawPayload.email || rawPayload.senderEmail || '').trim().toLowerCase();
+    const subject = (rawPayload.subject || '').trim();
+    const content = (rawPayload.content || rawPayload.message || rawPayload.description || '').trim();
+
+    if (!sender_email || !subject || !content) {
       return new Response(
-        JSON.stringify({ error: 'Lütfen tüm zorunlu alanları (ad, e-posta, konu, içerik) doldurun.' }),
+        JSON.stringify({ error: 'Lütfen tüm zorunlu alanları (e-posta, konu, içerik) doldurun.' }),
         { status: 400, headers: { 'Content-Type': 'application/json; charset=utf-8' } }
       );
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(payload.sender_email.trim())) {
+    if (!emailRegex.test(sender_email)) {
       return new Response(
         JSON.stringify({ error: 'Geçersiz e-posta adresi biçimi.' }),
         { status: 400, headers: { 'Content-Type': 'application/json; charset=utf-8' } }
@@ -49,18 +54,18 @@ export async function handleSupportSubmission(request: Request, env: { DB: D1Dat
     }
 
     const ticketId = generateTicketId();
-    const category = payload.category || 'general';
+    const category = rawPayload.category || 'general';
 
     // 1. D1 Veritabanına Kayıt
     await env.DB.prepare(`
       INSERT INTO messages (id, sender_name, sender_email, subject, content, category, status, created_at)
-      VALUES (?, ?, ?, ?, ?, ?, 'open', CURRENT_TIMESTAMP)
+      VALUES (?, ?, ?, ?, ?, ?, 'new', CURRENT_TIMESTAMP)
     `).bind(
       ticketId,
-      payload.sender_name.trim(),
-      payload.sender_email.trim().toLowerCase(),
-      payload.subject.trim(),
-      payload.content.trim(),
+      sender_name,
+      sender_email,
+      subject,
+      content,
       category
     ).run();
 
@@ -73,13 +78,13 @@ export async function handleSupportSubmission(request: Request, env: { DB: D1Dat
     // 3. Yapay Zeka (Gemini API) Otomatik Analizi
     analyzeSupportTicketWithAI({
       id: ticketId,
-      sender_name: payload.sender_name.trim(),
-      subject: payload.subject.trim(),
-      content: payload.content.trim(),
+      sender_name,
+      subject,
+      content,
       category
     }, env).then(async (analysis) => {
       if (analysis) {
-        const newStatus = analysis.is_spam ? 'spam' : 'open';
+        const newStatus = analysis.is_spam ? 'spam' : 'new';
         await env.DB.prepare(`
           UPDATE messages 
           SET category = ?, urgency = ?, ai_summary = ?, ai_draft = ?, status = ?
@@ -104,10 +109,10 @@ export async function handleSupportSubmission(request: Request, env: { DB: D1Dat
     const emailSubject = `[${ticketId}] Destek Talebiniz Alındı — MSK Labs`;
     const emailHtml = `
       <div style="font-family: Arial, sans-serif; color: #333; line-height: 1.6;">
-        <h2>Merhaba ${payload.sender_name},</h2>
+        <h2>Merhaba ${sender_name},</h2>
         <p>Destek talebiniz başarıyla kayıtlarımıza alınmıştır.</p>
         <p><strong>Bilet Numarası:</strong> <code style="background: #e2e8f0; padding: 2px 6px; border-radius: 4px;">${ticketId}</code></p>
-        <p><strong>Konu:</strong> ${payload.subject}</p>
+        <p><strong>Konu:</strong> ${subject}</p>
         <hr style="border: none; border-top: 1px solid #e2e8f0;" />
         <p>Talebiniz ekibimiz tarafından incelenip en kısa sürede bu e-posta adresi üzerinden yanıtlanacaktır.</p>
         <p>Teşekkür ederiz,<br /><strong>MSK Labs Destek Ekibi</strong></p>
@@ -115,8 +120,8 @@ export async function handleSupportSubmission(request: Request, env: { DB: D1Dat
     `;
 
     sendEmail({
-      to: payload.sender_email.trim(),
-      toName: payload.sender_name.trim(),
+      to: sender_email,
+      toName: sender_name,
       subject: emailSubject,
       html: emailHtml,
       emailType: 'ticket_confirmation'
@@ -126,6 +131,7 @@ export async function handleSupportSubmission(request: Request, env: { DB: D1Dat
       JSON.stringify({
         success: true,
         ticket_id: ticketId,
+        ticketId: ticketId,
         message: 'Destek talebiniz başarıyla alındı. Onay e-postası iletildi.',
       }),
       { status: 201, headers: { 'Content-Type': 'application/json; charset=utf-8' } }

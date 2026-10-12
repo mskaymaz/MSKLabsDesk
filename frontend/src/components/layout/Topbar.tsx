@@ -17,38 +17,42 @@ export const Topbar: React.FC<TopbarProps> = ({ activeTab, onOpenSearch, pending
   return (
     <header
       style={{
+        position: 'sticky',
+        top: 0,
+        zIndex: 30,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        padding: '16px 24px',
+        padding: '0 20px',
+        height: '40px',
         borderBottom: '1px solid var(--border-subtle)',
         background: 'var(--bg-topbar)',
-        backdropFilter: 'blur(8px)',
+        backdropFilter: 'blur(12px)',
       }}
     >
       <div>
-        <span style={{ fontSize: 'var(--font-xs)', color: 'var(--text-muted)' }}>MSKLabsDesk / {activeTab}</span>
+        <span style={{ fontSize: '0.76rem', color: 'var(--text-muted)', fontWeight: 600 }}>MSKLabsDesk / {activeTab}</span>
       </div>
 
-      <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
         <button
           type="button"
           onClick={onOpenSearch}
           style={{
             display: 'flex',
             alignItems: 'center',
-            gap: '8px',
-            padding: '8px 14px',
+            gap: '6px',
+            padding: '3px 10px',
             background: 'rgba(255, 255, 255, 0.05)',
             border: '1px solid var(--border-subtle)',
-            borderRadius: 'var(--radius-md)',
+            borderRadius: 'var(--radius-sm)',
             color: 'var(--text-secondary)',
-            fontSize: 'var(--font-xs)',
+            fontSize: '0.74rem',
             cursor: 'pointer',
-            minHeight: '44px',
+            height: '28px',
           }}
         >
-          <Search size={16} />
+          <Search size={13} />
           <span>Hızlı Arama (Cmd+K)</span>
         </button>
 
@@ -61,23 +65,23 @@ export const Topbar: React.FC<TopbarProps> = ({ activeTab, onOpenSearch, pending
               border: 'none',
               color: 'var(--text-secondary)',
               cursor: 'pointer',
-              padding: '8px',
-              minWidth: '44px',
-              minHeight: '44px',
+              padding: '4px',
+              width: '28px',
+              height: '28px',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
             }}
           >
-            <Bell size={20} />
+            <Bell size={16} />
             {pendingCount > 0 && (
               <span
                 style={{
                   position: 'absolute',
-                  top: '6px',
-                  right: '6px',
-                  width: '8px',
-                  height: '8px',
+                  top: '3px',
+                  right: '3px',
+                  width: '6px',
+                  height: '6px',
                   borderRadius: '50%',
                   background: 'var(--accent-amber)',
                 }}
@@ -96,28 +100,28 @@ export const Topbar: React.FC<TopbarProps> = ({ activeTab, onOpenSearch, pending
             border: 'none',
             color: 'var(--text-secondary)',
             cursor: 'pointer',
-            padding: '8px',
-            minWidth: '44px',
-            minHeight: '44px',
+            padding: '4px',
+            width: '28px',
+            height: '28px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            borderRadius: 'var(--radius-md)',
+            borderRadius: 'var(--radius-sm)',
             transition: 'transform 0.2s ease',
           }}
         >
           {theme === 'dark' ? (
-            <Sun size={20} color="var(--accent-amber)" />
+            <Sun size={16} color="var(--accent-amber)" />
           ) : (
-            <Moon size={20} color="var(--accent-primary)" />
+            <Moon size={16} color="var(--accent-primary)" />
           )}
         </button>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
           <div
             style={{
-              width: '32px',
-              height: '32px',
+              width: '24px',
+              height: '24px',
               borderRadius: '50%',
               background: 'var(--accent-primary)',
               display: 'flex',
@@ -126,9 +130,9 @@ export const Topbar: React.FC<TopbarProps> = ({ activeTab, onOpenSearch, pending
               color: '#FFF',
             }}
           >
-            <User size={16} />
+            <User size={13} />
           </div>
-          <span style={{ fontSize: 'var(--font-xs)', fontWeight: 600, color: 'var(--text-primary)' }}>
+          <span style={{ fontSize: '0.74rem', fontWeight: 600, color: 'var(--text-primary)' }}>
             {user?.name || 'Admin'}
           </span>
         </div>

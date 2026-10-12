@@ -63,6 +63,41 @@ export const api = {
     return res.json();
   },
 
+  async analyzeTicket(id: string) {
+    const res = await fetch(`${API_BASE}/admin/tickets/${id}/analyze`, {
+      method: 'POST',
+      headers: getHeaders(),
+    });
+    if (!res.ok) throw new Error('Yapay zeka analizi çalıştırılamadı.');
+    return res.json();
+  },
+
+  async analyzeAllTickets() {
+    const res = await fetch(`${API_BASE}/admin/tickets/analyze-all`, {
+      method: 'POST',
+      headers: getHeaders(),
+    });
+    if (!res.ok) throw new Error('Toplu analiz çalıştırılamadı.');
+    return res.json();
+  },
+
+  async translateTicket(id: string) {
+    const res = await fetch(`${API_BASE}/admin/tickets/${id}/translate`, {
+      method: 'POST',
+      headers: getHeaders(),
+    });
+    if (!res.ok) throw new Error('Çeviri işlemi gerçekleştirilemedi.');
+    return res.json() as Promise<{
+      success: boolean;
+      ticket_id: string;
+      original_subject: string;
+      original_content: string;
+      detected_language: string;
+      translated_subject: string;
+      translated_content: string;
+    }>;
+  },
+
   // Comments
   async getComments(status?: string): Promise<{ comments: CommentItem[] }> {
     const query = status ? `?status=${encodeURIComponent(status)}` : '';

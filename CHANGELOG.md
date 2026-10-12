@@ -1,6 +1,38 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [12.10.2026 - 16:50] - Destek Talepleri Kategori Açılır Listesi (Dropdown) & Başlık Hizalaması
+- `TicketsView.tsx`:
+  - Mobilde yatayda kayan ve taşan 6 adet konu filtresi butonu yerine açılır liste (`<select>`) kurgulandı.
+  - Listenin en üstünde varsayılan olarak `📋 Tüm Konular (${tickets.length})` seçeneği yer aldı; altında `🐛 Hata Bildirimleri`, `✨ Özellik Talepleri`, `❤️ Teşekkür / Övgü`, `💡 Yeni Fikirler`, `✉️ E-Postalar` kendi sayaçlarıyla dinamik olarak sunuldu.
+  - Açılır liste doğrudan **Destek Talepleri** başlığı ve talep sayacı rozetinin yanına yerleştirilerek üst panel 3 satırdan 2 satıra indirildi.
+  - İkinci satır sadece arama kutusu ve durum açılır listesine tahsis edilerek ferah ve dikeyde minimal bir yapı elde edildi.
+- Yalnızca `DevAdmin` dalında çalışıldı, `main` korundu.
+
+## [12.10.2026 - 16:34] - Destek Talepleri ve Blog Yorumları Sayfa İçi Anlık Yenileme (Refresh) Butonu
+- `TicketsView.tsx`: Sağ üst kontrol alanına `🔄 Yenile` butonu eklendi. Tüm tarayıcı sayfasını yeniden yüklemeden (`SPA`), yalnızca mesaj listesini API üzerinden anlık sorgular. Tıklandığında dönen ikon animasyonu (`.spin`) ile görsel geri bildirim sunar.
+- `CommentsView.tsx`: Destek paneline uyumlu modern, sticky ve ultra-kompakt başlık yapısına geçirildi; sağ üst köşeye aynı sayfa içi `🔄 Yenile` butonu eklendi.
+- `index.css`: Buton ikonunun dönmesi için `@keyframes spin` ve `.spin` animasyon sınıfı tanımlandı.
+- Yalnızca `DevAdmin` dalında çalışıldı, `main` korundu.
+
+## [12.10.2026 - 16:28] - Destek Kontrol Paneli Ultra-Kompakt Dönüşümü, Topbar İnceltme ve Sticky Sabit Başlık
+- `Topbar.tsx`: En üstteki yönetici çubuğu `padding: 5px 20px`, `minHeight: 41px` ve `position: sticky; top: 0; zIndex: 30;` ile zarif ve ince bir şerit haline getirildi; butonlar ~28px yüksekliğe çekildi.
+- `TicketsView.tsx`:
+  - Destek & Talepler başlık, AI butonu, konu etiketleri, arama kutusu ve durum açılır listesi 3 sıkıştırılmış satırda birleştirilerek dikey boşluklar (padding/margin) 1-2px seviyesine indirildi.
+  - Kontrol paneli `position: sticky; top: 41px; zIndex: 20;` ile Topbar'ın altına yapıştırıldı; arka planına blur ve gölge verildi.
+  - Kullanıcı yüzlerce bilet arasında aşağı doğru kaydırma yaptıkça bilet kartlarının bu sabit başlığın altından yukarıya doğru akması sağlandı.
+- `AppShell.tsx`: Sayfa içeriği üst boşluğu Topbar'a kusursuz yapışması için `padding: 10px 20px 24px 20px` olarak düzenlendi.
+- Yalnızca `DevAdmin` dalında çalışıldı, `main` korundu.
+
+## [12.10.2026 - 16:25] - Bilet Yanıtı Açılır/Kapanır Yapısı, Çok Dilli Anlık Türkçe Çeviri ve Bilet Kartı Yükseklik Kilidi
+- `TicketsView.tsx`: Kartın alt-ortasındaki mavi AI açıklama kutucuğu tamamen kaldırıldı, kart eskisi gibi tertemiz hale getirildi. Kullanıcı mesajı önizlemesi `WebkitLineClamp: 4`, `lineHeight: 1.35` ve `maxHeight: 74px` olarak ayarlandı; kart dikeyde kesinlikle büyümeden sabit yükseklikte 4 satır metin gösterecek şekilde kilitlendi.
+- `TicketDetailModal.tsx`:
+  - Yanıt gönderildiğinde formun boş açık kalarak ardışık mail gönderme yanılgısı yaratması engellendi. Yanıt iletildiğinde yeşil başarı bildirimi (`✅ Bu talebe yanıt başarıyla iletildi`) gösterilerek form otomatik daraltıldı; ihtiyaç halinde açılabilmesi için `✉️ Ek Yanıt / Takip Mesajı Yaz` butonu eklendi.
+  - Yabancı dildeki (İngilizce/Arapça vb.) bilet içerikleri için sağ üst köşeye tek tıkla çalışan `🌐 Türkçe'ye Çevir` / `↩️ Orijinal Metin` geçiş butonu eklendi. Modal ve kart yapısı/şekli bozulmadan hem başlık hem mesaj gövdesi doğal Türkçe'ye çevrilebilir hale getirildi.
+- `backend/src/utils/ai.ts` & `backend/src/routes/adminTickets.ts`: `POST /api/admin/tickets/:id/translate` endpoint'i yazıldı. Canlı ortamda Gemini 1.5 Flash ile, yerel geliştirme ortamında akıllı kural motoruyla (Zero-Cost ve API anahtarsız) kesintisiz çeviri sağlandı.
+- `backend/src/utils/email.ts`: Yerel geliştirme ortamında e-posta kotası tüketmemek ve spam önlemek için çalışan simülasyon modu doğrulandı.
+- Yalnızca `DevAdmin` dalında çalışıldı, `main` korundu.
+
 ## [12.10.2026 - 11:39] - Admin Arayüzü İlk Aşamadan Kontrollü Düzeltmeye Başlıyoruz
 - `admin_icerigi.md`: 1. Aşama (Ana Gösterge Paneli / Dashboard) test kutuları işlemde (`[-]`) olarak işaretlendi.
 - Admin arayüzünün ilk aşamadan (Özet Ekranı) başlayarak adım adım ve kontrollü olarak denetlenmesi ve doğal Türkçe ifadelere dönüştürülmesi süreci başlatıldı.

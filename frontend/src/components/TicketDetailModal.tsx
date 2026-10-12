@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import type { TicketDetailResponse } from '../types';
-import { Sparkles, Send, Gift, X, User, Clock, CheckCircle, Ban } from 'lucide-react';
+import { Sparkles, Send, Gift, X, User, Clock, CheckCircle, Ban, Eye, Languages } from 'lucide-react';
 import { api } from '../services/api';
 
 interface TicketDetailModalProps {
@@ -19,23 +19,38 @@ export const TicketDetailModal: React.FC<TicketDetailModalProps> = ({
   const [replyMessage, setReplyMessage] = useState('');
   const [loadingReply, setLoadingReply] = useState(false);
   const [loadingStatus, setLoadingStatus] = useState(false);
+  const [loadingAi, setLoadingAi] = useState(false);
+  const [showReplyBox, setShowReplyBox] = useState(false);
+  const [isTranslated, setIsTranslated] = useState(false);
+  const [translatedData, setTranslatedData] = useState<{ subject: string; content: string; lang: string } | null>(null);
+  const [loadingTranslate, setLoadingTranslate] = useState(false);
 
   if (!ticketDetail) return null;
   const { ticket, replies } = ticketDetail;
 
-  const getStatusBadgeLabel = (status: string) => {
-    switch (status) {
-      case 'new': return 'Yeni';
-      case 'in_progress': return 'İşlemde';
-      case 'resolved': return 'Çözüldü';
-      case 'rejected': return 'Reddedildi';
-      default: return status;
+  const handleTriggerAi = async () => {
+    setLoadingAi(true);
+    try {
+      await api.analyzeTicket(ticket.id);
+      onRefresh();
+    } catch {
+      alert('Yapay zeka analizi çalıştırılamadı.');
+    } finally {
+      setLoadingAi(false);
     }
   };
 
+  const getStatusBadgeLabel = (s: string) =>
+    s === 'new' || s === 'open' ? 'Yeni' : s === 'in_progress' ? 'İşlemde' : s === 'resolved' ? 'Çözüldü' : s === 'rejected' || s === 'closed' ? 'Reddedildi' : s;
+
+  const btnStyle = (bg: string, shadow: string): React.CSSProperties => ({
+    background: bg, color: '#000000', fontWeight: 700, border: 'none', boxShadow: `0 2px 8px ${shadow}`
+  });
+
   const handleUseAiDraft = () => {
-    if (ticket.ai_suggested_reply) {
-      setReplyMessage(ticket.ai_suggested_reply);
+    const draft = ticket.ai_suggested_reply || (ticket as any).ai_draft;
+    if (draft) {
+      setReplyMessage(draft);
     }
   };
 
@@ -45,11 +60,39 @@ export const TicketDetailModal: React.FC<TicketDetailModalProps> = ({
     try {
       await api.replyTicket(ticket.id, replyMessage);
       setReplyMessage('');
+      setShowReplyBox(false);
       onRefresh();
     } catch (err) {
       alert('Cevap gönderilemedi.');
     } finally {
       setLoadingReply(false);
+    }
+  };
+
+  const handleToggleTranslate = async () => {
+    if (isTranslated) {
+      setIsTranslated(false);
+      return;
+    }
+    if (translatedData) {
+      setIsTranslated(true);
+      return;
+    }
+    setLoadingTranslate(true);
+    try {
+      const res = await api.translateTicket(ticket.id);
+      if (res.success) {
+        setTranslatedData({
+          subject: res.translated_subject,
+          content: res.translated_content,
+          lang: res.detected_language,
+        });
+        setIsTranslated(true);
+      }
+    } catch {
+      alert('Çeviri yapılamadı.');
+    } finally {
+      setLoadingTranslate(false);
     }
   };
 
@@ -82,7 +125,9 @@ export const TicketDetailModal: React.FC<TicketDetailModalProps> = ({
                 <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>{ticket.category}</span>
               )}
             </div>
-            <h2 style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--text-primary)' }}>{ticket.subject}</h2>
+            <h2 style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--text-primary)' }}>
+              {isTranslated && translatedData ? translatedData.subject : ticket.subject}
+            </h2>
           </div>
           <button onClick={onClose} style={{ background: 'transparent', border: 'none', color: 'var(--text-muted)', cursor: 'pointer' }}>
             <X size={22} />
@@ -109,8 +154,8 @@ export const TicketDetailModal: React.FC<TicketDetailModalProps> = ({
           </div>
         </div>
 
-        {/* AI Summary Banner */}
-        {ticket.ai_summary && (
+        {/* AI Summary Banner or Trigger Button */}
+        {ticket.ai_summary ? (
           <div style={{
             background: 'rgba(99, 102, 241, 0.12)',
             border: '1px solid rgba(99, 102, 241, 0.3)',
@@ -121,24 +166,98 @@ export const TicketDetailModal: React.FC<TicketDetailModalProps> = ({
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px', color: 'var(--accent-cyan)', fontWeight: 700, fontSize: '0.85rem' }}>
               <Sparkles size={16} /> Yapay Zeka Özeti
             </div>
-            <p style={{ fontSize: '0.85rem', color: '#E5E7EB' }}>{ticket.ai_summary}</p>
+            <p style={{ fontSize: '0.85rem', color: '#E5E7EB', lineHeight: 1.5 }}>{ticket.ai_summary}</p>
+          </div>
+        ) : (
+          <div style={{
+            background: 'rgba(255, 255, 255, 0.03)',
+            border: '1px dashed rgba(255, 255, 255, 0.15)',
+            borderRadius: 'var(--radius-md)',
+            padding: '10px 16px',
+            marginBottom: '20px',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            gap: '12px',
+            flexWrap: 'wrap'
+          }}>
+            <span style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>
+              🤖 Bu talep için henüz yapay zeka analizi yapılmadı.
+            </span>
+            <button
+              type="button"
+              className="btn btn-sm"
+              style={{
+                background: 'linear-gradient(135deg, #A78BFA, #38BDF8)',
+                color: '#000000',
+                fontWeight: 700,
+                border: 'none',
+                padding: '4px 12px',
+                fontSize: '0.78rem'
+              }}
+              disabled={loadingAi}
+              onClick={handleTriggerAi}
+            >
+              <Sparkles size={13} color="#000000" /> {loadingAi ? 'Analiz Ediliyor...' : 'Yapay Zeka Analizi Çalıştır'}
+            </button>
           </div>
         )}
 
         {/* Message Body */}
         <div style={{ marginBottom: '24px' }}>
-          <h4 style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: '8px' }}>Gelen Mesaj</h4>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <h4 style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-secondary)', margin: 0 }}>Gelen Mesaj</h4>
+              {isTranslated && (
+                <span style={{
+                  fontSize: '0.72rem',
+                  color: '#10B981',
+                  background: 'rgba(16, 185, 129, 0.15)',
+                  border: '1px solid rgba(16, 185, 129, 0.3)',
+                  padding: '2px 8px',
+                  borderRadius: '4px',
+                  fontWeight: 700
+                }}>
+                  🌐 Türkçe Çeviri ({translatedData?.lang.toUpperCase() || 'TR'})
+                </span>
+              )}
+            </div>
+            <button
+              type="button"
+              className="btn btn-sm"
+              onClick={handleToggleTranslate}
+              disabled={loadingTranslate}
+              style={{
+                fontSize: '0.78rem',
+                padding: '4px 12px',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px',
+                background: isTranslated ? 'rgba(16, 185, 129, 0.2)' : 'rgba(255, 255, 255, 0.08)',
+                color: isTranslated ? '#10B981' : 'var(--text-secondary)',
+                border: '1px solid rgba(255, 255, 255, 0.15)',
+                cursor: 'pointer',
+                borderRadius: '6px',
+                fontWeight: 600
+              }}
+            >
+              <Languages size={13} />
+              {loadingTranslate ? 'Çevriliyor...' : isTranslated ? '↩️ Orijinal Metin' : '🌐 Türkçe\'ye Çevir'}
+            </button>
+          </div>
           <div style={{
             padding: '16px',
-            background: 'rgba(0, 0, 0, 0.3)',
-            border: '1px solid var(--border-color)',
+            background: isTranslated ? 'rgba(16, 185, 129, 0.04)' : 'rgba(0, 0, 0, 0.3)',
+            border: isTranslated ? '1px solid rgba(16, 185, 129, 0.25)' : '1px solid var(--border-color)',
             borderRadius: 'var(--radius-md)',
             fontSize: '0.9rem',
             color: '#F3F4F6',
             whiteSpace: 'pre-wrap',
             lineHeight: 1.5
           }}>
-            {ticket.message_content}
+            {isTranslated && translatedData
+              ? translatedData.content
+              : (ticket.message_content || (ticket as any).content || '(İçerik bulunamadı)')}
           </div>
         </div>
 
@@ -165,64 +284,116 @@ export const TicketDetailModal: React.FC<TicketDetailModalProps> = ({
           </div>
         )}
 
-        {/* Action Controls & Reply Box */}
-        <div style={{ borderTop: '1px solid var(--border-color)', paddingTop: '20px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-            <h4 style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-secondary)' }}>Yanıt Yaz</h4>
-            {ticket.ai_suggested_reply && (
-              <button
-                type="button"
-                className="btn btn-secondary btn-sm"
-                onClick={handleUseAiDraft}
-                style={{ color: 'var(--accent-cyan)', borderColor: 'rgba(6, 182, 212, 0.3)' }}
-              >
-                <Sparkles size={14} /> AI Cevap Taslağını Aktar
-              </button>
-            )}
-          </div>
-
-          <textarea
-            className="form-textarea"
-            rows={4}
-            placeholder="Kullanıcıya iletilecek yanıt mesajı..."
-            value={replyMessage}
-            onChange={(e) => setReplyMessage(e.target.value)}
-            style={{ marginBottom: '12px' }}
-          />
-
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '10px' }}>
-            <div style={{ display: 'flex', gap: '8px' }}>
-              <button
-                className="btn btn-success btn-sm"
-                disabled={loadingStatus}
-                onClick={() => handleStatusChange('resolved')}
-              >
-                <CheckCircle size={14} /> Çözüldü İşaretle
-              </button>
-              <button
-                className="btn btn-danger btn-sm"
-                disabled={loadingStatus}
-                onClick={() => handleStatusChange('rejected')}
-              >
-                <Ban size={14} /> Reddet
-              </button>
-              <button
-                className="btn btn-secondary btn-sm"
-                style={{ color: 'var(--accent-amber)' }}
-                onClick={() => onOpenCoupon(ticket.id, ticket.sender_email, ticket.sender_name)}
-              >
-                <Gift size={14} /> Kupon Tanımla
-              </button>
+        {/* Post-Reply Confirmation Banner & Follow-Up Toggle */}
+        {replies && replies.length > 0 && !showReplyBox && (
+          <div style={{
+            padding: '12px 16px',
+            background: 'rgba(16, 185, 129, 0.1)',
+            border: '1px solid rgba(16, 185, 129, 0.3)',
+            borderRadius: 'var(--radius-md)',
+            marginBottom: '16px',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            flexWrap: 'wrap',
+            gap: '10px'
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#10B981', fontWeight: 600, fontSize: '0.85rem' }}>
+              <CheckCircle size={16} /> Bu talebe yanıt başarıyla iletildi.
             </div>
-
             <button
-              className="btn btn-primary"
-              disabled={loadingReply || !replyMessage.trim()}
-              onClick={handleSendReply}
+              type="button"
+              className="btn btn-sm btn-secondary"
+              style={{ fontSize: '0.78rem', padding: '5px 12px', fontWeight: 600 }}
+              onClick={() => setShowReplyBox(true)}
             >
-              <Send size={16} /> Yanıtı Gönder
+              ✉️ Ek Yanıt / Takip Mesajı Yaz
             </button>
           </div>
+        )}
+
+        {/* Reply Box (Shown when fresh ticket or explicitly opened) */}
+        {((!replies || replies.length === 0) || showReplyBox) && (
+          <div style={{ borderTop: '1px solid var(--border-color)', paddingTop: '16px', marginBottom: '16px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <h4 style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-secondary)', margin: 0 }}>
+                  {replies && replies.length > 0 ? 'Ek Yanıt / Takip Mesajı' : 'Yanıt Yaz'}
+                </h4>
+                {replies && replies.length > 0 && (
+                  <button
+                    type="button"
+                    style={{ background: 'none', border: 'none', color: 'var(--text-muted)', fontSize: '0.75rem', cursor: 'pointer' }}
+                    onClick={() => setShowReplyBox(false)}
+                  >
+                    (Gizle)
+                  </button>
+                )}
+              </div>
+              {ticket.ai_suggested_reply && (
+                <button
+                  type="button"
+                  className="btn btn-sm"
+                  onClick={handleUseAiDraft}
+                  style={{
+                    background: '#67E8F9',
+                    color: '#000000',
+                    fontWeight: 700,
+                    border: 'none',
+                    boxShadow: '0 2px 8px rgba(103, 232, 249, 0.3)',
+                    padding: '3px 10px',
+                    fontSize: '0.78rem'
+                  }}
+                >
+                  <Sparkles size={13} color="#000000" /> AI Cevap Taslağını Aktar
+                </button>
+              )}
+            </div>
+
+            <textarea
+              className="form-textarea"
+              rows={3}
+              placeholder="Kullanıcıya iletilecek yanıt mesajı..."
+              value={replyMessage}
+              onChange={(e) => setReplyMessage(e.target.value)}
+              style={{ marginBottom: '10px' }}
+            />
+
+            <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+              <button
+                type="button"
+                className="btn btn-sm"
+                style={{
+                  background: 'linear-gradient(135deg, #A78BFA, #38BDF8)',
+                  color: '#000000',
+                  fontWeight: 700,
+                  border: 'none',
+                  boxShadow: '0 4px 14px rgba(56, 189, 248, 0.35)',
+                  padding: '6px 16px'
+                }}
+                disabled={loadingReply || !replyMessage.trim()}
+                onClick={handleSendReply}
+              >
+                <Send size={15} color="#000000" /> {loadingReply ? 'Gönderiliyor...' : 'Yanıtı Gönder'}
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Status Action Buttons Toolbar */}
+        <div style={{ borderTop: '1px solid var(--border-color)', paddingTop: '16px', display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+          <button type="button" className="btn btn-sm" style={btnStyle('#38BDF8', 'rgba(56, 189, 248, 0.4)')} disabled={loadingStatus} onClick={() => handleStatusChange('in_progress')}>
+            <Eye size={14} color="#000000" /> Okundu İşaretle
+          </button>
+          <button type="button" className="btn btn-sm" style={btnStyle('#10B981', 'rgba(16, 185, 129, 0.4)')} disabled={loadingStatus} onClick={() => handleStatusChange('resolved')}>
+            <CheckCircle size={14} color="#000000" /> Çözüldü İşaretle
+          </button>
+          <button type="button" className="btn btn-sm" style={btnStyle('#EF4444', 'rgba(239, 68, 68, 0.4)')} disabled={loadingStatus} onClick={() => handleStatusChange('rejected')}>
+            <Ban size={14} color="#000000" /> Reddet
+          </button>
+          <button type="button" className="btn btn-sm" style={btnStyle('#F59E0B', 'rgba(245, 158, 11, 0.4)')} onClick={() => onOpenCoupon(ticket.id, ticket.sender_email, ticket.sender_name)}>
+            <Gift size={14} color="#000000" /> Kupon Tanımla
+          </button>
         </div>
       </div>
     </div>

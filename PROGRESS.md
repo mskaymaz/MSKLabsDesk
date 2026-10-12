@@ -1,6 +1,31 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 🟢 Son Güncelleme [12.10.2026 - 16:50] — KATEGORİ AÇILIR LİSTESİ DÖNÜŞÜMÜ & WEB ANA SAYFA SLOGAN TEMİZLİĞİ [*]
+* **Yapılan İşlem:**
+  1. **Kategori Butonlarının Açılır Listeye (Dropdown) Dönüştürülmesi:** `TicketsView.tsx` içerisinde mobilde sağa taşan ve ekran dışına çıkan 6 adet buton kaldırıldı; `[📋 Tüm Konular (X)]`, `[🐛 Hata Bildirimleri (X)]`, `[✨ Özellik Talepleri (X)]` vb. seçenekleri içeren derli toplu açılır liste haline getirildi.
+  2. **Başlık Hizasında Konumlandırma:** Kategori açılır listesi doğrudan 1. satırda `Destek Talepleri` başlığı ve sayaç rozetinin yanına yerleştirildi; 2. satır yalnızca arama çubuğu ve durum filtresine ayrılarak dikey yükseklik 2 satıra indirildi.
+  3. **WebMSKLabs Ana Sayfa Slogan ve Boşluk Temizliği:** `webMSKLabs/index.html` üzerinde "Özgün, kullanıcı dostu ve güvenilir yazılım çözümleri." başlığının altındaki "İbadet..." ile başlayan 1,5 satırlık tagline tamamen kaldırıldı; CSS dikey boşlukları sıfırlandı.
+* **Sonuçlar:** 61 test dosyası, 604 Vitest testi %100 PASS, her iki repo da başarıyla derlendi (0 error).
+* **Durum:** Mola verildi. Bir sonraki oturumda doğrudan Destek Talepleri (`TicketsView.tsx`) ekranından, oturmuş kategori liste yapısının ardından mobil arayüz iyileştirmelerinden kalınan yerden devam edilecektir. `DevAdmin` dalında çalışıldı, `main` korundu.
+
+## 🟢 Son Güncelleme [12.10.2026 - 16:28] — DESTEK KONTROL PANELİ ULTRA-KOMPAKT DÖNÜŞÜMÜ & STICKY SABİT BAŞLIK [*]
+* **Yapılan İşlem:**
+  1. **Topbar İnceltme:** `Topbar.tsx` yönetici paneli `padding: 5px 20px`, `minHeight: 41px` ve `position: sticky; top: 0; zIndex: 30;` ile dikeyde minimum yer kaplayan, zarif sabit bir şerit yapıldı.
+  2. **Ultra-Kompakt Kontrol Şeridi:** `TicketsView.tsx` başlık, talep sayacı, AI analiz butonu, konu hap butonları, arama inputu ve durum açılır listesi 3 sıkıştırılmış, minimal satırda birleştirildi; padding ve margin'ler 1-2px'e indirilerek dikeyde ~100px alan kazanıldı.
+  3. **Sticky Sabitleme & Alttan Kayan Mesajlar:** Kontrol paneli `position: sticky; top: 41px; zIndex: 20;` olarak ayarlandı. Kullanıcı aşağı indikçe bilet kartları bu sabit panelin altından yukarıya doğru akıp kaybolacak şekilde kurgulandı.
+* **Sonuçlar:** 61 test dosyası, 604 Vitest testi %100 PASS, Vite build hatasız tamamlandı.
+* **Durum:** `DevAdmin` dalında çalışıldı, `main` korundu.
+
+## 🟢 Son Güncelleme [12.10.2026 - 16:25] — BİLET YANITI DARALTMA, ANLIK TR ÇEVİRİ VE KART YÜKSEKLİK KİLİDİ [*]
+* **Yapılan İşlem:**
+  1. **Kart Mesaj Önizlemesi & Yükseklik Kilidi:** Kartların alt ortasındaki mavi yapay zeka balonu kaldırıldı, kartlar temizlendi. Kullanıcı mesajı önizlemesi `WebkitLineClamp: 4`, `lineHeight: 1.35`, `maxHeight: 74px` olarak ayarlanarak kartın dikey boyutu kesinlikle genişletilmeden 4 satır sığdırıldı.
+  2. **Yanıt Formu Açılır/Kapanır Mekanizması:** Bilet yanıtlandığında textarea'nın açık kalıp peş peşe mail atma hissi vermesi engellendi; form otomatik kapanıp `✅ Bu talebe yanıt başarıyla iletildi` yeşil bildirimi ve `✉️ Ek Yanıt / Takip Mesajı Yaz` butonu konumlandırıldı.
+  3. **Yabancı Dil (İngilizce/Arapça) Türkçe Çevirisi:** Gemini 1.5 Flash ve akıllı yerel kural motorlu `POST /api/admin/tickets/:id/translate` endpoint'i yazıldı. Detay modalında tek tıkla çalışan `🌐 Türkçe'ye Çevir` / `↩️ Orijinal Metin` butonu kart ve modal düzenini hiç bozmadan devreye alındı.
+  4. **E-Posta Simülasyonu:** Yerel geliştirme ortamındaki testlerde gerçek posta kutularına istenmeyen e-posta gönderimini ve kota israfını engelleyen simülasyon modu test edildi.
+* **Sonuçlar:** 61 test dosyası, 604 Vitest testi %100 PASS, Vite build hatasız tamamlandı.
+* **Durum:** `DevAdmin` dalında çalışıldı, `main` korundu.
+
 ## 🟢 Son Güncelleme [12.10.2026 - 11:39] — ADMİN ARAYÜZÜ İLK AŞAMADAN KONTROLLÜ DÜZELTMEYE BAŞLIYORUZ [-]
 * **Yapılan İşlem:** 
   1. `admin_icerigi.md` üzerinde 1. Aşama (Ana Gösterge Paneli / Dashboard) işlemde (`[-]`) olarak işaretlendi.
