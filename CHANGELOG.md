@@ -1,6 +1,11 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [12.10.2026 - 09:54] - Yönetici Kullanım & Fonksiyon Haritası (`admin_icerigi.md`) Dokümantasyonu
+- Yazılım/kodlama terimlerinden arındırılmış, son kullanıcı yöneticisinin gözünden panel ekranlarını ve yapılabilecek tüm ayarları detaylandıran `admin_icerigi.md` oluşturuldu.
+- Destek Biletleri (AI analizi, kupon tanımlama), Blog & TipTap Editör, Mobil/Web Uygulama Kataloğu (sürüm ve mağaza linkleri), AdSense Reklam Yönetimi (boyut, yapışkanlık, margin), Yorum Moderasyonu, Sesli Makale (TTS) ve Sistem Ayarları kapsamlı şekilde belgelendi.
+- `DevAdmin` dalında çalışıldı ve `main` korundu.
+
 ## [09.10.2026 - 16:06] - Bölüm 22 (Coverage Check Summary) Güncellemesi & Tamamlama Commit/Push
 - `tasks.md` içerisindeki **22. COVERAGE CHECK SUMMARY** altında listelenen 22 kritik mimari ve operasyonel denetim alanının tamamı `[*]` durumuna güncellendi.
 - `MSKLabsDesk` deposundaki değişiklikler `DevAdmin` dalına commit edilerek `origin/DevAdmin` üzerine push yapıldı.

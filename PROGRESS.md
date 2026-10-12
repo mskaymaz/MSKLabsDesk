@@ -1,6 +1,15 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 🟢 Son Güncelleme [12.10.2026 - 09:54] — YÖNETİCİ KULLANIM & FONKSİYON HARİTASI (`admin_icerigi.md`) OLUŞTURULDU
+* **Yapılan İşlem:** Yazılımdan anlamayan bir panel yöneticisinin gözünden ekranda göreceği tüm arayüzleri, yapabileceği ayarları ve butonları kapsayan 15 ana modüllü `admin_icerigi.md` dokümanı oluşturuldu.
+* **Kapsanan Modüller:** Dashboard, Destek/Biletler (AI Analiz & Kupon/Hediye), Blog & TipTap Editör, Kanallar, Yorum Moderasyonu, Sesli Makale (TTS), Mobil/Web Uygulama Kataloğu (Apps Showcase & Sürüm Yönetimi), AdSense Reklam Yerleşimi (10 Standart/Özel Boyut, Boşluk, Yapışkanlık), Üst Duyuru Bandı, Toplu E-Posta Bülteni (Broadcast), Abone Yönetimi (KVKK), Çok Dilli Çeviri & RTL, Sistem Ayarları, Güvenlik Denetim Logları ve Rol Yetkilendirme (RBAC).
+* **Sonuçlar:**
+  - `admin_icerigi.md` oluşturuldu (167 satır, 450 satır kuralına tam uyumlu).
+  - 87 kaynak dosya satır sınırı kuralı ve 592 Vitest testi %100 PASS.
+  - `DevAdmin` dalında çalışıldı, `main` korundu.
+* **Durum:** Dokümantasyon hazırlandı ve güncellendi.
+
 ## 🟢 Son Güncelleme [09.10.2026 - 16:06] — BÖLÜM 22 (COVERAGE CHECK SUMMARY) VE GENEL PROJE DENETİMİ TAMAMLANDI [*] 🎉
 * **Yapılan İşlem:** `tasks.md` içerisinde yer alan 22 başlığın tamamı (Governance, Architecture, Data, Auth, RBAC, Core Backend, AI, Email/Push, Admin UI, CMS, i18n, Ads, Audit, Incident, Perf, DR, Testing, Release, Privacy, webMSKLabs Integration, Go-Live ve Post-Launch Operations) derinlemesine denetlendi ve `[*]` olarak güncellendi.
 * **Sonuçlar:**
