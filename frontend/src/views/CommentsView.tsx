@@ -153,18 +153,18 @@ export const CommentsView: React.FC<CommentsViewProps> = ({ comments, onRefresh 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
           {filteredComments.map((comment) => (
             <div key={comment.id} className="glass-card" style={{ padding: '20px' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '10px' }}>
-                <div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '10px', flexWrap: 'wrap', gap: '8px' }}>
+                <div style={{ minWidth: 0, flex: '1 1 240px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
                     <h3 style={{ fontSize: '0.95rem', fontWeight: 700, color: '#FFF' }}>{comment.author_name}</h3>
-                    <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>({comment.author_email})</span>
+                    <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)', overflowWrap: 'anywhere' }}>({comment.author_email})</span>
                     <span className={`badge badge-${comment.status}`}>{comment.status}</span>
                   </div>
-                  <span style={{ fontSize: '0.75rem', color: 'var(--accent-cyan)', marginTop: '2px', display: 'inline-block' }}>
+                  <span style={{ fontSize: '0.75rem', color: 'var(--accent-cyan)', marginTop: '2px', display: 'inline-block', overflowWrap: 'anywhere' }}>
                     {t('comments.postUrl')}: {comment.post_id}
                   </span>
                 </div>
-                <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '4px', flexShrink: 0, marginLeft: 'auto' }}>
                   <Clock size={12} /> {new Date(comment.created_at).toLocaleString(locale)}
                 </span>
               </div>
@@ -182,7 +182,7 @@ export const CommentsView: React.FC<CommentsViewProps> = ({ comments, onRefresh 
                 "{comment.content}"
               </div>
 
-              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
+              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', flexWrap: 'wrap' }}>
                 {comment.status !== 'approved' && (
                   <button
                     className="btn btn-success btn-sm"

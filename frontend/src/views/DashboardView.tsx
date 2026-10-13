@@ -49,12 +49,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
       </div>
 
       {/* Metric Cards Grid */}
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
-        gap: '20px',
-        marginBottom: '28px'
-      }}>
+      <div className="dashboard-metrics-grid">
         <div className="glass-card glass-card-hover" onClick={() => onNavigate('tickets')} style={{ cursor: 'pointer' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
             <div>
@@ -117,8 +112,8 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
       </div>
 
       {/* Recent Tickets Overview */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '20px' }}>
-        <div className="glass-card">
+      <div className="dashboard-panels-grid">
+        <div className="glass-card" style={{ minWidth: 0 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '18px' }}>
             <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--text-primary)' }}>{t('dashboard.recentTickets')}</h3>
             <button className="btn btn-secondary btn-sm" onClick={() => onNavigate('tickets')}>{t('common.all')}</button>
@@ -138,17 +133,19 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                     border: '1px solid var(--border-color)',
                     display: 'flex',
                     flexDirection: 'column',
-                    gap: '6px'
+                    gap: '6px',
+                    minWidth: 0,
+                    overflow: 'hidden'
                   }}
                 >
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
                     <span style={{ fontSize: '0.78rem', fontWeight: 800, color: 'var(--accent-cyan)' }}>{ticket.id}</span>
                     <span className={`badge badge-${ticket.status}`}>{getStatusBadgeLabel(ticket.status)}</span>
                   </div>
-                  <h4 style={{ fontSize: '0.9rem', fontWeight: 700, color: 'var(--text-primary)' }}>{ticket.subject}</h4>
-                  <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'flex', justifyContent: 'space-between' }}>
-                    <span>{ticket.sender_name} ({ticket.sender_email})</span>
-                    <span style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+                  <h4 style={{ fontSize: '0.9rem', fontWeight: 700, color: 'var(--text-primary)', wordBreak: 'break-word' }}>{ticket.subject}</h4>
+                  <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '4px' }}>
+                    <span style={{ minWidth: 0, overflowWrap: 'anywhere' }}>{ticket.sender_name} ({ticket.sender_email})</span>
+                    <span style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.75rem', color: 'var(--text-muted)', flexShrink: 0 }}>
                       <Clock size={12} /> {new Date(ticket.created_at).toLocaleDateString(locale)}
                     </span>
                   </div>
@@ -163,10 +160,11 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                       display: 'flex',
                       alignItems: 'center',
                       gap: '6px',
-                      marginTop: '4px'
+                      marginTop: '4px',
+                      wordBreak: 'break-word'
                     }}>
                       <Sparkles size={14} color="var(--accent-primary)" style={{ flexShrink: 0 }} />
-                      <span>{ticket.ai_summary}</span>
+                      <span style={{ minWidth: 0 }}>{ticket.ai_summary}</span>
                     </div>
                   )}
                 </div>
@@ -176,7 +174,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         </div>
 
         {/* Pending Comments Overview */}
-        <div className="glass-card">
+        <div className="glass-card" style={{ minWidth: 0 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '18px' }}>
             <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--text-primary)' }}>{t('dashboard.pendingComments')}</h3>
             <button className="btn btn-secondary btn-sm" onClick={() => onNavigate('comments')}>{t('common.view')}</button>
@@ -194,13 +192,15 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                   border: '1px solid var(--border-color)',
                   display: 'flex',
                   flexDirection: 'column',
-                  gap: '6px'
+                  gap: '6px',
+                  minWidth: 0,
+                  overflow: 'hidden'
                 }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '4px' }}>
                     <span style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-primary)' }}>{comment.author_name}</span>
-                    <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{new Date(comment.created_at).toLocaleDateString(locale)}</span>
+                    <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', flexShrink: 0 }}>{new Date(comment.created_at).toLocaleDateString(locale)}</span>
                   </div>
-                  <p style={{ fontSize: '0.82rem', color: 'var(--text-secondary)' }}>"{comment.content}"</p>
+                  <p style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', wordBreak: 'break-word' }}>"{comment.content}"</p>
                 </div>
               ))}
             </div>

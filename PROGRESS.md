@@ -1,6 +1,27 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 🟢 Son Güncelleme [13.10.2026 - 14:55] — MOBİL YATAY TAŞMA & KESİLME DÜZENLEMELERİ VE BLOG YORUM HATASI ÇÖZÜMÜ [*]
+* **Yapılan İşlem:**
+  1. **Blog Yorum Gönderim Hatası Çözümü:**
+     - `MSKLabsDesk/backend/src/routes/comments.ts` ve `backend/src/index.ts`: Hem `/api/comments` hem `/api/v1/comments` rotaları (POST ve GET) desteklendi. `post_type`, `post_slug`, `author_name`, `author_email`, `content` alanları hem snake_case hem camelCase esnekliğiyle güçlendirildi.
+     - `webMSKLabs/blog/comments.js`: Yorum gönderme ve listeleme uç noktaları `SITE_CONFIG.apiUrl` üzerinden bağlandı; yerel ve üretim API adresleriyle tam senkron çalışır hale getirildi.
+     - `webMSKLabs/vite.config.ts`: Vite dev sunucusuna `/api` -> `http://localhost:8787` proxy yönlendirmesi eklendi.
+     - D1 veritabanına gerçek veriyle yorum yazıldı (`201 Created`) ve admin panelinde listelendiği test edilerek doğrulandı.
+  2. **Özet Ekranı (Dashboard) Panellerinin Sağdan Kesilmesinin Önlenmesi:**
+     - `DashboardView.tsx`: Sabit `minmax(320px, 1fr)` ve `minmax(240px, 1fr)` inline ızgara tanımları kaldırıldı; responsive `.dashboard-metrics-grid` ve `.dashboard-panels-grid` sınıflarına geçirildi.
+     - Mobilde (`<768px`) paneller tek sütun (`1fr`) esnekliğine alınarak `minWidth: 0`, `overflow: hidden`, `wordBreak: break-word` korumalarıyla sağ kenardan kesilme sorunu %100 çözüldü.
+  3. **Bilet Kartları ve Butonların Ekrandan Taşmasının Önlenmesi:**
+     - `TicketsView.tsx`: Kartın üst başlık satırına `flexWrap: 'wrap'` ve `marginLeft: 'auto'` eklendi. Geniş ekranlarda Tarih + İncele butonu sağa kilitli kalırken, dar mobil ekranlarda (<420px) ekran dışına taşmadan alt satırın sağına temizce sarılması sağlandı.
+     - Kart içerik satırındaki sabit `width: '310px'` değeri esnek `flex: '1 1 250px', minWidth: 0, maxWidth: '100%'` yapısına kavuşturuldu.
+     - Sticky kontrol şeridinde arama, durum ve AI analiz butonları mobil genişliklere uyumlu hale getirildi.
+  4. **Topbar & Genel Sayfa Padding Düzenlemesi:**
+     - `AppShell.tsx`: Sert kodlanmış inline padding kaldırıldı; `index.css` üzerinden desktop (`20px`) ve mobil (`10px` yan, `76px` alt boşluk) olarak dinamikleştirildi.
+     - `Topbar.tsx`: Arama metni ve yönetici kullanıcı adı mobilde `.hidden-mobile` ile gizlenerek yalnızca ikonlar gösterildi ve yatay taşma engellendi.
+     - `SubscribersView.tsx` ve `CommentsView.tsx`: Tablo ve kartlara `.table-responsive` ve esnek wrap korumaları uygulandı.
+* **Sonuçlar:** Tüm TypeScript derlemeleri ve Vite build işlemleri 0 hatayla tamamlandı. Satır sınırı kuralına (%100) uyuldu (`index.css`: 435 satır, `TicketsView.tsx`: 422 satır).
+* **Durum:** `DevAdmin` dalında çalışıldı, `main` korundu.
+
 ## 🟢 Son Güncelleme [13.10.2026 - 12:05] — DESTEK KARTLARI DÜZENİ, YAZI BOYUTU KONTROLLERİ VE RENK ERGONOMİSİ [*]
 * **Yapılan İşlem:**
   1. **Açık Mod Mesaj Kutusu Renkleri:** `TicketDetailModal.tsx` ve `index.css` üzerinde gelen mesaj metinleri siyah (`#000000`), zemin ferah açık gri (`#F1F5F9`) yapıldı; koyu moda kesinlikle dokunulmadı.

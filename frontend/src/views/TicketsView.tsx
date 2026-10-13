@@ -188,6 +188,7 @@ export const TicketsView: React.FC<TicketsViewProps> = ({
               onChange={(e) => setCategoryFilter(e.target.value)}
               style={{
                 width: 'auto',
+                maxWidth: '180px',
                 paddingTop: '2px',
                 paddingBottom: '2px',
                 paddingLeft: '8px',
@@ -199,15 +200,15 @@ export const TicketsView: React.FC<TicketsViewProps> = ({
               title="Talep Konusuna Göre Filtrele"
             >
               <option value="all">📋 Tüm Konular ({tickets.length})</option>
-              <option value="hata">🐛 Hata Bildirimleri ({tickets.filter((t) => normalizeCategory(t.category) === 'hata').length})</option>
-              <option value="istek">✨ Özellik Talepleri ({tickets.filter((t) => normalizeCategory(t.category) === 'istek').length})</option>
-              <option value="tesekkur">❤️ Teşekkür / Övgü ({tickets.filter((t) => normalizeCategory(t.category) === 'tesekkur').length})</option>
-              <option value="fikir">💡 Yeni Fikirler ({tickets.filter((t) => normalizeCategory(t.category) === 'fikir').length})</option>
-              <option value="email">✉️ E-Postalar ({tickets.filter((t) => normalizeCategory(t.category) === 'email').length})</option>
+              <option value="hata">🐛 Hata ({tickets.filter((t) => normalizeCategory(t.category) === 'hata').length})</option>
+              <option value="istek">✨ İstek ({tickets.filter((t) => normalizeCategory(t.category) === 'istek').length})</option>
+              <option value="tesekkur">❤️ Teşekkür ({tickets.filter((t) => normalizeCategory(t.category) === 'tesekkur').length})</option>
+              <option value="fikir">💡 Fikir ({tickets.filter((t) => normalizeCategory(t.category) === 'fikir').length})</option>
+              <option value="email">✉️ E-Posta ({tickets.filter((t) => normalizeCategory(t.category) === 'email').length})</option>
             </select>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
             <button
               type="button"
               className="btn btn-sm btn-secondary"
@@ -248,7 +249,8 @@ export const TicketsView: React.FC<TicketsViewProps> = ({
               onClick={handleAnalyzeAll}
               disabled={loadingAnalyze}
             >
-              <Sparkles size={13} color="#000000" /> {loadingAnalyze ? 'Analiz Ediliyor...' : '🤖 Tümünü AI ile Analiz Et'}
+              <Sparkles size={13} color="#000000" />
+              <span>{loadingAnalyze ? 'Analiz...' : '🤖 AI Analiz'}</span>
             </button>
           </div>
         </div>
@@ -258,9 +260,10 @@ export const TicketsView: React.FC<TicketsViewProps> = ({
           display: 'flex',
           gap: '8px',
           alignItems: 'center',
-          padding: '1px 0'
+          padding: '1px 0',
+          flexWrap: 'wrap'
         }}>
-          <div style={{ position: 'relative', flex: 1 }}>
+          <div style={{ position: 'relative', flex: '1 1 180px', minWidth: '130px' }}>
             <Search size={14} style={{ position: 'absolute', left: '8px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
             <input
               type="text"
@@ -279,7 +282,7 @@ export const TicketsView: React.FC<TicketsViewProps> = ({
           </div>
 
           {/* Durum Açılır Listesi */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '4px', flexShrink: 0 }}>
             <Filter size={14} color="var(--text-muted)" />
             <select
               className="form-select"
@@ -287,6 +290,7 @@ export const TicketsView: React.FC<TicketsViewProps> = ({
               onChange={(e) => setStatusFilter(e.target.value)}
               style={{
                 width: 'auto',
+                maxWidth: '160px',
                 paddingTop: '2px',
                 paddingBottom: '2px',
                 paddingLeft: '8px',
@@ -297,10 +301,10 @@ export const TicketsView: React.FC<TicketsViewProps> = ({
               title="İşlem Durumuna Göre Filtrele"
             >
               <option value="all">Tüm Durumlar</option>
-              <option value="new">Yeni / İncelenmeyi Bekleyen</option>
-              <option value="in_progress">İşlemde / İnceleniyor</option>
-              <option value="resolved">Çözüldü / Yanıtlandı</option>
-              <option value="rejected">Kapatıldı / Reddedildi</option>
+              <option value="new">Yeni</option>
+              <option value="in_progress">İşlemde</option>
+              <option value="resolved">Çözüldü</option>
+              <option value="rejected">Kapatıldı</option>
             </select>
           </div>
         </div>
@@ -331,9 +335,9 @@ export const TicketsView: React.FC<TicketsViewProps> = ({
               }}
             >
               {/* Kart Üst Başlık Satırı: Bilet No + Rozetler (Sol) & Tarih + İncele (Sağ) */}
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px', marginBottom: '2px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'nowrap', whiteSpace: 'nowrap' }}>
-                  <span style={{ fontSize: '0.78rem', fontWeight: 800, color: 'var(--accent-cyan)', fontFamily: 'ui-monospace, monospace', letterSpacing: '-0.02em', width: '84px', flexShrink: 0 }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px', marginBottom: '2px', flexWrap: 'wrap', rowGap: '4px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
+                  <span style={{ fontSize: '0.78rem', fontWeight: 800, color: 'var(--accent-cyan)', fontFamily: 'ui-monospace, monospace', letterSpacing: '-0.02em', minWidth: '76px', flexShrink: 0 }}>
                     {ticket.id}
                   </span>
                   {(() => {
@@ -341,7 +345,7 @@ export const TicketsView: React.FC<TicketsViewProps> = ({
                     const cBadge = getCategoryBadge(ticket.category);
                     return (
                       <>
-                        <span style={{ fontSize: '0.68rem', color: '#000000', background: sBadge.bg, border: `1px solid ${sBadge.border}`, padding: '1px 6px', borderRadius: '4px', fontWeight: 700, minWidth: '70px', textAlign: 'center', display: 'inline-flex', justifyContent: 'center', alignItems: 'center', flexShrink: 0 }}>
+                        <span style={{ fontSize: '0.68rem', color: '#000000', background: sBadge.bg, border: `1px solid ${sBadge.border}`, padding: '1px 6px', borderRadius: '4px', fontWeight: 700, minWidth: '60px', textAlign: 'center', display: 'inline-flex', justifyContent: 'center', alignItems: 'center', flexShrink: 0 }}>
                           {sBadge.label}
                         </span>
                         <span style={{ fontSize: '0.68rem', color: '#000000', background: cBadge.bg, border: `1px solid ${cBadge.border}`, padding: '1px 6px', borderRadius: '4px', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: '3px', flexShrink: 0 }}>
@@ -352,8 +356,8 @@ export const TicketsView: React.FC<TicketsViewProps> = ({
                   })()}
                 </div>
 
-                {/* Sağ: Tarih + İncele (Kart Başlığının Sağında Kilitli) */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
+                {/* Sağ: Tarih + İncele (Kart Başlığının Sağında Kilitli / Mobilde Temiz Wrap) */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginLeft: 'auto', flexShrink: 0 }}>
                   <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '3px' }}>
                     <Clock size={11} /> {new Date(ticket.created_at).toLocaleDateString(locale)}
                   </span>
@@ -369,8 +373,8 @@ export const TicketsView: React.FC<TicketsViewProps> = ({
               </div>
 
               {/* Kart İçerik Satırı: Konu & Gönderen (Sol) + Mesaj Önizleme (Orta/Sağ) */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '14px', flexWrap: 'wrap' }}>
-                <div style={{ width: '310px', minWidth: '240px', flexShrink: 0 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
+                <div style={{ flex: '1 1 250px', minWidth: 0, maxWidth: '100%' }}>
                   <h3 style={{ fontSize: '0.88rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '1px', lineHeight: 1.25, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                     {ticket.subject}
                   </h3>
@@ -379,7 +383,7 @@ export const TicketsView: React.FC<TicketsViewProps> = ({
                   </div>
                 </div>
 
-                <div style={{ flex: 1, minWidth: '200px' }}>
+                <div style={{ flex: '1 1 200px', minWidth: 0, maxWidth: '100%' }}>
                   <div style={{
                     fontSize: '0.75rem',
                     color: 'var(--text-secondary)',

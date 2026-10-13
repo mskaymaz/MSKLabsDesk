@@ -47,7 +47,7 @@ export const AppShell: React.FC<AppShellProps> = ({
             onOpenSearch={() => setIsSearchOpen(true)}
             pendingCount={pendingTicketCount + pendingCommentCount}
           />
-          <div className="page-content" style={{ padding: '0 20px 24px 20px', flex: 1, maxWidth: '1400px', margin: '0 auto', width: '100%' }}>
+          <div className="page-content">
             {children}
           </div>
         </main>

@@ -1,6 +1,27 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [13.10.2026 - 14:55] - Mobil Yatay Taşma & Kesilme Düzenlemeleri ve Blog Yorum Hatası Çözümü
+- `backend/src/routes/comments.ts` & `backend/src/index.ts`:
+  - Hem `/api/comments` hem `/api/v1/comments` uç noktaları GET ve POST metodlarıyla tam uyumlu hale getirildi.
+  - Yorum alanları (`post_slug`/`postSlug`, `post_type`/`postType`, `author_name`/`authorName`, `author_email`/`authorEmail`, `content`/`comment_text`) hem snake_case hem camelCase desteğiyle esnetildi.
+- `webMSKLabs/blog/comments.js` & `webMSKLabs/vite.config.ts`:
+  - Yorum gönderme fonksiyonu `SITE_CONFIG.apiUrl` üzerinden bağlandı; yerel ortamda port 8787'ye, canlıda Worker API'ye kesintisiz erişim sağlandı.
+  - Vite dev sunucusuna `/api` proxy yönlendirmesi eklendi.
+- `DashboardView.tsx` & `index.css`:
+  - `minmax(320px, 1fr)` ve `minmax(240px, 1fr)` inline ızgara değerleri yerine responsive `.dashboard-metrics-grid` ve `.dashboard-panels-grid` sınıfları tanımlandı.
+  - Mobilde paneller 1 sütuna çekildi, `minWidth: 0`, `overflow: hidden`, `wordBreak: break-word` ile panellerin sağdan kesilmesi tamamen giderildi.
+- `TicketsView.tsx`:
+  - Bilet kartının üst satırına `flexWrap: 'wrap'`, `rowGap: '4px'`, `marginLeft: 'auto'` eklenerek dar ekranlarda Tarih + İncele butonunun ekran dışına taşması önlendi.
+  - Kart içerik satırındaki sabit `width: '310px'` değeri esnek `flex: '1 1 250px', minWidth: 0, maxWidth: '100%'` yapıldı.
+  - Arama, durum filtresi ve AI analiz butonları mobil ekran genişliklerine uyarlandı.
+- `Topbar.tsx` & `AppShell.tsx`:
+  - Arama butonu metni ve kullanıcı adı mobilde `.hidden-mobile` ile gizlendi.
+  - Sayfa dolgusu CSS üzerinden desktop `20px`, mobil `10px` yan ve `76px` alt dolgu olarak düzenlendi.
+- `SubscribersView.tsx` & `CommentsView.tsx`:
+  - Tablo ve kartlara yatay kaydırma (`.table-responsive`) ve `flexWrap: 'wrap'` korumaları eklendi.
+- Yalnızca `DevAdmin` dalında çalışıldı, `main` korundu.
+
 ## [13.10.2026 - 12:05] - Destek Kartları 2 Satırlı Düzen, Yazı Boyutu Kontrolleri ve Renk Ergonomisi
 - `TicketDetailModal.tsx` & `index.css`:
   - Açık modda (`[data-theme="light"]`) gelen mesaj kutusu açık gri zemin (`#F1F5F9`) ve net siyah metin (`#000000`) yapılarak okunabilirlik sağlandı; koyu mod orijinal haliyle korundu.

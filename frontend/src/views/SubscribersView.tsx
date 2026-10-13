@@ -60,7 +60,8 @@ export const SubscribersView: React.FC<SubscribersViewProps> = ({ subscribers })
       </div>
 
       <div className="glass-card" style={{ padding: 0, overflow: 'hidden' }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '0.88rem' }}>
+        <div className="table-responsive">
+          <table style={{ width: '100%', minWidth: '550px', borderCollapse: 'collapse', textAlign: 'left', fontSize: '0.88rem' }}>
           <thead>
             <tr style={{ background: 'rgba(255,255,255,0.03)', borderBottom: '1px solid var(--border-color)', color: 'var(--text-secondary)' }}>
               <th style={{ padding: '14px 20px' }}>{t('subscribers.email')}</th>
@@ -114,6 +115,7 @@ export const SubscribersView: React.FC<SubscribersViewProps> = ({ subscribers })
             )}
           </tbody>
         </table>
+        </div>
       </div>
     </div>
   );

@@ -15,17 +15,23 @@ export interface CommentPayload {
  */
 export async function handleCommentSubmission(request: Request, env: { DB: D1Database }): Promise<Response> {
   try {
-    const payload = await request.json() as CommentPayload;
+    const raw = await request.json() as any;
 
-    if (!payload.post_type || !payload.post_slug || !payload.author_name || !payload.author_email || !payload.content) {
+    const postType = (raw.post_type || raw.postType || 'bizce').trim();
+    const postSlug = (raw.post_slug || raw.postSlug || '').trim();
+    const authorName = (raw.author_name || raw.authorName || '').trim();
+    const authorEmail = (raw.author_email || raw.authorEmail || '').trim().toLowerCase();
+    const content = (raw.content || raw.comment_text || '').trim();
+
+    if (!postSlug || !authorName || !authorEmail || !content) {
       return new Response(
-        JSON.stringify({ error: 'Lütfen tüm alanları eksiksiz doldurun.' }),
+        JSON.stringify({ error: 'Lütfen tüm alanları (isim, e-posta, yorum) eksiksiz doldurun.' }),
         { status: 400, headers: { 'Content-Type': 'application/json; charset=utf-8' } }
       );
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(payload.author_email.trim())) {
+    if (!emailRegex.test(authorEmail)) {
       return new Response(
         JSON.stringify({ error: 'Geçersiz e-posta adresi biçimi.' }),
         { status: 400, headers: { 'Content-Type': 'application/json; charset=utf-8' } }
@@ -41,11 +47,11 @@ export async function handleCommentSubmission(request: Request, env: { DB: D1Dat
       VALUES (?, ?, ?, ?, ?, ?, 'pending', ?, ?, CURRENT_TIMESTAMP)
     `).bind(
       commentId,
-      payload.post_type,
-      payload.post_slug.trim(),
-      payload.author_name.trim(),
-      payload.author_email.trim().toLowerCase(),
-      payload.content.trim(),
+      postType,
+      postSlug,
+      authorName,
+      authorEmail,
+      content,
       ipAddress,
       userAgent
     ).run();
@@ -73,7 +79,7 @@ export async function handleCommentSubmission(request: Request, env: { DB: D1Dat
 export async function handleGetApprovedComments(request: Request, env: { DB: D1Database }): Promise<Response> {
   try {
     const url = new URL(request.url);
-    const postSlug = url.searchParams.get('post_slug');
+    const postSlug = (url.searchParams.get('post_slug') || url.searchParams.get('postSlug') || '').trim();
 
     if (!postSlug) {
       return new Response(
@@ -87,10 +93,10 @@ export async function handleGetApprovedComments(request: Request, env: { DB: D1D
       FROM comments
       WHERE post_slug = ? AND status = 'approved'
       ORDER BY created_at ASC
-    `).bind(postSlug.trim()).all();
+    `).bind(postSlug).all();
 
     return new Response(
-      JSON.stringify({ success: true, comments: results || [] }),
+      JSON.stringify({ success: true, comments: results || [], data: results || [] }),
       { status: 200, headers: { 'Content-Type': 'application/json; charset=utf-8' } }
     );
   } catch (err: any) {

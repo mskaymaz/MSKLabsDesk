@@ -44,8 +44,12 @@ export default {
 
     let response: Response;
 
-    // 1. Kamusal & Headless CMS Public API V1 Endpoint'leri
-    if (path.startsWith('/api/v1/')) {
+    // 1. Kamusal & Headless CMS Public API V1 / Base Endpoint'leri
+    if ((path === '/api/comments' || path === '/api/v1/comments') && request.method === 'POST') {
+      response = await handleCommentSubmission(request, env);
+    } else if ((path === '/api/comments' || path === '/api/v1/comments') && request.method === 'GET') {
+      response = await handleGetApprovedComments(request, env);
+    } else if (path.startsWith('/api/v1/')) {
       response = await handleCmsPublic(request, env);
     } else if (path === '/api/health') {
       response = new Response(JSON.stringify({ status: 'ok', service: 'MSKLabsDesk API Engine', timestamp: new Date().toISOString() }), {
@@ -53,10 +57,6 @@ export default {
       });
     } else if (path === '/api/support' && request.method === 'POST') {
       response = await handleSupportSubmission(request, env);
-    } else if (path === '/api/comments' && request.method === 'POST') {
-      response = await handleCommentSubmission(request, env);
-    } else if (path === '/api/comments' && request.method === 'GET') {
-      response = await handleGetApprovedComments(request, env);
     } else if (path === '/api/subscribe' && request.method === 'POST') {
       response = await handleSubscribe(request, env);
     } else if (path === '/api/unsubscribe' && request.method === 'POST') {

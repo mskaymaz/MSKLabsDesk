@@ -16,6 +16,7 @@ export const Topbar: React.FC<TopbarProps> = ({ activeTab, onOpenSearch, pending
 
   return (
     <header
+      className="topbar-header"
       style={{
         position: 'sticky',
         top: 0,
@@ -30,19 +31,23 @@ export const Topbar: React.FC<TopbarProps> = ({ activeTab, onOpenSearch, pending
         backdropFilter: 'blur(12px)',
       }}
     >
-      <div>
-        <span style={{ fontSize: '0.76rem', color: 'var(--text-muted)', fontWeight: 600 }}>MSKLabsDesk / {activeTab}</span>
+      <div style={{ minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+        <span style={{ fontSize: '0.76rem', color: 'var(--text-muted)', fontWeight: 600 }}>
+          <span className="hidden-mobile">MSKLabsDesk / </span>
+          {activeTab}
+        </span>
       </div>
 
-      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
         <button
           type="button"
           onClick={onOpenSearch}
+          title="Hızlı Arama (Cmd+K)"
           style={{
             display: 'flex',
             alignItems: 'center',
             gap: '6px',
-            padding: '3px 10px',
+            padding: '3px 8px',
             background: 'rgba(255, 255, 255, 0.05)',
             border: '1px solid var(--border-subtle)',
             borderRadius: 'var(--radius-sm)',
@@ -53,7 +58,7 @@ export const Topbar: React.FC<TopbarProps> = ({ activeTab, onOpenSearch, pending
           }}
         >
           <Search size={13} />
-          <span>Hızlı Arama (Cmd+K)</span>
+          <span className="hidden-mobile">Hızlı Arama (Cmd+K)</span>
         </button>
 
         <div style={{ position: 'relative' }}>
@@ -132,7 +137,7 @@ export const Topbar: React.FC<TopbarProps> = ({ activeTab, onOpenSearch, pending
           >
             <User size={13} />
           </div>
-          <span style={{ fontSize: '0.74rem', fontWeight: 600, color: 'var(--text-primary)' }}>
+          <span className="hidden-mobile" style={{ fontSize: '0.74rem', fontWeight: 600, color: 'var(--text-primary)' }}>
             {user?.name || 'Admin'}
           </span>
         </div>
