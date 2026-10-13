@@ -373,8 +373,8 @@ export const TicketsView: React.FC<TicketsViewProps> = ({
               </div>
 
               {/* Kart İçerik Satırı: Konu & Gönderen (Sol) + Mesaj Önizleme (Orta/Sağ) */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
-                <div style={{ flex: '1 1 250px', minWidth: 0, maxWidth: '100%' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
+                <div style={{ width: '270px', maxWidth: '100%', flexShrink: 0 }}>
                   <h3 style={{ fontSize: '0.88rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '1px', lineHeight: 1.25, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                     {ticket.subject}
                   </h3>
@@ -383,7 +383,7 @@ export const TicketsView: React.FC<TicketsViewProps> = ({
                   </div>
                 </div>
 
-                <div style={{ flex: '1 1 200px', minWidth: 0, maxWidth: '100%' }}>
+                <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{
                     fontSize: '0.75rem',
                     color: 'var(--text-secondary)',

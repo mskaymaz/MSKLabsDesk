@@ -13,7 +13,7 @@
   - Mobilde paneller 1 sütuna çekildi, `minWidth: 0`, `overflow: hidden`, `wordBreak: break-word` ile panellerin sağdan kesilmesi tamamen giderildi.
 - `TicketsView.tsx`:
   - Bilet kartının üst satırına `flexWrap: 'wrap'`, `rowGap: '4px'`, `marginLeft: 'auto'` eklenerek dar ekranlarda Tarih + İncele butonunun ekran dışına taşması önlendi.
-  - Kart içerik satırındaki sabit `width: '310px'` değeri esnek `flex: '1 1 250px', minWidth: 0, maxWidth: '100%'` yapıldı.
+  - Kart içerik satırında sol sütun `width: '270px', maxWidth: '100%', flexShrink: 0` olarak sabitlendi; ortadaki açıklama (mesaj önizleme) kutusu tüm kartlarda soldan aynı dikey hizaya kilitlendi, sağdaki alan `flex: 1, minWidth: 0` ile esnetildi.
   - Arama, durum filtresi ve AI analiz butonları mobil ekran genişliklerine uyarlandı.
 - `Topbar.tsx` & `AppShell.tsx`:
   - Arama butonu metni ve kullanıcı adı mobilde `.hidden-mobile` ile gizlendi.

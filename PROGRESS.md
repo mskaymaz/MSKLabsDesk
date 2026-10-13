@@ -19,6 +19,8 @@
      - `AppShell.tsx`: Sert kodlanmış inline padding kaldırıldı; `index.css` üzerinden desktop (`20px`) ve mobil (`10px` yan, `76px` alt boşluk) olarak dinamikleştirildi.
      - `Topbar.tsx`: Arama metni ve yönetici kullanıcı adı mobilde `.hidden-mobile` ile gizlenerek yalnızca ikonlar gösterildi ve yatay taşma engellendi.
      - `SubscribersView.tsx` ve `CommentsView.tsx`: Tablo ve kartlara `.table-responsive` ve esnek wrap korumaları uygulandı.
+  5. **Destek Kartları Açıklama Metninin Sola Sabitlenmesi:**
+     - `TicketsView.tsx`: Konu & Gönderen sütunu `width: '270px', maxWidth: '100%', flexShrink: 0` olarak kilitlendi. Böylece ortadaki açıklama (mesaj önizleme) kutusu ekran genişliğine göre sağa kaymadan, tüm kartlarda sol kenardan aynı dikey hizada sabitlendi; sağdaki boşluk `flex: 1, minWidth: 0` ile dolduruldu.
 * **Sonuçlar:** Tüm TypeScript derlemeleri ve Vite build işlemleri 0 hatayla tamamlandı. Satır sınırı kuralına (%100) uyuldu (`index.css`: 435 satır, `TicketsView.tsx`: 422 satır).
 * **Durum:** `DevAdmin` dalında çalışıldı, `main` korundu.
 
