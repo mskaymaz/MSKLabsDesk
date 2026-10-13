@@ -1,6 +1,17 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [13.10.2026 - 16:18] - Durum Filtrelerinin Başlık Yanına Açılır Liste Yapılması & Blog Konu Başlığı Çözümlemesi
+- `frontend/src/utils/blogMeta.ts`:
+  - `bizce-4`, `guncel-5` vb. sistem id/slug'ları yerine gerçek blog başlıklarını (`BİZCE / Neden Ücretsiz?`, `GÜNCEL / Filistin - Konyaspor Maçı` vb.) çözümleyen merkezi yardımcı modül oluşturuldu (44 satır).
+- `frontend/src/views/CommentsView.tsx`:
+  - Yatay buton sekmeleri (2. satır) kaldırılarak başlık ve sayaç rozetinin hemen sağına açılır liste (`<select>`) yerleştirildi.
+- `frontend/src/views/TicketsView.tsx`:
+  - Durum filtresi 2. satırdan 1. satıra, başlığın sağına ve kategori filtresinin yanına taşındı. 2. satır tam genişlikli hızlı arama alanına tahsis edildi.
+- `frontend/src/components/CommentDetailModal.tsx`:
+  - `blogMeta.ts` modülüne bağlanarak dosya boyutu 160 satıra düşürüldü.
+- Yalnızca `DevAdmin` dalında çalışıldı, `main` korundu.
+
 ## [13.10.2026 - 16:05] - Yorum İncele Butonu, Çift Tıklama Detay Modalı ve Sadeleştirilmiş Butonlar
 - `frontend/src/components/CommentDetailModal.tsx`:
   - Yorum detayını, yazar bilgilerini, onay/ret aksiyonlarını ve metin boyutlandırma araçlarını içeren yeni modüler modal bileşeni oluşturuldu (178 satır).

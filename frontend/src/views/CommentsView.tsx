@@ -4,6 +4,7 @@ import { api } from '../services/api';
 import { CheckCircle, XCircle, Clock, RotateCw, Eye } from 'lucide-react';
 import { useTranslation } from '../context/I18nContext';
 import { CommentDetailModal } from '../components/CommentDetailModal';
+import { getBlogTypeLabel, formatBlogSlug } from '../utils/blogMeta';
 
 interface CommentsViewProps {
   comments: CommentItem[];
@@ -19,24 +20,6 @@ export const CommentsView: React.FC<CommentsViewProps> = ({ comments, onRefresh 
 
   const locale = language === 'ar' ? 'ar-SA' : language === 'en' ? 'en-US' : 'tr-TR';
   const filteredComments = comments.filter((c) => filter === 'all' || c.status === filter);
-
-  const getBlogTypeLabel = (type?: string) => {
-    const norm = (type || '').toLowerCase();
-    if (norm === 'guncel' || norm === 'güncel') return 'GÜNCEL';
-    if (norm.includes('anilt') || norm.includes('anlat')) return 'ANILTILAR';
-    return 'BİZCE';
-  };
-
-  const formatBlogSlug = (slug?: string, fallbackId?: string) => {
-    const raw = (slug || fallbackId || '').trim();
-    if (!raw) return 'Genel Yazı';
-    return raw
-      .replace(/[-_]/g, ' ')
-      .split(' ')
-      .filter(Boolean)
-      .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-      .join(' ');
-  };
 
   const handleModerate = async (id: string, status: 'approved' | 'rejected') => {
     setLoadingId(id);
@@ -74,15 +57,17 @@ export const CommentsView: React.FC<CommentsViewProps> = ({ comments, onRefresh 
         borderBottom: '1px solid var(--border-color)',
         boxShadow: '0 4px 12px rgba(0, 0, 0, 0.25)'
       }}>
-        {/* Row 1: Title + Counter (Left) & Refresh Action (Right) */}
+        {/* Tek Satır Başlık: Başlık + Sayaç + Durum Açılır Listesi (Sol) & Yenile Butonu (Sağ) */}
         <div style={{
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
           padding: '1px 2px',
-          marginBottom: '4px'
+          marginBottom: '2px',
+          flexWrap: 'wrap',
+          gap: '6px'
         }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
             <h1 style={{ fontSize: '1.05rem', fontWeight: 800, margin: 0, color: 'var(--text-primary)', lineHeight: 1.2 }}>
               {t('common.comments')}
             </h1>
@@ -97,6 +82,30 @@ export const CommentsView: React.FC<CommentsViewProps> = ({ comments, onRefresh 
             }}>
               {filteredComments.length} yorum
             </span>
+
+            {/* Durum Açılır Listesi (Blog Yorumları Başlığının Sağında) */}
+            <select
+              className="form-select"
+              value={filter}
+              onChange={(e) => setFilter(e.target.value)}
+              style={{
+                width: 'auto',
+                maxWidth: '220px',
+                paddingTop: '2px',
+                paddingBottom: '2px',
+                paddingLeft: '8px',
+                paddingRight: '22px',
+                fontSize: '0.78rem',
+                height: '26px',
+                marginLeft: '4px'
+              }}
+              title="Yorum Durumuna Göre Filtrele"
+            >
+              <option value="pending">⏳ Bekleyenler ({comments.filter((c) => c.status === 'pending').length})</option>
+              <option value="approved">✅ Onaylananlar ({comments.filter((c) => c.status === 'approved').length})</option>
+              <option value="rejected">❌ Reddedilenler ({comments.filter((c) => c.status === 'rejected').length})</option>
+              <option value="all">📋 Tüm Yorumlar ({comments.length})</option>
+            </select>
           </div>
 
           <button
@@ -119,49 +128,6 @@ export const CommentsView: React.FC<CommentsViewProps> = ({ comments, onRefresh 
             <RotateCw size={12} className={refreshing ? 'spin' : ''} />
             {refreshing ? 'Yenileniyor...' : 'Yenile'}
           </button>
-        </div>
-
-        {/* Row 2: Status Filter Tabs (Minimal vertical padding) */}
-        <div style={{ display: 'flex', gap: '4px', overflowX: 'auto', padding: '1px 0' }}>
-          {[
-            { id: 'pending', label: t('tickets.pending') },
-            { id: 'approved', label: t('tickets.resolved') },
-            { id: 'rejected', label: t('tickets.rejected') },
-            { id: 'all', label: t('common.all') },
-          ].map((tab) => {
-            const count = tab.id === 'all'
-              ? comments.length
-              : comments.filter((c) => c.status === tab.id).length;
-            const isActive = filter === tab.id;
-            return (
-              <button
-                key={tab.id}
-                onClick={() => setFilter(tab.id)}
-                className={`btn btn-sm ${isActive ? 'btn-primary' : 'btn-secondary'}`}
-                style={{
-                  borderRadius: '14px',
-                  padding: '2px 8px',
-                  fontSize: '0.74rem',
-                  fontWeight: isActive ? 700 : 500,
-                  color: isActive ? '#FFFFFF' : 'var(--text-secondary)',
-                  whiteSpace: 'nowrap',
-                  lineHeight: '1.2'
-                }}
-              >
-                <span>{tab.label}</span>
-                <span style={{
-                  background: isActive ? 'rgba(0,0,0,0.2)' : 'rgba(255,255,255,0.08)',
-                  padding: '0 5px',
-                  borderRadius: '8px',
-                  fontSize: '0.68rem',
-                  marginLeft: '4px',
-                  fontWeight: 700
-                }}>
-                  {count}
-                </span>
-              </button>
-            );
-          })}
         </div>
       </div>
 

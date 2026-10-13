@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import type { CommentItem } from '../types';
 import { X, CheckCircle, XCircle, Clock, User, ZoomIn, ZoomOut, RotateCcw } from 'lucide-react';
 import { useTranslation } from '../context/I18nContext';
+import { getBlogTypeLabel, formatBlogSlug } from '../utils/blogMeta';
 
 interface CommentDetailModalProps {
   comment: CommentItem;
@@ -20,24 +21,6 @@ export const CommentDetailModal: React.FC<CommentDetailModalProps> = ({
   const [contentFontSize, setContentFontSize] = useState<number>(0.9);
 
   const locale = language === 'ar' ? 'ar-SA' : language === 'en' ? 'en-US' : 'tr-TR';
-
-  const getBlogTypeLabel = (type?: string) => {
-    const norm = (type || '').toLowerCase();
-    if (norm === 'guncel' || norm === 'güncel') return 'GÜNCEL';
-    if (norm.includes('anilt') || norm.includes('anlat')) return 'ANILTILAR';
-    return 'BİZCE';
-  };
-
-  const formatBlogSlug = (slug?: string, fallbackId?: string) => {
-    const raw = (slug || fallbackId || '').trim();
-    if (!raw) return 'Genel Yazı';
-    return raw
-      .replace(/[-_]/g, ' ')
-      .split(' ')
-      .filter(Boolean)
-      .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-      .join(' ');
-  };
 
   const sBadge = comment.status === 'approved'
     ? { label: '✅ Onaylandı', bg: 'rgba(16, 185, 129, 0.25)', border: 'rgba(16, 185, 129, 0.45)' }

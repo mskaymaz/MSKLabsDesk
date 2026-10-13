@@ -1,6 +1,18 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 🟢 Son Güncelleme [13.10.2026 - 16:18] — DURUM FİLTRELERİNİN BAŞLIK YANINA AÇILIR LİSTE YAPILMASI & BLOG KONU BAŞLIĞI ÇÖZÜMLEMESİ [*]
+* **Yapılan İşlem:**
+  1. **Blog Konu Başlıklarının Çözümlenmesi (`blogMeta.ts`):**
+     - `frontend/src/utils/blogMeta.ts` modülü oluşturuldu (44 satır).
+     - `bizce-4`, `guncel-5` vb. sistem slug'ları yerine kart ve modal üzerinde gerçek blog başlıklarının görünmesi sağlandı (`BİZCE / Neden Ücretsiz?`, `GÜNCEL / Filistin - Konyaspor Maçı` vb.).
+     - `CommentsView.tsx` ve `CommentDetailModal.tsx` içindeki mükerrer kodlar kaldırılarak merkezi yardımcıya bağlandı.
+  2. **Durum Filtrelerinin Başlık Yanına Açılır Liste Olarak Taşınması:**
+     - **Blog Yorumları (`CommentsView.tsx`):** Yatay buton sekmeleri (2. satır) tamamen kaldırılarak başlık ve sayaç rozetinin hemen sağına tek satırda kompakt bir açılır liste (`<select>`) yerleştirildi ("⏳ Bekleyenler", "✅ Onaylananlar", "❌ Reddedilenler", "📋 Tüm Yorumlar").
+     - **Destek & Talepler (`TicketsView.tsx`):** 2. satırdaki durum filtresi yukarıya, başlığın sağına ve kategori filtresinin yanına taşındı ("📋 Tüm Talepler", "🆕 Yeni", "⏳ İşlemde", "✅ Çözüldü / Yanıtlandı", "❌ Kapatıldı / Reddedildi"). 2. satır yalnızca tam genişlikli hızlı arama çubuğuna tahsis edildi.
+* **Sonuçlar:** Vite derlemesi ve TypeScript denetimi 0 hatayla geçti. Dosya satır sınırlarına tam uyuldu (`TicketsView.tsx`: 440 satır, `CommentsView.tsx`: 331 satır, `CommentDetailModal.tsx`: 160 satır, `blogMeta.ts`: 44 satır).
+* **Durum:** `DevAdmin` dalında çalışıldı, `main` korundu.
+
 ## 🟢 Son Güncelleme [13.10.2026 - 16:05] — YORUM İNCELE BUTONU, ÇİFT TIKLAMA DETAY MODALI VE SADELEŞTİRİLMİŞ BUTONLAR [*]
 * **Yapılan İşlem:**
   1. **Yorum Detay Modalı (`CommentDetailModal.tsx`):**

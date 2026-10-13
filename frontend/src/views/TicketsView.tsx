@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import type { Ticket, TicketDetailResponse } from '../types';
-import { Search, Filter, Sparkles, Eye, Clock, RotateCw } from 'lucide-react';
+import { Search, Sparkles, Eye, Clock, RotateCw } from 'lucide-react';
 import { api } from '../services/api';
 import { TicketDetailModal } from '../components/TicketDetailModal';
 import { useTranslation } from '../context/I18nContext';
@@ -181,14 +181,14 @@ export const TicketsView: React.FC<TicketsViewProps> = ({
               {filteredTickets.length} talep
             </span>
 
-            {/* Kategori Açılır Listesi (Destek & Talepler Başlığı Hizasında) */}
+            {/* Durum Açılır Listesi (Destek & Talepler Başlığının Hizası) */}
             <select
               className="form-select"
-              value={categoryFilter}
-              onChange={(e) => setCategoryFilter(e.target.value)}
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
               style={{
                 width: 'auto',
-                maxWidth: '180px',
+                maxWidth: '210px',
                 paddingTop: '2px',
                 paddingBottom: '2px',
                 paddingLeft: '8px',
@@ -197,9 +197,34 @@ export const TicketsView: React.FC<TicketsViewProps> = ({
                 height: '26px',
                 marginLeft: '4px'
               }}
+              title="İşlem Durumuna Göre Filtrele"
+            >
+              <option value="all">📋 Tüm Talepler ({tickets.length})</option>
+              <option value="new">🆕 Yeni ({tickets.filter((t) => t.status === 'new' || t.status === 'open').length})</option>
+              <option value="in_progress">⏳ İşlemde ({tickets.filter((t) => t.status === 'in_progress').length})</option>
+              <option value="resolved">✅ Çözüldü / Yanıtlandı ({tickets.filter((t) => t.status === 'resolved').length})</option>
+              <option value="rejected">❌ Kapatıldı / Reddedildi ({tickets.filter((t) => t.status === 'rejected').length})</option>
+            </select>
+
+            {/* Kategori Açılır Listesi (Destek & Talepler Başlığı Hizasında) */}
+            <select
+              className="form-select"
+              value={categoryFilter}
+              onChange={(e) => setCategoryFilter(e.target.value)}
+              style={{
+                width: 'auto',
+                maxWidth: '170px',
+                paddingTop: '2px',
+                paddingBottom: '2px',
+                paddingLeft: '8px',
+                paddingRight: '22px',
+                fontSize: '0.78rem',
+                height: '26px',
+                marginLeft: '2px'
+              }}
               title="Talep Konusuna Göre Filtrele"
             >
-              <option value="all">📋 Tüm Konular ({tickets.length})</option>
+              <option value="all">📁 Tüm Konular ({tickets.length})</option>
               <option value="hata">🐛 Hata ({tickets.filter((t) => normalizeCategory(t.category) === 'hata').length})</option>
               <option value="istek">✨ İstek ({tickets.filter((t) => normalizeCategory(t.category) === 'istek').length})</option>
               <option value="tesekkur">❤️ Teşekkür ({tickets.filter((t) => normalizeCategory(t.category) === 'tesekkur').length})</option>
@@ -255,15 +280,14 @@ export const TicketsView: React.FC<TicketsViewProps> = ({
           </div>
         </div>
 
-        {/* Row 2: Search Bar & Status Filter */}
+        {/* Row 2: Search Bar */}
         <div style={{
           display: 'flex',
           gap: '8px',
           alignItems: 'center',
-          padding: '1px 0',
-          flexWrap: 'wrap'
+          padding: '1px 0'
         }}>
-          <div style={{ position: 'relative', flex: '1 1 180px', minWidth: '130px' }}>
+          <div style={{ position: 'relative', width: '100%' }}>
             <Search size={14} style={{ position: 'absolute', left: '8px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
             <input
               type="text"
@@ -274,38 +298,12 @@ export const TicketsView: React.FC<TicketsViewProps> = ({
                 paddingTop: '3px',
                 paddingBottom: '3px',
                 fontSize: '0.78rem',
-                height: '28px'
+                height: '28px',
+                width: '100%'
               }}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
-          </div>
-
-          {/* Durum Açılır Listesi */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '4px', flexShrink: 0 }}>
-            <Filter size={14} color="var(--text-muted)" />
-            <select
-              className="form-select"
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
-              style={{
-                width: 'auto',
-                maxWidth: '160px',
-                paddingTop: '2px',
-                paddingBottom: '2px',
-                paddingLeft: '8px',
-                paddingRight: '22px',
-                fontSize: '0.78rem',
-                height: '28px'
-              }}
-              title="İşlem Durumuna Göre Filtrele"
-            >
-              <option value="all">Tüm Durumlar</option>
-              <option value="new">Yeni</option>
-              <option value="in_progress">İşlemde</option>
-              <option value="resolved">Çözüldü</option>
-              <option value="rejected">Kapatıldı</option>
-            </select>
           </div>
         </div>
       </div>
