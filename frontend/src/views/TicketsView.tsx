@@ -407,7 +407,19 @@ export const TicketsView: React.FC<TicketsViewProps> = ({
               </div>
 
               {/* Mobilde Kart Altına Tam Genişlikte 2 Satırlık Mesaj Önizlemesi */}
-              <div className="visible-mobile ticket-message-preview" style={{ marginTop: '6px', width: '100%' }}>
+              <div className="visible-mobile ticket-message-preview" style={{
+                marginTop: '6px',
+                width: '100%',
+                maxHeight: '2.8em',
+                lineHeight: 1.35,
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                wordBreak: 'break-word',
+                whiteSpace: 'normal',
+                WebkitLineClamp: 2,
+                WebkitBoxOrient: 'vertical',
+                display: '-webkit-box'
+              }}>
                 <span style={{ color: 'var(--text-muted)', marginRight: '4px' }}>💬</span>
                 {ticket.message_content || (ticket as any).content || '(İçerik belirtilmemiş)'}
               </div>

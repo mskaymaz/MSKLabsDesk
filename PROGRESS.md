@@ -1,6 +1,17 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 🟢 Son Güncelleme [13.10.2026 - 15:35] — MOBİLDE 2 SATIR MESAJ KISITLAMASININ DÜZELTİLMESİ (-webkit-line-clamp VE max-height) [*]
+* **Yapılan İşlem:**
+  1. **Display Çakışmasının Giderilmesi:**
+     - Mobilde `.visible-mobile` sınıfındaki `display: block !important;` kuralının, line-clamp için zorunlu olan `display: -webkit-box;` özelliğini ezdiği ve bu yüzden metnin taşarak tüm mesajın açılmasına neden olduğu tespit edildi.
+     - `index.css`: `.visible-mobile` üzerindeki `!important` kaldırıldı ve `.ticket-message-preview.visible-mobile { display: -webkit-box !important; }` özel seçicisi eklendi.
+  2. **Kesin 2 Satır Sınırı (max-height ve line-clamp):**
+     - `.ticket-message-preview` sınıfına ve `TicketsView.tsx` bileşenine `max-height: 2.8em;`, `line-height: 1.35;`, `overflow: hidden;`, `text-overflow: ellipsis;` ve `word-break: break-word;` kuralları kesinleştirildi.
+     - Uzun mesajlar ne kadar uzun olursa olsun tam 2 satırda kesilip üç nokta (`...`) ile sonlanacak şekilde fiziksel tavan uygulandı.
+* **Sonuçlar:** Vite derlemesi 0 hatayla geçti. Dosya sınırlarına uyuldu (`TicketsView.tsx`: 442 satır, `index.css`: 419 satır).
+* **Durum:** `DevAdmin` dalında çalışıldı, `main` korundu.
+
 ## 🟢 Son Güncelleme [13.10.2026 - 15:25] — KOYU TEMADA ROZET YAZILARININ BEYAZ YAPILMASI & MOBİLDE 2 SATIR MESAJ ÖNİZLEMESİ [*]
 * **Yapılan İşlem:**
   1. **Koyu Temada Rozet Yazılarının Beyaza Dönüştürülmesi:**

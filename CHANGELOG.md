@@ -1,6 +1,15 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [13.10.2026 - 15:35] - Mobilde 2 Satır Mesaj Kısıtlamasının Düzeltilmesi
+- `index.css`:
+  - `.visible-mobile` sınıfının `display: block !important` ile line-clamp'in `-webkit-box` özelliğini ezmesi engellendi.
+  - `.ticket-message-preview.visible-mobile { display: -webkit-box !important; }` tanımlandı.
+  - `.ticket-message-preview` sınıfına `max-height: 2.8em` ve `line-height: 1.35` eklenerek tam 2 satır tavanı getirildi.
+- `TicketsView.tsx`:
+  - Mobil önizleme kutusuna inline `maxHeight: '2.8em'`, `lineHeight: 1.35`, `WebkitLineClamp: 2`, `WebkitBoxOrient: 'vertical'` eklenerek uzun mesajların kesinlikle 2 satırda kesilmesi sağlandı.
+- Yalnızca `DevAdmin` dalında çalışıldı, `main` korundu.
+
 ## [13.10.2026 - 15:25] - Koyu Temada Rozet Yazılarının Beyaz Yapılması & Mobilde 2 Satır Mesaj Önizlemesi
 - `index.css`:
   - `.badge` ve tüm durum/kategori rozetlerinde koyu temadaki metin rengi beyaz (`#FFFFFF`) yapıldı.
