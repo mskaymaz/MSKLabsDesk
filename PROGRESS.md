@@ -1,6 +1,14 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 🟢 Son Güncelleme [13.10.2026 - 15:02] — MOBİLDE AÇIKLAMA GİZLEME VE ÇİFT TIKLAMA İLE MESAJ DETAYI AÇMA [*]
+* **Yapılan İşlem:**
+  1. **Mobilde Açıklama Önizlemesinin Gizlenmesi:** `TicketsView.tsx` içerisindeki mesaj önizleme kutusu `.hidden-mobile` sınıfıyla sarıldı. Mobil ekranda (<768px) açıklama metni gizlenerek yalnızca üst bilgiler (Bilet No, Rozetler, Tarih, İncele) ve Konu & Gönderen başlığı gösterildi; kart ferah ve taşmasız bir görünüme kavuştu. Masaüstünde açıklama önizlemesi soldan sabit hizada gösterilmeye devam eder.
+  2. **Mobilde Başlık Alanının Tam Genişliğe Yayılması:** `index.css` dosyasına eklenen `.ticket-subject-col` sınıfıyla sol sütun masaüstünde 270px sabit kalırken, mobilde açıklama gizlendiğinde tüm kart genişliğini (`width: 100%`) kaplayacak şekilde dinamikleştirildi.
+  3. **Çift Tıklama ile Mesaj Detayı Açma:** `TicketsView.tsx` üzerindeki bilet kartlarına `onDoubleClick={() => handleOpenDetail(ticket.id)}` ve `cursor: 'pointer'` eklendi. Hem mobil hem masaüstü ortamında kartın üzerine çift tıklandığında mesaj detay modalı doğrudan açılır hale getirildi.
+* **Sonuçlar:** Vite build ve TypeScript derlemeleri 0 hatayla geçti. Satır sınırı kuralına (%100) uyuldu (`index.css`: 440 satır, `TicketsView.tsx`: 425 satır).
+* **Durum:** `DevAdmin` dalında çalışıldı, `main` korundu.
+
 ## 🟢 Son Güncelleme [13.10.2026 - 14:55] — MOBİL YATAY TAŞMA & KESİLME DÜZENLEMELERİ VE BLOG YORUM HATASI ÇÖZÜMÜ [*]
 * **Yapılan İşlem:**
   1. **Blog Yorum Gönderim Hatası Çözümü:**

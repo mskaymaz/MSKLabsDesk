@@ -425,7 +425,10 @@ body.theme-light {
   .topbar-header { padding: 0 10px !important; }
   .dashboard-metrics-grid { grid-template-columns: 1fr !important; gap: 12px !important; }
   .dashboard-panels-grid { grid-template-columns: 1fr !important; gap: 14px !important; }
+  .ticket-subject-col { width: 100% !important; }
 }
+
+.ticket-subject-col { width: 270px; max-width: 100%; flex-shrink: 0; }
 
 @media (min-width: 768px) {
   .mobile-bottom-nav { display: none !important; }

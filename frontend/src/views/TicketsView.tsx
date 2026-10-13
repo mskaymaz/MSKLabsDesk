@@ -329,10 +329,13 @@ export const TicketsView: React.FC<TicketsViewProps> = ({
             <div
               key={ticket.id}
               className="glass-card glass-card-hover"
+              onDoubleClick={() => handleOpenDetail(ticket.id)}
               style={{
                 padding: '4px 14px',
-                borderRadius: '8px'
+                borderRadius: '8px',
+                cursor: 'pointer'
               }}
+              title="Çift tıklayarak mesaj detayını okuyabilirsiniz"
             >
               {/* Kart Üst Başlık Satırı: Bilet No + Rozetler (Sol) & Tarih + İncele (Sağ) */}
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px', marginBottom: '2px', flexWrap: 'wrap', rowGap: '4px' }}>
@@ -374,7 +377,7 @@ export const TicketsView: React.FC<TicketsViewProps> = ({
 
               {/* Kart İçerik Satırı: Konu & Gönderen (Sol) + Mesaj Önizleme (Orta/Sağ) */}
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
-                <div style={{ width: '270px', maxWidth: '100%', flexShrink: 0 }}>
+                <div className="ticket-subject-col">
                   <h3 style={{ fontSize: '0.88rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '1px', lineHeight: 1.25, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                     {ticket.subject}
                   </h3>
@@ -383,7 +386,7 @@ export const TicketsView: React.FC<TicketsViewProps> = ({
                   </div>
                 </div>
 
-                <div style={{ flex: 1, minWidth: 0 }}>
+                <div className="hidden-mobile" style={{ flex: 1, minWidth: 0 }}>
                   <div style={{
                     fontSize: '0.75rem',
                     color: 'var(--text-secondary)',

@@ -1,6 +1,14 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [13.10.2026 - 15:02] - Mobilde Bilet Açıklamasını Gizleme & Çift Tıklama ile Detay Açma
+- `TicketsView.tsx`:
+  - Kart üzerindeki açıklama önizlemesi (`💬 ...`) `.hidden-mobile` sınıfına bağlandı; mobilde (<768px) gizlenerek kartın dikeyde sıkışması ve taşması engellendi, yalnızca başlık ve gönderen sunuldu.
+  - Kart konteynerine `onDoubleClick={() => handleOpenDetail(ticket.id)}` eklendi; hem mobilde hem masaüstünde karta çift tıklanarak mesaj detay modalının açılması sağlandı.
+- `index.css`:
+  - `.ticket-subject-col` sınıfı tanımlandı: masaüstünde 270px sol sabit hizayı korurken, mobilde açıklama gizlendiğinde kart genişliğine (`100%`) yayılarak mükemmel okunabilirlik sunuldu.
+- Yalnızca `DevAdmin` dalında çalışıldı, `main` korundu.
+
 ## [13.10.2026 - 14:55] - Mobil Yatay Taşma & Kesilme Düzenlemeleri ve Blog Yorum Hatası Çözümü
 - `backend/src/routes/comments.ts` & `backend/src/index.ts`:
   - Hem `/api/comments` hem `/api/v1/comments` uç noktaları GET ve POST metodlarıyla tam uyumlu hale getirildi.
