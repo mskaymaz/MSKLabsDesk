@@ -1,6 +1,15 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [13.10.2026 - 15:48] - Blog Yorum Kartlarının Destek Kartları Formatına Dönüştürülmesi
+- `CommentsView.tsx`:
+  - Kart dolguları ve yapıları `glass-card glass-card-hover` altında `padding: 4px 14px`, `borderRadius: 8px` olarak destek kartları standardına dönüştürüldü.
+  - 1. Satır: Yorum Kodu (`#CMT-...`), Durum Rozeti (`⏳ Bekliyor` / `✅ Onaylandı` / `❌ Reddedildi`) ve Blog Yazısı Rozeti (`📰 {post_id}`) sol tarafa; formatlanmış Tarih (`Clock` ikonu) sağ tarafa yerleştirildi.
+  - 2. Satır: Yazar Adı & E-postası (Sol), 2 satırlık masaüstü yorum önizlemesi (Orta) ve kompakt Onayla/Reddet aksiyon butonları (Sağ) kilitlendi.
+  - 3. Satır: Mobilde kart altına tam genişlikte (`width: 100%`) 2 satırla sınırlandırılmış (`max-height: 2.8em`, `-webkit-line-clamp: 2`) önizleme balonu eklendi.
+  - Rozetlerde koyu temada beyaz, açık temada siyah metin sunan `.ticket-badge` sınıfı kullanıldı.
+- Yalnızca `DevAdmin` dalında çalışıldı, `main` korundu.
+
 ## [13.10.2026 - 15:35] - Mobilde 2 Satır Mesaj Kısıtlamasının Düzeltilmesi
 - `index.css`:
   - `.visible-mobile` sınıfının `display: block !important` ile line-clamp'in `-webkit-box` özelliğini ezmesi engellendi.

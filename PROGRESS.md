@@ -1,6 +1,22 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 🟢 Son Güncelleme [13.10.2026 - 15:48] — BLOG YORUM KARTLARININ DESTEK KARTLARI FORMATINA DÖNÜŞTÜRÜLMESİ [*]
+* **Yapılan İşlem:**
+  1. **Ultra-Kompakt Kart Mimarisine Geçiş:**
+     - `CommentsView.tsx`: Kaba dolgular (`padding: 20px`) kaldırılarak destek kartlarıyla tam uyumlu `padding: 4px 14px`, `borderRadius: 8px` ve `gap: 8px` kompakt kart ızgarasına geçirildi.
+  2. **1. Satır (Üst Başlık Satırı):**
+     - **Sol:** Yorum Kodu (`#CMT-...`, cyan monospace), Durum Rozeti (`⏳ Bekliyor`, `✅ Onaylandı`, `❌ Reddedildi`) ve Yazı Rozeti (`📰 {comment.post_id}`). Rozetlerde koyu temada beyaz (`#FFFFFF`), açık temada siyah metin sunan `.ticket-badge` sınıfı kullanıldı.
+     - **Sağ:** Üst satırın sağına sabitlenmiş formatlanmış Tarih (`Clock` ikonu ile, `marginLeft: 'auto'`, `flexShrink: 0`).
+  3. **2. Satır (Yazar & Masaüstü Önizleme & Hızlı Aksiyon):**
+     - **Sol:** Yorum yapan yazarın adı (`author_name`) ve e-posta adresi (`author_email`).
+     - **Orta (Desktop):** 2 satırla sınırlandırılmış masaüstü önizleme kutusu (`.hidden-mobile .ticket-message-preview`).
+     - **Sağ:** Yazar başlığı hizasında sağa kilitli kompakt Onayla (`CheckCircle`) ve Reddet (`XCircle`) butonları.
+  4. **3. Satır (Mobilde Alt Önizleme):**
+     - Mobilde (<768px) kartın altına tam genişlikte (`width: 100%`) ve kesinlikle 2 satırla sınırlı (`.visible-mobile .ticket-message-preview`) yorum önizleme kutusu eklendi.
+* **Sonuçlar:** Vite ve TypeScript build hatasız tamamlandı. Dosya sınırlarına tam uyuldu (`CommentsView.tsx`: 278 satır).
+* **Durum:** `DevAdmin` dalında çalışıldı, `main` korundu.
+
 ## 🟢 Son Güncelleme [13.10.2026 - 15:35] — MOBİLDE 2 SATIR MESAJ KISITLAMASININ DÜZELTİLMESİ (-webkit-line-clamp VE max-height) [*]
 * **Yapılan İşlem:**
   1. **Display Çakışmasının Giderilmesi:**

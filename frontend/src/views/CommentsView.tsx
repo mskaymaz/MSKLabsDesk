@@ -122,7 +122,7 @@ export const CommentsView: React.FC<CommentsViewProps> = ({ comments, onRefresh 
                   padding: '2px 8px',
                   fontSize: '0.74rem',
                   fontWeight: isActive ? 700 : 500,
-                  color: isActive ? '#000000' : 'var(--text-secondary)',
+                  color: isActive ? '#FFFFFF' : 'var(--text-secondary)',
                   whiteSpace: 'nowrap',
                   lineHeight: '1.2'
                 }}
@@ -150,57 +150,124 @@ export const CommentsView: React.FC<CommentsViewProps> = ({ comments, onRefresh 
           <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>{t('common.loading')}</p>
         </div>
       ) : (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
           {filteredComments.map((comment) => (
-            <div key={comment.id} className="glass-card" style={{ padding: '20px' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '10px', flexWrap: 'wrap', gap: '8px' }}>
-                <div style={{ minWidth: 0, flex: '1 1 240px' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
-                    <h3 style={{ fontSize: '0.95rem', fontWeight: 700, color: '#FFF' }}>{comment.author_name}</h3>
-                    <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)', overflowWrap: 'anywhere' }}>({comment.author_email})</span>
-                    <span className={`badge badge-${comment.status}`}>{comment.status}</span>
-                  </div>
-                  <span style={{ fontSize: '0.75rem', color: 'var(--accent-cyan)', marginTop: '2px', display: 'inline-block', overflowWrap: 'anywhere' }}>
-                    {t('comments.postUrl')}: {comment.post_id}
+            <div
+              key={comment.id}
+              className="glass-card glass-card-hover"
+              style={{
+                padding: '4px 14px',
+                borderRadius: '8px'
+              }}
+            >
+              {/* Kart Üst Satırı: Yorum Kodu + Durum Rozeti + Yazı Rozeti (Sol) & Tarih (Sağ) */}
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px', marginBottom: '4px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap', minWidth: 0 }}>
+                  <span
+                    style={{ fontSize: '0.78rem', fontWeight: 800, color: 'var(--accent-cyan)', fontFamily: 'ui-monospace, monospace', letterSpacing: '-0.02em', minWidth: '76px', flexShrink: 0 }}
+                    title={comment.id}
+                  >
+                    #{comment.id.length > 10 ? comment.id.slice(-8).toUpperCase() : comment.id}
                   </span>
+                  {(() => {
+                    const sBadge = comment.status === 'approved'
+                      ? { label: '✅ Onaylandı', bg: 'rgba(16, 185, 129, 0.25)', border: 'rgba(16, 185, 129, 0.45)' }
+                      : comment.status === 'rejected'
+                      ? { label: '❌ Reddedildi', bg: 'rgba(239, 68, 68, 0.25)', border: 'rgba(239, 68, 68, 0.45)' }
+                      : { label: '⏳ Bekliyor', bg: 'rgba(245, 158, 11, 0.25)', border: 'rgba(245, 158, 11, 0.45)' };
+                    return (
+                      <>
+                        <span className="ticket-badge" style={{ fontSize: '0.68rem', background: sBadge.bg, border: `1px solid ${sBadge.border}`, padding: '1px 6px', borderRadius: '4px', fontWeight: 700, minWidth: '60px', textAlign: 'center', display: 'inline-flex', justifyContent: 'center', alignItems: 'center', flexShrink: 0 }}>
+                          {sBadge.label}
+                        </span>
+                        <span className="ticket-badge" style={{ fontSize: '0.68rem', background: 'rgba(99, 102, 241, 0.2)', border: '1px solid rgba(99, 102, 241, 0.4)', padding: '1px 6px', borderRadius: '4px', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: '3px', flexShrink: 0, maxWidth: '220px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={comment.post_id}>
+                          📰 {comment.post_id}
+                        </span>
+                      </>
+                    );
+                  })()}
                 </div>
-                <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '4px', flexShrink: 0, marginLeft: 'auto' }}>
-                  <Clock size={12} /> {new Date(comment.created_at).toLocaleString(locale)}
+
+                {/* Sağ: Tarih (Üst satırın sağ tarafına kilitli, asla kaymaz) */}
+                <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '3px', marginLeft: 'auto', flexShrink: 0, whiteSpace: 'nowrap' }}>
+                  <Clock size={11} /> {new Date(comment.created_at).toLocaleDateString(locale)}
                 </span>
               </div>
 
-              <div style={{
-                padding: '12px 16px',
-                background: 'rgba(0, 0, 0, 0.25)',
-                borderRadius: 'var(--radius-md)',
-                border: '1px solid var(--border-color)',
-                fontSize: '0.88rem',
-                color: '#E5E7EB',
-                marginBottom: '14px',
-                lineHeight: 1.5
-              }}>
-                "{comment.content}"
+              {/* Kart Alt Satırı: Yazar & E-Posta (Sol) + Yorum Önizleme (Desktop) + Aksiyon Butonları (Sağ) */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <div className="ticket-subject-col" style={{ minWidth: 0 }}>
+                  <h3 style={{
+                    fontSize: '0.88rem',
+                    fontWeight: 700,
+                    color: 'var(--text-primary)',
+                    marginBottom: '1px',
+                    lineHeight: 1.25,
+                    display: '-webkit-box',
+                    WebkitLineClamp: 2,
+                    WebkitBoxOrient: 'vertical',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    wordBreak: 'break-word'
+                  }}>
+                    {comment.author_name}
+                  </h3>
+                  <div style={{ fontSize: '0.74rem', color: 'var(--text-secondary)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                    {comment.author_email}
+                  </div>
+                </div>
+
+                {/* Yorum Önizleme (Sadece Masaüstü) */}
+                <div className="hidden-mobile" style={{ flex: 1, minWidth: 0 }}>
+                  <div className="ticket-message-preview">
+                    <span style={{ color: 'var(--text-muted)', marginRight: '4px' }}>💬</span>
+                    "{comment.content}"
+                  </div>
+                </div>
+
+                {/* Sağ: Aksiyon Butonları (Başlık ile aynı hizada kilitli) */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginLeft: 'auto', flexShrink: 0 }}>
+                  {comment.status !== 'approved' && (
+                    <button
+                      className="btn btn-success btn-sm"
+                      style={{ padding: '3px 8px', fontSize: '0.74rem', borderRadius: '5px', whiteSpace: 'nowrap' }}
+                      disabled={loadingId === comment.id}
+                      onClick={() => handleModerate(comment.id, 'approved')}
+                      title={t('comments.approveComment')}
+                    >
+                      <CheckCircle size={12} /> {t('comments.approveComment')}
+                    </button>
+                  )}
+                  {comment.status !== 'rejected' && (
+                    <button
+                      className="btn btn-danger btn-sm"
+                      style={{ padding: '3px 8px', fontSize: '0.74rem', borderRadius: '5px', whiteSpace: 'nowrap' }}
+                      disabled={loadingId === comment.id}
+                      onClick={() => handleModerate(comment.id, 'rejected')}
+                      title={t('comments.rejectComment')}
+                    >
+                      <XCircle size={12} /> {t('comments.rejectComment')}
+                    </button>
+                  )}
+                </div>
               </div>
 
-              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', flexWrap: 'wrap' }}>
-                {comment.status !== 'approved' && (
-                  <button
-                    className="btn btn-success btn-sm"
-                    disabled={loadingId === comment.id}
-                    onClick={() => handleModerate(comment.id, 'approved')}
-                  >
-                    <CheckCircle size={14} /> {t('comments.approveComment')}
-                  </button>
-                )}
-                {comment.status !== 'rejected' && (
-                  <button
-                    className="btn btn-danger btn-sm"
-                    disabled={loadingId === comment.id}
-                    onClick={() => handleModerate(comment.id, 'rejected')}
-                  >
-                    <XCircle size={14} /> {t('comments.rejectComment')}
-                  </button>
-                )}
+              {/* Mobilde Kart Altına Tam Genişlikte 2 Satırlık Yorum Önizlemesi */}
+              <div className="visible-mobile ticket-message-preview" style={{
+                marginTop: '6px',
+                width: '100%',
+                maxHeight: '2.8em',
+                lineHeight: 1.35,
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                wordBreak: 'break-word',
+                whiteSpace: 'normal',
+                WebkitLineClamp: 2,
+                WebkitBoxOrient: 'vertical',
+                display: '-webkit-box'
+              }}>
+                <span style={{ color: 'var(--text-muted)', marginRight: '4px' }}>💬</span>
+                "{comment.content}"
               </div>
             </div>
           ))}
