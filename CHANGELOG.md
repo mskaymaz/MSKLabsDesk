@@ -1,6 +1,14 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [13.10.2026 - 15:55] - Blog Yorum Kartlarında Tür (Bizce/Güncel/Anıtlar) ve Yazı Konusu Rozeti
+- `types/index.ts`:
+  - `CommentItem` arayüzüne `post_type` ve `post_slug` alanları eklendi.
+- `CommentsView.tsx`:
+  - Kartın en üst satırına yorum kodu ve durum rozetinin hemen sağına `📰 BİZCE / Blog Konusu..` (veya `GÜNCEL / ...`, `ANILTILAR / ...`) formatında blog türü ve konusu rozeti eklendi.
+  - Türler `getBlogTypeLabel` ve konular `formatBlogSlug` ile formatlandı; dar ekranlarda `maxWidth: 280px` ve ellipsis ile taşması önlendi.
+- Yalnızca `DevAdmin` dalında çalışıldı, `main` korundu.
+
 ## [13.10.2026 - 15:48] - Blog Yorum Kartlarının Destek Kartları Formatına Dönüştürülmesi
 - `CommentsView.tsx`:
   - Kart dolguları ve yapıları `glass-card glass-card-hover` altında `padding: 4px 14px`, `borderRadius: 8px` olarak destek kartları standardına dönüştürüldü.

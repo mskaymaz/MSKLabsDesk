@@ -45,6 +45,8 @@ export interface TicketDetailResponse {
 export interface CommentItem {
   id: string;
   post_id: string;
+  post_type?: 'bizce' | 'aniltilar' | 'guncel' | string;
+  post_slug?: string;
   author_name: string;
   author_email: string;
   content: string;

@@ -1,6 +1,16 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 🟢 Son Güncelleme [13.10.2026 - 15:55] — BLOG YORUM KARTLARINDA TÜR (BİZCE/GÜNCEL/ANILTILAR) VE YAZI KONUSU ROZETİ [*]
+* **Yapılan İşlem:**
+  1. **Tip Tanımlarının Genişletilmesi:**
+     - `frontend/src/types/index.ts`: `CommentItem` arayüzüne veritabanı D1 şemasıyla tam uyumlu `post_type?: 'bizce' | 'aniltilar' | 'guncel' | string;` ve `post_slug?: string;` alanları eklendi.
+  2. **1. Satır Üst Başlıkta Tür ve Konu Entegrasyonu:**
+     - `CommentsView.tsx`: `getBlogTypeLabel` ve `formatBlogSlug` yardımcı fonksiyonları tanımlandı.
+     - Kartın en üst satırında bilet kodu ve durum rozetinin yanına `📰 BİZCE / Blog Konusu..` (veya `GÜNCEL / ...`, `ANILTILAR / ...`) formatında şık, temaya duyarlı ve taşmayan (`maxWidth: 280px`, `textOverflow: ellipsis`) bir bilgi rozeti yerleştirildi.
+* **Sonuçlar:** Vite derlemesi ve TypeScript denetimi 0 hatayla tamamlandı. Dosya sınırlarına tam uyuldu (`CommentsView.tsx`: 318 satır).
+* **Durum:** `DevAdmin` dalında çalışıldı, `main` korundu.
+
 ## 🟢 Son Güncelleme [13.10.2026 - 15:48] — BLOG YORUM KARTLARININ DESTEK KARTLARI FORMATINA DÖNÜŞTÜRÜLMESİ [*]
 * **Yapılan İşlem:**
   1. **Ultra-Kompakt Kart Mimarisine Geçiş:**

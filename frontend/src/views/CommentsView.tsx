@@ -18,6 +18,24 @@ export const CommentsView: React.FC<CommentsViewProps> = ({ comments, onRefresh 
   const locale = language === 'ar' ? 'ar-SA' : language === 'en' ? 'en-US' : 'tr-TR';
   const filteredComments = comments.filter((c) => filter === 'all' || c.status === filter);
 
+  const getBlogTypeLabel = (type?: string) => {
+    const norm = (type || '').toLowerCase();
+    if (norm === 'guncel' || norm === 'güncel') return 'GÜNCEL';
+    if (norm.includes('anilt') || norm.includes('anlat')) return 'ANILTILAR';
+    return 'BİZCE';
+  };
+
+  const formatBlogSlug = (slug?: string, fallbackId?: string) => {
+    const raw = (slug || fallbackId || '').trim();
+    if (!raw) return 'Genel Yazı';
+    return raw
+      .replace(/[-_]/g, ' ')
+      .split(' ')
+      .filter(Boolean)
+      .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+      .join(' ');
+  };
+
   const handleModerate = async (id: string, status: 'approved' | 'rejected') => {
     setLoadingId(id);
     try {
@@ -175,13 +193,35 @@ export const CommentsView: React.FC<CommentsViewProps> = ({ comments, onRefresh 
                       : comment.status === 'rejected'
                       ? { label: '❌ Reddedildi', bg: 'rgba(239, 68, 68, 0.25)', border: 'rgba(239, 68, 68, 0.45)' }
                       : { label: '⏳ Bekliyor', bg: 'rgba(245, 158, 11, 0.25)', border: 'rgba(245, 158, 11, 0.45)' };
+                    const typeLabel = getBlogTypeLabel(comment.post_type);
+                    const topicLabel = formatBlogSlug(comment.post_slug, comment.post_id);
+                    const fullInfo = `${typeLabel} / ${topicLabel}`;
                     return (
                       <>
                         <span className="ticket-badge" style={{ fontSize: '0.68rem', background: sBadge.bg, border: `1px solid ${sBadge.border}`, padding: '1px 6px', borderRadius: '4px', fontWeight: 700, minWidth: '60px', textAlign: 'center', display: 'inline-flex', justifyContent: 'center', alignItems: 'center', flexShrink: 0 }}>
                           {sBadge.label}
                         </span>
-                        <span className="ticket-badge" style={{ fontSize: '0.68rem', background: 'rgba(99, 102, 241, 0.2)', border: '1px solid rgba(99, 102, 241, 0.4)', padding: '1px 6px', borderRadius: '4px', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: '3px', flexShrink: 0, maxWidth: '220px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={comment.post_id}>
-                          📰 {comment.post_id}
+                        <span
+                          className="ticket-badge"
+                          style={{
+                            fontSize: '0.68rem',
+                            background: 'rgba(99, 102, 241, 0.18)',
+                            border: '1px solid rgba(99, 102, 241, 0.38)',
+                            padding: '1px 8px',
+                            borderRadius: '4px',
+                            fontWeight: 700,
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '4px',
+                            flexShrink: 0,
+                            maxWidth: '280px',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            whiteSpace: 'nowrap'
+                          }}
+                          title={fullInfo}
+                        >
+                          📰 {fullInfo}
                         </span>
                       </>
                     );
