@@ -1,6 +1,16 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [13.10.2026 - 15:10] - Destek Kartlarında Tarih Üst Satıra, İncele Butonu Alt Satıra & Başlık Sarma Düzeni
+- `TicketsView.tsx`:
+  - Tarih ve İncele butonu iki ayrı satıra bölündü:
+    - 1. Satır: Bilet No + Durum Rozeti + Kategori Rozeti (Sol) & Tarih (Sağda kilitli).
+    - 2. Satır: Konu & Gönderen (Sol) + Masaüstü mesaj önizleme (Orta) + İncele butonu (Sağda kilitli).
+  - Konu başlığı (`ticket.subject`) için `-webkit-line-clamp: 2` ve `word-break: break-word` uygulanarak mobilde uzun başlıklarda ikinci satıra temiz taşması sağlandı; butonun ve tarihin konumu sabitlendi.
+- `index.css`:
+  - `.ticket-subject-col` mobil kuralı `flex: 1 1 auto !important; width: auto !important; min-width: 0 !important;` olarak güncellendi; İncele butonuyla aynı satırda yan yana uyum sağlandı.
+- Yalnızca `DevAdmin` dalında çalışıldı, `main` korundu.
+
 ## [13.10.2026 - 15:02] - Mobilde Bilet Açıklamasını Gizleme & Çift Tıklama ile Detay Açma
 - `TicketsView.tsx`:
   - Kart üzerindeki açıklama önizlemesi (`💬 ...`) `.hidden-mobile` sınıfına bağlandı; mobilde (<768px) gizlenerek kartın dikeyde sıkışması ve taşması engellendi, yalnızca başlık ve gönderen sunuldu.

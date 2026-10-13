@@ -337,9 +337,9 @@ export const TicketsView: React.FC<TicketsViewProps> = ({
               }}
               title="Çift tıklayarak mesaj detayını okuyabilirsiniz"
             >
-              {/* Kart Üst Başlık Satırı: Bilet No + Rozetler (Sol) & Tarih + İncele (Sağ) */}
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px', marginBottom: '2px', flexWrap: 'wrap', rowGap: '4px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
+              {/* Kart Üst Satırı: Bilet No + Rozetler (Sol) & Tarih (Sağ) */}
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px', marginBottom: '4px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap', minWidth: 0 }}>
                   <span style={{ fontSize: '0.78rem', fontWeight: 800, color: 'var(--accent-cyan)', fontFamily: 'ui-monospace, monospace', letterSpacing: '-0.02em', minWidth: '76px', flexShrink: 0 }}>
                     {ticket.id}
                   </span>
@@ -359,26 +359,28 @@ export const TicketsView: React.FC<TicketsViewProps> = ({
                   })()}
                 </div>
 
-                {/* Sağ: Tarih + İncele (Kart Başlığının Sağında Kilitli / Mobilde Temiz Wrap) */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginLeft: 'auto', flexShrink: 0 }}>
-                  <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '3px' }}>
-                    <Clock size={11} /> {new Date(ticket.created_at).toLocaleDateString(locale)}
-                  </span>
-                  <button
-                    className="btn btn-primary btn-sm"
-                    style={{ padding: '2px 8px', fontSize: '0.74rem', borderRadius: '5px' }}
-                    onClick={() => handleOpenDetail(ticket.id)}
-                    disabled={loadingDetail}
-                  >
-                    <Eye size={12} /> {t('common.view')}
-                  </button>
-                </div>
+                {/* Sağ: Tarih (Üst satırın sağ tarafına kilitli) */}
+                <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '3px', marginLeft: 'auto', flexShrink: 0, whiteSpace: 'nowrap' }}>
+                  <Clock size={11} /> {new Date(ticket.created_at).toLocaleDateString(locale)}
+                </span>
               </div>
 
-              {/* Kart İçerik Satırı: Konu & Gönderen (Sol) + Mesaj Önizleme (Orta/Sağ) */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
-                <div className="ticket-subject-col">
-                  <h3 style={{ fontSize: '0.88rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '1px', lineHeight: 1.25, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+              {/* Kart Alt Satırı: Konu & Gönderen (Sol) + Mesaj Önizleme (Desktop) + İncele Butonu (Sağ) */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <div className="ticket-subject-col" style={{ minWidth: 0 }}>
+                  <h3 style={{
+                    fontSize: '0.88rem',
+                    fontWeight: 700,
+                    color: 'var(--text-primary)',
+                    marginBottom: '1px',
+                    lineHeight: 1.25,
+                    display: '-webkit-box',
+                    WebkitLineClamp: 2,
+                    WebkitBoxOrient: 'vertical',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    wordBreak: 'break-word'
+                  }}>
                     {ticket.subject}
                   </h3>
                   <div style={{ fontSize: '0.74rem', color: 'var(--text-secondary)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
@@ -405,6 +407,16 @@ export const TicketsView: React.FC<TicketsViewProps> = ({
                     {ticket.message_content || (ticket as any).content || '(İçerik belirtilmemiş)'}
                   </div>
                 </div>
+
+                {/* Sağ: İncele Butonu (Başlık ile aynı hizada kilitli) */}
+                <button
+                  className="btn btn-primary btn-sm"
+                  style={{ padding: '3px 10px', fontSize: '0.74rem', borderRadius: '5px', marginLeft: 'auto', flexShrink: 0, whiteSpace: 'nowrap' }}
+                  onClick={() => handleOpenDetail(ticket.id)}
+                  disabled={loadingDetail}
+                >
+                  <Eye size={12} /> {t('common.view')}
+                </button>
               </div>
             </div>
           ))}

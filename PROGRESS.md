@@ -1,6 +1,18 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 🟢 Son Güncelleme [13.10.2026 - 15:10] — DESTEK KARTLARINDA TARİH ÜSTTE, İNCELE BUTONU ALTA & BAŞLIK SARMA DÜZENİ [*]
+* **Yapılan İşlem:**
+  1. **Tarih ve İncele Yapısının Ayrıştırılması:**
+     - `TicketsView.tsx`: Tarih ve İncele butonu aynı satırda yer kaplamak yerine hiyerarşik 2 satıra bölündü.
+     - **1. Satır (Üst):** Sol tarafta Bilet No (`#TKT-...`) + Durum Rozeti + Kategori Rozeti, sağ tarafta ise `Clock` ikonu ile formatlanmış Tarih (`marginLeft: 'auto'`, `flexShrink: 0`) yerleştirildi.
+     - **2. Satır (Alt):** Sol tarafta Konu & Gönderen bilgisi, orta bölümde masaüstü mesaj önizlemesi (`hidden-mobile`), sağ tarafta ise "İncele" butonu (`marginLeft: 'auto'`, `flexShrink: 0`, `whiteSpace: 'nowrap'`) konumlandırıldı.
+  2. **Mobilde Başlığın 2. Satıra Temiz Sarılması:**
+     - Mobilde `.ticket-subject-col` sınıfı `flex: 1 1 auto !important; width: auto !important; min-width: 0 !important;` yapılarak sol alanı kaplaması sağlandı.
+     - `ticket.subject` başlığı `WebkitLineClamp: 2`, `wordBreak: 'break-word'` ile uzun olduğunda 2. satıra temizce kayacak, ancak sağdaki İncele butonunu veya üstteki Tarih bilgisini kesinlikle yerinden oynatmayacak şekilde kurgulandı.
+* **Sonuçlar:** Vite build ve TypeScript derlemeleri 0 hatayla geçti. Dosya satır limitlerine tam uyuldu (`TicketsView.tsx`: 437 satır, `index.css`: 438 satır).
+* **Durum:** `DevAdmin` dalında çalışıldı, `main` korundu.
+
 ## 🟢 Son Güncelleme [13.10.2026 - 15:02] — MOBİLDE AÇIKLAMA GİZLEME VE ÇİFT TIKLAMA İLE MESAJ DETAYI AÇMA [*]
 * **Yapılan İşlem:**
   1. **Mobilde Açıklama Önizlemesinin Gizlenmesi:** `TicketsView.tsx` içerisindeki mesaj önizleme kutusu `.hidden-mobile` sınıfıyla sarıldı. Mobil ekranda (<768px) açıklama metni gizlenerek yalnızca üst bilgiler (Bilet No, Rozetler, Tarih, İncele) ve Konu & Gönderen başlığı gösterildi; kart ferah ve taşmasız bir görünüme kavuştu. Masaüstünde açıklama önizlemesi soldan sabit hizada gösterilmeye devam eder.
