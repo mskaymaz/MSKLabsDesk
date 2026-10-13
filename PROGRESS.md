@@ -1,6 +1,17 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 🟢 Son Güncelleme [13.10.2026 - 12:05] — DESTEK KARTLARI DÜZENİ, YAZI BOYUTU KONTROLLERİ VE RENK ERGONOMİSİ [*]
+* **Yapılan İşlem:**
+  1. **Açık Mod Mesaj Kutusu Renkleri:** `TicketDetailModal.tsx` ve `index.css` üzerinde gelen mesaj metinleri siyah (`#000000`), zemin ferah açık gri (`#F1F5F9`) yapıldı; koyu moda kesinlikle dokunulmadı.
+  2. **Dinamik Yazı Boyutu Kontrolleri:** Gelen mesaj başlığının 30px sağına kibar `ZoomOut`, `RotateCcw` ve `ZoomIn` ikon butonları yerleştirilerek sadece mesaj metninin boyutu büyütülüp küçültülebilir hale getirildi.
+  3. **Tüm Rozet Yazıları Siyah:** Mesaj kartlarındaki ve detaydaki tüm durum, kategori ve okunma rozetlerinin metinleri siyah (`#000000`, `fontWeight: 700`) renge çekildi.
+  4. **Tekil ve Bütünleşik Durum Rozeti:** Yan yana iki kez çıkan "Yeni" etiketi karmaşası sonlandırıldı; `getUnifiedStatusBadge` ile (`🔔 Yeni`, `👁️ Açıldı`, `İşlemde`, `Çözüldü`, `Reddedildi`) tek bir rozette toplandı.
+  5. **Bilet Numarası & Hizalama:** Bilet numarası dar monospace fonta ve 84px sabit genişliğe alındı; `nowrap` ile tek satıra kilitlendi.
+  6. **Kart Üst Başlık Satırı & 2 Satırlı Tasarım:** Tarih ve İncele butonları kartın üst başlık satırının sağına kilitlendi. Sayfa daraltıldığında alt satıra düşmesi engellendi; kart dikeyde ~50px ultra-kompakt 2 temiz satıra ayrıldı.
+* **Sonuçlar:** Tüm TypeScript ve Vite build testleri 0 hatayla geçti. Dosya satır kurallarına (%100) uyuldu.
+* **Durum:** `DevAdmin` dalında çalışıldı, `main` korundu.
+
 ## 🟢 Son Güncelleme [12.10.2026 - 16:50] — KATEGORİ AÇILIR LİSTESİ DÖNÜŞÜMÜ & WEB ANA SAYFA SLOGAN TEMİZLİĞİ [*]
 * **Yapılan İşlem:**
   1. **Kategori Butonlarının Açılır Listeye (Dropdown) Dönüştürülmesi:** `TicketsView.tsx` içerisinde mobilde sağa taşan ve ekran dışına çıkan 6 adet buton kaldırıldı; `[📋 Tüm Konular (X)]`, `[🐛 Hata Bildirimleri (X)]`, `[✨ Özellik Talepleri (X)]` vb. seçenekleri içeren derli toplu açılır liste haline getirildi.

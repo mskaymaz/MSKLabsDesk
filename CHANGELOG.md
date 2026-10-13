@@ -1,6 +1,18 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [13.10.2026 - 12:05] - Destek Kartları 2 Satırlı Düzen, Yazı Boyutu Kontrolleri ve Renk Ergonomisi
+- `TicketDetailModal.tsx` & `index.css`:
+  - Açık modda (`[data-theme="light"]`) gelen mesaj kutusu açık gri zemin (`#F1F5F9`) ve net siyah metin (`#000000`) yapılarak okunabilirlik sağlandı; koyu mod orijinal haliyle korundu.
+  - Gelen mesaj başlığının hemen 30px sağına kibar `ZoomOut`, `RotateCcw` ve `ZoomIn` butonları konularak mesaj metninin boyutu dinamik yönetilebilir hale getirildi.
+  - Gönderen adı ve yanıt geçmişi yazıları tema duyarlı hale getirildi.
+- `TicketsView.tsx` & `index.css`:
+  - Mesaj kartlarındaki tüm durum, kategori ve okunma rozeti metinleri siyah (`#000000`, `fontWeight: 700`) yapıldı.
+  - Kartlarda yan yana iki kez "Yeni" yazması karmaşası `getUnifiedStatusBadge` ile giderildi; (`🔔 Yeni`, `👁️ Açıldı`, `İşlemde`, `Çözüldü`, `Reddedildi`) tek bir rozet altında birleştirildi.
+  - Bilet numarası dar monospace fonta ve 84px sabit genişliğe alındı; `nowrap` ile tek satıra kilitlendi.
+  - Tarih ve İncele butonları kartın üst başlık satırının sağına kilitlendi. Sayfa daraltıldığında alt satıra düşmesi önlendi; kart dikeyde ~50px ultra-kompakt 2 temiz satıra ayrıldı.
+- Yalnızca `DevAdmin` dalında çalışıldı, `main` korundu.
+
 ## [12.10.2026 - 16:50] - Destek Talepleri Kategori Açılır Listesi (Dropdown) & Başlık Hizalaması
 - `TicketsView.tsx`:
   - Mobilde yatayda kayan ve taşan 6 adet konu filtresi butonu yerine açılır liste (`<select>`) kurgulandı.

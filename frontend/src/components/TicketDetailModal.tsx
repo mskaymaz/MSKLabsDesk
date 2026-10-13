@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import type { TicketDetailResponse } from '../types';
-import { Sparkles, Send, Gift, X, User, Clock, CheckCircle, Ban, Eye, Languages } from 'lucide-react';
+import { Sparkles, Send, Gift, X, User, Clock, CheckCircle, Ban, Eye, Languages, ZoomIn, ZoomOut, RotateCcw } from 'lucide-react';
 import { api } from '../services/api';
 
 interface TicketDetailModalProps {
@@ -24,6 +24,7 @@ export const TicketDetailModal: React.FC<TicketDetailModalProps> = ({
   const [isTranslated, setIsTranslated] = useState(false);
   const [translatedData, setTranslatedData] = useState<{ subject: string; content: string; lang: string } | null>(null);
   const [loadingTranslate, setLoadingTranslate] = useState(false);
+  const [messageFontSize, setMessageFontSize] = useState<number>(0.9);
 
   if (!ticketDetail) return null;
   const { ticket, replies } = ticketDetail;
@@ -118,11 +119,11 @@ export const TicketDetailModal: React.FC<TicketDetailModalProps> = ({
               <span style={{ fontSize: '0.9rem', fontWeight: 800, color: 'var(--accent-cyan)' }}>{ticket.id}</span>
               <span className={`badge badge-${ticket.status}`}>{getStatusBadgeLabel(ticket.status)}</span>
               {ticket.category === 'email' ? (
-                <span style={{ fontSize: '0.78rem', color: '#38bdf8', background: 'rgba(56, 189, 248, 0.15)', border: '1px solid rgba(56, 189, 248, 0.3)', padding: '2px 8px', borderRadius: '4px', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                <span style={{ fontSize: '0.78rem', color: '#000000', background: 'rgba(56, 189, 248, 0.25)', border: '1px solid rgba(56, 189, 248, 0.45)', padding: '2px 8px', borderRadius: '4px', display: 'inline-flex', alignItems: 'center', gap: '4px', fontWeight: 700 }}>
                   ✉️ E-Posta
                 </span>
               ) : (
-                <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>{ticket.category}</span>
+                <span style={{ fontSize: '0.78rem', color: '#000000', background: 'rgba(156, 163, 175, 0.25)', border: '1px solid rgba(156, 163, 175, 0.45)', padding: '2px 8px', borderRadius: '4px', fontWeight: 700 }}>{ticket.category}</span>
               )}
             </div>
             <h2 style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--text-primary)' }}>
@@ -139,14 +140,15 @@ export const TicketDetailModal: React.FC<TicketDetailModalProps> = ({
           display: 'flex',
           justifyContent: 'space-between',
           padding: '12px 16px',
-          background: 'rgba(255, 255, 255, 0.03)',
+          background: 'var(--bg-secondary)',
+          border: '1px solid var(--border-color)',
           borderRadius: 'var(--radius-md)',
           marginBottom: '20px',
           fontSize: '0.85rem'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <User size={16} color="var(--accent-primary)" />
-            <strong style={{ color: '#FFF' }}>{ticket.sender_name}</strong> ({ticket.sender_email})
+            <strong style={{ color: 'var(--text-primary)' }}>{ticket.sender_name}</strong> ({ticket.sender_email})
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--text-muted)' }}>
             <Clock size={14} />
@@ -166,7 +168,7 @@ export const TicketDetailModal: React.FC<TicketDetailModalProps> = ({
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px', color: 'var(--accent-cyan)', fontWeight: 700, fontSize: '0.85rem' }}>
               <Sparkles size={16} /> Yapay Zeka Özeti
             </div>
-            <p style={{ fontSize: '0.85rem', color: '#E5E7EB', lineHeight: 1.5 }}>{ticket.ai_summary}</p>
+            <p style={{ fontSize: '0.85rem', color: 'var(--text-primary)', lineHeight: 1.5 }}>{ticket.ai_summary}</p>
           </div>
         ) : (
           <div style={{
@@ -208,6 +210,38 @@ export const TicketDetailModal: React.FC<TicketDetailModalProps> = ({
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <h4 style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-secondary)', margin: 0 }}>Gelen Mesaj</h4>
+
+              {/* Yazı Boyutu Kontrol Butonları (30px mesafede, ikonlu) */}
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '2px', marginLeft: '30px', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', borderRadius: '6px', padding: '1px 3px' }}>
+                <button
+                  type="button"
+                  onClick={() => setMessageFontSize((p) => Math.max(0.75, Number((p - 0.1).toFixed(2))))}
+                  disabled={messageFontSize <= 0.75}
+                  style={{ background: 'transparent', border: 'none', color: 'var(--text-secondary)', cursor: messageFontSize <= 0.75 ? 'not-allowed' : 'pointer', padding: '3px 5px', display: 'flex', alignItems: 'center', borderRadius: '4px', opacity: messageFontSize <= 0.75 ? 0.35 : 1 }}
+                  title="Yazı Boyutunu Küçült"
+                >
+                  <ZoomOut size={13} />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setMessageFontSize(0.9)}
+                  disabled={messageFontSize === 0.9}
+                  style={{ background: 'transparent', border: 'none', color: messageFontSize === 0.9 ? 'var(--text-muted)' : 'var(--accent-primary)', cursor: messageFontSize === 0.9 ? 'default' : 'pointer', padding: '3px 5px', display: 'flex', alignItems: 'center', borderRadius: '4px', opacity: messageFontSize === 0.9 ? 0.5 : 1 }}
+                  title="Standart Boyut"
+                >
+                  <RotateCcw size={12} />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setMessageFontSize((p) => Math.min(1.4, Number((p + 0.1).toFixed(2))))}
+                  disabled={messageFontSize >= 1.4}
+                  style={{ background: 'transparent', border: 'none', color: 'var(--text-secondary)', cursor: messageFontSize >= 1.4 ? 'not-allowed' : 'pointer', padding: '3px 5px', display: 'flex', alignItems: 'center', borderRadius: '4px', opacity: messageFontSize >= 1.4 ? 0.35 : 1 }}
+                  title="Yazı Boyutunu Büyüt"
+                >
+                  <ZoomIn size={13} />
+                </button>
+              </div>
+
               {isTranslated && (
                 <span style={{
                   fontSize: '0.72rem',
@@ -245,16 +279,10 @@ export const TicketDetailModal: React.FC<TicketDetailModalProps> = ({
               {loadingTranslate ? 'Çevriliyor...' : isTranslated ? '↩️ Orijinal Metin' : '🌐 Türkçe\'ye Çevir'}
             </button>
           </div>
-          <div style={{
-            padding: '16px',
-            background: isTranslated ? 'rgba(16, 185, 129, 0.04)' : 'rgba(0, 0, 0, 0.3)',
-            border: isTranslated ? '1px solid rgba(16, 185, 129, 0.25)' : '1px solid var(--border-color)',
-            borderRadius: 'var(--radius-md)',
-            fontSize: '0.9rem',
-            color: '#F3F4F6',
-            whiteSpace: 'pre-wrap',
-            lineHeight: 1.5
-          }}>
+          <div
+            className={`ticket-message-content ${isTranslated ? 'is-translated' : ''}`}
+            style={{ fontSize: `${messageFontSize}rem` }}
+          >
             {isTranslated && translatedData
               ? translatedData.content
               : (ticket.message_content || (ticket as any).content || '(İçerik bulunamadı)')}
@@ -269,7 +297,8 @@ export const TicketDetailModal: React.FC<TicketDetailModalProps> = ({
               {replies.map((reply) => (
                 <div key={reply.id} style={{
                   padding: '12px 14px',
-                  background: 'rgba(139, 92, 246, 0.08)',
+                  background: 'var(--bg-secondary)',
+                  border: '1px solid var(--border-color)',
                   borderLeft: '3px solid var(--accent-secondary)',
                   borderRadius: 'var(--radius-md)'
                 }}>
@@ -277,7 +306,7 @@ export const TicketDetailModal: React.FC<TicketDetailModalProps> = ({
                     <strong>{reply.admin_name}</strong>
                     <span>{new Date(reply.sent_at).toLocaleString('tr-TR')}</span>
                   </div>
-                  <p style={{ fontSize: '0.85rem', color: '#FFF' }}>{reply.reply_content}</p>
+                  <p style={{ fontSize: '0.85rem', color: 'var(--text-primary)' }}>{reply.reply_content}</p>
                 </div>
               ))}
             </div>

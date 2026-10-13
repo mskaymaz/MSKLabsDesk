@@ -61,35 +61,26 @@ export const TicketsView: React.FC<TicketsViewProps> = ({
     const norm = normalizeCategory(category);
     switch (norm) {
       case 'hata':
-        return { label: '🐛 Hata Bildirimi', bg: 'rgba(239, 68, 68, 0.15)', border: 'rgba(239, 68, 68, 0.35)', color: '#F87171' };
+        return { label: '🐛 Hata Bildirimi', bg: 'rgba(239, 68, 68, 0.25)', border: 'rgba(239, 68, 68, 0.45)', color: '#000000' };
       case 'istek':
-        return { label: '✨ Özellik Talebi', bg: 'rgba(99, 102, 241, 0.15)', border: 'rgba(99, 102, 241, 0.35)', color: '#818CF8' };
+        return { label: '✨ Özellik Talebi', bg: 'rgba(99, 102, 241, 0.25)', border: 'rgba(99, 102, 241, 0.45)', color: '#000000' };
       case 'tesekkur':
-        return { label: '❤️ Teşekkür & Övgü', bg: 'rgba(16, 185, 129, 0.15)', border: 'rgba(16, 185, 129, 0.35)', color: '#34D399' };
+        return { label: '❤️ Teşekkür & Övgü', bg: 'rgba(16, 185, 129, 0.25)', border: 'rgba(16, 185, 129, 0.45)', color: '#000000' };
       case 'fikir':
-        return { label: '💡 Yeni Fikir', bg: 'rgba(245, 158, 11, 0.15)', border: 'rgba(245, 158, 11, 0.35)', color: '#FBBF24' };
+        return { label: '💡 Yeni Fikir', bg: 'rgba(245, 158, 11, 0.25)', border: 'rgba(245, 158, 11, 0.45)', color: '#000000' };
       case 'email':
-        return { label: '✉️ E-Posta', bg: 'rgba(56, 189, 248, 0.15)', border: 'rgba(56, 189, 248, 0.35)', color: '#38BDF8' };
+        return { label: '✉️ E-Posta', bg: 'rgba(56, 189, 248, 0.25)', border: 'rgba(56, 189, 248, 0.45)', color: '#000000' };
       default:
-        return { label: '💬 Genel Talep', bg: 'rgba(156, 163, 175, 0.15)', border: 'rgba(156, 163, 175, 0.35)', color: '#D1D5DB' };
+        return { label: '💬 Genel Talep', bg: 'rgba(156, 163, 175, 0.25)', border: 'rgba(156, 163, 175, 0.45)', color: '#000000' };
     }
   };
 
-  const getStatusBadgeLabel = (status: string) => {
-    switch (status) {
-      case 'new':
-      case 'open':
-        return 'Yeni';
-      case 'in_progress':
-        return 'Okundu / İşlemde';
-      case 'resolved':
-        return 'Çözüldü';
-      case 'rejected':
-      case 'closed':
-        return 'Reddedildi';
-      default:
-        return status;
-    }
+  const getUnifiedStatusBadge = (ticket: Ticket) => {
+    if (ticket.status === 'resolved') return { label: 'Çözüldü', bg: 'rgba(16, 185, 129, 0.25)', border: 'rgba(16, 185, 129, 0.45)' };
+    if (ticket.status === 'in_progress') return { label: 'İşlemde', bg: 'rgba(245, 158, 11, 0.25)', border: 'rgba(245, 158, 11, 0.45)' };
+    if (ticket.status === 'rejected' || ticket.status === 'closed') return { label: 'Reddedildi', bg: 'rgba(239, 68, 68, 0.25)', border: 'rgba(239, 68, 68, 0.45)' };
+    if (openedIds.includes(ticket.id)) return { label: '👁️ Açıldı', bg: 'rgba(156, 163, 175, 0.25)', border: 'rgba(156, 163, 175, 0.45)' };
+    return { label: '🔔 Yeni', bg: 'rgba(6, 182, 212, 0.25)', border: 'rgba(6, 182, 212, 0.45)' };
   };
 
   const filteredTickets = tickets.filter((tItem) => {
@@ -335,97 +326,78 @@ export const TicketsView: React.FC<TicketsViewProps> = ({
               key={ticket.id}
               className="glass-card glass-card-hover"
               style={{
-                padding: '3px 14px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                gap: '10px',
-                flexWrap: 'wrap',
+                padding: '4px 14px',
                 borderRadius: '8px'
               }}
             >
-              <div style={{ flex: 1, minWidth: '240px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap', marginBottom: '2px' }}>
-                  <span style={{ fontSize: '0.8rem', fontWeight: 800, color: 'var(--accent-cyan)' }}>{ticket.id}</span>
-                  <span className={`badge badge-${ticket.status}`} style={{ padding: '1px 5px', fontSize: '0.68rem' }}>
-                    {getStatusBadgeLabel(ticket.status)}
+              {/* Kart Üst Başlık Satırı: Bilet No + Rozetler (Sol) & Tarih + İncele (Sağ) */}
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px', marginBottom: '2px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'nowrap', whiteSpace: 'nowrap' }}>
+                  <span style={{ fontSize: '0.78rem', fontWeight: 800, color: 'var(--accent-cyan)', fontFamily: 'ui-monospace, monospace', letterSpacing: '-0.02em', width: '84px', flexShrink: 0 }}>
+                    {ticket.id}
                   </span>
                   {(() => {
+                    const sBadge = getUnifiedStatusBadge(ticket);
                     const cBadge = getCategoryBadge(ticket.category);
                     return (
-                      <span style={{
-                        fontSize: '0.68rem',
-                        color: cBadge.color,
-                        background: cBadge.bg,
-                        border: `1px solid ${cBadge.border}`,
-                        padding: '1px 5px',
-                        borderRadius: '4px',
-                        fontWeight: 600,
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        gap: '3px'
-                      }}>
-                        {cBadge.label}
-                      </span>
+                      <>
+                        <span style={{ fontSize: '0.68rem', color: '#000000', background: sBadge.bg, border: `1px solid ${sBadge.border}`, padding: '1px 6px', borderRadius: '4px', fontWeight: 700, minWidth: '70px', textAlign: 'center', display: 'inline-flex', justifyContent: 'center', alignItems: 'center', flexShrink: 0 }}>
+                          {sBadge.label}
+                        </span>
+                        <span style={{ fontSize: '0.68rem', color: '#000000', background: cBadge.bg, border: `1px solid ${cBadge.border}`, padding: '1px 6px', borderRadius: '4px', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: '3px', flexShrink: 0 }}>
+                          {cBadge.label}
+                        </span>
+                      </>
                     );
                   })()}
-                  {openedIds.includes(ticket.id) ? (
-                    <span style={{ fontSize: '0.68rem', color: 'var(--text-muted)', background: 'rgba(255,255,255,0.06)', padding: '1px 5px', borderRadius: '4px' }}>
-                      👁️ Açıldı
-                    </span>
-                  ) : (
-                    <span style={{ fontSize: '0.68rem', color: '#38BDF8', background: 'rgba(56, 189, 248, 0.15)', border: '1px solid rgba(56, 189, 248, 0.35)', padding: '1px 5px', borderRadius: '4px', fontWeight: 700 }}>
-                      🔔 Yeni
-                    </span>
-                  )}
                 </div>
-                <h3 style={{ fontSize: '0.88rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '1px', lineHeight: 1.25 }}>
-                  {ticket.subject}
-                </h3>
-                <div style={{ fontSize: '0.74rem', color: 'var(--text-secondary)' }}>
-                  <strong>{ticket.sender_name}</strong> • {ticket.sender_email}
+
+                {/* Sağ: Tarih + İncele (Kart Başlığının Sağında Kilitli) */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
+                  <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '3px' }}>
+                    <Clock size={11} /> {new Date(ticket.created_at).toLocaleDateString(locale)}
+                  </span>
+                  <button
+                    className="btn btn-primary btn-sm"
+                    style={{ padding: '2px 8px', fontSize: '0.74rem', borderRadius: '5px' }}
+                    onClick={() => handleOpenDetail(ticket.id)}
+                    disabled={loadingDetail}
+                  >
+                    <Eye size={12} /> {t('common.view')}
+                  </button>
                 </div>
               </div>
 
-              {/* Middle Section: Message Preview */}
-              <div style={{
-                flex: 1,
-                minWidth: '200px',
-                maxWidth: '460px',
-                padding: '0 4px'
-              }}>
-                <div style={{
-                  fontSize: '0.75rem',
-                  color: 'var(--text-secondary)',
-                  lineHeight: '1.3',
-                  display: '-webkit-box',
-                  WebkitLineClamp: 3,
-                  WebkitBoxOrient: 'vertical',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  background: 'rgba(255, 255, 255, 0.03)',
-                  padding: '3px 6px',
-                  borderRadius: '5px',
-                  border: '1px solid rgba(255, 255, 255, 0.06)',
-                  maxHeight: '50px'
-                }}>
-                  <span style={{ color: 'var(--text-muted)', marginRight: '4px' }}>💬</span>
-                  {ticket.message_content || (ticket as any).content || '(İçerik belirtilmemiş)'}
+              {/* Kart İçerik Satırı: Konu & Gönderen (Sol) + Mesaj Önizleme (Orta/Sağ) */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '14px', flexWrap: 'wrap' }}>
+                <div style={{ width: '310px', minWidth: '240px', flexShrink: 0 }}>
+                  <h3 style={{ fontSize: '0.88rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '1px', lineHeight: 1.25, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                    {ticket.subject}
+                  </h3>
+                  <div style={{ fontSize: '0.74rem', color: 'var(--text-secondary)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                    <strong>{ticket.sender_name}</strong> • {ticket.sender_email}
+                  </div>
                 </div>
-              </div>
 
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '3px' }}>
-                  <Clock size={11} /> {new Date(ticket.created_at).toLocaleDateString(locale)}
-                </span>
-                <button
-                  className="btn btn-primary btn-sm"
-                  style={{ padding: '2px 8px', fontSize: '0.74rem', borderRadius: '5px' }}
-                  onClick={() => handleOpenDetail(ticket.id)}
-                  disabled={loadingDetail}
-                >
-                  <Eye size={12} /> {t('common.view')}
-                </button>
+                <div style={{ flex: 1, minWidth: '200px' }}>
+                  <div style={{
+                    fontSize: '0.75rem',
+                    color: 'var(--text-secondary)',
+                    lineHeight: '1.3',
+                    display: '-webkit-box',
+                    WebkitLineClamp: 2,
+                    WebkitBoxOrient: 'vertical',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    background: 'rgba(255, 255, 255, 0.03)',
+                    padding: '3px 8px',
+                    borderRadius: '5px',
+                    border: '1px solid rgba(255, 255, 255, 0.06)'
+                  }}>
+                    <span style={{ color: 'var(--text-muted)', marginRight: '4px' }}>💬</span>
+                    {ticket.message_content || (ticket as any).content || '(İçerik belirtilmemiş)'}
+                  </div>
+                </div>
               </div>
             </div>
           ))}
