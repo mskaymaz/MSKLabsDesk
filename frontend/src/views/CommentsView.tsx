@@ -133,8 +133,16 @@ export const CommentsView: React.FC<CommentsViewProps> = ({ comments, onRefresh 
 
       {/* Comments List */}
       {filteredComments.length === 0 ? (
-        <div className="glass-card" style={{ textAlign: 'center', padding: '40px' }}>
-          <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>{t('common.loading')}</p>
+        <div className="glass-card" style={{ textAlign: 'center', padding: '40px 20px' }}>
+          <div style={{ fontSize: '2.2rem', marginBottom: '8px' }}>💬</div>
+          <h3 style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '6px' }}>
+            {filter !== 'all' ? 'Bu Filtreye Uygun Yorum Bulunamadı' : 'Henüz Kayıtlı Blog Yorumu Bulunmuyor'}
+          </h3>
+          <p style={{ color: 'var(--text-muted)', fontSize: '0.84rem', maxWidth: '420px', margin: '0 auto', lineHeight: 1.45 }}>
+            {filter !== 'all'
+              ? 'Açılır listeden "Tüm Yorumlar" seçeneğini belirleyerek tüm kayıtları listeleyebilirsiniz.'
+              : 'Web sitemizdeki blog makalelerine okuyuculardan gelen yorumlar anlık olarak burada listelenecektir.'}
+          </p>
         </div>
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>

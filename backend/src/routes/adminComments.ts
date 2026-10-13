@@ -14,11 +14,20 @@ export async function handleAdminGetComments(request: Request, env: { DB: D1Data
   }
 
   const url = new URL(request.url);
-  const status = url.searchParams.get('status') || 'pending';
+  const status = url.searchParams.get('status');
 
-  const { results } = await env.DB.prepare(`
-    SELECT * FROM comments WHERE status = ? ORDER BY created_at DESC LIMIT 100
-  `).bind(status).all();
+  let query = 'SELECT * FROM comments WHERE 1=1';
+  const params: any[] = [];
+
+  if (status && status !== 'all') {
+    query += ' AND status = ?';
+    params.push(status);
+  }
+
+  query += ' ORDER BY created_at DESC LIMIT 200';
+
+  const stmt = env.DB.prepare(query);
+  const { results } = params.length > 0 ? await stmt.bind(...params).all() : await stmt.all();
 
   return new Response(JSON.stringify({ success: true, comments: results || [] }), {
     status: 200,

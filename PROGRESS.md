@@ -1,6 +1,16 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 🟢 Son Güncelleme [13.10.2026 - 16:25] — ONAYLANAN/REDDEDİLEN YORUM LİSTELEME HATASININ GİDERİLMESİ [*]
+* **Kök Neden Tespiti:**
+  - `backend/src/routes/adminComments.ts` içerisinde `handleAdminGetComments` fonksiyonunun, parametresiz çağrıldığında varsayılan olarak `status = 'pending'` filtrelemesi yaptığı (`url.searchParams.get('status') || 'pending'`) ve bu yüzden onaylanan veya reddedilen yorumların admin paneline hiç çekilmediği tespit edildi.
+  - `CommentsView.tsx` içerisinde liste boş olduğunda yanıltıcı olarak genel "Yükleniyor..." mesajı gösteriliyordu.
+* **Yapılan İşlem:**
+  1. **Backend Düzeltmesi (`adminComments.ts`):** `handleAdminGetComments` fonksiyonu `handleAdminGetTickets` mantığına dönüştürüldü. Parametresiz veya `status=all` çağrılarında tüm yorumlar (`WHERE 1=1`) listelenir; yalnızca belirli bir statü istendiğinde o statüye göre filtreleme uygulanır.
+  2. **Frontend Düzeltmesi (`CommentsView.tsx`):** Boş liste durumu filtreye duyarlı ve açıklayıcı ("Bu Filtreye Uygun Yorum Bulunamadı", "Açılır listeden 'Tüm Yorumlar' seçeneğini belirleyebilirsiniz...") bildirim kartına dönüştürüldü.
+* **Sonuçlar:** Onaylanan ve reddedilen yorumların anında "Onaylananlar", "Reddedilenler" ve "Tüm Yorumlar" filtrelerinde sayaçlarıyla birlikte listelenmesi doğrulandı.
+* **Durum:** `DevAdmin` dalında çalışıldı, `main` korundu.
+
 ## 🟢 Son Güncelleme [13.10.2026 - 16:18] — DURUM FİLTRELERİNİN BAŞLIK YANINA AÇILIR LİSTE YAPILMASI & BLOG KONU BAŞLIĞI ÇÖZÜMLEMESİ [*]
 * **Yapılan İşlem:**
   1. **Blog Konu Başlıklarının Çözümlenmesi (`blogMeta.ts`):**

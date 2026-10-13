@@ -1,6 +1,13 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [13.10.2026 - 16:25] - Onaylanan/Reddedilen Yorum Listeleme Hatasının Giderilmesi
+- `backend/src/routes/adminComments.ts`:
+  - `handleAdminGetComments` fonksiyonundaki varsayılan `status = 'pending'` kısıtlaması kaldırıldı; parametresiz veya `status=all` durumunda tüm yorumların getirilmesi sağlandı.
+- `frontend/src/views/CommentsView.tsx`:
+  - Yorum listesi boş olduğunda gösterilen genel `Yükleniyor...` metni yerine filtre durumuna duyarlı bilgilendirme kartı eklendi.
+- Yalnızca `DevAdmin` dalında çalışıldı, `main` korundu.
+
 ## [13.10.2026 - 16:18] - Durum Filtrelerinin Başlık Yanına Açılır Liste Yapılması & Blog Konu Başlığı Çözümlemesi
 - `frontend/src/utils/blogMeta.ts`:
   - `bizce-4`, `guncel-5` vb. sistem id/slug'ları yerine gerçek blog başlıklarını (`BİZCE / Neden Ücretsiz?`, `GÜNCEL / Filistin - Konyaspor Maçı` vb.) çözümleyen merkezi yardımcı modül oluşturuldu (44 satır).
