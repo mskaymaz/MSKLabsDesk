@@ -61,17 +61,17 @@ export const TicketsView: React.FC<TicketsViewProps> = ({
     const norm = normalizeCategory(category);
     switch (norm) {
       case 'hata':
-        return { label: '🐛 Hata Bildirimi', bg: 'rgba(239, 68, 68, 0.25)', border: 'rgba(239, 68, 68, 0.45)', color: '#000000' };
+        return { label: '🐛 Hata Bildirimi', bg: 'rgba(239, 68, 68, 0.25)', border: 'rgba(239, 68, 68, 0.45)' };
       case 'istek':
-        return { label: '✨ Özellik Talebi', bg: 'rgba(99, 102, 241, 0.25)', border: 'rgba(99, 102, 241, 0.45)', color: '#000000' };
+        return { label: '✨ Özellik Talebi', bg: 'rgba(99, 102, 241, 0.25)', border: 'rgba(99, 102, 241, 0.45)' };
       case 'tesekkur':
-        return { label: '❤️ Teşekkür & Övgü', bg: 'rgba(16, 185, 129, 0.25)', border: 'rgba(16, 185, 129, 0.45)', color: '#000000' };
+        return { label: '❤️ Teşekkür & Övgü', bg: 'rgba(16, 185, 129, 0.25)', border: 'rgba(16, 185, 129, 0.45)' };
       case 'fikir':
-        return { label: '💡 Yeni Fikir', bg: 'rgba(245, 158, 11, 0.25)', border: 'rgba(245, 158, 11, 0.45)', color: '#000000' };
+        return { label: '💡 Yeni Fikir', bg: 'rgba(245, 158, 11, 0.25)', border: 'rgba(245, 158, 11, 0.45)' };
       case 'email':
-        return { label: '✉️ E-Posta', bg: 'rgba(56, 189, 248, 0.25)', border: 'rgba(56, 189, 248, 0.45)', color: '#000000' };
+        return { label: '✉️ E-Posta', bg: 'rgba(56, 189, 248, 0.25)', border: 'rgba(56, 189, 248, 0.45)' };
       default:
-        return { label: '💬 Genel Talep', bg: 'rgba(156, 163, 175, 0.25)', border: 'rgba(156, 163, 175, 0.45)', color: '#000000' };
+        return { label: '💬 Genel Talep', bg: 'rgba(156, 163, 175, 0.25)', border: 'rgba(156, 163, 175, 0.45)' };
     }
   };
 
@@ -348,10 +348,10 @@ export const TicketsView: React.FC<TicketsViewProps> = ({
                     const cBadge = getCategoryBadge(ticket.category);
                     return (
                       <>
-                        <span style={{ fontSize: '0.68rem', color: '#000000', background: sBadge.bg, border: `1px solid ${sBadge.border}`, padding: '1px 6px', borderRadius: '4px', fontWeight: 700, minWidth: '60px', textAlign: 'center', display: 'inline-flex', justifyContent: 'center', alignItems: 'center', flexShrink: 0 }}>
+                        <span className="ticket-badge" style={{ fontSize: '0.68rem', background: sBadge.bg, border: `1px solid ${sBadge.border}`, padding: '1px 6px', borderRadius: '4px', fontWeight: 700, minWidth: '60px', textAlign: 'center', display: 'inline-flex', justifyContent: 'center', alignItems: 'center', flexShrink: 0 }}>
                           {sBadge.label}
                         </span>
-                        <span style={{ fontSize: '0.68rem', color: '#000000', background: cBadge.bg, border: `1px solid ${cBadge.border}`, padding: '1px 6px', borderRadius: '4px', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: '3px', flexShrink: 0 }}>
+                        <span className="ticket-badge" style={{ fontSize: '0.68rem', background: cBadge.bg, border: `1px solid ${cBadge.border}`, padding: '1px 6px', borderRadius: '4px', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: '3px', flexShrink: 0 }}>
                           {cBadge.label}
                         </span>
                       </>
@@ -389,20 +389,7 @@ export const TicketsView: React.FC<TicketsViewProps> = ({
                 </div>
 
                 <div className="hidden-mobile" style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{
-                    fontSize: '0.75rem',
-                    color: 'var(--text-secondary)',
-                    lineHeight: '1.3',
-                    display: '-webkit-box',
-                    WebkitLineClamp: 2,
-                    WebkitBoxOrient: 'vertical',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    background: 'rgba(255, 255, 255, 0.03)',
-                    padding: '3px 8px',
-                    borderRadius: '5px',
-                    border: '1px solid rgba(255, 255, 255, 0.06)'
-                  }}>
+                  <div className="ticket-message-preview">
                     <span style={{ color: 'var(--text-muted)', marginRight: '4px' }}>💬</span>
                     {ticket.message_content || (ticket as any).content || '(İçerik belirtilmemiş)'}
                   </div>
@@ -417,6 +404,12 @@ export const TicketsView: React.FC<TicketsViewProps> = ({
                 >
                   <Eye size={12} /> {t('common.view')}
                 </button>
+              </div>
+
+              {/* Mobilde Kart Altına Tam Genişlikte 2 Satırlık Mesaj Önizlemesi */}
+              <div className="visible-mobile ticket-message-preview" style={{ marginTop: '6px', width: '100%' }}>
+                <span style={{ color: 'var(--text-muted)', marginRight: '4px' }}>💬</span>
+                {ticket.message_content || (ticket as any).content || '(İçerik belirtilmemiş)'}
               </div>
             </div>
           ))}

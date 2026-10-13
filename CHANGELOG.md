@@ -1,6 +1,19 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [13.10.2026 - 15:25] - Koyu Temada Rozet Yazılarının Beyaz Yapılması & Mobilde 2 Satır Mesaj Önizlemesi
+- `index.css`:
+  - `.badge` ve tüm durum/kategori rozetlerinde koyu temadaki metin rengi beyaz (`#FFFFFF`) yapıldı.
+  - Açık mod için `[data-theme="light"]` altında siyah renk (`#000000 !important`) korundu.
+  - `.ticket-message-preview` sınıfı oluşturularak her iki tema için dinamik renkler bağlandı.
+  - `@media (max-width: 767px)` için `.visible-mobile` kuralı eklendi; masaüstünde gizlenip mobilde kart altında görünmesi sağlandı.
+- `TicketsView.tsx`:
+  - `getCategoryBadge` içindeki ve bilet kartı rozetlerindeki inline `#000000` renkleri kaldırılarak `.ticket-badge` sınıfına geçirildi.
+  - Bilet kartının altına mobil ekranlar için tam genişlikte (`width: 100%`) 2 satırlık açıklama önizleme kutusu (`.visible-mobile .ticket-message-preview`) eklendi.
+- `TicketDetailModal.tsx`:
+  - Kategori rozetlerindeki sert `#000000` rengi kaldırılarak `.ticket-badge` sınıfı uygulandı; koyu temada beyaz, açık temada siyah görünüm sağlandı.
+- Yalnızca `DevAdmin` dalında çalışıldı, `main` korundu.
+
 ## [13.10.2026 - 15:10] - Destek Kartlarında Tarih Üst Satıra, İncele Butonu Alt Satıra & Başlık Sarma Düzeni
 - `TicketsView.tsx`:
   - Tarih ve İncele butonu iki ayrı satıra bölündü:

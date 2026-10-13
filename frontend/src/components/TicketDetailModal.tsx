@@ -119,11 +119,11 @@ export const TicketDetailModal: React.FC<TicketDetailModalProps> = ({
               <span style={{ fontSize: '0.9rem', fontWeight: 800, color: 'var(--accent-cyan)' }}>{ticket.id}</span>
               <span className={`badge badge-${ticket.status}`}>{getStatusBadgeLabel(ticket.status)}</span>
               {ticket.category === 'email' ? (
-                <span style={{ fontSize: '0.78rem', color: '#000000', background: 'rgba(56, 189, 248, 0.25)', border: '1px solid rgba(56, 189, 248, 0.45)', padding: '2px 8px', borderRadius: '4px', display: 'inline-flex', alignItems: 'center', gap: '4px', fontWeight: 700 }}>
+                <span className="ticket-badge" style={{ fontSize: '0.78rem', background: 'rgba(56, 189, 248, 0.25)', border: '1px solid rgba(56, 189, 248, 0.45)', padding: '2px 8px', borderRadius: '4px', display: 'inline-flex', alignItems: 'center', gap: '4px', fontWeight: 700 }}>
                   ✉️ E-Posta
                 </span>
               ) : (
-                <span style={{ fontSize: '0.78rem', color: '#000000', background: 'rgba(156, 163, 175, 0.25)', border: '1px solid rgba(156, 163, 175, 0.45)', padding: '2px 8px', borderRadius: '4px', fontWeight: 700 }}>{ticket.category}</span>
+                <span className="ticket-badge" style={{ fontSize: '0.78rem', background: 'rgba(156, 163, 175, 0.25)', border: '1px solid rgba(156, 163, 175, 0.45)', padding: '2px 8px', borderRadius: '4px', fontWeight: 700 }}>{ticket.category}</span>
               )}
             </div>
             <h2 style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--text-primary)' }}>

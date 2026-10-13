@@ -1,6 +1,20 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 🟢 Son Güncelleme [13.10.2026 - 15:25] — KOYU TEMADA ROZET YAZILARININ BEYAZ YAPILMASI & MOBİLDE 2 SATIR MESAJ ÖNİZLEMESİ [*]
+* **Yapılan İşlem:**
+  1. **Koyu Temada Rozet Yazılarının Beyaza Dönüştürülmesi:**
+     - `index.css`: Tüm durum (`Yeni`, `İşlemde`, `Çözüldü`, `Reddedildi`) ve kategori (`Hata`, `İstek`, `Teşekkür`, `Yeni Fikir`, `E-Posta`, `Genel`) rozetlerinin koyu temadaki metin rengi siyah yerine net beyaz (`#FFFFFF`, `fontWeight: 700`) yapıldı.
+     - Açık tema için `[data-theme="light"]` kuralları altında siyah metin (`#000000 !important`) korunarak her iki temada da kusursuz kontrast sağlandı.
+     - `TicketsView.tsx` ve `TicketDetailModal.tsx`: Sert kodlanmış `#000000` renkleri kaldırılarak tema duyarlı `.ticket-badge` sınıfına geçirildi.
+  2. **Mobilde 2 Satırlık Mesaj Açıklama Önizlemesi:**
+     - `TicketsView.tsx` ve `index.css`: Mobil ekranda (<768px) kartın alt kısmına tam genişlikte (`width: 100%`) ve en fazla 2 satırla sınırlandırılmış (`WebkitLineClamp: 2`, `wordBreak: 'break-word'`) mesaj önizlemesi (`.visible-mobile .ticket-message-preview`) eklendi.
+     - Masaüstünde bu alt önizleme gizlenirken (`display: none`), orta sütundaki masaüstü önizlemesi korundu.
+  3. **Mobil Çift Tıklama Karmaşasının Sadeleştirilmesi:**
+     - Mobilde dokunmatik ekran zoom çakışmalarını önlemek adına çift tıklama zorlaması kaldırıldı; kullanıcılar tek dokunuşla "İncele" butonu üzerinden detay modalına rahatça erişebilir hale getirildi.
+* **Sonuçlar:** Vite build ve TypeScript derlemeleri 0 hatayla geçti. Dosya satır limitlerine tam uyuldu (`TicketsView.tsx`: 430 satır, `index.css`: 415 satır, `TicketDetailModal.tsx`: 430 satır).
+* **Durum:** `DevAdmin` dalında çalışıldı, `main` korundu.
+
 ## 🟢 Son Güncelleme [13.10.2026 - 15:10] — DESTEK KARTLARINDA TARİH ÜSTTE, İNCELE BUTONU ALTA & BAŞLIK SARMA DÜZENİ [*]
 * **Yapılan İşlem:**
   1. **Tarih ve İncele Yapısının Ayrıştırılması:**
