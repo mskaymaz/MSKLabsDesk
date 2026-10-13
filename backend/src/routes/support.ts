@@ -33,6 +33,26 @@ export async function handleSupportSubmission(request: Request, env: { DB: D1Dat
   try {
     const rawPayload = await request.json() as any;
 
+    // 1. Honeypot Bot Koruması (Gizli alan doldurulmuşsa sessizce geçiştir)
+    if (rawPayload.hp_company_field || rawPayload.supportHoneypot || rawPayload.website) {
+      return new Response(JSON.stringify({ success: true, ticketId: generateTicketId() }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json; charset=utf-8' },
+      });
+    }
+
+    // 2. Matematik / İnsan Doğrulaması Kontrolü (Formdan gönderilmişse)
+    if (rawPayload.captcha_expected !== undefined && rawPayload.captcha_answer !== undefined) {
+      const expected = Number(rawPayload.captcha_expected);
+      const answer = Number(rawPayload.captcha_answer);
+      if (isNaN(answer) || answer !== expected) {
+        return new Response(
+          JSON.stringify({ error: 'Güvenlik doğrulaması (robot testi) hatalı yanıtlandı. Lütfen tekrar deneyin.' }),
+          { status: 400, headers: { 'Content-Type': 'application/json; charset=utf-8' } }
+        );
+      }
+    }
+
     const sender_name = (rawPayload.sender_name || rawPayload.name || rawPayload.senderName || (rawPayload.app ? `${rawPayload.app} Kullanıcısı` : 'Web Ziyaretçisi')).trim();
     const sender_email = (rawPayload.sender_email || rawPayload.email || rawPayload.senderEmail || '').trim().toLowerCase();
     const subject = (rawPayload.subject || '').trim();

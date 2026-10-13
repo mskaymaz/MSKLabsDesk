@@ -1,6 +1,20 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [13.10.2026 - 16:55] - Çift Aşamalı E-Posta Doğrulaması & Robot Koruması (Matematik Testi + Bal Küpü)
+- `backend/migrations/0003_comment_verification.sql`:
+  - `comments` tablosuna `verification_token` ve `verified_at` kolonları eklendi.
+- `backend/src/routes/comments.ts`:
+  - Yorum oluşturulduğunda `status = 'unverified'` olarak kaydedilmesi sağlandı.
+  - E-posta doğrulama linki oluşturularak onay bağlantısı iletildi.
+  - `handleVerifyComment` uç noktası ile onaylanan yorumların `pending` statüsüne geçişi, iptal edilenlerin `cancelled` olması ve kullanıcıya şık HTML bilgilendirme ekranı sunulması sağlandı.
+  - Bal küpü (honeypot) ve dinamik matematik doğrulaması entegre edildi.
+- `backend/src/routes/support.ts`:
+  - Destek talepleri için bal küpü ve matematik doğrulaması eklendi.
+- `backend/src/index.ts`:
+  - `GET /api/comments/verify` rotası bağlandı.
+- Yalnızca `DevAdmin` dalında çalışıldı, `main` korundu.
+
 ## [13.10.2026 - 16:25] - Onaylanan/Reddedilen Yorum Listeleme Hatasının Giderilmesi
 - `backend/src/routes/adminComments.ts`:
   - `handleAdminGetComments` fonksiyonundaki varsayılan `status = 'pending'` kısıtlaması kaldırıldı; parametresiz veya `status=all` durumunda tüm yorumların getirilmesi sağlandı.

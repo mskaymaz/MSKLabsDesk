@@ -4,7 +4,7 @@
  */
 
 import { handleSupportSubmission } from './routes/support';
-import { handleCommentSubmission, handleGetApprovedComments } from './routes/comments';
+import { handleCommentSubmission, handleGetApprovedComments, handleVerifyComment } from './routes/comments';
 import { handleSubscribe, handleUnsubscribe } from './routes/subscribe';
 import { handleAdminLogin } from './routes/adminAuth';
 import { handleAdminGetTickets, handleAdminGetTicketDetail, handleAdminReplyTicket, handleAdminUpdateTicketStatus, handleAdminAnalyzeTicket, handleAdminAnalyzeAllTickets, handleAdminTranslateTicket } from './routes/adminTickets';
@@ -47,6 +47,8 @@ export default {
     // 1. Kamusal & Headless CMS Public API V1 / Base Endpoint'leri
     if ((path === '/api/comments' || path === '/api/v1/comments') && request.method === 'POST') {
       response = await handleCommentSubmission(request, env);
+    } else if ((path === '/api/comments/verify' || path === '/api/v1/comments/verify') && request.method === 'GET') {
+      response = await handleVerifyComment(request, env);
     } else if ((path === '/api/comments' || path === '/api/v1/comments') && request.method === 'GET') {
       response = await handleGetApprovedComments(request, env);
     } else if (path.startsWith('/api/v1/')) {

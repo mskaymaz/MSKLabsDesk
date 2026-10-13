@@ -1,6 +1,20 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 🟢 Son Güncelleme [13.10.2026 - 16:55] — ÇİFT AŞAMALI E-POSTA DOĞRULAMASI & ROBOT KORUMASI (MATEMATİK TESTİ + BAL KÜPÜ) [*]
+* **Yapılan İşlem:**
+  1. **Çift Aşamalı E-Posta Onay Mekanizması (Double Opt-In):**
+     - Blog yorumu gönderildiğinde yorum doğrudan editöre düşmez; `unverified` statüsünde kaydedilir.
+     - Kullanıcının e-posta adresine doğrulama bağlantısı (`/api/comments/verify?token=...&action=confirm`) ve vazgeçme bağlantısı (`action=cancel`) gönderilir.
+     - Kullanıcı e-postasındaki bağlantıya tıkladığında yorum `pending` statüsüne geçer ve editörün inceleme kuyruğuna alınır. Kullanıcı vazgeçerse yorum `cancelled` durumuna alınır.
+     - D1 veritabanı şemasına `verification_token` ve `verified_at` kolonları eklendi (`0003_comment_verification.sql`).
+  2. **Robot Koruması (Honeypot + Sıfır Maliyetli Matematik Testi):**
+     - Hem **Blog Yorumları** (`blog.html` + `comments.js`) hem de **Destek Talepleri** (`destek.html` + `support.ts`) formlarına dinamik aritmetik güvenlik sorusu eklendi.
+     - Botları sessizce yakalayan gizli Bal Küpü (Honeypot) alanları entegre edildi; botlar yanıltılarak spam kayıtların veritabanını kirletmesi engellendi.
+  3. **Tüm Dillerde Yerelleştirme:** TR, EN, AR dillerinde hata mesajları, placeholder'lar ve e-posta şablonları eksiksiz sağlandı.
+* **Sonuçlar:** Test akışı (`test_flow.cjs`, `test_verify.cjs`, `test_honeypot.cjs`) ile doğrulandı. Hatalı captcha engellendi (400), doğru captcha ile `unverified` kayıt oluştu, e-posta linki ile `pending` statüsüne geçiş ve yönetici panelinde listelenme teyit edildi. Bal küpü ile bot gönderimleri sıfırlandı. Dosya satır limitlerine tam uyuldu (`comments.js`: 438 satır, `destek.html`: 443 satır).
+* **Durum:** `DevAdmin` dalında çalışıldı, `main` korundu.
+
 ## 🟢 Son Güncelleme [13.10.2026 - 16:25] — ONAYLANAN/REDDEDİLEN YORUM LİSTELEME HATASININ GİDERİLMESİ [*]
 * **Kök Neden Tespiti:**
   - `backend/src/routes/adminComments.ts` içerisinde `handleAdminGetComments` fonksiyonunun, parametresiz çağrıldığında varsayılan olarak `status = 'pending'` filtrelemesi yaptığı (`url.searchParams.get('status') || 'pending'`) ve bu yüzden onaylanan veya reddedilen yorumların admin paneline hiç çekilmediği tespit edildi.
