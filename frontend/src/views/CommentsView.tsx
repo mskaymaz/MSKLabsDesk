@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import type { CommentItem } from '../types';
 import { api } from '../services/api';
-import { CheckCircle, XCircle, Clock, RotateCw } from 'lucide-react';
+import { CheckCircle, XCircle, Clock, RotateCw, Eye } from 'lucide-react';
 import { useTranslation } from '../context/I18nContext';
+import { CommentDetailModal } from '../components/CommentDetailModal';
 
 interface CommentsViewProps {
   comments: CommentItem[];
@@ -14,6 +15,7 @@ export const CommentsView: React.FC<CommentsViewProps> = ({ comments, onRefresh 
   const [filter, setFilter] = useState<string>('pending');
   const [loadingId, setLoadingId] = useState<string | null>(null);
   const [refreshing, setRefreshing] = useState(false);
+  const [selectedComment, setSelectedComment] = useState<CommentItem | null>(null);
 
   const locale = language === 'ar' ? 'ar-SA' : language === 'en' ? 'en-US' : 'tr-TR';
   const filteredComments = comments.filter((c) => filter === 'all' || c.status === filter);
@@ -40,6 +42,7 @@ export const CommentsView: React.FC<CommentsViewProps> = ({ comments, onRefresh 
     setLoadingId(id);
     try {
       await api.moderateComment(id, status);
+      setSelectedComment((prev) => (prev && prev.id === id ? { ...prev, status } : prev));
       onRefresh();
     } catch (err) {
       alert(t('comments.updateError'));
@@ -173,10 +176,13 @@ export const CommentsView: React.FC<CommentsViewProps> = ({ comments, onRefresh 
             <div
               key={comment.id}
               className="glass-card glass-card-hover"
+              onDoubleClick={() => setSelectedComment(comment)}
               style={{
                 padding: '4px 14px',
-                borderRadius: '8px'
+                borderRadius: '8px',
+                cursor: 'pointer'
               }}
+              title="Çift tıklayarak yorum detayını okuyabilirsiniz"
             >
               {/* Kart Üst Satırı: Yorum Kodu + Durum Rozeti + Yazı Rozeti (Sol) & Tarih (Sağ) */}
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px', marginBottom: '4px' }}>
@@ -267,26 +273,57 @@ export const CommentsView: React.FC<CommentsViewProps> = ({ comments, onRefresh 
 
                 {/* Sağ: Aksiyon Butonları (Başlık ile aynı hizada kilitli) */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginLeft: 'auto', flexShrink: 0 }}>
+                  <button
+                    className="btn btn-primary btn-sm"
+                    style={{ padding: '3px 8px', fontSize: '0.74rem', borderRadius: '5px', whiteSpace: 'nowrap' }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedComment(comment);
+                    }}
+                    title="Yorumu İncele"
+                  >
+                    <Eye size={12} /> {t('common.view')}
+                  </button>
                   {comment.status !== 'approved' && (
                     <button
                       className="btn btn-success btn-sm"
-                      style={{ padding: '3px 8px', fontSize: '0.74rem', borderRadius: '5px', whiteSpace: 'nowrap' }}
+                      style={{
+                        padding: '3px 8px',
+                        fontSize: '0.74rem',
+                        borderRadius: '5px',
+                        whiteSpace: 'nowrap',
+                        color: '#000000',
+                        fontWeight: 700
+                      }}
                       disabled={loadingId === comment.id}
-                      onClick={() => handleModerate(comment.id, 'approved')}
-                      title={t('comments.approveComment')}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleModerate(comment.id, 'approved');
+                      }}
+                      title="Onayla"
                     >
-                      <CheckCircle size={12} /> {t('comments.approveComment')}
+                      <CheckCircle size={12} color="#000000" /> Onayla
                     </button>
                   )}
                   {comment.status !== 'rejected' && (
                     <button
                       className="btn btn-danger btn-sm"
-                      style={{ padding: '3px 8px', fontSize: '0.74rem', borderRadius: '5px', whiteSpace: 'nowrap' }}
+                      style={{
+                        padding: '3px 8px',
+                        fontSize: '0.74rem',
+                        borderRadius: '5px',
+                        whiteSpace: 'nowrap',
+                        color: '#000000',
+                        fontWeight: 700
+                      }}
                       disabled={loadingId === comment.id}
-                      onClick={() => handleModerate(comment.id, 'rejected')}
-                      title={t('comments.rejectComment')}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleModerate(comment.id, 'rejected');
+                      }}
+                      title="Reddet"
                     >
-                      <XCircle size={12} /> {t('comments.rejectComment')}
+                      <XCircle size={12} color="#000000" /> Reddet
                     </button>
                   )}
                 </div>
@@ -312,6 +349,16 @@ export const CommentsView: React.FC<CommentsViewProps> = ({ comments, onRefresh 
             </div>
           ))}
         </div>
+      )}
+
+      {/* Yorum İnceleme Modalı */}
+      {selectedComment && (
+        <CommentDetailModal
+          comment={selectedComment}
+          loading={loadingId === selectedComment.id}
+          onClose={() => setSelectedComment(null)}
+          onModerate={handleModerate}
+        />
       )}
     </div>
   );

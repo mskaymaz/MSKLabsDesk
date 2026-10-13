@@ -1,6 +1,21 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 🟢 Son Güncelleme [13.10.2026 - 16:05] — YORUM İNCELE BUTONU, ÇİFT TIKLAMA DETAY MODALI VE SADELEŞTİRİLMİŞ BUTONLAR [*]
+* **Yapılan İşlem:**
+  1. **Yorum Detay Modalı (`CommentDetailModal.tsx`):**
+     - Destek modallarıyla birebir aynı mimaride bağımsız, 178 satırlık modüler `CommentDetailModal` bileşeni geliştirildi.
+     - Modal başlığında Yorum ID, Durum Rozeti, Blog Türü / Konusu ve Tarih yer alır.
+     - Yazar adı & e-posta kutusu, metin boyutu büyütme/küçültme/sıfırlama araçları (ZoomIn, ZoomOut, Reset), onaylama ve reddetme butonları entegre edildi.
+  2. **Yorum Kartlarında "İncele" Butonu & Çift Tıklama:**
+     - `CommentsView.tsx`: Her iki platformda (mobil & web) yorum kartlarına `Eye` ikonlu "İncele" butonu eklendi.
+     - Masaüstü/web ortamında karta çift tıklandığında (`onDoubleClick`) doğrudan detay modalının açılması sağlandı.
+  3. **Buton Metinleri ve Yazı Renklerinin Sadeleştirilmesi:**
+     - "Yorumu Onayla" -> "Onayla", "Spam/Reddet" -> "Reddet" olarak sadeleştirildi.
+     - Onayla ve Reddet butonlarının içindeki yazı ve ikonlar etiketlerde olduğu gibi belirgin siyah (`#000000`, `fontWeight: 700`) renge dönüştürüldü.
+* **Sonuçlar:** Vite derlemesi ve TypeScript denetimi 0 hatayla geçti. Dosya satır sınırlarına tam uyuldu (`CommentsView.tsx`: 366 satır, `CommentDetailModal.tsx`: 178 satır).
+* **Durum:** `DevAdmin` dalında çalışıldı, `main` korundu.
+
 ## 🟢 Son Güncelleme [13.10.2026 - 15:55] — BLOG YORUM KARTLARINDA TÜR (BİZCE/GÜNCEL/ANILTILAR) VE YAZI KONUSU ROZETİ [*]
 * **Yapılan İşlem:**
   1. **Tip Tanımlarının Genişletilmesi:**

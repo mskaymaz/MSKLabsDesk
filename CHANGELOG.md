@@ -1,6 +1,15 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [13.10.2026 - 16:05] - Yorum İncele Butonu, Çift Tıklama Detay Modalı ve Sadeleştirilmiş Butonlar
+- `frontend/src/components/CommentDetailModal.tsx`:
+  - Yorum detayını, yazar bilgilerini, onay/ret aksiyonlarını ve metin boyutlandırma araçlarını içeren yeni modüler modal bileşeni oluşturuldu (178 satır).
+- `frontend/src/views/CommentsView.tsx`:
+  - Kartlara hem mobilde hem masaüstünde görünen `Eye` ikonlu "İncele" butonu eklendi.
+  - Masaüstünde karta çift tıklama (`onDoubleClick`) ile inceleme modalının açılması bağlandı.
+  - "Yorumu Onayla" -> "Onayla" ve "Spam/Reddet" -> "Reddet" olarak kısaltıldı; buton metin ve ikonları belirgin siyah (`#000000`, `fontWeight: 700`) yapıldı.
+- Yalnızca `DevAdmin` dalında çalışıldı, `main` korundu.
+
 ## [13.10.2026 - 15:55] - Blog Yorum Kartlarında Tür (Bizce/Güncel/Anıtlar) ve Yazı Konusu Rozeti
 - `types/index.ts`:
   - `CommentItem` arayüzüne `post_type` ve `post_slug` alanları eklendi.
