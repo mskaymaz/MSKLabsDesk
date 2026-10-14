@@ -36,11 +36,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, [user]);
 
   const login = (newToken: string, newUser: AdminUser) => {
+    try {
+      localStorage.setItem('msk_admin_token', newToken);
+      localStorage.setItem('msk_admin_user', JSON.stringify(newUser));
+    } catch {}
     setToken(newToken);
     setUser(newUser);
   };
 
   const logout = () => {
+    try {
+      localStorage.removeItem('msk_admin_token');
+      localStorage.removeItem('msk_admin_user');
+    } catch {}
     setToken(null);
     setUser(null);
   };

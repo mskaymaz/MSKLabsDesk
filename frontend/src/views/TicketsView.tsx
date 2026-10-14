@@ -8,13 +8,11 @@ import { useTranslation } from '../context/I18nContext';
 interface TicketsViewProps {
   tickets: Ticket[];
   onRefresh: () => void;
-  onOpenCoupon: (ticketNo: string, email: string, name: string) => void;
 }
 
 export const TicketsView: React.FC<TicketsViewProps> = ({
   tickets,
   onRefresh,
-  onOpenCoupon,
 }) => {
   const { t, language } = useTranslation();
   const [searchQuery, setSearchQuery] = useState('');
@@ -432,7 +430,6 @@ export const TicketsView: React.FC<TicketsViewProps> = ({
           ticketDetail={selectedTicketDetail}
           onClose={() => setSelectedTicketDetail(null)}
           onRefresh={handleRefreshDetail}
-          onOpenCoupon={onOpenCoupon}
         />
       )}
     </div>

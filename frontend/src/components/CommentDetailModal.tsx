@@ -26,6 +26,8 @@ export const CommentDetailModal: React.FC<CommentDetailModalProps> = ({
     ? { label: '✅ Onaylandı', bg: 'rgba(16, 185, 129, 0.25)', border: 'rgba(16, 185, 129, 0.45)' }
     : comment.status === 'rejected'
     ? { label: '❌ Reddedildi', bg: 'rgba(239, 68, 68, 0.25)', border: 'rgba(239, 68, 68, 0.45)' }
+    : comment.status === 'unverified'
+    ? { label: '✉️ Onay Bekliyor', bg: 'rgba(148, 163, 184, 0.25)', border: 'rgba(148, 163, 184, 0.45)' }
     : { label: '⏳ Bekliyor', bg: 'rgba(245, 158, 11, 0.25)', border: 'rgba(245, 158, 11, 0.45)' };
 
   const typeLabel = getBlogTypeLabel(comment.post_type);

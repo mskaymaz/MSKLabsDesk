@@ -50,7 +50,7 @@ export interface CommentItem {
   author_name: string;
   author_email: string;
   content: string;
-  status: 'pending' | 'approved' | 'rejected';
+  status: 'pending' | 'approved' | 'rejected' | 'unverified';
   created_at: string;
 }
 

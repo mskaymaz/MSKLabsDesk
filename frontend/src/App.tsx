@@ -15,7 +15,6 @@ import { ChannelsView } from './views/ChannelsView';
 import { PostsView } from './views/PostsView';
 import { AppsCMSView } from './views/AppsCMSView';
 import { TemplatesView } from './views/TemplatesView';
-import { CouponModal } from './components/CouponModal';
 import type { Ticket, CommentItem, Subscriber } from './types';
 import { api } from './services/api';
 
@@ -26,18 +25,6 @@ const AdminPanelContent: React.FC = () => {
   const [tickets, setTickets] = useState<Ticket[]>([]);
   const [comments, setComments] = useState<CommentItem[]>([]);
   const [subscribers, setSubscribers] = useState<Subscriber[]>([]);
-
-  const [couponModalData, setCouponModalData] = useState<{
-    isOpen: boolean;
-    ticketNo: string;
-    email: string;
-    name: string;
-  }>({
-    isOpen: false,
-    ticketNo: '',
-    email: '',
-    name: '',
-  });
 
   const loadData = async () => {
     if (!isAuthenticated) return;
@@ -69,15 +56,6 @@ const AdminPanelContent: React.FC = () => {
   const pendingTickets = tickets.filter((t) => t.status === 'new' || t.status === 'in_progress').length;
   const pendingComments = comments.filter((c) => c.status === 'pending').length;
 
-  const handleOpenCoupon = (ticketNo: string, email: string, name: string) => {
-    setCouponModalData({
-      isOpen: true,
-      ticketNo,
-      email,
-      name,
-    });
-  };
-
   return (
     <AppShell
       activeTab={activeTab}
@@ -98,7 +76,6 @@ const AdminPanelContent: React.FC = () => {
         <TicketsView
           tickets={tickets}
           onRefresh={loadData}
-          onOpenCoupon={handleOpenCoupon}
         />
       )}
 
@@ -116,14 +93,6 @@ const AdminPanelContent: React.FC = () => {
       {activeTab === 'broadcast' && <BroadcastView />}
       {activeTab === 'subscribers' && <SubscribersView subscribers={subscribers} />}
       {activeTab === 'settings' && <SettingsView />}
-
-      <CouponModal
-        isOpen={couponModalData.isOpen}
-        onClose={() => setCouponModalData((prev) => ({ ...prev, isOpen: false }))}
-        ticketNo={couponModalData.ticketNo}
-        userEmail={couponModalData.email}
-        userName={couponModalData.name}
-      />
     </AppShell>
   );
 };

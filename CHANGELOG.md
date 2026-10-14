@@ -1,6 +1,21 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [14.10.2026 - 09:35] - Destek Paneli Durum Butonlarının İyileştirilmesi, Modal Kapanma ve Kupon Modülünün Kaldırılması
+- `frontend/src/components/TicketDetailModal.tsx`:
+  - "Okundu İşaretle" -> "Okundu", "Çözüldü İşaretle" -> "Çözüldü", "Reddet" -> "Reddet" olarak sadeleştirildi.
+  - Durum güncellendiğinde `onClose()` çağrılarak okuma panelinin doğrudan kapanması sağlandı.
+  - "Kupon Tanımla" butonu ve `Gift` ikonu kaldırıldı.
+- `frontend/src/views/TicketsView.tsx`:
+  - `onOpenCoupon` arayüz prop'ları ve modal aktarımı temizlendi.
+- `frontend/src/App.tsx`:
+  - `CouponModal` bileşeni, durumu ve açılış yöneticisi kaldırıldı.
+- `frontend/src/context/AuthContext.tsx`:
+  - `login()` ve `logout()` fonksiyonlarına senkron `localStorage` kaydı eklendi (oturum yarış durumu giderildi).
+- `frontend/src/views/CommentsView.tsx` & `CommentDetailModal.tsx` & `types/index.ts`:
+  - `unverified` (✉️ E-Posta Onayı Bekleyenler) filtresi ve rozeti eklendi.
+- Yalnızca `DevAdmin` dalında çalışıldı, `main` korundu.
+
 ## [13.10.2026 - 16:55] - Çift Aşamalı E-Posta Doğrulaması & Robot Koruması (Matematik Testi + Bal Küpü)
 - `backend/migrations/0003_comment_verification.sql`:
   - `comments` tablosuna `verification_token` ve `verified_at` kolonları eklendi.

@@ -1,20 +1,18 @@
 import React, { useState } from 'react';
 import type { TicketDetailResponse } from '../types';
-import { Sparkles, Send, Gift, X, User, Clock, CheckCircle, Ban, Eye, Languages, ZoomIn, ZoomOut, RotateCcw } from 'lucide-react';
+import { Sparkles, Send, X, User, Clock, CheckCircle, Ban, Eye, Languages, ZoomIn, ZoomOut, RotateCcw } from 'lucide-react';
 import { api } from '../services/api';
 
 interface TicketDetailModalProps {
   ticketDetail: TicketDetailResponse | null;
   onClose: () => void;
   onRefresh: () => void;
-  onOpenCoupon: (ticketNo: string, email: string, name: string) => void;
 }
 
 export const TicketDetailModal: React.FC<TicketDetailModalProps> = ({
   ticketDetail,
   onClose,
   onRefresh,
-  onOpenCoupon,
 }) => {
   const [replyMessage, setReplyMessage] = useState('');
   const [loadingReply, setLoadingReply] = useState(false);
@@ -102,6 +100,7 @@ export const TicketDetailModal: React.FC<TicketDetailModalProps> = ({
     try {
       await api.updateTicketStatus(ticket.id, newStatus);
       onRefresh();
+      onClose();
     } catch (err) {
       alert('Durum güncellenemedi.');
     } finally {
@@ -412,16 +411,13 @@ export const TicketDetailModal: React.FC<TicketDetailModalProps> = ({
         {/* Status Action Buttons Toolbar */}
         <div style={{ borderTop: '1px solid var(--border-color)', paddingTop: '16px', display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
           <button type="button" className="btn btn-sm" style={btnStyle('#38BDF8', 'rgba(56, 189, 248, 0.4)')} disabled={loadingStatus} onClick={() => handleStatusChange('in_progress')}>
-            <Eye size={14} color="#000000" /> Okundu İşaretle
+            <Eye size={14} color="#000000" /> Okundu
           </button>
           <button type="button" className="btn btn-sm" style={btnStyle('#10B981', 'rgba(16, 185, 129, 0.4)')} disabled={loadingStatus} onClick={() => handleStatusChange('resolved')}>
-            <CheckCircle size={14} color="#000000" /> Çözüldü İşaretle
+            <CheckCircle size={14} color="#000000" /> Çözüldü
           </button>
           <button type="button" className="btn btn-sm" style={btnStyle('#EF4444', 'rgba(239, 68, 68, 0.4)')} disabled={loadingStatus} onClick={() => handleStatusChange('rejected')}>
             <Ban size={14} color="#000000" /> Reddet
-          </button>
-          <button type="button" className="btn btn-sm" style={btnStyle('#F59E0B', 'rgba(245, 158, 11, 0.4)')} onClick={() => onOpenCoupon(ticket.id, ticket.sender_email, ticket.sender_name)}>
-            <Gift size={14} color="#000000" /> Kupon Tanımla
           </button>
         </div>
       </div>

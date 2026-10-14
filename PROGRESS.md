@@ -1,6 +1,19 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 🟢 Son Güncelleme [14.10.2026 - 09:35] — DESTEK PANELİ DURUM BUTONLARININ İYİLEŞTİRİLMESİ, MODAL KAPANMA VE KUPON MODÜLÜNÜN KALDIRILMASI [*]
+* **Yapılan İşlem:**
+  1. **Durum Butonlarının Sadeleştirilmesi & Fonksiyonel Kapanma:**
+     - "Okundu İşaretle" -> "Okundu", "Çözüldü İşaretle" -> "Çözüldü", "Reddet" -> "Reddet" olarak sadeleştirildi.
+     - Butonlara tıklandığında bilet durumu D1 veritabanında güncellenip liste yenilendikten sonra okuma panelinin (`onClose()`) anında otomatik kapanması sağlandı.
+  2. **Kupon Yapısının Kaldırılması:**
+     - Projede ücretli ürün/abonelik bulunmaması sebebiyle "Kupon Tanımla" butonu, çağrıları ve `App.tsx` içerisindeki modal bağlayıcıları tamamen temizlendi.
+  3. **Yorum Paneli & Oturum Yarış Durumu İyileştirmeleri:**
+     - `AuthContext.tsx` içerisine token'ın senkron yazılması eklendi; oturum açılışındaki 401 hatası önlendi.
+     - Yorum paneline `unverified` (✉️ E-Posta Onayı Bekleyenler) filtresi ve rozeti eklendi.
+* **Sonuçlar:** `tsc` ve Vite derlemesi 0 hata ile geçti. Dosya satır limitlerine (`<= 450`) tam uyuldu (`TicketDetailModal.tsx`: 427 satır, `TicketsView.tsx`: 438 satır).
+* **Durum:** `DevAdmin` dalında çalışıldı, `main` korundu.
+
 ## 🟢 Son Güncelleme [13.10.2026 - 16:55] — ÇİFT AŞAMALI E-POSTA DOĞRULAMASI & ROBOT KORUMASI (MATEMATİK TESTİ + BAL KÜPÜ) [*]
 * **Yapılan İşlem:**
   1. **Çift Aşamalı E-Posta Onay Mekanizması (Double Opt-In):**
