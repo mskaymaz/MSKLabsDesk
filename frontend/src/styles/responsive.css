@@ -1,0 +1,122 @@
+/* Responsive Navigation, Grid & Layout Styles */
+
+.mobile-bottom-nav {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.mobile-hamburger-btn {
+  display: none;
+}
+
+/* Post Filter Controls (Desktop Default) */
+.post-filter-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+}
+.filter-item-search {
+  position: relative;
+  width: 210px;
+}
+.filter-item-channel {
+  height: 28px;
+  padding: 2px 24px 2px 8px;
+  font-size: 0.88rem;
+  font-weight: 400;
+  cursor: pointer;
+  width: auto;
+  max-width: 190px;
+}
+.filter-item-status {
+  height: 28px;
+  padding: 2px 24px 2px 8px;
+  font-size: 0.88rem;
+  font-weight: 400;
+  cursor: pointer;
+  width: auto;
+  max-width: 150px;
+}
+.filter-item-new-btn {
+  height: 28px;
+  padding: 0 12px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  border-radius: 6px;
+  cursor: pointer;
+  white-space: nowrap;
+  margin-left: auto;
+}
+
+@media (max-width: 767px) {
+  .app-sidebar { display: none !important; }
+  .mobile-bottom-nav { display: flex !important; }
+  .mobile-hamburger-btn { display: inline-flex !important; }
+  .hidden-mobile { display: none !important; }
+  .visible-mobile { display: block; }
+  .ticket-message-preview.visible-mobile { display: -webkit-box !important; }
+  .page-content { padding: 0 10px 76px 10px !important; }
+  .glass-card { padding: 14px 12px; }
+  .topbar-header { padding: 0 10px !important; }
+  .dashboard-metrics-grid { grid-template-columns: 1fr !important; gap: 12px !important; }
+  .dashboard-panels-grid { grid-template-columns: 1fr !important; gap: 14px !important; }
+  .ticket-subject-col { flex: 1 1 auto !important; width: auto !important; min-width: 0 !important; }
+
+  /* Blog Filter Mobile: Sol sütunda Arama + Yeni Butonu, Sağ sütunda Türler + Durumlar */
+  .post-filter-controls {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    grid-template-areas:
+      "search  channel"
+      "newbtn  status" !important;
+    gap: 6px !important;
+    width: 100% !important;
+  }
+  .filter-item-search {
+    grid-area: search !important;
+    width: 100% !important;
+  }
+  .filter-item-channel {
+    grid-area: channel !important;
+    width: 100% !important;
+    max-width: none !important;
+  }
+  .filter-item-new-btn {
+    grid-area: newbtn !important;
+    width: 100% !important;
+    margin-left: 0 !important;
+    justify-content: center !important;
+  }
+  .filter-item-status {
+    grid-area: status !important;
+    width: 100% !important;
+    max-width: none !important;
+  }
+}
+
+.ticket-subject-col { width: 270px; max-width: 100%; flex-shrink: 0; }
+.visible-mobile { display: none; }
+
+@media (min-width: 768px) {
+  .mobile-bottom-nav { display: none !important; }
+  .mobile-hamburger-btn { display: none !important; }
+  .visible-mobile { display: none !important; }
+}
+
+@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+.spin { animation: spin 0.8s linear infinite; }
+
+@keyframes slideRight {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(0); }
+}

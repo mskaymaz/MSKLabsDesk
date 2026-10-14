@@ -128,11 +128,12 @@ export const PostCard: React.FC<PostCardProps> = ({
       style={{
         padding: '8px 12px',
         borderRadius: 'var(--radius-md)',
-        border: '1px solid var(--border-color)',
+        border: '1px solid var(--border-card)',
         background: 'var(--bg-card)',
         display: 'flex',
         flexDirection: 'column',
         gap: '4px',
+        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.18)',
       }}
     >
       {/* Üst Satır: Sıra No + Kanal + Durum + Video + Diller & İşlem Butonları */}
@@ -153,7 +154,7 @@ export const PostCard: React.FC<PostCardProps> = ({
               fontWeight: 400,
               color: 'var(--text-muted)',
               background: 'rgba(255, 255, 255, 0.04)',
-              border: '1px solid var(--border-color)',
+              border: '1px solid var(--border-card)',
               padding: '1px 5px',
               borderRadius: '4px',
             }}

@@ -1,6 +1,21 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [14.10.2026 - 16:40] - Mobil Filtre 2x2 Izgara Düzeni ve Kart Çevre Çizgisi (Kenarlık) İyileştirmesi
+- `frontend/src/components/posts/PostFilterBar.tsx` & `frontend/src/styles/responsive.css`:
+  - Mobil görünümde (`<= 767px`) 3. satıra taşan elemanlar 2x2 dengeli CSS Grid düzenine alındı:
+    - Sol Sütun: Arama kutusu (üst) ve "+ Yeni Blog Yazısı" butonu (alt).
+    - Sağ Sütun: "Tüm Blog Türleri" (üst) ve "Tüm Durumlar" (alt).
+  - Masaüstünde (`>= 768px`) tek satırda soldan sağa akıcı sıralama korundu.
+  - Mobilde üst panel dikey boyunu kompakt tutmak için açıklama metnine `hidden-mobile` eklendi.
+- `frontend/src/styles/tokens.css` & `frontend/src/index.css` & `PostCard.tsx`:
+  - Koyu temada kaybolan kart sınırlarını belirginleştirmek için `--border-card` (`rgba(255, 255, 255, 0.14)`) ve hover ışıması (`--border-card-hover`) tanımlandı.
+  - Açık tema için `--border-card: rgba(15, 23, 42, 0.14)` ile net sınır çizgisi sağlandı.
+  - Kartlara hafif derinlik katan `box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18)` eklendi; yuvarlatılmış köşeler her iki platform ve temada netleşti.
+- `frontend/src/styles/responsive.css`:
+  - Responsive ve animasyon kuralları `index.css`'ten ayrılarak modüler dosya haline getirildi; tüm CSS ve TSX dosyaları `<= 400` satır sınırına tam uyumlu kılındı.
+- Yalnızca `DevAdmin` dalında çalışıldı, `main` korundu.
+
 ## [14.10.2026 - 16:25] - Tipografi Birliği ve Sol Menü Yazı Tipi Standardizasyonu
 - `frontend/src/styles/tokens.css` & `frontend/src/index.css`:
   - Sol menünün kullandığı doğal sistem fontu (`-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif`) tüm arayüz için ana yazı tipi (`--font-sans`) olarak standartlaştırıldı; uyumsuzluk yaratan harici Google font ('Plus Jakarta Sans') kaldırıldı.

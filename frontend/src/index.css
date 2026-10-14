@@ -1,9 +1,12 @@
 @import './styles/tokens.css';
+@import './styles/responsive.css';
 @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap');
 
 :root {
   --bg-main: var(--bg-primary);
   --border-color: var(--border-subtle);
+  --border-card: rgba(255, 255, 255, 0.14);
+  --border-card-hover: rgba(99, 102, 241, 0.45);
 
   --text-primary: #F3F4F6;
   --text-secondary: #9CA3AF;
@@ -124,7 +127,7 @@ body {
   background: var(--bg-card);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--border-card);
   border-radius: var(--radius-lg);
   padding: 24px;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
@@ -132,7 +135,7 @@ body {
 }
 
 .glass-card-hover:hover {
-  border-color: rgba(99, 102, 241, 0.3);
+  border-color: var(--border-card-hover);
   transform: translateY(-2px);
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
 }
@@ -273,6 +276,8 @@ body {
 .theme-light {
   --bg-main: var(--bg-primary);
   --border-color: #CBD5E1;
+  --border-card: rgba(15, 23, 42, 0.14);
+  --border-card-hover: rgba(99, 102, 241, 0.5);
   --text-primary: #0F172A;
   --text-secondary: #475569;
   --text-muted: #64748B;
@@ -294,11 +299,11 @@ body.theme-light {
 [data-theme="light"] .glass-card {
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
   background: var(--bg-card);
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--border-card);
 }
 
 [data-theme="light"] .glass-card-hover:hover {
-  border-color: var(--accent-primary);
+  border-color: var(--border-card-hover);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
 }
 
@@ -386,49 +391,4 @@ body.theme-light {
 [data-theme="light"] ::-webkit-scrollbar-thumb { background: rgba(0, 0, 0, 0.15); }
 [data-theme="light"] ::-webkit-scrollbar-thumb:hover { background: rgba(0, 0, 0, 0.25); }
 
-/* Responsive Navigation & Layout (Mobile vs Desktop) */
-.mobile-bottom-nav {
-  display: none;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  justify-content: space-around;
-  align-items: center;
-}
 
-.mobile-hamburger-btn {
-  display: none;
-}
-
-@media (max-width: 767px) {
-  .app-sidebar { display: none !important; }
-  .mobile-bottom-nav { display: flex !important; }
-  .mobile-hamburger-btn { display: inline-flex !important; }
-  .hidden-mobile { display: none !important; }
-  .visible-mobile { display: block; }
-  .ticket-message-preview.visible-mobile { display: -webkit-box !important; }
-  .page-content { padding: 0 10px 76px 10px !important; }
-  .glass-card { padding: 14px 12px; }
-  .topbar-header { padding: 0 10px !important; }
-  .dashboard-metrics-grid { grid-template-columns: 1fr !important; gap: 12px !important; }
-  .dashboard-panels-grid { grid-template-columns: 1fr !important; gap: 14px !important; }
-  .ticket-subject-col { flex: 1 1 auto !important; width: auto !important; min-width: 0 !important; }
-}
-
-.ticket-subject-col { width: 270px; max-width: 100%; flex-shrink: 0; }
-.visible-mobile { display: none; }
-
-@media (min-width: 768px) {
-  .mobile-bottom-nav { display: none !important; }
-  .mobile-hamburger-btn { display: none !important; }
-  .visible-mobile { display: none !important; }
-}
-
-@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-.spin { animation: spin 0.8s linear infinite; }
-
-@keyframes slideRight {
-  from { transform: translateX(-100%); }
-  to { transform: translateX(0); }
-}

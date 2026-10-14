@@ -1,6 +1,21 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 🟢 Son Güncelleme [14.10.2026 - 16:40] — MOBİL FİLTRE 2x2 IZGARA DÜZENİ & KART ÇEVRE ÇİZGİSİ (KENARLIK) İYİLEŞTİRMESİ [*]
+* **Yapılan İşlem:**
+  1. **Mobil Filtre 2x2 Izgara Düzeni (`PostFilterBar.tsx` & `responsive.css`):**
+     - Mobilde 3. satıra taşan "Yeni Blog Yazısı" butonu ve filtreler CSS Grid `grid-template-areas` mimarisiyle 2 sütuna bölündü:
+       - **Sol Sütun:** Arama kutusu (üstte) + `+ Yeni Blog Yazısı` butonu (altında).
+       - **Sağ Sütun:** `Tüm Blog Türleri` açılır listesi (üstte) + `Tüm Durumlar` açılır listesi (altında).
+     - Masaüstü görünümünde ise tek yatay satır flex akışı bozulmadan korundu.
+  2. **Koyu ve Açık Tema Kart Kenarlık Çizgisi (`tokens.css`, `index.css`, `PostCard.tsx`):**
+     - Koyu temada kart kenarlarının arka plana karışıp kaybolmasını önlemek için `--border-card: rgba(255, 255, 255, 0.14)` ince, net ve zarif bir sınır çizgisi ile `box-shadow` derinliği eklendi.
+     - Açık tema için `--border-card: rgba(15, 23, 42, 0.14)` ve `--border-card-hover: rgba(99, 102, 241, 0.5)` tanımlanarak yuvarlatılmış kart köşelerinin her iki temada kusursuz görünmesi sağlandı.
+  3. **CSS Modülerleştirme (`responsive.css`):**
+     - 450 satır sınırını aşan `index.css` içindeki responsive ve grid kuralları `src/styles/responsive.css` dosyasına taşındı. `index.css` 344 satıra çekilerek modülerlik kuralı tam sağlandı.
+* **Sonuçlar:** Vite ve TypeScript build (`npm run build`) 0 hata ile 596 ms'de tamamlandı. Dosya sınırlarına uyuldu (`PostCard.tsx`: 384 satır, `PostCardActions.tsx`: 173 satır, `PostFilterBar.tsx`: 167 satır, `index.css`: 344 satır, `responsive.css`: 113 satır, `tokens.css`: 93 satır).
+* **Durum:** `DevAdmin` dalında çalışıldı, `main` korundu.
+
 ## 🟢 Son Güncelleme [14.10.2026 - 16:25] — TİPOGRAFİ BİRLİĞİ VE SOL MENÜ YAZI TİPİ STANDARDİZASYONU [*]
 * **Yapılan İşlem:**
   1. **Doğal Sistem Fontu Standardizasyonu (`tokens.css` & `index.css`):**

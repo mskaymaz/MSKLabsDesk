@@ -84,6 +84,7 @@ export const PostFilterBar: React.FC<PostFilterBarProps> = ({
 
           {/* Açıklama: Sol menü linkleri ile aynı font büyüklüğü ve karakteri (normal font) */}
           <span
+            className="hidden-mobile"
             style={{
               fontSize: '0.88rem',
               fontWeight: 400,
@@ -96,115 +97,73 @@ export const PostFilterBar: React.FC<PostFilterBarProps> = ({
         </div>
       </div>
 
-      {/* 2. Satır: Tek Satırda Arama + Türler + Durumlar (Sol) & Yeni Blog Yazısı Butonu (Sağ) */}
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          flexWrap: 'wrap',
-          gap: '8px',
-          padding: '1px 2px',
-        }}
-      >
-        {/* Sol Grup: Arama, Blog Türleri, Durumlar */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
-          {/* Arama Kutusu */}
-          <div style={{ position: 'relative', width: '210px' }}>
-            <Search
-              size={13}
-              style={{
-                position: 'absolute',
-                left: '9px',
-                top: '50%',
-                transform: 'translateY(-50%)',
-                color: 'var(--text-muted)',
-                pointerEvents: 'none',
-              }}
-            />
-            <input
-              type="text"
-              className="form-input"
-              placeholder="Yazı veya slug ara..."
-              value={searchQuery}
-              onChange={(e) => onSearchChange(e.target.value)}
-              style={{
-                width: '100%',
-                height: '28px',
-                paddingLeft: '28px',
-                paddingRight: '8px',
-                fontSize: '0.88rem',
-                fontWeight: 400,
-              }}
-            />
-          </div>
-
-          {/* Blog Türleri Açılır Listesi */}
-          <select
-            className="form-select"
-            value={channelFilter}
-            onChange={(e) => onChannelFilterChange(e.target.value)}
+      {/* 2. Satır: Mobil 2x2 Grid (Arama altı Yeni Butonu, sağında Türler altı Durumlar) / Masaüstü Tek Satır */}
+      <div className="post-filter-controls" style={{ padding: '1px 2px' }}>
+        {/* Arama Kutusu */}
+        <div className="filter-item-search">
+          <Search
+            size={13}
             style={{
+              position: 'absolute',
+              left: '9px',
+              top: '50%',
+              transform: 'translateY(-50%)',
+              color: 'var(--text-muted)',
+              pointerEvents: 'none',
+            }}
+          />
+          <input
+            type="text"
+            className="form-input"
+            placeholder="Yazı veya slug ara..."
+            value={searchQuery}
+            onChange={(e) => onSearchChange(e.target.value)}
+            style={{
+              width: '100%',
               height: '28px',
-              padding: '2px 24px 2px 8px',
+              paddingLeft: '28px',
+              paddingRight: '8px',
               fontSize: '0.88rem',
               fontWeight: 400,
-              cursor: 'pointer',
-              width: 'auto',
-              maxWidth: '190px',
             }}
-            title="Blog Kanalına Göre Filtrele"
-          >
-            <option value="all">📚 Tüm Blog Türleri</option>
-            {channels.map((ch) => (
-              <option key={ch.id} value={ch.id}>
-                {ch.slug === 'bizce' ? '✍️ ' : ch.slug === 'aniltilar' ? '📖 ' : ch.slug === 'guncel' ? '📰 ' : ch.slug === 'vlog' ? '🎬 ' : ''}
-                {ch.name_tr} {ch.is_active === 0 ? '(Pasif)' : ''}
-              </option>
-            ))}
-          </select>
-
-          {/* Durum Açılır Listesi */}
-          <select
-            className="form-select"
-            value={statusFilter}
-            onChange={(e) => onStatusFilterChange(e.target.value)}
-            style={{
-              height: '28px',
-              padding: '2px 24px 2px 8px',
-              fontSize: '0.88rem',
-              fontWeight: 400,
-              cursor: 'pointer',
-              width: 'auto',
-              maxWidth: '150px',
-            }}
-            title="Yayın Durumuna Göre Filtrele"
-          >
-            <option value="all">📋 Tüm Durumlar</option>
-            <option value="published">✅ Yayında</option>
-            <option value="unpublished">⏸️ Yayından Kaldırıldı</option>
-            <option value="draft">📝 Taslak</option>
-            <option value="trash">🗑️ Çöp Kutusu</option>
-          </select>
+          />
         </div>
 
-        {/* Sağ Grup: Yeni Blog Yazısı Butonu */}
+        {/* Blog Türleri Açılır Listesi */}
+        <select
+          className="form-select filter-item-channel"
+          value={channelFilter}
+          onChange={(e) => onChannelFilterChange(e.target.value)}
+          title="Blog Kanalına Göre Filtrele"
+        >
+          <option value="all">📚 Tüm Blog Türleri</option>
+          {channels.map((ch) => (
+            <option key={ch.id} value={ch.id}>
+              {ch.slug === 'bizce' ? '✍️ ' : ch.slug === 'aniltilar' ? '📖 ' : ch.slug === 'guncel' ? '📰 ' : ch.slug === 'vlog' ? '🎬 ' : ''}
+              {ch.name_tr} {ch.is_active === 0 ? '(Pasif)' : ''}
+            </option>
+          ))}
+        </select>
+
+        {/* Durum Açılır Listesi */}
+        <select
+          className="form-select filter-item-status"
+          value={statusFilter}
+          onChange={(e) => onStatusFilterChange(e.target.value)}
+          title="Yayın Durumuna Göre Filtrele"
+        >
+          <option value="all">📋 Tüm Durumlar</option>
+          <option value="published">✅ Yayında</option>
+          <option value="unpublished">⏸️ Yayından Kaldırıldı</option>
+          <option value="draft">📝 Taslak</option>
+          <option value="trash">🗑️ Çöp Kutusu</option>
+        </select>
+
+        {/* Yeni Blog Yazısı Butonu */}
         <button
           type="button"
           onClick={onNewPost}
-          className="btn btn-primary"
-          style={{
-            height: '28px',
-            padding: '0 12px',
-            fontSize: '0.85rem',
-            fontWeight: 500,
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '5px',
-            borderRadius: '6px',
-            cursor: 'pointer',
-            whiteSpace: 'nowrap',
-          }}
+          className="btn btn-primary filter-item-new-btn"
           title="Yeni Blog Yazısı Oluştur"
         >
           <Plus size={14} />

@@ -17,6 +17,8 @@
 
   --border-subtle: hsl(217, 33%, 17%);
   --border-focus: hsl(239, 84%, 67%);
+  --border-card: rgba(255, 255, 255, 0.14);
+  --border-card-hover: rgba(99, 102, 241, 0.45);
 
   --accent-primary: hsl(239, 84%, 67%);
   --accent-primary-hover: hsl(243, 75%, 59%);
@@ -99,6 +101,8 @@ html[dir="rtl"] {
 
   --border-subtle: hsl(214, 32%, 91%);
   --border-focus: hsl(239, 84%, 67%);
+  --border-card: rgba(15, 23, 42, 0.14);
+  --border-card-hover: rgba(99, 102, 241, 0.5);
 
   --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.08);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
