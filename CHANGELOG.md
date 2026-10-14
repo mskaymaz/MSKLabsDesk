@@ -1,6 +1,20 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [14.10.2026 - 14:50] - Blog Yazıları D1 Tohumlama, Dinamik API & Responsive Video Oynatıcı
+- `MSKLabsDesk/backend/migrations/0006_seed_blog_posts.sql` & `webMSKLabs/migrations/0015_seed_blog_posts.sql`:
+  - 5 adet zengin makale D1 veritabanı `blog_posts` tablosuna 3 dilli metinleriyle aktarıldı.
+- `MSKLabsDesk/backend/src/routes/cmsPublic.ts`:
+  - `/api/v1/posts` uç noktası SELECT sorgusu çok dilli (`title_tr/en/ar`, `summary_tr/en/ar`, `content_tr/en/ar`) alanları içerecek biçimde genişletildi.
+- `webMSKLabs/blog/blog.html`:
+  - `#readerView` içerisine 16:9 oranlı responsive `#postVideoWrapper` ve iframe oynatıcı entegre edildi.
+- `webMSKLabs/blog/blog.js`:
+  - `loadRemotePosts()` fonksiyonu eklenerek `/api/v1/posts` ile canlı veritabanı senkronizasyonu sağlandı.
+  - `getYouTubeEmbedUrl()` ile YouTube videolarını gizlilik odaklı (youtube-nocookie) embed formatına çeviren parser eklendi.
+  - `openPost()` ve `showList()` fonksiyonlarına video iframe yönetimi ve temizliği entegre edildi.
+  - VLOG kanalı ve slug yönlendirme uyumlulukları tamamlandı.
+- Yalnızca `DevAdmin` dalında çalışıldı, `main` korundu.
+
 ## [14.10.2026 - 13:25] - Mobil Sandviç (Drawer) Navigasyon Menüsü ve Tüm Modüllere Erişim
 - `frontend/src/components/layout/MobileDrawer.tsx`:
   - Masaüstü kenar çubuğundaki (`Sidebar.tsx`) 10 modülün tamamını içeren tam ekran animasyonlu mobil sandviç çekmece bileşeni oluşturuldu.

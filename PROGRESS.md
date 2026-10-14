@@ -1,6 +1,24 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 🟢 Son Güncelleme [14.10.2026 - 14:50] — BLOG YAZILARI D1 VERİTABANI TOHUMLAMA (SEED), DİNAMİK API & RESPONSIVE VİDEO OYNATICI ENTEGRASYONU [*]
+* **Yapılan İşlem:**
+  1. **D1 Veritabanı Tohumlama (`0006_seed_blog_posts.sql` & `0015_seed_blog_posts.sql`):**
+     - `blog.js` içerisindeki mevcut 5 makale (BİZCE Manifesto, ANILTILAR Manifesto, GÜNCEL Manifesto, Neden Ücretsiz?, Konyaspor-Filistin Maçı Analizi) 3 dilli (TR, EN, AR) metinleri, başlıkları, özetleri ve görselleriyle D1 `blog_posts` tablosuna aktarıldı.
+  2. **Public API Genişletmesi (`cmsPublic.ts`):**
+     - `GET /api/v1/posts` uç noktası SELECT sorgusuna `title_tr/en/ar`, `summary_tr/en/ar`, `content_tr/en/ar` kolonları eklendi. Böylece istemci ek ağ isteği yapmadan yerel dil değiştirici ile 3 dili de anında görüntüleyebilir hale getirildi.
+  3. **Web Blog Dinamik Entegrasyon & Resilient Mimari (`blog.js`):**
+     - `loadRemotePosts()` fonksiyonu geliştirildi; `SITE_CONFIG.apiUrl` üzerinden `/v1/posts` uç noktasına bağlandı.
+     - Kanal slug uyumluluğu (`aniltilar` -> `anilts`) ve tarih/ID bazlı ters kronolojik sıralama sağlandı.
+     - Çevrimdışı/API hatası durumunda statik veriye geri dönen hata toleransı korundu.
+  4. **Responsive YouTube/Video Oynatıcı (`blog.html` & `blog.js`):**
+     - `#readerView` içerisine 16:9 oranında duyarlı `#postVideoWrapper` ve iframe yerleştirildi.
+     - `getYouTubeEmbedUrl()` ile standart, kısa ve embed linklerini `youtube-nocookie.com` formatına çeviren ayrıştırıcı yazıldı; yazı açıldığında otomatik video yükleme, yazıdan çıkıldığında bellek temizleme sağlandı.
+  5. **Doğrulama & E2E Test:**
+     - `GET /api/v1/posts`, kanal bazlı filtreleme (`?channel=bizce`, `guncel`, `aniltilar`), slug ile detay (`/api/v1/posts/:slug`) ve yönetici CRUD testleri başarıyla doğrulandı.
+     - Hem MSKLabsDesk hem de webMSKLabs build kontrolleri 0 hata ile tamamlandı.
+* **Durum:** `DevAdmin` dalında çalışıldı, `main` korundu.
+
 ## 🟢 Son Güncelleme [14.10.2026 - 13:25] — MOBİL SANDVİÇ (DRAWER) NAVİGASYON MENÜSÜ ENTEGRASYONU [*]
 * **Yapılan İşlem:**
   1. **Mobil Sandviç Çekmece Bileşeni (`MobileDrawer.tsx`):**
