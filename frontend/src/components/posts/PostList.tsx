@@ -184,45 +184,51 @@ export const PostList: React.FC<PostListProps> = ({ posts, channels, loading, on
                   </span>
                 )}
 
-                {/* Diller */}
+                {/* Diller (TR, EN, AR) */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginLeft: '4px' }}>
                   <span
                     style={{
-                      fontSize: '0.68rem',
+                      fontSize: '0.7rem',
                       fontWeight: 700,
-                      color: '#10B981',
-                      background: 'rgba(16, 185, 129, 0.1)',
-                      padding: '2px 5px',
+                      color: 'var(--accent-emerald)',
+                      background: 'rgba(16, 185, 129, 0.12)',
+                      border: '1px solid rgba(16, 185, 129, 0.25)',
+                      padding: '2px 6px',
                       borderRadius: '4px',
                     }}
+                    title="Türkçe: Yayında / Mevcut"
                   >
-                    🇹🇷 TR
+                    TR
                   </span>
                   <span
                     style={{
-                      fontSize: '0.68rem',
+                      fontSize: '0.7rem',
                       fontWeight: 700,
-                      color: post.title_en ? '#10B981' : 'var(--text-muted)',
-                      background: post.title_en ? 'rgba(16, 185, 129, 0.1)' : 'rgba(255, 255, 255, 0.04)',
-                      padding: '2px 5px',
+                      color: post.title_en ? 'var(--accent-emerald)' : 'var(--text-muted)',
+                      background: post.title_en ? 'rgba(16, 185, 129, 0.12)' : 'rgba(255, 255, 255, 0.04)',
+                      border: `1px solid ${post.title_en ? 'rgba(16, 185, 129, 0.25)' : 'var(--border-subtle)'}`,
+                      padding: '2px 6px',
                       borderRadius: '4px',
                       opacity: post.title_en ? 1 : 0.6,
                     }}
+                    title={post.title_en ? 'İngilizce: Çeviri Mevcut' : 'İngilizce: Henüz Çevrilmedi (Eksik)'}
                   >
-                    🇬🇧 EN
+                    EN
                   </span>
                   <span
                     style={{
-                      fontSize: '0.68rem',
+                      fontSize: '0.7rem',
                       fontWeight: 700,
-                      color: post.title_ar ? '#10B981' : 'var(--text-muted)',
-                      background: post.title_ar ? 'rgba(16, 185, 129, 0.1)' : 'rgba(255, 255, 255, 0.04)',
-                      padding: '2px 5px',
+                      color: post.title_ar ? 'var(--accent-emerald)' : 'var(--text-muted)',
+                      background: post.title_ar ? 'rgba(16, 185, 129, 0.12)' : 'rgba(255, 255, 255, 0.04)',
+                      border: `1px solid ${post.title_ar ? 'rgba(16, 185, 129, 0.25)' : 'var(--border-subtle)'}`,
+                      padding: '2px 6px',
                       borderRadius: '4px',
                       opacity: post.title_ar ? 1 : 0.6,
                     }}
+                    title={post.title_ar ? 'Arapça: Çeviri Mevcut' : 'Arapça: Henüz Çevrilmedi (Eksik)'}
                   >
-                    🇸🇦 AR
+                    AR
                   </span>
                 </div>
               </div>
@@ -266,34 +272,45 @@ export const PostList: React.FC<PostListProps> = ({ posts, channels, loading, on
               </div>
             </div>
 
-            {/* Orta Satır: Blog Başlığı (Belirgin & Okunabilir) */}
-            <div>
+            {/* Orta Satır: Blog Başlığı ve Bağlantı Yolu (Aynı Hizada) */}
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'baseline',
+                justifyContent: 'space-between',
+                flexWrap: 'wrap',
+                gap: '8px 14px',
+              }}
+            >
               <h2
                 style={{
                   fontSize: '1.15rem',
                   fontWeight: 800,
                   color: 'var(--text-primary)',
-                  lineHeight: 1.45,
-                  margin: '0 0 6px 0',
+                  lineHeight: 1.4,
+                  margin: 0,
+                  flex: '1 1 auto',
                 }}
               >
                 {post.title_tr || '(Başlıksız Makale)'}
               </h2>
 
-              {/* Web Bağlantı Yolu */}
-              <div
+              {/* Web Bağlantı Yolu (Başlıkla Aynı Hizada ve Uyumlu Renkte) */}
+              <span
                 style={{
+                  fontSize: '0.78rem',
+                  fontWeight: 600,
+                  color: 'var(--text-muted)',
                   display: 'inline-flex',
                   alignItems: 'center',
-                  gap: '5px',
-                  fontSize: '0.78rem',
-                  color: 'var(--accent-cyan)',
-                  opacity: 0.9,
+                  gap: '4px',
+                  whiteSpace: 'nowrap',
                 }}
+                title={`Web Bağlantısı: /blog/${post.slug}`}
               >
-                <ExternalLink size={12} />
-                <span>/blog/{post.slug}</span>
-              </div>
+                <ExternalLink size={12} style={{ opacity: 0.7 }} />
+                /blog/{post.slug}
+              </span>
             </div>
 
             {/* Özet Metni (Varsa) */}

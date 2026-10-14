@@ -1,6 +1,16 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 🟢 Son Güncelleme [14.10.2026 - 15:10] — BLOG KARTLARINDA İNLINE BAĞLANTI DÜZENİ VE DİL ROZETLERİ (TR, EN, AR) SADELEŞTİRMESİ [*]
+* **Yapılan İşlem:**
+  1. **Başlık ve Web Bağlantısı Hizalaması (`PostList.tsx`):**
+     - Blog başlığının altında ayrı satırda duran `/blog/{post.slug}` bağlantısı, başlığın sağına aynı hizaya taşındı. `var(--text-muted)` rengi ve `ExternalLink` ikonuyla başlıkla uyumlu, sade bir biçimde yerleştirildi.
+  2. **Dil Rozetleri Sadeleştirmesi (`PostList.tsx`):**
+     - Bayrak emojilerinin işletim sistemi ve tarayıcı tarafından harf olarak yinelenmesi (`TRTR`, `GBEN`, `SAAR`) kaldırıldı; yerine standart, sade `TR`, `EN`, `AR` etiketleri uygulandı.
+     - Çevirisi mevcut ve yayında olan diller yeşil (`var(--accent-emerald)`), henüz çevrilmemiş olanlar ise gri/soluk renkte gösterilerek açıklayıcı tooltip'ler eklendi.
+* **Sonuçlar:** Vite ve TypeScript build (`npm run build`) 0 hata ile 581 ms'de tamamlandı. Dosya sınırlarına (`PostList.tsx`: 356 satır <= 450) tam uyuldu.
+* **Durum:** `DevAdmin` dalında çalışıldı, `main` korundu.
+
 ## 🟢 Son Güncelleme [14.10.2026 - 15:05] — BLOG YAZILARI ADMİN ARAYÜZÜ KONTRAST, KANAL FİLTRESİ & KART TASARIMI GELİŞTİRMELERİ [*]
 * **Yapılan İşlem:**
   1. **Başlık ve Metin Kontrastı Düzeltmesi (`PostFilterBar.tsx`):**

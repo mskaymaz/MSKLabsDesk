@@ -1,6 +1,13 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [14.10.2026 - 15:10] - Blog Kartlarında İnline Bağlantı Düzeni ve TR, EN, AR Dil Rozetleri
+- `frontend/src/components/posts/PostList.tsx`:
+  - `/blog/{post.slug}` bağlantı yolu başlığın altından alınıp, başlığın sağına aynı hizaya (inline/flex baseline) taşındı; `var(--text-muted)` rengi ile sadeleştirildi.
+  - Bayrak emojilerinin tarayıcıda yinelenmesi (`TRTR`, `GBEN`, `SAAR`) temizlendi; doğrudan `TR`, `EN`, `AR` metin rozetlerine dönüştürüldü.
+  - Yayında olan diller yeşil, eksik/çevrilmemiş olan diller soluk gri renk ve açıklayıcı tooltip ile donatıldı.
+- Yalnızca `DevAdmin` dalında çalışıldı, `main` korundu.
+
 ## [14.10.2026 - 15:05] - Blog Yazıları Admin Arayüzü Kontrast, Kanal Filtresi & Kart Tasarımı
 - `frontend/src/components/posts/PostFilterBar.tsx`:
   - Sayfa başlığı `#FFF` yerine `var(--text-primary)` yapılarak açık ve koyu temalarda tam okunabilirlik sağlandı.
