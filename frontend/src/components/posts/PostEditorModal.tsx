@@ -22,7 +22,7 @@ export interface PostFormData {
   cover_image: string;
   video_url?: string;
   meta_keywords: string;
-  status: 'draft' | 'published';
+  status: 'draft' | 'published' | 'unpublished' | 'trash';
   blocks?: LayoutBlock[];
 }
 
@@ -212,10 +212,12 @@ export const PostEditorModal: React.FC<PostEditorModalProps> = ({
                 <select
                   value={formData.status}
                   onChange={(e) => setFormData((prev) => ({ ...prev, status: e.target.value as any }))}
-                  style={{ width: '100%', padding: '8px', background: '#1A2234', border: '1px solid var(--border-subtle)', borderRadius: '6px', color: '#FFF' }}
+                  className="form-select"
+                  style={{ width: '100%', padding: '8px', borderRadius: '6px' }}
                 >
-                  <option value="draft">Taslak (Draft)</option>
-                  <option value="published">Yayında (Published)</option>
+                  <option value="draft">📝 Taslak (Draft)</option>
+                  <option value="published">✅ Yayında (Published)</option>
+                  <option value="unpublished">⏸️ Yayından Kaldırıldı (Unpublished)</option>
                 </select>
               </div>
             </div>

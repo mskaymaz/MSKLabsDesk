@@ -105,7 +105,7 @@ export interface BlogPost {
   video_url?: string;
   meta_keywords?: string;
   author_name?: string;
-  status: 'draft' | 'scheduled' | 'published' | 'archived';
+  status: 'draft' | 'scheduled' | 'published' | 'archived' | 'unpublished' | 'trash';
   views_count?: number;
   published_at?: string;
   created_at?: string;

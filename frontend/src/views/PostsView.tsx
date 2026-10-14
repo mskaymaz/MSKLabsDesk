@@ -111,10 +111,47 @@ export const PostsView: React.FC = () => {
     }
   };
 
-  const handleDeletePost = async (id: string) => {
-    if (!confirm(t('common.confirm'))) return;
+  const handlePublishPost = async (post: BlogPost) => {
     try {
-      await api.deletePost(id);
+      await api.updatePostStatus(post.id, 'published');
+      loadData();
+    } catch (err: any) {
+      alert(err.message || t('common.error'));
+    }
+  };
+
+  const handleUnpublishPost = async (post: BlogPost) => {
+    try {
+      await api.updatePostStatus(post.id, 'unpublished');
+      loadData();
+    } catch (err: any) {
+      alert(err.message || t('common.error'));
+    }
+  };
+
+  const handleMoveToTrash = async (id: string) => {
+    if (!confirm('Makale çöp kutusuna taşınacaktır. Onaylıyor musunuz?')) return;
+    try {
+      await api.deletePost(id, false);
+      loadData();
+    } catch (err: any) {
+      alert(err.message || t('common.error'));
+    }
+  };
+
+  const handleRestoreFromTrash = async (id: string) => {
+    try {
+      await api.updatePostStatus(id, 'unpublished');
+      loadData();
+    } catch (err: any) {
+      alert(err.message || t('common.error'));
+    }
+  };
+
+  const handlePermanentDelete = async (id: string) => {
+    if (!confirm('DİKKAT: Bu makale veritabanından KALICI OLARAK silinecektir. Bu işlem geri alınamaz!\n\nKalıcı olarak silmek istediğinize kesinlikle emin misiniz?')) return;
+    try {
+      await api.deletePost(id, true);
       loadData();
     } catch (err: any) {
       alert(err.message || t('common.error'));
@@ -160,7 +197,7 @@ export const PostsView: React.FC = () => {
       cover_image: post.cover_image || '',
       video_url: post.video_url || '',
       meta_keywords: post.meta_keywords || '',
-      status: post.status === 'published' ? 'published' : 'draft',
+      status: (post.status === 'published' || post.status === 'unpublished' || post.status === 'trash') ? post.status : 'draft',
     });
     setShowEditor(true);
   };
@@ -174,7 +211,13 @@ export const PostsView: React.FC = () => {
       (post.title_ar && post.title_ar.toLowerCase().includes(q)) ||
       post.slug.toLowerCase().includes(q);
 
-    const matchesStatus = statusFilter === 'all' || post.status === statusFilter;
+    const matchesStatus =
+      statusFilter === 'all'
+        ? post.status !== 'trash'
+        : statusFilter === 'unpublished'
+        ? post.status === 'unpublished' || post.status === 'archived'
+        : post.status === statusFilter;
+
     const matchesChannel =
       channelFilter === 'all' ||
       post.channel_id === channelFilter ||
@@ -203,7 +246,11 @@ export const PostsView: React.FC = () => {
         channels={channels}
         loading={loading}
         onEdit={handleOpenEditEditor}
-        onDelete={handleDeletePost}
+        onPublish={handlePublishPost}
+        onUnpublish={handleUnpublishPost}
+        onMoveToTrash={handleMoveToTrash}
+        onRestore={handleRestoreFromTrash}
+        onPermanentDelete={handlePermanentDelete}
       />
 
       <PostEditorModal

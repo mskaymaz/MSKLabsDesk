@@ -1,6 +1,26 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [14.10.2026 - 16:05] - Blog Yazıları 3 Aşamalı Yaşam Döngüsü ve Güvenli Silme Mimarisi
+- `backend/src/routes/cmsPosts.ts`:
+  - `DELETE` uç noktasına koruma eklendi: Yayındaki makale doğrudan silinemez (400 hatası).
+  - Taslak veya yayından kalkmış makaleler silindiğinde `status = 'trash'` olarak işaretlenir (Soft Delete).
+  - Kalıcı silme (`DELETE`) yalnızca çöp kutusundaki bir makale için geçerlidir.
+  - Tekil durum (`status`) güncellemeleri için kısmi `PUT` desteği getirildi.
+- `frontend/src/components/posts/PostCardActions.tsx`:
+  - Makale durumuna göre dinamik buton mantığı kuruldu:
+    - Yayında: Yalnızca `Yayından Kaldır` ve `Düzenle` (Sil butonu yok).
+    - Yayından Kaldırıldı / Taslak: `Yayına Al`, `Düzenle`, `Çöpe Gönder`.
+    - Çöp Kutusu: `Geri Kurtar`, `Kalıcı Sil`.
+- `frontend/src/components/posts/PostCard.tsx` & `PostList.tsx`:
+  - Kart ve aksiyon bileşenleri modüler hale getirildi (dosya satır sayısı <= 400).
+  - Durum rozeti (`getStatusBadge`) yeni yaşam döngüsü durumlarına uyarlandı.
+- `frontend/src/components/posts/PostFilterBar.tsx` & `PostsView.tsx`:
+  - Durum filtresine `⏸️ Yayından Kaldırıldı` ve `🗑️ Çöp Kutusu` eklendi.
+- `frontend/src/services/api.ts` & `frontend/src/types/index.ts`:
+  - `updatePostStatus` fonksiyonu ve `BlogPost.status` tipleri güncellendi.
+- Yalnızca `DevAdmin` dalında çalışıldı, `main` korundu.
+
 ## [14.10.2026 - 15:40] - Blog Yazıları Sabit (Sticky) Üst Panel ve Minimize Kart Mimarisi
 - `frontend/src/components/posts/PostFilterBar.tsx`:
   - `CommentsView` ve `TicketsView` modüllerine paralel olarak `position: 'sticky'`, `top: '40px'` sabit üst bar oluşturuldu.

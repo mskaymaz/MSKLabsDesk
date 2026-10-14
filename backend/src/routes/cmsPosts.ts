@@ -98,10 +98,27 @@ export async function handleCmsPosts(request: Request, env: any): Promise<Respon
     });
   }
 
-  // 4. PUT /api/admin/posts/:id — Blog Yazısını Güncelle
+  // 4. PUT /api/admin/posts/:id — Blog Yazısını Güncelle veya Durum Değiştir
   if (method === 'PUT') {
     const postId = url.pathname.split('/').pop();
     const body = await request.json() as any;
+
+    // Sadece status güncellemesi gönderildiyse (kısmi güncelleme / yaşam döngüsü)
+    if (body.status && Object.keys(body).length <= 2) {
+      const { status } = body;
+      const publishedAt = status === 'published' ? new Date().toISOString() : null;
+      await env.DB.prepare(
+        `UPDATE blog_posts SET
+          status = ?,
+          published_at = CASE WHEN ? = 'published' THEN COALESCE(published_at, ?) ELSE published_at END,
+          updated_at = CURRENT_TIMESTAMP
+         WHERE id = ?`
+      ).bind(status, status, publishedAt, postId).run();
+
+      return new Response(JSON.stringify({ success: true, status }), {
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
 
     const {
       channel_id, slug,
@@ -136,12 +153,47 @@ export async function handleCmsPosts(request: Request, env: any): Promise<Respon
     });
   }
 
-  // 5. DELETE /api/admin/posts/:id — Blog Yazısını Sil
+  // 5. DELETE /api/admin/posts/:id — 3 Aşamalı Yaşam Döngüsü Koruması
   if (method === 'DELETE') {
     const postId = url.pathname.split('/').pop();
-    await env.DB.prepare(`DELETE FROM blog_posts WHERE id = ?`).bind(postId).run();
+    const isPermanent = url.searchParams.get('permanent') === 'true';
 
-    return new Response(JSON.stringify({ success: true }), {
+    // Önce makalenin mevcut durumunu sorgula
+    const currentPost = await env.DB.prepare(
+      `SELECT id, status, title_tr FROM blog_posts WHERE id = ?`
+    ).bind(postId).first() as any;
+
+    if (!currentPost) {
+      return new Response(JSON.stringify({ error: 'Makale bulunamadı' }), {
+        status: 404,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+
+    // Kural 1: Yayındaki makale ASLA doğrudan silinemez
+    if (currentPost.status === 'published') {
+      return new Response(JSON.stringify({
+        error: 'Yayındaki bir makale doğrudan silinemez! Güvenlik için önce makaleyi yayından kaldırmalısınız.'
+      }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+
+    // Kural 2: Zaten çöp kutusunda ise VEYA permanent=true ise kalıcı sil (Hard Delete)
+    if (currentPost.status === 'trash' || isPermanent) {
+      await env.DB.prepare(`DELETE FROM blog_posts WHERE id = ?`).bind(postId).run();
+      return new Response(JSON.stringify({ success: true, action: 'permanent_deleted', message: 'Makale kalıcı olarak silindi.' }), {
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+
+    // Kural 3: Yayından kalkmış veya taslak makaleyi çöp kutusuna taşı (Soft Delete)
+    await env.DB.prepare(
+      `UPDATE blog_posts SET status = 'trash', updated_at = CURRENT_TIMESTAMP WHERE id = ?`
+    ).bind(postId).run();
+
+    return new Response(JSON.stringify({ success: true, action: 'moved_to_trash', message: 'Makale çöp kutusuna taşındı.' }), {
       headers: { 'Content-Type': 'application/json' },
     });
   }

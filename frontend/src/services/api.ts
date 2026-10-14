@@ -201,12 +201,29 @@ export const api = {
     return res.json();
   },
 
-  async deletePost(id: string) {
+  async updatePostStatus(id: string, status: 'published' | 'draft' | 'unpublished' | 'trash') {
     const res = await fetch(`${API_BASE}/admin/posts/${id}`, {
+      method: 'PUT',
+      headers: getHeaders(),
+      body: JSON.stringify({ status }),
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.error || 'Makale durumu güncellenemedi.');
+    }
+    return res.json();
+  },
+
+  async deletePost(id: string, permanent: boolean = false) {
+    const query = permanent ? '?permanent=true' : '';
+    const res = await fetch(`${API_BASE}/admin/posts/${id}${query}`, {
       method: 'DELETE',
       headers: getHeaders(),
     });
-    if (!res.ok) throw new Error('Yazı silinemedi.');
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.error || 'Yazı silinemedi.');
+    }
     return res.json();
   },
 

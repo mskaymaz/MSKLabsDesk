@@ -1,6 +1,23 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 🟢 Son Güncelleme [14.10.2026 - 16:05] — BLOG YAZILARI 3 AŞAMALI YAŞAM DÖNGÜSÜ (STATE MACHINE) & GÜVENLİ SİLME MİMARİSİ [*]
+* **Yapılan İşlem:**
+  1. **Backend Koruma & Yaşam Döngüsü (`cmsPosts.ts`):**
+     - Yayındaki (`published`) bir makale için `DELETE` isteği geldiğinde API seviyesinde doğrudan `400 Bad Request` dönülerek ("Yayındaki makale doğrudan silinemez! Önce yayından kaldırmalısınız") kazara silme kesin olarak engellendi.
+     - Yayından kalkmış (`unpublished`) veya taslak (`draft`) makaleler silinmek istendiğinde veritabanından silinmeyip `status = 'trash'` ile çöp kutusuna taşınması (Soft Delete) sağlandı.
+     - Kalıcı yok etme (Hard Delete) yalnızca çöp kutusundaki bir makale için ve `permanent=true` parametresiyle sınırlandı.
+     - Kısmi durum güncellemeleri için tek alanlı (`status`) `PUT` desteği sağlandı.
+  2. **Arayüzde Durum Bazlı Dinamik Butonlar (`PostCardActions.tsx` & `PostCard.tsx`):**
+     - **Yayındaki Yazılar:** Kırmızı "Sil" butonu tamamen kaldırıldı; yalnızca `⏸️ Yayından Kaldır` ve `✏️ Düzenle` butonları bırakıldı.
+     - **Yayından Kalkanlar / Taslaklar:** `✅ Yayına Al`, `✏️ Düzenle` ve `🗑️ Çöpe Gönder` butonları aktif kılındı.
+     - **Çöp Kutusu:** `🔄 Geri Kurtar` ve çift onaylı `⚠️ Kalıcı Sil` butonları yerleştirildi.
+  3. **Filtre & Modüler Kod Mimarisi (`PostFilterBar.tsx`, `PostList.tsx`, `PostsView.tsx`):**
+     - Durum filtresine `⏸️ Yayından Kaldırıldı` ve `🗑️ Çöp Kutusu` seçenekleri eklendi; varsayılan "Tüm Durumlar" filtresinde çöp kutusu gizlenerek liste temizliği sağlandı.
+     - `PostList.tsx` içerisinden `PostCard.tsx` ve `PostCardActions.tsx` modüler bileşenleri ayrılarak her dosya <= 400 satır kuralına tam uyumlu hale getirildi.
+* **Sonuçlar:** Vite ve TypeScript build (`npm run build`) 0 hata ile 580 ms'de tamamlandı. Dosya sınırlarına uyuldu (`PostCard.tsx`: 399 satır, `PostCardActions.tsx`: 178 satır, `PostList.tsx`: 69 satır).
+* **Durum:** `DevAdmin` dalında çalışıldı, `main` korundu.
+
 ## 🟢 Son Güncelleme [14.10.2026 - 15:40] — BLOG YAZILARI SABİT (STICKY) ÜST PANEL, TEK SATIR FİLTRE VE MİNİMİZE KART MİMARİSİ [*]
 * **Yapılan İşlem:**
   1. **Sabit (Sticky) ve Ultra-Kibar Üst Panel (`PostFilterBar.tsx` & `PostsView.tsx`):**

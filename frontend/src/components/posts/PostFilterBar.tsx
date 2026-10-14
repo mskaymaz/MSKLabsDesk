@@ -182,7 +182,9 @@ export const PostFilterBar: React.FC<PostFilterBarProps> = ({
           >
             <option value="all">📋 Tüm Durumlar</option>
             <option value="published">✅ Yayında</option>
+            <option value="unpublished">⏸️ Yayından Kaldırıldı</option>
             <option value="draft">📝 Taslak</option>
+            <option value="trash">🗑️ Çöp Kutusu</option>
           </select>
         </div>
 
