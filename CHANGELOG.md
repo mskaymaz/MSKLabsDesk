@@ -1,6 +1,18 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [14.10.2026 - 15:40] - Blog Yazıları Sabit (Sticky) Üst Panel ve Minimize Kart Mimarisi
+- `frontend/src/components/posts/PostFilterBar.tsx`:
+  - `CommentsView` ve `TicketsView` modüllerine paralel olarak `position: 'sticky'`, `top: '40px'` sabit üst bar oluşturuldu.
+  - 1. Satır: Başlık, sayaç rozeti ve hemen sağında sol menü tipografisiyle (`0.88rem`, `500`) açıklama metni yerleştirildi.
+  - 2. Satır: Arama kutusu, Blog Türleri ve Durum açılır listeleri tek yatay sırada kibar boyuta (`height: 28px`) çekildi; en sağa "+ Yeni Blog Yazısı" butonu yerleştirildi.
+- `frontend/src/components/posts/PostList.tsx`:
+  - Kart başlıkları sol menünün kalın font karakterine (`0.88rem`, `700`), özet metni sol menü font karakterine (`0.88rem`, `500`) uyarlandı.
+  - Kart padding'leri `8px 12px`, kart içi boşluklar `4px`, rozetler ve butonlar kibar minimal ölçülere indirgendi.
+- `frontend/src/views/PostsView.tsx`:
+  - Ana kapsayıcı boşluğu `6px` seviyesine çekilerek `animate-fade-in` ile akıcı görünüm sağlandı.
+- Yalnızca `DevAdmin` dalında çalışıldı, `main` korundu.
+
 ## [14.10.2026 - 15:15] - Blog Kartlarında Tipografi İnceliği ve Metaverilerin Üst Bara Taşınması
 - `frontend/src/components/posts/PostList.tsx`:
   - Kart başlık tipografisi `1.15rem` ve `800` ağırlıktan `1.02rem` ve `650` yarı-kalın kibar stile çekildi.

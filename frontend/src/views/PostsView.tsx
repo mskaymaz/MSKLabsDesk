@@ -184,7 +184,7 @@ export const PostsView: React.FC = () => {
   });
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+    <div className="animate-fade-in" style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
       <PostFilterBar
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}

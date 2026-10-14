@@ -83,7 +83,7 @@ export const PostList: React.FC<PostListProps> = ({ posts, channels, loading, on
   }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
       {posts.map((post, index) => {
         const chInfo = getChannelInfo(post, channels);
         const isPublished = post.status === 'published';
@@ -93,13 +93,13 @@ export const PostList: React.FC<PostListProps> = ({ posts, channels, loading, on
             key={post.id}
             className="glass-card glass-card-hover"
             style={{
-              padding: '18px 22px',
-              borderRadius: 'var(--radius-lg)',
+              padding: '8px 12px',
+              borderRadius: 'var(--radius-md)',
               border: '1px solid var(--border-color)',
               background: 'var(--bg-card)',
               display: 'flex',
               flexDirection: 'column',
-              gap: '12px',
+              gap: '4px',
             }}
           >
             {/* Üst Satır: Sıra No + Kanal + Durum + Video + Diller & İşlem Butonları */}
@@ -109,20 +109,20 @@ export const PostList: React.FC<PostListProps> = ({ posts, channels, loading, on
                 justifyContent: 'space-between',
                 alignItems: 'center',
                 flexWrap: 'wrap',
-                gap: '8px',
+                gap: '6px',
               }}
             >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '5px', flexWrap: 'wrap' }}>
                 {/* Kibar ve İnce Sıra Numarası Rozeti */}
                 <span
                   style={{
-                    fontSize: '0.74rem',
+                    fontSize: '0.70rem',
                     fontWeight: 700,
                     color: 'var(--text-muted)',
                     background: 'rgba(255, 255, 255, 0.04)',
                     border: '1px solid var(--border-color)',
-                    padding: '2px 8px',
-                    borderRadius: '6px',
+                    padding: '1px 5px',
+                    borderRadius: '4px',
                   }}
                   title={`Blog Sıra Numarası: ${index + 1}`}
                 >
@@ -132,16 +132,16 @@ export const PostList: React.FC<PostListProps> = ({ posts, channels, loading, on
                 {/* Kanal Rozeti (Bizce, Anıltılar, Güncel) */}
                 <span
                   style={{
-                    padding: '3px 10px',
-                    borderRadius: '8px',
-                    fontSize: '0.75rem',
+                    padding: '1px 6px',
+                    borderRadius: '4px',
+                    fontSize: '0.70rem',
                     fontWeight: 700,
                     background: chInfo.bg,
                     color: chInfo.color,
                     border: `1px solid ${chInfo.border}`,
                     display: 'inline-flex',
                     alignItems: 'center',
-                    gap: '4px',
+                    gap: '3px',
                   }}
                 >
                   <span>{chInfo.icon}</span>
@@ -151,9 +151,9 @@ export const PostList: React.FC<PostListProps> = ({ posts, channels, loading, on
                 {/* Yayın Durumu Rozeti */}
                 <span
                   style={{
-                    padding: '3px 8px',
-                    borderRadius: '6px',
-                    fontSize: '0.72rem',
+                    padding: '1px 5px',
+                    borderRadius: '4px',
+                    fontSize: '0.68rem',
                     fontWeight: 700,
                     background: isPublished ? 'rgba(16, 185, 129, 0.15)' : 'rgba(245, 158, 11, 0.15)',
                     color: isPublished ? 'var(--accent-emerald)' : 'var(--accent-amber)',
@@ -170,31 +170,31 @@ export const PostList: React.FC<PostListProps> = ({ posts, channels, loading, on
                     style={{
                       display: 'inline-flex',
                       alignItems: 'center',
-                      gap: '4px',
-                      padding: '3px 8px',
-                      borderRadius: '6px',
-                      fontSize: '0.72rem',
+                      gap: '3px',
+                      padding: '1px 5px',
+                      borderRadius: '4px',
+                      fontSize: '0.68rem',
                       fontWeight: 700,
                       background: 'rgba(239, 68, 68, 0.15)',
                       color: 'var(--accent-rose)',
                       border: '1px solid rgba(239, 68, 68, 0.3)',
                     }}
                   >
-                    <Video size={12} /> Video
+                    <Video size={11} /> Video
                   </span>
                 )}
 
                 {/* Diller (TR, EN, AR) */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginLeft: '4px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '3px', marginLeft: '2px' }}>
                   <span
                     style={{
-                      fontSize: '0.7rem',
+                      fontSize: '0.68rem',
                       fontWeight: 700,
                       color: 'var(--accent-emerald)',
                       background: 'rgba(16, 185, 129, 0.12)',
                       border: '1px solid rgba(16, 185, 129, 0.25)',
-                      padding: '2px 6px',
-                      borderRadius: '4px',
+                      padding: '1px 4px',
+                      borderRadius: '3px',
                     }}
                     title="Türkçe: Yayında / Mevcut"
                   >
@@ -202,13 +202,13 @@ export const PostList: React.FC<PostListProps> = ({ posts, channels, loading, on
                   </span>
                   <span
                     style={{
-                      fontSize: '0.7rem',
+                      fontSize: '0.68rem',
                       fontWeight: 700,
                       color: post.title_en ? 'var(--accent-emerald)' : 'var(--text-muted)',
                       background: post.title_en ? 'rgba(16, 185, 129, 0.12)' : 'rgba(255, 255, 255, 0.04)',
                       border: `1px solid ${post.title_en ? 'rgba(16, 185, 129, 0.25)' : 'var(--border-subtle)'}`,
-                      padding: '2px 6px',
-                      borderRadius: '4px',
+                      padding: '1px 4px',
+                      borderRadius: '3px',
                       opacity: post.title_en ? 1 : 0.6,
                     }}
                     title={post.title_en ? 'İngilizce: Çeviri Mevcut' : 'İngilizce: Henüz Çevrilmedi (Eksik)'}
@@ -217,13 +217,13 @@ export const PostList: React.FC<PostListProps> = ({ posts, channels, loading, on
                   </span>
                   <span
                     style={{
-                      fontSize: '0.7rem',
+                      fontSize: '0.68rem',
                       fontWeight: 700,
                       color: post.title_ar ? 'var(--accent-emerald)' : 'var(--text-muted)',
                       background: post.title_ar ? 'rgba(16, 185, 129, 0.12)' : 'rgba(255, 255, 255, 0.04)',
                       border: `1px solid ${post.title_ar ? 'rgba(16, 185, 129, 0.25)' : 'var(--border-subtle)'}`,
-                      padding: '2px 6px',
-                      borderRadius: '4px',
+                      padding: '1px 4px',
+                      borderRadius: '3px',
                       opacity: post.title_ar ? 1 : 0.6,
                     }}
                     title={post.title_ar ? 'Arapça: Çeviri Mevcut' : 'Arapça: Henüz Çevrilmedi (Eksik)'}
@@ -236,13 +236,13 @@ export const PostList: React.FC<PostListProps> = ({ posts, channels, loading, on
                 {post.cover_image && (
                   <span
                     style={{
-                      fontSize: '0.7rem',
+                      fontSize: '0.68rem',
                       fontWeight: 600,
                       color: 'var(--text-muted)',
                       background: 'rgba(255, 255, 255, 0.04)',
                       border: '1px solid var(--border-subtle)',
-                      padding: '2px 6px',
-                      borderRadius: '4px',
+                      padding: '1px 4px',
+                      borderRadius: '3px',
                     }}
                     title="Kapak Görseli Tanımlı"
                   >
@@ -252,25 +252,25 @@ export const PostList: React.FC<PostListProps> = ({ posts, channels, loading, on
               </div>
 
               {/* Sağ Taraf: Meta Bilgiler (30px Boşluk) + İşlemler (Düzenle & Sil) */}
-              <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '6px' }}>
                 {/* Meta Bilgiler: Okunma + Tarih + Yazar */}
                 <div
                   style={{
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '14px',
-                    fontSize: '0.76rem',
+                    gap: '10px',
+                    fontSize: '0.74rem',
                     color: 'var(--text-muted)',
                     marginRight: '30px',
                     flexWrap: 'wrap',
                   }}
                 >
-                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }} title="Okunma Sayısı">
-                    <Eye size={13} />
+                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: '3px' }} title="Okunma Sayısı">
+                    <Eye size={12} />
                     <span>{post.views_count || 0} okuma</span>
                   </span>
-                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }} title="Yayın Tarihi">
-                    <Calendar size={13} />
+                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: '3px' }} title="Yayın Tarihi">
+                    <Calendar size={12} />
                     <span>
                       {post.published_at
                         ? new Date(post.published_at).toLocaleDateString('tr-TR', {
@@ -281,14 +281,14 @@ export const PostList: React.FC<PostListProps> = ({ posts, channels, loading, on
                         : 'Taslak'}
                     </span>
                   </span>
-                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }} title="Yazar">
-                    <User size={13} />
+                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: '3px' }} title="Yazar">
+                    <User size={12} />
                     <span>{post.author_name || 'MSK Labs'}</span>
                   </span>
                 </div>
 
                 {/* İşlemler: Düzenle & Sil */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
                   <button
                     type="button"
                     onClick={() => onEdit(post)}
@@ -296,15 +296,16 @@ export const PostList: React.FC<PostListProps> = ({ posts, channels, loading, on
                     style={{
                       display: 'inline-flex',
                       alignItems: 'center',
-                      gap: '6px',
-                      padding: '6px 12px',
-                      fontSize: '0.8rem',
-                      borderRadius: '6px',
+                      gap: '4px',
+                      padding: '2px 8px',
+                      fontSize: '0.75rem',
+                      height: '24px',
+                      borderRadius: '5px',
                       cursor: 'pointer',
                     }}
                     title="Yazıyı Düzenle"
                   >
-                    <Edit size={14} /> Düzenle
+                    <Edit size={12} /> Düzenle
                   </button>
                   <button
                     type="button"
@@ -313,36 +314,37 @@ export const PostList: React.FC<PostListProps> = ({ posts, channels, loading, on
                     style={{
                       display: 'inline-flex',
                       alignItems: 'center',
-                      gap: '4px',
-                      padding: '6px 10px',
-                      fontSize: '0.8rem',
-                      borderRadius: '6px',
+                      gap: '3px',
+                      padding: '2px 6px',
+                      fontSize: '0.75rem',
+                      height: '24px',
+                      borderRadius: '5px',
                       cursor: 'pointer',
                     }}
                     title="Yazıyı Sil"
                   >
-                    <Trash2 size={14} />
+                    <Trash2 size={12} />
                   </button>
                 </div>
               </div>
             </div>
 
-            {/* Orta Satır: Blog Başlığı ve Bağlantı Yolu (Aynı Hizada) */}
+            {/* Orta Satır: Blog Başlığı (Sol Menünün Kalın Fontu) ve Bağlantı Yolu */}
             <div
               style={{
                 display: 'flex',
                 alignItems: 'baseline',
                 justifyContent: 'space-between',
                 flexWrap: 'wrap',
-                gap: '8px 14px',
+                gap: '4px 10px',
               }}
             >
               <h2
                 style={{
-                  fontSize: '1.02rem',
-                  fontWeight: 650,
+                  fontSize: '0.88rem',
+                  fontWeight: 700,
                   color: 'var(--text-primary)',
-                  lineHeight: 1.4,
+                  lineHeight: 1.3,
                   margin: 0,
                   flex: '1 1 auto',
                   letterSpacing: '-0.01em',
@@ -351,32 +353,33 @@ export const PostList: React.FC<PostListProps> = ({ posts, channels, loading, on
                 {post.title_tr || '(Başlıksız Makale)'}
               </h2>
 
-              {/* Web Bağlantı Yolu (Başlıkla Aynı Hizada ve Uyumlu Renkte) */}
+              {/* Web Bağlantı Yolu */}
               <span
                 style={{
-                  fontSize: '0.78rem',
-                  fontWeight: 600,
+                  fontSize: '0.76rem',
+                  fontWeight: 500,
                   color: 'var(--text-muted)',
                   display: 'inline-flex',
                   alignItems: 'center',
-                  gap: '4px',
+                  gap: '3px',
                   whiteSpace: 'nowrap',
                 }}
                 title={`Web Bağlantısı: /blog/${post.slug}`}
               >
-                <ExternalLink size={12} style={{ opacity: 0.7 }} />
+                <ExternalLink size={11} style={{ opacity: 0.7 }} />
                 /blog/{post.slug}
               </span>
             </div>
 
-            {/* Özet Metni (Varsa) */}
+            {/* Özet Metni: Sol menü linklerinin font ve özelliklerinde */}
             {post.summary_tr && (
               <p
                 style={{
-                  fontSize: '0.86rem',
+                  fontSize: '0.88rem',
+                  fontWeight: 500,
                   color: 'var(--text-secondary)',
-                  lineHeight: 1.5,
-                  margin: '0',
+                  lineHeight: 1.4,
+                  margin: 0,
                   display: '-webkit-box',
                   WebkitLineClamp: 2,
                   WebkitBoxOrient: 'vertical',

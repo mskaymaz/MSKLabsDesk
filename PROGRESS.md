@@ -1,6 +1,18 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 🟢 Son Güncelleme [14.10.2026 - 15:40] — BLOG YAZILARI SABİT (STICKY) ÜST PANEL, TEK SATIR FİLTRE VE MİNİMİZE KART MİMARİSİ [*]
+* **Yapılan İşlem:**
+  1. **Sabit (Sticky) ve Ultra-Kibar Üst Panel (`PostFilterBar.tsx` & `PostsView.tsx`):**
+     - Yorum Yönetimi (`CommentsView`) ve Destek Biletleri (`TicketsView`) sayfalarındaki gibi `top: '40px'`, `zIndex: 20`, `backdropFilter: 'blur(16px)'` ve `borderBottom` özellikli sabit (sticky) üst panel yapısına geçirildi. Blog kartları kaydırılırken üst panel sayfayla birlikte kaymayıp sabit kalır.
+     - 1. Satır: Başlık (`1.05rem`, `800` ağırlık), sayaç rozeti ve hemen sağında sol menü linkleri karakterinde (`0.88rem`, `500` ağırlık) `Çok dilli blog yazılarınızı yönetin` açıklaması hizalandı.
+     - 2. Satır: Tek bir yatay satırda Arama Kutusu (`height: 28px`), "Tüm Blog Türleri" seçimi (`height: 28px`), "Tüm Durumlar" seçimi (`height: 28px`) ve en sağda "+ Yeni Blog Yazısı" butonu yerleştirildi. Dikey yükseklik minimuma indirildi.
+  2. **Blog Kartlarının Tipografisi ve Minimizasyonu (`PostList.tsx`):**
+     - Kart başlığı sol menünün kalın font karakterine (`0.88rem`, `700` ağırlık), altındaki özet yazısı ise sol menünün normal karakterine (`0.88rem`, `500` ağırlık, `lineHeight: 1.4`) getirildi.
+     - Kart iç padding'i `18px 22px` yerine `8px 12px`, elemanlar arası boşluk `12px` yerine `4px`, rozet dolguları `1px 5px`, butonlar `24px` yüksekliğe çekilerek aşırı sıkışıklık yaratmadan aralıklar 1-2px seviyesinde minimize edildi.
+* **Sonuçlar:** Vite ve TypeScript build (`npm run build`) 0 hata ile 653 ms'de tamamlandı. Dosya satır sınırlarına tam uyuldu (`PostFilterBar.tsx`: 214 satır, `PostList.tsx`: 397 satır, `PostsView.tsx`: 222 satır <= 450).
+* **Durum:** `DevAdmin` dalında çalışıldı, `main` korundu.
+
 ## 🟢 Son Güncelleme [14.10.2026 - 15:15] — BLOG KARTLARINDA TİPOGRAFİ İNCELİĞİ VE METAVERİLERİN ÜST BARA (30PX BOŞLUK) TAŞINMASI [*]
 * **Yapılan İşlem:**
   1. **Başlık Tipografisi İyileştirmesi (`PostList.tsx`):**
