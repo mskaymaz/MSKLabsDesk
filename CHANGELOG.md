@@ -1,6 +1,13 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [14.10.2026 - 15:15] - Blog Kartlarında Tipografi İnceliği ve Metaverilerin Üst Bara Taşınması
+- `frontend/src/components/posts/PostList.tsx`:
+  - Kart başlık tipografisi `1.15rem` ve `800` ağırlıktan `1.02rem` ve `650` yarı-kalın kibar stile çekildi.
+  - Okunma sayısı, yayın tarihi ve yazar bilgileri kartın altından alınıp en üst satıra, "Düzenle" buton grubunun soluna `30px` mesafe ile yerleştirildi.
+  - Kartın altındaki gereksiz footer çizgisi ve alan temizlendi, kapak görseli rozeti üst rozetler alanına taşındı.
+- Yalnızca `DevAdmin` dalında çalışıldı, `main` korundu.
+
 ## [14.10.2026 - 15:10] - Blog Kartlarında İnline Bağlantı Düzeni ve TR, EN, AR Dil Rozetleri
 - `frontend/src/components/posts/PostList.tsx`:
   - `/blog/{post.slug}` bağlantı yolu başlığın altından alınıp, başlığın sağına aynı hizaya (inline/flex baseline) taşındı; `var(--text-muted)` rengi ile sadeleştirildi.

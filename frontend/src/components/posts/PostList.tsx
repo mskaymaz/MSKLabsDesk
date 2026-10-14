@@ -231,44 +231,99 @@ export const PostList: React.FC<PostListProps> = ({ posts, channels, loading, on
                     AR
                   </span>
                 </div>
+
+                {/* Kapak Görseli Rozeti */}
+                {post.cover_image && (
+                  <span
+                    style={{
+                      fontSize: '0.7rem',
+                      fontWeight: 600,
+                      color: 'var(--text-muted)',
+                      background: 'rgba(255, 255, 255, 0.04)',
+                      border: '1px solid var(--border-subtle)',
+                      padding: '2px 6px',
+                      borderRadius: '4px',
+                    }}
+                    title="Kapak Görseli Tanımlı"
+                  >
+                    🖼️ Görsel
+                  </span>
+                )}
               </div>
 
-              {/* İşlemler: Düzenle & Sil */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <button
-                  type="button"
-                  onClick={() => onEdit(post)}
-                  className="btn btn-sm btn-secondary"
+              {/* Sağ Taraf: Meta Bilgiler (30px Boşluk) + İşlemler (Düzenle & Sil) */}
+              <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
+                {/* Meta Bilgiler: Okunma + Tarih + Yazar */}
+                <div
                   style={{
-                    display: 'inline-flex',
+                    display: 'flex',
                     alignItems: 'center',
-                    gap: '6px',
-                    padding: '6px 12px',
-                    fontSize: '0.8rem',
-                    borderRadius: '6px',
-                    cursor: 'pointer',
+                    gap: '14px',
+                    fontSize: '0.76rem',
+                    color: 'var(--text-muted)',
+                    marginRight: '30px',
+                    flexWrap: 'wrap',
                   }}
-                  title="Yazıyı Düzenle"
                 >
-                  <Edit size={14} /> Düzenle
-                </button>
-                <button
-                  type="button"
-                  onClick={() => onDelete(post.id)}
-                  className="btn btn-sm btn-danger"
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '4px',
-                    padding: '6px 10px',
-                    fontSize: '0.8rem',
-                    borderRadius: '6px',
-                    cursor: 'pointer',
-                  }}
-                  title="Yazıyı Sil"
-                >
-                  <Trash2 size={14} />
-                </button>
+                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }} title="Okunma Sayısı">
+                    <Eye size={13} />
+                    <span>{post.views_count || 0} okuma</span>
+                  </span>
+                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }} title="Yayın Tarihi">
+                    <Calendar size={13} />
+                    <span>
+                      {post.published_at
+                        ? new Date(post.published_at).toLocaleDateString('tr-TR', {
+                            day: 'numeric',
+                            month: 'short',
+                            year: 'numeric',
+                          })
+                        : 'Taslak'}
+                    </span>
+                  </span>
+                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }} title="Yazar">
+                    <User size={13} />
+                    <span>{post.author_name || 'MSK Labs'}</span>
+                  </span>
+                </div>
+
+                {/* İşlemler: Düzenle & Sil */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <button
+                    type="button"
+                    onClick={() => onEdit(post)}
+                    className="btn btn-sm btn-secondary"
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '6px',
+                      padding: '6px 12px',
+                      fontSize: '0.8rem',
+                      borderRadius: '6px',
+                      cursor: 'pointer',
+                    }}
+                    title="Yazıyı Düzenle"
+                  >
+                    <Edit size={14} /> Düzenle
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => onDelete(post.id)}
+                    className="btn btn-sm btn-danger"
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '4px',
+                      padding: '6px 10px',
+                      fontSize: '0.8rem',
+                      borderRadius: '6px',
+                      cursor: 'pointer',
+                    }}
+                    title="Yazıyı Sil"
+                  >
+                    <Trash2 size={14} />
+                  </button>
+                </div>
               </div>
             </div>
 
@@ -284,12 +339,13 @@ export const PostList: React.FC<PostListProps> = ({ posts, channels, loading, on
             >
               <h2
                 style={{
-                  fontSize: '1.15rem',
-                  fontWeight: 800,
+                  fontSize: '1.02rem',
+                  fontWeight: 650,
                   color: 'var(--text-primary)',
                   lineHeight: 1.4,
                   margin: 0,
                   flex: '1 1 auto',
+                  letterSpacing: '-0.01em',
                 }}
               >
                 {post.title_tr || '(Başlıksız Makale)'}
@@ -330,50 +386,6 @@ export const PostList: React.FC<PostListProps> = ({ posts, channels, loading, on
                 {post.summary_tr}
               </p>
             )}
-
-            {/* Alt Bilgi Barı: Okunma + Tarih + Yazar */}
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                flexWrap: 'wrap',
-                gap: '12px',
-                paddingTop: '8px',
-                borderTop: '1px solid var(--border-subtle)',
-                fontSize: '0.78rem',
-                color: 'var(--text-muted)',
-              }}
-            >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap' }}>
-                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-                  <Eye size={13} />
-                  <span>{post.views_count || 0} okuma</span>
-                </span>
-                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-                  <Calendar size={13} />
-                  <span>
-                    {post.published_at
-                      ? new Date(post.published_at).toLocaleDateString('tr-TR', {
-                          day: 'numeric',
-                          month: 'long',
-                          year: 'numeric',
-                        })
-                      : 'Taslak (Yayınlanmadı)'}
-                  </span>
-                </span>
-                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-                  <User size={13} />
-                  <span>{post.author_name || 'MSK Labs'}</span>
-                </span>
-              </div>
-
-              {post.cover_image && (
-                <span style={{ fontSize: '0.74rem', color: 'var(--text-muted)', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-                  🖼️ Kapak Görseli Mevcut
-                </span>
-              )}
-            </div>
           </div>
         );
       })}

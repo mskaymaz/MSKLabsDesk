@@ -1,6 +1,19 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 🟢 Son Güncelleme [14.10.2026 - 15:15] — BLOG KARTLARINDA TİPOGRAFİ İNCELİĞİ VE METAVERİLERİN ÜST BARA (30PX BOŞLUK) TAŞINMASI [*]
+* **Yapılan İşlem:**
+  1. **Başlık Tipografisi İyileştirmesi (`PostList.tsx`):**
+     - Blog kartlarındaki aşırı büyük ve kaba başlık (`1.15rem`, `800` font-weight) dengelendi; `fontSize: '1.02rem'`, `fontWeight: 650` ve `letterSpacing: '-0.01em'` ile kibar, net ve şık bir tipografiye kavuşturuldu.
+  2. **Okunma, Tarih ve Yazar Bilgilerinin Üst Bara Taşınması (`PostList.tsx`):**
+     - Kartın en altında yer alan ve kart boyunu uzatan okunma sayısı (`Eye`), yayın tarihi (`Calendar`) ve yazar (`User`) metaverileri en üst satıra taşındı.
+     - "Düzenle" buton grubunun sol tarafına, tam istenildiği gibi `marginRight: '30px'` boşluk bırakılarak yerleştirildi.
+  3. **Kart Yapısının Sadeleştirilmesi (`PostList.tsx`):**
+     - Tüm meta bilgiler üst satıra alındığı için alt kısımdaki gereksiz alt bilgi çizgisi ve boş alan kaldırıldı.
+     - Kapak görseli olan yazılar için üst rozetler alanına kibar bir `🖼️ Görsel` rozeti eklendi; kartlar çok daha kompakt ve profesyonel bir görünüme kavuştu.
+* **Sonuçlar:** Vite ve TypeScript build (`npm run build`) 0 hata ile 658 ms'de tamamlandı. Dosya satır sayısı `PostList.tsx` için 394 satır ile kural sınırına (<= 450) tam uydu.
+* **Durum:** `DevAdmin` dalında çalışıldı, `main` korundu.
+
 ## 🟢 Son Güncelleme [14.10.2026 - 15:10] — BLOG KARTLARINDA İNLINE BAĞLANTI DÜZENİ VE DİL ROZETLERİ (TR, EN, AR) SADELEŞTİRMESİ [*]
 * **Yapılan İşlem:**
   1. **Başlık ve Web Bağlantısı Hizalaması (`PostList.tsx`):**
