@@ -9,6 +9,7 @@ export interface Ticket {
   category: string;
   priority: TicketPriority;
   status: TicketStatus;
+  email_status?: 'valid' | 'invalid' | 'bounced';
   message_content?: string;
   content?: string;
   ai_summary?: string;

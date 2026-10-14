@@ -381,6 +381,11 @@ export const TicketsView: React.FC<TicketsViewProps> = ({
                   </h3>
                   <div style={{ fontSize: '0.74rem', color: 'var(--text-secondary)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                     <strong>{ticket.sender_name}</strong> • {ticket.sender_email}
+                    {ticket.email_status === 'invalid' && (
+                      <span style={{ color: '#ef4444', fontWeight: 700, marginLeft: '6px' }} title="E-Posta Doğrulanamadı (Geçersiz Sunucu)">
+                        ⚠️ Geçersiz E-Posta
+                      </span>
+                    )}
                   </div>
                 </div>
 

@@ -28,6 +28,7 @@ export const TicketDetailModal: React.FC<TicketDetailModalProps> = ({
 
   if (!ticketDetail) return null;
   const { ticket, replies } = ticketDetail;
+  const isEmailInvalid = ticket.email_status === 'invalid' || ticket.email_status === 'bounced';
 
   const handleTriggerAi = async () => {
     setLoadingAi(true);
@@ -50,9 +51,7 @@ export const TicketDetailModal: React.FC<TicketDetailModalProps> = ({
 
   const handleUseAiDraft = () => {
     const draft = ticket.ai_suggested_reply || (ticket as any).ai_draft;
-    if (draft) {
-      setReplyMessage(draft);
-    }
+    if (draft) setReplyMessage(draft);
   };
 
   const handleSendReply = async () => {
@@ -63,7 +62,7 @@ export const TicketDetailModal: React.FC<TicketDetailModalProps> = ({
       setReplyMessage('');
       setShowReplyBox(false);
       onRefresh();
-    } catch (err) {
+    } catch {
       alert('Cevap gönderilemedi.');
     } finally {
       setLoadingReply(false);
@@ -71,23 +70,13 @@ export const TicketDetailModal: React.FC<TicketDetailModalProps> = ({
   };
 
   const handleToggleTranslate = async () => {
-    if (isTranslated) {
-      setIsTranslated(false);
-      return;
-    }
-    if (translatedData) {
-      setIsTranslated(true);
-      return;
-    }
+    if (isTranslated) { setIsTranslated(false); return; }
+    if (translatedData) { setIsTranslated(true); return; }
     setLoadingTranslate(true);
     try {
       const res = await api.translateTicket(ticket.id);
       if (res.success) {
-        setTranslatedData({
-          subject: res.translated_subject,
-          content: res.translated_content,
-          lang: res.detected_language,
-        });
+        setTranslatedData({ subject: res.translated_subject, content: res.translated_content, lang: res.detected_language });
         setIsTranslated(true);
       }
     } catch {
@@ -147,9 +136,36 @@ export const TicketDetailModal: React.FC<TicketDetailModalProps> = ({
           marginBottom: '20px',
           fontSize: '0.85rem'
         }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
             <User size={16} color="var(--accent-primary)" />
-            <strong style={{ color: 'var(--text-primary)' }}>{ticket.sender_name}</strong> ({ticket.sender_email})
+            <strong style={{ color: 'var(--text-primary)' }}>{ticket.sender_name}</strong>
+            <span style={{ color: 'var(--text-secondary)' }}>({ticket.sender_email})</span>
+            {ticket.email_status === 'invalid' && (
+              <span style={{
+                background: 'rgba(239, 68, 68, 0.2)',
+                color: '#ef4444',
+                border: '1px solid rgba(239, 68, 68, 0.4)',
+                padding: '1px 8px',
+                borderRadius: '6px',
+                fontSize: '0.74rem',
+                fontWeight: 700
+              }}>
+                ⚠️ E-Posta Doğrulanamadı (Geçersiz)
+              </span>
+            )}
+            {ticket.email_status === 'bounced' && (
+              <span style={{
+                background: 'rgba(245, 158, 11, 0.2)',
+                color: '#f59e0b',
+                border: '1px solid rgba(245, 158, 11, 0.4)',
+                padding: '1px 8px',
+                borderRadius: '6px',
+                fontSize: '0.74rem',
+                fontWeight: 700
+              }}>
+                📬 Teslim Edilemedi (Bounced)
+              </span>
+            )}
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--text-muted)' }}>
             <Clock size={14} />
@@ -342,72 +358,67 @@ export const TicketDetailModal: React.FC<TicketDetailModalProps> = ({
           </div>
         )}
 
-        {/* Reply Box (Shown when fresh ticket or explicitly opened) */}
-        {((!replies || replies.length === 0) || showReplyBox) && (
-          <div style={{ borderTop: '1px solid var(--border-color)', paddingTop: '16px', marginBottom: '16px' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <h4 style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-secondary)', margin: 0 }}>
-                  {replies && replies.length > 0 ? 'Ek Yanıt / Takip Mesajı' : 'Yanıt Yaz'}
-                </h4>
-                {replies && replies.length > 0 && (
-                  <button
-                    type="button"
-                    style={{ background: 'none', border: 'none', color: 'var(--text-muted)', fontSize: '0.75rem', cursor: 'pointer' }}
-                    onClick={() => setShowReplyBox(false)}
-                  >
-                    (Gizle)
+        {/* Reply Box (Shown when fresh ticket or explicitly opened, disabled if email is invalid) */}
+        {isEmailInvalid ? (
+          <div style={{ borderTop: '1px solid var(--border-color)', paddingTop: '14px', marginBottom: '16px' }}>
+            <div style={{
+              padding: '12px 16px',
+              background: 'rgba(239, 68, 68, 0.1)',
+              border: '1px dashed rgba(239, 68, 68, 0.4)',
+              borderRadius: 'var(--radius-md)',
+              color: '#ef4444',
+              fontSize: '0.84rem',
+              lineHeight: 1.5
+            }}>
+              <strong style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '3px' }}>
+                🚫 Yanıt Gönderimi Devre Dışı
+              </strong>
+              Kullanıcının girdiği e-posta sunucusuna ulaşılamadığı (veya adres geçersiz olduğu) için bu talebe e-posta yanıtı gönderilemez. Talebi aşağıdaki durum butonlarıyla kapatabilirsiniz.
+            </div>
+          </div>
+        ) : (
+          ((!replies || replies.length === 0) || showReplyBox) && (
+            <div style={{ borderTop: '1px solid var(--border-color)', paddingTop: '16px', marginBottom: '16px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <h4 style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-secondary)', margin: 0 }}>
+                    {replies && replies.length > 0 ? 'Ek Yanıt / Takip Mesajı' : 'Yanıt Yaz'}
+                  </h4>
+                  {replies && replies.length > 0 && (
+                    <button type="button" style={{ background: 'none', border: 'none', color: 'var(--text-muted)', fontSize: '0.75rem', cursor: 'pointer' }} onClick={() => setShowReplyBox(false)}>
+                      (Gizle)
+                    </button>
+                  )}
+                </div>
+                {ticket.ai_suggested_reply && (
+                  <button type="button" className="btn btn-sm" onClick={handleUseAiDraft} style={{ background: '#67E8F9', color: '#000000', fontWeight: 700, border: 'none', boxShadow: '0 2px 8px rgba(103, 232, 249, 0.3)', padding: '3px 10px', fontSize: '0.78rem' }}>
+                    <Sparkles size={13} color="#000000" /> AI Cevap Taslağını Aktar
                   </button>
                 )}
               </div>
-              {ticket.ai_suggested_reply && (
+
+              <textarea
+                className="form-textarea"
+                rows={3}
+                placeholder="Kullanıcıya iletilecek yanıt mesajı..."
+                value={replyMessage}
+                onChange={(e) => setReplyMessage(e.target.value)}
+                style={{ marginBottom: '10px' }}
+              />
+
+              <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
                 <button
                   type="button"
                   className="btn btn-sm"
-                  onClick={handleUseAiDraft}
-                  style={{
-                    background: '#67E8F9',
-                    color: '#000000',
-                    fontWeight: 700,
-                    border: 'none',
-                    boxShadow: '0 2px 8px rgba(103, 232, 249, 0.3)',
-                    padding: '3px 10px',
-                    fontSize: '0.78rem'
-                  }}
+                  style={{ background: 'linear-gradient(135deg, #A78BFA, #38BDF8)', color: '#000000', fontWeight: 700, border: 'none', boxShadow: '0 4px 14px rgba(56, 189, 248, 0.35)', padding: '6px 16px' }}
+                  disabled={loadingReply || !replyMessage.trim()}
+                  onClick={handleSendReply}
                 >
-                  <Sparkles size={13} color="#000000" /> AI Cevap Taslağını Aktar
+                  <Send size={15} color="#000000" /> {loadingReply ? 'Gönderiliyor...' : 'Yanıtı Gönder'}
                 </button>
-              )}
+              </div>
             </div>
-
-            <textarea
-              className="form-textarea"
-              rows={3}
-              placeholder="Kullanıcıya iletilecek yanıt mesajı..."
-              value={replyMessage}
-              onChange={(e) => setReplyMessage(e.target.value)}
-              style={{ marginBottom: '10px' }}
-            />
-
-            <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-              <button
-                type="button"
-                className="btn btn-sm"
-                style={{
-                  background: 'linear-gradient(135deg, #A78BFA, #38BDF8)',
-                  color: '#000000',
-                  fontWeight: 700,
-                  border: 'none',
-                  boxShadow: '0 4px 14px rgba(56, 189, 248, 0.35)',
-                  padding: '6px 16px'
-                }}
-                disabled={loadingReply || !replyMessage.trim()}
-                onClick={handleSendReply}
-              >
-                <Send size={15} color="#000000" /> {loadingReply ? 'Gönderiliyor...' : 'Yanıtı Gönder'}
-              </button>
-            </div>
-          </div>
+          )
         )}
 
         {/* Status Action Buttons Toolbar */}

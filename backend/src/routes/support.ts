@@ -4,6 +4,7 @@
 
 import { EmailEnv, sendEmail } from '../utils/email';
 import { AIEnv, analyzeSupportTicketWithAI } from '../utils/ai';
+import { validateEmailAddress } from '../utils/emailValidation';
 
 export interface SupportTicketPayload {
   sender_name: string;
@@ -73,27 +74,36 @@ export async function handleSupportSubmission(request: Request, env: { DB: D1Dat
       );
     }
 
+    const emailValidation = await validateEmailAddress(sender_email);
+    const isEmailValid = emailValidation.valid;
+    const emailStatus = isEmailValid ? 'valid' : 'invalid';
+
     const ticketId = generateTicketId();
     const category = rawPayload.category || 'general';
 
     // 1. D1 Veritabanına Kayıt
     await env.DB.prepare(`
-      INSERT INTO messages (id, sender_name, sender_email, subject, content, category, status, created_at)
-      VALUES (?, ?, ?, ?, ?, ?, 'new', CURRENT_TIMESTAMP)
+      INSERT INTO messages (id, sender_name, sender_email, subject, content, category, status, email_status, created_at)
+      VALUES (?, ?, ?, ?, ?, ?, 'new', ?, CURRENT_TIMESTAMP)
     `).bind(
       ticketId,
       sender_name,
       sender_email,
       subject,
       content,
-      category
+      category,
+      emailStatus
     ).run();
 
     // 2. Message Event Log Kaydı
+    const eventDetails = isEmailValid
+      ? 'Kullanıcı destek talebi oluşturdu.'
+      : `Kullanıcı destek talebi oluşturdu. (E-posta doğrulanamadı: ${emailValidation.reason || 'invalid_domain'})`;
+
     await env.DB.prepare(`
       INSERT INTO message_events (message_id, actor, action, details)
-      VALUES (?, 'user', 'created', 'Kullanıcı destek talebi oluşturdu.')
-    `).bind(ticketId).run();
+      VALUES (?, 'user', 'created', ?)
+    `).bind(ticketId, eventDetails).run();
 
     // 3. Yapay Zeka (Gemini API) Otomatik Analizi
     analyzeSupportTicketWithAI({
@@ -125,34 +135,41 @@ export async function handleSupportSubmission(request: Request, env: { DB: D1Dat
       }
     }).catch(err => console.error('AI Analiz Hatası:', err));
 
-    // 4. Otomatik E-Posta Gönderimi
-    const emailSubject = `[${ticketId}] Destek Talebiniz Alındı — MSK Labs`;
-    const emailHtml = `
-      <div style="font-family: Arial, sans-serif; color: #333; line-height: 1.6;">
-        <h2>Merhaba ${sender_name},</h2>
-        <p>Destek talebiniz başarıyla kayıtlarımıza alınmıştır.</p>
-        <p><strong>Bilet Numarası:</strong> <code style="background: #e2e8f0; padding: 2px 6px; border-radius: 4px;">${ticketId}</code></p>
-        <p><strong>Konu:</strong> ${subject}</p>
-        <hr style="border: none; border-top: 1px solid #e2e8f0;" />
-        <p>Talebiniz ekibimiz tarafından incelenip en kısa sürede bu e-posta adresi üzerinden yanıtlanacaktır.</p>
-        <p>Teşekkür ederiz,<br /><strong>MSK Labs Destek Ekibi</strong></p>
-      </div>
-    `;
+    // 4. Otomatik E-Posta Gönderimi (Yalnızca e-posta geçerliyse)
+    if (isEmailValid) {
+      const emailSubject = `[${ticketId}] Destek Talebiniz Alındı — MSK Labs`;
+      const emailHtml = `
+        <div style="font-family: Arial, sans-serif; color: #333; line-height: 1.6;">
+          <h2>Merhaba ${sender_name},</h2>
+          <p>Destek talebiniz başarıyla kayıtlarımıza alınmıştır.</p>
+          <p><strong>Bilet Numarası:</strong> <code style="background: #e2e8f0; padding: 2px 6px; border-radius: 4px;">${ticketId}</code></p>
+          <p><strong>Konu:</strong> ${subject}</p>
+          <hr style="border: none; border-top: 1px solid #e2e8f0;" />
+          <p>Talebiniz ekibimiz tarafından incelenip en kısa sürede bu e-posta adresi üzerinden yanıtlanacaktır.</p>
+          <p>Teşekkür ederiz,<br /><strong>MSK Labs Destek Ekibi</strong></p>
+        </div>
+      `;
 
-    sendEmail({
-      to: sender_email,
-      toName: sender_name,
-      subject: emailSubject,
-      html: emailHtml,
-      emailType: 'ticket_confirmation'
-    }, env).catch(err => console.error('E-Posta gönderim hatası:', err));
+      sendEmail({
+        to: sender_email,
+        toName: sender_name,
+        subject: emailSubject,
+        html: emailHtml,
+        emailType: 'ticket_confirmation'
+      }, env).catch(err => console.error('E-Posta gönderim hatası:', err));
+    }
 
     return new Response(
       JSON.stringify({
         success: true,
         ticket_id: ticketId,
         ticketId: ticketId,
-        message: 'Destek talebiniz başarıyla alındı. Onay e-postası iletildi.',
+        email_valid: isEmailValid,
+        email_status: emailStatus,
+        email_reason: emailValidation.reason,
+        message: isEmailValid
+          ? 'Destek talebiniz başarıyla alındı. Onay e-postası iletildi.'
+          : 'Destek talebiniz alındı ancak girdiğiniz e-posta adresi doğrulanamadı.',
       }),
       { status: 201, headers: { 'Content-Type': 'application/json; charset=utf-8' } }
     );

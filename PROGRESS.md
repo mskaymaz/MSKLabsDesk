@@ -1,6 +1,20 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 🟢 Son Güncelleme [14.10.2026 - 10:25] — E-POSTA DOĞRULAMA (DNS MX KONTROLÜ), UYARI BALONU VE CEVAP KİLİTLEME [*]
+* **Yapılan İşlem:**
+  1. **Anlık DNS MX ve Geçici Posta Doğrulaması (`emailValidation.ts`):**
+     - Cloudflare DNS-over-HTTPS (DoH `1.1.1.1`) üzerinden gelen e-postanın alan adında MX/A sunucu kaydı olup olmadığını 40-50 ms içinde tespit eden ve tek kullanımlık geçici alan adlarını süzen yardımcı geliştirildi.
+     - D1 `messages` tablosuna `email_status` (`valid` / `invalid` / `bounced`) kolonu eklendi (`0004_ticket_email_validation.sql`).
+  2. **Destek Formu Esnek Kabul & Kullanıcı Bilgilendirme Balonu (`destek.html`):**
+     - Kullanıcının talebi çöpe gitmez; sisteme kaydedilir. Ancak e-posta geçersiz ise form onay kartında (makbuzda) TR, EN, AR dillerinde uyarı balonu çıkar: *"Girdiğiniz e-posta sunucusuna ulaşılamadı. Talebiniz yöneticilerimize iletildi ancak geçersiz e-posta sebebiyle tarafınıza yanıt e-postası iletilemeyecektir."*
+  3. **Yönetici Paneli Koruması (`TicketDetailModal.tsx` & `TicketsView.tsx` & `adminTickets.ts`):**
+     - Kart listesinde ve detay modalında e-postanın hemen yanına `⚠️ E-Posta Doğrulanamadı (Geçersiz)` rozeti yerleştirildi.
+     - Detay ekranında cevap yazma alanı ve butonu kapatıldı; yöneticinin gereksiz cevap yazmasını önleyen bilgilendirici kutu konuldu.
+     - Backend API seviyesinde geçersiz adrese yanıt gönderimi 400 Bad Request ile kilitlendi.
+* **Sonuçlar:** End-to-end test senaryolarıyla (`test_support_email.cjs` ve `test_admin_email_block.cjs`) doğrulandı. Fake alan adı (`nxdomain`) yakalandı, backend yanıt kilitledi, geçerli mail onaylandı. Dosya sınırlarına uyuldu (`destek.html`: 424 satır, `TicketDetailModal.tsx`: 439 satır, `TicketsView.tsx`: 443 satır).
+* **Durum:** `DevAdmin` dalında çalışıldı, `main` korundu.
+
 ## 🟢 Son Güncelleme [14.10.2026 - 09:50] — VARSAYILAN "YENİ" TALEP FİLTRESİ VE MODALIN TEKRAR AÇILMASI HATASININ GİDERİLMESİ [*]
 * **Yapılan İşlem:**
   1. **Destek Talepleri Varsayılan Filtresi:**

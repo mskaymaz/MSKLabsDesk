@@ -1,6 +1,24 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [14.10.2026 - 10:25] - E-Posta Doğrulama (DNS MX Kontrolü), Uyarı Balonu ve Cevap Kilitleme
+- `backend/migrations/0004_ticket_email_validation.sql`:
+  - `messages` tablosuna `email_status` kolonu eklendi.
+- `backend/src/utils/emailValidation.ts`:
+  - Cloudflare DoH `1.1.1.1` üzerinden anlık MX kayıt denetimi ve disposable domain filtresi oluşturuldu.
+- `backend/src/routes/support.ts`:
+  - Destek talebi gönderilirken e-posta geçerliliği denetlendi; geçersizse `email_status = 'invalid'` olarak kaydedilip onay e-postası gereksiz gönderilmedi ve yanıtta `email_valid: false` döndürüldü.
+- `backend/src/routes/adminTickets.ts`:
+  - Geçersiz veya bounce olmuş e-posta adreslerine yanıt gönderimi backend düzeyinde 400 ile engellendi.
+- `frontend/src/types/index.ts`:
+  - `Ticket` tipine `email_status` alanı eklendi.
+- `frontend/src/components/TicketDetailModal.tsx`:
+  - E-posta adresinin yanında `⚠️ E-Posta Doğrulanamadı (Geçersiz)` rozeti eklendi.
+  - E-posta geçersiz olduğunda cevap kutusu kapatılarak bilgilendirme notu gösterildi.
+- `frontend/src/views/TicketsView.tsx`:
+  - Liste kartlarında e-posta yanına geçersiz rozeti eklendi.
+- Yalnızca `DevAdmin` dalında çalışıldı, `main` korundu.
+
 ## [14.10.2026 - 09:50] - Varsayılan "Yeni" Talep Filtresi ve Modalın Tekrar Açılması Hatasının Giderilmesi
 - `frontend/src/views/TicketsView.tsx`:
   - `statusFilter` varsayılan değeri `'new'` yapıldı.

@@ -101,9 +101,16 @@ export async function handleAdminReplyTicket(ticketId: string, request: Request,
     return new Response(JSON.stringify({ error: 'Cevap içeriği boş olamaz.' }), { status: 400, headers: { 'Content-Type': 'application/json' } });
   }
 
-  const ticket = await env.DB.prepare('SELECT * FROM messages WHERE id = ?').bind(ticketId).first<{ sender_email: string; sender_name: string; subject: string }>();
+  const ticket = await env.DB.prepare('SELECT * FROM messages WHERE id = ?').bind(ticketId).first<{ sender_email: string; sender_name: string; subject: string; email_status?: string }>();
   if (!ticket) {
     return new Response(JSON.stringify({ error: 'Bilet bulunamadı.' }), { status: 404, headers: { 'Content-Type': 'application/json' } });
+  }
+
+  if (ticket.email_status === 'invalid' || ticket.email_status === 'bounced') {
+    return new Response(
+      JSON.stringify({ error: 'Alıcının e-posta adresi doğrulanamadığı için e-posta yanıtı gönderilemez.' }),
+      { status: 400, headers: { 'Content-Type': 'application/json; charset=utf-8' } }
+    );
   }
 
   const replyId = `rpl_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
