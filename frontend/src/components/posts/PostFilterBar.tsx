@@ -123,40 +123,39 @@ export const PostFilterBar: React.FC<PostFilterBarProps> = ({
               height: '28px',
               paddingLeft: '28px',
               paddingRight: '8px',
-              fontSize: '0.88rem',
+              fontSize: '13px',
               fontWeight: 400,
             }}
           />
         </div>
 
-        {/* Blog Türleri Açılır Listesi */}
+        {/* Blog Türleri Açılır Listesi (Emojisiz, Temiz Metin) */}
         <select
           className="form-select filter-item-channel"
           value={channelFilter}
           onChange={(e) => onChannelFilterChange(e.target.value)}
           title="Blog Kanalına Göre Filtrele"
         >
-          <option value="all">📚 Tüm Blog Türleri</option>
+          <option value="all">Tüm Blog Türleri</option>
           {channels.map((ch) => (
             <option key={ch.id} value={ch.id}>
-              {ch.slug === 'bizce' ? '✍️ ' : ch.slug === 'aniltilar' ? '📖 ' : ch.slug === 'guncel' ? '📰 ' : ch.slug === 'vlog' ? '🎬 ' : ''}
-              {ch.name_tr} {ch.is_active === 0 ? '(Pasif)' : ''}
+              {ch.name_tr}{ch.is_active === 0 ? ' (Pasif)' : ''}
             </option>
           ))}
         </select>
 
-        {/* Durum Açılır Listesi */}
+        {/* Durum Açılır Listesi (Emojisiz, Temiz Metin) */}
         <select
           className="form-select filter-item-status"
           value={statusFilter}
           onChange={(e) => onStatusFilterChange(e.target.value)}
           title="Yayın Durumuna Göre Filtrele"
         >
-          <option value="all">📋 Tüm Durumlar</option>
-          <option value="published">✅ Yayında</option>
-          <option value="unpublished">⏸️ Yayından Kaldırıldı</option>
-          <option value="draft">📝 Taslak</option>
-          <option value="trash">🗑️ Çöp Kutusu</option>
+          <option value="all">Tüm Durumlar</option>
+          <option value="published">Yayında</option>
+          <option value="unpublished">Yayından Kaldırıldı</option>
+          <option value="draft">Taslak</option>
+          <option value="trash">Çöp Kutusu</option>
         </select>
 
         {/* Yeni Blog Yazısı Butonu */}

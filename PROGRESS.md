@@ -1,6 +1,18 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 🟢 Son Güncelleme [14.10.2026 - 16:55] — AÇILIR LİSTELERİN EMOJİLERDEN ARINDIRILMASI & 13PX TİPOGRAFİ OPTİMİZASYONU [*]
+* **Yapılan İşlem:**
+  1. **Açılır Liste Emojilerinin Temizlenmesi (`PostFilterBar.tsx`):**
+     - Açılır listelerde kutu içine sığmayarak yazının kesilmesine ve kaybolmasına sebep olan tüm emoji glifleri kaldırıldı; "Tüm Blog Türleri", "Tüm Durumlar", "Yayında", "Yayından Kaldırıldı", "Taslak", "Çöp Kutusu" şeklinde net metinlere kavuşturuldu.
+  2. **13px / 12.5px Tipografi ve Dolgu Optimizasyonu (`responsive.css`):**
+     - Açılır liste ve arama metin boyutları `13px` seviyesine çekildi. Açılır liste seçeneklerine (`option`) `font-size: 13px` tanımlandı.
+     - Sağ/sol kenar dolguları optimize edilerek kapalı kutu içinde hiçbir metnin kesilmemesi sağlandı.
+  3. **Yarın Sabahki Genel Tipografi Çalışması Hazırlığı:**
+     - Kullanıcının talebi doğrultusunda kart başlığı ve tüm admin paneli tipografi standart tablosu korundu; yarın sabahki derin inceleme ve onay sonrası tüm modüllere uygulanmak üzere hazırlandı.
+* **Sonuçlar:** Derleme (`npm run build`) 0 hata ile 537 ms'de tamamlandı. Dosya sınırlarına uyuldu (`PostFilterBar.tsx`: 166 satır, `responsive.css`: 122 satır).
+* **Durum:** `DevAdmin` dalında çalışıldı, `main` korundu.
+
 ## 🟢 Son Güncelleme [14.10.2026 - 16:40] — MOBİL FİLTRE 2x2 IZGARA DÜZENİ & KART ÇEVRE ÇİZGİSİ (KENARLIK) İYİLEŞTİRMESİ [*]
 * **Yapılan İşlem:**
   1. **Mobil Filtre 2x2 Izgara Düzeni (`PostFilterBar.tsx` & `responsive.css`):**

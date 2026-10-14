@@ -1,6 +1,13 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [14.10.2026 - 16:55] - Açılır Listelerin Emojilerden Arındırılması ve 13px Tipografi Optimizasyonu
+- `frontend/src/components/posts/PostFilterBar.tsx` & `frontend/src/styles/responsive.css`:
+  - Açılır liste kutularında alanı daraltıp yazıları gizleyen tüm emoji glifleri (`📚`, `📋`, `✍️`, `✅`, `⏸️`, `📝`, `🗑️`) kaldırıldı; temiz ve sade metin etiketlerine geçildi.
+  - Açılır liste ve arama kutusu yazı boyutu `13px` (`12.5px` mobilde) seviyesine çekildi; seçenekler (`option`) için `13px` yazı boyutu ve `4px 6px` dolgu tanımlandı.
+  - Masaüstü maksimum genişlikleri ve iç dolguları (`2px 20px 2px 8px`) optimize edilerek hem açık hem koyu modda kapalıyken metinlerin eksiksiz görünmesi sağlandı.
+- Yalnızca `DevAdmin` dalında çalışıldı, `main` korundu.
+
 ## [14.10.2026 - 16:40] - Mobil Filtre 2x2 Izgara Düzeni ve Kart Çevre Çizgisi (Kenarlık) İyileştirmesi
 - `frontend/src/components/posts/PostFilterBar.tsx` & `frontend/src/styles/responsive.css`:
   - Mobil görünümde (`<= 767px`) 3. satıra taşan elemanlar 2x2 dengeli CSS Grid düzenine alındı:
