@@ -24,3 +24,11 @@
   - subscribers ve subscriber_preferences tabloları D1 üzerinde oluşturulacak.
   - **Segmentasyon Kuralları:** Abonelik kategorileri (Blog Yazıları, Ürün/Uygulama Güncellemeleri, Genel Duyurular) ayrıştırılacak.
   - Panelden bülten gönderilirken hedef kategori seçilecek; yalnızca ilgili konuya abone olan kişilere e-posta iletilecek.
+
+### 5. Gelecek Vizyonu, Ürünleştirme ve Büyüme Stratejisi (14.10.2026 - 11:45)
+* **Karar:** Mevcut projeler (`MSKLabsDesk` ve `webMSKLabs`) canlıya alınıp gerçek testler tamamlandıktan ve zihinsel sakinlik sağlandıktan sonra 3 ana stratejik faz hayata geçirilecektir:
+  1. **Yüzsüz (Faceless) Video/Vlog Modeli:** Memuriyet ve gizlilik kısıtlarına uygun, şahıs yerine MSK Labs marka kimliğiyle, dijital tahta ve minimalist tipografi ile "Kodsuz Mimarlık & Dijital Akıl" içerikleri üretilecek. YouTube embed ile sıfır sunucu maliyetli huni kurulacak.
+  2. **White-Label / Anahtar Teslim Web & Yönetim Çekirdeği (Boilerplate):** Şahsi verilerden arındırılmış demo içerikli (`seed_demo.sql`), tek dosyadan konfigüre edilen (`site.config.json`) ve modül aç/kapa (Feature Flags) yapısına sahip ürünleştirilmiş bir şablon oluşturulacak.
+  3. **Sadık Müşteri Yapılı E-Ticaret Platformu:** Sistem oturduktan sonra topluluk ve sadakat odaklı özel bir e-ticaret mimarisi geliştirilecek.
+* **Detaylı Doküman:** Tüm istişare ve uygulama detayları [GELECEK_VIZYONU_VE_STRATEJI.md](file:///d:/Code/mskaymaz/MSKLabsDesk/GELECEK_VIZYONU_VE_STRATEJI.md) dosyasında kayıt altına alınmıştır.
+
