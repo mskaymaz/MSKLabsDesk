@@ -121,10 +121,14 @@ export const PostFilterBar: React.FC<PostFilterBarProps> = ({
             style={{
               width: '100%',
               height: '28px',
+              paddingTop: 0,
+              paddingBottom: 0,
               paddingLeft: '28px',
               paddingRight: '8px',
               fontSize: '13px',
+              lineHeight: '26px',
               fontWeight: 400,
+              boxSizing: 'border-box',
             }}
           />
         </div>
@@ -135,6 +139,18 @@ export const PostFilterBar: React.FC<PostFilterBarProps> = ({
           value={channelFilter}
           onChange={(e) => onChannelFilterChange(e.target.value)}
           title="Blog Kanalına Göre Filtrele"
+          style={{
+            height: '28px',
+            paddingTop: 0,
+            paddingBottom: 0,
+            paddingLeft: '8px',
+            paddingRight: '22px',
+            fontSize: '13px',
+            lineHeight: '26px',
+            fontWeight: 400,
+            cursor: 'pointer',
+            boxSizing: 'border-box',
+          }}
         >
           <option value="all">Tüm Blog Türleri</option>
           {channels.map((ch) => (
@@ -150,6 +166,18 @@ export const PostFilterBar: React.FC<PostFilterBarProps> = ({
           value={statusFilter}
           onChange={(e) => onStatusFilterChange(e.target.value)}
           title="Yayın Durumuna Göre Filtrele"
+          style={{
+            height: '28px',
+            paddingTop: 0,
+            paddingBottom: 0,
+            paddingLeft: '8px',
+            paddingRight: '22px',
+            fontSize: '13px',
+            lineHeight: '26px',
+            fontWeight: 400,
+            cursor: 'pointer',
+            boxSizing: 'border-box',
+          }}
         >
           <option value="all">Tüm Durumlar</option>
           <option value="published">Yayında</option>

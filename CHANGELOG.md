@@ -1,6 +1,14 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [14.10.2026 - 17:05] - Açılır Liste Dikey Dolgu (Padding) Kesilmesi Düzeltmesi & Tipografi Görsel Vitrini
+- `frontend/src/components/posts/PostFilterBar.tsx` & `frontend/src/styles/responsive.css`:
+  - Genel `.form-select` kuralından gelen `padding: 10px 14px` dolgusunun 28px'lik açılır kutuları dikeyde sıkıştırıp metinleri gizlemesi engellendi; sıfır üst/alt dolgu (`padding: 0 22px 0 8px`) ve `line-height: 26px` inline stillerle sabitlendi.
+  - Açılır kutu genişlikleri (`min-width: 140px/145px`, `max-width: 200px`) genişletilerek masaüstü görünümde "Yayından Kaldırıldı" dahil tüm metinlerin ferahça okunması sağlandı.
+- Tipografi Standartları Görsel Vitrini:
+  - Generative UI ile Dark/Light tema geçişli, canlı font-weight karşılaştırmalı (`600` vs `700`) ve gerçek kart mockup'lı interaktif görsel rehber hazırlandı.
+- Yalnızca `DevAdmin` dalında çalışıldı, `main` korundu.
+
 ## [14.10.2026 - 16:55] - Açılır Listelerin Emojilerden Arındırılması ve 13px Tipografi Optimizasyonu
 - `frontend/src/components/posts/PostFilterBar.tsx` & `frontend/src/styles/responsive.css`:
   - Açılır liste kutularında alanı daraltıp yazıları gizleyen tüm emoji glifleri (`📚`, `📋`, `✍️`, `✅`, `⏸️`, `📝`, `🗑️`) kaldırıldı; temiz ve sade metin etiketlerine geçildi.

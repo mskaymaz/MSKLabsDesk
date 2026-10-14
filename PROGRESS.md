@@ -1,6 +1,16 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 🟢 Son Güncelleme [14.10.2026 - 17:05] — AÇILIR LİSTE DİKEY DOLGU DÜZELTMESİ & TİPOGRAFİ GÖRSEL VİTRİNİ [*]
+* **Yapılan İşlem:**
+  1. **Açılır Liste Dikey Dolgu (Padding) İzolasyonu (`PostFilterBar.tsx` & `responsive.css`):**
+     - `.form-select` genel stilindeki `padding: 10px 14px` kuralının 28px'lik açılır kutularda metni dikeyde 8px'e sıkıştırarak gizlemesi engellendi; inline stil ve yüksek özgüllüklü CSS ile sıfır dikey dolgu (`padding: 0 22px 0 8px`) ve `line-height: 26px` ile metin dikeyde mükemmel ortalandı.
+     - Açılır kutu genişlikleri masaüstünde ferahlatılarak ("Yayından Kaldırıldı" 19 harf dahil) metinlerin kapalıyken kesilmesi önlendi.
+  2. **Tipografi Standartları Canlı Görsel Vitrini (`typography-preview.html`):**
+     - Dark/Light tema geçişli, canlı font-weight karşılaştırıcılı (`700` vs `600` vs `500`), filtre çubuğu ve blog kartı simülasyonunu barındıran zengin interaktif Generative UI vitrini oluşturuldu.
+* **Sonuçlar:** `npm run build` PASS (0 hata, 717 ms). Dosya satır sınırları korundu.
+* **Durum:** `DevAdmin` dalında çalışıldı, `main` korundu.
+
 ## 🟢 Son Güncelleme [14.10.2026 - 16:55] — AÇILIR LİSTELERİN EMOJİLERDEN ARINDIRILMASI & 13PX TİPOGRAFİ OPTİMİZASYONU [*]
 * **Yapılan İşlem:**
   1. **Açılır Liste Emojilerinin Temizlenmesi (`PostFilterBar.tsx`):**

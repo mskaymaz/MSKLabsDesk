@@ -26,23 +26,29 @@
   position: relative;
   width: 210px;
 }
-.filter-item-channel {
-  height: 28px;
-  padding: 2px 20px 2px 8px;
-  font-size: 13px;
-  font-weight: 400;
+.form-select.filter-item-channel {
+  height: 28px !important;
+  padding: 0 22px 0 8px !important;
+  line-height: 26px !important;
+  font-size: 13px !important;
+  font-weight: 400 !important;
   cursor: pointer;
   width: auto;
-  max-width: 175px;
+  min-width: 140px;
+  max-width: 200px;
+  box-sizing: border-box !important;
 }
-.filter-item-status {
-  height: 28px;
-  padding: 2px 20px 2px 8px;
-  font-size: 13px;
-  font-weight: 400;
+.form-select.filter-item-status {
+  height: 28px !important;
+  padding: 0 22px 0 8px !important;
+  line-height: 26px !important;
+  font-size: 13px !important;
+  font-weight: 400 !important;
   cursor: pointer;
   width: auto;
-  max-width: 160px;
+  min-width: 145px;
+  max-width: 190px;
+  box-sizing: border-box !important;
 }
 .filter-item-channel option,
 .filter-item-status option {
