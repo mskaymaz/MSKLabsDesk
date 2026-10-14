@@ -17,6 +17,7 @@ export const PostsView: React.FC = () => {
 
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
+  const [channelFilter, setChannelFilter] = useState('all');
 
   const [formData, setFormData] = useState<PostFormData>({
     channel_id: '',
@@ -165,11 +166,21 @@ export const PostsView: React.FC = () => {
   };
 
   const filteredPosts = posts.filter((post) => {
+    const q = searchQuery.toLowerCase().trim();
     const matchesSearch =
-      post.title_tr.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      post.slug.toLowerCase().includes(searchQuery.toLowerCase());
+      !q ||
+      post.title_tr.toLowerCase().includes(q) ||
+      (post.title_en && post.title_en.toLowerCase().includes(q)) ||
+      (post.title_ar && post.title_ar.toLowerCase().includes(q)) ||
+      post.slug.toLowerCase().includes(q);
+
     const matchesStatus = statusFilter === 'all' || post.status === statusFilter;
-    return matchesSearch && matchesStatus;
+    const matchesChannel =
+      channelFilter === 'all' ||
+      post.channel_id === channelFilter ||
+      (post.channel_slug && post.channel_slug === channelFilter);
+
+    return matchesSearch && matchesStatus && matchesChannel;
   });
 
   return (
@@ -179,11 +190,17 @@ export const PostsView: React.FC = () => {
         onSearchChange={setSearchQuery}
         statusFilter={statusFilter}
         onStatusFilterChange={setStatusFilter}
+        channelFilter={channelFilter}
+        onChannelFilterChange={setChannelFilter}
+        channels={channels}
+        totalCount={posts.length}
+        filteredCount={filteredPosts.length}
         onNewPost={handleOpenNewEditor}
       />
 
       <PostList
         posts={filteredPosts}
+        channels={channels}
         loading={loading}
         onEdit={handleOpenEditEditor}
         onDelete={handleDeletePost}

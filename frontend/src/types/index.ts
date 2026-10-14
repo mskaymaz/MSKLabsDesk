@@ -90,6 +90,7 @@ export interface BlogPost {
   id: string;
   channel_id: string;
   channel_name?: string;
+  channel_slug?: string;
   slug: string;
   title_tr: string;
   title_en?: string;

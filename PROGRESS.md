@@ -1,6 +1,23 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 🟢 Son Güncelleme [14.10.2026 - 15:05] — BLOG YAZILARI ADMİN ARAYÜZÜ KONTRAST, KANAL FİLTRESİ & KART TASARIMI GELİŞTİRMELERİ [*]
+* **Yapılan İşlem:**
+  1. **Başlık ve Metin Kontrastı Düzeltmesi (`PostFilterBar.tsx`):**
+     - Hardcoded `#FFF` renk tanımı kaldırılarak `var(--text-primary)` bağlandı. Böylece açık temada beyaz yazı - gri zemin nedeniyle başlığın görünmez olması engellendi, tüm temalarda yüksek kontrast sağlandı.
+  2. **Arama ve Açılır Liste Kontrast & Tema Uyumu (`PostFilterBar.tsx`):**
+     - Arama kutusundaki rahatsız edici koyu gri `rgba(0,0,0,0.3)` ve açılır listedeki simsiyah `#0F1522` arkaplanlar temizlendi. Form elemanları `.form-input` ve `.form-select` sınıflarına bağlanarak açık temada ferah beyaz/açık gri zemin, koyu temada koyu lacivert kart yüzeyi kazandı.
+  3. **Kanal Açılır Listesi Entegrasyonu (`PostsView.tsx` & `PostFilterBar.tsx`):**
+     - Arama kutusunun hemen yanına `Tüm Blog Türleri`, `✍️ BİZCE`, `📖 ANILTILAR`, `📰 GÜNCEL`, `🎬 VLOG` seçeneklerini içeren kanal seçici eklendi.
+     - `filteredPosts` algoritmasına kanal filtresi bağlanarak seçilen türe ait makalelerin listelenmesi ve anlık sayaç gösterimi sağlandı.
+  4. **Modern Blog Kartı, Belirgin Başlık & Sıra Numarası (`PostList.tsx`):**
+     - Dar ve yatay kaydırma gerektiren tablo yerine modern, duyarlı kart (`glass-card`) mimarisine geçildi.
+     - Her kartın başında admin için kibar ve ince sıra numarası rozeti (`#{index + 1}`) yerleştirildi.
+     - Gizlenen ve okunmayan başlık problemi çözüldü; `post.title_tr` belirgin, kalın `h2` başlığı olarak kartın merkezine oturtuldu. Web linki ise `/blog/{post.slug}` olarak kibar bir alt bağlantıya dönüştürüldü.
+     - Kanal rozeti, yayın durumu (Yayında/Taslak), video rozeti, çeviri dilleri (TR/EN/AR), okuma sayısı ve yayın tarihi kart üzerine yerleştirildi.
+* **Sonuçlar:** Vite ve TypeScript build (`npm run build`) 0 hata ile 709 ms'de tamamlandı. Dosya sınırlarına uyuldu (`PostFilterBar.tsx`: 146 satır, `PostList.tsx`: 283 satır, `PostsView.tsx`: 222 satır).
+* **Durum:** `DevAdmin` dalında çalışıldı, `main` korundu.
+
 ## 🟢 Son Güncelleme [14.10.2026 - 14:50] — BLOG YAZILARI D1 VERİTABANI TOHUMLAMA (SEED), DİNAMİK API & RESPONSIVE VİDEO OYNATICI ENTEGRASYONU [*]
 * **Yapılan İşlem:**
   1. **D1 Veritabanı Tohumlama (`0006_seed_blog_posts.sql` & `0015_seed_blog_posts.sql`):**

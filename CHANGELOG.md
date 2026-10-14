@@ -1,6 +1,25 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [14.10.2026 - 15:05] - Blog Yazıları Admin Arayüzü Kontrast, Kanal Filtresi & Kart Tasarımı
+- `frontend/src/components/posts/PostFilterBar.tsx`:
+  - Sayfa başlığı `#FFF` yerine `var(--text-primary)` yapılarak açık ve koyu temalarda tam okunabilirlik sağlandı.
+  - Arama kutusu ve açılır listeler `.form-input` ve `.form-select` sınıflarına bağlanarak rahatsız edici koyu gri ve simsiyah arka planlar kaldırıldı.
+  - Arama çubuğunun hemen yanına `Tüm Blog Türleri`, `✍️ BİZCE`, `📖 ANILTILAR`, `📰 GÜNCEL`, `🎬 VLOG` kanal filtre açılır listesi eklendi.
+  - Anlık filtrelenen / toplam yazı sayacı eklendi.
+- `frontend/src/views/PostsView.tsx`:
+  - `channelFilter` state'i tanımlandı, `filteredPosts` algoritmasına kanal filtresi entegre edildi.
+  - `PostFilterBar` ve `PostList` bileşenlerine güncel prop'lar aktarıldı.
+- `frontend/src/types/index.ts`:
+  - `BlogPost` arayüzüne opsiyonel `channel_slug?: string;` eklendi.
+- `frontend/src/components/posts/PostList.tsx`:
+  - Sıkışık HTML tablo yapısı yerine modern ve duyarlı kart listesi (`glass-card`) inşa edildi.
+  - Her kartın başında admin sıra numarası (`#{index + 1}`) rozeti yerleştirildi.
+  - Blog başlığı belirgin ve kalın `h2` (`var(--text-primary)`) olarak kartın merkezine oturtuldu.
+  - Link yapısı `/blog/{post.slug}` olarak kibar bir alt bağlantı haline getirildi.
+  - Kanal rozeti, yayın durumu (Yayında/Taslak), video rozeti, çeviri dilleri (TR/EN/AR), okuma sayısı ve yayın tarihi kart üzerine yerleştirildi.
+- Yalnızca `DevAdmin` dalında çalışıldı, `main` korundu.
+
 ## [14.10.2026 - 14:50] - Blog Yazıları D1 Tohumlama, Dinamik API & Responsive Video Oynatıcı
 - `MSKLabsDesk/backend/migrations/0006_seed_blog_posts.sql` & `webMSKLabs/migrations/0015_seed_blog_posts.sql`:
   - 5 adet zengin makale D1 veritabanı `blog_posts` tablosuna 3 dilli metinleriyle aktarıldı.
