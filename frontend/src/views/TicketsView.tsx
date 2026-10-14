@@ -16,7 +16,7 @@ export const TicketsView: React.FC<TicketsViewProps> = ({
 }) => {
   const { t, language } = useTranslation();
   const [searchQuery, setSearchQuery] = useState('');
-  const [statusFilter, setStatusFilter] = useState<string>('all');
+  const [statusFilter, setStatusFilter] = useState<string>('new');
   const [categoryFilter, setCategoryFilter] = useState<string>('all');
   const [selectedTicketDetail, setSelectedTicketDetail] = useState<TicketDetailResponse | null>(null);
   const [loadingDetail, setLoadingDetail] = useState(false);
@@ -197,8 +197,8 @@ export const TicketsView: React.FC<TicketsViewProps> = ({
               }}
               title="İşlem Durumuna Göre Filtrele"
             >
-              <option value="all">📋 Tüm Talepler ({tickets.length})</option>
               <option value="new">🆕 Yeni ({tickets.filter((t) => t.status === 'new' || t.status === 'open').length})</option>
+              <option value="all">📋 Tüm Talepler ({tickets.length})</option>
               <option value="in_progress">⏳ İşlemde ({tickets.filter((t) => t.status === 'in_progress').length})</option>
               <option value="resolved">✅ Çözüldü / Yanıtlandı ({tickets.filter((t) => t.status === 'resolved').length})</option>
               <option value="rejected">❌ Kapatıldı / Reddedildi ({tickets.filter((t) => t.status === 'rejected').length})</option>
@@ -430,6 +430,7 @@ export const TicketsView: React.FC<TicketsViewProps> = ({
           ticketDetail={selectedTicketDetail}
           onClose={() => setSelectedTicketDetail(null)}
           onRefresh={handleRefreshDetail}
+          onStatusChangeSuccess={onRefresh}
         />
       )}
     </div>

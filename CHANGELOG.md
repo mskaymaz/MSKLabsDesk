@@ -1,6 +1,16 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [14.10.2026 - 09:50] - Varsayılan "Yeni" Talep Filtresi ve Modalın Tekrar Açılması Hatasının Giderilmesi
+- `frontend/src/views/TicketsView.tsx`:
+  - `statusFilter` varsayılan değeri `'new'` yapıldı.
+  - Açılır listede `🆕 Yeni` seçeneği en üste taşındı.
+  - `<TicketDetailModal>` bileşenine `onStatusChangeSuccess={onRefresh}` prop'u sağlandı.
+- `frontend/src/components/TicketDetailModal.tsx`:
+  - `onStatusChangeSuccess` callback'i tanımlandı.
+  - Durum güncellemelerinde (`handleStatusChange`), asenkron detay çağrısı yapan `onRefresh` yerine ana tabloyu yenileyen `onStatusChangeSuccess` tetiklenerek kapanan modalın tekrar açılmasına yol açan yarış durumu giderildi.
+- Yalnızca `DevAdmin` dalında çalışıldı, `main` korundu.
+
 ## [14.10.2026 - 09:35] - Destek Paneli Durum Butonlarının İyileştirilmesi, Modal Kapanma ve Kupon Modülünün Kaldırılması
 - `frontend/src/components/TicketDetailModal.tsx`:
   - "Okundu İşaretle" -> "Okundu", "Çözüldü İşaretle" -> "Çözüldü", "Reddet" -> "Reddet" olarak sadeleştirildi.

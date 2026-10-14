@@ -1,6 +1,17 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 🟢 Son Güncelleme [14.10.2026 - 09:50] — VARSAYILAN "YENİ" TALEP FİLTRESİ VE MODALIN TEKRAR AÇILMASI HATASININ GİDERİLMESİ [*]
+* **Yapılan İşlem:**
+  1. **Destek Talepleri Varsayılan Filtresi:**
+     - `TicketsView.tsx` içerisinde `statusFilter` varsayılan değeri `'new'` olarak ayarlandı.
+     - Açılır listenin ilk sırasına `🆕 Yeni` seçeneği taşındı. Panel ilk açıldığında doğrudan yeni gelen talepler listelenir.
+  2. **Modalın Kapanıp Tekrar Açılması Hatasının (Yarış Durumu) Çözümü:**
+     - `TicketDetailModal.tsx` içerisinde durum butonlarına tıklandığında `onRefresh` (detay sorgulayan asenkron fonksiyon) yerine `onStatusChangeSuccess` (yalnızca ana tabloyu yenileyen fonksiyon) tetiklenecek şekilde mimari ayrıştırıldı.
+     - Böylece "Okundu", "Çözüldü" veya "Reddet" butonlarına basıldığında modal kapanır, arka planda ana liste güncellenir ve modalın yeniden açılma yarışı (re-open race condition) tamamen ortadan kalkar.
+* **Sonuçlar:** Vite ve TypeScript build (`npm run build`) 0 hata ile tamamlandı. Dosya satır sınırlarına tam uyuldu (`TicketsView.tsx`: 438 satır, `TicketDetailModal.tsx`: 428 satır).
+* **Durum:** `DevAdmin` dalında çalışıldı, `main` korundu.
+
 ## 🟢 Son Güncelleme [14.10.2026 - 09:35] — DESTEK PANELİ DURUM BUTONLARININ İYİLEŞTİRİLMESİ, MODAL KAPANMA VE KUPON MODÜLÜNÜN KALDIRILMASI [*]
 * **Yapılan İşlem:**
   1. **Durum Butonlarının Sadeleştirilmesi & Fonksiyonel Kapanma:**

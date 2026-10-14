@@ -7,12 +7,14 @@ interface TicketDetailModalProps {
   ticketDetail: TicketDetailResponse | null;
   onClose: () => void;
   onRefresh: () => void;
+  onStatusChangeSuccess: () => void;
 }
 
 export const TicketDetailModal: React.FC<TicketDetailModalProps> = ({
   ticketDetail,
   onClose,
   onRefresh,
+  onStatusChangeSuccess,
 }) => {
   const [replyMessage, setReplyMessage] = useState('');
   const [loadingReply, setLoadingReply] = useState(false);
@@ -99,8 +101,8 @@ export const TicketDetailModal: React.FC<TicketDetailModalProps> = ({
     setLoadingStatus(true);
     try {
       await api.updateTicketStatus(ticket.id, newStatus);
-      onRefresh();
       onClose();
+      onStatusChangeSuccess();
     } catch (err) {
       alert('Durum güncellenemedi.');
     } finally {
