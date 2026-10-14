@@ -1,19 +1,23 @@
 import React from 'react';
-import { LayoutDashboard, Inbox, MessageSquare, Settings, FileText } from 'lucide-react';
+import { LayoutDashboard, Inbox, MessageSquare, Settings, FileText, Menu } from 'lucide-react';
 import type { TabType } from '../Sidebar';
 
 export interface MobileBottomNavProps {
   activeTab: TabType;
   setActiveTab: (tab: TabType) => void;
+  onOpenMenu?: () => void;
 }
 
-export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ activeTab, setActiveTab }) => {
+export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
+  activeTab,
+  setActiveTab,
+  onOpenMenu,
+}) => {
   const items = [
     { id: 'dashboard' as TabType, label: 'Özet', icon: LayoutDashboard },
     { id: 'tickets' as TabType, label: 'Biletler', icon: Inbox },
     { id: 'comments' as TabType, label: 'Yorumlar', icon: MessageSquare },
     { id: 'posts' as TabType, label: 'Blog', icon: FileText },
-    { id: 'settings' as TabType, label: 'Ayarlar', icon: Settings },
   ];
 
   return (
@@ -56,6 +60,56 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ activeTab, set
           </button>
         );
       })}
+
+      {onOpenMenu ? (
+        <button
+          type="button"
+          onClick={onOpenMenu}
+          aria-label="Tüm Menüyü Aç"
+          title="Tüm Menü"
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: '2px',
+            background: 'transparent',
+            border: 'none',
+            color: 'var(--accent-primary)',
+            fontSize: '10px',
+            fontWeight: 700,
+            minWidth: '44px',
+            minHeight: '44px',
+            justifyContent: 'center',
+            cursor: 'pointer',
+          }}
+        >
+          <Menu size={18} />
+          <span>Menü ☰</span>
+        </button>
+      ) : (
+        <button
+          type="button"
+          onClick={() => setActiveTab('settings')}
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: '2px',
+            background: 'transparent',
+            border: 'none',
+            color: activeTab === 'settings' ? 'var(--accent-primary)' : 'var(--text-muted)',
+            fontSize: '10px',
+            fontWeight: activeTab === 'settings' ? 700 : 400,
+            minWidth: '44px',
+            minHeight: '44px',
+            justifyContent: 'center',
+            cursor: 'pointer',
+          }}
+        >
+          <Settings size={18} />
+          <span>Ayarlar</span>
+        </button>
+      )}
     </nav>
   );
 };

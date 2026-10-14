@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Sidebar, type TabType } from '../Sidebar';
 import { Topbar } from './Topbar';
 import { MobileBottomNav } from './MobileBottomNav';
+import { MobileDrawer } from './MobileDrawer';
 import { GlobalSearchModal } from '../modals/GlobalSearchModal';
 import { ErrorBoundary, OfflineBanner } from './ErrorBoundary';
 import { useTranslation } from '../../context/I18nContext';
@@ -22,6 +23,7 @@ export const AppShell: React.FC<AppShellProps> = ({
   children,
 }) => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { language } = useTranslation();
 
   return (
@@ -41,10 +43,21 @@ export const AppShell: React.FC<AppShellProps> = ({
           pendingCommentCount={pendingCommentCount}
         />
 
+        {/* Mobile Sandwich Drawer (<768px) */}
+        <MobileDrawer
+          isOpen={isMobileMenuOpen}
+          onClose={() => setIsMobileMenuOpen(false)}
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+          pendingTicketCount={pendingTicketCount}
+          pendingCommentCount={pendingCommentCount}
+        />
+
         <main className="main-content" style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 }}>
           <Topbar
             activeTab={activeTab}
             onOpenSearch={() => setIsSearchOpen(true)}
+            onToggleMobileMenu={() => setIsMobileMenuOpen((prev) => !prev)}
             pendingCount={pendingTicketCount + pendingCommentCount}
           />
           <div className="page-content">
@@ -52,8 +65,12 @@ export const AppShell: React.FC<AppShellProps> = ({
           </div>
         </main>
 
-        {/* Mobile Bottom Navigation (<640px) */}
-        <MobileBottomNav activeTab={activeTab} setActiveTab={setActiveTab} />
+        {/* Mobile Bottom Navigation (<768px) */}
+        <MobileBottomNav
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+          onOpenMenu={() => setIsMobileMenuOpen(true)}
+        />
 
         {/* Global Cmd+K Search Modal */}
         <GlobalSearchModal

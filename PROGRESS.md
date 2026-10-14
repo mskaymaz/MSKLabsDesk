@@ -1,6 +1,21 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 🟢 Son Güncelleme [14.10.2026 - 13:25] — MOBİL SANDVİÇ (DRAWER) NAVİGASYON MENÜSÜ ENTEGRASYONU [*]
+* **Yapılan İşlem:**
+  1. **Mobil Sandviç Çekmece Bileşeni (`MobileDrawer.tsx`):**
+     - Masaüstü sol kenar çubuğunda (`Sidebar.tsx`) yer alan ancak mobil ekranda gizlenen 10 modülün tamamını (Özet, Destek Biletleri, Yorum Yönetimi, Blog Türleri, Blog Yazıları, Uygulamalar, Şablon & Reklam, Duyurular, Aboneler, Ayarlar) içeren tam erişimli bir mobil çekmece (drawer) inşa edildi.
+     - Çekmece başlığına MSKLabsDesk logosu ve kapatma butonu (`X`), alt paneline ise kullanıcı bilgisi, koyu/açık tema değiştirici ve çıkış butonu yerleştirildi.
+     - `Escape` tuşu ve karartılmış arka plana (backdrop) tıklama ile otomatik kapanma ve `body` kaydırma kilidi eklendi.
+  2. **Üst Bar & Alt Gezinme Entegrasyonu (`Topbar.tsx` & `MobileBottomNav.tsx`):**
+     - `Topbar.tsx` içerisine mobil görünümde (`<768px`) beliren sandviç menü butonu (`☰`) yerleştirildi.
+     - `MobileBottomNav.tsx` altına 5. öğe olarak `Menü ☰` butonu entegre edildi. Böylece mobilde hem ekranın üstünden hem de başparmak erişimiyle alttan tek tıkla tüm menüye ulaşım sağlandı.
+  3. **Kabuk Entegrasyonu & CSS Animasyonları (`AppShell.tsx` & `index.css`):**
+     - `AppShell.tsx` üzerinde `isMobileMenuOpen` durumu Topbar, MobileBottomNav ve MobileDrawer arasında senkronize edildi.
+     - `index.css` içerisine `.mobile-hamburger-btn` responsive sınıfları ve `@keyframes slideRight` akıcı açılış animasyonu tanımlandı.
+* **Sonuçlar:** Vite ve TypeScript build (`npm run build`) 0 hata ile 638 ms'de tamamlandı. Dosya sınırlarına uyuldu (`MobileDrawer.tsx`: 243 satır, `Topbar.tsx`: 168 satır, `MobileBottomNav.tsx`: 99 satır, `AppShell.tsx`: 84 satır).
+* **Durum:** `DevAdmin` dalında çalışıldı, `main` korundu.
+
 ## 🟢 Son Güncelleme [14.10.2026 - 13:20] — VLOG KANALI (VARSAYILAN PASİF), VİDEO URL ENTEGRASYONU & KANAL YÖNETİMİ [*]
 * **Yapılan İşlem:**
   1. **VLOG Kanalı ve Video URL D1 Şeması (`0005_vlog_and_video_url.sql`):**

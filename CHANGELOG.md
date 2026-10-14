@@ -1,6 +1,20 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [14.10.2026 - 13:25] - Mobil Sandviç (Drawer) Navigasyon Menüsü ve Tüm Modüllere Erişim
+- `frontend/src/components/layout/MobileDrawer.tsx`:
+  - Masaüstü kenar çubuğundaki (`Sidebar.tsx`) 10 modülün tamamını içeren tam ekran animasyonlu mobil sandviç çekmece bileşeni oluşturuldu.
+- `frontend/src/components/layout/Topbar.tsx`:
+  - Mobil görünümde (`<768px`) sol başlık yanında görünen `☰` sandviç açma butonu eklendi.
+  - Başlıkta modül kimliği yerine Türkçe okunabilir etiketler tanımlandı.
+- `frontend/src/components/layout/MobileBottomNav.tsx`:
+  - Alt gezinme barına 5. buton olarak tek tıkla çekmeceyi açan `Menü ☰` butonu entegre edildi.
+- `frontend/src/components/layout/AppShell.tsx`:
+  - Çekmece durumu (`isMobileMenuOpen`) Topbar, MobileBottomNav ve MobileDrawer ile bağlandı.
+- `frontend/src/index.css`:
+  - `.mobile-hamburger-btn` ve `@keyframes slideRight` animasyon kuralları eklendi.
+- Yalnızca `DevAdmin` dalında çalışıldı, `main` korundu.
+
 ## [14.10.2026 - 13:20] - VLOG Kanalı (Varsayılan Pasif), Video URL ve Kanal Yönetimi Entegrasyonu
 - `AGENTS.md`:
   - 6. Madde eklendi: Nesnel Mühendislik ve Dürüst İstişare İlkesi (Övgü ve Pohpohlama Yasağı).

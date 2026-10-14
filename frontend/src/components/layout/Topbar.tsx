@@ -1,5 +1,5 @@
 import React from 'react';
-import { Search, Bell, User, Sun, Moon } from 'lucide-react';
+import { Search, Bell, User, Sun, Moon, Menu } from 'lucide-react';
 import type { TabType } from '../Sidebar';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
@@ -8,9 +8,28 @@ export interface TopbarProps {
   activeTab: TabType;
   onOpenSearch: () => void;
   pendingCount?: number;
+  onToggleMobileMenu?: () => void;
 }
 
-export const Topbar: React.FC<TopbarProps> = ({ activeTab, onOpenSearch, pendingCount = 0 }) => {
+const tabLabels: Record<TabType, string> = {
+  dashboard: 'Özet',
+  tickets: 'Destek Biletleri',
+  comments: 'Yorum Yönetimi',
+  channels: 'Blog Türleri',
+  posts: 'Blog Yazıları',
+  apps: 'Uygulamalar',
+  templates: 'Şablon & Reklam',
+  broadcast: 'Duyuru Gönder',
+  subscribers: 'Aboneler',
+  settings: 'Ayarlar',
+};
+
+export const Topbar: React.FC<TopbarProps> = ({
+  activeTab,
+  onOpenSearch,
+  pendingCount = 0,
+  onToggleMobileMenu,
+}) => {
   const { user } = useAuth();
   const { theme, toggleTheme } = useTheme();
 
@@ -31,11 +50,34 @@ export const Topbar: React.FC<TopbarProps> = ({ activeTab, onOpenSearch, pending
         backdropFilter: 'blur(12px)',
       }}
     >
-      <div style={{ minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-        <span style={{ fontSize: '0.76rem', color: 'var(--text-muted)', fontWeight: 600 }}>
-          <span className="hidden-mobile">MSKLabsDesk / </span>
-          {activeTab}
-        </span>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', minWidth: 0 }}>
+        {onToggleMobileMenu && (
+          <button
+            type="button"
+            className="mobile-hamburger-btn"
+            onClick={onToggleMobileMenu}
+            aria-label="Menüyü Aç"
+            title="Tüm Menü"
+            style={{
+              background: 'transparent',
+              border: 'none',
+              color: 'var(--text-primary)',
+              cursor: 'pointer',
+              padding: '4px',
+              display: 'none',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <Menu size={18} />
+          </button>
+        )}
+        <div style={{ minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+          <span style={{ fontSize: '0.76rem', color: 'var(--text-muted)', fontWeight: 600 }}>
+            <span className="hidden-mobile">MSKLabsDesk / </span>
+            {tabLabels[activeTab] || activeTab}
+          </span>
+        </div>
       </div>
 
       <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
