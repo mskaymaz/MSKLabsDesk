@@ -1,6 +1,19 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 🟢 Son Güncelleme [14.10.2026 - 16:25] — TİPOGRAFİ BİRLİĞİ VE SOL MENÜ YAZI TİPİ STANDARDİZASYONU [*]
+* **Yapılan İşlem:**
+  1. **Doğal Sistem Fontu Standardizasyonu (`tokens.css` & `index.css`):**
+     - Kullanıcının referans verdiği sol menü butonlarının sistem yazı tipinde (`Segoe UI` / `-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif`) render edildiği, ana içerik alanının ise harici 'Plus Jakarta Sans' fontunu kullandığı ve bu nedenle görsel uyumsuzluk oluştuğu tespit edildi.
+     - `--font-sans` değişkeni sol menüyle birebir eşleşen `-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif` sistem font yığınına dönüştürüldü.
+     - Tüm form ve buton elemanları için `button, input, select, textarea { font-family: inherit; }` kuralı eklenerek yazı tipi 100% eşitlendi.
+  2. **"Başlıklar Kalın, Normaller Normal" Kuralının Uygulanması (`PostCard.tsx`, `PostFilterBar.tsx`, `PostCardActions.tsx`):**
+     - **Kalın Başlıklar (`fontWeight: 700`):** Blog ana başlığı (`h1`) ve kart makale başlıkları (`h2`).
+     - **Normal Metinler (`fontWeight: 400`):** Kart özet metni (`post.summary_tr`), web bağlantı yolu (`/blog/...`), üst açıklama metni ("Çok dilli blog yazılarınızı yönetin"), sayaç rozeti, arama kutusu, kanal ve durum açılır listeleri, tüm kart rozetleri (sıra no `#`, kanal, durum, video, diller `TR`, `EN`, `AR`, kapak görseli).
+     - **Normal Butonlar (`fontWeight: 500`):** "+ Yeni Blog Yazısı", "Yayından Kaldır", "Yayına Al", "Geri Kurtar", "Kalıcı Sil", "Düzenle".
+* **Sonuçlar:** Vite ve TypeScript build (`npm run build`) 0 hata ile 727 ms'de tamamlandı. Dosya sınırlarına uyuldu (`PostCard.tsx`: 383 satır, `PostCardActions.tsx`: 173 satır, `PostFilterBar.tsx`: 208 satır, `index.css`: 379 satır, `tokens.css`: 89 satır).
+* **Durum:** `DevAdmin` dalında çalışıldı, `main` korundu.
+
 ## 🟢 Son Güncelleme [14.10.2026 - 16:05] — BLOG YAZILARI 3 AŞAMALI YAŞAM DÖNGÜSÜ (STATE MACHINE) & GÜVENLİ SİLME MİMARİSİ [*]
 * **Yapılan İşlem:**
   1. **Backend Koruma & Yaşam Döngüsü (`cmsPosts.ts`):**

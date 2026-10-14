@@ -50,7 +50,7 @@ export const PostCardActions: React.FC<PostCardActionsProps> = ({
             background: 'rgba(245, 158, 11, 0.12)',
             color: 'var(--accent-amber)',
             border: '1px solid rgba(245, 158, 11, 0.3)',
-            fontWeight: 600,
+            fontWeight: 500,
           }}
           title="Makaleyi Web Yayından Kaldır (Arşive Al)"
         >
@@ -77,7 +77,7 @@ export const PostCardActions: React.FC<PostCardActionsProps> = ({
               background: 'rgba(16, 185, 129, 0.12)',
               color: 'var(--accent-emerald)',
               border: '1px solid rgba(16, 185, 129, 0.3)',
-              fontWeight: 600,
+              fontWeight: 500,
             }}
             title="Makaleyi Webde Yayına Al"
           >
@@ -124,7 +124,7 @@ export const PostCardActions: React.FC<PostCardActionsProps> = ({
               background: 'rgba(6, 182, 212, 0.12)',
               color: 'var(--accent-cyan)',
               border: '1px solid rgba(6, 182, 212, 0.3)',
-              fontWeight: 600,
+              fontWeight: 500,
             }}
             title="Çöp Kutusundan Geri Kurtar"
           >
@@ -144,6 +144,7 @@ export const PostCardActions: React.FC<PostCardActionsProps> = ({
               height: '24px',
               borderRadius: '5px',
               cursor: 'pointer',
+              fontWeight: 500,
             }}
             title="Veritabanından Kalıcı Olarak Sil"
           >
@@ -167,6 +168,7 @@ export const PostCardActions: React.FC<PostCardActionsProps> = ({
             height: '24px',
             borderRadius: '5px',
             cursor: 'pointer',
+            fontWeight: 500,
           }}
           title="Yazıyı Düzenle"
         >

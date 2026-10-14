@@ -1,6 +1,20 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [14.10.2026 - 16:25] - Tipografi Birliği ve Sol Menü Yazı Tipi Standardizasyonu
+- `frontend/src/styles/tokens.css` & `frontend/src/index.css`:
+  - Sol menünün kullandığı doğal sistem fontu (`-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif`) tüm arayüz için ana yazı tipi (`--font-sans`) olarak standartlaştırıldı; uyumsuzluk yaratan harici Google font ('Plus Jakarta Sans') kaldırıldı.
+  - `button, input, select, textarea` için global `font-family: inherit` tanımlanarak menü ve form elemanları arasındaki font farkı giderildi.
+  - `.btn` taban yazı kalınlığı `500` (normal/orta) seviyesine çekildi.
+- `frontend/src/components/posts/PostFilterBar.tsx`:
+  - Başlık (`h1`) kalın (`700`), sayaç ve açıklama metni normal (`400`) ağırlığa ayarlandı.
+  - Arama kutusu ve filtre açılır listeleri (`select`) normal (`400`), "+ Yeni Blog Yazısı" butonu normal (`500`) yapıldı.
+- `frontend/src/components/posts/PostCard.tsx`:
+  - "Başlıklar kalın, normaller normal" kuralına göre: Blog başlığı (`h2`) kalın (`700`), özet metni (`p`) normal (`400`, `0.88rem`), bağlantı yolu (`slug`) normal (`400`), tüm rozetler (sıra no, kanal, durum, video, diller TR/EN/AR, görsel) normal (`400`) yapıldı.
+- `frontend/src/components/posts/PostCardActions.tsx`:
+  - Aksiyon butonları ("Yayından Kaldır", "Yayına Al", "Geri Kurtar", "Kalıcı Sil", "Düzenle") kalın font yerine normal (`500`) ağırlığa çekildi.
+- Yalnızca `DevAdmin` dalında çalışıldı, `main` korundu.
+
 ## [14.10.2026 - 16:05] - Blog Yazıları 3 Aşamalı Yaşam Döngüsü ve Güvenli Silme Mimarisi
 - `backend/src/routes/cmsPosts.ts`:
   - `DELETE` uç noktasına koruma eklendi: Yayındaki makale doğrudan silinemez (400 hatası).

@@ -150,7 +150,7 @@ export const PostCard: React.FC<PostCardProps> = ({
           <span
             style={{
               fontSize: '0.70rem',
-              fontWeight: 700,
+              fontWeight: 400,
               color: 'var(--text-muted)',
               background: 'rgba(255, 255, 255, 0.04)',
               border: '1px solid var(--border-color)',
@@ -168,7 +168,7 @@ export const PostCard: React.FC<PostCardProps> = ({
               padding: '1px 6px',
               borderRadius: '4px',
               fontSize: '0.70rem',
-              fontWeight: 700,
+              fontWeight: 400,
               background: chInfo.bg,
               color: chInfo.color,
               border: `1px solid ${chInfo.border}`,
@@ -187,7 +187,7 @@ export const PostCard: React.FC<PostCardProps> = ({
               padding: '1px 5px',
               borderRadius: '4px',
               fontSize: '0.68rem',
-              fontWeight: 700,
+              fontWeight: 400,
               background: sBadge.bg,
               color: sBadge.color,
               border: `1px solid ${sBadge.border}`,
@@ -207,7 +207,7 @@ export const PostCard: React.FC<PostCardProps> = ({
                 padding: '1px 5px',
                 borderRadius: '4px',
                 fontSize: '0.68rem',
-                fontWeight: 700,
+                fontWeight: 400,
                 background: 'rgba(239, 68, 68, 0.15)',
                 color: 'var(--accent-rose)',
                 border: '1px solid rgba(239, 68, 68, 0.3)',
@@ -222,7 +222,7 @@ export const PostCard: React.FC<PostCardProps> = ({
             <span
               style={{
                 fontSize: '0.68rem',
-                fontWeight: 700,
+                fontWeight: 400,
                 color: 'var(--accent-emerald)',
                 background: 'rgba(16, 185, 129, 0.12)',
                 border: '1px solid rgba(16, 185, 129, 0.25)',
@@ -236,7 +236,7 @@ export const PostCard: React.FC<PostCardProps> = ({
             <span
               style={{
                 fontSize: '0.68rem',
-                fontWeight: 700,
+                fontWeight: 400,
                 color: post.title_en ? 'var(--accent-emerald)' : 'var(--text-muted)',
                 background: post.title_en ? 'rgba(16, 185, 129, 0.12)' : 'rgba(255, 255, 255, 0.04)',
                 border: `1px solid ${post.title_en ? 'rgba(16, 185, 129, 0.25)' : 'var(--border-subtle)'}`,
@@ -251,7 +251,7 @@ export const PostCard: React.FC<PostCardProps> = ({
             <span
               style={{
                 fontSize: '0.68rem',
-                fontWeight: 700,
+                fontWeight: 400,
                 color: post.title_ar ? 'var(--accent-emerald)' : 'var(--text-muted)',
                 background: post.title_ar ? 'rgba(16, 185, 129, 0.12)' : 'rgba(255, 255, 255, 0.04)',
                 border: `1px solid ${post.title_ar ? 'rgba(16, 185, 129, 0.25)' : 'var(--border-subtle)'}`,
@@ -270,7 +270,7 @@ export const PostCard: React.FC<PostCardProps> = ({
             <span
               style={{
                 fontSize: '0.68rem',
-                fontWeight: 600,
+                fontWeight: 400,
                 color: 'var(--text-muted)',
                 background: 'rgba(255, 255, 255, 0.04)',
                 border: '1px solid var(--border-subtle)',
@@ -362,7 +362,7 @@ export const PostCard: React.FC<PostCardProps> = ({
         <span
           style={{
             fontSize: '0.76rem',
-            fontWeight: 500,
+            fontWeight: 400,
             color: 'var(--text-muted)',
             display: 'inline-flex',
             alignItems: 'center',
@@ -376,12 +376,12 @@ export const PostCard: React.FC<PostCardProps> = ({
         </span>
       </div>
 
-      {/* Özet Metni: Sol menü linklerinin font ve özelliklerinde */}
+      {/* Özet Metni: Sol menü linklerinin font ve özelliklerinde (normal font) */}
       {post.summary_tr && (
         <p
           style={{
             fontSize: '0.88rem',
-            fontWeight: 500,
+            fontWeight: 400,
             color: 'var(--text-secondary)',
             lineHeight: 1.4,
             margin: 0,

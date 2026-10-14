@@ -59,7 +59,7 @@ export const PostFilterBar: React.FC<PostFilterBarProps> = ({
           <h1
             style={{
               fontSize: '1.05rem',
-              fontWeight: 800,
+              fontWeight: 700,
               margin: 0,
               color: 'var(--text-primary)',
               lineHeight: 1.2,
@@ -71,7 +71,7 @@ export const PostFilterBar: React.FC<PostFilterBarProps> = ({
           <span
             style={{
               fontSize: '0.72rem',
-              fontWeight: 700,
+              fontWeight: 400,
               color: 'var(--accent-cyan)',
               background: 'rgba(6, 182, 212, 0.12)',
               border: '1px solid rgba(6, 182, 212, 0.25)',
@@ -82,11 +82,11 @@ export const PostFilterBar: React.FC<PostFilterBarProps> = ({
             {filteredCount} / {totalCount} Yazı
           </span>
 
-          {/* Açıklama: Sol menü linkleri ile aynı font büyüklüğü ve karakteri */}
+          {/* Açıklama: Sol menü linkleri ile aynı font büyüklüğü ve karakteri (normal font) */}
           <span
             style={{
               fontSize: '0.88rem',
-              fontWeight: 500,
+              fontWeight: 400,
               color: 'var(--text-secondary)',
               marginLeft: '4px',
             }}
@@ -134,7 +134,7 @@ export const PostFilterBar: React.FC<PostFilterBarProps> = ({
                 paddingLeft: '28px',
                 paddingRight: '8px',
                 fontSize: '0.88rem',
-                fontWeight: 500,
+                fontWeight: 400,
               }}
             />
           </div>
@@ -148,7 +148,7 @@ export const PostFilterBar: React.FC<PostFilterBarProps> = ({
               height: '28px',
               padding: '2px 24px 2px 8px',
               fontSize: '0.88rem',
-              fontWeight: 500,
+              fontWeight: 400,
               cursor: 'pointer',
               width: 'auto',
               maxWidth: '190px',
@@ -173,7 +173,7 @@ export const PostFilterBar: React.FC<PostFilterBarProps> = ({
               height: '28px',
               padding: '2px 24px 2px 8px',
               fontSize: '0.88rem',
-              fontWeight: 500,
+              fontWeight: 400,
               cursor: 'pointer',
               width: 'auto',
               maxWidth: '150px',
@@ -197,7 +197,7 @@ export const PostFilterBar: React.FC<PostFilterBarProps> = ({
             height: '28px',
             padding: '0 12px',
             fontSize: '0.85rem',
-            fontWeight: 650,
+            fontWeight: 500,
             display: 'inline-flex',
             alignItems: 'center',
             gap: '5px',
