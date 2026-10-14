@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BookOpen, Plus, Trash2, CheckCircle } from 'lucide-react';
+import { BookOpen, Plus, Trash2, CheckCircle, Video, Eye, EyeOff } from 'lucide-react';
 import type { BlogChannel } from '../types';
 import { api } from '../services/api';
 import { useTranslation } from '../context/I18nContext';
@@ -21,6 +21,7 @@ export const ChannelsView: React.FC = () => {
     description_ar: '',
     icon: 'book-open',
     display_order: 0,
+    is_active: 1,
   });
 
   const loadChannels = async () => {
@@ -57,6 +58,7 @@ export const ChannelsView: React.FC = () => {
         description_ar: '',
         icon: 'book-open',
         display_order: 0,
+        is_active: 1,
       });
       loadChannels();
     } catch (err: any) {
@@ -69,6 +71,19 @@ export const ChannelsView: React.FC = () => {
     try {
       await api.deleteChannel(id);
       loadChannels();
+    } catch (err: any) {
+      alert(err.message || t('common.error'));
+    }
+  };
+
+  const handleToggleActive = async (ch: BlogChannel) => {
+    const isCurrentlyActive = ch.is_active === 1 || ch.is_active === true;
+    const nextState = !isCurrentlyActive;
+    try {
+      await api.updateChannel(ch.id, { is_active: nextState ? 1 : 0 });
+      setChannels((prev) =>
+        prev.map((c) => (c.id === ch.id ? { ...c, is_active: nextState ? 1 : 0 } : c))
+      );
     } catch (err: any) {
       alert(err.message || t('common.error'));
     }
@@ -116,38 +131,69 @@ export const ChannelsView: React.FC = () => {
         <p style={{ color: 'var(--text-muted)' }}>{t('common.loading')}</p>
       ) : (
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '16px' }}>
-          {channels.map((ch) => (
-            <div key={ch.id} className="glass-card" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: '16px' }}>
-              <div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <div style={{ padding: '8px', background: 'rgba(99, 102, 241, 0.15)', borderRadius: '8px', color: 'var(--accent-primary)' }}>
-                      <BookOpen size={20} />
+          {channels.map((ch) => {
+            const isActive = ch.is_active === 1 || ch.is_active === true;
+            return (
+              <div key={ch.id} className="glass-card" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: '16px' }}>
+                <div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                      <div style={{
+                        padding: '8px',
+                        background: ch.icon === 'video' ? 'rgba(239, 68, 68, 0.15)' : 'rgba(99, 102, 241, 0.15)',
+                        borderRadius: '8px',
+                        color: ch.icon === 'video' ? 'var(--accent-rose)' : 'var(--accent-primary)'
+                      }}>
+                        {ch.icon === 'video' ? <Video size={20} /> : <BookOpen size={20} />}
+                      </div>
+                      <div>
+                        <h3 style={{ fontSize: '1.1rem', fontWeight: 800, color: '#FFF' }}>{ch.name_tr}</h3>
+                        <span style={{ fontSize: '0.75rem', color: 'var(--accent-cyan)' }}>/blog/{ch.slug}</span>
+                      </div>
                     </div>
-                    <div>
-                      <h3 style={{ fontSize: '1.1rem', fontWeight: 800, color: '#FFF' }}>{ch.name_tr}</h3>
-                      <span style={{ fontSize: '0.75rem', color: 'var(--accent-cyan)' }}>/blog/{ch.slug}</span>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <button
+                        onClick={() => handleToggleActive(ch)}
+                        style={{
+                          padding: '4px 10px',
+                          fontSize: '0.75rem',
+                          fontWeight: 700,
+                          borderRadius: '20px',
+                          cursor: 'pointer',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '4px',
+                          border: 'none',
+                          background: isActive ? 'rgba(16, 185, 129, 0.2)' : 'rgba(239, 68, 68, 0.2)',
+                          color: isActive ? 'var(--accent-emerald)' : 'var(--accent-rose)',
+                        }}
+                        title={isActive ? 'Kanalı Pasife Al' : 'Kanalı Aktife Al'}
+                      >
+                        {isActive ? <Eye size={13} /> : <EyeOff size={13} />}
+                        {isActive ? 'Aktif' : 'Pasif'}
+                      </button>
+                      <button
+                        onClick={() => handleDeleteChannel(ch.id)}
+                        style={{ background: 'transparent', border: 'none', color: 'var(--accent-rose)', cursor: 'pointer', padding: '4px' }}
+                        title="Kanalı Sil"
+                      >
+                        <Trash2 size={16} />
+                      </button>
                     </div>
                   </div>
-                  <button
-                    onClick={() => handleDeleteChannel(ch.id)}
-                    style={{ background: 'transparent', border: 'none', color: 'var(--accent-rose)', cursor: 'pointer' }}
-                  >
-                    <Trash2 size={16} />
-                  </button>
-                </div>
 
-                <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', lineHeight: 1.5 }}>
-                  {ch.description_tr || t('common.error')}
-                </p>
+                  <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', lineHeight: 1.5 }}>
+                    {ch.description_tr || t('common.error')}
+                  </p>
 
-                <div style={{ display: 'flex', gap: '6px', marginTop: '12px' }}>
-                  <span style={{ fontSize: '0.7rem', padding: '2px 6px', background: 'rgba(255,255,255,0.05)', borderRadius: '4px', color: 'var(--text-muted)' }}>🇬🇧 {ch.name_en || 'EN'}</span>
-                  <span style={{ fontSize: '0.7rem', padding: '2px 6px', background: 'rgba(255,255,255,0.05)', borderRadius: '4px', color: 'var(--text-muted)' }}>🇸🇦 {ch.name_ar || 'AR'}</span>
+                  <div style={{ display: 'flex', gap: '6px', marginTop: '12px' }}>
+                    <span style={{ fontSize: '0.7rem', padding: '2px 6px', background: 'rgba(255,255,255,0.05)', borderRadius: '4px', color: 'var(--text-muted)' }}>🇬🇧 {ch.name_en || 'EN'}</span>
+                    <span style={{ fontSize: '0.7rem', padding: '2px 6px', background: 'rgba(255,255,255,0.05)', borderRadius: '4px', color: 'var(--text-muted)' }}>🇸🇦 {ch.name_ar || 'AR'}</span>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
 
@@ -209,13 +255,38 @@ export const ChannelsView: React.FC = () => {
               </div>
 
               <div>
-                <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'block', marginBottom: '4px' }}>{t('channels.channelName')} (TR)</label>
+                <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'block', marginBottom: '4px' }}>Açıklama (TR)</label>
                 <textarea
                   rows={2}
                   value={formData.description_tr}
                   onChange={(e) => setFormData({ ...formData, description_tr: e.target.value })}
                   style={{ width: '100%', padding: '10px', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border-color)', borderRadius: '6px', color: '#FFF' }}
                 />
+              </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                <div>
+                  <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'block', marginBottom: '4px' }}>İkon</label>
+                  <select
+                    value={formData.icon}
+                    onChange={(e) => setFormData({ ...formData, icon: e.target.value })}
+                    style={{ width: '100%', padding: '10px', background: '#1A2234', border: '1px solid var(--border-color)', borderRadius: '6px', color: '#FFF' }}
+                  >
+                    <option value="book-open">Yazı / Kitap (BookOpen)</option>
+                    <option value="video">Video / Vlog (Video)</option>
+                  </select>
+                </div>
+                <div>
+                  <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'block', marginBottom: '4px' }}>Başlangıç Durumu</label>
+                  <select
+                    value={formData.is_active}
+                    onChange={(e) => setFormData({ ...formData, is_active: parseInt(e.target.value) })}
+                    style={{ width: '100%', padding: '10px', background: '#1A2234', border: '1px solid var(--border-color)', borderRadius: '6px', color: '#FFF' }}
+                  >
+                    <option value={1}>Aktif (Yayında)</option>
+                    <option value={0}>Pasif (Gizli)</option>
+                  </select>
+                </div>
               </div>
 
               <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', marginTop: '12px' }}>

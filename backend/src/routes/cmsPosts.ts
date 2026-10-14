@@ -65,7 +65,7 @@ export async function handleCmsPosts(request: Request, env: any): Promise<Respon
       title_tr, title_en, title_ar,
       content_tr, content_en, content_ar,
       summary_tr, summary_en, summary_ar,
-      cover_image, meta_keywords, status, author_name
+      cover_image, meta_keywords, status, author_name, video_url
     } = body;
 
     if (!channel_id || !slug || !title_tr || !content_tr) {
@@ -81,15 +81,15 @@ export async function handleCmsPosts(request: Request, env: any): Promise<Respon
         title_tr, title_en, title_ar,
         content_tr, content_en, content_ar,
         summary_tr, summary_en, summary_ar,
-        cover_image, meta_keywords, author_name, status, published_at
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+        cover_image, meta_keywords, author_name, status, published_at, video_url
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
     ).bind(
       id, channel_id, slug.toLowerCase().trim(),
       title_tr, title_en || null, title_ar || null,
       content_tr, content_en || null, content_ar || null,
       summary_tr || null, summary_en || null, summary_ar || null,
       cover_image || null, meta_keywords || null, author_name || user.name || 'MSK Labs',
-      status || 'draft', publishedAt
+      status || 'draft', publishedAt, video_url || null
     ).run();
 
     return new Response(JSON.stringify({ success: true, postId: id }), {
@@ -108,7 +108,7 @@ export async function handleCmsPosts(request: Request, env: any): Promise<Respon
       title_tr, title_en, title_ar,
       content_tr, content_en, content_ar,
       summary_tr, summary_en, summary_ar,
-      cover_image, meta_keywords, status, author_name
+      cover_image, meta_keywords, status, author_name, video_url
     } = body;
 
     const publishedAt = status === 'published' ? new Date().toISOString() : null;
@@ -120,7 +120,7 @@ export async function handleCmsPosts(request: Request, env: any): Promise<Respon
         content_tr = ?, content_en = ?, content_ar = ?,
         summary_tr = ?, summary_en = ?, summary_ar = ?,
         cover_image = ?, meta_keywords = ?, author_name = ?, status = ?,
-        published_at = COALESCE(published_at, ?), updated_at = CURRENT_TIMESTAMP
+        video_url = ?, published_at = COALESCE(published_at, ?), updated_at = CURRENT_TIMESTAMP
        WHERE id = ?`
     ).bind(
       channel_id, slug,
@@ -128,7 +128,7 @@ export async function handleCmsPosts(request: Request, env: any): Promise<Respon
       content_tr, content_en || null, content_ar || null,
       summary_tr || null, summary_en || null, summary_ar || null,
       cover_image || null, meta_keywords || null, author_name || 'MSK Labs', status || 'draft',
-      publishedAt, postId
+      video_url || null, publishedAt, postId
     ).run();
 
     return new Response(JSON.stringify({ success: true }), {

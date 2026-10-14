@@ -83,7 +83,7 @@ export interface BlogChannel {
   description_ar?: string;
   icon?: string;
   display_order?: number;
-  is_active?: boolean;
+  is_active?: boolean | number;
 }
 
 export interface BlogPost {
@@ -101,6 +101,7 @@ export interface BlogPost {
   summary_en?: string;
   summary_ar?: string;
   cover_image?: string;
+  video_url?: string;
   meta_keywords?: string;
   author_name?: string;
   status: 'draft' | 'scheduled' | 'published' | 'archived';

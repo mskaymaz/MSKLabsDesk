@@ -31,6 +31,7 @@ export const PostsView: React.FC = () => {
     summary_en: '',
     summary_ar: '',
     cover_image: '',
+    video_url: '',
     meta_keywords: '',
     status: 'draft',
   });
@@ -134,6 +135,7 @@ export const PostsView: React.FC = () => {
       summary_en: '',
       summary_ar: '',
       cover_image: '',
+      video_url: '',
       meta_keywords: '',
       status: 'draft',
     });
@@ -155,6 +157,7 @@ export const PostsView: React.FC = () => {
       summary_en: post.summary_en || '',
       summary_ar: post.summary_ar || '',
       cover_image: post.cover_image || '',
+      video_url: post.video_url || '',
       meta_keywords: post.meta_keywords || '',
       status: post.status === 'published' ? 'published' : 'draft',
     });

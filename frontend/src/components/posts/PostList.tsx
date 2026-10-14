@@ -1,5 +1,5 @@
 import React from 'react';
-import { Edit, Trash2, Eye, FileText } from 'lucide-react';
+import { Edit, Trash2, Eye, FileText, Video } from 'lucide-react';
 import type { BlogPost } from '../../types';
 import { EmptyState } from '../ui/CommonUI';
 
@@ -49,7 +49,27 @@ export const PostList: React.FC<PostListProps> = ({ posts, loading, onEdit, onDe
             {posts.map((post) => (
               <tr key={post.id} style={{ borderBottom: '1px solid var(--border-subtle)' }}>
                 <td style={{ padding: '14px 18px' }}>
-                  <div style={{ fontWeight: 700, color: '#FFF' }}>{post.title_tr}</div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <span style={{ fontWeight: 700, color: '#FFF' }}>{post.title_tr}</span>
+                    {post.video_url && (
+                      <span
+                        title={`Video: ${post.video_url}`}
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '3px',
+                          padding: '2px 6px',
+                          borderRadius: '4px',
+                          fontSize: '0.7rem',
+                          fontWeight: 700,
+                          background: 'rgba(239, 68, 68, 0.2)',
+                          color: 'var(--accent-rose)',
+                        }}
+                      >
+                        <Video size={11} /> Video
+                      </span>
+                    )}
+                  </div>
                   <div style={{ fontSize: '0.75rem', color: 'var(--accent-cyan)' }}>/blog/{post.slug}</div>
                 </td>
                 <td style={{ padding: '14px 18px' }}>

@@ -69,19 +69,29 @@ export async function handleCmsChannels(request: Request, env: any): Promise<Res
 
     await env.DB.prepare(
       `UPDATE blog_channels 
-       SET slug = ?, name_tr = ?, name_en = ?, name_ar = ?, description_tr = ?, description_en = ?, description_ar = ?, icon = ?, display_order = ?, is_active = ?, updated_at = CURRENT_TIMESTAMP
+       SET slug = COALESCE(?, slug),
+           name_tr = COALESCE(?, name_tr),
+           name_en = COALESCE(?, name_en),
+           name_ar = COALESCE(?, name_ar),
+           description_tr = COALESCE(?, description_tr),
+           description_en = COALESCE(?, description_en),
+           description_ar = COALESCE(?, description_ar),
+           icon = COALESCE(?, icon),
+           display_order = COALESCE(?, display_order),
+           is_active = COALESCE(?, is_active),
+           updated_at = CURRENT_TIMESTAMP
        WHERE id = ?`
     ).bind(
-      slug,
-      name_tr,
-      name_en || null,
-      name_ar || null,
-      description_tr || null,
-      description_en || null,
-      description_ar || null,
-      icon || 'book-open',
-      display_order || 0,
-      is_active !== undefined ? (is_active ? 1 : 0) : 1,
+      slug ?? null,
+      name_tr ?? null,
+      name_en ?? null,
+      name_ar ?? null,
+      description_tr ?? null,
+      description_en ?? null,
+      description_ar ?? null,
+      icon ?? null,
+      display_order ?? null,
+      is_active !== undefined ? (is_active ? 1 : 0) : null,
       channelId
     ).run();
 

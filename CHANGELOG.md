@@ -1,6 +1,32 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [14.10.2026 - 13:20] - VLOG Kanalı (Varsayılan Pasif), Video URL ve Kanal Yönetimi Entegrasyonu
+- `AGENTS.md`:
+  - 6. Madde eklendi: Nesnel Mühendislik ve Dürüst İstişare İlkesi (Övgü ve Pohpohlama Yasağı).
+- `backend/migrations/0005_vlog_and_video_url.sql`:
+  - `blog_posts` tablosuna `video_url` alanı eklendi.
+  - `blog_channels` tablosuna varsayılan pasif (`is_active = 0`) `ch_vlog` kanalı eklendi.
+- `backend/src/routes/cmsPosts.ts`:
+  - Yeni yazı ekleme (`POST`) ve güncelleme (`PUT`) sorgularına `video_url` desteği eklendi.
+- `backend/src/routes/cmsPublic.ts`:
+  - `/api/v1/posts` genel listeleme sorgusuna `p.video_url` dahil edildi.
+- `backend/src/routes/cmsChannels.ts`:
+  - Kanal güncelleme sorgusu `COALESCE` ile kısmi güncellemelere karşı korumalı hale getirildi.
+- `frontend/src/types/index.ts`:
+  - `BlogPost` arayüzüne `video_url?: string;`, `BlogChannel` arayüzüne `is_active?: boolean | number;` eklendi.
+- `frontend/src/views/ChannelsView.tsx`:
+  - Kanal kartlarına anlık Aktif/Pasif değiştirme butonu (`handleToggleActive`) ve `Video` ikonu entegre edildi.
+  - Yeni kanal oluşturma modalına ikon seçimi ve başlangıç durumu seçeneği eklendi.
+- `frontend/src/components/posts/PostEditorModal.tsx`:
+  - Form alanlarına Kapak Görseli, Video / YouTube URL ve Yayın Durumu eklendi.
+  - TR, EN, AR sekmelerine Kısa Özet/SEO açıklaması metin kutuları eklendi.
+- `frontend/src/views/PostsView.tsx`:
+  - Form state'i ve editör açılışları `video_url` ile bağlandı.
+- `frontend/src/components/posts/PostList.tsx`:
+  - Video bağlantısına sahip blog gönderileri için başlık yanına `🎥 Video` rozeti eklendi.
+- Yalnızca `DevAdmin` dalında çalışıldı, `main` korundu.
+
 ## [14.10.2026 - 11:45] - Gelecek Vizyonu, Ürünleştirme ve Büyüme Stratejisi Dokümantasyonu
 - `GELECEK_VIZYONU_VE_STRATEJI.md`:
   - Yüzsüz (Faceless) video/vlog modeli ("Kodsuz Mimarlık & Dijital Akıl"), sıfır maliyetli huni mimarisi ve gelir modelleri detaylandırıldı.

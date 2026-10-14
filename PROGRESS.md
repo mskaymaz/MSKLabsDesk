@@ -1,6 +1,30 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 🟢 Son Güncelleme [14.10.2026 - 13:20] — VLOG KANALI (VARSAYILAN PASİF), VİDEO URL ENTEGRASYONU & KANAL YÖNETİMİ [*]
+* **Yapılan İşlem:**
+  1. **VLOG Kanalı ve Video URL D1 Şeması (`0005_vlog_and_video_url.sql`):**
+     - `blog_posts` tablosuna opsiyonel `video_url TEXT` kolonu eklendi.
+     - `blog_channels` tablosuna `ch_vlog` (VLOG) kanalı varsayılan olarak **pasif** (`is_active = 0`) şekilde eklendi.
+     - Public API (`/api/v1/channels` ve `/api/v1/posts`) sorgularında `WHERE is_active = 1` filtresi bulunduğu için VLOG kanalı panelden aktif edilene kadar web arayüzünde tamamen gizli kalır.
+  2. **Backend API Güncellemeleri (`cmsPosts.ts` & `cmsPublic.ts` & `cmsChannels.ts`):**
+     - Blog yazısı oluşturma (`POST`) ve güncelleme (`PUT`) uçlarına `video_url` alanı bağlandı.
+     - Public API (`/api/v1/posts`) `SELECT` sorgusuna `p.video_url` dahil edildi.
+     - Kanal güncelleme (`PUT /api/admin/channels/:id`) uç noktası `COALESCE` mimarisiyle kısmi güncellemeleri (örneğin sadece `is_active` durumunu) veri kaybı olmadan güncelleyecek şekilde güçlendirildi.
+  3. **Yönetici Paneli Frontend Entegrasyonu:**
+     - `types/index.ts`: `BlogPost` arayüzüne `video_url?: string;` ve `BlogChannel` arayüzüne `is_active?: boolean | number;` eklendi.
+     - `ChannelsView.tsx`: Kanal kartlarına anlık Aktif/Pasif değiştirme butonu (`handleToggleActive`) ve `Video` ikonu desteği eklendi. Yeni kanal modalına ikon ve başlangıç durumu seçimi entegre edildi.
+     - `PostEditorModal.tsx`: Kapak görseli, Video/YouTube URL, Yayın Durumu ve 3 dilli (TR, EN, AR) Kısa Özet/SEO alanları eklendi.
+     - `PostsView.tsx`: Form durumu ve düzenleme açılışları `video_url` ile senkronize edildi.
+     - `PostList.tsx`: Video/YouTube bağlantısı olan yazılara başlık yanında `🎥 Video` rozeti yerleştirildi.
+  4. **Prensip Dokümantasyonu (`AGENTS.md` Madde 6):**
+     - Nesnel Mühendislik ve Dürüst İstişare İlkesi eklendi (abartılı övgü/pohpohlama yasağı, soğukkanlı teknik denetim).
+* **Doğrulama & Test:**
+  - `webMSKLabs` ve `MSKLabsDesk` üzerinde D1 migrasyonları başarıyla işletildi.
+  - Public API çağrısında (`GET /api/v1/channels`) VLOG kanalının pasif kaldığı, yalnızca aktif 3 kanalın döndüğü doğrulandı.
+  - TypeScript derlemeleri (`npm run build`) 0 hata ile tamamlandı. Satır limitlerine (`<= 450`) tam uyuldu.
+* **Durum:** `DevAdmin` dalında çalışıldı, `main` korundu.
+
 ## 🟢 Son Güncelleme [14.10.2026 - 11:45] — GELECEK VİZYONU, ÜRÜNLEŞTİRME VE STRATEJİ DOKÜMANTASYONU [*]
 * **Yapılan İşlem:**
   - Kullanıcı ile gerçekleştirilen stratejik istişare neticesinde, mevcut geliştirmeler tamamlanıp canlıda test edildikten ve kafa sakinleştikten sonra devreye alınacak yol haritası kayıt altına alındı.

@@ -20,6 +20,7 @@ export interface PostFormData {
   summary_en: string;
   summary_ar: string;
   cover_image: string;
+  video_url?: string;
   meta_keywords: string;
   status: 'draft' | 'published';
   blocks?: LayoutBlock[];
@@ -177,6 +178,48 @@ export const PostEditorModal: React.FC<PostEditorModalProps> = ({
               </div>
             </div>
 
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '12px' }}>
+              <div>
+                <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'block', marginBottom: '4px' }}>
+                  Kapak Görseli URL
+                </label>
+                <input
+                  type="text"
+                  placeholder="https://.../cover.webp"
+                  value={formData.cover_image || ''}
+                  onChange={(e) => setFormData((prev) => ({ ...prev, cover_image: e.target.value }))}
+                  style={{ width: '100%', padding: '8px', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border-subtle)', borderRadius: '6px', color: '#FFF' }}
+                />
+              </div>
+
+              <div>
+                <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'block', marginBottom: '4px' }}>
+                  Video / YouTube URL (Vlog)
+                </label>
+                <input
+                  type="text"
+                  placeholder="https://www.youtube.com/watch?v=..."
+                  value={formData.video_url || ''}
+                  onChange={(e) => setFormData((prev) => ({ ...prev, video_url: e.target.value }))}
+                  style={{ width: '100%', padding: '8px', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border-subtle)', borderRadius: '6px', color: '#FFF' }}
+                />
+              </div>
+
+              <div>
+                <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'block', marginBottom: '4px' }}>
+                  Yayın Durumu
+                </label>
+                <select
+                  value={formData.status}
+                  onChange={(e) => setFormData((prev) => ({ ...prev, status: e.target.value as any }))}
+                  style={{ width: '100%', padding: '8px', background: '#1A2234', border: '1px solid var(--border-subtle)', borderRadius: '6px', color: '#FFF' }}
+                >
+                  <option value="draft">Taslak (Draft)</option>
+                  <option value="published">Yayında (Published)</option>
+                </select>
+              </div>
+            </div>
+
             <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid var(--border-subtle)', paddingBottom: '8px' }}>
               <div style={{ display: 'flex', gap: '6px' }}>
                 <button
@@ -238,6 +281,13 @@ export const PostEditorModal: React.FC<PostEditorModalProps> = ({
                       required
                       style={{ width: '100%', padding: '8px', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border-subtle)', borderRadius: '6px', color: '#FFF' }}
                     />
+                    <textarea
+                      rows={2}
+                      placeholder="Türkçe Kısa Özet / SEO Özeti"
+                      value={formData.summary_tr || ''}
+                      onChange={(e) => setFormData((prev) => ({ ...prev, summary_tr: e.target.value }))}
+                      style={{ width: '100%', padding: '8px', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border-subtle)', borderRadius: '6px', color: '#FFF' }}
+                    />
                     <RichTextEditor
                       label="Türkçe İçerik (TipTap + XSS Dezenfeksiyonu)"
                       value={formData.content_tr}
@@ -255,6 +305,13 @@ export const PostEditorModal: React.FC<PostEditorModalProps> = ({
                       onChange={(e) => setFormData((prev) => ({ ...prev, title_en: e.target.value }))}
                       style={{ width: '100%', padding: '8px', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border-subtle)', borderRadius: '6px', color: '#FFF' }}
                     />
+                    <textarea
+                      rows={2}
+                      placeholder="English Short Summary / SEO Summary"
+                      value={formData.summary_en || ''}
+                      onChange={(e) => setFormData((prev) => ({ ...prev, summary_en: e.target.value }))}
+                      style={{ width: '100%', padding: '8px', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border-subtle)', borderRadius: '6px', color: '#FFF' }}
+                    />
                     <RichTextEditor
                       label="English Content"
                       value={formData.content_en}
@@ -270,6 +327,13 @@ export const PostEditorModal: React.FC<PostEditorModalProps> = ({
                       placeholder="العنوان باللغة العربية"
                       value={formData.title_ar}
                       onChange={(e) => setFormData((prev) => ({ ...prev, title_ar: e.target.value }))}
+                      style={{ width: '100%', padding: '8px', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border-subtle)', borderRadius: '6px', color: '#FFF', fontFamily: 'Cairo' }}
+                    />
+                    <textarea
+                      rows={2}
+                      placeholder="ملخص المقال / وصف SEO"
+                      value={formData.summary_ar || ''}
+                      onChange={(e) => setFormData((prev) => ({ ...prev, summary_ar: e.target.value }))}
                       style={{ width: '100%', padding: '8px', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border-subtle)', borderRadius: '6px', color: '#FFF', fontFamily: 'Cairo' }}
                     />
                     <RichTextEditor

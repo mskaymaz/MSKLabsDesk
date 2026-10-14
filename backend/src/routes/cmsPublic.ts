@@ -33,7 +33,7 @@ export async function handleCmsPublic(request: Request, env: any): Promise<Respo
     const limit = parseInt(url.searchParams.get('limit') || '20');
 
     let query = `
-      SELECT p.id, p.slug, p.cover_image, p.author_name, p.published_at, p.views_count,
+      SELECT p.id, p.slug, p.cover_image, p.author_name, p.published_at, p.views_count, p.video_url,
              c.slug as channel_slug, c.name_tr as channel_name_tr, c.name_en as channel_name_en, c.name_ar as channel_name_ar,
              CASE WHEN ? = 'en' AND p.title_en IS NOT NULL THEN p.title_en
                   WHEN ? = 'ar' AND p.title_ar IS NOT NULL THEN p.title_ar
