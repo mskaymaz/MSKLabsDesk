@@ -64,7 +64,7 @@ const BoundedSlider: React.FC<BoundedSliderProps> = ({ boundKey, value, onChange
       </div>
       {hint && (
         <span className="admin-meta-text" style={{ fontSize: '0.66rem', color: 'var(--text-muted)' }}>
-          {hint} (Sınır: {bound.min}{bound.unit} - {bound.max}{bound.unit})
+          {hint} ({bound.min}{bound.unit} - {bound.max}{bound.unit})
         </span>
       )}
     </div>
@@ -97,13 +97,13 @@ export const InspectorSections: React.FC<InspectorSectionsProps> = ({
       <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
         <ColorPickerInput
           label="Ana Vurgu Rengi (Accent Primary)"
-          description="Butonlar, aktif sekmeler, odak halkaları"
+          description="Kaydet, Uygula ve aktif butonlar"
           value={metrics.accentPrimary}
           onChange={(hex) => onUpdateMetric('accentPrimary', hex)}
         />
         <ColorPickerInput
-          label="Vurgu Üzerine Gelme (Accent Hover)"
-          description="Buton hover durumu"
+          label="Vurgu Hover Rengi (Accent Hover)"
+          description="Buton üzerine gelme durumu"
           value={metrics.accentHover}
           onChange={(hex) => onUpdateMetric('accentHover', hex)}
         />
@@ -117,7 +117,7 @@ export const InspectorSections: React.FC<InspectorSectionsProps> = ({
       <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
         <div>
           <label className="admin-meta-text" style={{ fontWeight: 600, display: 'block', marginBottom: '4px' }}>
-            Başlık Yazı Tipi (Ayrı Font)
+            Başlık Yazı Tipi Ailesi
           </label>
           <select
             className="admin-filter-select"
@@ -137,14 +137,14 @@ export const InspectorSections: React.FC<InspectorSectionsProps> = ({
           boundKey="cardTitleSize"
           value={metrics.cardTitleSize}
           onChange={(v) => onUpdateMetric('cardTitleSize', v)}
-          hint="Liste kartlarındaki başlık boyutu"
+          hint="Kart içi başlık boyutu"
         />
 
         <BoundedSlider
           boundKey="pageTitleSize"
           value={metrics.pageTitleSize}
           onChange={(v) => onUpdateMetric('pageTitleSize', v)}
-          hint="Sayfa en üst başlık boyutu"
+          hint="Sayfa en üst ana başlık boyutu"
         />
 
         <div>
@@ -179,7 +179,7 @@ export const InspectorSections: React.FC<InspectorSectionsProps> = ({
       <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
         <div>
           <label className="admin-meta-text" style={{ fontWeight: 600, display: 'block', marginBottom: '4px' }}>
-            Gövde & Metin Yazı Tipi
+            Gövde Yazı Tipi Ailesi
           </label>
           <select
             className="admin-filter-select"
@@ -199,21 +199,21 @@ export const InspectorSections: React.FC<InspectorSectionsProps> = ({
           boundKey="descSize"
           value={metrics.descSize}
           onChange={(v) => onUpdateMetric('descSize', v)}
-          hint="Kart özet ve açıklama metinleri"
+          hint="Kart açıklama ve özet metinleri"
         />
 
         <BoundedSlider
           boundKey="metaSize"
           value={metrics.metaSize}
           onChange={(v) => onUpdateMetric('metaSize', v)}
-          hint="Tarih, yazar ve sayaç alt metinleri"
+          hint="Tarih, saat ve yazar bilgileri"
         />
 
         <BoundedSlider
           boundKey="fontScale"
           value={metrics.fontScale}
           onChange={(v) => onUpdateMetric('fontScale', v)}
-          hint="Tüm panel orantılı genel ölçek"
+          hint="Tüm panel genel ölçeği"
         />
 
         <ColorPickerInput
@@ -265,36 +265,68 @@ export const InspectorSections: React.FC<InspectorSectionsProps> = ({
     );
   }
 
-  // 5. Butonlar
+  // 5. Butonlar (Köşe, Dolgular, Boyut ve Tüm Buton Renkleri)
   if (section === 'buttons') {
     return (
       <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-        <div style={{ padding: '8px', borderRadius: '4px', background: 'rgba(99, 102, 241, 0.08)', border: '1px solid rgba(99, 102, 241, 0.2)' }}>
-          <span className="admin-meta-text" style={{ fontSize: '0.70rem', color: 'var(--text-secondary)' }}>
-            ⚠️ <strong>Geometrik Emniyet Sınırı:</strong> 25px yüksekliğindeki butonun bozulmaması için köşe yuvarlaklığı maksimum 12px ile sınırlandırılmıştır.
-          </span>
-        </div>
-
         <BoundedSlider
           boundKey="btnRadius"
           value={metrics.btnRadius}
           onChange={(v) => onUpdateMetric('btnRadius', v)}
-          hint="Buton köşe yuvarlaklığı (Güvenli: 0-12px)"
+          hint="Köşe yuvarlaklığı"
+        />
+
+        <BoundedSlider
+          boundKey="btnPaddingV"
+          value={metrics.btnPaddingV}
+          onChange={(v) => onUpdateMetric('btnPaddingV', v)}
+          hint="Buton dikey dolgusu"
         />
 
         <BoundedSlider
           boundKey="btnPaddingH"
           value={metrics.btnPaddingH}
           onChange={(v) => onUpdateMetric('btnPaddingH', v)}
-          hint="Buton içi yatay boşluk"
+          hint="Buton yatay dolgusu"
         />
 
         <BoundedSlider
           boundKey="btnFontSize"
           value={metrics.btnFontSize}
           onChange={(v) => onUpdateMetric('btnFontSize', v)}
-          hint="Buton yazı büyüklüğü"
+          hint="Buton yazı boyutu"
         />
+
+        <div style={{ borderTop: '1px solid var(--border-subtle)', paddingTop: '10px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+          <h4 className="admin-meta-text" style={{ fontWeight: 700, color: 'var(--text-primary)' }}>
+            BUTON ROL RENKLERİ:
+          </h4>
+          <ColorPickerInput
+            label="Kaydet / Uygula Butonu (Birincil)"
+            value={metrics.accentPrimary}
+            onChange={(hex) => onUpdateMetric('accentPrimary', hex)}
+          />
+          <ColorPickerInput
+            label="İncele Butonu (Detay/Görüntüle)"
+            value={metrics.btnViewColor}
+            onChange={(hex) => onUpdateMetric('btnViewColor', hex)}
+          />
+          <ColorPickerInput
+            label="Onayla Butonu (Kabul Et/Aktif)"
+            value={metrics.btnSuccessColor}
+            onChange={(hex) => onUpdateMetric('btnSuccessColor', hex)}
+          />
+          <ColorPickerInput
+            label="Reddet Butonu (Sil/İptal)"
+            value={metrics.btnDangerColor}
+            onChange={(hex) => onUpdateMetric('btnDangerColor', hex)}
+          />
+          <ColorPickerInput
+            label="Düzenle Butonu (İkincil)"
+            value={metrics.btnEditColor}
+            onChange={(hex) => onUpdateMetric('btnEditColor', hex)}
+          />
+        </div>
       </div>
     );
   }
@@ -303,24 +335,32 @@ export const InspectorSections: React.FC<InspectorSectionsProps> = ({
   if (section === 'badges') {
     return (
       <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-        <div style={{ padding: '8px', borderRadius: '4px', background: 'rgba(16, 185, 129, 0.08)', border: '1px solid rgba(16, 185, 129, 0.2)' }}>
-          <span className="admin-meta-text" style={{ fontSize: '0.70rem', color: 'var(--text-secondary)' }}>
-            ⚠️ <strong>Geometrik Emniyet Sınırı:</strong> ~18px yüksekliğindeki rozetler için köşe yuvarlaklığı maksimum 9px ile sınırlandırılmıştır.
-          </span>
-        </div>
-
         <BoundedSlider
           boundKey="badgeRadius"
           value={metrics.badgeRadius}
           onChange={(v) => onUpdateMetric('badgeRadius', v)}
-          hint="Rozet köşe yuvarlaklığı (Güvenli: 0-9px)"
+          hint="Rozet köşe yuvarlaklığı"
+        />
+
+        <BoundedSlider
+          boundKey="badgePaddingV"
+          value={metrics.badgePaddingV}
+          onChange={(v) => onUpdateMetric('badgePaddingV', v)}
+          hint="Rozet dikey dolgusu"
+        />
+
+        <BoundedSlider
+          boundKey="badgePaddingH"
+          value={metrics.badgePaddingH}
+          onChange={(v) => onUpdateMetric('badgePaddingH', v)}
+          hint="Rozet yatay dolgusu"
         />
 
         <BoundedSlider
           boundKey="badgeFontSize"
           value={metrics.badgeFontSize}
           onChange={(v) => onUpdateMetric('badgeFontSize', v)}
-          hint="Rozet font büyüklüğü"
+          hint="Rozet metin boyutu"
         />
       </div>
     );

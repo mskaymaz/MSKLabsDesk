@@ -121,8 +121,7 @@
   font-family: inherit;
   cursor: pointer;
   border-radius: var(--admin-btn-radius, 6px);
-  padding-left: var(--admin-btn-padding-h, 8px);
-  padding-right: var(--admin-btn-padding-h, 8px);
+  padding: var(--admin-btn-padding-v, 3px) var(--admin-btn-padding-h, 8px);
   font-size: var(--admin-btn-font-size, inherit);
   transition: all 0.15s ease;
   border: 1px solid transparent;
@@ -163,22 +162,22 @@
 }
 
 .admin-btn-view {
-  background: rgba(6, 182, 212, 0.15);
-  color: var(--accent-cyan);
-  border-color: rgba(6, 182, 212, 0.3);
+  background: var(--btn-view-bg, rgba(6, 182, 212, 0.15));
+  color: var(--btn-view-color, var(--accent-cyan));
+  border-color: var(--btn-view-border, rgba(6, 182, 212, 0.3));
 }
 .admin-btn-view:hover:not(:disabled) {
-  background: rgba(6, 182, 212, 0.25);
-  border-color: rgba(6, 182, 212, 0.45);
+  background: var(--btn-view-hover, rgba(6, 182, 212, 0.25));
+  border-color: var(--btn-view-border-hover, rgba(6, 182, 212, 0.45));
 }
 
 .admin-btn-edit {
-  background: rgba(255, 255, 255, 0.05);
-  color: var(--text-primary);
-  border-color: var(--border-color);
+  background: var(--btn-edit-bg, rgba(255, 255, 255, 0.05));
+  color: var(--btn-edit-color, var(--text-primary));
+  border-color: var(--btn-edit-border, var(--border-color));
 }
 .admin-btn-edit:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--btn-edit-hover, rgba(255, 255, 255, 0.1));
   border-color: var(--border-card-hover);
 }
 
@@ -193,13 +192,13 @@
 }
 
 .admin-btn-danger {
-  background: rgba(239, 68, 68, 0.15);
-  color: var(--accent-rose);
-  border-color: rgba(239, 68, 68, 0.3);
+  background: var(--btn-danger-bg, rgba(239, 68, 68, 0.15));
+  color: var(--btn-danger-color, var(--accent-rose));
+  border-color: var(--btn-danger-border, rgba(239, 68, 68, 0.3));
 }
 .admin-btn-danger:hover:not(:disabled) {
-  background: rgba(239, 68, 68, 0.25);
-  border-color: rgba(239, 68, 68, 0.45);
+  background: var(--btn-danger-hover, rgba(239, 68, 68, 0.25));
+  border-color: var(--btn-danger-border-hover, rgba(239, 68, 68, 0.45));
 }
 
 .admin-btn-warning {
@@ -213,13 +212,13 @@
 }
 
 .admin-btn-success {
-  background: rgba(16, 185, 129, 0.15);
-  color: var(--accent-emerald);
-  border-color: rgba(16, 185, 129, 0.3);
+  background: var(--btn-success-bg, rgba(16, 185, 129, 0.15));
+  color: var(--btn-success-color, var(--accent-emerald));
+  border-color: var(--btn-success-border, rgba(16, 185, 129, 0.3));
 }
 .admin-btn-success:hover:not(:disabled) {
-  background: rgba(16, 185, 129, 0.25);
-  border-color: rgba(16, 185, 129, 0.45);
+  background: var(--btn-success-hover, rgba(16, 185, 129, 0.25));
+  border-color: var(--btn-success-border-hover, rgba(16, 185, 129, 0.45));
 }
 
 .admin-btn-ai {
@@ -258,7 +257,7 @@
   gap: 4px;
   font-size: var(--admin-badge-font-size, 0.68rem);
   font-weight: 600;
-  padding: 1.5px 6px;
+  padding: var(--admin-badge-padding-v, 1.5px) var(--admin-badge-padding-h, 6px);
   border-radius: var(--admin-badge-radius, 4px);
   line-height: 1.2;
   text-transform: none;

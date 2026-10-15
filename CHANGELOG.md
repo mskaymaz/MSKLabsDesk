@@ -1,6 +1,29 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [15.10.2026 - 11:48] - Blog Yorum Kartlarında Açılır Eylem Sütunu ve Tema Motoru Canlı Önizleme & Buton Rol Renkleri
+- **Blog Yorum Kartları Düzeni (`CommentsView.tsx`):**
+  - Uzun ziyaretçi e-posta veya isimlerinde butonların alt satıra kayarak kart yapısını bozması engellendi.
+  - Kartın sağ tarafına başlık hizasında dikey bir eylem sütunu eklendi:
+    - İlk sırada varsayılan olarak "İncele" seçili olan, altında "Onayla" ve "Reddet" bulunan açılır menü (`<select>`).
+    - Hemen altında seçilen eylemi tek tıkla çalıştıran "Uygula" butonu.
+  - Sol içerik sütunu ve sağ eylem sütunu ayrıştırılarak tam genişlik ve hizalama stabilitesi sağlandı.
+- **Tema Motoru & Buton/Rozet İyileştirmeleri (`InspectorSections.tsx`, `types.ts`, `CustomizerContext.tsx`):**
+  - Ayarlar panelindeki tüm sarı/yeşil uyarı kutucukları ("⚠️ Geometrik Emniyet...") kaldırıldı; arayüz sadeleştirildi.
+  - Butonlar için bağımsız **Dikey Dolgu (`btnPaddingV`: 2-8px)** ve **Yatay Dolgu (`btnPaddingH`: 4-16px)** kontrolleri eklendi.
+  - Rozetler için bağımsız **Dikey Dolgu (`badgePaddingV`: 1-6px)** ve **Yatay Dolgu (`badgePaddingH`: 4-12px)** kontrolleri eklendi.
+  - Sistemdeki tüm buton rollerine (`İncele`, `Onayla`, `Reddet`, `Düzenle`, `Kaydet/Uygula`) ait bağımsız renk seçicileri eklendi (`--btn-view-color`, `--btn-success-color`, `--btn-danger-color`, `--btn-edit-color`).
+- **Bileşene Özel Dinamik Canlı Önizleme (`ThemeCustomizerDrawer.tsx`):**
+  - Hangi bileşen seçilirse ona uygun Canlı Önizleme kartı gösterilmesi sağlandı:
+    - *Butonlar:* 5 buton rolünü (`Kaydet`, `İncele`, `Onayla`, `Reddet`, `Düzenle`) canlı dolgu, yuvarlaklık ve renkleriyle gösterir.
+    - *Rozetler:* `Bekliyor`, `Onaylandı`, `Reddedildi`, `Onay Bekliyor`, `Blog/Güncel` rozetlerini canlı dolgu ve yuvarlaklıkla gösterir.
+    - *Başlıklar:* Sayfa ve kart başlıklarını canlı font, boyut ve renkleriyle gösterir.
+    - *Gövde Metinleri:* Açıklama metni ve meta verileri canlı gösterir.
+    - *Kartlar:* Kenarlık, dolgu, arka plan ve köşe yapısını canlı yansıtır.
+- **Tasarım Sistemi Değişken Kancaları (`design-system.css`):**
+  - `.admin-btn`, `.admin-btn-view`, `.admin-btn-success`, `.admin-btn-danger`, `.admin-btn-edit`, `.admin-badge` sınıfları dinamik CSS değişkenlerine bağlandı.
+- Yalnızca `DevAdmin` dalında çalışıldı, `main` korundu.
+
 ## [15.10.2026 - 11:25] - Profesyonel Tema & Arayüz Motoru (Inspector Engine) ve Geometrik Sınır Koruması
 - **Buzlu Cam (Backdrop) İptali:**
   - Arayüzü donduran ve görünmez kılan karartma katmanı kaldırıldı; çekmece açıkken arka plandaki tüm sayfa (kartlar, butonlar, sayaçlar) serbestçe görünür, tıklanabilir ve kaydırılabilir hale getirildi.

@@ -11,6 +11,11 @@ export interface ThemeMetrics {
   // Renkler
   accentPrimary: string;
   accentHover: string;
+  // Buton Rol Renkleri
+  btnViewColor: string; // İncele (Cyan / View)
+  btnSuccessColor: string; // Onayla (Emerald / Success)
+  btnDangerColor: string; // Reddet (Rose / Danger)
+  btnEditColor: string; // Düzenle (Amber / Edit)
   // Başlık Tipografisi
   headingFont: string;
   cardTitleSize: number; // px
@@ -30,10 +35,13 @@ export interface ThemeMetrics {
   cardBorder: string;
   // Butonlar (Köşe yuvarlatma maks 12px sınırlandırılmış)
   btnRadius: number; // px (0-12)
-  btnPaddingH: number; // px (6-18)
+  btnPaddingV: number; // px (2-8)
+  btnPaddingH: number; // px (4-16)
   btnFontSize: number; // px (11-14)
   // Rozetler & Etiketler (Köşe yuvarlatma maks 9px sınırlandırılmış)
   badgeRadius: number; // px (0-9)
+  badgePaddingV: number; // px (1-6)
+  badgePaddingH: number; // px (4-12)
   badgeFontSize: number; // px (10-13)
   // Genel Ölçek
   fontScale: number; // % (90-115)
@@ -47,10 +55,13 @@ export const METRIC_BOUNDS = {
   cardPaddingV: { min: 4, max: 20, step: 1, unit: 'px', label: 'Kart Dikey Dolgu' },
   cardPaddingH: { min: 8, max: 24, step: 1, unit: 'px', label: 'Kart Yatay Dolgu' },
   cardRadius: { min: 0, max: 20, step: 1, unit: 'px', label: 'Kart Köşe Yuvarlaklığı' },
-  btnRadius: { min: 0, max: 12, step: 1, unit: 'px', label: 'Buton Köşe Yuvarlaklığı (Maks: 12px)' },
-  btnPaddingH: { min: 6, max: 18, step: 1, unit: 'px', label: 'Buton Yatay Dolgu' },
+  btnRadius: { min: 0, max: 12, step: 1, unit: 'px', label: 'Buton Köşe Yuvarlaklığı (0-12px)' },
+  btnPaddingV: { min: 2, max: 8, step: 1, unit: 'px', label: 'Buton Dikey Dolgu (Padding)' },
+  btnPaddingH: { min: 4, max: 16, step: 1, unit: 'px', label: 'Buton Yatay Dolgu (Padding)' },
   btnFontSize: { min: 11, max: 14, step: 1, unit: 'px', label: 'Buton Metin Boyutu' },
-  badgeRadius: { min: 0, max: 9, step: 1, unit: 'px', label: 'Rozet Köşe Yuvarlaklığı (Maks: 9px)' },
+  badgeRadius: { min: 0, max: 9, step: 1, unit: 'px', label: 'Rozet Köşe Yuvarlaklığı (0-9px)' },
+  badgePaddingV: { min: 1, max: 6, step: 1, unit: 'px', label: 'Rozet Dikey Dolgu (Padding)' },
+  badgePaddingH: { min: 4, max: 12, step: 1, unit: 'px', label: 'Rozet Yatay Dolgu (Padding)' },
   badgeFontSize: { min: 10, max: 13, step: 1, unit: 'px', label: 'Rozet Metin Boyutu' },
   fontScale: { min: 90, max: 115, step: 1, unit: '%', label: 'Genel Font Ölçeği' },
 } as const;
@@ -69,6 +80,10 @@ export const AVAILABLE_FONTS = [
 export const DEFAULT_DARK_METRICS: ThemeMetrics = {
   accentPrimary: '#6366f1',
   accentHover: '#4f46e5',
+  btnViewColor: '#06b6d4',
+  btnSuccessColor: '#10b981',
+  btnDangerColor: '#f43f5e',
+  btnEditColor: '#f59e0b',
   headingFont: 'system',
   cardTitleSize: 14,
   pageTitleSize: 17,
@@ -84,9 +99,12 @@ export const DEFAULT_DARK_METRICS: ThemeMetrics = {
   cardBg: 'rgba(18, 24, 38, 0.75)',
   cardBorder: 'rgba(255, 255, 255, 0.14)',
   btnRadius: 6,
+  btnPaddingV: 3,
   btnPaddingH: 8,
   btnFontSize: 12,
   badgeRadius: 4,
+  badgePaddingV: 2,
+  badgePaddingH: 6,
   badgeFontSize: 11,
   fontScale: 100,
 };
@@ -94,6 +112,10 @@ export const DEFAULT_DARK_METRICS: ThemeMetrics = {
 export const DEFAULT_LIGHT_METRICS: ThemeMetrics = {
   accentPrimary: '#6366f1',
   accentHover: '#4f46e5',
+  btnViewColor: '#0891b2',
+  btnSuccessColor: '#059669',
+  btnDangerColor: '#e11d48',
+  btnEditColor: '#d97706',
   headingFont: 'system',
   cardTitleSize: 14,
   pageTitleSize: 17,
@@ -109,9 +131,12 @@ export const DEFAULT_LIGHT_METRICS: ThemeMetrics = {
   cardBg: '#FFFFFF',
   cardBorder: 'rgba(15, 23, 42, 0.14)',
   btnRadius: 6,
+  btnPaddingV: 3,
   btnPaddingH: 8,
   btnFontSize: 12,
   badgeRadius: 4,
+  badgePaddingV: 2,
+  badgePaddingH: 6,
   badgeFontSize: 11,
   fontScale: 100,
 };

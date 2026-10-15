@@ -1,6 +1,24 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 🟢 Son Güncelleme [15.10.2026 - 11:48] — BLOG YORUM KARTLARI AÇILIR EYLEM SÜTUNU & TEMA MOTORU CANLI ÖNİZLEME GELİŞTİRMELERİ [*]
+* **Yapılan İşlem:**
+  1. **Blog Yorum Kartı Eylem Sütunu (`CommentsView.tsx`):**
+     - Ziyaretçi e-posta veya isimlerinin uzun olduğu durumlarda butonların alt satıra kayması sorunu giderildi.
+     - Kartın sağ tarafına başlık hizasında dikey bir eylem sütunu (92px sabit genişlik) yerleştirildi:
+       - İlk sırada "İncele" seçili olan, altında "Onayla" ve "Reddet" barındıran açılır liste (`<select>`).
+       - Listenin hemen altında seçilen işlemi tek tıkla uygulayan "Uygula" butonu.
+  2. **Tema Motoru Uyarılarının Temizlenmesi & Dolgu (Padding) Kontrolleri (`InspectorSections.tsx`, `types.ts`):**
+     - Butonlar ve rozetler sekmesindeki sarı/yeşil tüm uyarı kutucukları kaldırıldı; sade ve profesyonel arayüze geçildi.
+     - Butonlar için **Dikey Dolgu (`btnPaddingV`: 2-8px)** ve **Yatay Dolgu (`btnPaddingH`: 4-16px)** eklendi.
+     - Rozetler için **Dikey Dolgu (`badgePaddingV`: 1-6px)** ve **Yatay Dolgu (`badgePaddingH`: 4-12px)** eklendi.
+  3. **Tüm Buton Rol Renklerinin Özelleştirilmesi (`types.ts`, `design-system.css`, `CustomizerContext.tsx`):**
+     - `İncele` (`btnViewColor`), `Onayla` (`btnSuccessColor`), `Reddet` (`btnDangerColor`), `Düzenle` (`btnEditColor`) ve `Kaydet/Uygula` (`accentPrimary`) için bağımsız renk seçicileri eklendi; CSS değişkenlerine bağlandı.
+  4. **Bileşene Özel Dinamik Canlı Önizleme (`ThemeCustomizerDrawer.tsx`):**
+     - Seçilen hedef bileşene göre önizleme kutusu dinamikleşti: Butonlar seçildiğinde tüm buton ailesi, rozetler seçildiğinde gerçek rozetler, başlıklar seçildiğinde hiyerarşik başlıklar gösterilmektedir.
+* **Sonuçlar:** `npm run build` PASS (0 hata, 471 ms). Tüm dosyalar `<= 420` satır kuralına tam uyumlu (`InspectorSections.tsx`: 419 satır, `CommentsView.tsx`: 260 satır).
+* **Durum:** `DevAdmin` dalında çalışıldı, `main` korundu.
+
 ## 🟢 Son Güncelleme [15.10.2026 - 11:25] — PROFESYONEL TEMA & ARAYÜZ MOTORU (INSPECTOR ENGINE) & GEOMETRİK SINIR KORUMASI [*]
 * **Yapılan İşlem:**
   1. **Buzlu Cam (Backdrop) Kaldırıldı (`ThemeCustomizerDrawer.tsx`):**

@@ -28,13 +28,27 @@ function loadMetricsFromStorage(theme: 'dark' | 'light'): ThemeMetrics {
 function applyMetricsToDOM(metrics: ThemeMetrics) {
   const root = document.documentElement;
 
-  // 1. Renkler
+  // 1. Genel Renkler
   root.style.setProperty('--accent-primary', metrics.accentPrimary);
   root.style.setProperty('--accent-primary-hover', metrics.accentHover);
   root.style.setProperty('--ring', metrics.accentPrimary);
   root.style.setProperty('--border-focus', metrics.accentPrimary);
 
-  // 2. Başlık Tipografisi
+  // 2. Buton Rol Renkleri (8-digit hex ile saydamlık)
+  const applyBtnColor = (prefix: string, hex: string) => {
+    const cleanHex = hex.startsWith('#') && hex.length === 7 ? hex : '#6366f1';
+    root.style.setProperty(`--${prefix}-color`, cleanHex);
+    root.style.setProperty(`--${prefix}-bg`, `${cleanHex}24`);
+    root.style.setProperty(`--${prefix}-border`, `${cleanHex}55`);
+    root.style.setProperty(`--${prefix}-hover`, `${cleanHex}40`);
+    root.style.setProperty(`--${prefix}-border-hover`, `${cleanHex}88`);
+  };
+  applyBtnColor('btn-view', metrics.btnViewColor);
+  applyBtnColor('btn-success', metrics.btnSuccessColor);
+  applyBtnColor('btn-danger', metrics.btnDangerColor);
+  applyBtnColor('btn-edit', metrics.btnEditColor);
+
+  // 3. Başlık Tipografisi
   const hFont = AVAILABLE_FONTS.find((f) => f.id === metrics.headingFont) || AVAILABLE_FONTS[0];
   root.style.setProperty('--admin-heading-font', hFont.family);
   root.style.setProperty('--admin-title-size', `${metrics.cardTitleSize}px`);
@@ -42,7 +56,7 @@ function applyMetricsToDOM(metrics: ThemeMetrics) {
   root.style.setProperty('--admin-title-weight', String(metrics.titleWeight));
   root.style.setProperty('--admin-title-color', metrics.titleColor);
 
-  // 3. Gövde & Açıklama Tipografisi
+  // 4. Gövde & Açıklama Tipografisi
   const bFont = AVAILABLE_FONTS.find((f) => f.id === metrics.bodyFont) || AVAILABLE_FONTS[0];
   root.style.setProperty('--admin-body-font', bFont.family);
   root.style.setProperty('--font-sans', bFont.family);
@@ -50,25 +64,28 @@ function applyMetricsToDOM(metrics: ThemeMetrics) {
   root.style.setProperty('--admin-desc-color', metrics.descColor);
   root.style.setProperty('--admin-meta-size', `${metrics.metaSize}px`);
 
-  // 4. Kartlar
+  // 5. Kartlar
   root.style.setProperty('--admin-card-padding-v', `${metrics.cardPaddingV}px`);
   root.style.setProperty('--admin-card-padding-h', `${metrics.cardPaddingH}px`);
   root.style.setProperty('--admin-card-radius', `${metrics.cardRadius}px`);
   root.style.setProperty('--admin-card-bg', metrics.cardBg);
   root.style.setProperty('--admin-card-border', metrics.cardBorder);
 
-  // 5. Butonlar (Geometrik Emniyet: Maks 12px clamp)
+  // 6. Butonlar (Geometrik Emniyet: Maks 12px clamp)
   const safeBtnRadius = Math.min(Math.max(metrics.btnRadius, 0), 12);
   root.style.setProperty('--admin-btn-radius', `${safeBtnRadius}px`);
+  root.style.setProperty('--admin-btn-padding-v', `${metrics.btnPaddingV}px`);
   root.style.setProperty('--admin-btn-padding-h', `${metrics.btnPaddingH}px`);
   root.style.setProperty('--admin-btn-font-size', `${metrics.btnFontSize}px`);
 
-  // 6. Rozetler (Geometrik Emniyet: Maks 9px clamp)
+  // 7. Rozetler (Geometrik Emniyet: Maks 9px clamp)
   const safeBadgeRadius = Math.min(Math.max(metrics.badgeRadius, 0), 9);
   root.style.setProperty('--admin-badge-radius', `${safeBadgeRadius}px`);
+  root.style.setProperty('--admin-badge-padding-v', `${metrics.badgePaddingV}px`);
+  root.style.setProperty('--admin-badge-padding-h', `${metrics.badgePaddingH}px`);
   root.style.setProperty('--admin-badge-font-size', `${metrics.badgeFontSize}px`);
 
-  // 7. Genel Ölçek
+  // 8. Genel Ölçek
   root.style.fontSize = `${metrics.fontScale}%`;
 }
 

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import type { CommentItem } from '../types';
 import { api } from '../services/api';
-import { CheckCircle, XCircle, Clock, RotateCw, Eye } from 'lucide-react';
+import { Clock, RotateCw } from 'lucide-react';
 import { useTranslation } from '../context/I18nContext';
 import { CommentDetailModal } from '../components/CommentDetailModal';
 import { getBlogTypeLabel, formatBlogSlug } from '../utils/blogMeta';
@@ -17,6 +17,7 @@ export const CommentsView: React.FC<CommentsViewProps> = ({ comments, onRefresh 
   const [loadingId, setLoadingId] = useState<string | null>(null);
   const [refreshing, setRefreshing] = useState(false);
   const [selectedComment, setSelectedComment] = useState<CommentItem | null>(null);
+  const [actionSelections, setActionSelections] = useState<Record<string, 'view' | 'approved' | 'rejected'>>({});
 
   const locale = language === 'ar' ? 'ar-SA' : language === 'en' ? 'en-US' : 'tr-TR';
   const filteredComments = comments.filter((c) => filter === 'all' || c.status === filter);
@@ -31,6 +32,15 @@ export const CommentsView: React.FC<CommentsViewProps> = ({ comments, onRefresh 
       alert(t('comments.updateError'));
     } finally {
       setLoadingId(null);
+    }
+  };
+
+  const handleExecuteAction = (comment: CommentItem) => {
+    const act = actionSelections[comment.id] || 'view';
+    if (act === 'view') {
+      setSelectedComment(comment);
+    } else {
+      handleModerate(comment.id, act);
     }
   };
 
@@ -134,11 +144,12 @@ export const CommentsView: React.FC<CommentsViewProps> = ({ comments, onRefresh 
               key={comment.id}
               className="admin-list-card"
               onDoubleClick={() => setSelectedComment(comment)}
-              style={{ cursor: 'pointer' }}
+              style={{ cursor: 'pointer', display: 'flex', flexDirection: 'row', gap: '10px', alignItems: 'flex-start' }}
               title="Çift tıklayarak yorum detayını okuyabilirsiniz"
             >
-              {/* 1. Satır: Yorum Kodu + Rozetler + Metaveriler (Sol) & Aksiyon Butonları (Sağ) */}
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px', flexWrap: 'wrap' }}>
+              {/* Sol Sütun: Rozetler, Yazar Bilgileri, Başlık ve Yorum Metni */}
+              <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: '3px' }}>
+                {/* 1. Satır: Yorum Kodu + Rozetler + Metaveriler */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap', minWidth: 0 }}>
                   <span
                     style={{ fontSize: '0.78rem', fontWeight: 800, color: 'var(--accent-cyan)', fontFamily: 'ui-monospace, monospace', letterSpacing: '-0.02em', minWidth: '76px', flexShrink: 0 }}
@@ -191,56 +202,61 @@ export const CommentsView: React.FC<CommentsViewProps> = ({ comments, onRefresh 
                   </div>
                 </div>
 
-                {/* Sağ: Aksiyon Butonları */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginLeft: 'auto', flexShrink: 0 }}>
-                  <button
-                    className="admin-btn admin-btn-sm admin-btn-view"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setSelectedComment(comment);
-                    }}
-                    title="Yorumu İncele"
-                  >
-                    <Eye size={12} /> {t('common.view')}
-                  </button>
-                  {comment.status !== 'approved' && (
-                    <button
-                      className="admin-btn admin-btn-sm admin-btn-success"
-                      disabled={loadingId === comment.id}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleModerate(comment.id, 'approved');
-                      }}
-                      title="Onayla"
-                    >
-                      <CheckCircle size={12} /> Onayla
-                    </button>
-                  )}
-                  {comment.status !== 'rejected' && (
-                    <button
-                      className="admin-btn admin-btn-sm admin-btn-danger"
-                      disabled={loadingId === comment.id}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleModerate(comment.id, 'rejected');
-                      }}
-                      title="Reddet"
-                    >
-                      <XCircle size={12} /> Reddet
-                    </button>
-                  )}
-                </div>
+                {/* 2. Satır: Başlık (Yazarın Yorum Başlığı) */}
+                <h3 className="admin-card-title">
+                  {comment.author_name} — Yorum
+                </h3>
+
+                {/* 3. Satır: Yorum İçerik Açıklaması */}
+                <p className="admin-card-desc line-clamp-2">
+                  "{comment.content}"
+                </p>
               </div>
 
-              {/* 2. Satır: Başlık (Yazarın Yorum Başlığı) */}
-              <h3 className="admin-card-title">
-                {comment.author_name} — Yorum
-              </h3>
+              {/* Sağ Sütun: Açılır Liste (İncele, Onayla, Reddet) ve Altında Uygula Butonu */}
+              <div
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '3px',
+                  width: '92px',
+                  flexShrink: 0,
+                  alignSelf: 'flex-start',
+                }}
+                onClick={(e) => e.stopPropagation()}
+              >
+                <select
+                  className="admin-filter-select"
+                  value={actionSelections[comment.id] || 'view'}
+                  onChange={(e) => {
+                    const val = e.target.value as 'view' | 'approved' | 'rejected';
+                    setActionSelections((prev) => ({ ...prev, [comment.id]: val }));
+                  }}
+                  style={{
+                    height: '24px',
+                    fontSize: '0.74rem',
+                    padding: '0 16px 0 6px',
+                    width: '100%',
+                    cursor: 'pointer',
+                  }}
+                  title="Yorum Eylemi Seçin"
+                >
+                  <option value="view">İncele</option>
+                  <option value="approved">Onayla</option>
+                  <option value="rejected">Reddet</option>
+                </select>
 
-              {/* 3. Satır: Yorum İçerik Açıklaması (Tam genişlik, kutusuz, standart line-clamp-2) */}
-              <p className="admin-card-desc line-clamp-2">
-                "{comment.content}"
-              </p>
+                <button
+                  type="button"
+                  className="admin-btn admin-btn-primary admin-btn-xs"
+                  disabled={loadingId === comment.id}
+                  onClick={() => handleExecuteAction(comment)}
+                  style={{ width: '100%', height: '22px', fontSize: '0.72rem' }}
+                  title="Seçili Eylemi Uygula"
+                >
+                  {loadingId === comment.id ? '...' : 'Uygula'}
+                </button>
+              </div>
             </div>
           ))}
         </div>
