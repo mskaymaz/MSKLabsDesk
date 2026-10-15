@@ -1,6 +1,29 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 🟢 Son Güncelleme [15.10.2026 - 11:25] — PROFESYONEL TEMA & ARAYÜZ MOTORU (INSPECTOR ENGINE) & GEOMETRİK SINIR KORUMASI [*]
+* **Yapılan İşlem:**
+  1. **Buzlu Cam (Backdrop) Kaldırıldı (`ThemeCustomizerDrawer.tsx`):**
+     - Arka planı donduran ve sayfadaki öğelerin görünmesini engelleyen karartma/bulanıklık katmanı tamamen kaldırıldı.
+     - Çekmece sağ kenarda açıkken arka plandaki tüm kartlar, sayaçlar ve listeler serbestçe görünür ve etkileşime açık hale getirildi.
+  2. **Hedef Bileşen Denetleyicisi (Target Inspector Dropdown):**
+     - Açılır menü üzerinden müdahale edilecek yapı seçimi sağlandı:
+       - 🎨 Genel Vurgu & Renkler
+       - 🔤 Başlık Tipografisi (Ayrı font, boyut, ağırlık, renk)
+       - 📝 Gövde & Açıklama Tipografisi (Ayrı font, boyut, meta boyut, renk)
+       - 🗂️ Liste & İçerik Kartları (Dikey/yatay dolgu, radius, kenarlık, arkaplan)
+       - 🔘 Butonlar (0-12px geometrik sınır koruması, dolgu, font boyutu)
+       - 🏷️ Rozetler & Etiketler (0-9px geometrik sınır koruması, font boyutu)
+       - 💾 Tema Paketi (JSON Export / Import / Sıfırla)
+  3. **Geometrik Emniyet ve Sınır Kontrolü (`types.ts`, `clampMetric`):**
+     - Kullanıcının buton ve rozetleri geometrik sınırları aşacak kadar yuvarlatmasını engelleyen koruma mekanizması kuruldu (Buton: Maks 12px, Rozet: Maks 9px).
+  4. **Serbest Renk Girişi & HTML5 Teker (`ColorPickerInput.tsx`):**
+     - `#HEX` metin kutusu + yerel renk tekeri + kurumsal hazır palet entegre edildi.
+  5. **Modüler Mimari & Satır Sınırı:**
+     - Kodlar 5 küçük modüle bölündü (`types.ts`: 120, `ColorPickerInput.tsx`: 116, `InspectorSections.tsx`: 381, `CustomizerContext.tsx`: 180, `ThemeCustomizerDrawer.tsx`: 178 satır <= 400).
+* **Sonuçlar:** `npm run build` PASS (0 hata, 423 ms).
+* **Durum:** `DevAdmin` dalında çalışıldı, `main` korundu.
+
 ## 🟢 Son Güncelleme [15.10.2026 - 11:05] — GÖRÜNÜM VE TEMA STÜDYOSU (THEME CUSTOMIZER) & CANLI ÖNİZLEME [*]
 * **Yapılan İşlem:**
   1. **Merkezi Customizer Context & Kalıcılık (`CustomizerContext.tsx`):**

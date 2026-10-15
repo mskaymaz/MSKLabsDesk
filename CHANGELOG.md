@@ -1,6 +1,25 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [15.10.2026 - 11:25] - Profesyonel Tema & Arayüz Motoru (Inspector Engine) ve Geometrik Sınır Koruması
+- **Buzlu Cam (Backdrop) İptali:**
+  - Arayüzü donduran ve görünmez kılan karartma katmanı kaldırıldı; çekmece açıkken arka plandaki tüm sayfa (kartlar, butonlar, sayaçlar) serbestçe görünür, tıklanabilir ve kaydırılabilir hale getirildi.
+- **Hedef Bileşen Seçici (Target Inspector) Mimarisi:**
+  - Açılır menüden müdahale edilecek yapıyı seçebilen profesyonel denetim mimarisi kuruldu (`Genel Renkler`, `Başlık Tipografisi`, `Gövde Tipografisi`, `Liste Kartları`, `Butonlar`, `Rozetler`, `Tema Paketi`).
+- **Geometrik Emniyet Sınırları (Min/Max Clamping):**
+  - Buton köşe yuvarlaklığı butonun dikey sınırlarını aşmayacak şekilde kesin olarak `0 - 12px` ile sınırlandırıldı.
+  - Rozet köşe yuvarlaklığı `0 - 9px` ile sınırlandırıldı.
+  - Kart dolguları, başlık/gövde font boyutları için sınır kontrolleri (`clampMetric`) tanımlandı.
+- **Serbest Renk Girişi & HTML5 Palet (`ColorPickerInput.tsx`):**
+  - Sabit palet kısıtı aşıldı; doğrudan `#HEX` yazılabilen metin kutusu, yerel HTML5 renk tekeri ve hazır palet noktaları eklendi.
+- **Bağımsız Başlık & Gövde Fontları (`tokens.css`, `types.ts`):**
+  - Başlıklar ve gövde metinleri için bağımsız font seçiciler eklendi. Google Fonts koleksiyonuna `Montserrat` ve `Poppins` dahil edildi.
+- **Ticari Tema Paketi Yönetimi (`package`):**
+  - Tema ayarlarını JSON formatında tek tıkla dışa aktarma (Export) ve JSON metnini içe aktararak uygulama (Import) özelliği kazandırıldı.
+- **Modülerlik & Satır Sınırı:**
+  - 5 bağımsız modüle bölündü (`types.ts`: 120, `ColorPickerInput.tsx`: 116, `InspectorSections.tsx`: 381, `CustomizerContext.tsx`: 180, `ThemeCustomizerDrawer.tsx`: 178 satır <= 400).
+- Yalnızca `DevAdmin` dalında çalışıldı, `main` korundu.
+
 ## [15.10.2026 - 11:05] - Görünüm ve Tema Stüdyosu (ThemeCustomizerDrawer) ve Canlı Önizleme Altyapısı
 - `frontend/src/context/CustomizerContext.tsx`:
   - Koyu ve Açık temalar için bağımsız ayar saklama (`msk_customizer_dark`, `msk_customizer_light`) mimarisi kuruldu.
