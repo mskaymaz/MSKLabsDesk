@@ -3,13 +3,13 @@
  */
 
 export const BLOG_POST_TITLES: Record<string, string> = {
-  '1': 'BİZCE Nedir?',
-  'bizce-1': 'BİZCE Nedir?',
-  '2': 'ANILTILAR Nedir?',
-  'anilts-2': 'ANILTILAR Nedir?',
-  'aniltilar-2': 'ANILTILAR Nedir?',
-  '3': 'GÜNCEL Nedir?',
-  'guncel-3': 'GÜNCEL Nedir?',
+  '1': 'Bizce Nedir?',
+  'bizce-1': 'Bizce Nedir?',
+  '2': 'Anıltılar Nedir?',
+  'anilts-2': 'Anıltılar Nedir?',
+  'aniltilar-2': 'Anıltılar Nedir?',
+  '3': 'Güncel Nedir?',
+  'guncel-3': 'Güncel Nedir?',
   '4': 'Neden Ücretsiz?',
   'bizce-4': 'Neden Ücretsiz?',
   '5': 'Filistin - Konyaspor Maçı',
@@ -18,9 +18,9 @@ export const BLOG_POST_TITLES: Record<string, string> = {
 
 export const getBlogTypeLabel = (type?: string): string => {
   const norm = (type || '').toLowerCase();
-  if (norm === 'guncel' || norm === 'güncel') return 'GÜNCEL';
-  if (norm.includes('anilt') || norm.includes('anlat')) return 'ANILTILAR';
-  return 'BİZCE';
+  if (norm === 'guncel' || norm === 'güncel') return 'Güncel';
+  if (norm.includes('anilt') || norm.includes('anlat')) return 'Anıltılar';
+  return 'Bizce';
 };
 
 export const formatBlogSlug = (slug?: string, fallbackId?: string): string => {

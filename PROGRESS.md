@@ -1,6 +1,18 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 🟢 Son Güncelleme [15.10.2026 - 10:48] — BAŞ HARFİ BÜYÜK (TITLE CASE) ROZETLER & TÜM ADMİN EKRANLARI STANDARTLAŞMASI [*]
+* **Yapılan İşlem:**
+  1. **Title Case Rozet Standardı (`design-system.css`, `blogMeta.ts`, `PostCard.tsx`):**
+     - `.admin-badge` sınıfındaki `text-transform: uppercase;` kaldırıldı (`text-transform: none`).
+     - Tüm rozet ve etiketler (`BEKLİYOR`, `GÜNCEL / ...`, `AÇILDI`, `TEŞEKKÜR & ÖVGÜ`) doğal Baş Harfi Büyük (Title Case) standardına (`Bekliyor`, `Güncel / ...`, `Açıldı`, `Teşekkür & Övgü`) kavuşturuldu.
+  2. **Tüm Admin Ekranlarının Standartlaştırılması (`ChannelsView.tsx`, `SubscribersView.tsx`, `DashboardView.tsx`, `AppsCMSView.tsx`, `BroadcastView.tsx`, `TemplatesView.tsx`, `SettingsView.tsx`):**
+     - Sayfa başlıkları `.admin-page-title` ve `.admin-page-desc` sınıflarına bağlandı.
+     - Açık temada okunmayan hardcoded `#FFF` ve `#0F1522` metin ve kutu stilleri kaldırıldı; `var(--text-primary)`, `var(--bg-card)` ve `var(--bg-secondary)` tematik değişkenlerine bağlandı.
+     - Butonlar, arama kutuları ve açılır listeler `.admin-btn`, `.admin-btn-primary`, `.admin-btn-view`, `.admin-btn-refresh`, `.form-input` ve `.form-select` sınıflarına dönüştürüldü.
+* **Sonuçlar:** `npm run build` PASS (0 hata, 666 ms). Tüm dosyalar `<= 450` satır kuralına tam uyumlu (`TemplatesView.tsx`: 326 satır, `ChannelsView.tsx`: 287 satır).
+* **Durum:** `DevAdmin` dalında çalışıldı, `main` korundu.
+
 ## 🟢 Son Güncelleme [15.10.2026 - 10:35] — KART AÇIKLAMALARI (LINE-CLAMP) İZOLASYONU & 3 KATMANLI KART STANDARTLAŞMASI [*]
 * **Yapılan İşlem:**
   1. **Line-Clamp İzolasyonu (`design-system.css`):**

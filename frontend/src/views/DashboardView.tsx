@@ -43,9 +43,9 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
 
   return (
     <div className="animate-fade-in">
-      <div>
-        <h1 className="page-title">{t('dashboard.quickStats')}</h1>
-        <p className="page-subtitle">{t('common.welcome', { name: 'Admin' })}</p>
+      <div style={{ marginBottom: '16px' }}>
+        <h1 className="admin-page-title">{t('dashboard.quickStats')}</h1>
+        <p className="admin-page-desc">{t('common.welcome', { name: 'Admin' })}</p>
       </div>
 
       {/* Metric Cards Grid */}
@@ -115,8 +115,8 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
       <div className="dashboard-panels-grid">
         <div className="glass-card" style={{ minWidth: 0 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '18px' }}>
-            <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--text-primary)' }}>{t('dashboard.recentTickets')}</h3>
-            <button className="btn btn-secondary btn-sm" onClick={() => onNavigate('tickets')}>{t('common.all')}</button>
+            <h3 className="admin-card-title">{t('dashboard.recentTickets')}</h3>
+            <button className="admin-btn admin-btn-view admin-btn-sm" onClick={() => onNavigate('tickets')}>{t('common.all')}</button>
           </div>
 
           {pendingTickets.length === 0 ? (
@@ -140,7 +140,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                 >
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
                     <span style={{ fontSize: '0.78rem', fontWeight: 800, color: 'var(--accent-cyan)' }}>{ticket.id}</span>
-                    <span className={`badge badge-${ticket.status}`}>{getStatusBadgeLabel(ticket.status)}</span>
+                    <span className="admin-badge admin-badge-counter">{getStatusBadgeLabel(ticket.status)}</span>
                   </div>
                   <h4 style={{ fontSize: '0.9rem', fontWeight: 700, color: 'var(--text-primary)', wordBreak: 'break-word' }}>{ticket.subject}</h4>
                   <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '4px' }}>
@@ -176,8 +176,8 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         {/* Pending Comments Overview */}
         <div className="glass-card" style={{ minWidth: 0 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '18px' }}>
-            <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--text-primary)' }}>{t('dashboard.pendingComments')}</h3>
-            <button className="btn btn-secondary btn-sm" onClick={() => onNavigate('comments')}>{t('common.view')}</button>
+            <h3 className="admin-card-title">{t('dashboard.pendingComments')}</h3>
+            <button className="admin-btn admin-btn-view admin-btn-sm" onClick={() => onNavigate('comments')}>{t('common.view')}</button>
           </div>
 
           {pendingComments.length === 0 ? (

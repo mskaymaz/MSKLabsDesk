@@ -57,17 +57,17 @@ export const SettingsView: React.FC = () => {
 
   return (
     <div className="animate-fade-in" style={{ maxWidth: '800px' }}>
-      <div>
-        <h1 className="page-title">{t('settings.title')}</h1>
-        <p className="page-subtitle">{t('common.settings')}</p>
+      <div style={{ marginBottom: '16px' }}>
+        <h1 className="admin-page-title">{t('settings.title')}</h1>
+        <p className="admin-page-desc">Sistem yapılandırması, bildirimler ve arayüz seçenekleri</p>
       </div>
 
-      <div className="glass-card" style={{ padding: '28px' }}>
+      <div className="admin-list-card" style={{ padding: '24px' }}>
         <form onSubmit={handleSave}>
           {/* Site Bilgileri */}
           <div style={{ marginBottom: '24px' }}>
-            <h3 style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '14px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <Globe size={18} color="var(--accent-primary)" /> Genel Site Bilgileri
+            <h3 className="admin-card-title" style={{ fontSize: '0.95rem', marginBottom: '14px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <Globe size={16} color="var(--accent-primary)" /> Genel Site Bilgileri
             </h3>
             
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
@@ -94,22 +94,22 @@ export const SettingsView: React.FC = () => {
 
             <div className="form-group">
               <label className="form-label">Arayüz Teması</label>
-              <div style={{ display: 'flex', gap: '12px' }}>
+              <div style={{ display: 'flex', gap: '10px' }}>
                 <button
                   type="button"
                   onClick={() => setTheme('dark')}
-                  className={`btn btn-sm ${theme === 'dark' ? 'btn-primary' : 'btn-secondary'}`}
+                  className={`admin-btn admin-btn-sm ${theme === 'dark' ? 'admin-btn-primary' : 'admin-btn-refresh'}`}
                   style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}
                 >
-                  <Moon size={14} /> Karanlık (Dark)
+                  <Moon size={13} /> Karanlık (Dark)
                 </button>
                 <button
                   type="button"
                   onClick={() => setTheme('light')}
-                  className={`btn btn-sm ${theme === 'light' ? 'btn-primary' : 'btn-secondary'}`}
+                  className={`admin-btn admin-btn-sm ${theme === 'light' ? 'admin-btn-primary' : 'admin-btn-refresh'}`}
                   style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}
                 >
-                  <Sun size={14} /> Aydınlık (Light)
+                  <Sun size={13} /> Aydınlık (Light)
                 </button>
               </div>
             </div>
@@ -192,7 +192,7 @@ export const SettingsView: React.FC = () => {
               </div>
               <button
                 type="button"
-                className={`btn btn-sm ${pushEnabled ? 'btn-success' : 'btn-secondary'}`}
+                className={`admin-btn admin-btn-sm ${pushEnabled ? 'admin-btn-success' : 'admin-btn-refresh'}`}
                 onClick={togglePush}
               >
                 {pushEnabled ? 'Etkin' : t('settings.enablePush')}
@@ -200,9 +200,9 @@ export const SettingsView: React.FC = () => {
             </div>
           </div>
 
-          <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-            <button type="submit" className="btn btn-primary">
-              {saved ? <Check size={16} /> : <Save size={16} />} {saved ? t('common.save') : t('common.save')}
+          <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '8px' }}>
+            <button type="submit" className="admin-btn admin-btn-primary admin-btn-md">
+              {saved ? <Check size={15} /> : <Save size={15} />} {saved ? t('common.save') : t('common.save')}
             </button>
           </div>
         </form>

@@ -23,19 +23,19 @@ export const SubscribersView: React.FC<SubscribersViewProps> = ({ subscribers })
 
   return (
     <div className="animate-fade-in">
-      <div>
-        <h1 className="page-title">{t('subscribers.title')}</h1>
-        <p className="page-subtitle">{t('dashboard.totalSubscribers')}: {subscribers.length}</p>
+      <div style={{ marginBottom: '16px' }}>
+        <h1 className="admin-page-title">{t('subscribers.title')}</h1>
+        <p className="admin-page-desc">{t('dashboard.totalSubscribers')}: {subscribers.length}</p>
       </div>
 
-      <div className="glass-card" style={{ padding: '16px', marginBottom: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
-        <div style={{ position: 'relative', width: '320px' }}>
-          <Search size={18} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
+      <div className="admin-list-card" style={{ padding: '12px 16px', marginBottom: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
+        <div style={{ position: 'relative', width: '320px', maxWidth: '100%' }}>
+          <Search size={16} style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
           <input
             type="text"
             className="form-input"
             placeholder={t('common.search')}
-            style={{ paddingLeft: '38px' }}
+            style={{ paddingLeft: '32px', height: '28px', fontSize: '13px', width: '100%' }}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
@@ -46,68 +46,68 @@ export const SubscribersView: React.FC<SubscribersViewProps> = ({ subscribers })
             className="form-select"
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value as any)}
-            style={{ width: '180px' }}
+            style={{ width: '180px', height: '28px', fontSize: '13px', padding: '0 22px 0 8px' }}
           >
             <option value="all">{t('common.all')}</option>
             <option value="verified">Doğrulanmış</option>
             <option value="unverified">Doğrulanmamış</option>
             <option value="unsubscribed">Ayrılanlar</option>
           </select>
-          <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', fontWeight: 600 }}>
-            {t('common.all')}: {filtered.length}
+          <span className="admin-badge admin-badge-counter">
+            {filtered.length}
           </span>
         </div>
       </div>
 
-      <div className="glass-card" style={{ padding: 0, overflow: 'hidden' }}>
+      <div className="admin-list-card" style={{ padding: 0, overflow: 'hidden' }}>
         <div className="table-responsive">
-          <table style={{ width: '100%', minWidth: '550px', borderCollapse: 'collapse', textAlign: 'left', fontSize: '0.88rem' }}>
+          <table style={{ width: '100%', minWidth: '550px', borderCollapse: 'collapse', textAlign: 'left', fontSize: '0.85rem' }}>
           <thead>
-            <tr style={{ background: 'rgba(255,255,255,0.03)', borderBottom: '1px solid var(--border-color)', color: 'var(--text-secondary)' }}>
-              <th style={{ padding: '14px 20px' }}>{t('subscribers.email')}</th>
-              <th style={{ padding: '14px 20px' }}>{t('common.status')}</th>
-              <th style={{ padding: '14px 20px' }}>KVKK</th>
-              <th style={{ padding: '14px 20px' }}>{t('subscribers.subscribedAt')}</th>
-              <th style={{ padding: '14px 20px' }}>Ayrılma Tarihi</th>
+            <tr style={{ background: 'rgba(255,255,255,0.02)', borderBottom: '1px solid var(--border-color)', color: 'var(--text-secondary)' }}>
+              <th style={{ padding: '12px 16px' }}>{t('subscribers.email')}</th>
+              <th style={{ padding: '12px 16px' }}>{t('common.status')}</th>
+              <th style={{ padding: '12px 16px' }}>KVKK</th>
+              <th style={{ padding: '12px 16px' }}>{t('subscribers.subscribedAt')}</th>
+              <th style={{ padding: '12px 16px' }}>Ayrılma Tarihi</th>
             </tr>
           </thead>
           <tbody>
             {filtered.length === 0 ? (
               <tr>
-                <td colSpan={5} style={{ padding: '30px', textAlign: 'center', color: 'var(--text-muted)' }}>
+                <td colSpan={5} style={{ padding: '24px', textAlign: 'center', color: 'var(--text-muted)' }}>
                   {t('common.loading')}
                 </td>
               </tr>
             ) : (
               filtered.map((sub) => (
                 <tr key={sub.id} style={{ borderBottom: '1px solid var(--border-color)' }}>
-                  <td style={{ padding: '14px 20px', color: '#FFF', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <Mail size={16} color="var(--accent-primary)" /> {sub.email}
+                  <td style={{ padding: '12px 16px', color: 'var(--text-primary)', fontWeight: 500, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <Mail size={15} color="var(--accent-primary)" /> {sub.email}
                   </td>
-                  <td style={{ padding: '14px 20px' }}>
+                  <td style={{ padding: '12px 16px' }}>
                     {sub.unsubscribed_at ? (
-                      <span className="badge badge-closed" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                      <span className="admin-badge" style={{ background: 'rgba(239, 68, 68, 0.15)', color: 'var(--accent-rose)', border: '1px solid rgba(239, 68, 68, 0.3)' }}>
                         <XCircle size={12} /> Ayrıldı
                       </span>
                     ) : sub.is_verified ? (
-                      <span className="badge badge-resolved" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                      <span className="admin-badge" style={{ background: 'rgba(16, 185, 129, 0.15)', color: 'var(--accent-emerald)', border: '1px solid rgba(16, 185, 129, 0.3)' }}>
                         <CheckCircle2 size={12} /> Doğrulanmış
                       </span>
                     ) : (
-                      <span className="badge badge-in_progress" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                      <span className="admin-badge" style={{ background: 'rgba(245, 158, 11, 0.15)', color: 'var(--accent-amber)', border: '1px solid rgba(245, 158, 11, 0.3)' }}>
                         <XCircle size={12} /> Onay Bekliyor
                       </span>
                     )}
                   </td>
-                  <td style={{ padding: '14px 20px' }}>
-                    <span style={{ color: 'var(--accent-emerald)', fontSize: '0.8rem', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                  <td style={{ padding: '12px 16px' }}>
+                    <span style={{ color: 'var(--accent-emerald)', fontSize: '0.8rem', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
                       <ShieldCheck size={14} /> Evet
                     </span>
                   </td>
-                  <td style={{ padding: '14px 20px', color: 'var(--text-muted)' }}>
+                  <td style={{ padding: '12px 16px', color: 'var(--text-muted)' }}>
                     {new Date(sub.created_at).toLocaleDateString('tr-TR')}
                   </td>
-                  <td style={{ padding: '14px 20px', color: 'var(--text-muted)' }}>
+                  <td style={{ padding: '12px 16px', color: 'var(--text-muted)' }}>
                     {sub.unsubscribed_at ? new Date(sub.unsubscribed_at).toLocaleDateString('tr-TR') : '-'}
                   </td>
                 </tr>

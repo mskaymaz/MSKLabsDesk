@@ -1,6 +1,18 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [15.10.2026 - 10:48] - Baş Harfi Büyük (Title Case) Rozet Standardı ve Tüm Admin Ekranlarının Tasarım Sistemine Bağlanması
+- `frontend/src/styles/design-system.css`:
+  - `.admin-badge` sınıfındaki `text-transform: uppercase;` ve `letter-spacing: 0.04em;` kaldırıldı; tüm rozet ve etiketlerin doğal Baş Harfi Büyük (Title Case) olarak görünmesi sağlandı.
+- `frontend/src/utils/blogMeta.ts` & `frontend/src/components/posts/PostCard.tsx`:
+  - `BİZCE`, `ANILTILAR`, `GÜNCEL`, `VLOG` büyük harfli kanal ve konu etiketleri `Bizce`, `Anıltılar`, `Güncel`, `Vlog` Title Case standardına geçirildi.
+- Tüm Admin Görünümleri (`ChannelsView.tsx`, `SubscribersView.tsx`, `DashboardView.tsx`, `AppsCMSView.tsx`, `BroadcastView.tsx`, `TemplatesView.tsx`, `SettingsView.tsx`):
+  - Tüm sayfa başlıkları `.admin-page-title` ve `.admin-page-desc` sınıflarına bağlandı.
+  - Açık temada okunmayan hardcoded `#FFF` ve `#0F1522` metin ve kutu renkleri `var(--text-primary)`, `var(--bg-card)` ve `var(--bg-secondary)` dinamik tokenlarına dönüştürüldü.
+  - Dağınık butonlar ve form elemanları `.admin-btn`, `.admin-btn-primary`, `.admin-btn-view`, `.admin-btn-refresh`, `.form-input` ve `.form-select` standartlarına geçirildi.
+  - Tüm dosyalarda satır sınırları korundu (en büyük dosya `TemplatesView.tsx`: 326 satır <= 450).
+- Yalnızca `DevAdmin` dalında çalışıldı, `main` korundu.
+
 ## [15.10.2026 - 10:35] - Kart Açıklamaları (Line-Clamp) İzolasyonu ve 3 Katmanlı Kart Standartlaşması
 - `frontend/src/styles/design-system.css`:
   - `.admin-card-desc` temel tipografi kuralından satır sınırlaması (`-webkit-line-clamp`, `max-height`) ayrıştırıldı; farklı kartların farklı satır ihtiyaçları için bağımsız `.line-clamp-1`, `.line-clamp-2`, `.line-clamp-3` yardımcı sınıfları eklendi.

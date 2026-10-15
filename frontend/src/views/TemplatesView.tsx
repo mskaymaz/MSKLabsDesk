@@ -108,18 +108,18 @@ export const TemplatesView: React.FC = () => {
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
       {/* Header */}
       <div>
-        <h1 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#FFF' }}>{t('templates.title')}</h1>
-        <p style={{ fontSize: '0.88rem', color: 'var(--text-secondary)' }}>
-          {t('templates.title')} — AdSense Settings & Announcement Bar
+        <h1 className="admin-page-title">{t('templates.title')}</h1>
+        <p className="admin-page-desc">
+          Duyuru bandı metinlerini ve Google AdSense reklam yerleşimlerini yönetin
         </p>
       </div>
 
       {message && (
-        <div style={{ padding: '12px 16px', background: 'rgba(16, 185, 129, 0.15)', border: '1px solid var(--accent-emerald)', color: 'var(--accent-emerald)', borderRadius: 'var(--radius-md)', display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <CheckCircle size={18} />
+        <div style={{ padding: '10px 14px', background: 'rgba(16, 185, 129, 0.15)', border: '1px solid var(--accent-emerald)', color: 'var(--accent-emerald)', borderRadius: 'var(--radius-md)', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem' }}>
+          <CheckCircle size={16} />
           <span>{message}</span>
         </div>
       )}
@@ -127,18 +127,18 @@ export const TemplatesView: React.FC = () => {
       {loading ? (
         <p style={{ color: 'var(--text-muted)' }}>{t('common.loading')}</p>
       ) : (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
           {/* Announcement Bar Form */}
-          <div className="glass-card">
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
-              <Megaphone size={20} color="var(--accent-amber)" />
-              <h2 style={{ fontSize: '1.1rem', fontWeight: 800, color: '#FFF' }}>{t('templates.newTemplate')}</h2>
+          <div className="admin-list-card" style={{ padding: '20px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px' }}>
+              <Megaphone size={18} color="var(--accent-amber)" />
+              <h2 className="admin-card-title">{t('templates.newTemplate')}</h2>
             </div>
 
             <form onSubmit={handleSaveAnnouncement} style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '12px' }}>
                 <div>
-                  <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'block', marginBottom: '4px' }}>TR</label>
+                  <label className="form-label">TR (Türkçe)</label>
                   <input
                     type="text"
                     className="form-input"
@@ -147,7 +147,7 @@ export const TemplatesView: React.FC = () => {
                   />
                 </div>
                 <div>
-                  <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'block', marginBottom: '4px' }}>EN</label>
+                  <label className="form-label">EN (English)</label>
                   <input
                     type="text"
                     className="form-input"
@@ -156,7 +156,7 @@ export const TemplatesView: React.FC = () => {
                   />
                 </div>
                 <div>
-                  <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'block', marginBottom: '4px' }}>AR</label>
+                  <label className="form-label">AR (العربية)</label>
                   <input
                     type="text"
                     className="form-input"
@@ -166,43 +166,43 @@ export const TemplatesView: React.FC = () => {
                 </div>
               </div>
 
-              <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                <button type="submit" className="btn btn-primary" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
-                  <Save size={16} /> {t('common.save')}
+              <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '6px' }}>
+                <button type="submit" className="admin-btn admin-btn-primary admin-btn-md">
+                  <Save size={15} /> {t('common.save')}
                 </button>
               </div>
             </form>
           </div>
 
           {/* AdSense Settings Section (ADS-001 & ADS-002) */}
-          <div className="glass-card">
+          <div className="admin-list-card" style={{ padding: '20px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
-              <DollarSign size={20} color="var(--accent-emerald)" />
-              <h2 style={{ fontSize: '1.1rem', fontWeight: 800, color: '#FFF' }}>
-                AdSense Placement & Config (ADS-001)
+              <DollarSign size={18} color="var(--accent-emerald)" />
+              <h2 className="admin-card-title">
+                AdSense Reklam Yerleşimleri ve Ayarları
               </h2>
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
               {ads.map((ad) => (
                 <div
                   key={ad.id || ad.slot_key}
                   style={{
-                    background: 'rgba(0,0,0,0.25)',
+                    background: 'var(--bg-secondary)',
                     padding: '16px',
                     borderRadius: 'var(--radius-md)',
                     border: '1px solid var(--border-color)',
                     display: 'flex',
                     flexDirection: 'column',
-                    gap: '14px'
+                    gap: '12px'
                   }}
                 >
                   {/* Slot Title & Toggle Header */}
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                      <Settings size={18} color="var(--accent-primary)" />
-                      <strong style={{ color: '#FFF', fontSize: '0.95rem' }}>{ad.title}</strong>
-                      <span className="badge badge-resolved" style={{ fontSize: '0.75rem' }}>{ad.slot_key}</span>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <Settings size={16} color="var(--accent-primary)" />
+                      <strong style={{ color: 'var(--text-primary)', fontSize: '0.92rem' }}>{ad.title}</strong>
+                      <span className="admin-badge admin-badge-counter">{ad.slot_key}</span>
                     </div>
 
                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
@@ -286,25 +286,23 @@ export const TemplatesView: React.FC = () => {
                   </div>
 
                   {/* Actions Bar */}
-                  <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', paddingTop: '8px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '8px', paddingTop: '8px' }}>
                     <button
                       type="button"
-                      className="btn btn-secondary btn-sm"
+                      className="admin-btn admin-btn-view admin-btn-sm"
                       onClick={() => {
                         setSelectedAd(ad);
                         setShowPreviewModal(true);
                       }}
-                      style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}
                     >
-                      <Eye size={14} /> DRAFT Preview (ADS-002)
+                      <Eye size={13} /> Önizleme
                     </button>
                     <button
                       type="button"
-                      className="btn btn-primary btn-sm"
+                      className="admin-btn admin-btn-primary admin-btn-sm"
                       onClick={() => handleUpdateAdSetting(ad)}
-                      style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}
                     >
-                      <Save size={14} /> {t('common.save')}
+                      <Save size={13} /> {t('common.save')}
                     </button>
                   </div>
                 </div>

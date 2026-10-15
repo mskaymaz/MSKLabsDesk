@@ -90,38 +90,25 @@ export const ChannelsView: React.FC = () => {
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
       {/* Header */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
         <div>
-          <h1 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#FFF' }}>{t('channels.title')}</h1>
-          <p style={{ fontSize: '0.88rem', color: 'var(--text-secondary)' }}>
-            {t('channels.title')}
-          </p>
+          <h1 className="admin-page-title">{t('channels.title')}</h1>
+          <p className="admin-page-desc">Blog kategorilerini, dillerini ve görünürlük durumlarını yönetin</p>
         </div>
         <button
           onClick={() => setShowModal(true)}
-          style={{
-            background: 'linear-gradient(135deg, var(--accent-primary), var(--accent-secondary))',
-            color: '#FFF',
-            border: 'none',
-            borderRadius: 'var(--radius-md)',
-            padding: '10px 18px',
-            fontWeight: 700,
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px',
-          }}
+          className="admin-btn admin-btn-primary admin-btn-md"
         >
-          <Plus size={18} />
+          <Plus size={16} />
           <span>{t('channels.addChannel')}</span>
         </button>
       </div>
 
       {message && (
-        <div style={{ padding: '12px 16px', background: 'rgba(16, 185, 129, 0.15)', border: '1px solid var(--accent-emerald)', color: 'var(--accent-emerald)', borderRadius: 'var(--radius-md)', display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <CheckCircle size={18} />
+        <div style={{ padding: '10px 14px', background: 'rgba(16, 185, 129, 0.15)', border: '1px solid var(--accent-emerald)', color: 'var(--accent-emerald)', borderRadius: 'var(--radius-md)', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem' }}>
+          <CheckCircle size={16} />
           <span>{message}</span>
         </div>
       )}
@@ -130,65 +117,56 @@ export const ChannelsView: React.FC = () => {
       {loading ? (
         <p style={{ color: 'var(--text-muted)' }}>{t('common.loading')}</p>
       ) : (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '16px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '14px' }}>
           {channels.map((ch) => {
             const isActive = ch.is_active === 1 || ch.is_active === true;
             return (
-              <div key={ch.id} className="glass-card" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: '16px' }}>
+              <div key={ch.id} className="admin-list-card" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: '12px' }}>
                 <div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '8px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                       <div style={{
-                        padding: '8px',
-                        background: ch.icon === 'video' ? 'rgba(239, 68, 68, 0.15)' : 'rgba(99, 102, 241, 0.15)',
-                        borderRadius: '8px',
-                        color: ch.icon === 'video' ? 'var(--accent-rose)' : 'var(--accent-primary)'
+                        padding: '7px',
+                        background: ch.icon === 'video' ? 'rgba(239, 68, 68, 0.12)' : 'rgba(99, 102, 241, 0.12)',
+                        borderRadius: '6px',
+                        color: ch.icon === 'video' ? 'var(--accent-rose)' : 'var(--accent-primary)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
                       }}>
-                        {ch.icon === 'video' ? <Video size={20} /> : <BookOpen size={20} />}
+                        {ch.icon === 'video' ? <Video size={18} /> : <BookOpen size={18} />}
                       </div>
                       <div>
-                        <h3 style={{ fontSize: '1.1rem', fontWeight: 800, color: '#FFF' }}>{ch.name_tr}</h3>
-                        <span style={{ fontSize: '0.75rem', color: 'var(--accent-cyan)' }}>/blog/{ch.slug}</span>
+                        <h3 className="admin-card-title">{ch.name_tr}</h3>
+                        <span className="admin-link-subtle">/blog/{ch.slug}</span>
                       </div>
                     </div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                       <button
                         onClick={() => handleToggleActive(ch)}
-                        style={{
-                          padding: '4px 10px',
-                          fontSize: '0.75rem',
-                          fontWeight: 700,
-                          borderRadius: '20px',
-                          cursor: 'pointer',
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          gap: '4px',
-                          border: 'none',
-                          background: isActive ? 'rgba(16, 185, 129, 0.2)' : 'rgba(239, 68, 68, 0.2)',
-                          color: isActive ? 'var(--accent-emerald)' : 'var(--accent-rose)',
-                        }}
+                        className={`admin-btn admin-btn-sm ${isActive ? 'admin-btn-success' : 'admin-btn-warning'}`}
                         title={isActive ? 'Kanalı Pasife Al' : 'Kanalı Aktife Al'}
                       >
-                        {isActive ? <Eye size={13} /> : <EyeOff size={13} />}
+                        {isActive ? <Eye size={12} /> : <EyeOff size={12} />}
                         {isActive ? 'Aktif' : 'Pasif'}
                       </button>
                       <button
                         onClick={() => handleDeleteChannel(ch.id)}
-                        style={{ background: 'transparent', border: 'none', color: 'var(--accent-rose)', cursor: 'pointer', padding: '4px' }}
+                        className="admin-btn admin-btn-sm admin-btn-danger"
                         title="Kanalı Sil"
                       >
-                        <Trash2 size={16} />
+                        <Trash2 size={13} />
                       </button>
                     </div>
                   </div>
 
-                  <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', lineHeight: 1.5 }}>
-                    {ch.description_tr || t('common.error')}
+                  <p className="admin-card-desc line-clamp-2">
+                    {ch.description_tr || 'Açıklama girilmedi.'}
                   </p>
 
-                  <div style={{ display: 'flex', gap: '6px', marginTop: '12px' }}>
-                    <span style={{ fontSize: '0.7rem', padding: '2px 6px', background: 'rgba(255,255,255,0.05)', borderRadius: '4px', color: 'var(--text-muted)' }}>🇬🇧 {ch.name_en || 'EN'}</span>
-                    <span style={{ fontSize: '0.7rem', padding: '2px 6px', background: 'rgba(255,255,255,0.05)', borderRadius: '4px', color: 'var(--text-muted)' }}>🇸🇦 {ch.name_ar || 'AR'}</span>
+                  <div style={{ display: 'flex', gap: '6px', marginTop: '10px' }}>
+                    <span className="admin-badge admin-badge-index">EN: {ch.name_en || 'İngilizce'}</span>
+                    <span className="admin-badge admin-badge-index">AR: {ch.name_ar || 'Arapça'}</span>
                   </div>
                 </div>
               </div>
@@ -199,16 +177,16 @@ export const ChannelsView: React.FC = () => {
 
       {/* Modal */}
       {showModal && (
-        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(8px)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}>
-          <div className="glass-card" style={{ width: '100%', maxWidth: '500px', background: '#0F1522' }}>
-            <h2 style={{ fontSize: '1.2rem', fontWeight: 800, color: '#FFF', marginBottom: '16px' }}>{t('channels.addChannel')}</h2>
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(8px)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: '16px' }}>
+          <div className="admin-list-card" style={{ width: '100%', maxWidth: '500px', background: 'var(--bg-card)', padding: '24px', boxShadow: '0 10px 30px rgba(0,0,0,0.5)' }}>
+            <h2 className="admin-card-title" style={{ fontSize: '1.2rem', marginBottom: '16px' }}>{t('channels.addChannel')}</h2>
 
             <form onSubmit={handleCreateChannel} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
               <div>
-                <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'block', marginBottom: '4px' }}>{t('channels.channelName')} (TR)</label>
+                <label className="form-label">{t('channels.channelName')} (TR)</label>
                 <input
                   type="text"
-                  placeholder="TR Name"
+                  placeholder="Kanal Adı"
                   value={formData.name_tr}
                   onChange={(e) => {
                     const val = e.target.value;
@@ -216,72 +194,79 @@ export const ChannelsView: React.FC = () => {
                     setFormData({ ...formData, name_tr: val, slug: autoSlug });
                   }}
                   required
-                  style={{ width: '100%', padding: '10px', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border-color)', borderRadius: '6px', color: '#FFF' }}
+                  className="form-input"
+                  style={{ width: '100%' }}
                 />
               </div>
 
               <div>
-                <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'block', marginBottom: '4px' }}>{t('channels.slug')}</label>
+                <label className="form-label">{t('channels.slug')}</label>
                 <input
                   type="text"
                   value={formData.slug}
                   onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
                   required
-                  style={{ width: '100%', padding: '10px', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border-color)', borderRadius: '6px', color: 'var(--accent-cyan)' }}
+                  className="form-input"
+                  style={{ width: '100%', color: 'var(--accent-cyan)' }}
                 />
               </div>
 
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
                 <div>
-                  <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'block', marginBottom: '4px' }}>{t('channels.channelName')} (EN)</label>
+                  <label className="form-label">{t('channels.channelName')} (EN)</label>
                   <input
                     type="text"
-                    placeholder="EN Name"
+                    placeholder="English Name"
                     value={formData.name_en}
                     onChange={(e) => setFormData({ ...formData, name_en: e.target.value })}
-                    style={{ width: '100%', padding: '10px', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border-color)', borderRadius: '6px', color: '#FFF' }}
+                    className="form-input"
+                    style={{ width: '100%' }}
                   />
                 </div>
                 <div>
-                  <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'block', marginBottom: '4px' }}>{t('channels.channelName')} (AR)</label>
+                  <label className="form-label">{t('channels.channelName')} (AR)</label>
                   <input
                     type="text"
-                    placeholder="AR Name"
+                    placeholder="Arabic Name"
                     value={formData.name_ar}
                     onChange={(e) => setFormData({ ...formData, name_ar: e.target.value })}
-                    style={{ width: '100%', padding: '10px', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border-color)', borderRadius: '6px', color: '#FFF' }}
+                    className="form-input"
+                    style={{ width: '100%' }}
                   />
                 </div>
               </div>
 
               <div>
-                <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'block', marginBottom: '4px' }}>Açıklama (TR)</label>
+                <label className="form-label">Açıklama (TR)</label>
                 <textarea
                   rows={2}
                   value={formData.description_tr}
                   onChange={(e) => setFormData({ ...formData, description_tr: e.target.value })}
-                  style={{ width: '100%', padding: '10px', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border-color)', borderRadius: '6px', color: '#FFF' }}
+                  className="form-input"
+                  style={{ width: '100%' }}
                 />
               </div>
 
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
                 <div>
-                  <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'block', marginBottom: '4px' }}>İkon</label>
+                  <label className="form-label">İkon</label>
                   <select
                     value={formData.icon}
                     onChange={(e) => setFormData({ ...formData, icon: e.target.value })}
-                    style={{ width: '100%', padding: '10px', background: '#1A2234', border: '1px solid var(--border-color)', borderRadius: '6px', color: '#FFF' }}
+                    className="form-select"
+                    style={{ width: '100%' }}
                   >
                     <option value="book-open">Yazı / Kitap (BookOpen)</option>
                     <option value="video">Video / Vlog (Video)</option>
                   </select>
                 </div>
                 <div>
-                  <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'block', marginBottom: '4px' }}>Başlangıç Durumu</label>
+                  <label className="form-label">Başlangıç Durumu</label>
                   <select
                     value={formData.is_active}
                     onChange={(e) => setFormData({ ...formData, is_active: parseInt(e.target.value) })}
-                    style={{ width: '100%', padding: '10px', background: '#1A2234', border: '1px solid var(--border-color)', borderRadius: '6px', color: '#FFF' }}
+                    className="form-select"
+                    style={{ width: '100%' }}
                   >
                     <option value={1}>Aktif (Yayında)</option>
                     <option value={0}>Pasif (Gizli)</option>
@@ -290,8 +275,8 @@ export const ChannelsView: React.FC = () => {
               </div>
 
               <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', marginTop: '12px' }}>
-                <button type="button" onClick={() => setShowModal(false)} style={{ padding: '8px 16px', background: 'transparent', border: '1px solid var(--border-color)', color: 'var(--text-secondary)', borderRadius: '6px', cursor: 'pointer' }}>{t('common.cancel')}</button>
-                <button type="submit" style={{ padding: '8px 16px', background: 'var(--accent-primary)', border: 'none', color: '#FFF', borderRadius: '6px', fontWeight: 700, cursor: 'pointer' }}>{t('common.save')}</button>
+                <button type="button" onClick={() => setShowModal(false)} className="admin-btn admin-btn-refresh admin-btn-md">{t('common.cancel')}</button>
+                <button type="submit" className="admin-btn admin-btn-primary admin-btn-md">{t('common.save')}</button>
               </div>
             </form>
           </div>

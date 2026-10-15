@@ -32,7 +32,7 @@ const getChannelInfo = (post: BlogPost, channels?: BlogChannel[]) => {
   switch (slug) {
     case 'bizce':
       return {
-        name: ch.name_tr || 'BİZCE',
+        name: ch.name_tr || 'Bizce',
         icon: '✍️',
         bg: 'rgba(99, 102, 241, 0.12)',
         color: 'var(--accent-primary)',
@@ -41,7 +41,7 @@ const getChannelInfo = (post: BlogPost, channels?: BlogChannel[]) => {
     case 'aniltilar':
     case 'anilts':
       return {
-        name: ch.name_tr || 'ANILTILAR',
+        name: ch.name_tr || 'Anıltılar',
         icon: '📖',
         bg: 'rgba(16, 185, 129, 0.12)',
         color: 'var(--accent-emerald)',
@@ -49,7 +49,7 @@ const getChannelInfo = (post: BlogPost, channels?: BlogChannel[]) => {
       };
     case 'guncel':
       return {
-        name: ch.name_tr || 'GÜNCEL',
+        name: ch.name_tr || 'Güncel',
         icon: '📰',
         bg: 'rgba(245, 158, 11, 0.12)',
         color: 'var(--accent-amber)',
@@ -57,7 +57,7 @@ const getChannelInfo = (post: BlogPost, channels?: BlogChannel[]) => {
       };
     case 'vlog':
       return {
-        name: ch.name_tr || 'VLOG',
+        name: ch.name_tr || 'Vlog',
         icon: '🎬',
         bg: 'rgba(239, 68, 68, 0.12)',
         color: 'var(--accent-rose)',

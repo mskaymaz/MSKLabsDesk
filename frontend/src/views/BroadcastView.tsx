@@ -46,35 +46,35 @@ export const BroadcastView: React.FC = () => {
 
   return (
     <div className="animate-fade-in" style={{ maxWidth: '1000px' }}>
-      <div>
-        <h1 className="page-title">{t('broadcast.broadcastTitle')}</h1>
-        <p className="page-subtitle">{t('broadcast.broadcastSubject')}</p>
+      <div style={{ marginBottom: '16px' }}>
+        <h1 className="admin-page-title">{t('broadcast.broadcastTitle')}</h1>
+        <p className="admin-page-desc">{t('broadcast.broadcastSubject')}</p>
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', alignItems: 'start' }}>
         {/* Sol Panel: Form ve Ayarlar */}
-        <div className="glass-card" style={{ padding: '24px' }}>
+        <div className="admin-list-card" style={{ padding: '20px' }}>
           {successMsg && (
             <div style={{
               background: 'rgba(16, 185, 129, 0.12)',
               border: '1px solid rgba(16, 185, 129, 0.3)',
-              padding: '12px 16px',
+              padding: '10px 14px',
               borderRadius: 'var(--radius-md)',
-              color: '#6EE7B7',
-              marginBottom: '20px',
+              color: 'var(--accent-emerald)',
+              marginBottom: '16px',
               display: 'flex',
               alignItems: 'center',
               gap: '10px',
               fontSize: '0.85rem'
             }}>
-              <CheckCircle2 size={18} />
+              <CheckCircle2 size={16} />
               <span>{successMsg}</span>
             </div>
           )}
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
             <div>
-              <label className="form-label" style={{ fontSize: '0.82rem', color: 'var(--text-secondary)' }}>{t('broadcast.broadcastSubject')}</label>
+              <label className="form-label">{t('broadcast.broadcastSubject')}</label>
               <input
                 type="text"
                 className="form-input"
@@ -85,7 +85,7 @@ export const BroadcastView: React.FC = () => {
             </div>
 
             <div>
-              <label className="form-label" style={{ fontSize: '0.82rem', color: 'var(--text-secondary)' }}>{t('broadcast.broadcastContent')}</label>
+              <label className="form-label">{t('broadcast.broadcastContent')}</label>
               <textarea
                 className="form-input"
                 rows={8}
@@ -96,22 +96,22 @@ export const BroadcastView: React.FC = () => {
             </div>
 
             <button
-              className="btn btn-primary"
+              className="admin-btn admin-btn-primary admin-btn-md"
               disabled={!title || !contentHtml || sending}
               onClick={() => setShowConfirmModal(true)}
-              style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
+              style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', height: '36px' }}
             >
-              <Send size={16} />
+              <Send size={15} />
               <span>{t('broadcast.sendBroadcast')}</span>
             </button>
           </div>
         </div>
 
         {/* Sağ Panel: HTML Önizleme */}
-        <div className="glass-card" style={{ padding: '24px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px', color: 'var(--accent-cyan)' }}>
-            <Eye size={18} />
-            <h3 style={{ fontSize: '0.95rem', fontWeight: 700, color: '#FFF' }}>{t('posts.preview')}</h3>
+        <div className="admin-list-card" style={{ padding: '20px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '14px', color: 'var(--accent-cyan)' }}>
+            <Eye size={16} />
+            <h3 className="admin-card-title">{t('posts.preview')}</h3>
           </div>
 
           <div style={{
