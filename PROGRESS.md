@@ -1,6 +1,22 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 🟢 Son Güncelleme [15.10.2026 - 11:05] — GÖRÜNÜM VE TEMA STÜDYOSU (THEME CUSTOMIZER) & CANLI ÖNİZLEME [*]
+* **Yapılan İşlem:**
+  1. **Merkezi Customizer Context & Kalıcılık (`CustomizerContext.tsx`):**
+     - Koyu ve Açık temalar için bağımsız ayar depolama (`msk_customizer_dark` ve `msk_customizer_light`) mimarisi kuruldu.
+     - 6 Türkçe destekli font ailesi (`system`, `cairo`, `inter`, `plus-jakarta`, `outfit`, `roboto`), 6 vurgu rengi (`accentColor`), 3 kademeli kart dolgusu (`cardPadding`), 4 kademeli köşe yuvarlaklığı (`borderRadius`), 3 kart başlık boyutu & ağırlığı (`titleSize`, `titleWeight`) ve 3 font ölçeği (`fontScale`) yönetimi sağlandı.
+     - CSS değişkenleri (`--font-sans`, `--accent-primary`, `--accent-primary-hover`, `--admin-card-padding`, `--admin-card-radius`, `--admin-btn-radius`, `--admin-badge-radius`, `--admin-title-size`, `--admin-title-weight`, `--admin-desc-size`) dinamik olarak enjekte edildi.
+  2. **Görünüm Stüdyosu Çekmecesi (`ThemeCustomizerDrawer.tsx`):**
+     - Sağdan yumuşak animasyonla (`slideInRight`) kayan, yarı saydam karartmalı (backdrop), ESC tuşu ve dış tık korumalı modal çekmece geliştirildi.
+     - İçerisine başlık, rozet, açıklama ve eylem butonları içeren canlı önizleme kartı yerleştirildi; kullanıcı ayarları değiştirdiği anda panelin tamamına anlık yansıması sağlandı.
+     - "Varsayılana Sıfırla" butonuyla anında fabrika ayarlarına dönüş sağlandı.
+  3. **Arayüz Entegrasyonu (`Topbar.tsx`, `AppShell.tsx`, `App.tsx`):**
+     - Üst çubukta Güneş/Ay butonunun yanına `Palette` ikonu eklendi.
+     - `CustomizerProvider` ve `ThemeCustomizerDrawer` ana kabuğa entegre edildi.
+* **Sonuçlar:** `npm run build` PASS (0 hata, 700 ms). Tüm dosyalar `<= 400` satır kuralına tam uyumlu (`ThemeCustomizerDrawer.tsx`: 395 satır, `CustomizerContext.tsx`: 185 satır).
+* **Durum:** `DevAdmin` dalında çalışıldı, `main` korundu.
+
 ## 🟢 Son Güncelleme [15.10.2026 - 10:53] — ÖZET EKRANI METRİK KARTLARININ MİNİMİZASYONU & KİBAR SAYAÇ MİMARİSİ [*]
 * **Yapılan İşlem:**
   1. **İkonların Kaldırılması ve Dolgu (Padding) Azaltımı (`DashboardView.tsx`):**

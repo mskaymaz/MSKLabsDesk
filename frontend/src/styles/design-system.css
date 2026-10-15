@@ -5,8 +5,8 @@
 
 /* --- 1. Kart Yapısı (Standart Liste Kartı) --- */
 .admin-list-card {
-  padding: 8px 12px;
-  border-radius: var(--radius-md, 8px);
+  padding: var(--admin-card-padding, 8px 12px);
+  border-radius: var(--admin-card-radius, 8px);
   border: 1px solid var(--border-card);
   background: var(--bg-card);
   display: flex;
@@ -59,15 +59,15 @@
 }
 
 .admin-card-title {
-  font-size: 0.88rem;
-  font-weight: 600;
+  font-size: var(--admin-title-size, 0.88rem);
+  font-weight: var(--admin-title-weight, 600);
   color: var(--text-primary);
   line-height: 1.35;
   margin: 0;
 }
 
 .admin-card-desc {
-  font-size: 0.88rem;
+  font-size: var(--admin-desc-size, 0.88rem);
   font-weight: 400;
   color: var(--text-secondary);
   line-height: 1.45;
@@ -115,7 +115,7 @@
   gap: 5px;
   font-family: inherit;
   cursor: pointer;
-  border-radius: var(--radius-sm, 6px);
+  border-radius: var(--admin-btn-radius, 6px);
   transition: all 0.15s ease;
   border: 1px solid transparent;
   white-space: nowrap;
@@ -251,7 +251,7 @@
   font-size: 0.68rem;
   font-weight: 600;
   padding: 1.5px 6px;
-  border-radius: 4px;
+  border-radius: var(--admin-badge-radius, 4px);
   line-height: 1.2;
   text-transform: none;
   letter-spacing: normal;
@@ -337,3 +337,15 @@
   cursor: pointer !important;
   box-sizing: border-box !important;
 }
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+

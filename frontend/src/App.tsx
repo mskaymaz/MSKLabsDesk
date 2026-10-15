@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { I18nProvider } from './context/I18nContext';
 import { ThemeProvider } from './context/ThemeContext';
+import { CustomizerProvider } from './context/CustomizerContext';
 import { type TabType } from './components/Sidebar';
 import { AppShell } from './components/layout/AppShell';
 import { LoginView } from './views/LoginView';
@@ -100,11 +101,13 @@ const AdminPanelContent: React.FC = () => {
 export default function App() {
   return (
     <ThemeProvider>
-      <I18nProvider>
-        <AuthProvider>
-          <AdminPanelContent />
-        </AuthProvider>
-      </I18nProvider>
+      <CustomizerProvider>
+        <I18nProvider>
+          <AuthProvider>
+            <AdminPanelContent />
+          </AuthProvider>
+        </I18nProvider>
+      </CustomizerProvider>
     </ThemeProvider>
   );
 }

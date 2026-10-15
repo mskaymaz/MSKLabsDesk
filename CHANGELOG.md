@@ -1,6 +1,24 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [15.10.2026 - 11:05] - Görünüm ve Tema Stüdyosu (ThemeCustomizerDrawer) ve Canlı Önizleme Altyapısı
+- `frontend/src/context/CustomizerContext.tsx`:
+  - Koyu ve Açık temalar için bağımsız ayar saklama (`msk_customizer_dark`, `msk_customizer_light`) mimarisi kuruldu.
+  - 6 adet Türkçe (Latin-ext) karakter destekli font ailesi (`system`, `cairo`, `inter`, `plus-jakarta`, `outfit`, `roboto`), 6 vurgu rengi (`accentColor`), 3 kademeli kart dolgusu (`cardPadding`), 4 kademeli köşe yuvarlaklığı (`borderRadius`), 3 kart başlık boyutu & ağırlığı (`titleSize`, `titleWeight`) ve 3 font ölçeği (`fontScale`) yönetimi sağlandı.
+  - CSS değişkenleri (`--font-sans`, `--accent-primary`, `--accent-primary-hover`, `--admin-card-padding`, `--admin-card-radius`, `--admin-btn-radius`, `--admin-badge-radius`, `--admin-title-size`, `--admin-title-weight`, `--admin-desc-size`) dinamik olarak `document.documentElement`'e enjekte edildi.
+  - "Varsayılana Sıfırla" ve `localStorage` kalıcı saklama altyapısı tamamlandı.
+- `frontend/src/components/ThemeCustomizerDrawer.tsx`:
+  - Sağdan yumuşak animasyonla (`slideInRight`) açılan, ESC tuşu ve dış tıkla kapanan modal çekmece inşa edildi.
+  - Yapılan değişiklikleri anlık gösteren Canlı Önizleme Kartı (başlık, rozet, açıklama, eylem butonları) eklendi.
+  - Türkçe etiketli görsel seçim butonları ve renk paletleri entegre edildi (satır sayısı: 395 <= 450).
+- `frontend/src/components/layout/Topbar.tsx`:
+  - Tema (Güneş/Ay) butonunun hemen yanına `Palette` ikonuyla "Görünüm Stüdyosu" tetikleme butonu eklendi.
+- `frontend/src/components/layout/AppShell.tsx` & `frontend/src/App.tsx`:
+  - `CustomizerProvider` ve `ThemeCustomizerDrawer` ana kabuğa entegre edildi.
+- `frontend/src/styles/design-system.css`:
+  - `.admin-badge`, `.admin-card-desc` değişken kancaları ve `@keyframes slideInRight` eklendi.
+- Yalnızca `DevAdmin` dalında çalışıldı, `main` korundu.
+
 ## [15.10.2026 - 10:53] - Özet Ekranı Metrik Kartlarının Minimizasyonu ve Kibar Sayaç Mimarisi
 - `frontend/src/views/DashboardView.tsx`:
   - 4 adet üst metrik kartındaki kaba 24px ikon kutuları tamamen kaldırıldı; dikey dolgu (padding) 24px'ten 8px 12px'e (yarıdan fazlası) indirildi.

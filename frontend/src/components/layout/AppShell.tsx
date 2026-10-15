@@ -4,6 +4,7 @@ import { Topbar } from './Topbar';
 import { MobileBottomNav } from './MobileBottomNav';
 import { MobileDrawer } from './MobileDrawer';
 import { GlobalSearchModal } from '../modals/GlobalSearchModal';
+import { ThemeCustomizerDrawer } from '../ThemeCustomizerDrawer';
 import { ErrorBoundary, OfflineBanner } from './ErrorBoundary';
 import { useTranslation } from '../../context/I18nContext';
 
@@ -78,6 +79,9 @@ export const AppShell: React.FC<AppShellProps> = ({
           onClose={() => setIsSearchOpen(false)}
           onNavigate={setActiveTab}
         />
+
+        {/* Global Görünüm ve Tema Stüdyosu Çekmecesi */}
+        <ThemeCustomizerDrawer />
       </div>
     </ErrorBoundary>
   );

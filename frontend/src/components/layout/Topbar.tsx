@@ -1,8 +1,9 @@
 import React from 'react';
-import { Search, Bell, User, Sun, Moon, Menu } from 'lucide-react';
+import { Search, Bell, User, Sun, Moon, Menu, Palette } from 'lucide-react';
 import type { TabType } from '../Sidebar';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
+import { useCustomizer } from '../../context/CustomizerContext';
 
 export interface TopbarProps {
   activeTab: TabType;
@@ -32,6 +33,7 @@ export const Topbar: React.FC<TopbarProps> = ({
 }) => {
   const { user } = useAuth();
   const { theme, toggleTheme } = useTheme();
+  const { openCustomizer } = useCustomizer();
 
   return (
     <header
@@ -162,6 +164,29 @@ export const Topbar: React.FC<TopbarProps> = ({
           ) : (
             <Moon size={16} color="var(--accent-primary)" />
           )}
+        </button>
+
+        <button
+          type="button"
+          onClick={openCustomizer}
+          aria-label="Görünüm Stüdyosu"
+          title="Görünüm Stüdyosu (Yazı Tipi, Renk, Dolgu, Boyut)"
+          style={{
+            background: 'transparent',
+            border: 'none',
+            color: 'var(--text-secondary)',
+            cursor: 'pointer',
+            padding: '4px',
+            width: '28px',
+            height: '28px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            borderRadius: 'var(--radius-sm)',
+            transition: 'transform 0.2s ease',
+          }}
+        >
+          <Palette size={16} color="var(--accent-primary)" />
         </button>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
