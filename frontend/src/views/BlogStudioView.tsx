@@ -9,6 +9,7 @@ import {
   SlidersHorizontal,
   ChevronDown,
   ChevronUp,
+  Copy,
 } from 'lucide-react';
 import type { BlogPost, BlogChannel } from '../types';
 import type { PostFormData } from '../components/posts/PostEditorModal';
@@ -246,12 +247,49 @@ export const BlogStudioView: React.FC<BlogStudioViewProps> = ({
 
           <button
             type="button"
+            className="admin-btn admin-btn-secondary admin-btn-sm"
+            onClick={() => {
+              if (!formData.content_tr) {
+                alert('Klonlanacak Türkçe içerik bulunamadı.');
+                return;
+              }
+              if (activeTab === 'tr') {
+                if (confirm('Türkçe mizanpaj ve içeriği hem EN hem de AR sekmesine klonlamak istiyor musunuz?')) {
+                  setFormData((prev) => ({
+                    ...prev,
+                    title_en: prev.title_en || prev.title_tr,
+                    title_ar: prev.title_ar || prev.title_tr,
+                    content_en: prev.content_tr,
+                    content_ar: prev.content_tr,
+                  }));
+                  alert('Türkçe görsel düzen ve tablolar EN ve AR sekmelerine klonlandı.');
+                }
+              } else {
+                if (confirm(`Türkçe mizanpajı ${activeTab.toUpperCase()} sekmesine klonlamak istiyor musunuz?`)) {
+                  setFormData((prev) => ({
+                    ...prev,
+                    [activeTab === 'en' ? 'content_en' : 'content_ar']: prev.content_tr,
+                    [activeTab === 'en' ? 'title_en' : 'title_ar']: prev[activeTab === 'en' ? 'title_en' : 'title_ar'] || prev.title_tr,
+                  }));
+                  alert(`Türkçe mizanpaj ${activeTab.toUpperCase()} sekmesine aktarıldı.`);
+                }
+              }
+            }}
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}
+            title="Türkçe mizanpaj, görsel ve tabloları diğer dillere kopyalar"
+          >
+            <Copy size={13} /> Düzeni Klonla
+          </button>
+
+          <button
+            type="button"
             className="admin-btn admin-btn-ai admin-btn-sm"
             onClick={onAiTranslate}
             disabled={aiTranslating}
             style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}
+            title="3 Aşamalı Doğrulamalı AI Çeviri Hattı"
           >
-            <Sparkles size={13} /> {aiTranslating ? 'Çevriliyor...' : '✨ AI Çevir'}
+            <Sparkles size={13} /> {aiTranslating ? 'Doğrulanıyor...' : '✨ AI Doğrulamalı Çevir'}
           </button>
 
           <button

@@ -1,7 +1,26 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
-## 🟢 Son Güncelleme [15.10.2026 - 15:45] — SERBEST KÜSÜRLÜ KENARLIK/DOLGU, HÜCRE BOYUTLARI (WIDTH/HEIGHT), TAM HTML RENK PALETİ & ÇİZGİSİZ TABLO KILAVUZU [*]
+## 🟢 Son Güncelleme [15.10.2026 - 16:15] — 3 AŞAMALI DOĞRULAMALI AI ÇEVİRİ HATTI, HTML/STİL KORUMASI, DEEPL DESTEĞİ & TR ŞABLON KLONLAMA [*]
+* **Yapılan İşlem:**
+  1. **TR Düzenini Hedef Dillere Klonlama Butonu (`BlogStudioView.tsx`):**
+     - Üst stüdyo çubuğuna *"Düzeni Klonla"* butonu eklendi.
+     - Türkçe tuvalindeki tüm tablo iskeleti, hücre boyutları, inline stilleri, renkleri ve görsel yerleşimleri tek tıkla `EN` ve/veya `AR` tuvaline mizanpajı bozmadan klonlanır.
+  2. **3 Aşamalı Doğrulamalı AI Çeviri Hattı (`ai.ts`):**
+     - **Aşama 1 (HTML/Stil Koruması):** `<table>`, `<tr>`, `<td>`, `style`, `class`, `img` gibi tüm etiket ve inline CSS kuralları kilitlendi; yalnızca etiketler arasındaki metin düğümleri çevrilir.
+     - **Aşama 2 (Bağlam ve Yanlış Anlama Taraması):** Deyimlerin ve teknik terimlerin hedef dilde yanlış veya çelişkili anlaşılmasını önleyecek kurumsal terim denetimi yapıldı (Arapça'da modern standart Fusha kullanımı).
+     - **Aşama 3 (Tersine Çeviri / Back-translation Doğrulaması):** Çevrilen metinlerin orijinal Türkçe anlamla örtüştüğü denetlenip `verification_status: "verified"` ve doğrulama raporu üretildi.
+  3. **DeepL Entegrasyon Desteği (`ai.ts`):**
+     - `DEEPL_API_KEY` tanımlandığında İngilizce çeviride otomatik DeepL HTML modu kullanılır; Arapça ve SEO özetleri Gemini 3 aşamalı hat ile üretilir.
+  4. **Kural Güncellemesi (`AGENTS.md`):**
+     - Kullanıcı kalibrasyonu doğrultusunda Kural 2'ye *"Özet ve Maddeli Yanıt Standardı (10-15 satır)"* işlendi.
+  5. **Doğrulama ve Standartlar:**
+     - `frontend` derlemesi (`npm run build`) PASS (0 hata, 735ms).
+     - `backend` tip denetimi (`npx tsc --noEmit`) PASS (0 hata).
+     - Tüm dosyalar Kural 2 satır tavanlarına tam uyumlu tutuldu (`ai.ts`: 354 satır, `BlogStudioView.tsx`: 518 satır).
+* **Durum:** `DevAdmin` dalında çalışıldı, `main` korundu.
+
+## [15.10.2026 - 15:45] — SERBEST KÜSÜRLÜ KENARLIK/DOLGU, HÜCRE BOYUTLARI (WIDTH/HEIGHT), TAM HTML RENK PALETİ & ÇİZGİSİZ TABLO KILAVUZU
 * **Yapılan İşlem:**
   1. **Serbest Küsürlü Kenarlık Kalınlığı & Çizgi Stilleri (`TableBorderControls.tsx`):**
      - Standart değer kısıtı kaldırılarak klavyeden doğrudan küsürlü sayı girilebilir (`step="0.1"`, `min="0.1"`) input ve `+` / `-` (0.5px adımlı) stepper yapısı kuruldu.

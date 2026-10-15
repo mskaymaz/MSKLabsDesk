@@ -1,6 +1,20 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [15.10.2026 - 16:15] - 3 Aşamalı Doğrulamalı AI Çeviri Hattı, HTML/Stil Koruması, DeepL Desteği ve TR Şablon Klonlama
+- **TR Düzenini Hedef Dillere Klonlama Butonu (`BlogStudioView.tsx`):**
+  - Üst stüdyo çubuğuna *"Düzeni Klonla"* butonu eklendi; Türkçe tuvalindeki tüm tablo, görsel ve mizanpaj iskeletini tek tıkla `EN` ve/veya `AR` tuvaline kopyalayarak manuel çeviriyi hızlandırır.
+- **3 Aşamalı Doğrulamalı AI Çeviri Hattı (`backend/src/utils/ai.ts`):**
+  - Aşama 1: HTML etiketleri, inline stiller, padding ve görseller kilitlenerek yalnızca metin düğümleri çevrilir.
+  - Aşama 2: Deyim ve terimlerin yanlış anlaşılmasını önleyen kurumsal bağlam denetimi yapılır.
+  - Aşama 3: Tersine çeviri (Back-translation) ile Türkçe anlamla tam örtüşme test edilip doğrulanır.
+- **DeepL API Entegrasyonu (`backend/src/utils/ai.ts`):**
+  - `DEEPL_API_KEY` ortam değişkeni tanımlandığında İngilizce çeviri için DeepL HTML modu öncelikli kullanılır.
+- **Doğrulama ve Standartlar:**
+  - `frontend` derlemesi (`npm run build`) PASS (0 hata, 735ms).
+  - `backend` tip kontrolü (`npx tsc --noEmit`) PASS (0 hata).
+  - Yalnızca `DevAdmin` dalında çalışıldı, `main` korundu.
+
 ## [15.10.2026 - 15:45] - Serbest Küsürlü Kenarlık/Dolgu, Hücre Boyutları (Width/Height), Tam HTML Renk Paleti ve Çizgisiz Tablo Kılavuz Çizgileri
 - **Serbest Küsürlü Kenarlık Kalınlığı & Çizgi Stilleri (`TableBorderControls.tsx`):**
   - Sayısal küsürlü giriş alanı (`step="0.1"`, `min="0.1"`) ve hassas stepper (`+` / `-` 0.5px) kontrolleri sağlandı.

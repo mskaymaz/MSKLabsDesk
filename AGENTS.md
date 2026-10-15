@@ -9,7 +9,7 @@
 
 ## 2. Kodlama ve Token Tasarrufu Prensipleri
 * **Token Ekonomisi:** Tüm yanıtlar ve doküman güncellemeleri olabildiğince kısa, net ve ekonomik tutulur.
-* **Kısa ve Maddeli Yanıt Standardı:** İstişare ve açıklamalarda yanıtlar 3-5 satırı geçmeyecek şekilde; "Olur / Kısmen olur / Mümkün değil" şeklinde net durum bildirimi ve 2-3 maddelik seçeneklerle sunulur. Uzun anlatım yapılmaz; detaylar yalnızca kullanıcı açıkça talep ettiğinde verilir.
+* **Özet ve Maddeli Yanıt Standardı:** İstişare ve açıklamalarda yanıtlar 10-15 satır bandında tutulur; durum bildirimi sonrasında maddelerin altında 1-2 satırlık öz ve net açıklamalar sunulur. Ne aşırı boğucu kısalıkta ne de gereksiz uzunlukta tutulur; detay gerektiren konular adım adım istişare edilir.
 * **Minimalist & Cerrahi Müdahale:** Yazılan veya güncellenen kodlar son derece minimal, odaklı ve etrafa yayılmadan yazılır.
 * **Satır Sınırı:** Yardımcı bileşenler, modallar, eklentiler ve araç çubuklarında **400-450 satır** hedefi korunur. Form alanlarını, durum makinelerini ve tuval düzenini bir arada yöneten ana stüdyo ekranları (`BlogStudioView` vb.) için tavan sınır **azami 600 satır** olarak uygulanabilir; 600 satırı aşan durumlar modüler parçalara bölünür.
 * **Kapsam İzni:** Onay/talimat olmadan tüm repo genelinde arama veya izinsiz büyük değişiklik yapılmaz.

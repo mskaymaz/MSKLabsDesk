@@ -85,7 +85,10 @@ export const PostsView: React.FC = () => {
           content_ar: trans.content_ar || prev.content_ar,
           meta_keywords: trans.meta_keywords || prev.meta_keywords,
         }));
-        alert(t('posts.aiSuccess'));
+        const msg = trans.quality_notes
+          ? `${t('posts.aiSuccess')}\n\n✓ ${trans.quality_notes}`
+          : t('posts.aiSuccess');
+        alert(msg);
       }
     } catch (err: any) {
       alert(err.message || t('common.error'));
