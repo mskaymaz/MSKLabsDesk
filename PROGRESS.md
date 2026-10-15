@@ -18,6 +18,8 @@
      - `frontend` derlemesi (`npm run build`) PASS (0 hata, 735ms).
      - `backend` tip denetimi (`npx tsc --noEmit`) PASS (0 hata).
      - Tüm dosyalar Kural 2 satır tavanlarına tam uyumlu tutuldu (`ai.ts`: 354 satır, `BlogStudioView.tsx`: 518 satır).
+  6. **Gelecek Adım / Not:**
+     - İlk blog yazısı aşamasında DeepL Free API anahtarı temin edilecek ve sisteme `DEEPL_API_KEY` olarak tanımlanacak.
 * **Durum:** `DevAdmin` dalında çalışıldı, `main` korundu.
 
 ## [15.10.2026 - 15:45] — SERBEST KÜSÜRLÜ KENARLIK/DOLGU, HÜCRE BOYUTLARI (WIDTH/HEIGHT), TAM HTML RENK PALETİ & ÇİZGİSİZ TABLO KILAVUZU
