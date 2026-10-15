@@ -26,6 +26,7 @@
 ## 5. Dil ve Arayüz Kuralı (Admin UI vs. Web İçeriği)
 * **Admin Paneli Arayüzü:** Yönetici panelinin kendi menüleri, butonları, bildirimleri ve yönetim ekranları tamamen **Türkçe** olarak sunulur (panel yöneticileri Türkçe bilen ekiptir).
 * **Web İçerik Çoklu Dil Desteği:** Web arayüzüne sunulacak tüm içerikler (blog yazıları, SEO başlık/açıklamaları, bildirim şablonları vb.) TR, EN, AR dillerini destekleyen çok dilli CMS altyapısını ve AI çeviri yeteneklerini eksiksiz korur.
+* **Dil Etiketleri Standardı (Bayrak Emojisi Yasağı):** Sistem genelindeki hiçbir arayüzde (rozetler, sekmeler, butonlar, önizleme çubukları) bayrak emojileri (🇹🇷, 🇬🇧, 🇸🇦 vb.) veya ülke kodları (TRTR, GB EN, SA AR) kullanılmaz. Dil göstergeleri her yerde istisnasız yalın **TR**, **EN**, **AR** (veya Arapça için özel hazırlanmış kaligrafik yazı/svg) formatında sunulur.
 
 ## 6. Nesnel Mühendislik ve Dürüst İstişare İlkesi (Övgü ve Pohpohlama Yasağı)
 * Kullanıcıya yönelik yapay övgüler, pohpohlama veya abartılı ifadeler ("harika, süper, mühendislik harikası" vb.) kesinlikle kullanılmaz.

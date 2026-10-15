@@ -1,6 +1,22 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [15.10.2026 - 12:35] - Canlı Web Önizleme Koyu/Açık Tema Simülatörü, Standart TR/EN/AR Dilleri ve Kural Güncellemesi
+- **Dil Etiketi Kuralı (`AGENTS.md`):**
+  - Section 5'e kullanıcı talimatı gereği net kural eklendi: Sistem genelinde hiçbir arayüzde bayrak emojileri (🇹🇷, 🇬🇧, 🇸🇦 vb.) veya ülke kodları kullanılmayacak; daima yalın ve standart **TR**, **EN**, **AR** formatı uygulanacak.
+  - `PostEditorModal.tsx` içindeki sekmeler `TR`, `EN`, `AR` olarak düzeltildi.
+- **Canlı Önizleme Çok Dilli Makale Simülasyonu (`PostPreviewModal.tsx`, `PostEditorModal.tsx`):**
+  - `PostEditorModal`'dan `PostPreviewModal`'a tam `formData` aktarımı sağlandı.
+  - Önizleme çubuğuna standart **TR**, **EN**, **AR** butonları eklendi.
+  - Seçilen dile göre başlık, SEO özeti ve makale içeriğinin dinamik render edilmesi sağlandı; içerik girilmemiş diller için kibar uyarı gösterildi.
+  - Arapça (`AR`) seçildiğinde otomatik `dir="rtl"` ve otantik `Cairo` fontu uygulandı.
+- **Ziyaretçi Web Sitesi Tema Simülatörü (`PostPreviewModal.tsx`):**
+  - Önizleme çubuğuna `☀️ Açık` ve `🌙 Koyu` web teması geçişi eklendi.
+  - Makale okuma alanı, ziyaretçinin web arayüzünde (port 5174) koyu ve açık modda nasıl bir okuma deneyimi yaşayacağını anlık simüle eder hale getirildi.
+- **Modülerlik & Satır Sınırı:**
+  - `PostPreviewModal.tsx` 342 satır, `PostEditorModal.tsx` 377 satır ile `<= 400` satır sınırında tutuldu.
+- Yalnızca `DevAdmin` dalında çalışıldı, `main` korundu.
+
 ## [15.10.2026 - 12:28] - Blog Yazı Editörü ve Modallarının Tema Uyumu (Açık/Koyu Mod) ve Tasarım Sistemi Entegrasyonu
 - **Blog Editör Modalı Açık/Koyu Tema Uyumu (`PostEditorModal.tsx`):**
   - Yeni blog yazısı ve blog düzenleme modalının Light temada dahi kalıcı karanlık açılmasına yol açan hardcoded `#0D1320` arka planı ve `#FFF` metin renkleri kaldırıldı.

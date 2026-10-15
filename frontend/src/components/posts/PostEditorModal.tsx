@@ -262,7 +262,7 @@ export const PostEditorModal: React.FC<PostEditorModalProps> = ({
                     fontWeight: activeTab === 'tr' ? 700 : 500,
                   }}
                 >
-                  🇹🇷 Türkçe
+                  TR
                 </button>
                 <button
                   type="button"
@@ -274,7 +274,7 @@ export const PostEditorModal: React.FC<PostEditorModalProps> = ({
                     fontWeight: activeTab === 'en' ? 700 : 500,
                   }}
                 >
-                  🇬🇧 EN
+                  EN
                 </button>
                 <button
                   type="button"
@@ -286,7 +286,7 @@ export const PostEditorModal: React.FC<PostEditorModalProps> = ({
                     fontWeight: activeTab === 'ar' ? 700 : 500,
                   }}
                 >
-                  🇸🇦 AR (RTL)
+                  AR
                 </button>
               </div>
 
@@ -370,11 +370,7 @@ export const PostEditorModal: React.FC<PostEditorModalProps> = ({
       <PostPreviewModal
         isOpen={isPreviewOpen}
         onClose={() => setIsPreviewOpen(false)}
-        post={{
-          title_tr: formData.title_tr,
-          content_tr: formData.content_tr,
-          cover_image: formData.cover_image,
-        }}
+        formData={formData}
       />
     </>
   );

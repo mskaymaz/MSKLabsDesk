@@ -1,6 +1,24 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 🟢 Son Güncelleme [15.10.2026 - 12:35] — CANLI WEB ÖNİZLEME KOYU/AÇIK TEMA SİMÜLATÖRÜ, STANDART TR/EN/AR & KURAL GÜNCELLEMESİ [*]
+* **Yapılan İşlem:**
+  1. **Dil Etiketleri Kuralı (`AGENTS.md`):**
+     - Kullanıcı talimatı doğrultusunda Section 5'e bağlayıcı kural eklendi: Sistemdeki hiçbir ekranda bayrak emojileri veya karmaşık ülke kodları kullanılmayacak, kesin olarak standart **TR**, **EN**, **AR** formatı uygulanacak.
+     - `PostEditorModal.tsx` içindeki sekmeler `TR`, `EN`, `AR` olarak sadeleştirildi.
+  2. **Canlı Önizleme Çok Dilli Makale Desteği (`PostPreviewModal.tsx`, `PostEditorModal.tsx`):**
+     - `PostEditorModal`'dan `PostPreviewModal`'a tam `formData` aktarımı sağlandı.
+     - Önizleme çubuğuna yalın **TR**, **EN**, **AR** butonları yerleştirildi.
+     - Kullanıcı dile tıkladığında başlık, özet ve zengin metin seçilen dilde anlık render edilmekte; henüz yazılmamış diller için kibar uyarı verilmektedir.
+     - Arapça (`AR`) seçildiğinde sağdan sola (`dir="rtl"`) düzen ve `Cairo` fontu otomatik devreye girmektedir.
+  3. **Ziyaretçi Web Sitesi Tema Simülatörü (`PostPreviewModal.tsx`):**
+     - Önizleme araç çubuğuna `☀️ Açık` / `🌙 Koyu` web teması geçişi eklendi.
+     - Okuma alanı ziyaretçinin blog sitesinde (port 5174) Açık ve Koyu modlarda içeriği nasıl göreceğini tam renk ve kontrastla simüle etmektedir.
+  4. **Modülerlik ve Satır Sınırı:**
+     - `PostPreviewModal.tsx` 342 satır, `PostEditorModal.tsx` 377 satır ile `<= 400` satır sınırına tam uyumlu tutuldu.
+* **Sonuçlar:** `npm run build` PASS (0 hata, 652 ms).
+* **Durum:** `DevAdmin` dalında çalışıldı, `main` korundu.
+
 ## 🟢 Son Güncelleme [15.10.2026 - 12:28] — BLOG YAZI EDİTÖRÜ MODALININ TEMA UYUMU (AÇIK/KOYU) & TASARIM SİSTEMİ ENTEGRASYONU [*]
 * **Yapılan İşlem:**
   1. **Açık/Koyu Tema Uyumu ve Karanlık Ekran Sorununun Çözümü (`PostEditorModal.tsx`):**
