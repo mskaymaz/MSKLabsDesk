@@ -1,4 +1,6 @@
 import Image from '@tiptap/extension-image';
+import TableCell from '@tiptap/extension-table-cell';
+import TableHeader from '@tiptap/extension-table-header';
 import { Extension } from '@tiptap/core';
 import '@tiptap/extension-text-style';
 
@@ -257,6 +259,39 @@ export const CustomImage = Image.extend({
             attrs: options,
           });
         },
+    };
+  },
+});
+
+// 6. Stil ve Kenarlık Destekli Özel Hücre Eklentileri (Custom Table Cells with Border/Color)
+export const CustomTableCell = TableCell.extend({
+  addAttributes() {
+    return {
+      ...this.parent?.(),
+      style: {
+        default: null,
+        parseHTML: (element) => element.getAttribute('style') || null,
+        renderHTML: (attributes) => {
+          if (!attributes.style) return {};
+          return { style: attributes.style };
+        },
+      },
+    };
+  },
+});
+
+export const CustomTableHeader = TableHeader.extend({
+  addAttributes() {
+    return {
+      ...this.parent?.(),
+      style: {
+        default: null,
+        parseHTML: (element) => element.getAttribute('style') || null,
+        renderHTML: (attributes) => {
+          if (!attributes.style) return {};
+          return { style: attributes.style };
+        },
+      },
     };
   },
 });

@@ -1,6 +1,21 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [15.10.2026 - 15:35] - Canlı Seçim Durumu Yansıtması, Sayısal Stepper'lar, Font Ailesi ve Word Kenarlık Yönleri
+- **Canlı Seçim Durumu Yansıtması (`EditorToolbar.tsx`, `EditorTypographyControls.tsx`):**
+  - TipTap `selectionUpdate` ve `transaction` kancalarıyla imlecin bulunduğu veya seçili metnin aktif Font Ailesi, Punto, Satır Aralığı ve Paragraf Boşluğu araç çubuğunda canlı olarak gösterildi.
+- **Sayısal Girilebilir Stepper'lar (`EditorTypographyControls.tsx`):**
+  - Klavyeden doğrudan sayısal değer girilebilen ve `+` / `-` butonlarıyla adım adım ayarlanabilen Punto, Satır Aralığı ve Paragraf Boşluğu denetleyicileri oluşturuldu.
+- **Font Ailesi Desteği (`EditorTypographyControls.tsx`, `RichTextEditor.tsx`):**
+  - `@tiptap/extension-font-family` entegre edilerek Inter, Roboto, Open Sans, Merriweather, Playfair Display, Fira Code gibi zengin web ve sistem fontları kazandırıldı.
+- **Word Stili Kenarlık Yönleri ve Tablo Çizgi/Renk Çözümü (`FloatingTableInspector.tsx`, `customExtensions.ts`):**
+  - TipTap motorunun hücrelerdeki `style` özniteliklerini temizlemesi sorunu `CustomTableCell` ve `CustomTableHeader` uzantılarına `addAttributes()` ile `style` eklenerek çözüldü.
+  - Word stili kenarlık yönleri (Tümü, Dış, Üst, Alt, Sol, Sağ, Gizli), çizgi stilleri (düz, kesikli, noktalı), kalınlık ve canlı renk seçimi eklendi.
+- **Kod Standartları ve Doğrulama:**
+  - Tüm yardımcı modüller (`<= 450` satır) ve ana stüdyo (`<= 600` satır) Rule 2 satır limitlerine tam uyumlu hale getirildi.
+  - `npm run build` PASS (0 hata, 849ms).
+- Yalnızca `DevAdmin` dalında çalışıldı, `main` korundu.
+
 ## [15.10.2026 - 15:10] - Bilgisayardan Otomatik Görsel Yükleme (Media Upload API), Tablo Kenarlık Çizgisi/Gizleme/Kalınlık/Renk ve Hücre Dolgusu (Padding)
 - **Bilgisayardan Otomatik Medya Yükleme (`ImageDropdown.tsx`, `api.ts`):**
   - Görsel açılır menüsüne `"Bilgisayardan Seç"` sekmesi eklendi; dosya seçici (`<input type="file">`) ile PNG, JPEG, WebP, SVG formatları doğrudan masaüstünden seçilebilir hale getirildi.

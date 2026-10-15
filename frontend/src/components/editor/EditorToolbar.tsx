@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import type { Editor } from '@tiptap/react';
 import {
   Bold,
@@ -21,37 +21,62 @@ import {
   Heading3,
   Heading4,
   Pilcrow,
-  Indent,
-  Outdent,
 } from 'lucide-react';
 import { TableDropdown } from './TableDropdown';
 import { ImageDropdown } from './ImageDropdown';
 import { LinkModal } from './LinkModal';
+import { EditorTypographyControls } from './EditorTypographyControls';
 
 interface EditorToolbarProps {
   editor: Editor | null;
   onOpenFloatingTable?: () => void;
 }
 
-const FONT_SIZES = ['12px', '14px', '16px', '18px', '20px', '24px', '28px', '32px'];
-const LINE_HEIGHTS = [
-  { label: '1.0 (Sıkı)', value: '1.0' },
-  { label: '1.15 (Standart)', value: '1.15' },
-  { label: '1.5 (Geniş)', value: '1.5' },
-  { label: '2.0 (Çift)', value: '2.0' },
-];
-const PARAGRAPH_SPACINGS = [
-  { label: '0px (Bitişik)', value: '0px' },
-  { label: '8px (Hafif)', value: '8px' },
-  { label: '14px (Standart)', value: '14px' },
-  { label: '20px (Geniş)', value: '20px' },
-];
-
 export const EditorToolbar: React.FC<EditorToolbarProps> = ({
   editor,
   onOpenFloatingTable = () => {},
 }) => {
   const [isLinkModalOpen, setIsLinkModalOpen] = useState(false);
+  const [fontSize, setFontSize] = useState<string>('16');
+  const [fontFamily, setFontFamily] = useState<string>('');
+  const [lineHeight, setLineHeight] = useState<string>('1.5');
+  const [paragraphSpacing, setParagraphSpacing] = useState<string>('14');
+
+  // Canlı Durum Yansıtma (Seçim değiştikçe aktif nitelikleri araçlara aktar)
+  useEffect(() => {
+    if (!editor) return;
+
+    const updateActiveAttrs = () => {
+      // Font Size
+      const curFontSize = editor.getAttributes('textStyle').fontSize;
+      if (curFontSize) {
+        setFontSize(curFontSize.replace('px', ''));
+      }
+
+      // Font Family
+      const curFontFamily = editor.getAttributes('textStyle').fontFamily;
+      setFontFamily(curFontFamily || '');
+
+      // Line Height
+      const curLh = editor.getAttributes('paragraph').lineHeight || editor.getAttributes('heading').lineHeight;
+      if (curLh) {
+        setLineHeight(curLh);
+      }
+
+      // Paragraph Spacing
+      const curMb = editor.getAttributes('paragraph').marginBottom || editor.getAttributes('heading').marginBottom;
+      if (curMb) {
+        setParagraphSpacing(curMb.replace('px', ''));
+      }
+    };
+
+    editor.on('selectionUpdate', updateActiveAttrs);
+    editor.on('transaction', updateActiveAttrs);
+    return () => {
+      editor.off('selectionUpdate', updateActiveAttrs);
+      editor.off('transaction', updateActiveAttrs);
+    };
+  }, [editor]);
 
   if (!editor) return null;
 
@@ -65,8 +90,8 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
     display: 'inline-flex',
     alignItems: 'center',
     justifyContent: 'center',
-    minWidth: '26px',
-    height: '26px',
+    minWidth: '24px',
+    height: '24px',
     transition: 'background 0.15s ease',
   });
 
@@ -135,82 +160,17 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
 
         {divider}
 
-        {/* Punto / Yazı Boyutu Seçici */}
-        <select
-          onChange={(e) => {
-            const val = e.target.value;
-            if (val) editor.chain().focus().setFontSize(val).run();
-            else editor.chain().focus().unsetFontSize().run();
-          }}
-          className="admin-filter-select"
-          style={{ height: '26px', fontSize: '11px', width: '70px', padding: '0 4px' }}
-          title="Yazı Boyutu (Punto)"
-          defaultValue="16px"
-        >
-          <option value="">Punto</option>
-          {FONT_SIZES.map((size) => (
-            <option key={size} value={size}>
-              {size}
-            </option>
-          ))}
-        </select>
-
-        {/* Satır Yüksekliği (Line Height) */}
-        <select
-          onChange={(e) => {
-            const val = e.target.value;
-            if (val) editor.chain().focus().setLineHeight(val).run();
-            else editor.chain().focus().unsetLineHeight().run();
-          }}
-          className="admin-filter-select"
-          style={{ height: '26px', fontSize: '11px', width: '84px', padding: '0 4px' }}
-          title="Satır Aralığı (Line Height)"
-          defaultValue="1.5"
-        >
-          <option value="">Satır Aralığı</option>
-          {LINE_HEIGHTS.map((lh) => (
-            <option key={lh.value} value={lh.value}>
-              {lh.label}
-            </option>
-          ))}
-        </select>
-
-        {/* Paragraf Boşluğu (Margin Bottom) */}
-        <select
-          onChange={(e) => {
-            const val = e.target.value;
-            if (val) editor.chain().focus().setParagraphSpacing(val).run();
-          }}
-          className="admin-filter-select"
-          style={{ height: '26px', fontSize: '11px', width: '92px', padding: '0 4px' }}
-          title="Paragraf Altı Boşluğu"
-          defaultValue="14px"
-        >
-          <option value="">Paragraf Arası</option>
-          {PARAGRAPH_SPACINGS.map((ps) => (
-            <option key={ps.value} value={ps.value}>
-              {ps.label}
-            </option>
-          ))}
-        </select>
-
-        {/* Girinti Azalt / Artır */}
-        <button
-          type="button"
-          onClick={() => editor.chain().focus().setIndent(-1).run()}
-          style={btnStyle(false)}
-          title="Girintiyi Azalt"
-        >
-          <Outdent size={13} />
-        </button>
-        <button
-          type="button"
-          onClick={() => editor.chain().focus().setIndent(1).run()}
-          style={btnStyle(false)}
-          title="Girintiyi Artır"
-        >
-          <Indent size={13} />
-        </button>
+        <EditorTypographyControls
+          editor={editor}
+          fontSize={fontSize}
+          setFontSize={setFontSize}
+          fontFamily={fontFamily}
+          setFontFamily={setFontFamily}
+          lineHeight={lineHeight}
+          setLineHeight={setLineHeight}
+          paragraphSpacing={paragraphSpacing}
+          setParagraphSpacing={setParagraphSpacing}
+        />
 
         {divider}
 

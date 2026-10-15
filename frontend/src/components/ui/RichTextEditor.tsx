@@ -4,14 +4,12 @@ import StarterKit from '@tiptap/starter-kit';
 import Underline from '@tiptap/extension-underline';
 import Subscript from '@tiptap/extension-subscript';
 import Superscript from '@tiptap/extension-superscript';
-import { TextStyle } from '@tiptap/extension-text-style';
+import { TextStyle, FontFamily } from '@tiptap/extension-text-style';
 import Color from '@tiptap/extension-color';
 import Highlight from '@tiptap/extension-highlight';
 import TextAlign from '@tiptap/extension-text-align';
 import { Table } from '@tiptap/extension-table';
 import TableRow from '@tiptap/extension-table-row';
-import TableHeader from '@tiptap/extension-table-header';
-import TableCell from '@tiptap/extension-table-cell';
 import Link from '@tiptap/extension-link';
 import { Eye, Edit3, Clock, Type, AlignLeft } from 'lucide-react';
 import {
@@ -20,6 +18,8 @@ import {
   ParagraphSpacing,
   DuplicateSelection,
   CustomImage,
+  CustomTableCell,
+  CustomTableHeader,
 } from '../editor/customExtensions';
 import { EditorToolbar } from '../editor/EditorToolbar';
 import { FloatingTableInspector } from '../editor/FloatingTableInspector';
@@ -57,6 +57,7 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
       Subscript,
       Superscript,
       TextStyle,
+      FontFamily,
       Color,
       Highlight.configure({ multicolor: true }),
       TextAlign.configure({
@@ -66,8 +67,8 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
         resizable: true,
       }),
       TableRow,
-      TableHeader,
-      TableCell,
+      CustomTableHeader,
+      CustomTableCell,
       Link.configure({
         openOnClick: false,
         HTMLAttributes: {

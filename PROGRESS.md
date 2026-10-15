@@ -1,7 +1,23 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
-## 🟢 Son Güncelleme [15.10.2026 - 15:10] — BİLGİSAYARDAN OTOMATİK GÖRSEL YÜKLEME, TABLO KENARLIK GİZLEME/KALINLIK/RENK & HÜCRE DOLGUSU (PADDING) [*]
+## 🟢 Son Güncelleme [15.10.2026 - 15:35] — CANLI TİPOGRAFİ SEÇİM YANSITMASI, SAYISAL STEPPER'LAR, FONT AİLESİ & WORD KENARLIK YÖNLERİ [*]
+* **Yapılan İşlem:**
+  1. **Canlı Seçim Durumu Yansıtması (Selection State Reflection - `EditorToolbar.tsx`, `EditorTypographyControls.tsx`):**
+     - TipTap `selectionUpdate` ve `transaction` kancalarıyla imlecin bulunduğu veya seçilen metnin anlık Font Ailesi, Punto (fontSize), Satır Aralığı (lineHeight) ve Paragraf Boşluğu araç çubuğuna canlı yansıtıldı.
+  2. **Doğrudan Sayısal Girilebilir Stepper Kontrolleri (`EditorTypographyControls.tsx`):**
+     - Statik açılır listelerin ötesinde, klavyeden doğrudan sayı girilebilen ve `+` / `-` stepper butonlarıyla hassas ayarlanabilen Punto, Satır Aralığı ve Paragraf Boşluğu kontrolleri modüler bileşene çıkarıldı (237 satır).
+  3. **Yazı Tipi / Font Ailesi Seçicisi (`EditorTypographyControls.tsx`, `RichTextEditor.tsx`):**
+     - `@tiptap/extension-font-family` entegre edildi. Inter, Roboto, Open Sans, Merriweather, Playfair Display, Fira Code vb. sistem ve web fontları seçilebilir hale getirildi.
+  4. **Word Stili Kenarlık Yönleri ve Hücre Stili Çözümü (`FloatingTableInspector.tsx`, `customExtensions.ts`):**
+     - TipTap'in yerleşik `TableCell`'inde `style` özniteliği eksikliğinden dolayı kenarlık ve renklerin silinmesi sorunu, `CustomTableCell` ve `CustomTableHeader` içine `style` özniteliği `addAttributes()` ile tanımlanarak çözüldü.
+     - Word stili kenarlık yönleri (Tüm, Dış, Üst, Alt, Sol, Sağ, Gizli), çizgi stilleri (düz, kesikli, noktalı), kalınlık ve canlı renk seçimi hücrelere tam yansıtıldı.
+  5. **Modülerlik & Standart Doğrulama:**
+     - `FloatingTableInspector.tsx` (440 satır), `EditorToolbar.tsx` (340 satır), `EditorTypographyControls.tsx` (237 satır), `customExtensions.ts` (297 satır) ile Rule 2 tavan sınırları (`<= 450`) korundu.
+     - `npm run build` PASS (0 hata, 849ms).
+* **Durum:** `DevAdmin` dalında çalışıldı, `main` korundu.
+
+## [15.10.2026 - 15:10] — BİLGİSAYARDAN OTOMATİK GÖRSEL YÜKLEME, TABLO KENARLIK GİZLEME/KALINLIK/RENK & HÜCRE DOLGUSU (PADDING)
 * **Yapılan İşlem:**
   1. **Bilgisayardan Otomatik Görsel Yükleme (`ImageDropdown.tsx`, `api.ts`):**
      - Görsel açılır menüsüne `"Bilgisayardan Seç"` sekmesi eklendi.
