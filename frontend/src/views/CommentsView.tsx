@@ -151,10 +151,7 @@ export const CommentsView: React.FC<CommentsViewProps> = ({ comments, onRefresh 
               <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: '3px' }}>
                 {/* 1. Satır: Yorum Kodu + Rozetler + Metaveriler */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap', minWidth: 0 }}>
-                  <span
-                    style={{ fontSize: '0.78rem', fontWeight: 800, color: 'var(--accent-cyan)', fontFamily: 'ui-monospace, monospace', letterSpacing: '-0.02em', minWidth: '76px', flexShrink: 0 }}
-                    title={comment.id}
-                  >
+                  <span className="admin-token-id" title={comment.id}>
                     #{comment.id.length > 10 ? comment.id.slice(-8).toUpperCase() : comment.id}
                   </span>
                   {(() => {

@@ -285,7 +285,7 @@
   font-size: 0.70rem;
   font-weight: 400;
   padding: 1px 5px;
-  border-radius: 4px;
+  border-radius: var(--admin-badge-radius, 4px);
   color: var(--text-muted);
   background: rgba(255, 255, 255, 0.04);
   border-color: var(--border-card);
@@ -296,6 +296,20 @@
   background: #F1F5F9;
   border-color: #CBD5E1;
   color: #64748B;
+}
+
+/* --- Token & Takip Kodu Standartları (MSK-2026-EZRD, #73_LLUNA vb.) --- */
+.admin-token-id {
+  font-family: var(--admin-token-font, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace);
+  font-size: var(--admin-token-size, 0.78rem);
+  font-weight: var(--admin-token-weight, 800);
+  color: var(--admin-token-color, var(--accent-cyan));
+  letter-spacing: var(--admin-token-spacing, -0.02em);
+  display: inline-flex;
+  align-items: center;
+  min-width: 76px;
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 
 /* Tematik Renk Rozetleri */

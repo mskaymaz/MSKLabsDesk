@@ -145,17 +145,11 @@ export const PostCard: React.FC<PostCardProps> = ({
 
           {/* Kanal Rozeti (Bizce, Anıltılar, Güncel, Vlog) */}
           <span
+            className="admin-badge"
             style={{
-              padding: '1px 6px',
-              borderRadius: '4px',
-              fontSize: '0.70rem',
-              fontWeight: 400,
               background: chInfo.bg,
               color: chInfo.color,
               border: `1px solid ${chInfo.border}`,
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '3px',
             }}
           >
             <span>{chInfo.icon}</span>
@@ -164,11 +158,8 @@ export const PostCard: React.FC<PostCardProps> = ({
 
           {/* Yayın Durumu Rozeti */}
           <span
+            className="admin-badge"
             style={{
-              padding: '1px 5px',
-              borderRadius: '4px',
-              fontSize: '0.68rem',
-              fontWeight: 400,
               background: sBadge.bg,
               color: sBadge.color,
               border: `1px solid ${sBadge.border}`,
@@ -180,15 +171,9 @@ export const PostCard: React.FC<PostCardProps> = ({
           {/* Video Rozeti */}
           {post.video_url && (
             <span
+              className="admin-badge"
               title={`Video Bağlantısı: ${post.video_url}`}
               style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '3px',
-                padding: '1px 5px',
-                borderRadius: '4px',
-                fontSize: '0.68rem',
-                fontWeight: 400,
                 background: 'rgba(239, 68, 68, 0.15)',
                 color: 'var(--accent-rose)',
                 border: '1px solid rgba(239, 68, 68, 0.3)',
@@ -201,44 +186,41 @@ export const PostCard: React.FC<PostCardProps> = ({
           {/* Diller (TR, EN, AR) */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '3px', marginLeft: '2px' }}>
             <span
+              className="admin-badge"
               style={{
-                fontSize: '0.68rem',
-                fontWeight: 400,
                 color: 'var(--accent-emerald)',
                 background: 'rgba(16, 185, 129, 0.12)',
                 border: '1px solid rgba(16, 185, 129, 0.25)',
-                padding: '1px 4px',
-                borderRadius: '3px',
+                minWidth: '22px',
+                justifyContent: 'center',
               }}
               title="Türkçe: Yayında / Mevcut"
             >
               TR
             </span>
             <span
+              className="admin-badge"
               style={{
-                fontSize: '0.68rem',
-                fontWeight: 400,
                 color: post.title_en ? 'var(--accent-emerald)' : 'var(--text-muted)',
                 background: post.title_en ? 'rgba(16, 185, 129, 0.12)' : 'rgba(255, 255, 255, 0.04)',
                 border: `1px solid ${post.title_en ? 'rgba(16, 185, 129, 0.25)' : 'var(--border-subtle)'}`,
-                padding: '1px 4px',
-                borderRadius: '3px',
                 opacity: post.title_en ? 1 : 0.6,
+                minWidth: '22px',
+                justifyContent: 'center',
               }}
               title={post.title_en ? 'İngilizce: Çeviri Mevcut' : 'İngilizce: Henüz Çevrilmedi (Eksik)'}
             >
               EN
             </span>
             <span
+              className="admin-badge"
               style={{
-                fontSize: '0.68rem',
-                fontWeight: 400,
                 color: post.title_ar ? 'var(--accent-emerald)' : 'var(--text-muted)',
                 background: post.title_ar ? 'rgba(16, 185, 129, 0.12)' : 'rgba(255, 255, 255, 0.04)',
                 border: `1px solid ${post.title_ar ? 'rgba(16, 185, 129, 0.25)' : 'var(--border-subtle)'}`,
-                padding: '1px 4px',
-                borderRadius: '3px',
                 opacity: post.title_ar ? 1 : 0.6,
+                minWidth: '22px',
+                justifyContent: 'center',
               }}
               title={post.title_ar ? 'Arapça: Çeviri Mevcut' : 'Arapça: Henüz Çevrilmedi (Eksik)'}
             >

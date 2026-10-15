@@ -69,6 +69,22 @@ export const ThemeCustomizerDrawer: React.FC = () => {
       );
     }
 
+    if (activeSection === 'tokens') {
+      return (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <span className="admin-meta-text" style={{ fontSize: '0.66rem', fontWeight: 700 }}>CANLI ÖNİZLEME: TOKEN & TAKİP KODLARI</span>
+            <span className="admin-badge admin-badge-info">Monospace</span>
+          </div>
+          <div style={{ display: 'flex', gap: '10px', alignItems: 'center', flexWrap: 'wrap', padding: '8px', background: 'var(--bg-card)', borderRadius: 'var(--radius-sm, 6px)', border: '1px solid var(--border-card)' }}>
+            <span className="admin-token-id">MSK-2026-EZRD</span>
+            <span className="admin-token-id">#73_LLUNA</span>
+            <span className="admin-token-id">#POST-042</span>
+          </div>
+        </div>
+      );
+    }
+
     if (activeSection === 'headings') {
       return (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
@@ -192,6 +208,7 @@ export const ThemeCustomizerDrawer: React.FC = () => {
           <option value="cards">🗂️ Liste & İçerik Kartları</option>
           <option value="buttons">🔘 Butonlar (Dolgular, Renkler & Emniyet)</option>
           <option value="badges">🏷️ Rozetler & Etiketler (Dolgular & Emniyet)</option>
+          <option value="tokens">🎫 Token & Takip Kodları (MSK-2026-EZRD)</option>
           <option value="package">💾 Tema Paketi (İçe / Dışa Aktar)</option>
         </select>
       </div>

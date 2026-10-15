@@ -1,6 +1,22 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 🟢 Son Güncelleme [15.10.2026 - 12:00] — TOKEN & TAKİP KODLARI TEMA AYARLARI VE BLOG ROZET STANDARDİZASYONU [*]
+* **Yapılan İşlem:**
+  1. **Token Numaraları & Takip Kodları Tema Ayar Paneli (`InspectorSections.tsx`, `types.ts`, `CustomizerContext.tsx`):**
+     - Destek biletleri (`MSK-2026-EZRD`), blog yorum kimlikleri (`#73_LLUNA`) ve içerik takip kodları için bağımsız Tema Ayar Denetleyicisi eklendi (`activeSection === 'tokens'`).
+     - Bağımsız Font Boyutu (`tokenSize`: 10-16px), Font Kalınlığı (`tokenWeight`: 400-800), Harf Aralığı (`tokenSpacing`: 0-2px) ve Renk Seçici (`tokenColor`) metrikleri tanımlandı.
+     - Tasarım sistemine (`design-system.css`) `.admin-token-id` sınıfı ve CSS değişken kancaları (`--admin-token-size`, `--admin-token-weight`, `--admin-token-color`, `--admin-token-spacing`) eklendi.
+     - `TicketsView.tsx` ve `CommentsView.tsx` bileşenlerindeki takip kodları `.admin-token-id` sınıfına geçirildi.
+  2. **Blog Rozetlerinin Tema Motoruna Bağlanması (`PostCard.tsx`, `design-system.css`):**
+     - Blog yazılarındaki kanal rozetleri (`Bizce`, `Güncel`), yayın durumu (`Yayında`), video ve çok dilli içerik etiketlerindeki (`TR`, `EN`, `AR`) hardcoded inline stiller kaldırıldı.
+     - Tümü standart `.admin-badge` sınıfına dönüştürülerek tema motorundaki köşe yuvarlaklığı ve dikey/yatay dolgu ayarlarıyla anlık etkileşir hale getirildi.
+  3. **Canlı Önizleme ve Modüler Mimari (`ThemeCustomizerDrawer.tsx`, `BoundedSlider.tsx`, `PackageSection.tsx`):**
+     - Tema Çekmecesine `🎫 Token & Takip Kodları` seçeneği ve buna ait canlı önizleme vitrini eklendi.
+     - 400-450 satır kuralına tam uyum sağlamak üzere `BoundedSlider.tsx` (64 satır) ve `PackageSection.tsx` (102 satır) bağımsız modüllere ayrıştırıldı; `InspectorSections.tsx` 367 satırda tutuldu.
+* **Sonuçlar:** `npm run build` PASS (0 hata, 661 ms). Tüm dosyalar `<= 373` satır kuralına tam uyumlu.
+* **Durum:** `DevAdmin` dalında çalışıldı, `main` korundu.
+
 ## 🟢 Son Güncelleme [15.10.2026 - 11:48] — BLOG YORUM KARTLARI AÇILIR EYLEM SÜTUNU & TEMA MOTORU CANLI ÖNİZLEME GELİŞTİRMELERİ [*]
 * **Yapılan İşlem:**
   1. **Blog Yorum Kartı Eylem Sütunu (`CommentsView.tsx`):**

@@ -1,75 +1,12 @@
 import React from 'react';
-import { Download, Upload, RotateCcw } from 'lucide-react';
 import {
   type ThemeMetrics,
   type CustomizerSection,
-  METRIC_BOUNDS,
   AVAILABLE_FONTS,
-  clampMetric,
 } from './types';
 import { ColorPickerInput } from './ColorPickerInput';
-
-interface BoundedSliderProps {
-  boundKey: keyof typeof METRIC_BOUNDS;
-  value: number;
-  onChange: (val: number) => void;
-  hint?: string;
-}
-
-const BoundedSlider: React.FC<BoundedSliderProps> = ({ boundKey, value, onChange, hint }) => {
-  const bound = METRIC_BOUNDS[boundKey];
-
-  const handleChange = (newVal: number) => {
-    onChange(clampMetric(boundKey, newVal));
-  };
-
-  return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <span className="admin-meta-text" style={{ fontWeight: 600, color: 'var(--text-primary)' }}>
-          {bound.label}
-        </span>
-        <span className="admin-badge admin-badge-info" style={{ fontFamily: 'monospace', fontSize: '0.70rem' }}>
-          {value}{bound.unit}
-        </span>
-      </div>
-
-      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-        <input
-          type="range"
-          min={bound.min}
-          max={bound.max}
-          step={bound.step}
-          value={value}
-          onChange={(e) => handleChange(Number(e.target.value))}
-          style={{ flex: 1, accentColor: 'var(--accent-primary)', cursor: 'pointer' }}
-        />
-        <input
-          type="number"
-          min={bound.min}
-          max={bound.max}
-          value={value}
-          onChange={(e) => handleChange(Number(e.target.value))}
-          style={{
-            width: '48px',
-            height: '24px',
-            fontSize: '0.74rem',
-            textAlign: 'center',
-            borderRadius: 'var(--radius-sm, 4px)',
-            border: '1px solid var(--border-card)',
-            background: 'var(--bg-input, rgba(0,0,0,0.2))',
-            color: 'var(--text-primary)',
-          }}
-        />
-      </div>
-      {hint && (
-        <span className="admin-meta-text" style={{ fontSize: '0.66rem', color: 'var(--text-muted)' }}>
-          {hint} ({bound.min}{bound.unit} - {bound.max}{bound.unit})
-        </span>
-      )}
-    </div>
-  );
-};
+import { BoundedSlider } from './BoundedSlider';
+import { PackageSection } from './PackageSection';
 
 interface InspectorSectionsProps {
   section: CustomizerSection;
@@ -88,9 +25,6 @@ export const InspectorSections: React.FC<InspectorSectionsProps> = ({
   onExportJSON,
   onImportJSON,
 }) => {
-  const [importText, setImportText] = React.useState('');
-  const [importStatus, setImportStatus] = React.useState<string | null>(null);
-
   // 1. Genel Renkler
   if (section === 'colors') {
     return (
@@ -265,7 +199,7 @@ export const InspectorSections: React.FC<InspectorSectionsProps> = ({
     );
   }
 
-  // 5. Butonlar (Köşe, Dolgular, Boyut ve Tüm Buton Renkleri)
+  // 5. Butonlar (Köşe, Dolgular, Boyut ve Tüm Buton Rol Renkleri)
   if (section === 'buttons') {
     return (
       <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
@@ -366,89 +300,68 @@ export const InspectorSections: React.FC<InspectorSectionsProps> = ({
     );
   }
 
-  // 7. Tema Paketi (İçe / Dışa Aktar & Sıfırla)
-  return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-      <div>
-        <h4 className="admin-card-title" style={{ fontSize: '0.84rem', marginBottom: '4px' }}>
-          Tema Paketini Dışa Aktar (Export)
-        </h4>
-        <p className="admin-card-desc" style={{ fontSize: '0.74rem', marginBottom: '8px' }}>
-          Tüm bu ayarları JSON formatında indirerek başka bir müşteriye veya projeye tek tıkla yükleyebilirsiniz.
-        </p>
-        <button
-          type="button"
-          onClick={onExportJSON}
-          className="admin-btn admin-btn-primary admin-btn-sm"
-          style={{ width: '100%' }}
-        >
-          <Download size={14} /> JSON Tema Paketini İndir
-        </button>
-      </div>
-
-      <div style={{ borderTop: '1px solid var(--border-subtle)', paddingTop: '10px' }}>
-        <h4 className="admin-card-title" style={{ fontSize: '0.84rem', marginBottom: '4px' }}>
-          Tema Paketini İçe Aktar (Import)
-        </h4>
-        <p className="admin-card-desc" style={{ fontSize: '0.74rem', marginBottom: '6px' }}>
-          Elinizdeki tema JSON metnini buraya yapıştırıp sisteme uygulayabilirsiniz:
-        </p>
-        <textarea
-          rows={3}
-          value={importText}
-          onChange={(e) => setImportText(e.target.value)}
-          placeholder='{"accentPrimary": "#3b82f6", ...}'
-          style={{
-            width: '100%',
-            fontFamily: 'monospace',
-            fontSize: '0.72rem',
-            padding: '6px',
-            borderRadius: 'var(--radius-sm, 4px)',
-            border: '1px solid var(--border-card)',
-            background: 'var(--bg-input, rgba(0,0,0,0.2))',
-            color: 'var(--text-primary)',
-            boxSizing: 'border-box',
-          }}
+  // 7. Token & Takip Kodları (MSK-2026-EZRD, #73_LLUNA)
+  if (section === 'tokens') {
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+        <BoundedSlider
+          boundKey="tokenSize"
+          value={metrics.tokenSize}
+          onChange={(v) => onUpdateMetric('tokenSize', v)}
+          hint="Token ve takip kodları yazı boyutu"
         />
-        <div style={{ display: 'flex', gap: '6px', marginTop: '6px' }}>
-          <button
-            type="button"
-            onClick={() => {
-              if (!importText.trim()) return;
-              try {
-                onImportJSON(importText);
-                setImportStatus('✅ Tema başarıyla yüklendi.');
-                setImportText('');
-              } catch (err: any) {
-                setImportStatus(`❌ Hata: ${err.message}`);
-              }
-            }}
-            className="admin-btn admin-btn-view admin-btn-sm"
-            style={{ flex: 1 }}
-          >
-            <Upload size={14} /> Temayı Yükle ve Uygula
-          </button>
-        </div>
-        {importStatus && (
-          <span className="admin-meta-text" style={{ fontSize: '0.70rem', display: 'block', marginTop: '4px' }}>
-            {importStatus}
-          </span>
-        )}
-      </div>
 
-      <div style={{ borderTop: '1px solid var(--border-subtle)', paddingTop: '10px' }}>
-        <h4 className="admin-card-title" style={{ fontSize: '0.84rem', marginBottom: '4px' }}>
-          Fabrika Ayarlarına Dön
-        </h4>
-        <button
-          type="button"
-          onClick={onReset}
-          className="admin-btn admin-btn-refresh admin-btn-sm"
-          style={{ width: '100%' }}
-        >
-          <RotateCcw size={14} /> Bu Temanın Varsayılan Ayarlarına Sıfırla
-        </button>
+        <div>
+          <label className="admin-meta-text" style={{ fontWeight: 600, display: 'block', marginBottom: '4px' }}>
+            Token Kalınlığı (Font Weight)
+          </label>
+          <select
+            className="admin-filter-select"
+            value={metrics.tokenWeight}
+            onChange={(e) => onUpdateMetric('tokenWeight', Number(e.target.value))}
+            style={{ width: '100%', height: '30px' }}
+          >
+            <option value={500}>500 (Orta - Medium)</option>
+            <option value={600}>600 (Yarı Kalın - SemiBold)</option>
+            <option value={700}>700 (Kalın - Bold)</option>
+            <option value={800}>800 (Çok Kalın - ExtraBold)</option>
+          </select>
+        </div>
+
+        <div>
+          <label className="admin-meta-text" style={{ fontWeight: 600, display: 'block', marginBottom: '4px' }}>
+            Harf Aralığı (Letter Spacing)
+          </label>
+          <select
+            className="admin-filter-select"
+            value={metrics.tokenSpacing}
+            onChange={(e) => onUpdateMetric('tokenSpacing', e.target.value)}
+            style={{ width: '100%', height: '30px' }}
+          >
+            <option value="-0.04em">-0.04em (Çok Sıkı)</option>
+            <option value="-0.02em">-0.02em (Hafif Sıkı - Varsayılan)</option>
+            <option value="0em">0em (Normal)</option>
+            <option value="0.02em">0.02em (Hafif Geniş)</option>
+            <option value="0.04em">0.04em (Geniş)</option>
+          </select>
+        </div>
+
+        <ColorPickerInput
+          label="Token Metin Rengi"
+          description="Bilet ve yorum takip numaralarının rengi"
+          value={metrics.tokenColor}
+          onChange={(hex) => onUpdateMetric('tokenColor', hex)}
+        />
       </div>
-    </div>
+    );
+  }
+
+  // 8. Tema Paketi (İçe / Dışa Aktar & Sıfırla)
+  return (
+    <PackageSection
+      onExportJSON={onExportJSON}
+      onImportJSON={onImportJSON}
+      onReset={onReset}
+    />
   );
 };

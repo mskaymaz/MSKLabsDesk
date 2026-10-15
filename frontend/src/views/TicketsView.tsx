@@ -301,7 +301,7 @@ export const TicketsView: React.FC<TicketsViewProps> = ({
               {/* 1. Satır: Bilet No + Rozetler + Metaveriler (Sol) & İncele Butonu (Sağ) */}
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px', flexWrap: 'wrap' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap', minWidth: 0 }}>
-                  <span style={{ fontSize: '0.78rem', fontWeight: 800, color: 'var(--accent-cyan)', fontFamily: 'ui-monospace, monospace', letterSpacing: '-0.02em', minWidth: '76px', flexShrink: 0 }}>
+                  <span className="admin-token-id">
                     {ticket.id}
                   </span>
                   {(() => {

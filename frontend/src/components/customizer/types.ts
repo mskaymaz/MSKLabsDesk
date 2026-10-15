@@ -5,6 +5,7 @@ export type CustomizerSection =
   | 'cards'
   | 'buttons'
   | 'badges'
+  | 'tokens'
   | 'package';
 
 export interface ThemeMetrics {
@@ -43,6 +44,11 @@ export interface ThemeMetrics {
   badgePaddingV: number; // px (1-6)
   badgePaddingH: number; // px (4-12)
   badgeFontSize: number; // px (10-13)
+  // Token & Takip Kodları (MSK-2026-EZRD, #73_LLUNA)
+  tokenSize: number; // px (11-16)
+  tokenWeight: number; // 500-800
+  tokenColor: string; // #hex
+  tokenSpacing: string; // -0.04em to 0.04em
   // Genel Ölçek
   fontScale: number; // % (90-115)
 }
@@ -56,13 +62,14 @@ export const METRIC_BOUNDS = {
   cardPaddingH: { min: 8, max: 24, step: 1, unit: 'px', label: 'Kart Yatay Dolgu' },
   cardRadius: { min: 0, max: 20, step: 1, unit: 'px', label: 'Kart Köşe Yuvarlaklığı' },
   btnRadius: { min: 0, max: 12, step: 1, unit: 'px', label: 'Buton Köşe Yuvarlaklığı (0-12px)' },
-  btnPaddingV: { min: 2, max: 8, step: 1, unit: 'px', label: 'Buton Dikey Dolgu (Padding)' },
-  btnPaddingH: { min: 4, max: 16, step: 1, unit: 'px', label: 'Buton Yatay Dolgu (Padding)' },
+  btnPaddingV: { min: 2, max: 8, step: 1, unit: 'px', label: 'Buton Dikey Dolgu' },
+  btnPaddingH: { min: 4, max: 16, step: 1, unit: 'px', label: 'Buton Yatay Dolgu' },
   btnFontSize: { min: 11, max: 14, step: 1, unit: 'px', label: 'Buton Metin Boyutu' },
   badgeRadius: { min: 0, max: 9, step: 1, unit: 'px', label: 'Rozet Köşe Yuvarlaklığı (0-9px)' },
-  badgePaddingV: { min: 1, max: 6, step: 1, unit: 'px', label: 'Rozet Dikey Dolgu (Padding)' },
-  badgePaddingH: { min: 4, max: 12, step: 1, unit: 'px', label: 'Rozet Yatay Dolgu (Padding)' },
+  badgePaddingV: { min: 1, max: 6, step: 1, unit: 'px', label: 'Rozet Dikey Dolgu' },
+  badgePaddingH: { min: 4, max: 12, step: 1, unit: 'px', label: 'Rozet Yatay Dolgu' },
   badgeFontSize: { min: 10, max: 13, step: 1, unit: 'px', label: 'Rozet Metin Boyutu' },
+  tokenSize: { min: 11, max: 16, step: 1, unit: 'px', label: 'Token / Kod Yazı Boyutu' },
   fontScale: { min: 90, max: 115, step: 1, unit: '%', label: 'Genel Font Ölçeği' },
 } as const;
 
@@ -106,6 +113,10 @@ export const DEFAULT_DARK_METRICS: ThemeMetrics = {
   badgePaddingV: 2,
   badgePaddingH: 6,
   badgeFontSize: 11,
+  tokenSize: 13,
+  tokenWeight: 800,
+  tokenColor: '#06b6d4',
+  tokenSpacing: '-0.02em',
   fontScale: 100,
 };
 
@@ -138,6 +149,10 @@ export const DEFAULT_LIGHT_METRICS: ThemeMetrics = {
   badgePaddingV: 2,
   badgePaddingH: 6,
   badgeFontSize: 11,
+  tokenSize: 13,
+  tokenWeight: 800,
+  tokenColor: '#0891b2',
+  tokenSpacing: '-0.02em',
   fontScale: 100,
 };
 

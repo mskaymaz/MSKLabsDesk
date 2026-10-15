@@ -85,7 +85,13 @@ function applyMetricsToDOM(metrics: ThemeMetrics) {
   root.style.setProperty('--admin-badge-padding-h', `${metrics.badgePaddingH}px`);
   root.style.setProperty('--admin-badge-font-size', `${metrics.badgeFontSize}px`);
 
-  // 8. Genel Ölçek
+  // 8. Token & Takip Kodları (MSK-2026-EZRD, #73_LLUNA)
+  root.style.setProperty('--admin-token-size', `${metrics.tokenSize}px`);
+  root.style.setProperty('--admin-token-weight', String(metrics.tokenWeight));
+  root.style.setProperty('--admin-token-color', metrics.tokenColor);
+  root.style.setProperty('--admin-token-spacing', metrics.tokenSpacing);
+
+  // 9. Genel Ölçek
   root.style.fontSize = `${metrics.fontScale}%`;
 }
 

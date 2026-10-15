@@ -1,6 +1,20 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [15.10.2026 - 12:00] - Token & Takip Kodları (MSK-2026-EZRD) Tema Ayarları ve Blog Rozet Standardizasyonu
+- **Token & Takip Kodları Tema Ayar Paneli (`InspectorSections.tsx`, `types.ts`, `CustomizerContext.tsx`):**
+  - Destek biletleri (`MSK-2026-EZRD`), blog yorum kimlikleri (`#73_LLUNA`) ve içerik takip kodları için bağımsız Tema Ayar Denetleyicisi eklendi (`activeSection === 'tokens'`).
+  - Font boyutu (`tokenSize`: 10-16px), font kalınlığı (`tokenWeight`: 400-800), harf aralığı (`tokenSpacing`: 0-2px) ve bağımsız renk seçici (`tokenColor`) metrikleri bağlandı.
+  - Tasarım sistemine `.admin-token-id` sınıfı ve CSS değişken kancaları (`--admin-token-size`, `--admin-token-weight`, `--admin-token-color`, `--admin-token-spacing`) entegre edildi.
+  - `TicketsView.tsx` ve `CommentsView.tsx` bileşenlerindeki takip kodları `.admin-token-id` sınıfına geçirildi.
+- **Blog Kartları Rozet Standardizasyonu (`PostCard.tsx`, `design-system.css`):**
+  - Blog yazılarındaki kanal rozetleri (`Bizce`, `Güncel`), yayın durumu (`Yayında`), video ve çok dilli içerik etiketlerindeki (`TR`, `EN`, `AR`) hardcoded inline stiller kaldırıldı.
+  - Tümü standart `.admin-badge` sınıfına dönüştürülerek tema motorundaki köşe yuvarlaklığı ve dikey/yatay dolgu ayarlarıyla anlık etkileşir hale getirildi.
+- **Canlı Önizleme ve Modüler Mimari (`ThemeCustomizerDrawer.tsx`, `BoundedSlider.tsx`, `PackageSection.tsx`):**
+  - Tema Çekmecesine `🎫 Token & Takip Kodları` seçeneği ve buna ait canlı önizleme vitrini eklendi.
+  - 400-450 satır kuralına tam uyum sağlamak üzere `BoundedSlider.tsx` (64 satır) ve `PackageSection.tsx` (102 satır) bağımsız modüllere ayrıştırıldı; `InspectorSections.tsx` 367 satırda tutuldu.
+- Yalnızca `DevAdmin` dalında çalışıldı, `main` korundu.
+
 ## [15.10.2026 - 11:48] - Blog Yorum Kartlarında Açılır Eylem Sütunu ve Tema Motoru Canlı Önizleme & Buton Rol Renkleri
 - **Blog Yorum Kartları Düzeni (`CommentsView.tsx`):**
   - Uzun ziyaretçi e-posta veya isimlerinde butonların alt satıra kayarak kart yapısını bozması engellendi.
