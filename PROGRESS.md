@@ -1,7 +1,30 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
-## 🟢 Son Güncelleme [15.10.2026 - 15:35] — CANLI TİPOGRAFİ SEÇİM YANSITMASI, SAYISAL STEPPER'LAR, FONT AİLESİ & WORD KENARLIK YÖNLERİ [*]
+## 🟢 Son Güncelleme [15.10.2026 - 15:45] — SERBEST KÜSÜRLÜ KENARLIK/DOLGU, HÜCRE BOYUTLARI (WIDTH/HEIGHT), TAM HTML RENK PALETİ & ÇİZGİSİZ TABLO KILAVUZU [*]
+* **Yapılan İşlem:**
+  1. **Serbest Küsürlü Kenarlık Kalınlığı & Çizgi Stilleri (`TableBorderControls.tsx`):**
+     - Standart değer kısıtı kaldırılarak klavyeden doğrudan küsürlü sayı girilebilir (`step="0.1"`, `min="0.1"`) input ve `+` / `-` (0.5px adımlı) stepper yapısı kuruldu.
+     - Çizgi stili: `Düz` (solid), `Kesikli` (dashed), `Noktalı` (dotted), `Çift` (double) seçenekleri sağlandı.
+  2. **Genişletilmiş HTML Renk Paleti & Şeffaflık (`TableBorderControls.tsx`, `TableCellDimensionControls.tsx`):**
+     - Hem kenarlık hem de hücre dolgu rengi için HTML5 yerel renk tekeri (`<input type="color">`), doğrudan `#HEX` / `rgba()` metin kutusu ve tek tıkla `"Renksiz / Şeffaf"` (`transparent`) yapma butonları eklendi.
+  3. **4 Yönlü Bağımsız Küsürlü Dolgu (Padding - `TableCellDimensionControls.tsx`):**
+     - Üst, Sağ, Alt, Sol için bağımsız küsürlü px giriş alanları oluşturuldu (`parse4WayPadding`).
+     - Yönleri tek tıkla birbirine bağlayan / ayıran "Bağlı / Ayrı" (Link/Unlink) butonu sağlandı.
+  4. **Hücre Boyutları — Genişlik ve Yükseklik (`TableCellDimensionControls.tsx`):**
+     - Hücreye/sütuna özel Genişlik (Width - px veya %) ve Yükseklik (Height - px) serbest sayısal girişleri eklendi.
+     - Değerleri akışkan içeriğe geri döndüren "Oto" (Auto) sıfırlama butonları bağlandı.
+  5. **Çizgisiz Tablolar İçin Editör Kılavuz Çizgileri (`editor.css`):**
+     - Web ziyaretçisine tamamen görünmez olan (`border: none` / `transparent`), ancak editörde yazarın hücreleri rahatça seçip düzenleyebilmesini sağlayan silik kesikli Word kılavuz çizgisi (`outline: 1px dashed rgba(148, 163, 184, 0.28)`) eklendi.
+  6. **Stil Birleştirme Güvenliği (`tableStyleHelper.ts`):**
+     - `mergeCellStyle` motoru inşa edilerek kenarlık değiştiğinde dolgunun (padding) veya zemin renginin ezilmesi/silinmesi önlendi; stiller cerrahi olarak birleştirildi.
+  7. **Modüler Bölünme & Kural 2:**
+     - `FloatingTableInspector.tsx` 3 sekmeli kompakt panele dönüştürüldü (254 satır).
+     - `TableBorderControls.tsx` (323 satır), `TableCellDimensionControls.tsx` (360 satır), `tableStyleHelper.ts` (104 satır) ile Rule 2 tavan sınırları (`<= 450`) korundu.
+  8. **Sonuçlar:** `npm run build` PASS (0 hata, 899ms).
+* **Durum:** `DevAdmin` dalında çalışıldı, `main` korundu.
+
+## [15.10.2026 - 15:35] — CANLI TİPOGRAFİ SEÇİM YANSITMASI, SAYISAL STEPPER'LAR, FONT AİLESİ & WORD KENARLIK YÖNLERİ
 * **Yapılan İşlem:**
   1. **Canlı Seçim Durumu Yansıtması (Selection State Reflection - `EditorToolbar.tsx`, `EditorTypographyControls.tsx`):**
      - TipTap `selectionUpdate` ve `transaction` kancalarıyla imlecin bulunduğu veya seçilen metnin anlık Font Ailesi, Punto (fontSize), Satır Aralığı (lineHeight) ve Paragraf Boşluğu araç çubuğuna canlı yansıtıldı.

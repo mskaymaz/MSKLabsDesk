@@ -12,6 +12,7 @@ import {
   Eye,
   EyeOff,
 } from 'lucide-react';
+import { mergeCellStyle } from './tableStyleHelper';
 
 interface TableDropdownProps {
   editor: Editor | null;
@@ -182,7 +183,9 @@ export const TableDropdown: React.FC<TableDropdownProps> = ({ editor, onOpenFloa
                 type="button"
                 style={itemStyle}
                 onClick={() => {
-                  editor.chain().focus().setCellAttribute('style', 'border: none;').run();
+                  const current = editor.getAttributes('tableCell')?.style || editor.getAttributes('tableHeader')?.style || '';
+                  const merged = mergeCellStyle(current, { border: 'none' });
+                  editor.chain().focus().setCellAttribute('style', merged).run();
                   setIsOpen(false);
                 }}
               >
@@ -192,7 +195,9 @@ export const TableDropdown: React.FC<TableDropdownProps> = ({ editor, onOpenFloa
                 type="button"
                 style={itemStyle}
                 onClick={() => {
-                  editor.chain().focus().setCellAttribute('style', 'border: 1px solid var(--border-card);').run();
+                  const current = editor.getAttributes('tableCell')?.style || editor.getAttributes('tableHeader')?.style || '';
+                  const merged = mergeCellStyle(current, { border: '1px solid var(--border-card)' });
+                  editor.chain().focus().setCellAttribute('style', merged).run();
                   setIsOpen(false);
                 }}
               >

@@ -216,6 +216,15 @@
   pointer-events: none;
 }
 
+/* Çizgisiz / Şeffaf Tablolar İçin Editör Kılavuz Çizgileri (Word Kılavuzu: Ziyaretçiye Görünmez) */
+.tiptap td[style*="border: none"],
+.tiptap th[style*="border: none"],
+.tiptap td[style*="transparent"],
+.tiptap th[style*="transparent"] {
+  outline: 1px dashed rgba(148, 163, 184, 0.28);
+  outline-offset: -1px;
+}
+
 /* Word Tarzı Sarmalanan & Hizalanan Görseller */
 .tiptap img,
 .tiptap-content img {

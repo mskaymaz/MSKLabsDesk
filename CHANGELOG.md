@@ -1,6 +1,24 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [15.10.2026 - 15:45] - Serbest Küsürlü Kenarlık/Dolgu, Hücre Boyutları (Width/Height), Tam HTML Renk Paleti ve Çizgisiz Tablo Kılavuz Çizgileri
+- **Serbest Küsürlü Kenarlık Kalınlığı & Çizgi Stilleri (`TableBorderControls.tsx`):**
+  - Sayısal küsürlü giriş alanı (`step="0.1"`, `min="0.1"`) ve hassas stepper (`+` / `-` 0.5px) kontrolleri sağlandı.
+  - Çizgi stilleri: Düz, Kesikli, Noktalı ve Çift (double) kenarlıklar entegre edildi.
+- **Genişletilmiş HTML Renk Paleti & Şeffaflık (`TableBorderControls.tsx`, `TableCellDimensionControls.tsx`):**
+  - Kenarlık ve dolgu renklerinde HTML5 renk paleti (`<input type="color">`), doğrudan `#HEX` / `rgba` giriş alanı ve tek tıkla `"Renksiz / Şeffaf"` (`transparent`) yapma özelliği eklendi.
+- **4 Yönlü Bağımsız Küsürlü Dolgu (Padding - `TableCellDimensionControls.tsx`):**
+  - Üst, Sağ, Alt, Sol için bağımsız ondalıklı px girişleri eklendi; tek tıkla tüm yönleri eşitleyen veya ayıran "Bağlı / Ayrı" butonu bağlandı.
+- **Hücre Genişliği ve Yüksekliği (`TableCellDimensionControls.tsx`):**
+  - Hücre veya sütuna özel Genişlik (px veya %) ve Yükseklik (px) girişleri ve "Oto" sıfırlama butonları eklendi.
+- **Çizgisiz Tablolar İçin Editör Kılavuz Çizgileri (`editor.css`):**
+  - Web çıktısında tamamen görünmez olan, editör tuvalinde ise hücrelerin rahatça seçilebilmesini sağlayan silik kesikli kılavuz çizgisi (`outline: 1px dashed rgba(148, 163, 184, 0.28)`) oluşturuldu.
+- **Modüler Mimari & Doğrulama:**
+  - `FloatingTableInspector.tsx` 3 sekmeli kompakt yapıya kavuşturuldu (254 satır).
+  - `TableBorderControls.tsx` (323 satır), `TableCellDimensionControls.tsx` (360 satır), `tableStyleHelper.ts` (104 satır) ile Rule 2 tavan sınırları (`<= 450`) korundu.
+  - `npm run build` PASS (0 hata, 899ms).
+- Yalnızca `DevAdmin` dalında çalışıldı, `main` korundu.
+
 ## [15.10.2026 - 15:35] - Canlı Seçim Durumu Yansıtması, Sayısal Stepper'lar, Font Ailesi ve Word Kenarlık Yönleri
 - **Canlı Seçim Durumu Yansıtması (`EditorToolbar.tsx`, `EditorTypographyControls.tsx`):**
   - TipTap `selectionUpdate` ve `transaction` kancalarıyla imlecin bulunduğu veya seçili metnin aktif Font Ailesi, Punto, Satır Aralığı ve Paragraf Boşluğu araç çubuğunda canlı olarak gösterildi.
