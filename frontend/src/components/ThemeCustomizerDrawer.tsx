@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { Palette, X } from 'lucide-react';
+import React, { useEffect, useState, useRef } from 'react';
+import { X, Move, RotateCcw } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 import { useCustomizer } from '../context/CustomizerContext';
 import { InspectorSections } from './customizer/InspectorSections';
@@ -19,6 +19,19 @@ export const ThemeCustomizerDrawer: React.FC = () => {
     setActiveSection,
   } = useCustomizer();
 
+  // Sürüklenebilir panel koordinatları (Varsayılan: Ekranın sağ üst köşesi)
+  const [pos, setPos] = useState<{ x: number; y: number }>(() => {
+    const initialX = typeof window !== 'undefined' ? Math.max(10, window.innerWidth - 395) : 800;
+    return { x: initialX, y: 48 };
+  });
+  const [isDragging, setIsDragging] = useState(false);
+  const dragStartRef = useRef<{ startX: number; startY: number; posX: number; posY: number }>({
+    startX: 0,
+    startY: 0,
+    posX: 0,
+    posY: 0,
+  });
+
   // ESC tuşuyla paneli kapatma
   useEffect(() => {
     if (!isOpen) return;
@@ -28,6 +41,49 @@ export const ThemeCustomizerDrawer: React.FC = () => {
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, closeCustomizer]);
+
+  // Sürükleme Başlangıcı (Pointer Events API)
+  const handlePointerDown = (e: React.PointerEvent) => {
+    if (e.button !== 0) return;
+    const target = e.target as HTMLElement;
+    if (target.closest('button') || target.closest('select') || target.closest('input')) return;
+
+    setIsDragging(true);
+    dragStartRef.current = {
+      startX: e.clientX,
+      startY: e.clientY,
+      posX: pos.x,
+      posY: pos.y,
+    };
+    (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+  };
+
+  const handlePointerMove = (e: React.PointerEvent) => {
+    if (!isDragging) return;
+    const dx = e.clientX - dragStartRef.current.startX;
+    const dy = e.clientY - dragStartRef.current.startY;
+    const maxX = Math.max(10, window.innerWidth - 390);
+    const maxY = Math.max(10, window.innerHeight - 140);
+    const newX = Math.min(maxX, Math.max(10, dragStartRef.current.posX + dx));
+    const newY = Math.min(maxY, Math.max(10, dragStartRef.current.posY + dy));
+    setPos({ x: newX, y: newY });
+  };
+
+  const handlePointerUp = (e: React.PointerEvent) => {
+    if (isDragging) {
+      setIsDragging(false);
+      try {
+        (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId);
+      } catch {
+        // ignore
+      }
+    }
+  };
+
+  const resetPosition = () => {
+    const defaultX = typeof window !== 'undefined' ? Math.max(10, window.innerWidth - 395) : 800;
+    setPos({ x: defaultX, y: 48 });
+  };
 
   if (!isOpen) return null;
 
@@ -74,7 +130,7 @@ export const ThemeCustomizerDrawer: React.FC = () => {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <span className="admin-meta-text" style={{ fontSize: '0.66rem', fontWeight: 700 }}>CANLI ÖNİZLEME: TOKEN & TAKİP KODLARI</span>
-            <span className="admin-badge admin-badge-info">Monospace</span>
+            <span className="admin-badge admin-badge-info">Dinamik Font</span>
           </div>
           <div style={{ display: 'flex', gap: '10px', alignItems: 'center', flexWrap: 'wrap', padding: '8px', background: 'var(--bg-card)', borderRadius: 'var(--radius-sm, 6px)', border: '1px solid var(--border-card)' }}>
             <span className="admin-token-id">MSK-2026-EZRD</span>
@@ -118,13 +174,13 @@ export const ThemeCustomizerDrawer: React.FC = () => {
           <span className="admin-meta-text" style={{ fontSize: '0.66rem', fontWeight: 700 }}>CANLI ÖNİZLEME: LİSTE KARTI</span>
           <span className="admin-badge admin-badge-success">Örnek Kart</span>
         </div>
-        <div className="admin-list-card" style={{ boxShadow: 'none' }}>
+        <div className="admin-list-card">
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <h4 className="admin-card-title">Örnek Başlık: Sistem Tasarımı</h4>
             <span className="admin-badge admin-badge-info">Bilgi</span>
           </div>
           <p className="admin-card-desc line-clamp-2">
-            Seçtiğiniz font, renk, dolgu ve yuvarlaklık arka plandaki tüm sayfalara anlık uygulanır.
+            Seçtiğiniz font, renk, dolgu, kenarlık ve gölge arka plandaki tüm sayfalara anlık uygulanır.
           </p>
           <div style={{ display: 'flex', gap: '6px', marginTop: '2px' }}>
             <button type="button" className="admin-btn admin-btn-primary admin-btn-xs">
@@ -144,22 +200,27 @@ export const ThemeCustomizerDrawer: React.FC = () => {
       aria-label="Arayüz ve Tema Motoru"
       style={{
         position: 'fixed',
-        top: '40px',
-        right: 0,
-        bottom: 0,
+        left: `${pos.x}px`,
+        top: `${pos.y}px`,
         width: '380px',
-        maxWidth: '92vw',
+        maxWidth: 'calc(100vw - 20px)',
+        height: 'min(780px, calc(100vh - 65px))',
         background: 'var(--bg-modal, #121826)',
-        borderLeft: '1px solid var(--border-card)',
-        boxShadow: '-6px 0 24px rgba(0, 0, 0, 0.3)',
+        borderRadius: '12px',
+        border: '1px solid var(--border-card)',
+        boxShadow: '0 16px 40px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(255, 255, 255, 0.08)',
         zIndex: 1000,
         display: 'flex',
         flexDirection: 'column',
-        animation: 'slideInRight 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
+        userSelect: isDragging ? 'none' : 'auto',
+        transition: isDragging ? 'none' : 'box-shadow 0.2s ease',
       }}
     >
-      {/* Üst Bar: Başlık & Kapat Butonu */}
+      {/* Sürüklenebilir Üst Bar: Başlık, Taşıma İkonu & Kapat */}
       <div
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={handlePointerUp}
         style={{
           padding: '10px 14px',
           borderBottom: '1px solid var(--border-subtle)',
@@ -167,28 +228,50 @@ export const ThemeCustomizerDrawer: React.FC = () => {
           alignItems: 'center',
           justifyContent: 'space-between',
           background: 'var(--bg-card)',
+          borderTopLeftRadius: '12px',
+          borderTopRightRadius: '12px',
+          cursor: isDragging ? 'grabbing' : 'grab',
+          touchAction: 'none',
         }}
+        title="Paneli taşımak için basılı tutup sürükleyin"
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <Palette size={16} color="var(--accent-primary)" />
+          <Move size={15} color="var(--accent-primary)" style={{ opacity: 0.85 }} />
           <div>
-            <h3 className="admin-page-title" style={{ fontSize: '0.88rem' }}>
-              Tema & Arayüz Motoru
-            </h3>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <h3 className="admin-page-title" style={{ fontSize: '0.88rem' }}>
+                Tema & Arayüz Motoru
+              </h3>
+              <span className="admin-badge admin-badge-info" style={{ fontSize: '0.62rem', padding: '1px 5px' }}>
+                Taşınabilir
+              </span>
+            </div>
             <span className="admin-meta-text" style={{ fontSize: '0.68rem' }}>
               Aktif: {theme === 'dark' ? 'Koyu Mod' : 'Açık Mod'} (Bağımsız Saklanır)
             </span>
           </div>
         </div>
-        <button
-          type="button"
-          onClick={closeCustomizer}
-          aria-label="Kapat"
-          className="admin-btn admin-btn-refresh admin-btn-sm"
-          style={{ width: '26px', height: '26px', padding: 0 }}
-        >
-          <X size={14} />
-        </button>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+          <button
+            type="button"
+            onClick={resetPosition}
+            title="Varsayılan Konuma Yasla"
+            aria-label="Konumu Sıfırla"
+            className="admin-btn admin-btn-refresh admin-btn-sm"
+            style={{ width: '26px', height: '26px', padding: 0 }}
+          >
+            <RotateCcw size={13} />
+          </button>
+          <button
+            type="button"
+            onClick={closeCustomizer}
+            aria-label="Kapat"
+            className="admin-btn admin-btn-refresh admin-btn-sm"
+            style={{ width: '26px', height: '26px', padding: 0 }}
+          >
+            <X size={14} />
+          </button>
+        </div>
       </div>
 
       {/* Hedef Bileşen Seçici Açılır Menü */}
@@ -205,10 +288,10 @@ export const ThemeCustomizerDrawer: React.FC = () => {
           <option value="colors">🎨 Genel Vurgu & Renkler</option>
           <option value="headings">🔤 Başlık Tipografisi</option>
           <option value="body">📝 Gövde & Açıklama Tipografisi</option>
-          <option value="cards">🗂️ Liste & İçerik Kartları</option>
+          <option value="cards">🗂️ Liste & İçerik Kartları (Çizgi & Gölge)</option>
           <option value="buttons">🔘 Butonlar (Dolgular, Renkler & Emniyet)</option>
           <option value="badges">🏷️ Rozetler & Etiketler (Dolgular & Emniyet)</option>
-          <option value="tokens">🎫 Token & Takip Kodları (MSK-2026-EZRD)</option>
+          <option value="tokens">🎫 Token & Takip Kodları (Font, Boyut & Renk)</option>
           <option value="package">💾 Tema Paketi (İçe / Dışa Aktar)</option>
         </select>
       </div>
@@ -254,10 +337,15 @@ export const ThemeCustomizerDrawer: React.FC = () => {
           borderTop: '1px solid var(--border-subtle)',
           display: 'flex',
           alignItems: 'center',
-          justifyContent: 'flex-end',
+          justifyContent: 'space-between',
           background: 'var(--bg-card)',
+          borderBottomLeftRadius: '12px',
+          borderBottomRightRadius: '12px',
         }}
       >
+        <span className="admin-meta-text" style={{ fontSize: '0.66rem' }}>
+          💡 Başlıktan tutarak sürükleyin
+        </span>
         <button
           type="button"
           onClick={closeCustomizer}

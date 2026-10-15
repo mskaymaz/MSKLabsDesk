@@ -3,9 +3,12 @@ import {
   type ThemeMetrics,
   type CustomizerSection,
   AVAILABLE_FONTS,
+  CARD_SHADOW_OPTIONS,
 } from './types';
 import { ColorPickerInput } from './ColorPickerInput';
 import { BoundedSlider } from './BoundedSlider';
+import { ButtonsSection } from './ButtonsSection';
+import { BadgesSection } from './BadgesSection';
 import { PackageSection } from './PackageSection';
 
 interface InspectorSectionsProps {
@@ -30,14 +33,14 @@ export const InspectorSections: React.FC<InspectorSectionsProps> = ({
     return (
       <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
         <ColorPickerInput
-          label="Ana Vurgu Rengi (Accent Primary)"
-          description="Kaydet, Uygula ve aktif butonlar"
+          label="Birincil Vurgu Rengi (Accent Primary)"
+          description="Butonlar, aktif sekmeler, bağlantılar ve odak halkaları"
           value={metrics.accentPrimary}
           onChange={(hex) => onUpdateMetric('accentPrimary', hex)}
         />
         <ColorPickerInput
-          label="Vurgu Hover Rengi (Accent Hover)"
-          description="Buton üzerine gelme durumu"
+          label="Vurgu Üzerine Gelme (Accent Hover)"
+          description="Butonların üzerine gelindiğindeki durum rengi"
           value={metrics.accentHover}
           onChange={(hex) => onUpdateMetric('accentHover', hex)}
         />
@@ -51,34 +54,34 @@ export const InspectorSections: React.FC<InspectorSectionsProps> = ({
       <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
         <div>
           <label className="admin-meta-text" style={{ fontWeight: 600, display: 'block', marginBottom: '4px' }}>
-            Başlık Yazı Tipi Ailesi
+            Başlık Yazı Tipi (Font Ailesi)
           </label>
           <select
             className="admin-filter-select"
             value={metrics.headingFont}
             onChange={(e) => onUpdateMetric('headingFont', e.target.value)}
-            style={{ width: '100%', height: '32px' }}
+            style={{ width: '100%', height: '30px' }}
           >
-            {AVAILABLE_FONTS.map((f) => (
-              <option key={f.id} value={f.id} style={{ fontFamily: f.family }}>
-                {f.name}
+            {AVAILABLE_FONTS.map((font) => (
+              <option key={font.id} value={font.id}>
+                {font.name}
               </option>
             ))}
           </select>
         </div>
 
         <BoundedSlider
-          boundKey="cardTitleSize"
-          value={metrics.cardTitleSize}
-          onChange={(v) => onUpdateMetric('cardTitleSize', v)}
-          hint="Kart içi başlık boyutu"
-        />
-
-        <BoundedSlider
           boundKey="pageTitleSize"
           value={metrics.pageTitleSize}
           onChange={(v) => onUpdateMetric('pageTitleSize', v)}
-          hint="Sayfa en üst ana başlık boyutu"
+          hint="Sayfa ana başlık boyutu"
+        />
+
+        <BoundedSlider
+          boundKey="cardTitleSize"
+          value={metrics.cardTitleSize}
+          onChange={(v) => onUpdateMetric('cardTitleSize', v)}
+          hint="Liste kartları ve modal başlık boyutu"
         />
 
         <div>
@@ -113,17 +116,17 @@ export const InspectorSections: React.FC<InspectorSectionsProps> = ({
       <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
         <div>
           <label className="admin-meta-text" style={{ fontWeight: 600, display: 'block', marginBottom: '4px' }}>
-            Gövde Yazı Tipi Ailesi
+            Gövde & Metin Yazı Tipi
           </label>
           <select
             className="admin-filter-select"
             value={metrics.bodyFont}
             onChange={(e) => onUpdateMetric('bodyFont', e.target.value)}
-            style={{ width: '100%', height: '32px' }}
+            style={{ width: '100%', height: '30px' }}
           >
-            {AVAILABLE_FONTS.map((f) => (
-              <option key={f.id} value={f.id} style={{ fontFamily: f.family }}>
-                {f.name}
+            {AVAILABLE_FONTS.map((font) => (
+              <option key={font.id} value={font.id}>
+                {font.name}
               </option>
             ))}
           </select>
@@ -133,14 +136,14 @@ export const InspectorSections: React.FC<InspectorSectionsProps> = ({
           boundKey="descSize"
           value={metrics.descSize}
           onChange={(v) => onUpdateMetric('descSize', v)}
-          hint="Kart açıklama ve özet metinleri"
+          hint="Kart açıklama ve içerik metin boyutu"
         />
 
         <BoundedSlider
           boundKey="metaSize"
           value={metrics.metaSize}
           onChange={(v) => onUpdateMetric('metaSize', v)}
-          hint="Tarih, saat ve yazar bilgileri"
+          hint="Tarih, etiket altı ve sayaç boyutu"
         />
 
         <BoundedSlider
@@ -184,6 +187,31 @@ export const InspectorSections: React.FC<InspectorSectionsProps> = ({
           hint="Kart köşe yuvarlaklığı"
         />
 
+        <BoundedSlider
+          boundKey="cardBorderWidth"
+          value={metrics.cardBorderWidth ?? 1}
+          onChange={(v) => onUpdateMetric('cardBorderWidth', v)}
+          hint="Kart kenarlık çizgi kalınlığı"
+        />
+
+        <div>
+          <label className="admin-meta-text" style={{ fontWeight: 600, display: 'block', marginBottom: '4px' }}>
+            Kart Panel Gölgesi (Box Shadow)
+          </label>
+          <select
+            className="admin-filter-select"
+            value={metrics.cardShadow || 'medium'}
+            onChange={(e) => onUpdateMetric('cardShadow', e.target.value as any)}
+            style={{ width: '100%', height: '30px' }}
+          >
+            {CARD_SHADOW_OPTIONS.map((opt) => (
+              <option key={opt.id} value={opt.id}>
+                {opt.label}
+              </option>
+            ))}
+          </select>
+        </div>
+
         <ColorPickerInput
           label="Kart Kenarlık Rengi"
           value={metrics.cardBorder}
@@ -202,101 +230,20 @@ export const InspectorSections: React.FC<InspectorSectionsProps> = ({
   // 5. Butonlar (Köşe, Dolgular, Boyut ve Tüm Buton Rol Renkleri)
   if (section === 'buttons') {
     return (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-        <BoundedSlider
-          boundKey="btnRadius"
-          value={metrics.btnRadius}
-          onChange={(v) => onUpdateMetric('btnRadius', v)}
-          hint="Köşe yuvarlaklığı"
-        />
-
-        <BoundedSlider
-          boundKey="btnPaddingV"
-          value={metrics.btnPaddingV}
-          onChange={(v) => onUpdateMetric('btnPaddingV', v)}
-          hint="Buton dikey dolgusu"
-        />
-
-        <BoundedSlider
-          boundKey="btnPaddingH"
-          value={metrics.btnPaddingH}
-          onChange={(v) => onUpdateMetric('btnPaddingH', v)}
-          hint="Buton yatay dolgusu"
-        />
-
-        <BoundedSlider
-          boundKey="btnFontSize"
-          value={metrics.btnFontSize}
-          onChange={(v) => onUpdateMetric('btnFontSize', v)}
-          hint="Buton yazı boyutu"
-        />
-
-        <div style={{ borderTop: '1px solid var(--border-subtle)', paddingTop: '10px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-          <h4 className="admin-meta-text" style={{ fontWeight: 700, color: 'var(--text-primary)' }}>
-            BUTON ROL RENKLERİ:
-          </h4>
-          <ColorPickerInput
-            label="Kaydet / Uygula Butonu (Birincil)"
-            value={metrics.accentPrimary}
-            onChange={(hex) => onUpdateMetric('accentPrimary', hex)}
-          />
-          <ColorPickerInput
-            label="İncele Butonu (Detay/Görüntüle)"
-            value={metrics.btnViewColor}
-            onChange={(hex) => onUpdateMetric('btnViewColor', hex)}
-          />
-          <ColorPickerInput
-            label="Onayla Butonu (Kabul Et/Aktif)"
-            value={metrics.btnSuccessColor}
-            onChange={(hex) => onUpdateMetric('btnSuccessColor', hex)}
-          />
-          <ColorPickerInput
-            label="Reddet Butonu (Sil/İptal)"
-            value={metrics.btnDangerColor}
-            onChange={(hex) => onUpdateMetric('btnDangerColor', hex)}
-          />
-          <ColorPickerInput
-            label="Düzenle Butonu (İkincil)"
-            value={metrics.btnEditColor}
-            onChange={(hex) => onUpdateMetric('btnEditColor', hex)}
-          />
-        </div>
-      </div>
+      <ButtonsSection
+        metrics={metrics}
+        onUpdateMetric={onUpdateMetric}
+      />
     );
   }
 
   // 6. Rozetler & Etiketler
   if (section === 'badges') {
     return (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-        <BoundedSlider
-          boundKey="badgeRadius"
-          value={metrics.badgeRadius}
-          onChange={(v) => onUpdateMetric('badgeRadius', v)}
-          hint="Rozet köşe yuvarlaklığı"
-        />
-
-        <BoundedSlider
-          boundKey="badgePaddingV"
-          value={metrics.badgePaddingV}
-          onChange={(v) => onUpdateMetric('badgePaddingV', v)}
-          hint="Rozet dikey dolgusu"
-        />
-
-        <BoundedSlider
-          boundKey="badgePaddingH"
-          value={metrics.badgePaddingH}
-          onChange={(v) => onUpdateMetric('badgePaddingH', v)}
-          hint="Rozet yatay dolgusu"
-        />
-
-        <BoundedSlider
-          boundKey="badgeFontSize"
-          value={metrics.badgeFontSize}
-          onChange={(v) => onUpdateMetric('badgeFontSize', v)}
-          hint="Rozet metin boyutu"
-        />
-      </div>
+      <BadgesSection
+        metrics={metrics}
+        onUpdateMetric={onUpdateMetric}
+      />
     );
   }
 
@@ -304,6 +251,24 @@ export const InspectorSections: React.FC<InspectorSectionsProps> = ({
   if (section === 'tokens') {
     return (
       <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+        <div>
+          <label className="admin-meta-text" style={{ fontWeight: 600, display: 'block', marginBottom: '4px' }}>
+            Token Yazı Tipi (Font Ailesi)
+          </label>
+          <select
+            className="admin-filter-select"
+            value={metrics.tokenFont || 'mono'}
+            onChange={(e) => onUpdateMetric('tokenFont', e.target.value)}
+            style={{ width: '100%', height: '30px' }}
+          >
+            {AVAILABLE_FONTS.map((font) => (
+              <option key={font.id} value={font.id}>
+                {font.name}
+              </option>
+            ))}
+          </select>
+        </div>
+
         <BoundedSlider
           boundKey="tokenSize"
           value={metrics.tokenSize}

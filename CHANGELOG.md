@@ -1,6 +1,25 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [15.10.2026 - 12:18] - Sürüklenebilir Yüzen Ayar Paneli, Kart Çizgi/Gölge Kontrolleri ve Özet Ekranı Standardizasyonu
+- **Sürüklenebilir Yüzen Denetim Paneli (`ThemeCustomizerDrawer.tsx`):**
+  - Ayarlar paneli sağ kenara çakılı statik çekmeceden, ekran üzerinde 4 yöne (sağa, sola, yukarı, aşağı) serbestçe taşınabilen bir **Yüzen Denetim Penceresi (Floating Draggable Inspector)** yapısına dönüştürüldü.
+  - Yerel Pointer Events API (`onPointerDown`, `onPointerMove`, `onPointerUp`) ile sıfır harici bağımlılıkla ekran sınırlarını aşmayacak şekilde yumuşak sürükleme kancası kuruldu.
+  - Başlığa `Taşınabilir` durum rozeti, taşıma ikonu (`Move`) ve paneli tek tıkla sağ üst varsayılan konuma yaslayan sıfırlama butonu (`RotateCcw`) eklendi.
+- **Kartların Çizgi Kalınlığı ve Panel Gölgesi Denetimi (`types.ts`, `InspectorSections.tsx`, `CustomizerContext.tsx`, `design-system.css`):**
+  - `ThemeMetrics`'e `cardBorderWidth` (0-4px) ve `cardShadow` (`none`, `subtle`, `medium`, `deep`) metrikleri eklendi.
+  - Tasarım sisteminde `.admin-list-card`, `.admin-panel-card` ve geriye dönük uyumluluk için `.glass-card` sınıfları `--admin-card-border-width` ve `--admin-card-shadow` değişkenlerine bağlandı.
+- **Token Font Ailesi Seçicisi (`types.ts`, `InspectorSections.tsx`, `CustomizerContext.tsx`):**
+  - Font listesine (`AVAILABLE_FONTS`) özel `Monospace (Kod & Token)` seçeneği dahil edildi.
+  - Token ayar paneline bağımsız `Token Yazı Tipi` açılır menüsü eklendi; `--admin-token-font` değişkeni üzerinden dinamikleştirildi.
+- **Özet Ekranı (Dashboard) Standardizasyonu (`DashboardView.tsx`):**
+  - Özet ekranında hardcoded inline stil ile kalan `ticket.id` yapısı `.admin-token-id` sınıfına geçirildi.
+  - Bekleyen yorumlar kartına da biletlerle standart takip kodu (`#{comment.id}`) kazandırıldı.
+  - `.glass-card` ve satır içi arka plan/dolgu stilleri yerine `.admin-panel-card` ve `.admin-list-card` sınıfları entegre edilerek tüm kartların tema motorundan anlık etkilenmesi sağlandı.
+- **Modülerlik & Satır Sınırı:**
+  - 400-450 satır kuralına tam uyum amacıyla `ButtonsSection.tsx` (77 satır) ve `BadgesSection.tsx` (45 satır) modüler bileşenlere ayrıştırıldı; tüm dosyalar 360 satırın altında tutuldu.
+- Yalnızca `DevAdmin` dalında çalışıldı, `main` korundu.
+
 ## [15.10.2026 - 12:00] - Token & Takip Kodları (MSK-2026-EZRD) Tema Ayarları ve Blog Rozet Standardizasyonu
 - **Token & Takip Kodları Tema Ayar Paneli (`InspectorSections.tsx`, `types.ts`, `CustomizerContext.tsx`):**
   - Destek biletleri (`MSK-2026-EZRD`), blog yorum kimlikleri (`#73_LLUNA`) ve içerik takip kodları için bağımsız Tema Ayar Denetleyicisi eklendi (`activeSection === 'tokens'`).

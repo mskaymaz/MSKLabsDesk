@@ -3,34 +3,49 @@
    Tüm admin arayüzü genelindeki kart, buton, rozet ve tipografi standartları.
    ========================================================================== */
 
-/* --- 1. Kart Yapısı (Standart Liste Kartı) --- */
+/* --- 1. Kart Yapısı (Standart Liste & İçerik Kartı) --- */
 .admin-list-card {
   padding: var(--admin-card-padding-v, 8px) var(--admin-card-padding-h, 12px);
   border-radius: var(--admin-card-radius, 8px);
-  border: 1px solid var(--admin-card-border, var(--border-card));
+  border: var(--admin-card-border-width, 1px) solid var(--admin-card-border, var(--border-card));
   background: var(--admin-card-bg, var(--bg-card));
   display: flex;
   flex-direction: column;
   gap: 4px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+  box-shadow: var(--admin-card-shadow, 0 2px 8px rgba(0, 0, 0, 0.18));
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
   position: relative;
 }
 
 .admin-list-card:hover {
   border-color: var(--border-card-hover);
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+  box-shadow: var(--admin-card-shadow, 0 4px 14px rgba(0, 0, 0, 0.25));
 }
 
-[data-theme="light"] .admin-list-card {
-  background: #FFFFFF;
-  border-color: var(--border-card);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+/* --- 1.1 Panel Kartı (Özet, Büyük Bölüm ve Gösterge Panelleri) --- */
+.admin-panel-card,
+.glass-card {
+  padding: calc(var(--admin-card-padding-v, 8px) * 1.5) calc(var(--admin-card-padding-h, 12px) * 1.2);
+  border-radius: calc(var(--admin-card-radius, 8px) + 2px);
+  border: var(--admin-card-border-width, 1px) solid var(--admin-card-border, var(--border-card));
+  background: var(--admin-card-bg, var(--bg-card));
+  box-shadow: var(--admin-card-shadow, 0 4px 14px rgba(0, 0, 0, 0.22));
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  position: relative;
 }
 
-[data-theme="light"] .admin-list-card:hover {
+[data-theme="light"] .admin-list-card,
+[data-theme="light"] .admin-panel-card,
+[data-theme="light"] .glass-card {
+  background: var(--admin-card-bg, #FFFFFF);
+  border-color: var(--admin-card-border, var(--border-card));
+  box-shadow: var(--admin-card-shadow, 0 1px 3px rgba(0, 0, 0, 0.05));
+}
+
+[data-theme="light"] .admin-list-card:hover,
+[data-theme="light"] .admin-panel-card:hover,
+[data-theme="light"] .glass-card:hover {
   border-color: var(--accent-primary);
-  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.12);
 }
 
 /* --- 2. Tipografi Standartları --- */

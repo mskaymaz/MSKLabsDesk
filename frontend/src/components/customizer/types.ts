@@ -34,6 +34,8 @@ export interface ThemeMetrics {
   cardRadius: number; // px
   cardBg: string;
   cardBorder: string;
+  cardBorderWidth: number; // px (0-4)
+  cardShadow: 'none' | 'subtle' | 'medium' | 'deep';
   // Butonlar (Köşe yuvarlatma maks 12px sınırlandırılmış)
   btnRadius: number; // px (0-12)
   btnPaddingV: number; // px (2-8)
@@ -45,6 +47,7 @@ export interface ThemeMetrics {
   badgePaddingH: number; // px (4-12)
   badgeFontSize: number; // px (10-13)
   // Token & Takip Kodları (MSK-2026-EZRD, #73_LLUNA)
+  tokenFont: string;
   tokenSize: number; // px (11-16)
   tokenWeight: number; // 500-800
   tokenColor: string; // #hex
@@ -61,6 +64,7 @@ export const METRIC_BOUNDS = {
   cardPaddingV: { min: 4, max: 20, step: 1, unit: 'px', label: 'Kart Dikey Dolgu' },
   cardPaddingH: { min: 8, max: 24, step: 1, unit: 'px', label: 'Kart Yatay Dolgu' },
   cardRadius: { min: 0, max: 20, step: 1, unit: 'px', label: 'Kart Köşe Yuvarlaklığı' },
+  cardBorderWidth: { min: 0, max: 4, step: 1, unit: 'px', label: 'Kart Çizgi / Kenarlık Kalınlığı' },
   btnRadius: { min: 0, max: 12, step: 1, unit: 'px', label: 'Buton Köşe Yuvarlaklığı (0-12px)' },
   btnPaddingV: { min: 2, max: 8, step: 1, unit: 'px', label: 'Buton Dikey Dolgu' },
   btnPaddingH: { min: 4, max: 16, step: 1, unit: 'px', label: 'Buton Yatay Dolgu' },
@@ -75,6 +79,7 @@ export const METRIC_BOUNDS = {
 
 export const AVAILABLE_FONTS = [
   { id: 'system', name: 'Sistem Varsayılanı', family: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif' },
+  { id: 'mono', name: 'Monospace (Kod & Token)', family: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace' },
   { id: 'inter', name: 'Inter (Modern & Düzgün)', family: "'Inter', sans-serif" },
   { id: 'plus-jakarta', name: 'Plus Jakarta Sans (Kibar & Kurumsal)', family: "'Plus Jakarta Sans', sans-serif" },
   { id: 'outfit', name: 'Outfit (Geometrik & Net)', family: "'Outfit', sans-serif" },
@@ -82,6 +87,13 @@ export const AVAILABLE_FONTS = [
   { id: 'poppins', name: 'Poppins (Yumuşak & Estetik)', family: "'Poppins', sans-serif" },
   { id: 'montserrat', name: 'Montserrat (Geniş & Vurgulu)', family: "'Montserrat', sans-serif" },
   { id: 'cairo', name: 'Cairo (Çok Dilli Arapça/Latin)', family: "'Cairo', sans-serif" },
+] as const;
+
+export const CARD_SHADOW_OPTIONS = [
+  { id: 'none', label: 'Gölge Yok', value: 'none' },
+  { id: 'subtle', label: 'Hafif & Zarif', value: '0 1px 3px rgba(0, 0, 0, 0.12)' },
+  { id: 'medium', label: 'Orta Derinlik', value: '0 4px 12px rgba(0, 0, 0, 0.22)' },
+  { id: 'deep', label: 'Belirgin & Yüzen', value: '0 8px 24px rgba(0, 0, 0, 0.35)' },
 ] as const;
 
 export const DEFAULT_DARK_METRICS: ThemeMetrics = {
@@ -105,6 +117,8 @@ export const DEFAULT_DARK_METRICS: ThemeMetrics = {
   cardRadius: 8,
   cardBg: 'rgba(18, 24, 38, 0.75)',
   cardBorder: 'rgba(255, 255, 255, 0.14)',
+  cardBorderWidth: 1,
+  cardShadow: 'medium',
   btnRadius: 6,
   btnPaddingV: 3,
   btnPaddingH: 8,
@@ -113,6 +127,7 @@ export const DEFAULT_DARK_METRICS: ThemeMetrics = {
   badgePaddingV: 2,
   badgePaddingH: 6,
   badgeFontSize: 11,
+  tokenFont: 'mono',
   tokenSize: 13,
   tokenWeight: 800,
   tokenColor: '#06b6d4',
@@ -141,6 +156,8 @@ export const DEFAULT_LIGHT_METRICS: ThemeMetrics = {
   cardRadius: 8,
   cardBg: '#FFFFFF',
   cardBorder: 'rgba(15, 23, 42, 0.14)',
+  cardBorderWidth: 1,
+  cardShadow: 'subtle',
   btnRadius: 6,
   btnPaddingV: 3,
   btnPaddingH: 8,
@@ -149,6 +166,7 @@ export const DEFAULT_LIGHT_METRICS: ThemeMetrics = {
   badgePaddingV: 2,
   badgePaddingH: 6,
   badgeFontSize: 11,
+  tokenFont: 'mono',
   tokenSize: 13,
   tokenWeight: 800,
   tokenColor: '#0891b2',

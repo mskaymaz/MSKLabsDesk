@@ -180,7 +180,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
 
       {/* Recent Tickets Overview */}
       <div className="dashboard-panels-grid">
-        <div className="glass-card" style={{ minWidth: 0 }}>
+        <div className="admin-panel-card" style={{ minWidth: 0 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '18px' }}>
             <h3 className="admin-card-title">{t('dashboard.recentTickets')}</h3>
             <button className="admin-btn admin-btn-view admin-btn-sm" onClick={() => onNavigate('tickets')}>{t('common.all')}</button>
@@ -193,11 +193,10 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
               {pendingTickets.slice(0, 4).map((ticket) => (
                 <div 
                   key={ticket.id} 
+                  className="admin-list-card"
+                  onClick={() => onNavigate('tickets')}
                   style={{
-                    padding: '12px',
-                    background: 'var(--bg-secondary)',
-                    borderRadius: 'var(--radius-md)',
-                    border: '1px solid var(--border-color)',
+                    cursor: 'pointer',
                     display: 'flex',
                     flexDirection: 'column',
                     gap: '6px',
@@ -206,10 +205,10 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                   }}
                 >
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
-                    <span style={{ fontSize: '0.78rem', fontWeight: 800, color: 'var(--accent-cyan)' }}>{ticket.id}</span>
+                    <span className="admin-token-id">{ticket.id}</span>
                     <span className="admin-badge admin-badge-counter">{getStatusBadgeLabel(ticket.status)}</span>
                   </div>
-                  <h4 style={{ fontSize: '0.9rem', fontWeight: 700, color: 'var(--text-primary)', wordBreak: 'break-word' }}>{ticket.subject}</h4>
+                  <h4 className="admin-card-title line-clamp-1">{ticket.subject}</h4>
                   <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '4px' }}>
                     <span style={{ minWidth: 0, overflowWrap: 'anywhere' }}>{ticket.sender_name} ({ticket.sender_email})</span>
                     <span style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.75rem', color: 'var(--text-muted)', flexShrink: 0 }}>
@@ -222,7 +221,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
                       background: 'rgba(99, 102, 241, 0.08)',
                       borderLeft: '3px solid var(--accent-primary)',
                       padding: '6px 10px',
-                      borderRadius: '4px',
+                      borderRadius: 'var(--admin-badge-radius, 4px)',
                       color: 'var(--text-secondary)',
                       display: 'flex',
                       alignItems: 'center',
@@ -241,7 +240,7 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
         </div>
 
         {/* Pending Comments Overview */}
-        <div className="glass-card" style={{ minWidth: 0 }}>
+        <div className="admin-panel-card" style={{ minWidth: 0 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '18px' }}>
             <h3 className="admin-card-title">{t('dashboard.pendingComments')}</h3>
             <button className="admin-btn admin-btn-view admin-btn-sm" onClick={() => onNavigate('comments')}>{t('common.view')}</button>
@@ -252,22 +251,29 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
               {pendingComments.slice(0, 4).map((comment) => (
-                <div key={comment.id} style={{
-                  padding: '12px',
-                  background: 'var(--bg-secondary)',
-                  borderRadius: 'var(--radius-md)',
-                  border: '1px solid var(--border-color)',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: '6px',
-                  minWidth: 0,
-                  overflow: 'hidden'
-                }}>
+                <div 
+                  key={comment.id}
+                  className="admin-list-card"
+                  onClick={() => onNavigate('comments')}
+                  style={{
+                    cursor: 'pointer',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '6px',
+                    minWidth: 0,
+                    overflow: 'hidden'
+                  }}
+                >
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '4px' }}>
-                    <span style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-primary)' }}>{comment.author_name}</span>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <span className="admin-token-id" style={{ minWidth: 'auto' }}>
+                        #{comment.id.length > 10 ? comment.id.slice(-8).toUpperCase() : comment.id}
+                      </span>
+                      <span style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--text-primary)' }}>{comment.author_name}</span>
+                    </div>
                     <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', flexShrink: 0 }}>{new Date(comment.created_at).toLocaleDateString(locale)}</span>
                   </div>
-                  <p style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', wordBreak: 'break-word' }}>"{comment.content}"</p>
+                  <p className="admin-card-desc line-clamp-2">"{comment.content}"</p>
                 </div>
               ))}
             </div>

@@ -6,6 +6,7 @@ import {
   DEFAULT_DARK_METRICS,
   DEFAULT_LIGHT_METRICS,
   AVAILABLE_FONTS,
+  CARD_SHADOW_OPTIONS,
   clampMetric,
   METRIC_BOUNDS,
 } from '../components/customizer/types';
@@ -70,6 +71,9 @@ function applyMetricsToDOM(metrics: ThemeMetrics) {
   root.style.setProperty('--admin-card-radius', `${metrics.cardRadius}px`);
   root.style.setProperty('--admin-card-bg', metrics.cardBg);
   root.style.setProperty('--admin-card-border', metrics.cardBorder);
+  root.style.setProperty('--admin-card-border-width', `${metrics.cardBorderWidth ?? 1}px`);
+  const shadowOpt = CARD_SHADOW_OPTIONS.find((s) => s.id === metrics.cardShadow) || CARD_SHADOW_OPTIONS[2];
+  root.style.setProperty('--admin-card-shadow', shadowOpt.value);
 
   // 6. Butonlar (Geometrik Emniyet: Maks 12px clamp)
   const safeBtnRadius = Math.min(Math.max(metrics.btnRadius, 0), 12);
@@ -86,6 +90,8 @@ function applyMetricsToDOM(metrics: ThemeMetrics) {
   root.style.setProperty('--admin-badge-font-size', `${metrics.badgeFontSize}px`);
 
   // 8. Token & Takip Kodları (MSK-2026-EZRD, #73_LLUNA)
+  const tFont = AVAILABLE_FONTS.find((f) => f.id === metrics.tokenFont) || AVAILABLE_FONTS.find((f) => f.id === 'mono') || AVAILABLE_FONTS[0];
+  root.style.setProperty('--admin-token-font', tFont.family);
   root.style.setProperty('--admin-token-size', `${metrics.tokenSize}px`);
   root.style.setProperty('--admin-token-weight', String(metrics.tokenWeight));
   root.style.setProperty('--admin-token-color', metrics.tokenColor);

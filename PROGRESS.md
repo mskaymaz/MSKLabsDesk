@@ -1,6 +1,26 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 🟢 Son Güncelleme [15.10.2026 - 12:18] — SÜRÜKLENEBİLİR YÜZEN AYAR PANELİ, KART ÇİZGİ/GÖLGE DENETİMİ & ÖZET EKRANI STANDARDIZASYONU [*]
+* **Yapılan İşlem:**
+  1. **Sürüklenebilir Yüzen Denetim Paneli (`ThemeCustomizerDrawer.tsx`):**
+     - Statik sağ kenar çekmecesi yerine, ekran üzerinde 4 yöne (sağa, sola, yukarı, aşağı) serbestçe taşınabilen bir **Yüzen Denetim Penceresi (Floating Draggable Inspector)** yapısı inşa edildi.
+     - Pointer Events API (`onPointerDown`, `onPointerMove`, `onPointerUp`) ile sıfır harici paketle pürüzsüz sürükleme kancası kuruldu.
+     - Başlık barına `Taşınabilir` rozeti, taşıma ikonu (`Move`) ve paneli anında sağ üst köşeye yaslayan sıfırlama butonu (`RotateCcw`) yerleştirildi.
+  2. **Genişletilmiş Kart Çizgi ve Gölge Ayarları (`types.ts`, `InspectorSections.tsx`, `CustomizerContext.tsx`, `design-system.css`):**
+     - Kart kenarlık çizgi kalınlığı (`cardBorderWidth`: 0-4px) ve panel gölgesi (`cardShadow`: Yok, Hafif, Orta, Derin) metrikleri eklendi; CSS değişkenlerine bağlandı.
+     - Tasarım sistemindeki `.admin-list-card`, `.admin-panel-card` ve geriye dönük uyumluluk için `.glass-card` sınıfları bu değişkenlere entegre edildi.
+  3. **Token Font Ailesi Özelleştirmesi (`types.ts`, `InspectorSections.tsx`, `CustomizerContext.tsx`):**
+     - Font seçeneklerine `Monospace (Kod & Token)` eklendi. Token ayar paneline bağımsız yazı tipi açılır listesi bağlandı (`--admin-token-font`).
+  4. **Özet Ekranı (Dashboard) Standardizasyonu (`DashboardView.tsx`):**
+     - `ticket.id` hardcoded inline stilden çıkarılarak `.admin-token-id` sınıfına geçirildi.
+     - Yorum kartlarına da biletlerle standart takip kodu (`#{comment.id}`) uygulandı.
+     - `.glass-card` ve satır içi arka planlar yerine merkezi `.admin-panel-card` ve `.admin-list-card` sınıfları bağlandı.
+  5. **Modülerlik & Satır Sınırı:**
+     - 400-450 satır kuralına tam uyum sağlamak üzere `ButtonsSection.tsx` (77 satır) ve `BadgesSection.tsx` (45 satır) modüler bileşenlere ayrıştırıldı; `ThemeCustomizerDrawer.tsx` 359 satır, `InspectorSections.tsx` 332 satırda tutuldu.
+* **Sonuçlar:** `npm run build` PASS (0 hata, 688 ms). Tüm dosyalar `<= 387` satır kuralına tam uyumlu.
+* **Durum:** `DevAdmin` dalında çalışıldı, `main` korundu.
+
 ## 🟢 Son Güncelleme [15.10.2026 - 12:00] — TOKEN & TAKİP KODLARI TEMA AYARLARI VE BLOG ROZET STANDARDİZASYONU [*]
 * **Yapılan İşlem:**
   1. **Token Numaraları & Takip Kodları Tema Ayar Paneli (`InspectorSections.tsx`, `types.ts`, `CustomizerContext.tsx`):**
