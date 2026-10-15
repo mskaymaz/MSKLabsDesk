@@ -1,6 +1,15 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 🟢 Son Güncelleme [15.10.2026 - 09:40] — ADMİN PANELİ STANDART TİPOGRAFİ MANİFESTOSU & CAIRO 500 GÜNCELLEMESİ [*]
+* **Yapılan İşlem:**
+  1. **Cairo Font URL Güncellemesi (`tokens.css` & `index.css`):**
+     - Cairo font ailesine `500` (Medium) kalınlığı dahil edildi. Butonlar ve sidebar navigasyonundaki ağırlıklar tarayıcı emülasyonundan kurtarılarak otantik hale getirildi.
+  2. **10'lu Standart Tipografi Manifestosu & Canlı Görsel Vitrini (`typography-preview.html`):**
+     - Tüm admin arayüzü genelindeki yazılar (Sayfa başlığı, modal başlığı, kart başlığı, sol menü, kart gövdesi, form etiketi, açılır liste/arama, butonlar, metaveriler, rozetler) için `rem`, `px`, `pt`, `weight` ve canlı web render'ını içeren kapsamlı tablo ve Dark/Light geçişli vitrin hazırlandı.
+* **Sonuçlar:** `npm run build` PASS (0 hata, 681 ms).
+* **Durum:** `DevAdmin` dalında çalışıldı, `main` korundu.
+
 ## 🟢 Son Güncelleme [14.10.2026 - 17:05] — AÇILIR LİSTE DİKEY DOLGU DÜZELTMESİ & TİPOGRAFİ GÖRSEL VİTRİNİ [*]
 * **Yapılan İşlem:**
   1. **Açılır Liste Dikey Dolgu (Padding) İzolasyonu (`PostFilterBar.tsx` & `responsive.css`):**

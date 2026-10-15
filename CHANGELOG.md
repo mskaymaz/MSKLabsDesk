@@ -1,6 +1,13 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [15.10.2026 - 09:40] - Admin Paneli Standart Tipografi Manifestosu & Cairo 500 Font Desteği
+- `frontend/src/styles/tokens.css` & `frontend/src/index.css`:
+  - Cairo font ailesi import url'sine `500` (Medium) kalınlığı eklendi (`family=Cairo:wght@400;500;600;700;800`), buton ve sidebar linklerinde otantik tipografi sağlandı.
+- Tipografi Manifestosu & Canlı Görsel Vitrini (`typography-preview.html`):
+  - Tüm admin arayüzü genelinde kullanılan 10 temel metin sınıfı için standart rem/px/pt/weight ölçüleri ve canlı görsel karşılaştırma tablosu hazırlandı.
+- Yalnızca `DevAdmin` dalında çalışıldı, `main` korundu.
+
 ## [14.10.2026 - 17:05] - Açılır Liste Dikey Dolgu (Padding) Kesilmesi Düzeltmesi & Tipografi Görsel Vitrini
 - `frontend/src/components/posts/PostFilterBar.tsx` & `frontend/src/styles/responsive.css`:
   - Genel `.form-select` kuralından gelen `padding: 10px 14px` dolgusunun 28px'lik açılır kutuları dikeyde sıkıştırıp metinleri gizlemesi engellendi; sıfır üst/alt dolgu (`padding: 0 22px 0 8px`) ve `line-height: 26px` inline stillerle sabitlendi.
