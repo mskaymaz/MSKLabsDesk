@@ -1,6 +1,17 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [15.10.2026 - 10:35] - Kart Açıklamaları (Line-Clamp) İzolasyonu ve 3 Katmanlı Kart Standartlaşması
+- `frontend/src/styles/design-system.css`:
+  - `.admin-card-desc` temel tipografi kuralından satır sınırlaması (`-webkit-line-clamp`, `max-height`) ayrıştırıldı; farklı kartların farklı satır ihtiyaçları için bağımsız `.line-clamp-1`, `.line-clamp-2`, `.line-clamp-3` yardımcı sınıfları eklendi.
+- `frontend/src/components/posts/PostCard.tsx`:
+  - Özet metni `<p className="admin-card-desc line-clamp-2">` bağımsız sınıflarına bağlandı.
+- `frontend/src/views/TicketsView.tsx` & `frontend/src/views/CommentsView.tsx`:
+  - Destek talepleri ve yorum kartlarındaki dar orta sütun, kutucuklu gri zemin (`rgba(255,255,255,0.03)`) ve çift mobil/desktop kod blokları kaldırıldı.
+  - Blog kartı ile 1:1 aynı 3 katmanlı hiyerarşiye kavuşturuldu (1. Satır: Rozetler/Tarih/Butonlar, 2. Satır: Başlık, 3. Satır: Tam genişlik `.admin-card-desc line-clamp-2`).
+  - Satır sayıları optimize edildi (`TicketsView.tsx`: 373 satır, `CommentsView.tsx`: 260 satır <= 450).
+- Yalnızca `DevAdmin` dalında çalışıldı, `main` korundu.
+
 ## [15.10.2026 - 10:20] - Merkezi Tasarım Sistemi (design-system.css) ve Kart/Buton Standartlaşması
 - `frontend/src/styles/design-system.css`:
   - 9 temel tasarım grubunu (Standart Liste Kartı, Buton Ailesi, Rozetler/Sayaçlar, Tipografi ve Formlar) içeren merkezi CSS kütüphanesi oluşturuldu ve `index.css`'e dahil edildi.

@@ -347,17 +347,9 @@ export const PostCard: React.FC<PostCardProps> = ({
         </span>
       </div>
 
-      {/* Özet Metni: Standart admin-card-desc ile 2 satır */}
+      {/* Özet Metni: Standart admin-card-desc ile line-clamp-2 */}
       {post.summary_tr && (
-        <p
-          className="admin-card-desc"
-          style={{
-            display: '-webkit-box',
-            WebkitLineClamp: 2,
-            WebkitBoxOrient: 'vertical',
-            overflow: 'hidden',
-          }}
-        >
+        <p className="admin-card-desc line-clamp-2">
           {post.summary_tr}
         </p>
       )}

@@ -137,8 +137,8 @@ export const CommentsView: React.FC<CommentsViewProps> = ({ comments, onRefresh 
               style={{ cursor: 'pointer' }}
               title="Çift tıklayarak yorum detayını okuyabilirsiniz"
             >
-              {/* Kart Üst Satırı: Yorum Kodu + Durum Rozeti + Yazı Rozeti (Sol) & Tarih (Sağ) */}
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px', marginBottom: '4px' }}>
+              {/* 1. Satır: Yorum Kodu + Rozetler + Metaveriler (Sol) & Aksiyon Butonları (Sağ) */}
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px', flexWrap: 'wrap' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap', minWidth: 0 }}>
                   <span
                     style={{ fontSize: '0.78rem', fontWeight: 800, color: 'var(--accent-cyan)', fontFamily: 'ui-monospace, monospace', letterSpacing: '-0.02em', minWidth: '76px', flexShrink: 0 }}
@@ -168,7 +168,7 @@ export const CommentsView: React.FC<CommentsViewProps> = ({ comments, onRefresh 
                             background: 'rgba(99, 102, 241, 0.18)',
                             color: 'var(--accent-primary)',
                             border: '1px solid rgba(99, 102, 241, 0.38)',
-                            maxWidth: '280px',
+                            maxWidth: '260px',
                             overflow: 'hidden',
                             textOverflow: 'ellipsis',
                           }}
@@ -179,43 +179,19 @@ export const CommentsView: React.FC<CommentsViewProps> = ({ comments, onRefresh 
                       </>
                     );
                   })()}
-                </div>
 
-                {/* Sağ: Tarih (Üst satırın sağ tarafına kilitli, asla kaymaz) */}
-                <span className="admin-meta-text" style={{ display: 'flex', alignItems: 'center', gap: '3px', marginLeft: 'auto', flexShrink: 0, whiteSpace: 'nowrap' }}>
-                  <Clock size={11} /> {new Date(comment.created_at).toLocaleDateString(locale)}
-                </span>
-              </div>
-
-              {/* Kart Alt Satırı: Yazar & E-Posta (Sol) + Yorum Önizleme (Desktop) + Aksiyon Butonları (Sağ) */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <div className="ticket-subject-col" style={{ minWidth: 0 }}>
-                  <h3 className="admin-card-title" style={{
-                    marginBottom: '1px',
-                    lineHeight: 1.25,
-                    display: '-webkit-box',
-                    WebkitLineClamp: 2,
-                    WebkitBoxOrient: 'vertical',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    wordBreak: 'break-word'
-                  }}>
-                    {comment.author_name}
-                  </h3>
-                  <div className="admin-meta-text" style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                    {comment.author_email}
+                  <div className="admin-meta-text" style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', marginLeft: '4px', flexWrap: 'wrap' }}>
+                    <strong>{comment.author_name}</strong>
+                    <span>•</span>
+                    <span>{comment.author_email}</span>
+                    <span>•</span>
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '2px' }}>
+                      <Clock size={11} /> {new Date(comment.created_at).toLocaleDateString(locale)}
+                    </span>
                   </div>
                 </div>
 
-                {/* Yorum Önizleme (Sadece Masaüstü) */}
-                <div className="hidden-mobile" style={{ flex: 1, minWidth: 0 }}>
-                  <div className="ticket-message-preview">
-                    <span style={{ color: 'var(--text-muted)', marginRight: '4px' }}>💬</span>
-                    "{comment.content}"
-                  </div>
-                </div>
-
-                {/* Sağ: Aksiyon Butonları (Başlık ile aynı hizada kilitli) */}
+                {/* Sağ: Aksiyon Butonları */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginLeft: 'auto', flexShrink: 0 }}>
                   <button
                     className="admin-btn admin-btn-sm admin-btn-view"
@@ -256,23 +232,15 @@ export const CommentsView: React.FC<CommentsViewProps> = ({ comments, onRefresh 
                 </div>
               </div>
 
-              {/* Mobilde Kart Altına Tam Genişlikte 2 Satırlık Yorum Önizlemesi */}
-              <div className="visible-mobile ticket-message-preview" style={{
-                marginTop: '6px',
-                width: '100%',
-                maxHeight: '2.8em',
-                lineHeight: 1.35,
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-                wordBreak: 'break-word',
-                whiteSpace: 'normal',
-                WebkitLineClamp: 2,
-                WebkitBoxOrient: 'vertical',
-                display: '-webkit-box'
-              }}>
-                <span style={{ color: 'var(--text-muted)', marginRight: '4px' }}>💬</span>
+              {/* 2. Satır: Başlık (Yazarın Yorum Başlığı) */}
+              <h3 className="admin-card-title">
+                {comment.author_name} — Yorum
+              </h3>
+
+              {/* 3. Satır: Yorum İçerik Açıklaması (Tam genişlik, kutusuz, standart line-clamp-2) */}
+              <p className="admin-card-desc line-clamp-2">
                 "{comment.content}"
-              </div>
+              </p>
             </div>
           ))}
         </div>

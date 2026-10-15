@@ -1,6 +1,19 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 🟢 Son Güncelleme [15.10.2026 - 10:35] — KART AÇIKLAMALARI (LINE-CLAMP) İZOLASYONU & 3 KATMANLI KART STANDARTLAŞMASI [*]
+* **Yapılan İşlem:**
+  1. **Line-Clamp İzolasyonu (`design-system.css`):**
+     - `.admin-card-desc` temel tipografi kuralından satır sınırlaması (`-webkit-line-clamp`, `max-height`) ayrıştırıldı; farklı kartların farklı satır ihtiyaçları için bağımsız `.line-clamp-1`, `.line-clamp-2`, `.line-clamp-3` yardımcı sınıfları eklendi.
+  2. **Blog Kartı Özet Metni (`PostCard.tsx`):**
+     - Özet metni `<p className="admin-card-desc line-clamp-2">` bağımsız sınıflarına bağlandı.
+  3. **Destek Talepleri ve Blog Yorumları 3 Katmanlı Standart Düzen (`TicketsView.tsx`, `CommentsView.tsx`):**
+     - Destek talepleri ve yorum kartlarındaki dar orta sütun, kutucuklu gri zemin (`rgba(255,255,255,0.03)`) ve çift mobil/desktop kod blokları kaldırıldı.
+     - Blog kartı ile 1:1 aynı 3 katmanlı hiyerarşiye kavuşturuldu (1. Satır: Rozetler/Tarih/Butonlar, 2. Satır: Başlık, 3. Satır: Tam genişlik `.admin-card-desc line-clamp-2`).
+     - Satır sayıları optimize edildi (`TicketsView.tsx`: 373 satır, `CommentsView.tsx`: 260 satır <= 450).
+* **Sonuçlar:** `npm run build` PASS (0 hata, 781 ms). Dosya satır sınırları korundu.
+* **Durum:** `DevAdmin` dalında çalışıldı, `main` korundu.
+
 ## 🟢 Son Güncelleme [15.10.2026 - 10:20] — MERKEZİ TASARIM SİSTEMİ & KART/BUTON STANDARTLAŞMASI [*]
 * **Yapılan İşlem:**
   1. **Merkezi Tasarım Sistemi Oluşturuldu (`design-system.css`):**

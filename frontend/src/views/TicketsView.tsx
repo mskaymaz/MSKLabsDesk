@@ -298,8 +298,8 @@ export const TicketsView: React.FC<TicketsViewProps> = ({
               style={{ cursor: 'pointer' }}
               title="Çift tıklayarak mesaj detayını okuyabilirsiniz"
             >
-              {/* Kart Üst Satırı: Bilet No + Rozetler (Sol) & Tarih (Sağ) */}
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px', marginBottom: '4px' }}>
+              {/* 1. Satır: Bilet No + Rozetler + Metaveriler (Sol) & İncele Butonu (Sağ) */}
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px', flexWrap: 'wrap' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap', minWidth: 0 }}>
                   <span style={{ fontSize: '0.78rem', fontWeight: 800, color: 'var(--accent-cyan)', fontFamily: 'ui-monospace, monospace', letterSpacing: '-0.02em', minWidth: '76px', flexShrink: 0 }}>
                     {ticket.id}
@@ -318,47 +318,23 @@ export const TicketsView: React.FC<TicketsViewProps> = ({
                       </>
                     );
                   })()}
-                </div>
 
-                {/* Sağ: Tarih (Üst satırın sağ tarafına kilitli) */}
-                <span className="admin-meta-text" style={{ display: 'flex', alignItems: 'center', gap: '3px', marginLeft: 'auto', flexShrink: 0, whiteSpace: 'nowrap' }}>
-                  <Clock size={11} /> {new Date(ticket.created_at).toLocaleDateString(locale)}
-                </span>
-              </div>
-
-              {/* Kart Alt Satırı: Konu & Gönderen (Sol) + Mesaj Önizleme (Desktop) + İncele Butonu (Sağ) */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <div className="ticket-subject-col" style={{ minWidth: 0 }}>
-                  <h3 className="admin-card-title" style={{
-                    marginBottom: '1px',
-                    lineHeight: 1.25,
-                    display: '-webkit-box',
-                    WebkitLineClamp: 2,
-                    WebkitBoxOrient: 'vertical',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    wordBreak: 'break-word'
-                  }}>
-                    {ticket.subject}
-                  </h3>
-                  <div className="admin-meta-text" style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                    <strong>{ticket.sender_name}</strong> • {ticket.sender_email}
+                  <div className="admin-meta-text" style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', marginLeft: '4px', flexWrap: 'wrap' }}>
+                    <strong>{ticket.sender_name}</strong>
+                    <span>•</span>
+                    <span>{ticket.sender_email}</span>
                     {ticket.email_status === 'invalid' && (
-                      <span style={{ color: '#ef4444', fontWeight: 700, marginLeft: '6px' }} title="E-Posta Doğrulanamadı (Geçersiz Sunucu)">
+                      <span style={{ color: '#ef4444', fontWeight: 700, marginLeft: '4px' }} title="E-Posta Doğrulanamadı (Geçersiz Sunucu)">
                         ⚠️ Geçersiz E-Posta
                       </span>
                     )}
+                    <span>•</span>
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '2px' }}>
+                      <Clock size={11} /> {new Date(ticket.created_at).toLocaleDateString(locale)}
+                    </span>
                   </div>
                 </div>
 
-                <div className="hidden-mobile" style={{ flex: 1, minWidth: 0 }}>
-                  <div className="ticket-message-preview">
-                    <span style={{ color: 'var(--text-muted)', marginRight: '4px' }}>💬</span>
-                    {ticket.message_content || (ticket as any).content || '(İçerik belirtilmemiş)'}
-                  </div>
-                </div>
-
-                {/* Sağ: İncele Butonu (Başlık ile aynı hizada kilitli) */}
                 <button
                   className="admin-btn admin-btn-sm admin-btn-view"
                   style={{ marginLeft: 'auto', flexShrink: 0 }}
@@ -369,23 +345,15 @@ export const TicketsView: React.FC<TicketsViewProps> = ({
                 </button>
               </div>
 
-              {/* Mobilde Kart Altına Tam Genişlikte 2 Satırlık Mesaj Önizlemesi */}
-              <div className="visible-mobile ticket-message-preview" style={{
-                marginTop: '6px',
-                width: '100%',
-                maxHeight: '2.8em',
-                lineHeight: 1.35,
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-                wordBreak: 'break-word',
-                whiteSpace: 'normal',
-                WebkitLineClamp: 2,
-                WebkitBoxOrient: 'vertical',
-                display: '-webkit-box'
-              }}>
-                <span style={{ color: 'var(--text-muted)', marginRight: '4px' }}>💬</span>
+              {/* 2. Satır: Konu Başlığı */}
+              <h3 className="admin-card-title">
+                {ticket.subject}
+              </h3>
+
+              {/* 3. Satır: Mesaj Açıklaması (Tam genişlik, kutusuz, standart line-clamp-2) */}
+              <p className="admin-card-desc line-clamp-2">
                 {ticket.message_content || (ticket as any).content || '(İçerik belirtilmemiş)'}
-              </div>
+              </p>
             </div>
           ))}
         </div>
