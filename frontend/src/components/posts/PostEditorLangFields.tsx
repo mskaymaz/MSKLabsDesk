@@ -43,7 +43,7 @@ export const PostEditorLangFields: React.FC<PostEditorLangFieldsProps> = ({
           }}
         />
         <RichTextEditor
-          label="Türkçe İçerik (TipTap + XSS Dezenfeksiyonu)"
+          label="Türkçe İçerik"
           value={formData.content_tr}
           onChange={(val) => onContentChange(val, 'tr')}
         />
@@ -117,6 +117,7 @@ export const PostEditorLangFields: React.FC<PostEditorLangFieldsProps> = ({
         label="المحتوى باللغة العربية"
         value={formData.content_ar}
         onChange={(val) => onContentChange(val, 'ar')}
+        dir="rtl"
       />
     </div>
   );

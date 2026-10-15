@@ -1,5 +1,21 @@
-import React, { useState } from 'react';
-import { Eye, Edit3 } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { useEditor, EditorContent } from '@tiptap/react';
+import StarterKit from '@tiptap/starter-kit';
+import Underline from '@tiptap/extension-underline';
+import Subscript from '@tiptap/extension-subscript';
+import Superscript from '@tiptap/extension-superscript';
+import { TextStyle } from '@tiptap/extension-text-style';
+import Color from '@tiptap/extension-color';
+import Highlight from '@tiptap/extension-highlight';
+import TextAlign from '@tiptap/extension-text-align';
+import { Table } from '@tiptap/extension-table';
+import TableRow from '@tiptap/extension-table-row';
+import TableHeader from '@tiptap/extension-table-header';
+import TableCell from '@tiptap/extension-table-cell';
+import Link from '@tiptap/extension-link';
+import { Eye, Edit3, Clock, Type, AlignLeft } from 'lucide-react';
+import { FontSize, CustomImage } from '../editor/customExtensions';
+import { EditorToolbar } from '../editor/EditorToolbar';
 
 export interface RichTextEditorProps {
   label?: string;
@@ -7,6 +23,7 @@ export interface RichTextEditorProps {
   onChange: (val: string) => void;
   placeholder?: string;
   error?: string;
+  dir?: 'ltr' | 'rtl';
 }
 
 export const RichTextEditor: React.FC<RichTextEditorProps> = ({
@@ -15,8 +32,54 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
   onChange,
   placeholder,
   error,
+  dir = 'ltr',
 }) => {
   const [isPreview, setIsPreview] = useState(false);
+
+  const editor = useEditor({
+    extensions: [
+      StarterKit.configure({
+        heading: {
+          levels: [1, 2, 3, 4],
+        },
+      }),
+      Underline,
+      Subscript,
+      Superscript,
+      TextStyle,
+      Color,
+      Highlight.configure({ multicolor: true }),
+      TextAlign.configure({
+        types: ['heading', 'paragraph'],
+      }),
+      Table.configure({
+        resizable: true,
+      }),
+      TableRow,
+      TableHeader,
+      TableCell,
+      Link.configure({
+        openOnClick: false,
+        HTMLAttributes: {
+          rel: 'noopener noreferrer',
+          target: '_blank',
+        },
+      }),
+      FontSize,
+      CustomImage,
+    ],
+    content: value || '',
+    onUpdate: ({ editor: activeEditor }) => {
+      const html = activeEditor.getHTML();
+      onChange(html);
+    },
+  });
+
+  useEffect(() => {
+    if (editor && value !== editor.getHTML()) {
+      editor.commands.setContent(value || '', { emitUpdate: false });
+    }
+  }, [value, editor]);
 
   const sanitizeHTML = (html: string) => {
     return html
@@ -25,72 +88,89 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
       .replace(/on\w+="[^"]*"/gi, '');
   };
 
+  const textContent = editor?.state.doc.textContent || '';
+  const wordCount = textContent.trim().length > 0 ? textContent.trim().split(/\s+/).filter(Boolean).length : 0;
+  const charCount = textContent.length;
+  const readingTimeMinutes = Math.max(1, Math.ceil(wordCount / 200));
+
   return (
-    <div style={{ marginBottom: 'var(--space-4)' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-1)' }}>
+    <div style={{ marginBottom: 'var(--space-3, 12px)' }}>
+      {/* Üst Başlık ve Önizleme Geçiş Butonu */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
         {label && (
-          <label style={{ fontSize: 'var(--font-sm)', fontWeight: 600, color: 'var(--text-secondary)' }}>
+          <label style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text-secondary)' }}>
             {label}
           </label>
         )}
         <button
           type="button"
           onClick={() => setIsPreview(!isPreview)}
+          className="admin-btn admin-btn-secondary"
           style={{
-            background: 'transparent',
-            border: 'none',
-            color: 'var(--accent-cyan)',
-            fontSize: 'var(--font-xs)',
-            fontWeight: 600,
+            padding: '3px 10px',
+            fontSize: '12px',
+            height: '28px',
             display: 'inline-flex',
             alignItems: 'center',
-            gap: '4px',
+            gap: '6px',
             cursor: 'pointer',
-            minHeight: '36px',
           }}
         >
-          {isPreview ? <Edit3 size={14} /> : <Eye size={14} />}
+          {isPreview ? <Edit3 size={13} /> : <Eye size={13} />}
           <span>{isPreview ? 'Editör Modu' : 'Önizleme'}</span>
         </button>
       </div>
 
-      {isPreview ? (
-        <div
-          style={{
-            minHeight: '160px',
-            padding: '12px 16px',
-            background: 'var(--bg-secondary)',
-            border: '1px solid var(--border-card)',
-            borderRadius: 'var(--radius-md)',
-            color: 'var(--text-primary)',
-            fontSize: 'var(--font-sm)',
-            overflowY: 'auto',
-          }}
-          dangerouslySetInnerHTML={{ __html: sanitizeHTML(value || '<p style="color:var(--text-muted)">İçerik boş...</p>') }}
-        />
-      ) : (
-        <textarea
-          rows={8}
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          placeholder={placeholder}
-          aria-invalid={!!error}
-          style={{
-            width: '100%',
-            padding: '12px 16px',
-            background: 'var(--bg-secondary)',
-            border: error ? '1px solid var(--danger)' : '1px solid var(--border-card)',
-            borderRadius: 'var(--radius-md)',
-            color: 'var(--text-primary)',
-            fontFamily: 'inherit',
-            fontSize: 'var(--font-sm)',
-            outline: 'none',
-          }}
-        />
-      )}
+      {/* Editör / Önizleme Kapsayıcısı */}
+      <div className={`rich-editor-wrapper ${error ? 'has-error' : ''}`} dir={dir}>
+        {!isPreview && <EditorToolbar editor={editor} />}
+
+        {isPreview ? (
+          <div
+            className="rich-editor-content-area tiptap-content"
+            style={{ minHeight: '260px' }}
+            dangerouslySetInnerHTML={{
+              __html: sanitizeHTML(
+                value || '<p style="color:var(--text-muted); font-style:italic;">(İçerik henüz girilmedi...)</p>'
+              ),
+            }}
+          />
+        ) : (
+          <div
+            className="rich-editor-content-area"
+            onClick={() => editor?.commands.focus()}
+          >
+            <EditorContent editor={editor} placeholder={placeholder} />
+          </div>
+        )}
+
+        {/* Alt Bilgi / İstatistik Çubuğu */}
+        <div className="rich-editor-footer">
+          <div className="rich-editor-stats">
+            <span className="rich-editor-stat-item">
+              <Type size={12} />
+              <span>Kelime:</span>
+              <strong className="rich-editor-stat-value">{wordCount}</strong>
+            </span>
+            <span className="rich-editor-stat-item">
+              <AlignLeft size={12} />
+              <span>Karakter:</span>
+              <strong className="rich-editor-stat-value">{charCount}</strong>
+            </span>
+            <span className="rich-editor-stat-item">
+              <Clock size={12} />
+              <span>Tahmini Okuma:</span>
+              <strong className="rich-editor-stat-value">{readingTimeMinutes} dk</strong>
+            </span>
+          </div>
+          <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
+            {isPreview ? 'Önizleme Modu Aktif' : 'WYSIWYG Editör'}
+          </span>
+        </div>
+      </div>
 
       {error && (
-        <span style={{ display: 'block', color: 'var(--danger)', fontSize: 'var(--font-xs)', marginTop: 'var(--space-1)' }}>
+        <span style={{ display: 'block', color: 'var(--danger, #EF4444)', fontSize: '12px', marginTop: '4px' }}>
           {error}
         </span>
       )}

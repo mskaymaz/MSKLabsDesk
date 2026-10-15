@@ -1,7 +1,32 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
-## 🟢 Son Güncelleme [15.10.2026 - 12:35] — CANLI WEB ÖNİZLEME KOYU/AÇIK TEMA SİMÜLATÖRÜ, STANDART TR/EN/AR & KURAL GÜNCELLEMESİ [*]
+## 🟢 Son Güncelleme [15.10.2026 - 14:20] — WORD STİLİ GÖRSEL WYSIWYG BLOG EDİTÖRÜ (TIPTAP), TABLO STÜDYOSU, METİN SARMALI GÖRSELLER VE CANLI İSTATİSTİKLER [*]
+* **Yapılan İşlem:**
+  1. **Word Benzeri Görsel WYSIWYG Editör Mimarisi (`RichTextEditor.tsx`, `EditorToolbar.tsx`, `customExtensions.ts`):**
+     - Basit HTML textarea alanı yerine, TipTap motoru ve zengin araç çubuğuna (Word Ribbon şeridi) sahip modüler bir editör geliştirildi.
+     - TipTap React ve PM çekirdekleri (`@tiptap/react`, `@tiptap/pm`, `@tiptap/starter-kit`, `underline`, `subscript`, `superscript`, `text-style`, `color`, `highlight`, `text-align`, `table`, `link`) kuruldu.
+  2. **Gelişmiş Tipografi ve Biçimlendirme Araçları (`EditorToolbar.tsx`, `customExtensions.ts`):**
+     - Punto seçimi (12px - 32px), Kalın, İtalik, Altı Çizgili, Üstü Çizgili, Alt Simge, Üst Simge.
+     - Metin Rengi ve Highlighter (Zemin Vurgusu) paletleri, Biçimlendirmeyi Temizleme butonu.
+     - Paragraf / H1-H4 başlık hiyerarşisi, sola/ortaya/sağa/iki yana yaslama (justify), sıralı/sırasız listeler, alıntı bloğu, kod bloğu ve yatay ayırıcı çizgi araçları.
+  3. **Word Tablo Stüdyosu Modalı (`TableModal.tsx`):**
+     - $N \times M$ boyutunda tablo oluşturma, başlık satırı desteği.
+     - Tabloya satır/sütun ekleme/silme, hücre birleştirme (`mergeCells`), hücre bölme (`splitCell`), hücre zemin rengi boyama ve tabloyu silme araçları.
+  4. **Word Tarzı Metin Sarmalı Görseller (`ImageModal.tsx`, `customExtensions.ts`, `editor.css`):**
+     - Metni saran sol (`float: left`), metni saran sağ (`float: right`), satır açan blok ortalı (`display: block; margin: auto`) ve tam genişlik (`width: 100%`) yerleşimleri.
+     - Genişlik boyutlandırma desteği (%25 - %100).
+  5. **Bağlantı Modalı (`LinkModal.tsx`):**
+     - Güvenli bağlantı (`rel="noopener noreferrer"`, `target="_blank"`) ekleme ve kaldırma.
+  6. **Canlı Doküman İstatistikleri ve Çok Dilli Uyum (`RichTextEditor.tsx`, `PostEditorLangFields.tsx`, `PostPreviewModal.tsx`):**
+     - Alt çubukta anlık Kelime Sayısı, Karakter Sayısı ve Tahmini Okuma Süresi (dakika) sayacı.
+     - Editör / Canlı Önizleme modu geçişi.
+     - TR, EN ve Arapça (`dir="rtl"`) tam uyumluluk; `PostPreviewModal`'a `.tiptap-content` sınıfı bağlanarak önizlemede tabloların ve sarmalanan görsellerin birebir görünmesi sağlandı.
+  7. **Modülerlik & Satır Sınırı:**
+     - Tüm dosyalar modüler tutuldu (`EditorToolbar.tsx`: 364 satır, `RichTextEditor.tsx`: 168 satır, `TableModal.tsx`: 249 satır, `ImageModal.tsx`: 217 satır, `LinkModal.tsx`: 134 satır, `editor.css`: 204 satır) ve `<= 400` satır kuralına tam uyuldu.
+* **Sonuçlar:** `npm run build` PASS (0 hata, 1.41s).
+* **Durum:** `DevAdmin` dalında çalışıldı, `main` korundu.
+
 * **Yapılan İşlem:**
   1. **Dil Etiketleri Kuralı (`AGENTS.md`):**
      - Kullanıcı talimatı doğrultusunda Section 5'e bağlayıcı kural eklendi: Sistemdeki hiçbir ekranda bayrak emojileri veya karmaşık ülke kodları kullanılmayacak, kesin olarak standart **TR**, **EN**, **AR** formatı uygulanacak.

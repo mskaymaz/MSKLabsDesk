@@ -1,0 +1,288 @@
+/* ==========================================================================
+   MSKLabsDesk — Zengin Metin Editörü (TipTap / Word Stili) Stilleri
+   Editör gövdesi, tablolar, sarmalanan görseller ve durum çubuğu kuralları.
+   ========================================================================== */
+
+.rich-editor-wrapper {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border-card);
+  border-radius: var(--radius-md, 8px);
+  background: var(--bg-card);
+  overflow: hidden;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.rich-editor-wrapper:focus-within {
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 1px rgba(99, 102, 241, 0.25);
+}
+
+.rich-editor-wrapper.has-error {
+  border-color: var(--danger, #EF4444);
+}
+
+/* Editör İçerik Gövdesi */
+.rich-editor-content-area {
+  min-height: 280px;
+  max-height: 520px;
+  overflow-y: auto;
+  padding: 16px 20px;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  cursor: text;
+}
+
+/* TipTap Prose Tipografi (Hem Editör Hem Canlı Önizleme) */
+.tiptap,
+.tiptap-content {
+  outline: none;
+  font-family: inherit;
+  font-size: 15px;
+  line-height: 1.75;
+  color: var(--text-primary);
+  word-break: break-word;
+}
+
+.tiptap::after,
+.tiptap-content::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* Paragraf & Başlıklar */
+.tiptap p,
+.tiptap-content p {
+  margin: 0 0 12px 0;
+}
+
+.tiptap h1,
+.tiptap-content h1 {
+  font-size: 1.85rem;
+  font-weight: 800;
+  line-height: 1.25;
+  margin: 20px 0 10px 0;
+  color: var(--text-primary);
+}
+
+.tiptap h2,
+.tiptap-content h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.3;
+  margin: 18px 0 8px 0;
+  color: var(--text-primary);
+}
+
+.tiptap h3,
+.tiptap-content h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.35;
+  margin: 14px 0 6px 0;
+  color: var(--text-primary);
+}
+
+.tiptap h4,
+.tiptap-content h4 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  line-height: 1.4;
+  margin: 12px 0 4px 0;
+  color: var(--text-primary);
+}
+
+/* Listeler */
+.tiptap ul,
+.tiptap ol,
+.tiptap-content ul,
+.tiptap-content ol {
+  padding-left: 26px;
+  margin: 8px 0 14px 0;
+}
+
+.tiptap li,
+.tiptap-content li {
+  margin-bottom: 4px;
+}
+
+/* Alıntı (Blockquote) */
+.tiptap blockquote,
+.tiptap-content blockquote {
+  border-left: 3px solid var(--accent-primary);
+  padding: 10px 16px;
+  margin: 16px 0;
+  color: var(--text-secondary);
+  font-style: italic;
+  background: rgba(99, 102, 241, 0.05);
+  border-radius: 0 6px 6px 0;
+}
+
+[dir="rtl"] .tiptap blockquote,
+[dir="rtl"] .tiptap-content blockquote {
+  border-left: none;
+  border-right: 3px solid var(--accent-primary);
+  border-radius: 6px 0 0 6px;
+}
+
+/* Kod Blokları & Satır İçi Kod */
+.tiptap pre,
+.tiptap-content pre {
+  background: #0B0F19;
+  border: 1px solid var(--border-subtle);
+  color: #38BDF8;
+  padding: 12px 16px;
+  border-radius: 6px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 13px;
+  line-height: 1.5;
+  overflow-x: auto;
+  margin: 14px 0;
+}
+
+.tiptap code,
+.tiptap-content code {
+  background: rgba(255, 255, 255, 0.08);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.88em;
+  font-family: monospace;
+}
+
+/* Ayırıcı Çizgi */
+.tiptap hr,
+.tiptap-content hr {
+  border: none;
+  border-top: 1px solid var(--border-card);
+  margin: 24px 0;
+}
+
+/* Bağlantılar */
+.tiptap a,
+.tiptap-content a {
+  color: var(--accent-cyan);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+/* Word Tablo Stüdyosu */
+.tiptap table,
+.tiptap-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 18px 0;
+  table-layout: fixed;
+  overflow: hidden;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.tiptap th,
+.tiptap td,
+.tiptap-content th,
+.tiptap-content td {
+  min-width: 2em;
+  border: 1px solid var(--border-card);
+  padding: 8px 12px;
+  vertical-align: top;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.tiptap th,
+.tiptap-content th {
+  font-weight: 700;
+  text-align: left;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-primary);
+}
+
+[dir="rtl"] .tiptap th,
+[dir="rtl"] .tiptap-content th {
+  text-align: right;
+}
+
+.tiptap .selectedCell:after {
+  z-index: 2;
+  position: absolute;
+  content: "";
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background: rgba(99, 102, 241, 0.22);
+  pointer-events: none;
+}
+
+/* Word Tarzı Sarmalanan & Hizalanan Görseller */
+.tiptap img,
+.tiptap-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: transform 0.2s ease;
+}
+
+.tiptap img[data-layout="left"],
+.tiptap-content img[data-layout="left"] {
+  float: left;
+  margin: 6px 18px 14px 0;
+  max-width: 48%;
+}
+
+.tiptap img[data-layout="right"],
+.tiptap-content img[data-layout="right"] {
+  float: right;
+  margin: 6px 0 14px 18px;
+  max-width: 48%;
+}
+
+.tiptap img[data-layout="center"],
+.tiptap-content img[data-layout="center"] {
+  display: block;
+  margin: 18px auto;
+  max-width: 100%;
+  clear: both;
+}
+
+.tiptap img[data-layout="full"],
+.tiptap-content img[data-layout="full"] {
+  display: block;
+  width: 100%;
+  margin: 18px auto;
+  clear: both;
+}
+
+/* Editör Durum Çubuğu (Footer) */
+.rich-editor-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 14px;
+  background: var(--bg-card);
+  border-top: 1px solid var(--border-subtle);
+  font-size: 11px;
+  color: var(--text-secondary);
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.rich-editor-stats {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.rich-editor-stat-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.rich-editor-stat-value {
+  font-weight: 700;
+  color: var(--accent-cyan);
+}

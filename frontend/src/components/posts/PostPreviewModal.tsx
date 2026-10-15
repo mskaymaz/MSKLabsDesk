@@ -322,6 +322,7 @@ export const PostPreviewModal: React.FC<PostPreviewModalProps> = ({
           )}
 
           <div
+            className="tiptap-content"
             style={{
               fontSize: '0.95rem',
               lineHeight: 1.7,

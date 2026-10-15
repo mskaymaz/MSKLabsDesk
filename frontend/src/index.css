@@ -1,6 +1,7 @@
 @import './styles/tokens.css';
 @import './styles/design-system.css';
 @import './styles/responsive.css';
+@import './styles/editor.css';
 @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap');
 
 :root {
