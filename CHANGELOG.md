@@ -1,6 +1,14 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [15.10.2026 - 10:53] - Özet Ekranı Metrik Kartlarının Minimizasyonu ve Kibar Sayaç Mimarisi
+- `frontend/src/views/DashboardView.tsx`:
+  - 4 adet üst metrik kartındaki kaba 24px ikon kutuları tamamen kaldırıldı; dikey dolgu (padding) 24px'ten 8px 12px'e (yarıdan fazlası) indirildi.
+  - Kaba duran `2rem` (32px) 800 weight devasa sayaç fontu yerine `1.35rem` 700 weight kibar tipografiye geçildi.
+  - 4. Karttaki anlamsız ve tek başına duran "Duyuruyu Gönder" karmaşası giderildi; diğer 3 kartla aynı hiyerarşide (Üst: "Toplu E-Bülten" başlığı ve abone rozeti, Alt: kibar "Duyuru Gönder →" eylem butonu ve bülten açıklaması) yapılandırıldı.
+  - Kullanılmayan Lucide ikon importları (`Inbox`, `MessageSquare`, `Users`, `Send`) temizlendi.
+- Yalnızca `DevAdmin` dalında çalışıldı, `main` korundu.
+
 ## [15.10.2026 - 10:48] - Baş Harfi Büyük (Title Case) Rozet Standardı ve Tüm Admin Ekranlarının Tasarım Sistemine Bağlanması
 - `frontend/src/styles/design-system.css`:
   - `.admin-badge` sınıfındaki `text-transform: uppercase;` ve `letter-spacing: 0.04em;` kaldırıldı; tüm rozet ve etiketlerin doğal Baş Harfi Büyük (Title Case) olarak görünmesi sağlandı.

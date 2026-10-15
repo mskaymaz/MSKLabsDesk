@@ -2,13 +2,9 @@ import React from 'react';
 import type { Ticket, CommentItem, Subscriber } from '../types';
 import { useTranslation } from '../context/I18nContext';
 import { 
-  Inbox, 
-  MessageSquare, 
-  Users, 
   Sparkles, 
   Clock, 
-  ArrowRight,
-  Send
+  ArrowRight
 } from 'lucide-react';
 import type { TabType } from '../components/Sidebar';
 
@@ -49,64 +45,135 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
       </div>
 
       {/* Metric Cards Grid */}
-      <div className="dashboard-metrics-grid">
-        <div className="glass-card glass-card-hover" onClick={() => onNavigate('tickets')} style={{ cursor: 'pointer' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-            <div>
-              <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', fontWeight: 600 }}>{t('dashboard.totalTickets')}</span>
-              <h3 style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--text-primary)', marginTop: '4px' }}>{pendingTickets.length}</h3>
-            </div>
-            <div style={{ padding: '10px', background: 'rgba(99, 102, 241, 0.15)', borderRadius: '12px', color: 'var(--accent-primary)' }}>
-              <Inbox size={24} />
-            </div>
+      <div className="dashboard-metrics-grid" style={{ gap: '10px', marginBottom: '16px' }}>
+        {/* 1. Destek Talepleri */}
+        <div
+          className="admin-list-card"
+          onClick={() => onNavigate('tickets')}
+          style={{
+            cursor: 'pointer',
+            padding: '8px 12px',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+            gap: '4px',
+            minWidth: 0,
+          }}
+        >
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <span style={{ fontSize: '0.76rem', color: 'var(--text-secondary)', fontWeight: 500 }}>
+              Bekleyen Talepler
+            </span>
+            <span className="admin-badge admin-badge-counter">
+              {tickets.length} Toplam
+            </span>
           </div>
-          <div style={{ marginTop: '12px', fontSize: '0.78rem', color: 'var(--accent-cyan)', fontWeight: 600 }}>
-            {t('tickets.count', { count: tickets.length })}
-          </div>
-        </div>
-
-        <div className="glass-card glass-card-hover" onClick={() => onNavigate('comments')} style={{ cursor: 'pointer' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-            <div>
-              <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', fontWeight: 600 }}>{t('dashboard.pendingComments')}</span>
-              <h3 style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--text-primary)', marginTop: '4px' }}>{pendingComments.length}</h3>
-            </div>
-            <div style={{ padding: '10px', background: 'rgba(245, 158, 11, 0.15)', borderRadius: '12px', color: 'var(--accent-amber)' }}>
-              <MessageSquare size={24} />
-            </div>
-          </div>
-          <div style={{ marginTop: '12px', fontSize: '0.78rem', color: 'var(--text-muted)', fontWeight: 600 }}>
-            {t('comments.pendingCount', { count: comments.length })}
-          </div>
-        </div>
-
-        <div className="glass-card glass-card-hover" onClick={() => onNavigate('subscribers')} style={{ cursor: 'pointer' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-            <div>
-              <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', fontWeight: 600 }}>{t('dashboard.totalSubscribers')}</span>
-              <h3 style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--text-primary)', marginTop: '4px' }}>{subscribers.length}</h3>
-            </div>
-            <div style={{ padding: '10px', background: 'rgba(16, 185, 129, 0.15)', borderRadius: '12px', color: 'var(--accent-emerald)' }}>
-              <Users size={24} />
-            </div>
-          </div>
-          <div style={{ marginTop: '12px', fontSize: '0.78rem', color: 'var(--accent-emerald)', fontWeight: 600 }}>
-            {t('subscribers.title')}
+          <div style={{ display: 'flex', alignItems: 'baseline', gap: '6px' }}>
+            <span style={{ fontSize: '1.35rem', fontWeight: 700, color: 'var(--text-primary)', lineHeight: 1 }}>
+              {pendingTickets.length}
+            </span>
+            <span style={{ fontSize: '0.70rem', color: 'var(--accent-cyan)' }}>
+              incelenmeyi bekliyor
+            </span>
           </div>
         </div>
 
-        <div className="glass-card glass-card-hover" onClick={() => onNavigate('broadcast')} style={{ cursor: 'pointer' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-            <div>
-              <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', fontWeight: 600 }}>{t('broadcast.broadcastTitle')}</span>
-              <h3 style={{ fontSize: '1.2rem', fontWeight: 700, color: 'var(--text-primary)', marginTop: '8px' }}>{t('broadcast.sendBroadcast')}</h3>
-            </div>
-            <div style={{ padding: '10px', background: 'rgba(139, 92, 246, 0.15)', borderRadius: '12px', color: 'var(--accent-secondary)' }}>
-              <Send size={24} />
-            </div>
+        {/* 2. Blog Yorumları */}
+        <div
+          className="admin-list-card"
+          onClick={() => onNavigate('comments')}
+          style={{
+            cursor: 'pointer',
+            padding: '8px 12px',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+            gap: '4px',
+            minWidth: 0,
+          }}
+        >
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <span style={{ fontSize: '0.76rem', color: 'var(--text-secondary)', fontWeight: 500 }}>
+              Bekleyen Yorumlar
+            </span>
+            <span className="admin-badge admin-badge-counter">
+              {comments.length} Toplam
+            </span>
           </div>
-          <div style={{ marginTop: '12px', fontSize: '0.78rem', color: 'var(--text-secondary)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '4px' }}>
-            {t('common.view')} <ArrowRight size={14} />
+          <div style={{ display: 'flex', alignItems: 'baseline', gap: '6px' }}>
+            <span style={{ fontSize: '1.35rem', fontWeight: 700, color: 'var(--text-primary)', lineHeight: 1 }}>
+              {pendingComments.length}
+            </span>
+            <span style={{ fontSize: '0.70rem', color: 'var(--accent-amber)' }}>
+              onay bekliyor
+            </span>
+          </div>
+        </div>
+
+        {/* 3. E-Bülten Aboneleri */}
+        <div
+          className="admin-list-card"
+          onClick={() => onNavigate('subscribers')}
+          style={{
+            cursor: 'pointer',
+            padding: '8px 12px',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+            gap: '4px',
+            minWidth: 0,
+          }}
+        >
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <span style={{ fontSize: '0.76rem', color: 'var(--text-secondary)', fontWeight: 500 }}>
+              Kayıtlı Aboneler
+            </span>
+            <span className="admin-badge admin-badge-counter">
+              {subscribers.filter((s) => s.is_verified).length} Doğrulanmış
+            </span>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'baseline', gap: '6px' }}>
+            <span style={{ fontSize: '1.35rem', fontWeight: 700, color: 'var(--text-primary)', lineHeight: 1 }}>
+              {subscribers.length}
+            </span>
+            <span style={{ fontSize: '0.70rem', color: 'var(--accent-emerald)' }}>
+              aktif abone
+            </span>
+          </div>
+        </div>
+
+        {/* 4. Toplu E-Bülten Duyurusu */}
+        <div
+          className="admin-list-card"
+          onClick={() => onNavigate('broadcast')}
+          style={{
+            cursor: 'pointer',
+            padding: '8px 12px',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+            gap: '4px',
+            minWidth: 0,
+          }}
+        >
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <span style={{ fontSize: '0.76rem', color: 'var(--text-secondary)', fontWeight: 500 }}>
+              Toplu E-Bülten
+            </span>
+            <span className="admin-badge admin-badge-index">
+              {subscribers.length} Abone
+            </span>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <span
+              className="admin-btn admin-btn-sm admin-btn-primary"
+              style={{ height: '22px', fontSize: '0.72rem', padding: '0 8px', display: 'inline-flex', alignItems: 'center', gap: '4px' }}
+            >
+              Duyuru Gönder <ArrowRight size={11} />
+            </span>
+            <span style={{ fontSize: '0.70rem', color: 'var(--text-muted)' }}>
+              anlık bülten yayını
+            </span>
           </div>
         </div>
       </div>

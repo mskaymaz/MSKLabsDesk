@@ -1,6 +1,18 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 🟢 Son Güncelleme [15.10.2026 - 10:53] — ÖZET EKRANI METRİK KARTLARININ MİNİMİZASYONU & KİBAR SAYAÇ MİMARİSİ [*]
+* **Yapılan İşlem:**
+  1. **İkonların Kaldırılması ve Dolgu (Padding) Azaltımı (`DashboardView.tsx`):**
+     - Üstteki 4 metrik kartında gereksiz dikey yer kaplayan 24px ikon kutuları tamamen kaldırıldı.
+     - Dikey dolgu `padding: 24px` seviyesinden `padding: 8px 12px` seviyesine indirilerek kart yüksekliği ~120px'ten ~56px'e (tam yarı yarıya) çekildi.
+  2. **Sayaç Tipografisi & 4. Kart Hiyerarşi Düzenlemesi:**
+     - `2rem` 800 weight kaba sayaç fontu yerine `1.35rem` 700 weight kibar tipografiye geçildi; sayaç yanına küçük açıklama metinleri eklendi.
+     - 4. Karttaki uyumsuz "Duyuruyu Gönder" karmaşası giderildi; diğer kartlarla aynı yapıda ("Toplu E-Bülten" başlığı, abone rozeti ve kibar "Duyuru Gönder →" butonu) eşitlendi.
+  3. **Kod Temizliği:** Kullanılmayan Lucide ikon importları kaldırıldı; satır sayısı 279 satırda tutuldu.
+* **Sonuçlar:** `npm run build` PASS (0 hata, 574 ms).
+* **Durum:** `DevAdmin` dalında çalışıldı, `main` korundu.
+
 ## 🟢 Son Güncelleme [15.10.2026 - 10:48] — BAŞ HARFİ BÜYÜK (TITLE CASE) ROZETLER & TÜM ADMİN EKRANLARI STANDARTLAŞMASI [*]
 * **Yapılan İşlem:**
   1. **Title Case Rozet Standardı (`design-system.css`, `blogMeta.ts`, `PostCard.tsx`):**
