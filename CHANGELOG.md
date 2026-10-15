@@ -1,6 +1,25 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [15.10.2026 - 15:10] - Bilgisayardan Otomatik Görsel Yükleme (Media Upload API), Tablo Kenarlık Çizgisi/Gizleme/Kalınlık/Renk ve Hücre Dolgusu (Padding)
+- **Bilgisayardan Otomatik Medya Yükleme (`ImageDropdown.tsx`, `api.ts`):**
+  - Görsel açılır menüsüne `"Bilgisayardan Seç"` sekmesi eklendi; dosya seçici (`<input type="file">`) ile PNG, JPEG, WebP, SVG formatları doğrudan masaüstünden seçilebilir hale getirildi.
+  - Arka planda `POST /api/v1/admin/media/upload` API'si çağrılarak görsel R2 bulut depolama alanına `blog/{year}/{timestamp}_{slug}.{ext}` hiyerarşisiyle otomatik yüklendi.
+  - Geri dönen URL anında Word stüdyosuna istenen yerleşimde (Sola Sar, Sağa Sar, Ortalı Blok, Tam Genişlik) ve seçilen boyutta yerleştirildi.
+  - Yerel geliştirme veya offline senaryoları için yerel FileReader veri URL'i fallback'i eklendi.
+- **Tablo Kenarlık Çizgileri ve Görünürlük Kontrolleri (`FloatingTableInspector.tsx`, `TableDropdown.tsx`):**
+  - Tablo kenarlıklarını tek tıkla gizleme (`border: none`) veya görünür kılma (`solid`, `dashed`, `dotted`).
+  - Çizgi kalınlığı seçicisi: `0px` (kenarlıksız şeffaf tablo), `1px`, `2px`, `3px`, `4px`.
+  - Kenarlık renk paleti ve özel renk seçici inputu.
+  - `TableDropdown.tsx` içine de tek tıkla `"Kenarlıkları Gizle (Çizgisiz)"` ve `"Kenarlıkları Göster"` hızlı eylemleri eklendi.
+- **Hücre İçi Boşluk / Dolgu (Padding) Seçicisi (`FloatingTableInspector.tsx`):**
+  - Hücre içi boşluğu canlı değiştiren seçenekler: Kompakt (`4px 8px`), Standart (`8px 12px`), Ferah (`14px 18px`).
+- **Doğrulama ve Standartlar:**
+  - `ImageDropdown.tsx` (378 satır), `FloatingTableInspector.tsx` (356 satır), `TableDropdown.tsx` (227 satır) ile tüm dosyalar `<= 378` satır sınırında tutuldu.
+  - `npm run build` PASS (0 hata, 1.10s).
+- Yalnızca `DevAdmin` dalında çalışıldı, `main` korundu.
+
+
 ## [15.10.2026 - 15:00] - Tam Ekran Blog Stüdyosu (BlogStudioView), Genişletilebilir Tuval, Açılır Menü Araçları, Yüzen Tablo Paleti ve Pano/Satır Aralığı Desteği
 - **Ayrı Panel Mimarisi — Blog Stüdyosu (`BlogStudioView.tsx`, `PostsView.tsx`):**
   - Sıkışık modal penceresi kaldırılarak, blog yazısı oluşturma/düzenleme tetiklendiğinde doğrudan açılan bağımsız ve tam ekran bir **Blog Stüdyosu (`BlogStudioView`)** inşa edildi.

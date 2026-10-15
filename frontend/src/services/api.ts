@@ -313,5 +313,26 @@ export const api = {
     }
     return res.json();
   },
+
+  // Media Management (API-010)
+  async uploadMedia(file: File, altText?: string): Promise<{ success: boolean; data: { url: string; key: string } }> {
+    const token = localStorage.getItem('msk_admin_token');
+    const formData = new FormData();
+    formData.append('file', file);
+    if (altText) formData.append('altText', altText);
+
+    const res = await fetch(`${API_BASE}/v1/admin/media/upload`, {
+      method: 'POST',
+      headers: {
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+      body: formData,
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.error || 'Görsel yüklenemedi.');
+    }
+    return res.json();
+  },
 };
 

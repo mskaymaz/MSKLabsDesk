@@ -10,6 +10,8 @@ import {
   Split,
   Combine,
   Palette,
+  Square,
+  Maximize,
 } from 'lucide-react';
 
 interface FloatingTableInspectorProps {
@@ -36,6 +38,10 @@ export const FloatingTableInspector: React.FC<FloatingTableInspectorProps> = ({
 }) => {
   const [position, setPosition] = useState({ x: window.innerWidth - 320, y: 140 });
   const [isDragging, setIsDragging] = useState(false);
+  const [borderStyle, setBorderStyle] = useState<string>('solid');
+  const [borderWidth, setBorderWidth] = useState<string>('1px');
+  const [borderColor, setBorderColor] = useState<string>('var(--border-card)');
+
   const dragStartRef = useRef<{ startX: number; startY: number; posX: number; posY: number }>({
     startX: 0,
     startY: 0,
@@ -48,8 +54,8 @@ export const FloatingTableInspector: React.FC<FloatingTableInspectorProps> = ({
       if (!isDragging) return;
       const dx = e.clientX - dragStartRef.current.startX;
       const dy = e.clientY - dragStartRef.current.startY;
-      const newX = Math.max(10, Math.min(window.innerWidth - 300, dragStartRef.current.posX + dx));
-      const newY = Math.max(70, Math.min(window.innerHeight - 340, dragStartRef.current.posY + dy));
+      const newX = Math.max(10, Math.min(window.innerWidth - 310, dragStartRef.current.posX + dx));
+      const newY = Math.max(70, Math.min(window.innerHeight - 440, dragStartRef.current.posY + dy));
       setPosition({ x: newX, y: newY });
     };
 
@@ -85,6 +91,18 @@ export const FloatingTableInspector: React.FC<FloatingTableInspectorProps> = ({
     editor.chain().focus().setCellAttribute('style', `background-color: ${color}`).run();
   };
 
+  const handleApplyBorder = (s = borderStyle, w = borderWidth, c = borderColor) => {
+    setBorderStyle(s);
+    setBorderWidth(w);
+    setBorderColor(c);
+    const borderCss = s === 'none' || w === '0px' ? 'border: none;' : `border: ${w} ${s} ${c};`;
+    editor.chain().focus().setCellAttribute('style', borderCss).run();
+  };
+
+  const handleSetPadding = (pad: string) => {
+    editor.chain().focus().setCellAttribute('style', `padding: ${pad};`).run();
+  };
+
   const btnStyle: React.CSSProperties = {
     padding: '4px 8px',
     fontSize: '11px',
@@ -99,6 +117,20 @@ export const FloatingTableInspector: React.FC<FloatingTableInspectorProps> = ({
     gap: '4px',
   };
 
+  const miniBtnStyle = (active: boolean): React.CSSProperties => ({
+    padding: '2px 6px',
+    fontSize: '10px',
+    fontWeight: active ? 700 : 500,
+    border: '1px solid var(--border-card)',
+    borderRadius: '3px',
+    background: active ? 'var(--accent-primary)' : 'var(--bg-secondary)',
+    color: active ? '#FFFFFF' : 'var(--text-secondary)',
+    cursor: 'pointer',
+    flex: 1,
+    textAlign: 'center',
+    justifyContent: 'center',
+  });
+
   return (
     <aside
       aria-label="Yüzen Tablo Stüdyosu"
@@ -106,7 +138,8 @@ export const FloatingTableInspector: React.FC<FloatingTableInspectorProps> = ({
         position: 'fixed',
         left: `${position.x}px`,
         top: `${position.y}px`,
-        width: '280px',
+        width: '290px',
+        maxHeight: '85vh',
         background: 'var(--bg-card, #1F2937)',
         border: '1px solid var(--border-card-hover, rgba(99, 102, 241, 0.4))',
         borderRadius: '8px',
@@ -155,8 +188,8 @@ export const FloatingTableInspector: React.FC<FloatingTableInspectorProps> = ({
         </button>
       </div>
 
-      {/* Gövde / Araçlar */}
-      <div style={{ padding: '10px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+      {/* Gövde / Araçlar (Scrollable) */}
+      <div style={{ padding: '10px', display: 'flex', flexDirection: 'column', gap: '10px', overflowY: 'auto' }}>
         {!isTableActive ? (
           <div style={{ textAlign: 'center', padding: '12px 6px' }}>
             <p style={{ fontSize: '12px', color: 'var(--text-muted)', marginBottom: '8px' }}>
@@ -172,54 +205,47 @@ export const FloatingTableInspector: React.FC<FloatingTableInspectorProps> = ({
           </div>
         ) : (
           <>
-            {/* Satır İşlemleri */}
+            {/* Satır & Sütun İşlemleri */}
             <div>
               <span style={{ fontSize: '10px', fontWeight: 700, color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>
-                SATIR DÜZENLEME
+                SATIR & SÜTUN DÜZENİ
               </span>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4px', marginBottom: '4px' }}>
                 <button type="button" style={btnStyle} onClick={() => editor.chain().focus().addRowBefore().run()}>
-                  <Rows size={11} /> Üste Ekle
+                  <Rows size={11} /> Üste Satır
                 </button>
                 <button type="button" style={btnStyle} onClick={() => editor.chain().focus().addRowAfter().run()}>
-                  <Rows size={11} /> Alta Ekle
+                  <Rows size={11} /> Alta Satır
                 </button>
-              </div>
-              <button
-                type="button"
-                style={{ ...btnStyle, width: '100%', marginTop: '4px', color: 'var(--accent-rose)' }}
-                onClick={() => editor.chain().focus().deleteRow().run()}
-              >
-                <Trash2 size={11} /> Seçili Satırı Sil
-              </button>
-            </div>
-
-            {/* Sütun İşlemleri */}
-            <div>
-              <span style={{ fontSize: '10px', fontWeight: 700, color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>
-                SÜTUN DÜZENLEME
-              </span>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4px' }}>
                 <button type="button" style={btnStyle} onClick={() => editor.chain().focus().addColumnBefore().run()}>
-                  <Columns size={11} /> Sola Ekle
+                  <Columns size={11} /> Sola Sütun
                 </button>
                 <button type="button" style={btnStyle} onClick={() => editor.chain().focus().addColumnAfter().run()}>
-                  <Columns size={11} /> Sağa Ekle
+                  <Columns size={11} /> Sağa Sütun
                 </button>
               </div>
-              <button
-                type="button"
-                style={{ ...btnStyle, width: '100%', marginTop: '4px', color: 'var(--accent-rose)' }}
-                onClick={() => editor.chain().focus().deleteColumn().run()}
-              >
-                <Trash2 size={11} /> Seçili Sütunu Sil
-              </button>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4px' }}>
+                <button
+                  type="button"
+                  style={{ ...btnStyle, color: 'var(--accent-rose)' }}
+                  onClick={() => editor.chain().focus().deleteRow().run()}
+                >
+                  <Trash2 size={11} /> Satırı Sil
+                </button>
+                <button
+                  type="button"
+                  style={{ ...btnStyle, color: 'var(--accent-rose)' }}
+                  onClick={() => editor.chain().focus().deleteColumn().run()}
+                >
+                  <Trash2 size={11} /> Sütunu Sil
+                </button>
+              </div>
             </div>
 
             {/* Hücre Birleştirme / Bölme */}
             <div>
               <span style={{ fontSize: '10px', fontWeight: 700, color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>
-                HÜCRE İŞLEMLERİ
+                HÜCRE BİRLEŞTİRME & BÖLME
               </span>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4px' }}>
                 <button type="button" style={btnStyle} onClick={() => editor.chain().focus().mergeCells().run()}>
@@ -231,10 +257,80 @@ export const FloatingTableInspector: React.FC<FloatingTableInspectorProps> = ({
               </div>
             </div>
 
+            {/* Kenarlık Çizgileri & Görünürlük */}
+            <div>
+              <span style={{ fontSize: '10px', fontWeight: 700, color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '4px', marginBottom: '4px' }}>
+                <Square size={11} /> KENARLIK ÇİZGİSİ
+              </span>
+              {/* Çizgi Tipi */}
+              <div style={{ display: 'flex', gap: '3px', marginBottom: '4px' }}>
+                {[
+                  { label: 'Çizgili', value: 'solid' },
+                  { label: 'Gizli', value: 'none' },
+                  { label: 'Kesikli', value: 'dashed' },
+                  { label: 'Noktalı', value: 'dotted' },
+                ].map((s) => (
+                  <button
+                    key={s.value}
+                    type="button"
+                    style={miniBtnStyle(borderStyle === s.value)}
+                    onClick={() => handleApplyBorder(s.value, borderWidth, borderColor)}
+                  >
+                    {s.label}
+                  </button>
+                ))}
+              </div>
+              {/* Çizgi Kalınlığı & Renk */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                {['1px', '2px', '3px', '4px'].map((w) => (
+                  <button
+                    key={w}
+                    type="button"
+                    style={miniBtnStyle(borderWidth === w && borderStyle !== 'none')}
+                    onClick={() => handleApplyBorder(borderStyle === 'none' ? 'solid' : borderStyle, w, borderColor)}
+                  >
+                    {w}
+                  </button>
+                ))}
+                <label style={{ display: 'flex', alignItems: 'center', cursor: 'pointer', padding: '2px' }} title="Kenarlık Rengi">
+                  <Palette size={13} style={{ color: borderColor }} />
+                  <input
+                    type="color"
+                    defaultValue="#6366F1"
+                    onChange={(e) => handleApplyBorder(borderStyle, borderWidth, e.target.value)}
+                    style={{ opacity: 0, width: 0, height: 0 }}
+                  />
+                </label>
+              </div>
+            </div>
+
+            {/* Hücre Dolgusu (Padding) */}
+            <div>
+              <span style={{ fontSize: '10px', fontWeight: 700, color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '4px', marginBottom: '4px' }}>
+                <Maximize size={11} /> HÜCRE DOLGUSU (PADDING)
+              </span>
+              <div style={{ display: 'flex', gap: '3px' }}>
+                {[
+                  { label: 'Kompakt (4px)', value: '4px 8px' },
+                  { label: 'Standart (8px)', value: '8px 12px' },
+                  { label: 'Ferah (14px)', value: '14px 18px' },
+                ].map((p) => (
+                  <button
+                    key={p.value}
+                    type="button"
+                    style={miniBtnStyle(false)}
+                    onClick={() => handleSetPadding(p.value)}
+                  >
+                    {p.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
             {/* Hücre Zemin Rengi */}
             <div>
               <span style={{ fontSize: '10px', fontWeight: 700, color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '4px', marginBottom: '4px' }}>
-                <Palette size={11} /> HÜCRE DOLGUSU
+                <Palette size={11} /> HÜCRE ZEMİN DOLGUSU
               </span>
               <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap' }}>
                 {CELL_COLORS.map((c, i) => (

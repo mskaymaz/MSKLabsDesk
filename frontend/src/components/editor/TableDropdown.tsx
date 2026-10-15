@@ -9,6 +9,8 @@ import {
   Combine,
   Split,
   Move,
+  Eye,
+  EyeOff,
 } from 'lucide-react';
 
 interface TableDropdownProps {
@@ -175,6 +177,26 @@ export const TableDropdown: React.FC<TableDropdownProps> = ({ editor, onOpenFloa
                 }}
               >
                 <Split size={12} /> Hücreyi Böl
+              </button>
+              <button
+                type="button"
+                style={itemStyle}
+                onClick={() => {
+                  editor.chain().focus().setCellAttribute('style', 'border: none;').run();
+                  setIsOpen(false);
+                }}
+              >
+                <EyeOff size={12} /> Kenarlıkları Gizle (Çizgisiz)
+              </button>
+              <button
+                type="button"
+                style={itemStyle}
+                onClick={() => {
+                  editor.chain().focus().setCellAttribute('style', 'border: 1px solid var(--border-card);').run();
+                  setIsOpen(false);
+                }}
+              >
+                <Eye size={12} /> Kenarlıkları Göster (1px)
               </button>
               <button
                 type="button"

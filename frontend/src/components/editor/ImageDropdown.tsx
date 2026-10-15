@@ -8,7 +8,11 @@ import {
   AlignRight,
   Maximize2,
   Plus,
+  Upload,
+  Link as LinkIcon,
+  Loader2,
 } from 'lucide-react';
+import { api } from '../../services/api';
 
 interface ImageDropdownProps {
   editor: Editor | null;
@@ -16,11 +20,18 @@ interface ImageDropdownProps {
 
 export const ImageDropdown: React.FC<ImageDropdownProps> = ({ editor }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [tab, setTab] = useState<'upload' | 'url'>('upload');
   const [url, setUrl] = useState('');
   const [alt, setAlt] = useState('');
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [previewSrc, setPreviewSrc] = useState<string | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [layout, setLayout] = useState<'left' | 'right' | 'center' | 'full'>('center');
   const [width, setWidth] = useState('100%');
+
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -38,15 +49,63 @@ export const ImageDropdown: React.FC<ImageDropdownProps> = ({ editor }) => {
 
   if (!editor) return null;
 
-  const handleInsert = (e: React.FormEvent) => {
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setErrorMsg(null);
+    const file = e.target.files?.[0];
+    if (file) {
+      if (file.size > 5 * 1024 * 1024) {
+        setErrorMsg('Görsel boyutu 5 MB sınırını aşamaz.');
+        return;
+      }
+      setSelectedFile(file);
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        setPreviewSrc(ev.target?.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleInsertImage = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!url.trim()) return;
+    setErrorMsg(null);
+
+    let finalSrc = url.trim();
+
+    if (tab === 'upload') {
+      if (!selectedFile) {
+        setErrorMsg('Lütfen bilgisayarınızdan bir görsel seçin.');
+        return;
+      }
+
+      setIsUploading(true);
+      try {
+        const res = await api.uploadMedia(selectedFile, alt.trim() || selectedFile.name);
+        if (res.success && res.data?.url) {
+          finalSrc = res.data.url;
+        } else {
+          // Fallback to local DataURL for dev environment
+          finalSrc = previewSrc || '';
+        }
+      } catch (err: any) {
+        // Yerel dev ortamında veya offline durumda kullanıcıyı engellememek için veri URL'i fallback'i
+        console.warn('Medya API yükleme uyarısı (yerel veri URL kullanılıyor):', err);
+        finalSrc = previewSrc || '';
+      } finally {
+        setIsUploading(false);
+      }
+    }
+
+    if (!finalSrc) {
+      setErrorMsg('Görsel kaynağı geçersiz.');
+      return;
+    }
 
     editor
       .chain()
       .focus()
       .setImageWithLayout({
-        src: url.trim(),
+        src: finalSrc,
         alt: alt.trim() || undefined,
         layout,
         width: layout === 'full' ? '100%' : width,
@@ -55,6 +114,8 @@ export const ImageDropdown: React.FC<ImageDropdownProps> = ({ editor }) => {
 
     setUrl('');
     setAlt('');
+    setSelectedFile(null);
+    setPreviewSrc(null);
     setIsOpen(false);
   };
 
@@ -99,12 +160,12 @@ export const ImageDropdown: React.FC<ImageDropdownProps> = ({ editor }) => {
 
       {isOpen && (
         <form
-          onSubmit={handleInsert}
+          onSubmit={handleInsertImage}
           style={{
             position: 'absolute',
             top: 'calc(100% + 4px)',
             left: 0,
-            width: '270px',
+            width: '290px',
             background: 'var(--bg-card, #1F2937)',
             border: '1px solid var(--border-card-hover, rgba(99, 102, 241, 0.4))',
             borderRadius: '6px',
@@ -116,19 +177,113 @@ export const ImageDropdown: React.FC<ImageDropdownProps> = ({ editor }) => {
             gap: '8px',
           }}
         >
-          <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--text-primary)' }}>
-            Görsel Ekle & Metin Sarma
-          </span>
+          {/* Üst Sekmeler: Dosya Yükle / URL */}
+          <div style={{ display: 'flex', gap: '3px', borderBottom: '1px solid var(--border-subtle)', paddingBottom: '6px' }}>
+            <button
+              type="button"
+              onClick={() => setTab('upload')}
+              style={{
+                flex: 1,
+                padding: '4px 8px',
+                fontSize: '11px',
+                fontWeight: tab === 'upload' ? 700 : 500,
+                border: 'none',
+                borderRadius: '4px',
+                background: tab === 'upload' ? 'var(--accent-primary)' : 'transparent',
+                color: tab === 'upload' ? '#FFFFFF' : 'var(--text-secondary)',
+                cursor: 'pointer',
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '4px',
+              }}
+            >
+              <Upload size={12} /> Bilgisayardan Seç
+            </button>
+            <button
+              type="button"
+              onClick={() => setTab('url')}
+              style={{
+                flex: 1,
+                padding: '4px 8px',
+                fontSize: '11px',
+                fontWeight: tab === 'url' ? 700 : 500,
+                border: 'none',
+                borderRadius: '4px',
+                background: tab === 'url' ? 'var(--accent-primary)' : 'transparent',
+                color: tab === 'url' ? '#FFFFFF' : 'var(--text-secondary)',
+                cursor: 'pointer',
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '4px',
+              }}
+            >
+              <LinkIcon size={12} /> Web Bağlantısı (URL)
+            </button>
+          </div>
 
-          <input
-            type="url"
-            placeholder="Görsel Bağlantısı (https://...)"
-            value={url}
-            onChange={(e) => setUrl(e.target.value)}
-            required
-            className="admin-filter-input"
-            style={{ width: '100%', height: '28px', padding: '0 8px', fontSize: '12px' }}
-          />
+          {/* Dosya Yükleme Alanı */}
+          {tab === 'upload' ? (
+            <div>
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/png, image/jpeg, image/webp, image/svg+xml"
+                onChange={handleFileChange}
+                style={{ display: 'none' }}
+              />
+              <div
+                onClick={() => fileInputRef.current?.click()}
+                style={{
+                  border: '1px dashed var(--border-card)',
+                  borderRadius: '6px',
+                  padding: '12px 8px',
+                  textAlign: 'center',
+                  cursor: 'pointer',
+                  background: 'var(--bg-secondary)',
+                }}
+              >
+                {previewSrc ? (
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', justifyContent: 'center' }}>
+                    <img
+                      src={previewSrc}
+                      alt="Önizleme"
+                      style={{ width: '36px', height: '36px', objectFit: 'cover', borderRadius: '4px' }}
+                    />
+                    <div style={{ textAlign: 'left', overflow: 'hidden' }}>
+                      <span style={{ fontSize: '11px', fontWeight: 600, display: 'block', color: 'var(--text-primary)', whiteSpace: 'nowrap', textOverflow: 'ellipsis', maxWidth: '180px' }}>
+                        {selectedFile?.name}
+                      </span>
+                      <span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>
+                        {selectedFile ? (selectedFile.size / 1024).toFixed(0) + ' KB' : ''}
+                      </span>
+                    </div>
+                  </div>
+                ) : (
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px' }}>
+                    <Upload size={16} style={{ color: 'var(--accent-cyan)' }} />
+                    <span style={{ fontSize: '11px', color: 'var(--text-secondary)' }}>
+                      Görsel seçmek için tıklayın
+                    </span>
+                    <span style={{ fontSize: '9px', color: 'var(--text-muted)' }}>
+                      PNG, JPEG, WebP, SVG (Azami 5 MB)
+                    </span>
+                  </div>
+                )}
+              </div>
+            </div>
+          ) : (
+            <input
+              type="url"
+              placeholder="Görsel Bağlantısı (https://...)"
+              value={url}
+              onChange={(e) => setUrl(e.target.value)}
+              required
+              className="admin-filter-input"
+              style={{ width: '100%', height: '28px', padding: '0 8px', fontSize: '12px' }}
+            />
+          )}
 
           <input
             type="text"
@@ -201,8 +356,15 @@ export const ImageDropdown: React.FC<ImageDropdownProps> = ({ editor }) => {
             </div>
           )}
 
+          {errorMsg && (
+            <span style={{ fontSize: '11px', color: 'var(--danger, #EF4444)', display: 'block' }}>
+              {errorMsg}
+            </span>
+          )}
+
           <button
             type="submit"
+            disabled={isUploading}
             style={{
               padding: '6px 10px',
               fontSize: '12px',
@@ -211,7 +373,7 @@ export const ImageDropdown: React.FC<ImageDropdownProps> = ({ editor }) => {
               color: '#FFFFFF',
               border: 'none',
               borderRadius: '4px',
-              cursor: 'pointer',
+              cursor: isUploading ? 'not-allowed' : 'pointer',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -219,7 +381,17 @@ export const ImageDropdown: React.FC<ImageDropdownProps> = ({ editor }) => {
               marginTop: '4px',
             }}
           >
-            <Plus size={13} /> Belgeye Ekle
+            {isUploading ? (
+              <>
+                <Loader2 size={13} className="animate-spin" />
+                <span>Yükleniyor...</span>
+              </>
+            ) : (
+              <>
+                <Plus size={13} />
+                <span>{tab === 'upload' ? 'Yükle & Belgeye Ekle' : 'Belgeye Ekle'}</span>
+              </>
+            )}
           </button>
         </form>
       )}

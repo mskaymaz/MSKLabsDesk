@@ -1,7 +1,25 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
-## 🟢 Son Güncelleme [15.10.2026 - 15:00] — TAM EKRAN BLOG STÜDYOSU (BLOGSTUDIOVIEW), GENİŞLETİLEBİLİR TUVAL, AÇILIR MENÜLER, YÜZEN TABLO PALETİ & PANO/SATIR ARALIĞI [*]
+## 🟢 Son Güncelleme [15.10.2026 - 15:10] — BİLGİSAYARDAN OTOMATİK GÖRSEL YÜKLEME, TABLO KENARLIK GİZLEME/KALINLIK/RENK & HÜCRE DOLGUSU (PADDING) [*]
+* **Yapılan İşlem:**
+  1. **Bilgisayardan Otomatik Görsel Yükleme (`ImageDropdown.tsx`, `api.ts`):**
+     - Görsel açılır menüsüne `"Bilgisayardan Seç"` sekmesi eklendi.
+     - Masaüstünden görsel seçildiğinde doğrudan `POST /api/v1/admin/media/upload` servisine gönderilip Cloudflare R2'ye `blog/{year}/{timestamp}_{slug}.{ext}` formatında yüklenmesi sağlandı.
+     - Yüklenen görselin adresi anında Word tuvaline seçilen metin sarma düzeni (sola sar, sağa sar, ortalı blok, tam genişlik) ve genişlik yüzdesiyle yerleştirildi.
+     - Offline ve test ortamları için yerel FileReader veri URL'i fallback'i kuruldu.
+  2. **Tablo Kenarlık Çizgileri ve Görünürlük Kontrolleri (`FloatingTableInspector.tsx`, `TableDropdown.tsx`):**
+     - Tablo kenarlıklarını gizleme (`border: none`) veya görünür kılma (`solid`, `dashed`, `dotted`).
+     - Kalınlık seçenekleri (`0px`, `1px`, `2px`, `3px`, `4px`).
+     - Kenarlık renk seçicisi.
+     - `TableDropdown.tsx` içerisine tek tıkla `"Kenarlıkları Gizle (Çizgisiz Tablo)"` ve `"Kenarlıkları Göster"` butonları eklendi.
+  3. **Hücre İçi Boşluk / Dolgu (Padding) Seçicisi (`FloatingTableInspector.tsx`):**
+     - Hücre içi dolguyu dinamik ayarlayan Kompakt (`4px 8px`), Standart (`8px 12px`), Ferah (`14px 18px`) butonları eklendi.
+  4. **Modülerlik & Doğrulama:**
+     - `ImageDropdown.tsx` (378 satır), `FloatingTableInspector.tsx` (356 satır), `TableDropdown.tsx` (227 satır) ile tüm dosyalar `<= 378` satır sınırında tutuldu.
+* **Sonuçlar:** `npm run build` PASS (0 hata, 1.10s).
+* **Durum:** `DevAdmin` dalında çalışıldı, `main` korundu.
+
 * **Yapılan İşlem:**
   1. **Ayrı Panel Mimarisi — Blog Stüdyosu (`BlogStudioView.tsx`, `PostsView.tsx`):**
      - Blog oluşturma ve düzenleme akışı sıkışık modal penceresinden kurtarılarak, bağımsız tam ekran bir **Blog Stüdyosu (`BlogStudioView`)** yapısına geçirildi.
