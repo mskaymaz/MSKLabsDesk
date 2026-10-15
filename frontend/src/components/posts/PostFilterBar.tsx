@@ -56,41 +56,18 @@ export const PostFilterBar: React.FC<PostFilterBarProps> = ({
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
-          <h1
-            style={{
-              fontSize: '1.05rem',
-              fontWeight: 700,
-              margin: 0,
-              color: 'var(--text-primary)',
-              lineHeight: 1.2,
-            }}
-          >
+          <h1 className="admin-page-title">
             Blog Yazıları & Editör
           </h1>
 
-          <span
-            style={{
-              fontSize: '0.72rem',
-              fontWeight: 400,
-              color: 'var(--accent-cyan)',
-              background: 'rgba(6, 182, 212, 0.12)',
-              border: '1px solid rgba(6, 182, 212, 0.25)',
-              padding: '1px 6px',
-              borderRadius: '10px',
-            }}
-          >
+          <span className="admin-badge admin-badge-counter">
             {filteredCount} / {totalCount} Yazı
           </span>
 
-          {/* Açıklama: Sol menü linkleri ile aynı font büyüklüğü ve karakteri (normal font) */}
+          {/* Açıklama: Standart admin-page-subtitle */}
           <span
-            className="hidden-mobile"
-            style={{
-              fontSize: '0.88rem',
-              fontWeight: 400,
-              color: 'var(--text-secondary)',
-              marginLeft: '4px',
-            }}
+            className="admin-page-subtitle hidden-mobile"
+            style={{ marginLeft: '4px' }}
           >
             Çok dilli blog yazılarınızı yönetin
           </span>
@@ -190,7 +167,7 @@ export const PostFilterBar: React.FC<PostFilterBarProps> = ({
         <button
           type="button"
           onClick={onNewPost}
-          className="btn btn-primary filter-item-new-btn"
+          className="admin-btn admin-btn-md admin-btn-primary filter-item-new-btn"
           title="Yeni Blog Yazısı Oluştur"
         >
           <Plus size={14} />

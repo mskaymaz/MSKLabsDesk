@@ -1,6 +1,17 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 🟢 Son Güncelleme [15.10.2026 - 10:20] — MERKEZİ TASARIM SİSTEMİ & KART/BUTON STANDARTLAŞMASI [*]
+* **Yapılan İşlem:**
+  1. **Merkezi Tasarım Sistemi Oluşturuldu (`design-system.css`):**
+     - Standart liste kartları (`.admin-list-card`), 6 temel buton türü (`.admin-btn-primary`, `.admin-btn-view`, `.admin-btn-edit`, `.admin-btn-refresh`, `.admin-btn-danger`, `.admin-btn-success`, `.admin-btn-ai`), rozetler (`.admin-badge`), tipografi (`.admin-page-title`, `.admin-card-title`, `.admin-card-desc`) ve form filtreleri merkezi olarak tanımlandı.
+  2. **Blog Kartları ve Filtreleri Refactor Edildi (`PostCard.tsx`, `PostCardActions.tsx`, `PostFilterBar.tsx`):**
+     - Kart gövdesi ve başlığı %50 yumuşatılmış 600 weight ile standart sınıflara taşındı. Dağınık inline stiller kaldırıldı.
+  3. **Destek Talepleri ve Blog Yorumları Standartlaştırıldı (`TicketsView.tsx`, `CommentsView.tsx`):**
+     - İncele, Yenile, Onayla butonları ile kart gövdeleri ve başlıkları ortak sınıflara bağlandı. Görsel uyumsuzluklar giderildi.
+* **Sonuçlar:** `npm run build` PASS (0 hata, 700 ms). Dosya satır sınırları korundu (`TicketsView.tsx`: 406 satır).
+* **Durum:** `DevAdmin` dalında çalışıldı, `main` korundu.
+
 ## 🟢 Son Güncelleme [15.10.2026 - 09:40] — ADMİN PANELİ STANDART TİPOGRAFİ MANİFESTOSU & CAIRO 500 GÜNCELLEMESİ [*]
 * **Yapılan İşlem:**
   1. **Cairo Font URL Güncellemesi (`tokens.css` & `index.css`):**

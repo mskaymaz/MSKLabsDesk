@@ -68,18 +68,10 @@ export const CommentsView: React.FC<CommentsViewProps> = ({ comments, onRefresh 
           gap: '6px'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
-            <h1 style={{ fontSize: '1.05rem', fontWeight: 800, margin: 0, color: 'var(--text-primary)', lineHeight: 1.2 }}>
+            <h1 className="admin-page-title">
               {t('common.comments')}
             </h1>
-            <span style={{
-              fontSize: '0.72rem',
-              color: 'var(--accent-cyan)',
-              background: 'rgba(6, 182, 212, 0.12)',
-              border: '1px solid rgba(6, 182, 212, 0.25)',
-              padding: '1px 6px',
-              borderRadius: '10px',
-              fontWeight: 700
-            }}>
+            <span className="admin-badge admin-badge-counter">
               {filteredComments.length} yorum
             </span>
 
@@ -111,17 +103,7 @@ export const CommentsView: React.FC<CommentsViewProps> = ({ comments, onRefresh 
 
           <button
             type="button"
-            className="btn btn-sm btn-secondary"
-            style={{
-              padding: '3px 9px',
-              fontSize: '0.74rem',
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '4px',
-              borderRadius: '6px',
-              fontWeight: 600,
-              color: 'var(--text-secondary)'
-            }}
+            className="admin-btn admin-btn-sm admin-btn-refresh"
             onClick={handleManualRefresh}
             disabled={refreshing}
             title="Yorumları Yenile (Yalnızca Listeyi Günceller)"
@@ -150,13 +132,9 @@ export const CommentsView: React.FC<CommentsViewProps> = ({ comments, onRefresh 
           {filteredComments.map((comment) => (
             <div
               key={comment.id}
-              className="glass-card glass-card-hover"
+              className="admin-list-card"
               onDoubleClick={() => setSelectedComment(comment)}
-              style={{
-                padding: '4px 14px',
-                borderRadius: '8px',
-                cursor: 'pointer'
-              }}
+              style={{ cursor: 'pointer' }}
               title="Çift tıklayarak yorum detayını okuyabilirsiniz"
             >
               {/* Kart Üst Satırı: Yorum Kodu + Durum Rozeti + Yazı Rozeti (Sol) & Tarih (Sağ) */}
@@ -181,26 +159,18 @@ export const CommentsView: React.FC<CommentsViewProps> = ({ comments, onRefresh 
                     const fullInfo = `${typeLabel} / ${topicLabel}`;
                     return (
                       <>
-                        <span className="ticket-badge" style={{ fontSize: '0.68rem', background: sBadge.bg, border: `1px solid ${sBadge.border}`, padding: '1px 6px', borderRadius: '4px', fontWeight: 700, minWidth: '60px', textAlign: 'center', display: 'inline-flex', justifyContent: 'center', alignItems: 'center', flexShrink: 0 }}>
+                        <span className="admin-badge" style={{ background: sBadge.bg, color: 'var(--text-primary)', border: `1px solid ${sBadge.border}`, minWidth: '60px', justifyContent: 'center' }}>
                           {sBadge.label}
                         </span>
                         <span
-                          className="ticket-badge"
+                          className="admin-badge"
                           style={{
-                            fontSize: '0.68rem',
                             background: 'rgba(99, 102, 241, 0.18)',
+                            color: 'var(--accent-primary)',
                             border: '1px solid rgba(99, 102, 241, 0.38)',
-                            padding: '1px 8px',
-                            borderRadius: '4px',
-                            fontWeight: 700,
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            gap: '4px',
-                            flexShrink: 0,
                             maxWidth: '280px',
                             overflow: 'hidden',
                             textOverflow: 'ellipsis',
-                            whiteSpace: 'nowrap'
                           }}
                           title={fullInfo}
                         >
@@ -212,7 +182,7 @@ export const CommentsView: React.FC<CommentsViewProps> = ({ comments, onRefresh 
                 </div>
 
                 {/* Sağ: Tarih (Üst satırın sağ tarafına kilitli, asla kaymaz) */}
-                <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '3px', marginLeft: 'auto', flexShrink: 0, whiteSpace: 'nowrap' }}>
+                <span className="admin-meta-text" style={{ display: 'flex', alignItems: 'center', gap: '3px', marginLeft: 'auto', flexShrink: 0, whiteSpace: 'nowrap' }}>
                   <Clock size={11} /> {new Date(comment.created_at).toLocaleDateString(locale)}
                 </span>
               </div>
@@ -220,10 +190,7 @@ export const CommentsView: React.FC<CommentsViewProps> = ({ comments, onRefresh 
               {/* Kart Alt Satırı: Yazar & E-Posta (Sol) + Yorum Önizleme (Desktop) + Aksiyon Butonları (Sağ) */}
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                 <div className="ticket-subject-col" style={{ minWidth: 0 }}>
-                  <h3 style={{
-                    fontSize: '0.88rem',
-                    fontWeight: 700,
-                    color: 'var(--text-primary)',
+                  <h3 className="admin-card-title" style={{
                     marginBottom: '1px',
                     lineHeight: 1.25,
                     display: '-webkit-box',
@@ -235,7 +202,7 @@ export const CommentsView: React.FC<CommentsViewProps> = ({ comments, onRefresh 
                   }}>
                     {comment.author_name}
                   </h3>
-                  <div style={{ fontSize: '0.74rem', color: 'var(--text-secondary)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                  <div className="admin-meta-text" style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                     {comment.author_email}
                   </div>
                 </div>
@@ -251,8 +218,7 @@ export const CommentsView: React.FC<CommentsViewProps> = ({ comments, onRefresh 
                 {/* Sağ: Aksiyon Butonları (Başlık ile aynı hizada kilitli) */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginLeft: 'auto', flexShrink: 0 }}>
                   <button
-                    className="btn btn-primary btn-sm"
-                    style={{ padding: '3px 8px', fontSize: '0.74rem', borderRadius: '5px', whiteSpace: 'nowrap' }}
+                    className="admin-btn admin-btn-sm admin-btn-view"
                     onClick={(e) => {
                       e.stopPropagation();
                       setSelectedComment(comment);
@@ -263,15 +229,7 @@ export const CommentsView: React.FC<CommentsViewProps> = ({ comments, onRefresh 
                   </button>
                   {comment.status !== 'approved' && (
                     <button
-                      className="btn btn-success btn-sm"
-                      style={{
-                        padding: '3px 8px',
-                        fontSize: '0.74rem',
-                        borderRadius: '5px',
-                        whiteSpace: 'nowrap',
-                        color: '#000000',
-                        fontWeight: 700
-                      }}
+                      className="admin-btn admin-btn-sm admin-btn-success"
                       disabled={loadingId === comment.id}
                       onClick={(e) => {
                         e.stopPropagation();
@@ -279,20 +237,12 @@ export const CommentsView: React.FC<CommentsViewProps> = ({ comments, onRefresh 
                       }}
                       title="Onayla"
                     >
-                      <CheckCircle size={12} color="#000000" /> Onayla
+                      <CheckCircle size={12} /> Onayla
                     </button>
                   )}
                   {comment.status !== 'rejected' && (
                     <button
-                      className="btn btn-danger btn-sm"
-                      style={{
-                        padding: '3px 8px',
-                        fontSize: '0.74rem',
-                        borderRadius: '5px',
-                        whiteSpace: 'nowrap',
-                        color: '#000000',
-                        fontWeight: 700
-                      }}
+                      className="admin-btn admin-btn-sm admin-btn-danger"
                       disabled={loadingId === comment.id}
                       onClick={(e) => {
                         e.stopPropagation();
@@ -300,7 +250,7 @@ export const CommentsView: React.FC<CommentsViewProps> = ({ comments, onRefresh 
                       }}
                       title="Reddet"
                     >
-                      <XCircle size={12} color="#000000" /> Reddet
+                      <XCircle size={12} /> Reddet
                     </button>
                   )}
                 </div>

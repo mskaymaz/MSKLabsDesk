@@ -164,18 +164,10 @@ export const TicketsView: React.FC<TicketsViewProps> = ({
           gap: '6px'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
-            <h1 style={{ fontSize: '1.05rem', fontWeight: 800, margin: 0, color: 'var(--text-primary)', lineHeight: 1.2 }}>
+            <h1 className="admin-page-title">
               {t('common.tickets')}
             </h1>
-            <span style={{
-              fontSize: '0.72rem',
-              color: 'var(--accent-cyan)',
-              background: 'rgba(6, 182, 212, 0.12)',
-              border: '1px solid rgba(6, 182, 212, 0.25)',
-              padding: '1px 6px',
-              borderRadius: '10px',
-              fontWeight: 700
-            }}>
+            <span className="admin-badge admin-badge-counter">
               {filteredTickets.length} talep
             </span>
 
@@ -234,17 +226,7 @@ export const TicketsView: React.FC<TicketsViewProps> = ({
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
             <button
               type="button"
-              className="btn btn-sm btn-secondary"
-              style={{
-                padding: '3px 9px',
-                fontSize: '0.74rem',
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '4px',
-                borderRadius: '6px',
-                fontWeight: 600,
-                color: 'var(--text-secondary)'
-              }}
+              className="admin-btn admin-btn-sm admin-btn-refresh"
               onClick={handleManualRefresh}
               disabled={refreshing}
               title="Mesajları Yenile (Yalnızca Listeyi Günceller)"
@@ -255,24 +237,11 @@ export const TicketsView: React.FC<TicketsViewProps> = ({
 
             <button
               type="button"
-              className="btn btn-sm"
-              style={{
-                background: 'linear-gradient(135deg, #A78BFA, #38BDF8)',
-                color: '#000000',
-                fontWeight: 700,
-                border: 'none',
-                boxShadow: '0 2px 8px rgba(56, 189, 248, 0.35)',
-                padding: '3px 10px',
-                fontSize: '0.76rem',
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '5px',
-                borderRadius: '6px'
-              }}
+              className="admin-btn admin-btn-sm admin-btn-ai"
               onClick={handleAnalyzeAll}
               disabled={loadingAnalyze}
             >
-              <Sparkles size={13} color="#000000" />
+              <Sparkles size={13} />
               <span>{loadingAnalyze ? 'Analiz...' : '🤖 AI Analiz'}</span>
             </button>
           </div>
@@ -324,13 +293,9 @@ export const TicketsView: React.FC<TicketsViewProps> = ({
           {filteredTickets.map((ticket) => (
             <div
               key={ticket.id}
-              className="glass-card glass-card-hover"
+              className="admin-list-card"
               onDoubleClick={() => handleOpenDetail(ticket.id)}
-              style={{
-                padding: '4px 14px',
-                borderRadius: '8px',
-                cursor: 'pointer'
-              }}
+              style={{ cursor: 'pointer' }}
               title="Çift tıklayarak mesaj detayını okuyabilirsiniz"
             >
               {/* Kart Üst Satırı: Bilet No + Rozetler (Sol) & Tarih (Sağ) */}
@@ -344,10 +309,10 @@ export const TicketsView: React.FC<TicketsViewProps> = ({
                     const cBadge = getCategoryBadge(ticket.category);
                     return (
                       <>
-                        <span className="ticket-badge" style={{ fontSize: '0.68rem', background: sBadge.bg, border: `1px solid ${sBadge.border}`, padding: '1px 6px', borderRadius: '4px', fontWeight: 700, minWidth: '60px', textAlign: 'center', display: 'inline-flex', justifyContent: 'center', alignItems: 'center', flexShrink: 0 }}>
+                        <span className="admin-badge" style={{ background: sBadge.bg, color: 'var(--text-primary)', border: `1px solid ${sBadge.border}`, minWidth: '60px', justifyContent: 'center' }}>
                           {sBadge.label}
                         </span>
-                        <span className="ticket-badge" style={{ fontSize: '0.68rem', background: cBadge.bg, border: `1px solid ${cBadge.border}`, padding: '1px 6px', borderRadius: '4px', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: '3px', flexShrink: 0 }}>
+                        <span className="admin-badge" style={{ background: cBadge.bg, color: 'var(--text-primary)', border: `1px solid ${cBadge.border}` }}>
                           {cBadge.label}
                         </span>
                       </>
@@ -356,7 +321,7 @@ export const TicketsView: React.FC<TicketsViewProps> = ({
                 </div>
 
                 {/* Sağ: Tarih (Üst satırın sağ tarafına kilitli) */}
-                <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '3px', marginLeft: 'auto', flexShrink: 0, whiteSpace: 'nowrap' }}>
+                <span className="admin-meta-text" style={{ display: 'flex', alignItems: 'center', gap: '3px', marginLeft: 'auto', flexShrink: 0, whiteSpace: 'nowrap' }}>
                   <Clock size={11} /> {new Date(ticket.created_at).toLocaleDateString(locale)}
                 </span>
               </div>
@@ -364,10 +329,7 @@ export const TicketsView: React.FC<TicketsViewProps> = ({
               {/* Kart Alt Satırı: Konu & Gönderen (Sol) + Mesaj Önizleme (Desktop) + İncele Butonu (Sağ) */}
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                 <div className="ticket-subject-col" style={{ minWidth: 0 }}>
-                  <h3 style={{
-                    fontSize: '0.88rem',
-                    fontWeight: 700,
-                    color: 'var(--text-primary)',
+                  <h3 className="admin-card-title" style={{
                     marginBottom: '1px',
                     lineHeight: 1.25,
                     display: '-webkit-box',
@@ -379,7 +341,7 @@ export const TicketsView: React.FC<TicketsViewProps> = ({
                   }}>
                     {ticket.subject}
                   </h3>
-                  <div style={{ fontSize: '0.74rem', color: 'var(--text-secondary)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                  <div className="admin-meta-text" style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                     <strong>{ticket.sender_name}</strong> • {ticket.sender_email}
                     {ticket.email_status === 'invalid' && (
                       <span style={{ color: '#ef4444', fontWeight: 700, marginLeft: '6px' }} title="E-Posta Doğrulanamadı (Geçersiz Sunucu)">
@@ -398,8 +360,8 @@ export const TicketsView: React.FC<TicketsViewProps> = ({
 
                 {/* Sağ: İncele Butonu (Başlık ile aynı hizada kilitli) */}
                 <button
-                  className="btn btn-primary btn-sm"
-                  style={{ padding: '3px 10px', fontSize: '0.74rem', borderRadius: '5px', marginLeft: 'auto', flexShrink: 0, whiteSpace: 'nowrap' }}
+                  className="admin-btn admin-btn-sm admin-btn-view"
+                  style={{ marginLeft: 'auto', flexShrink: 0 }}
                   onClick={() => handleOpenDetail(ticket.id)}
                   disabled={loadingDetail}
                 >

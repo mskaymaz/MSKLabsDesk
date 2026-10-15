@@ -123,19 +123,7 @@ export const PostCard: React.FC<PostCardProps> = ({
   const sBadge = getStatusBadge(post.status);
 
   return (
-    <div
-      className="glass-card glass-card-hover"
-      style={{
-        padding: '8px 12px',
-        borderRadius: 'var(--radius-md)',
-        border: '1px solid var(--border-card)',
-        background: 'var(--bg-card)',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '4px',
-        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.18)',
-      }}
-    >
+    <div className="admin-list-card">
       {/* Üst Satır: Sıra No + Kanal + Durum + Video + Diller & İşlem Butonları */}
       <div
         style={{
@@ -149,15 +137,7 @@ export const PostCard: React.FC<PostCardProps> = ({
         <div style={{ display: 'flex', alignItems: 'center', gap: '5px', flexWrap: 'wrap' }}>
           {/* Sıra Numarası Rozeti */}
           <span
-            style={{
-              fontSize: '0.70rem',
-              fontWeight: 400,
-              color: 'var(--text-muted)',
-              background: 'rgba(255, 255, 255, 0.04)',
-              border: '1px solid var(--border-card)',
-              padding: '1px 5px',
-              borderRadius: '4px',
-            }}
+            className="admin-badge admin-badge-index"
             title={`Blog Sıra Numarası: ${index + 1}`}
           >
             #{index + 1}
@@ -345,17 +325,7 @@ export const PostCard: React.FC<PostCardProps> = ({
           gap: '4px 10px',
         }}
       >
-        <h2
-          style={{
-            fontSize: '0.88rem',
-            fontWeight: 700,
-            color: 'var(--text-primary)',
-            lineHeight: 1.3,
-            margin: 0,
-            flex: '1 1 auto',
-            letterSpacing: '-0.01em',
-          }}
-        >
+        <h2 className="admin-card-title" style={{ flex: '1 1 auto' }}>
           {post.title_tr || '(Başlıksız Makale)'}
         </h2>
 
@@ -377,15 +347,11 @@ export const PostCard: React.FC<PostCardProps> = ({
         </span>
       </div>
 
-      {/* Özet Metni: Sol menü linklerinin font ve özelliklerinde (normal font) */}
+      {/* Özet Metni: Standart admin-card-desc ile 2 satır */}
       {post.summary_tr && (
         <p
+          className="admin-card-desc"
           style={{
-            fontSize: '0.88rem',
-            fontWeight: 400,
-            color: 'var(--text-secondary)',
-            lineHeight: 1.4,
-            margin: 0,
             display: '-webkit-box',
             WebkitLineClamp: 2,
             WebkitBoxOrient: 'vertical',

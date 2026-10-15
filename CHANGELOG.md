@@ -1,6 +1,17 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [15.10.2026 - 10:20] - Merkezi Tasarım Sistemi (design-system.css) ve Kart/Buton Standartlaşması
+- `frontend/src/styles/design-system.css`:
+  - 9 temel tasarım grubunu (Standart Liste Kartı, Buton Ailesi, Rozetler/Sayaçlar, Tipografi ve Formlar) içeren merkezi CSS kütüphanesi oluşturuldu ve `index.css`'e dahil edildi.
+- `frontend/src/components/posts/PostCard.tsx` & `PostCardActions.tsx` & `PostFilterBar.tsx`:
+  - Kart gövdesi `.admin-list-card`, kart başlığı `.admin-card-title` (%50 yumuşatılmış 600 weight), özet metni `.admin-card-desc` sınıflarına bağlandı.
+  - Eylem butonları (`.admin-btn-warning`, `.admin-btn-success`, `.admin-btn-view`, `.admin-btn-danger`, `.admin-btn-edit`) standart sınıflara dönüştürüldü; dağınık inline stiller temizlendi.
+- `frontend/src/views/TicketsView.tsx` & `CommentsView.tsx`:
+  - Talep ve yorum kartları `.admin-list-card`, başlıklar `.admin-card-title`, inceleme/yenileme butonları `.admin-btn-view` ve `.admin-btn-refresh` sınıflarına bağlandı.
+  - Dosya satır limitlerine tam uyum sağlandı (`TicketsView.tsx`: 406 satır).
+- Yalnızca `DevAdmin` dalında çalışıldı, `main` korundu.
+
 ## [15.10.2026 - 09:40] - Admin Paneli Standart Tipografi Manifestosu & Cairo 500 Font Desteği
 - `frontend/src/styles/tokens.css` & `frontend/src/index.css`:
   - Cairo font ailesi import url'sine `500` (Medium) kalınlığı eklendi (`family=Cairo:wght@400;500;600;700;800`), buton ve sidebar linklerinde otantik tipografi sağlandı.
