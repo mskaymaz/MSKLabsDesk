@@ -74,24 +74,20 @@ export const LayoutBuilder: React.FC<LayoutBuilderProps> = ({ blocks, onChange, 
   return (
     <div dir={isRtl ? 'rtl' : 'ltr'} style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <h4 style={{ color: '#FFF', fontSize: '0.95rem', fontWeight: 700 }}>Modüler Düzen Oluşturucu (Layout Builder)</h4>
+        <h4 style={{ color: 'var(--text-primary)', fontSize: '0.95rem', fontWeight: 700 }}>Modüler Düzen Oluşturucu (Layout Builder)</h4>
         <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>{blocks.length} Blok Mevcut</span>
       </div>
 
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', background: 'rgba(0,0,0,0.3)', padding: '10px', borderRadius: '8px' }}>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', background: 'var(--bg-secondary)', border: '1px solid var(--border-card)', padding: '10px', borderRadius: '8px' }}>
         {ALLOWED_TYPES.map((t) => (
           <button
             key={t}
             type="button"
             onClick={() => addBlock(t)}
+            className="admin-btn admin-btn-view admin-btn-xs"
             style={{
               padding: '4px 10px',
               fontSize: '0.75rem',
-              background: 'rgba(255,255,255,0.08)',
-              border: '1px solid var(--border-subtle)',
-              borderRadius: '4px',
-              color: '#FFF',
-              cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
               gap: '4px',
@@ -109,10 +105,10 @@ export const LayoutBuilder: React.FC<LayoutBuilderProps> = ({ blocks, onChange, 
           return (
             <div
               key={block.block_id}
+              className="admin-list-card"
               style={{
-                background: isUnknown ? 'rgba(239, 68, 68, 0.1)' : 'rgba(255,255,255,0.04)',
-                border: isUnknown ? '1px solid var(--danger)' : '1px solid var(--border-subtle)',
-                borderRadius: '8px',
+                background: isUnknown ? 'rgba(239, 68, 68, 0.12)' : 'var(--bg-card)',
+                borderColor: isUnknown ? 'var(--danger)' : 'var(--border-card)',
                 padding: '12px',
               }}
             >
@@ -127,26 +123,29 @@ export const LayoutBuilder: React.FC<LayoutBuilderProps> = ({ blocks, onChange, 
                     onClick={() => moveBlock(idx, 'up')}
                     disabled={idx === 0}
                     aria-label="Yukarı Taşı"
-                    style={{ background: 'transparent', border: 'none', color: '#FFF', cursor: 'pointer', opacity: idx === 0 ? 0.3 : 1 }}
+                    className="admin-btn admin-btn-refresh admin-btn-xs"
+                    style={{ width: '24px', height: '24px', padding: 0, opacity: idx === 0 ? 0.3 : 1 }}
                   >
-                    <ArrowUp size={16} />
+                    <ArrowUp size={14} />
                   </button>
                   <button
                     type="button"
                     onClick={() => moveBlock(idx, 'down')}
                     disabled={idx === blocks.length - 1}
                     aria-label="Aşağı Taşı"
-                    style={{ background: 'transparent', border: 'none', color: '#FFF', cursor: 'pointer', opacity: idx === blocks.length - 1 ? 0.3 : 1 }}
+                    className="admin-btn admin-btn-refresh admin-btn-xs"
+                    style={{ width: '24px', height: '24px', padding: 0, opacity: idx === blocks.length - 1 ? 0.3 : 1 }}
                   >
-                    <ArrowDown size={16} />
+                    <ArrowDown size={14} />
                   </button>
                   <button
                     type="button"
                     onClick={() => removeBlock(block.block_id)}
                     aria-label="Blok Sil"
-                    style={{ background: 'transparent', border: 'none', color: 'var(--danger)', cursor: 'pointer' }}
+                    className="admin-btn admin-btn-danger admin-btn-xs"
+                    style={{ width: '24px', height: '24px', padding: 0 }}
                   >
-                    <Trash2 size={16} />
+                    <Trash2 size={14} />
                   </button>
                 </div>
               </div>
@@ -162,14 +161,14 @@ export const LayoutBuilder: React.FC<LayoutBuilderProps> = ({ blocks, onChange, 
                     placeholder="Başlık / Metin / URL"
                     value={block.payload.text || block.payload.title || block.payload.url || ''}
                     onChange={(e) => updatePayload(block.block_id, 'text', e.target.value)}
-                    style={{ padding: '6px 10px', background: 'rgba(0,0,0,0.3)', border: '1px solid var(--border-subtle)', borderRadius: '4px', color: '#FFF', fontSize: '0.8rem' }}
+                    style={{ padding: '6px 10px', background: 'var(--bg-secondary)', border: '1px solid var(--border-card)', borderRadius: '4px', color: 'var(--text-primary)', fontSize: '0.8rem' }}
                   />
                   <input
                     type="text"
                     placeholder="Açıklama / Payload"
                     value={block.payload.subtitle || block.payload.html || ''}
                     onChange={(e) => updatePayload(block.block_id, 'subtitle', e.target.value)}
-                    style={{ padding: '6px 10px', background: 'rgba(0,0,0,0.3)', border: '1px solid var(--border-subtle)', borderRadius: '4px', color: '#FFF', fontSize: '0.8rem' }}
+                    style={{ padding: '6px 10px', background: 'var(--bg-secondary)', border: '1px solid var(--border-card)', borderRadius: '4px', color: 'var(--text-primary)', fontSize: '0.8rem' }}
                   />
                 </div>
               )}

@@ -1,6 +1,22 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [15.10.2026 - 12:28] - Blog Yazı Editörü ve Modallarının Tema Uyumu (Açık/Koyu Mod) ve Tasarım Sistemi Entegrasyonu
+- **Blog Editör Modalı Açık/Koyu Tema Uyumu (`PostEditorModal.tsx`):**
+  - Yeni blog yazısı ve blog düzenleme modalının Light temada dahi kalıcı karanlık açılmasına yol açan hardcoded `#0D1320` arka planı ve `#FFF` metin renkleri kaldırıldı.
+  - Modal gövdesi `.admin-panel-card` sınıfına ve `var(--bg-modal, var(--bg-card))` değişkenine bağlanarak panelin seçili temayı (Açık/Koyu) anında yansıtması sağlandı.
+  - Başlık `.admin-modal-title` tipografi kuralına bağlandı; kapat butonu `.admin-btn-refresh` standardına geçirildi.
+- **Form Elemanları ve Buton Standartlaşması (`PostEditorModal.tsx`):**
+  - Kanal seçimi ve yayın durumu açılır listeleri `.admin-filter-select` sınıfına; URL slug, kapak görseli ve video URL girdileri `.admin-filter-input` sınıfına dönüştürüldü.
+  - "Canlı Önizle" (`.admin-btn-view`), "✨ AI Çevir" (`.admin-btn-ai`), "İptal" (`.admin-btn-view`) ve "Kaydet & Gönder" (`.admin-btn-primary`) butonları merkezi tasarım sistemine bağlandı.
+  - Dil sekmeleri (TR / EN / AR) ve editör modu butonları aktif/pasif durumları tematik değişkenlerle dengelendi.
+- **Zengin Metin Editörü & Düzen Oluşturucu Uyumu (`RichTextEditor.tsx`, `LayoutBuilder.tsx`, `PostPreviewModal.tsx`):**
+  - `RichTextEditor` içerisindeki hardcoded `rgba(0,0,0,0.3)` karanlık metin kutusu `var(--bg-secondary)` ve `var(--border-card)` değişkenlerine uyarlandı.
+  - `LayoutBuilder` ve `PostPreviewModal` bileşenlerindeki sabit koyu arka planlar (`#0B0F19`) ve beyaz metinler ayıklanarak merkezi tema sistemine bağlandı.
+- **Modülerlik & Satır Sınırı:**
+  - 400-450 satır kuralına tam uyum sağlamak üzere dil içerik alanları (TR, EN, AR başlık, özet, editör) `PostEditorLangFields.tsx` (123 satır) bileşeni olarak modülerleştirildi; `PostEditorModal.tsx` 381 satırda tutuldu.
+- Yalnızca `DevAdmin` dalında çalışıldı, `main` korundu.
+
 ## [15.10.2026 - 12:18] - Sürüklenebilir Yüzen Ayar Paneli, Kart Çizgi/Gölge Kontrolleri ve Özet Ekranı Standardizasyonu
 - **Sürüklenebilir Yüzen Denetim Paneli (`ThemeCustomizerDrawer.tsx`):**
   - Ayarlar paneli sağ kenara çakılı statik çekmeceden, ekran üzerinde 4 yöne (sağa, sola, yukarı, aşağı) serbestçe taşınabilen bir **Yüzen Denetim Penceresi (Floating Draggable Inspector)** yapısına dönüştürüldü.

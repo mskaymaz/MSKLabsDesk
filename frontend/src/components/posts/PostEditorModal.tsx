@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Sparkles, X, Eye, Layout, FileText } from 'lucide-react';
 import type { BlogPost, BlogChannel } from '../../types';
-import { Button } from '../ui/Button';
-import { RichTextEditor } from '../ui/RichTextEditor';
 import type { LayoutBlock } from './LayoutBuilder';
 import { LayoutBuilder } from './LayoutBuilder';
 import { PostPreviewModal } from './PostPreviewModal';
+import { PostEditorLangFields } from './PostEditorLangFields';
 
 export interface PostFormData {
   channel_id: string;
@@ -84,19 +83,28 @@ export const PostEditorModal: React.FC<PostEditorModalProps> = ({
         style={{
           position: 'fixed',
           inset: 0,
-          background: 'rgba(0,0,0,0.85)',
-          backdropFilter: 'blur(10px)',
+          background: 'rgba(0, 0, 0, 0.72)',
+          backdropFilter: 'blur(6px)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          zIndex: 'var(--z-modal)',
+          zIndex: 'var(--z-modal, 999)',
           padding: '20px',
         }}
       >
         <div
-          className="glass-card"
-          style={{ width: '100%', maxWidth: '960px', maxHeight: '90vh', overflowY: 'auto', background: '#0D1320' }}
+          className="admin-panel-card"
+          style={{
+            width: '100%',
+            maxWidth: '960px',
+            maxHeight: '90vh',
+            overflowY: 'auto',
+            background: 'var(--bg-modal, var(--bg-card))',
+            borderRadius: '12px',
+            boxShadow: 'var(--shadow-xl)',
+          }}
         >
+          {/* Modal Üst Barı */}
           <div
             style={{
               display: 'flex',
@@ -108,21 +116,21 @@ export const PostEditorModal: React.FC<PostEditorModalProps> = ({
             }}
           >
             <div>
-              <h2 id="editor-modal-title" style={{ fontSize: '1.2rem', fontWeight: 800, color: '#FFF' }}>
+              <h2 id="editor-modal-title" className="admin-modal-title">
                 {editingPost ? 'Blog Yazısını Düzenle' : 'Yeni Blog Yazısı Oluştur'}
               </h2>
-              <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginTop: '2px' }}>
+              <div className="admin-meta-text" style={{ marginTop: '2px' }}>
                 Autosave Durumu:{' '}
                 <span
                   style={{
                     fontWeight: 700,
                     color:
                       autosaveState === 'saved'
-                        ? 'var(--success)'
+                        ? 'var(--success, #10b981)'
                         : autosaveState === 'saving'
                         ? 'var(--accent-cyan)'
                         : autosaveState === 'dirty'
-                        ? '#F59E0B'
+                        ? 'var(--accent-amber, #f59e0b)'
                         : 'var(--text-secondary)',
                   }}
                 >
@@ -132,14 +140,29 @@ export const PostEditorModal: React.FC<PostEditorModalProps> = ({
             </div>
 
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <Button variant="secondary" onClick={() => setIsPreviewOpen(true)} icon={<Eye size={16} />}>
-                Canlı Önizle
-              </Button>
-              <Button variant="secondary" onClick={onAiTranslate} loading={aiTranslating} icon={<Sparkles size={16} />}>
-                {aiTranslating ? 'Gemini AI...' : '✨ AI Çevir'}
-              </Button>
-              <button onClick={onClose} aria-label="Kapat" style={{ background: 'transparent', border: 'none', color: '#FFF', cursor: 'pointer' }}>
-                <X size={20} />
+              <button
+                type="button"
+                className="admin-btn admin-btn-view admin-btn-sm"
+                onClick={() => setIsPreviewOpen(true)}
+              >
+                <Eye size={14} /> Canlı Önizle
+              </button>
+              <button
+                type="button"
+                className="admin-btn admin-btn-ai admin-btn-sm"
+                onClick={onAiTranslate}
+                disabled={aiTranslating}
+              >
+                <Sparkles size={14} /> {aiTranslating ? 'Gemini AI...' : '✨ AI Çevir'}
+              </button>
+              <button
+                type="button"
+                onClick={onClose}
+                aria-label="Kapat"
+                className="admin-btn admin-btn-refresh admin-btn-sm"
+                style={{ width: '28px', height: '28px', padding: 0 }}
+              >
+                <X size={16} />
               </button>
             </div>
           </div>
@@ -147,17 +170,18 @@ export const PostEditorModal: React.FC<PostEditorModalProps> = ({
           <form onSubmit={onSave} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
               <div>
-                <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'block', marginBottom: '4px' }}>
+                <label className="admin-meta-text" style={{ fontWeight: 600, display: 'block', marginBottom: '4px' }}>
                   Blog Kanalı
                 </label>
                 <select
                   value={formData.channel_id}
                   onChange={(e) => setFormData((prev) => ({ ...prev, channel_id: e.target.value }))}
                   required
-                  style={{ width: '100%', padding: '8px', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border-subtle)', borderRadius: '6px', color: '#FFF' }}
+                  className="admin-filter-select"
+                  style={{ width: '100%', height: '34px' }}
                 >
                   {channels.map((ch) => (
-                    <option key={ch.id} value={ch.id} style={{ background: '#0F1522' }}>
+                    <option key={ch.id} value={ch.id}>
                       {ch.name_tr}
                     </option>
                   ))}
@@ -165,7 +189,7 @@ export const PostEditorModal: React.FC<PostEditorModalProps> = ({
               </div>
 
               <div>
-                <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'block', marginBottom: '4px' }}>
+                <label className="admin-meta-text" style={{ fontWeight: 600, display: 'block', marginBottom: '4px' }}>
                   URL Slug
                 </label>
                 <input
@@ -173,14 +197,15 @@ export const PostEditorModal: React.FC<PostEditorModalProps> = ({
                   value={formData.slug}
                   onChange={(e) => setFormData((prev) => ({ ...prev, slug: e.target.value }))}
                   required
-                  style={{ width: '100%', padding: '8px', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border-subtle)', borderRadius: '6px', color: 'var(--accent-cyan)' }}
+                  className="admin-filter-input"
+                  style={{ width: '100%', height: '34px', padding: '0 10px', color: 'var(--accent-cyan)' }}
                 />
               </div>
             </div>
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '12px' }}>
               <div>
-                <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'block', marginBottom: '4px' }}>
+                <label className="admin-meta-text" style={{ fontWeight: 600, display: 'block', marginBottom: '4px' }}>
                   Kapak Görseli URL
                 </label>
                 <input
@@ -188,12 +213,13 @@ export const PostEditorModal: React.FC<PostEditorModalProps> = ({
                   placeholder="https://.../cover.webp"
                   value={formData.cover_image || ''}
                   onChange={(e) => setFormData((prev) => ({ ...prev, cover_image: e.target.value }))}
-                  style={{ width: '100%', padding: '8px', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border-subtle)', borderRadius: '6px', color: '#FFF' }}
+                  className="admin-filter-input"
+                  style={{ width: '100%', height: '34px', padding: '0 10px' }}
                 />
               </div>
 
               <div>
-                <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'block', marginBottom: '4px' }}>
+                <label className="admin-meta-text" style={{ fontWeight: 600, display: 'block', marginBottom: '4px' }}>
                   Video / YouTube URL (Vlog)
                 </label>
                 <input
@@ -201,19 +227,20 @@ export const PostEditorModal: React.FC<PostEditorModalProps> = ({
                   placeholder="https://www.youtube.com/watch?v=..."
                   value={formData.video_url || ''}
                   onChange={(e) => setFormData((prev) => ({ ...prev, video_url: e.target.value }))}
-                  style={{ width: '100%', padding: '8px', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border-subtle)', borderRadius: '6px', color: '#FFF' }}
+                  className="admin-filter-input"
+                  style={{ width: '100%', height: '34px', padding: '0 10px' }}
                 />
               </div>
 
               <div>
-                <label style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', display: 'block', marginBottom: '4px' }}>
+                <label className="admin-meta-text" style={{ fontWeight: 600, display: 'block', marginBottom: '4px' }}>
                   Yayın Durumu
                 </label>
                 <select
                   value={formData.status}
                   onChange={(e) => setFormData((prev) => ({ ...prev, status: e.target.value as any }))}
-                  className="form-select"
-                  style={{ width: '100%', padding: '8px', borderRadius: '6px' }}
+                  className="admin-filter-select"
+                  style={{ width: '100%', height: '34px' }}
                 >
                   <option value="draft">📝 Taslak (Draft)</option>
                   <option value="published">✅ Yayında (Published)</option>
@@ -222,45 +249,85 @@ export const PostEditorModal: React.FC<PostEditorModalProps> = ({
               </div>
             </div>
 
-            <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid var(--border-subtle)', paddingBottom: '8px' }}>
+            {/* Dil ve Editör Modu Sekmeleri */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--border-subtle)', paddingBottom: '8px' }}>
               <div style={{ display: 'flex', gap: '6px' }}>
                 <button
                   type="button"
                   onClick={() => setActiveTab('tr')}
-                  style={{ padding: '4px 12px', borderRadius: '6px', border: 'none', background: activeTab === 'tr' ? 'var(--accent-primary)' : 'transparent', color: '#FFF', fontWeight: 700, cursor: 'pointer' }}
+                  className="admin-btn admin-btn-sm"
+                  style={{
+                    background: activeTab === 'tr' ? 'var(--accent-primary)' : 'transparent',
+                    color: activeTab === 'tr' ? '#FFFFFF' : 'var(--text-secondary)',
+                    fontWeight: activeTab === 'tr' ? 700 : 500,
+                  }}
                 >
                   🇹🇷 Türkçe
                 </button>
                 <button
                   type="button"
                   onClick={() => setActiveTab('en')}
-                  style={{ padding: '4px 12px', borderRadius: '6px', border: 'none', background: activeTab === 'en' ? 'var(--accent-primary)' : 'transparent', color: '#FFF', fontWeight: 700, cursor: 'pointer' }}
+                  className="admin-btn admin-btn-sm"
+                  style={{
+                    background: activeTab === 'en' ? 'var(--accent-primary)' : 'transparent',
+                    color: activeTab === 'en' ? '#FFFFFF' : 'var(--text-secondary)',
+                    fontWeight: activeTab === 'en' ? 700 : 500,
+                  }}
                 >
                   🇬🇧 EN
                 </button>
                 <button
                   type="button"
                   onClick={() => setActiveTab('ar')}
-                  style={{ padding: '4px 12px', borderRadius: '6px', border: 'none', background: activeTab === 'ar' ? 'var(--accent-primary)' : 'transparent', color: '#FFF', fontWeight: 700, cursor: 'pointer' }}
+                  className="admin-btn admin-btn-sm"
+                  style={{
+                    background: activeTab === 'ar' ? 'var(--accent-primary)' : 'transparent',
+                    color: activeTab === 'ar' ? '#FFFFFF' : 'var(--text-secondary)',
+                    fontWeight: activeTab === 'ar' ? 700 : 500,
+                  }}
                 >
                   🇸🇦 AR (RTL)
                 </button>
               </div>
 
-              <div style={{ display: 'flex', gap: '6px', background: 'rgba(0,0,0,0.3)', padding: '2px', borderRadius: '6px' }}>
+              <div style={{ display: 'flex', gap: '4px', background: 'var(--bg-secondary)', border: '1px solid var(--border-card)', padding: '2px', borderRadius: '6px' }}>
                 <button
                   type="button"
                   onClick={() => setEditorMode('rich')}
-                  style={{ padding: '4px 10px', border: 'none', borderRadius: '4px', background: editorMode === 'rich' ? 'var(--accent-cyan)' : 'transparent', color: '#000', fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}
+                  style={{
+                    padding: '4px 10px',
+                    border: 'none',
+                    borderRadius: '4px',
+                    background: editorMode === 'rich' ? 'var(--accent-cyan)' : 'transparent',
+                    color: editorMode === 'rich' ? '#000000' : 'var(--text-secondary)',
+                    fontWeight: 700,
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '4px',
+                    fontSize: '12px',
+                  }}
                 >
-                  <FileText size={14} /> TipTap Editör
+                  <FileText size={13} /> TipTap Editör
                 </button>
                 <button
                   type="button"
                   onClick={() => setEditorMode('layout')}
-                  style={{ padding: '4px 10px', border: 'none', borderRadius: '4px', background: editorMode === 'layout' ? 'var(--accent-cyan)' : 'transparent', color: '#000', fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}
+                  style={{
+                    padding: '4px 10px',
+                    border: 'none',
+                    borderRadius: '4px',
+                    background: editorMode === 'layout' ? 'var(--accent-cyan)' : 'transparent',
+                    color: editorMode === 'layout' ? '#000000' : 'var(--text-secondary)',
+                    fontWeight: 700,
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '4px',
+                    fontSize: '12px',
+                  }}
                 >
-                  <Layout size={14} /> Modüler Düzen
+                  <Layout size={13} /> Modüler Düzen
                 </button>
               </div>
             </div>
@@ -272,85 +339,29 @@ export const PostEditorModal: React.FC<PostEditorModalProps> = ({
                 isRtl={activeTab === 'ar'}
               />
             ) : (
-              <>
-                {activeTab === 'tr' && (
-                  <>
-                    <input
-                      type="text"
-                      placeholder="Türkçe Başlık"
-                      value={formData.title_tr}
-                      onChange={(e) => setFormData((prev) => ({ ...prev, title_tr: e.target.value }))}
-                      required
-                      style={{ width: '100%', padding: '8px', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border-subtle)', borderRadius: '6px', color: '#FFF' }}
-                    />
-                    <textarea
-                      rows={2}
-                      placeholder="Türkçe Kısa Özet / SEO Özeti"
-                      value={formData.summary_tr || ''}
-                      onChange={(e) => setFormData((prev) => ({ ...prev, summary_tr: e.target.value }))}
-                      style={{ width: '100%', padding: '8px', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border-subtle)', borderRadius: '6px', color: '#FFF' }}
-                    />
-                    <RichTextEditor
-                      label="Türkçe İçerik (TipTap + XSS Dezenfeksiyonu)"
-                      value={formData.content_tr}
-                      onChange={(val) => handleContentChange(val, 'tr')}
-                    />
-                  </>
-                )}
-
-                {activeTab === 'en' && (
-                  <>
-                    <input
-                      type="text"
-                      placeholder="English Title"
-                      value={formData.title_en}
-                      onChange={(e) => setFormData((prev) => ({ ...prev, title_en: e.target.value }))}
-                      style={{ width: '100%', padding: '8px', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border-subtle)', borderRadius: '6px', color: '#FFF' }}
-                    />
-                    <textarea
-                      rows={2}
-                      placeholder="English Short Summary / SEO Summary"
-                      value={formData.summary_en || ''}
-                      onChange={(e) => setFormData((prev) => ({ ...prev, summary_en: e.target.value }))}
-                      style={{ width: '100%', padding: '8px', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border-subtle)', borderRadius: '6px', color: '#FFF' }}
-                    />
-                    <RichTextEditor
-                      label="English Content"
-                      value={formData.content_en}
-                      onChange={(val) => handleContentChange(val, 'en')}
-                    />
-                  </>
-                )}
-
-                {activeTab === 'ar' && (
-                  <div dir="rtl">
-                    <input
-                      type="text"
-                      placeholder="العنوان باللغة العربية"
-                      value={formData.title_ar}
-                      onChange={(e) => setFormData((prev) => ({ ...prev, title_ar: e.target.value }))}
-                      style={{ width: '100%', padding: '8px', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border-subtle)', borderRadius: '6px', color: '#FFF', fontFamily: 'Cairo' }}
-                    />
-                    <textarea
-                      rows={2}
-                      placeholder="ملخص المقال / وصف SEO"
-                      value={formData.summary_ar || ''}
-                      onChange={(e) => setFormData((prev) => ({ ...prev, summary_ar: e.target.value }))}
-                      style={{ width: '100%', padding: '8px', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--border-subtle)', borderRadius: '6px', color: '#FFF', fontFamily: 'Cairo' }}
-                    />
-                    <RichTextEditor
-                      label="المحتوى باللغة العربية"
-                      value={formData.content_ar}
-                      onChange={(val) => handleContentChange(val, 'ar')}
-                    />
-                  </div>
-                )}
-              </>
+              <PostEditorLangFields
+                lang={activeTab}
+                formData={formData}
+                setFormData={setFormData}
+                onContentChange={handleContentChange}
+              />
             )}
 
+            {/* Alt Eylem Butonları */}
             <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', marginTop: '12px' }}>
-              <Button variant="secondary" onClick={onClose}>İptal</Button>
-              <Button type="submit">Kaydet & Gönder</Button>
+              <button
+                type="button"
+                className="admin-btn admin-btn-view admin-btn-sm"
+                onClick={onClose}
+              >
+                İptal
+              </button>
+              <button
+                type="submit"
+                className="admin-btn admin-btn-primary admin-btn-sm"
+              >
+                Kaydet & Gönder
+              </button>
             </div>
           </form>
         </div>

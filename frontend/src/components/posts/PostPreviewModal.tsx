@@ -44,9 +44,10 @@ export const PostPreviewModal: React.FC<PostPreviewModalProps> = ({ isOpen, onCl
           width: '100%',
           maxWidth: getMaxWidth(),
           height: '85vh',
-          background: '#0B0F19',
-          border: '1px solid var(--border-subtle)',
+          background: 'var(--bg-modal, var(--bg-card))',
+          border: '1px solid var(--border-card)',
           borderRadius: '12px',
+          boxShadow: 'var(--shadow-xl)',
           display: 'flex',
           flexDirection: 'column',
           overflow: 'hidden',
@@ -59,17 +60,17 @@ export const PostPreviewModal: React.FC<PostPreviewModalProps> = ({ isOpen, onCl
             justifyContent: 'space-between',
             alignItems: 'center',
             padding: '12px 16px',
-            background: 'rgba(255,255,255,0.04)',
+            background: 'var(--bg-card)',
             borderBottom: '1px solid var(--border-subtle)',
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span id="preview-modal-title" style={{ fontWeight: 700, color: '#FFF', fontSize: '0.9rem' }}>
+            <span id="preview-modal-title" style={{ fontWeight: 700, color: 'var(--text-primary)', fontSize: '0.9rem' }}>
               Canlı Cihaz Önizleme
             </span>
           </div>
 
-          <div style={{ display: 'flex', gap: '6px', background: 'rgba(0,0,0,0.4)', padding: '4px', borderRadius: '6px' }}>
+          <div style={{ display: 'flex', gap: '6px', background: 'var(--bg-secondary)', border: '1px solid var(--border-card)', padding: '4px', borderRadius: '6px' }}>
             <button
               type="button"
               onClick={() => setDeviceMode('mobile')}
@@ -78,8 +79,11 @@ export const PostPreviewModal: React.FC<PostPreviewModalProps> = ({ isOpen, onCl
                 border: 'none',
                 borderRadius: '4px',
                 background: deviceMode === 'mobile' ? 'var(--accent-primary)' : 'transparent',
-                color: '#FFF',
+                color: deviceMode === 'mobile' ? '#FFF' : 'var(--text-secondary)',
                 cursor: 'pointer',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '4px',
               }}
             >
               <Smartphone size={16} /> <span style={{ fontSize: '0.75rem' }}>Mobil (&lt;640)</span>
@@ -92,8 +96,11 @@ export const PostPreviewModal: React.FC<PostPreviewModalProps> = ({ isOpen, onCl
                 border: 'none',
                 borderRadius: '4px',
                 background: deviceMode === 'tablet' ? 'var(--accent-primary)' : 'transparent',
-                color: '#FFF',
+                color: deviceMode === 'tablet' ? '#FFF' : 'var(--text-secondary)',
                 cursor: 'pointer',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '4px',
               }}
             >
               <Tablet size={16} /> <span style={{ fontSize: '0.75rem' }}>Tablet (640-1024)</span>
@@ -106,16 +113,24 @@ export const PostPreviewModal: React.FC<PostPreviewModalProps> = ({ isOpen, onCl
                 border: 'none',
                 borderRadius: '4px',
                 background: deviceMode === 'desktop' ? 'var(--accent-primary)' : 'transparent',
-                color: '#FFF',
+                color: deviceMode === 'desktop' ? '#FFF' : 'var(--text-secondary)',
                 cursor: 'pointer',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '4px',
               }}
             >
               <Monitor size={16} /> <span style={{ fontSize: '0.75rem' }}>Masaüstü (&gt;1024)</span>
             </button>
           </div>
 
-          <button onClick={onClose} aria-label="Kapat" style={{ background: 'transparent', border: 'none', color: '#FFF', cursor: 'pointer' }}>
-            <X size={20} />
+          <button
+            onClick={onClose}
+            aria-label="Kapat"
+            className="admin-btn admin-btn-refresh admin-btn-sm"
+            style={{ width: '28px', height: '28px', padding: 0 }}
+          >
+            <X size={16} />
           </button>
         </div>
 
@@ -128,12 +143,12 @@ export const PostPreviewModal: React.FC<PostPreviewModalProps> = ({ isOpen, onCl
             />
           )}
 
-          <h1 style={{ fontSize: deviceMode === 'mobile' ? '1.4rem' : '2rem', fontWeight: 800, color: '#FFF', marginBottom: '12px' }}>
+          <h1 style={{ fontSize: deviceMode === 'mobile' ? '1.4rem' : '2rem', fontWeight: 800, color: 'var(--text-primary)', marginBottom: '12px' }}>
             {post.title_tr || 'Untitled Post'}
           </h1>
 
           <div
-            style={{ fontSize: '0.95rem', lineHeight: 1.6, color: '#E2E8F0' }}
+            style={{ fontSize: '0.95rem', lineHeight: 1.6, color: 'var(--text-secondary)' }}
             dangerouslySetInnerHTML={{ __html: post.content_tr || '<p style="color:var(--text-muted)">İçerik boş...</p>' }}
           />
         </div>

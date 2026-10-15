@@ -1,6 +1,24 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 🟢 Son Güncelleme [15.10.2026 - 12:28] — BLOG YAZI EDİTÖRÜ MODALININ TEMA UYUMU (AÇIK/KOYU) & TASARIM SİSTEMİ ENTEGRASYONU [*]
+* **Yapılan İşlem:**
+  1. **Açık/Koyu Tema Uyumu ve Karanlık Ekran Sorununun Çözümü (`PostEditorModal.tsx`):**
+     - Blog düzenleme ve yeni blog yazısı modalının her iki durumda da kalıcı karanlık açılmasına neden olan hardcoded `#0D1320` arka planı ve `#FFF` renkleri kaldırıldı.
+     - Modal penceresi `.admin-panel-card` sınıfına ve dinamik `var(--bg-modal, var(--bg-card))` kancasına bağlandı; seçili tema (Açık veya Koyu) hangisi ise modal artık anında o temaya uygun kusursuz renk ve kontrastla açılmaktadır.
+     - Modal başlığı `.admin-modal-title` standardına geçirildi, kapatma butonu `.admin-btn-refresh` sınıfına bağlandı.
+  2. **Form Elemanları ve Butonların Standartlaştırılması (`PostEditorModal.tsx`):**
+     - Kanal seçimi ve yayın durumu açılır menüleri `.admin-filter-select` standardına geçirildi.
+     - URL slug, kapak görseli ve video URL girdi alanları `.admin-filter-input` sınıfına dönüştürüldü.
+     - Eylem butonları sistem genelindeki `.admin-btn-primary`, `.admin-btn-view`, `.admin-btn-ai` sınıflarına bağlandı; tema motorundaki buton dolguları ve köşe yuvarlaklığı ayarlarıyla tam uyumlu hale getirildi.
+  3. **Zengin Metin Editörü, Önizleme ve Modüler Bloklar (`RichTextEditor.tsx`, `LayoutBuilder.tsx`, `PostPreviewModal.tsx`):**
+     - `RichTextEditor` ve `LayoutBuilder` içerisindeki hardcoded koyu kutular `var(--bg-secondary)` ve `var(--border-card)` CSS değişkenlerine uyarlandı.
+     - `PostPreviewModal` içerisindeki cihaz seçim çubuğu ve önizleme çerçevesi Açık/Koyu tema değişkenleriyle entegre edildi.
+  4. **Modüler Mimari ve Satır Sınırı:**
+     - 400-450 satır kuralına tam uyum sağlamak üzere çok dilli içerik alanları `PostEditorLangFields.tsx` (123 satır) bileşeni olarak ayrıştırıldı; `PostEditorModal.tsx` 381 satırda tutuldu.
+* **Sonuçlar:** `npm run build` PASS (0 hata, 643 ms). Tüm dosyalar `<= 381` satır kuralına tam uyumlu.
+* **Durum:** `DevAdmin` dalında çalışıldı, `main` korundu.
+
 ## 🟢 Son Güncelleme [15.10.2026 - 12:18] — SÜRÜKLENEBİLİR YÜZEN AYAR PANELİ, KART ÇİZGİ/GÖLGE DENETİMİ & ÖZET EKRANI STANDARDIZASYONU [*]
 * **Yapılan İşlem:**
   1. **Sürüklenebilir Yüzen Denetim Paneli (`ThemeCustomizerDrawer.tsx`):**

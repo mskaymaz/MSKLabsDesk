@@ -59,8 +59,8 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
           style={{
             minHeight: '160px',
             padding: '12px 16px',
-            background: 'rgba(0,0,0,0.4)',
-            border: '1px solid var(--border-subtle)',
+            background: 'var(--bg-secondary)',
+            border: '1px solid var(--border-card)',
             borderRadius: 'var(--radius-md)',
             color: 'var(--text-primary)',
             fontSize: 'var(--font-sm)',
@@ -78,11 +78,11 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
           style={{
             width: '100%',
             padding: '12px 16px',
-            background: 'rgba(0,0,0,0.3)',
-            border: error ? '1px solid var(--danger)' : '1px solid var(--border-subtle)',
+            background: 'var(--bg-secondary)',
+            border: error ? '1px solid var(--danger)' : '1px solid var(--border-card)',
             borderRadius: 'var(--radius-md)',
             color: 'var(--text-primary)',
-            fontFamily: 'monospace',
+            fontFamily: 'inherit',
             fontSize: 'var(--font-sm)',
             outline: 'none',
           }}
