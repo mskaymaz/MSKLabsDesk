@@ -13,37 +13,50 @@ import {
   AlignJustify,
   List,
   ListOrdered,
-  Quote,
-  Minus,
-  Code,
   Link as LinkIcon,
-  Image as ImageIcon,
-  Table as TableIcon,
-  Undo2,
-  Redo2,
-  RemoveFormatting,
   Palette,
   Highlighter,
+  Heading1,
+  Heading2,
+  Heading3,
+  Heading4,
+  Pilcrow,
+  Indent,
+  Outdent,
 } from 'lucide-react';
-import { TableModal } from './TableModal';
-import { ImageModal } from './ImageModal';
+import { TableDropdown } from './TableDropdown';
+import { ImageDropdown } from './ImageDropdown';
 import { LinkModal } from './LinkModal';
 
 interface EditorToolbarProps {
   editor: Editor | null;
+  onOpenFloatingTable?: () => void;
 }
 
 const FONT_SIZES = ['12px', '14px', '16px', '18px', '20px', '24px', '28px', '32px'];
+const LINE_HEIGHTS = [
+  { label: '1.0 (Sıkı)', value: '1.0' },
+  { label: '1.15 (Standart)', value: '1.15' },
+  { label: '1.5 (Geniş)', value: '1.5' },
+  { label: '2.0 (Çift)', value: '2.0' },
+];
+const PARAGRAPH_SPACINGS = [
+  { label: '0px (Bitişik)', value: '0px' },
+  { label: '8px (Hafif)', value: '8px' },
+  { label: '14px (Standart)', value: '14px' },
+  { label: '20px (Geniş)', value: '20px' },
+];
 
-export const EditorToolbar: React.FC<EditorToolbarProps> = ({ editor }) => {
-  const [isTableModalOpen, setIsTableModalOpen] = useState(false);
-  const [isImageModalOpen, setIsImageModalOpen] = useState(false);
+export const EditorToolbar: React.FC<EditorToolbarProps> = ({
+  editor,
+  onOpenFloatingTable = () => {},
+}) => {
   const [isLinkModalOpen, setIsLinkModalOpen] = useState(false);
 
   if (!editor) return null;
 
   const btnStyle = (active: boolean): React.CSSProperties => ({
-    padding: '4px 6px',
+    padding: '3px 5px',
     border: 'none',
     borderRadius: '4px',
     background: active ? 'var(--accent-primary)' : 'transparent',
@@ -58,7 +71,7 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({ editor }) => {
   });
 
   const divider = (
-    <div style={{ width: '1px', height: '18px', background: 'var(--border-subtle)', margin: '0 3px' }} />
+    <div style={{ width: '1px', height: '18px', background: 'var(--border-subtle)', margin: '0 2px' }} />
   );
 
   return (
@@ -70,313 +83,289 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({ editor }) => {
           flexWrap: 'wrap',
           alignItems: 'center',
           gap: '3px',
-          padding: '6px 8px',
-          background: 'var(--bg-secondary)',
-          borderBottom: '1px solid var(--border-card)',
-          borderTopLeftRadius: 'var(--radius-md, 6px)',
-          borderTopRightRadius: 'var(--radius-md, 6px)',
+          padding: '6px 10px',
+          background: 'var(--bg-card, #1F2937)',
+          borderBottom: '1px solid var(--border-subtle)',
+          userSelect: 'none',
         }}
       >
-        {/* 1. Geçmiş (Undo / Redo) */}
-        <button
-          type="button"
-          onClick={() => editor.chain().focus().undo().run()}
-          disabled={!editor.can().undo()}
-          title="Geri Al (Ctrl+Z)"
-          style={{ ...btnStyle(false), opacity: editor.can().undo() ? 1 : 0.35 }}
-        >
-          <Undo2 size={14} />
-        </button>
-        <button
-          type="button"
-          onClick={() => editor.chain().focus().redo().run()}
-          disabled={!editor.can().redo()}
-          title="İleri Al (Ctrl+Y)"
-          style={{ ...btnStyle(false), opacity: editor.can().redo() ? 1 : 0.35 }}
-        >
-          <Redo2 size={14} />
-        </button>
+        {/* Başlık / Paragraf Seçimi */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '2px' }}>
+          <button
+            type="button"
+            onClick={() => editor.chain().focus().setParagraph().run()}
+            style={btnStyle(editor.isActive('paragraph'))}
+            title="Normal Paragraf"
+          >
+            <Pilcrow size={13} />
+          </button>
+          <button
+            type="button"
+            onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
+            style={btnStyle(editor.isActive('heading', { level: 1 }))}
+            title="Başlık 1"
+          >
+            <Heading1 size={13} />
+          </button>
+          <button
+            type="button"
+            onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
+            style={btnStyle(editor.isActive('heading', { level: 2 }))}
+            title="Başlık 2"
+          >
+            <Heading2 size={13} />
+          </button>
+          <button
+            type="button"
+            onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
+            style={btnStyle(editor.isActive('heading', { level: 3 }))}
+            title="Başlık 3"
+          >
+            <Heading3 size={13} />
+          </button>
+          <button
+            type="button"
+            onClick={() => editor.chain().focus().toggleHeading({ level: 4 }).run()}
+            style={btnStyle(editor.isActive('heading', { level: 4 }))}
+            title="Başlık 4"
+          >
+            <Heading4 size={13} />
+          </button>
+        </div>
 
         {divider}
 
-        {/* 2. Paragraf / Başlık Formatı */}
+        {/* Punto / Yazı Boyutu Seçici */}
         <select
-          value={
-            editor.isActive('heading', { level: 1 })
-              ? 'h1'
-              : editor.isActive('heading', { level: 2 })
-              ? 'h2'
-              : editor.isActive('heading', { level: 3 })
-              ? 'h3'
-              : editor.isActive('heading', { level: 4 })
-              ? 'h4'
-              : 'p'
-          }
           onChange={(e) => {
             const val = e.target.value;
-            if (val === 'p') editor.chain().focus().setParagraph().run();
-            else if (val === 'h1') editor.chain().focus().toggleHeading({ level: 1 }).run();
-            else if (val === 'h2') editor.chain().focus().toggleHeading({ level: 2 }).run();
-            else if (val === 'h3') editor.chain().focus().toggleHeading({ level: 3 }).run();
-            else if (val === 'h4') editor.chain().focus().toggleHeading({ level: 4 }).run();
+            if (val) editor.chain().focus().setFontSize(val).run();
+            else editor.chain().focus().unsetFontSize().run();
           }}
           className="admin-filter-select"
-          style={{ height: '26px', fontSize: '11px', padding: '0 18px 0 6px', fontWeight: 600 }}
+          style={{ height: '26px', fontSize: '11px', width: '70px', padding: '0 4px' }}
+          title="Yazı Boyutu (Punto)"
+          defaultValue="16px"
         >
-          <option value="p">Normal Metin</option>
-          <option value="h1">Başlık 1 (H1)</option>
-          <option value="h2">Başlık 2 (H2)</option>
-          <option value="h3">Başlık 3 (H3)</option>
-          <option value="h4">Başlık 4 (H4)</option>
-        </select>
-
-        {/* 3. Yazı Boyutu (Punto) */}
-        <select
-          onChange={(e) => {
-            const size = e.target.value;
-            if (size === 'default') editor.chain().focus().unsetFontSize().run();
-            else editor.chain().focus().setFontSize(size).run();
-          }}
-          className="admin-filter-select"
-          style={{ height: '26px', fontSize: '11px', padding: '0 18px 0 6px' }}
-          title="Yazı Boyutu"
-        >
-          <option value="default">Punto (Oto)</option>
-          {FONT_SIZES.map((sz) => (
-            <option key={sz} value={sz}>
-              {sz}
+          <option value="">Punto</option>
+          {FONT_SIZES.map((size) => (
+            <option key={size} value={size}>
+              {size}
             </option>
           ))}
         </select>
 
+        {/* Satır Yüksekliği (Line Height) */}
+        <select
+          onChange={(e) => {
+            const val = e.target.value;
+            if (val) editor.chain().focus().setLineHeight(val).run();
+            else editor.chain().focus().unsetLineHeight().run();
+          }}
+          className="admin-filter-select"
+          style={{ height: '26px', fontSize: '11px', width: '84px', padding: '0 4px' }}
+          title="Satır Aralığı (Line Height)"
+          defaultValue="1.5"
+        >
+          <option value="">Satır Aralığı</option>
+          {LINE_HEIGHTS.map((lh) => (
+            <option key={lh.value} value={lh.value}>
+              {lh.label}
+            </option>
+          ))}
+        </select>
+
+        {/* Paragraf Boşluğu (Margin Bottom) */}
+        <select
+          onChange={(e) => {
+            const val = e.target.value;
+            if (val) editor.chain().focus().setParagraphSpacing(val).run();
+          }}
+          className="admin-filter-select"
+          style={{ height: '26px', fontSize: '11px', width: '92px', padding: '0 4px' }}
+          title="Paragraf Altı Boşluğu"
+          defaultValue="14px"
+        >
+          <option value="">Paragraf Arası</option>
+          {PARAGRAPH_SPACINGS.map((ps) => (
+            <option key={ps.value} value={ps.value}>
+              {ps.label}
+            </option>
+          ))}
+        </select>
+
+        {/* Girinti Azalt / Artır */}
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().setIndent(-1).run()}
+          style={btnStyle(false)}
+          title="Girintiyi Azalt"
+        >
+          <Outdent size={13} />
+        </button>
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().setIndent(1).run()}
+          style={btnStyle(false)}
+          title="Girintiyi Artır"
+        >
+          <Indent size={13} />
+        </button>
+
         {divider}
 
-        {/* 4. Karakter Stilleri */}
+        {/* Karakter Biçimlendirme */}
         <button
           type="button"
           onClick={() => editor.chain().focus().toggleBold().run()}
-          title="Kalın (Ctrl+B)"
           style={btnStyle(editor.isActive('bold'))}
+          title="Kalın (Ctrl+B)"
         >
-          <Bold size={14} />
+          <Bold size={13} />
         </button>
         <button
           type="button"
           onClick={() => editor.chain().focus().toggleItalic().run()}
-          title="İtalik (Ctrl+I)"
           style={btnStyle(editor.isActive('italic'))}
+          title="İtalik (Ctrl+I)"
         >
-          <Italic size={14} />
+          <Italic size={13} />
         </button>
         <button
           type="button"
           onClick={() => editor.chain().focus().toggleUnderline().run()}
-          title="Altı Çizgili (Ctrl+U)"
           style={btnStyle(editor.isActive('underline'))}
+          title="Altı Çizgili (Ctrl+U)"
         >
-          <UnderlineIcon size={14} />
+          <UnderlineIcon size={13} />
         </button>
         <button
           type="button"
           onClick={() => editor.chain().focus().toggleStrike().run()}
-          title="Üstü Çizili"
           style={btnStyle(editor.isActive('strike'))}
+          title="Üstü Çizgili"
         >
-          <Strikethrough size={14} />
+          <Strikethrough size={13} />
         </button>
         <button
           type="button"
           onClick={() => editor.chain().focus().toggleSubscript().run()}
-          title="Alt Simge (X₂)"
           style={btnStyle(editor.isActive('subscript'))}
+          title="Alt Simge (X₂)"
         >
-          <SubscriptIcon size={14} />
+          <SubscriptIcon size={13} />
         </button>
         <button
           type="button"
           onClick={() => editor.chain().focus().toggleSuperscript().run()}
-          title="Üst Simge (X²)"
           style={btnStyle(editor.isActive('superscript'))}
+          title="Üst Simge (X²)"
         >
-          <SuperscriptIcon size={14} />
+          <SuperscriptIcon size={13} />
         </button>
 
         {divider}
 
-        {/* 5. Yazı & Zemin Rengi */}
+        {/* Renk Seçiciler */}
         <label
+          style={{ ...btnStyle(false), cursor: 'pointer', position: 'relative' }}
           title="Yazı Rengi"
-          style={{
-            ...btnStyle(false),
-            position: 'relative',
-            cursor: 'pointer',
-          }}
         >
-          <Palette size={14} color="var(--accent-primary)" />
+          <Palette size={13} />
           <input
             type="color"
             onChange={(e) => editor.chain().focus().setColor(e.target.value).run()}
-            style={{
-              position: 'absolute',
-              opacity: 0,
-              width: 0,
-              height: 0,
-              pointerEvents: 'none',
-            }}
+            style={{ position: 'absolute', opacity: 0, width: '100%', height: '100%', cursor: 'pointer' }}
           />
         </label>
-
         <label
-          title="Metin Vurgu / Zemin Rengi (Highlight)"
-          style={{
-            ...btnStyle(editor.isActive('highlight')),
-            position: 'relative',
-            cursor: 'pointer',
-          }}
+          style={{ ...btnStyle(false), cursor: 'pointer', position: 'relative' }}
+          title="Zemin Vurgusu (Highlighter)"
         >
-          <Highlighter size={14} color="var(--accent-amber, #f59e0b)" />
+          <Highlighter size={13} />
           <input
             type="color"
+            defaultValue="#FEF08A"
             onChange={(e) => editor.chain().focus().toggleHighlight({ color: e.target.value }).run()}
-            style={{
-              position: 'absolute',
-              opacity: 0,
-              width: 0,
-              height: 0,
-              pointerEvents: 'none',
-            }}
+            style={{ position: 'absolute', opacity: 0, width: '100%', height: '100%', cursor: 'pointer' }}
           />
         </label>
-
-        <button
-          type="button"
-          onClick={() => editor.chain().focus().unsetAllMarks().clearNodes().run()}
-          title="Biçimlendirmeyi Temizle (Silgi)"
-          style={btnStyle(false)}
-        >
-          <RemoveFormatting size={14} />
-        </button>
 
         {divider}
 
-        {/* 6. Hizalama */}
+        {/* Hizalama */}
         <button
           type="button"
           onClick={() => editor.chain().focus().setTextAlign('left').run()}
-          title="Sola Yasla"
           style={btnStyle(editor.isActive({ textAlign: 'left' }))}
+          title="Sola Yasla"
         >
-          <AlignLeft size={14} />
+          <AlignLeft size={13} />
         </button>
         <button
           type="button"
           onClick={() => editor.chain().focus().setTextAlign('center').run()}
-          title="Ortala"
           style={btnStyle(editor.isActive({ textAlign: 'center' }))}
+          title="Ortala"
         >
-          <AlignCenter size={14} />
+          <AlignCenter size={13} />
         </button>
         <button
           type="button"
           onClick={() => editor.chain().focus().setTextAlign('right').run()}
-          title="Sağa Yasla"
           style={btnStyle(editor.isActive({ textAlign: 'right' }))}
+          title="Sağa Yasla"
         >
-          <AlignRight size={14} />
+          <AlignRight size={13} />
         </button>
         <button
           type="button"
           onClick={() => editor.chain().focus().setTextAlign('justify').run()}
-          title="İki Yana Yasla"
           style={btnStyle(editor.isActive({ textAlign: 'justify' }))}
+          title="İki Yana Yasla"
         >
-          <AlignJustify size={14} />
+          <AlignJustify size={13} />
         </button>
 
         {divider}
 
-        {/* 7. Listeler & Bloklar */}
+        {/* Listeler */}
         <button
           type="button"
           onClick={() => editor.chain().focus().toggleBulletList().run()}
-          title="Madde İşaretli Liste"
           style={btnStyle(editor.isActive('bulletList'))}
+          title="Madde İşaretli Liste"
         >
-          <List size={14} />
+          <List size={13} />
         </button>
         <button
           type="button"
           onClick={() => editor.chain().focus().toggleOrderedList().run()}
-          title="Numaralı Liste"
           style={btnStyle(editor.isActive('orderedList'))}
+          title="Numaralı Liste"
         >
-          <ListOrdered size={14} />
-        </button>
-        <button
-          type="button"
-          onClick={() => editor.chain().focus().toggleBlockquote().run()}
-          title="Alıntı Bloğu"
-          style={btnStyle(editor.isActive('blockquote'))}
-        >
-          <Quote size={14} />
-        </button>
-        <button
-          type="button"
-          onClick={() => editor.chain().focus().setHorizontalRule().run()}
-          title="Yatay Ayırıcı Çizgi"
-          style={btnStyle(false)}
-        >
-          <Minus size={14} />
-        </button>
-        <button
-          type="button"
-          onClick={() => editor.chain().focus().toggleCodeBlock().run()}
-          title="Kod Bloğu"
-          style={btnStyle(editor.isActive('codeBlock'))}
-        >
-          <Code size={14} />
+          <ListOrdered size={13} />
         </button>
 
         {divider}
 
-        {/* 8. Bağlantı, Resim & Tablo Ekleme */}
+        {/* Bağlantı (Link) */}
         <button
           type="button"
           onClick={() => setIsLinkModalOpen(true)}
-          title="Bağlantı (Link) Ekle"
           style={btnStyle(editor.isActive('link'))}
+          title="Bağlantı Ekle / Düzenle"
         >
-          <LinkIcon size={14} />
+          <LinkIcon size={13} />
         </button>
-        <button
-          type="button"
-          onClick={() => setIsImageModalOpen(true)}
-          title="Görsel & Metin Kaydırma Ekle"
-          style={btnStyle(editor.isActive('customImage'))}
-        >
-          <ImageIcon size={14} />
-        </button>
-        <button
-          type="button"
-          onClick={() => setIsTableModalOpen(true)}
-          title="Tablo Stüdyosu (Ekle / Düzenle / Birleştir)"
-          style={btnStyle(editor.isActive('table'))}
-        >
-          <TableIcon size={14} />
-        </button>
+
+        {/* Açılır Menülü Tablo Aracı */}
+        <TableDropdown editor={editor} onOpenFloating={onOpenFloatingTable} />
+
+        {/* Açılır Menülü Görsel Aracı */}
+        <ImageDropdown editor={editor} />
       </div>
 
-      {/* İlgili Modallar */}
-      <TableModal
-        editor={editor}
-        isOpen={isTableModalOpen}
-        onClose={() => setIsTableModalOpen(false)}
-      />
-      <ImageModal
-        editor={editor}
-        isOpen={isImageModalOpen}
-        onClose={() => setIsImageModalOpen(false)}
-      />
       <LinkModal
         editor={editor}
         isOpen={isLinkModalOpen}

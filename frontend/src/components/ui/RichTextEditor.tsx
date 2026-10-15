@@ -14,8 +14,15 @@ import TableHeader from '@tiptap/extension-table-header';
 import TableCell from '@tiptap/extension-table-cell';
 import Link from '@tiptap/extension-link';
 import { Eye, Edit3, Clock, Type, AlignLeft } from 'lucide-react';
-import { FontSize, CustomImage } from '../editor/customExtensions';
+import {
+  FontSize,
+  LineHeight,
+  ParagraphSpacing,
+  DuplicateSelection,
+  CustomImage,
+} from '../editor/customExtensions';
 import { EditorToolbar } from '../editor/EditorToolbar';
+import { FloatingTableInspector } from '../editor/FloatingTableInspector';
 
 export interface RichTextEditorProps {
   label?: string;
@@ -24,6 +31,7 @@ export interface RichTextEditorProps {
   placeholder?: string;
   error?: string;
   dir?: 'ltr' | 'rtl';
+  editorRef?: React.MutableRefObject<any>;
 }
 
 export const RichTextEditor: React.FC<RichTextEditorProps> = ({
@@ -33,8 +41,10 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
   placeholder,
   error,
   dir = 'ltr',
+  editorRef,
 }) => {
   const [isPreview, setIsPreview] = useState(false);
+  const [isFloatingTableOpen, setIsFloatingTableOpen] = useState(false);
 
   const editor = useEditor({
     extensions: [
@@ -66,6 +76,9 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
         },
       }),
       FontSize,
+      LineHeight,
+      ParagraphSpacing,
+      DuplicateSelection,
       CustomImage,
     ],
     content: value || '',
@@ -74,6 +87,12 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
       onChange(html);
     },
   });
+
+  useEffect(() => {
+    if (editorRef) {
+      editorRef.current = editor;
+    }
+  }, [editor, editorRef]);
 
   useEffect(() => {
     if (editor && value !== editor.getHTML()) {
@@ -123,12 +142,17 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
 
       {/* Editör / Önizleme Kapsayıcısı */}
       <div className={`rich-editor-wrapper ${error ? 'has-error' : ''}`} dir={dir}>
-        {!isPreview && <EditorToolbar editor={editor} />}
+        {!isPreview && (
+          <EditorToolbar
+            editor={editor}
+            onOpenFloatingTable={() => setIsFloatingTableOpen(true)}
+          />
+        )}
 
         {isPreview ? (
           <div
             className="rich-editor-content-area tiptap-content"
-            style={{ minHeight: '260px' }}
+            style={{ minHeight: '340px' }}
             dangerouslySetInnerHTML={{
               __html: sanitizeHTML(
                 value || '<p style="color:var(--text-muted); font-style:italic;">(İçerik henüz girilmedi...)</p>'
@@ -139,6 +163,7 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
           <div
             className="rich-editor-content-area"
             onClick={() => editor?.commands.focus()}
+            style={{ minHeight: '340px' }}
           >
             <EditorContent editor={editor} placeholder={placeholder} />
           </div>
@@ -164,10 +189,17 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
             </span>
           </div>
           <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
-            {isPreview ? 'Önizleme Modu Aktif' : 'WYSIWYG Editör'}
+            {isPreview ? 'Önizleme Modu Aktif' : 'WYSIWYG Word Editörü'}
           </span>
         </div>
       </div>
+
+      {/* Sürüklenebilir Canlı Tablo Paleti */}
+      <FloatingTableInspector
+        editor={editor}
+        isOpen={isFloatingTableOpen}
+        onClose={() => setIsFloatingTableOpen(false)}
+      />
 
       {error && (
         <span style={{ display: 'block', color: 'var(--danger, #EF4444)', fontSize: '12px', marginTop: '4px' }}>

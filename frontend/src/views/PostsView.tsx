@@ -3,7 +3,8 @@ import type { BlogPost, BlogChannel } from '../types';
 import { api } from '../services/api';
 import { PostFilterBar } from '../components/posts/PostFilterBar';
 import { PostList } from '../components/posts/PostList';
-import { PostEditorModal, type PostFormData } from '../components/posts/PostEditorModal';
+import { BlogStudioView } from './BlogStudioView';
+import type { PostFormData } from '../components/posts/PostEditorModal';
 import { useTranslation } from '../context/I18nContext';
 
 export const PostsView: React.FC = () => {
@@ -226,6 +227,22 @@ export const PostsView: React.FC = () => {
     return matchesSearch && matchesStatus && matchesChannel;
   });
 
+  if (showEditor) {
+    return (
+      <BlogStudioView
+        isOpen={showEditor}
+        onClose={() => setShowEditor(false)}
+        editingPost={editingPost}
+        channels={channels}
+        formData={formData}
+        setFormData={setFormData}
+        onSave={handleSavePost}
+        onAiTranslate={handleAiTranslate}
+        aiTranslating={aiTranslating}
+      />
+    );
+  }
+
   return (
     <div className="animate-fade-in" style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
       <PostFilterBar
@@ -251,18 +268,6 @@ export const PostsView: React.FC = () => {
         onMoveToTrash={handleMoveToTrash}
         onRestore={handleRestoreFromTrash}
         onPermanentDelete={handlePermanentDelete}
-      />
-
-      <PostEditorModal
-        isOpen={showEditor}
-        onClose={() => setShowEditor(false)}
-        editingPost={editingPost}
-        channels={channels}
-        formData={formData}
-        setFormData={setFormData}
-        onSave={handleSavePost}
-        onAiTranslate={handleAiTranslate}
-        aiTranslating={aiTranslating}
       />
     </div>
   );

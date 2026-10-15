@@ -8,6 +8,17 @@ declare module '@tiptap/core' {
       setFontSize: (size: string) => ReturnType;
       unsetFontSize: () => ReturnType;
     };
+    lineHeight: {
+      setLineHeight: (height: string) => ReturnType;
+      unsetLineHeight: () => ReturnType;
+    };
+    paragraphSpacing: {
+      setParagraphSpacing: (bottomSpacing: string) => ReturnType;
+      setIndent: (delta: number) => ReturnType;
+    };
+    duplicateSelection: {
+      duplicateNode: () => ReturnType;
+    };
     customImage: {
       setImageWithLayout: (options: {
         src: string;
@@ -63,7 +74,141 @@ export const FontSize = Extension.create({
   },
 });
 
-// 2. Metin Saran ve Satır Açan Özel Resim Eklentisi (Word-style Image Wrap)
+// 2. Satır Yüksekliği / Satır Aralığı (Line Height) Eklentisi
+export const LineHeight = Extension.create({
+  name: 'lineHeight',
+  addOptions() {
+    return {
+      types: ['paragraph', 'heading'],
+    };
+  },
+  addGlobalAttributes() {
+    return [
+      {
+        types: this.options.types,
+        attributes: {
+          lineHeight: {
+            default: null,
+            parseHTML: (element) => element.style.lineHeight || null,
+            renderHTML: (attributes) => {
+              if (!attributes.lineHeight) return {};
+              return {
+                style: `line-height: ${attributes.lineHeight}`,
+              };
+            },
+          },
+        },
+      },
+    ];
+  },
+  addCommands() {
+    return {
+      setLineHeight:
+        (height: string) =>
+        ({ commands }) => {
+          return this.options.types.every((type: string) =>
+            commands.updateAttributes(type, { lineHeight: height })
+          );
+        },
+      unsetLineHeight:
+        () =>
+        ({ commands }) => {
+          return this.options.types.every((type: string) =>
+            commands.resetAttributes(type, 'lineHeight')
+          );
+        },
+    };
+  },
+});
+
+// 3. Paragraf Boşlukları ve Girinti (Paragraph Spacing & Indent) Eklentisi
+export const ParagraphSpacing = Extension.create({
+  name: 'paragraphSpacing',
+  addOptions() {
+    return {
+      types: ['paragraph', 'heading'],
+    };
+  },
+  addGlobalAttributes() {
+    return [
+      {
+        types: this.options.types,
+        attributes: {
+          marginBottom: {
+            default: null,
+            parseHTML: (element) => element.style.marginBottom || null,
+            renderHTML: (attributes) => {
+              if (!attributes.marginBottom) return {};
+              return {
+                style: `margin-bottom: ${attributes.marginBottom}`,
+              };
+            },
+          },
+          paddingLeft: {
+            default: null,
+            parseHTML: (element) => element.style.paddingLeft || null,
+            renderHTML: (attributes) => {
+              if (!attributes.paddingLeft) return {};
+              return {
+                style: `padding-left: ${attributes.paddingLeft}`,
+              };
+            },
+          },
+        },
+      },
+    ];
+  },
+  addCommands() {
+    return {
+      setParagraphSpacing:
+        (bottomSpacing: string) =>
+        ({ commands }) => {
+          return this.options.types.every((type: string) =>
+            commands.updateAttributes(type, { marginBottom: bottomSpacing })
+          );
+        },
+      setIndent:
+        (delta: number) =>
+        ({ state, commands }) => {
+          const { selection } = state;
+          const node = selection.$from.parent;
+          const currentPadding = parseInt(node.attrs.paddingLeft || '0', 10);
+          const newPadding = Math.max(0, currentPadding + delta * 24);
+          const paddingVal = newPadding > 0 ? `${newPadding}px` : null;
+
+          return this.options.types.every((type: string) =>
+            commands.updateAttributes(type, { paddingLeft: paddingVal })
+          );
+        },
+    };
+  },
+});
+
+// 4. Seçimi / Bloğu Çoğaltma (Duplicate Selection) Eklentisi
+export const DuplicateSelection = Extension.create({
+  name: 'duplicateSelection',
+  addCommands() {
+    return {
+      duplicateNode:
+        () =>
+        ({ state, dispatch }) => {
+          const { selection, tr } = state;
+          const node = selection.$from.parent;
+          if (!node) return false;
+
+          const end = selection.$to.end();
+          const nodeCopy = node.copy(node.content);
+          if (dispatch) {
+            tr.insert(end + 1, nodeCopy);
+            dispatch(tr);
+          }
+          return true;
+        },
+    };
+  },
+});
+
+// 5. Metin Saran ve Satır Açan Özel Resim Eklentisi (Word-style Image Wrap)
 export const CustomImage = Image.extend({
   name: 'customImage',
   addAttributes() {
@@ -90,17 +235,13 @@ export const CustomImage = Image.extend({
     let style = '';
 
     if (layout === 'left') {
-      // Metni Saran - Sola Yaslı
-      style = 'float: left; margin: 0 16px 12px 0; max-width: 48%; border-radius: 6px;';
+      style = 'float: left; margin: 4px 18px 14px 0; max-width: 48%; border-radius: 6px;';
     } else if (layout === 'right') {
-      // Metni Saran - Sağa Yaslı
-      style = 'float: right; margin: 0 0 12px 16px; max-width: 48%; border-radius: 6px;';
+      style = 'float: right; margin: 4px 0 14px 18px; max-width: 48%; border-radius: 6px;';
     } else if (layout === 'full') {
-      // Tam Genişlik
-      style = 'display: block; width: 100%; margin: 16px auto; border-radius: 6px; clear: both;';
+      style = 'display: block; width: 100%; margin: 18px auto; border-radius: 6px; clear: both;';
     } else {
-      // Satır Açan Ortalı Blok
-      style = 'display: block; margin: 16px auto; max-width: 100%; border-radius: 6px; clear: both;';
+      style = 'display: block; margin: 18px auto; max-width: 100%; border-radius: 6px; clear: both;';
     }
 
     const existingStyle = HTMLAttributes.style || '';

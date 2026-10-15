@@ -1,6 +1,32 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [15.10.2026 - 15:00] - Tam Ekran Blog Stüdyosu (BlogStudioView), Genişletilebilir Tuval, Açılır Menü Araçları, Yüzen Tablo Paleti ve Pano/Satır Aralığı Desteği
+- **Ayrı Panel Mimarisi — Blog Stüdyosu (`BlogStudioView.tsx`, `PostsView.tsx`):**
+  - Sıkışık modal penceresi kaldırılarak, blog yazısı oluşturma/düzenleme tetiklendiğinde doğrudan açılan bağımsız ve tam ekran bir **Blog Stüdyosu (`BlogStudioView`)** inşa edildi.
+  - Sabit üst stüdyo çubuğunda "← Makaleler" geri dönüşü, başlık, anlık durum makinesi (Kaydedildi/Kaydediliyor/Değişiklik Var), yalın TR/EN/AR dil sekmeleri ve eylemler yerleştirildi.
+- **Word Masaüstü ve Genişletilebilir Kağıt Tuvali (`editor.css`, `BlogStudioView.tsx`):**
+  - Editör dışındaki alanlar gri/nötr masaüstü dolgusu (`.studio-desk-surface`) olarak düzenlendi.
+  - Ortadaki metin alanı gerçek blog/yazı okuma genişliğini temsil eden gölgeli, Açık/Koyu tema uyumlu beyaz/kart zeminli kağıt tuvali (`.word-paper-canvas`) olarak kurgulandı.
+  - Kullanıcının tarayıcı sınırları içinde sağdan soldan rahatça genişletip daraltabileceği **Tuval Genişliği Seçicisi** (780px Standart, 920px Geniş, 1080px Masaüstü, %100 Akışkan) entegre edildi.
+- **Buzsuz Açılır Menü (Dropdown) ve Sürüklenebilir Yüzen Tablo Stüdyosu (`TableDropdown.tsx`, `FloatingTableInspector.tsx`):**
+  - Ekranı donduran ve arkadaki metni buzlayarak canlı görmeyi engelleyen modal kaldırıldı.
+  - Ribbon araç çubuğuna hafif açılır popover **Tablo ▾** (`TableDropdown.tsx`) eklendi (NxM ızgara seçici, satır/sütun ekleme/silme, hücre birleştirme/bölme).
+  - Canlı düzenleme için `Pointer Events` API ile sıfır harici paketle çalışan, arkası buzsuz ve yarı saydam **Yüzen Tablo Stüdyosu (`FloatingTableInspector.tsx`)** inşa edildi. Kullanıcı tablo üzerinde işlem yaparken tabloyu canlı izleyebilir.
+- **Açılır Menülü Görsel Yerleşim Aracı (`ImageDropdown.tsx`):**
+  - Ribbon çubuğuna açılır liste **Görsel ▾** eklendi; URL ve alt metin girişi ile Word stili metin sarma (sola sar, sağa sar, ortalı blok, tam genişlik) ve boyutlandırma araçları bağlandı.
+- **Sol Dikey Hızlı Araç Çubuğu (`EditorVerticalToolbar.tsx`):**
+  - Stüdyonun sol kenarına Pano Araçları (Kes, Kopyala, Yapıştır - tarayıcı izin kontrollü ve Ctrl+V ipuçlu, Çoğalt/Duplicate), Belge Eylemleri (Geri Al, İleri Al, Biçimlendirmeyi Temizle) ve Hızlı Bloklar (Alıntı, Kod, Çizgi, Tablo Paleti) yerleştirildi.
+- **Satır Aralığı ve Paragraf Boşlukları (`customExtensions.ts`, `EditorToolbar.tsx`):**
+  - TipTap motoruna `LineHeight` (1.0, 1.15, 1.5, 2.0), `ParagraphSpacing` (0px, 8px, 14px, 20px) ve `setIndent` (girinti artır/azalt) eklentileri kazandırıldı.
+- **Kural 2 Satır Sınırı Esnetmesi (`AGENTS.md`):**
+  - Kullanıcı mutabakatıyla ana stüdyo ekranları için tavan sınır azami 600 satır olarak güncellendi; modüler bileşenlerde 400-450 satır kuralı korundu.
+- **Modülerlik & Doğrulama:**
+  - `BlogStudioView.tsx` (452 satır), `EditorToolbar.tsx` (351 satır), `FloatingTableInspector.tsx` (265 satır), `TableDropdown.tsx` (205 satır), `ImageDropdown.tsx` (213 satır), `EditorVerticalToolbar.tsx` (210 satır), `RichTextEditor.tsx` (198 satır).
+  - `npm run build` PASS (0 hata, 974ms).
+- Yalnızca `DevAdmin` dalında çalışıldı, `main` korundu.
+
+
 ## [15.10.2026 - 14:20] - Word Stili Görsel WYSIWYG Blog Editörü (TipTap), Tablo Stüdyosu, Metin Sarmalı Görseller ve Canlı İstatistikler
 - **Word Benzeri Görsel WYSIWYG Editör Mimarisi (`RichTextEditor.tsx`, `EditorToolbar.tsx`, `customExtensions.ts`):**
   - Ham HTML bekleyen eski metin alanı, kullanıcı dostu şerit (ribbon) tasarımlı Microsoft Word benzeri zengin görsel editöre dönüştürüldü.
