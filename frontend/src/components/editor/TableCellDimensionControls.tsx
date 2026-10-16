@@ -1,7 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import type { Editor } from '@tiptap/react';
 import { Maximize, Palette, Link as LinkIcon, Unlink, Check } from 'lucide-react';
-import { parseCellStyle, mergeCellStyle, parse4WayPadding } from './tableStyleHelper';
+import {
+  parseCellStyle,
+  mergeCellStyle,
+  parse4WayPadding,
+  setColumnWidth,
+  setRowHeight,
+  getActiveColumnWidth,
+  getActiveRowHeight,
+} from './tableStyleHelper';
 import { TableLayoutControls } from './TableLayoutControls';
 
 interface TableCellDimensionControlsProps {
@@ -27,7 +35,7 @@ export const TableCellDimensionControls: React.FC<TableCellDimensionControlsProp
   const [padLeft, setPadLeft] = useState<string>('12');
   const [isLinked, setIsLinked] = useState<boolean>(false);
 
-  // Hücre Boyutları (Width & Height)
+  // Hücre / Sütun Boyutları (Width & Height)
   const [cellWidth, setCellWidth] = useState<string>('');
   const [cellHeight, setCellHeight] = useState<string>('');
 
@@ -55,9 +63,12 @@ export const TableCellDimensionControls: React.FC<TableCellDimensionControlsProp
         if (parsedCell['padding-left']) setPadLeft(parsedCell['padding-left'].replace('px', ''));
       }
 
-      // Hücre Boyutları
-      setCellWidth(parsedCell['width'] || '');
-      setCellHeight(parsedCell['height'] || parsedCell['min-height'] || '');
+      // Sütun genişliği ve satır yüksekliği
+      const colW = getActiveColumnWidth(editor);
+      setCellWidth(colW || parsedCell['width'] || '');
+
+      const rowH = getActiveRowHeight(editor);
+      setCellHeight(rowH || parsedCell['height'] || parsedCell['min-height'] || '');
 
       // Zemin Rengi
       setCellBg(parsedCell['background-color'] || 'transparent');
@@ -70,7 +81,7 @@ export const TableCellDimensionControls: React.FC<TableCellDimensionControlsProp
     };
   }, [editor]);
 
-  // Dolgu uygulama (Odağı çalmadan uygular)
+  // Dolgu uygulama
   const applyPadding = (top = padTop, right = padRight, bottom = padBottom, left = padLeft) => {
     const padStr = `${parseFloat(top) || 0}px ${parseFloat(right) || 0}px ${parseFloat(bottom) || 0}px ${parseFloat(left) || 0}px`;
     const existing = editor.getAttributes('tableCell')?.style || editor.getAttributes('tableHeader')?.style || '';
@@ -92,29 +103,23 @@ export const TableCellDimensionControls: React.FC<TableCellDimensionControlsProp
     }
   };
 
-  // Hücre Genişliği ve Yüksekliği Uygulama (Odağı çalmadan uygular)
-  const applyDimension = (widthVal = cellWidth, heightVal = cellHeight) => {
-    const existing = editor.getAttributes('tableCell')?.style || editor.getAttributes('tableHeader')?.style || '';
-    const updates: Record<string, string | null> = {};
+  // Sütun genişliği uygulama (TableMap tabanlı)
+  const applyColumnWidth = (val: string) => {
+    const num = parseFloat(val);
+    setColumnWidth(editor, num > 0 ? num : null);
+  };
 
-    if (!widthVal || widthVal.trim() === 'auto') {
-      updates['width'] = null;
-    } else {
-      const cleanW = widthVal.endsWith('%') || widthVal.endsWith('px') ? widthVal : `${widthVal}px`;
-      updates['width'] = cleanW;
-    }
+  // Satır yüksekliği uygulama (TableMap tabanlı)
+  const applyRowHeight = (val: string) => {
+    const num = parseFloat(val);
+    setRowHeight(editor, num > 0 ? num : null);
+  };
 
-    if (!heightVal || heightVal.trim() === 'auto') {
-      updates['height'] = null;
-      updates['min-height'] = null;
-    } else {
-      const cleanH = heightVal.endsWith('px') ? heightVal : `${heightVal}px`;
-      updates['height'] = cleanH;
-      updates['min-height'] = cleanH;
-    }
-
-    const merged = mergeCellStyle(existing, updates);
-    editor.commands.setCellAttribute('style', merged);
+  // Tek Merkezi Uygulama Fonksiyonu (Tüm boyut ve dolguları aynı anda uygular)
+  const handleApplyAll = () => {
+    applyColumnWidth(cellWidth);
+    applyRowHeight(cellHeight);
+    applyPadding(padTop, padRight, padBottom, padLeft);
   };
 
   // Zemin Rengi Uygulama
@@ -132,47 +137,37 @@ export const TableCellDimensionControls: React.FC<TableCellDimensionControlsProp
       {/* 1. Tablo Genişliği ve Hizalama (Modüler Bileşen) */}
       <TableLayoutControls editor={editor} />
 
-      {/* 2. Hücre Boyutları (Genişlik & Yükseklik) */}
-      <div style={{ paddingBottom: '6px', borderBottom: '1px solid var(--border-subtle)' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
-          <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--text-primary)' }}>
-            Hücre Genişliği ve Yüksekliği
-          </span>
-          <button
-            type="button"
-            onClick={() => applyDimension(cellWidth, cellHeight)}
-            className="admin-btn admin-btn-primary admin-btn-xs"
-            title="Hücre boyutunu uygula"
-          >
-            <Check size={11} /> Uygula
-          </button>
-        </div>
+      {/* 2. Sütun Genişliği ve Satır Yüksekliği */}
+      <div style={{ paddingBottom: '7px', borderBottom: '1px solid var(--border-subtle)' }}>
+        <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--text-primary)', display: 'block', marginBottom: '4px' }}>
+          Sütun Genişliği ve Satır Yüksekliği
+        </span>
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px' }}>
           {/* Genişlik */}
           <div style={{ display: 'flex', flexDirection: 'column' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2px' }}>
-              <span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>Genişlik</span>
+              <span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>Sütun Genişliği</span>
               <button
                 type="button"
                 onClick={() => {
                   setCellWidth('');
-                  applyDimension('', cellHeight);
+                  setColumnWidth(editor, null);
                 }}
                 style={{ fontSize: '9px', background: 'transparent', border: 'none', color: 'var(--accent-cyan)', cursor: 'pointer', padding: 0 }}
-                title="Genişliği Otomatik Yap"
+                title="Genişliği Otomatik Dağılıma Döndür"
               >
                 Oto
               </button>
             </div>
             <input
               type="text"
-              placeholder="Örn: 250px veya 33%"
+              placeholder="Örn: 250px"
               value={cellWidth}
               onChange={(e) => setCellWidth(e.target.value)}
-              onBlur={() => applyDimension(cellWidth, cellHeight)}
+              onBlur={() => applyColumnWidth(cellWidth)}
               onKeyDown={(e) => {
-                if (e.key === 'Enter') applyDimension(cellWidth, cellHeight);
+                if (e.key === 'Enter') applyColumnWidth(cellWidth);
               }}
               style={{
                 width: '100%',
@@ -184,33 +179,34 @@ export const TableCellDimensionControls: React.FC<TableCellDimensionControlsProp
                 color: 'var(--text-primary)',
                 fontWeight: 600,
               }}
+              title="Sütun piksel değeri girip Enter'a basabilirsiniz"
             />
           </div>
 
           {/* Yükseklik */}
           <div style={{ display: 'flex', flexDirection: 'column' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2px' }}>
-              <span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>Yükseklik</span>
+              <span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>Satır Yüksekliği</span>
               <button
                 type="button"
                 onClick={() => {
                   setCellHeight('');
-                  applyDimension(cellWidth, '');
+                  setRowHeight(editor, null);
                 }}
                 style={{ fontSize: '9px', background: 'transparent', border: 'none', color: 'var(--accent-cyan)', cursor: 'pointer', padding: 0 }}
-                title="Yüksekliği Otomatik Yap"
+                title="Yüksekliği Otomatik Boyuta Döndür"
               >
                 Oto
               </button>
             </div>
             <input
               type="text"
-              placeholder="Örn: 40px"
+              placeholder="Örn: 50px"
               value={cellHeight}
               onChange={(e) => setCellHeight(e.target.value)}
-              onBlur={() => applyDimension(cellWidth, cellHeight)}
+              onBlur={() => applyRowHeight(cellHeight)}
               onKeyDown={(e) => {
-                if (e.key === 'Enter') applyDimension(cellWidth, cellHeight);
+                if (e.key === 'Enter') applyRowHeight(cellHeight);
               }}
               style={{
                 width: '100%',
@@ -222,47 +218,38 @@ export const TableCellDimensionControls: React.FC<TableCellDimensionControlsProp
                 color: 'var(--text-primary)',
                 fontWeight: 600,
               }}
+              title="Satır piksel yüksekliği girip Enter'a basabilirsiniz"
             />
           </div>
         </div>
       </div>
 
       {/* 3. 4 Yönlü Küsürlü Dolgu (Padding) */}
-      <div style={{ paddingBottom: '6px', borderBottom: '1px solid var(--border-subtle)' }}>
+      <div style={{ paddingBottom: '7px', borderBottom: '1px solid var(--border-subtle)' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
           <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '4px' }}>
             <Maximize size={11} /> 4 Yönlü Dolgu (Padding - px)
           </span>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-            <button
-              type="button"
-              onClick={() => setIsLinked(!isLinked)}
-              title={isLinked ? 'Tüm yönler bağlı' : 'Yönler bağımsız'}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '2px',
-                padding: '1px 5px',
-                fontSize: '9px',
-                background: isLinked ? 'var(--accent-primary)' : 'var(--bg-secondary)',
-                color: isLinked ? '#FFFFFF' : 'var(--text-secondary)',
-                border: '1px solid var(--border-card)',
-                borderRadius: '3px',
-                cursor: 'pointer',
-              }}
-            >
-              {isLinked ? <LinkIcon size={9} /> : <Unlink size={9} />}
-              {isLinked ? 'Bağlı' : 'Ayrı'}
-            </button>
-            <button
-              type="button"
-              onClick={() => applyPadding(padTop, padRight, padBottom, padLeft)}
-              className="admin-btn admin-btn-secondary admin-btn-xs"
-              title="Dolguyu uygula"
-            >
-              <Check size={11} />
-            </button>
-          </div>
+          <button
+            type="button"
+            onClick={() => setIsLinked(!isLinked)}
+            title={isLinked ? 'Tüm yönler bağlı' : 'Yönler bağımsız'}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '2px',
+              padding: '1px 5px',
+              fontSize: '9px',
+              background: isLinked ? 'var(--accent-primary)' : 'var(--bg-secondary)',
+              color: isLinked ? '#FFFFFF' : 'var(--text-secondary)',
+              border: '1px solid var(--border-card)',
+              borderRadius: '3px',
+              cursor: 'pointer',
+            }}
+          >
+            {isLinked ? <LinkIcon size={9} /> : <Unlink size={9} />}
+            {isLinked ? 'Bağlı' : 'Ayrı'}
+          </button>
         </div>
 
         {/* 4 Yönlü Sayısal Girişler */}
@@ -304,10 +291,10 @@ export const TableCellDimensionControls: React.FC<TableCellDimensionControlsProp
       </div>
 
       {/* 4. Hücre Zemin Dolgu Rengi (Background Fill) */}
-      <div>
+      <div style={{ paddingBottom: '4px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
           <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '4px' }}>
-            <Palette size={11} /> Hücre Dolgu Rengi ve Şeffaflık
+            <Palette size={11} /> Hücre Dolgu Rengi
           </span>
           <button
             type="button"
@@ -381,6 +368,27 @@ export const TableCellDimensionControls: React.FC<TableCellDimensionControlsProp
           />
         </div>
       </div>
+
+      {/* 5. TEK MERKEZİ UYGULA BUTONU */}
+      <button
+        type="button"
+        onClick={handleApplyAll}
+        className="admin-btn admin-btn-primary"
+        style={{
+          width: '100%',
+          padding: '6px 10px',
+          fontSize: '11px',
+          fontWeight: 700,
+          marginTop: '2px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: '5px',
+        }}
+        title="Girilen sütun genişliği, satır yüksekliği ve dolguyu tek seferde uygula"
+      >
+        <Check size={13} /> Değişiklikleri Uygula
+      </button>
     </div>
   );
 };

@@ -1,6 +1,20 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [16.10.2026 - 15:15] - CustomTableView ile Canlı Tablo Hizalama, TableMap Tabanlı Sütun/Satır Boyutlandırma ve Tek Merkezi Uygula Butonu
+- **CustomTableView ile Canlı Tablo Hizalama (`customExtensions.ts`, `RichTextEditor.tsx`, `TableLayoutControls.tsx`):**
+  - TipTap'in `TableView` sınıfı genişletilerek `CustomTableView` oluşturuldu; `update(node)` çağrısında tablonun DOM öğesine `node.attrs.style` doğrudan aktarılarak canlı senkronizasyon sağlandı.
+  - Sola Yasla (`margin-left: 0; margin-right: auto`), Ortala (`margin: 18px auto`) ve Sağa Yasla (`margin-left: auto; margin-right: 0`) stilleri açıkça ayrılarak editörde anında görselleştirildi.
+- **TableMap Tabanlı Sütun Genişliği ve Satır Yüksekliği (`tableStyleHelper.ts`, `TableCellDimensionControls.tsx`):**
+  - ProseMirror `TableMap` motoru ile `setColumnWidth` ve `setRowHeight` fonksiyonları yazıldı.
+  - Sütun genişliği girildiğinde o sütunun tüm hücrelerinin `colwidth` ve `style.width` öznitelikleri güncellenerek TipTap `<col>` yapısı üzerinden 250px (veya girilen px) görsel genişlik sağlandı.
+  - Satır yüksekliği satırdaki tüm hücrelere yansıtıldı; "Oto" butonları ile akışkan boyuta dönüş bağlandı.
+- **Tek Merkezi "Değişiklikleri Uygula" Butonu (`TableCellDimensionControls.tsx`):**
+  - Paneldeki 3 farklı dağınık "Uygula" butonu kaldırıldı; panelin altına tek bir merkezi "Değişiklikleri Uygula" butonu yerleştirilerek tüm boyut ve dolgu değişiklikleri tek tıkta uygulanabilir kılındı.
+- **Doğrulama ve Kural Uyumu:**
+  - `frontend` derlemesi (`npm run build`) PASS (0 hata, 769ms).
+  - Yalnızca `DevAdmin` dalında çalışıldı, `main` korundu.
+
 ## [16.10.2026 - 14:35] - Tablo Stüdyosu Odak Kaybı Giderildi, Tablo Genişlik/Hizalama (2/3, %50, %100) ve Title Case Başlıklar
 - **Odak Kaybı (Focus Stealing) Giderildi & "Uygula" Butonları (`TableCellDimensionControls.tsx`, `TableBorderControls.tsx`):**
   - Sayı girilirken imlecin editör tuvaline kaçmasına yol açan `.focus()` kaldırıldı; `editor.commands.setCellAttribute(...)` doğrudan bağlandı.

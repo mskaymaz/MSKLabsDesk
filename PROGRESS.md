@@ -1,7 +1,29 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
-## 🟢 Son Güncelleme [16.10.2026 - 14:35] — TABLO STÜDYOSU ODAK KAYBI GİDERİLDİ, TABLO GENİŞLİK/HİZALAMA (2/3, %50, %100) & TİTLE CASE BAŞLIKLAR [*]
+## 🟢 Son Güncelleme [16.10.2026 - 15:15] — CUSTOMTABLEVIEW İLE CANLI TABLO HİZALAMA, TABLEMAP TABANLI SÜTUN/SATIR BOYUTLANDIRMA & TEK MERKEZİ UYGULA BUTONU [*]
+* **Yapılan İşlem:**
+  1. **CustomTableView ile Canlı Tablo Hizalama ve Genişlik (`customExtensions.ts`, `RichTextEditor.tsx`, `TableLayoutControls.tsx`):**
+     - TipTap'in yerleşik `TableView` sınıfı genişletilerek `CustomTableView` oluşturuldu; `constructor` ve `update(node)` esnasında `node.attrs.style` doğrudan DOM `<table>` elementine bağlanarak inline CSS senkronizasyonu sağlandı.
+     - `TableLayoutControls` içinde Sola Yasla (`margin-left: 0; margin-right: auto`), Ortala (`margin: 18px auto`) ve Sağa Yasla (`margin-left: auto; margin-right: 0`) stilleri açıkça ayrılarak editör modunda canlı görselleşme garanti edildi.
+     - Hızlı genişlik butonları (%100, 2/3, %50, %75) ve hizalama butonları tıklandığı anda anında çalışır hale getirildi.
+  2. **TableMap Tabanlı Sütun Genişliği ve Satır Yüksekliği (`tableStyleHelper.ts`, `TableCellDimensionControls.tsx`):**
+     - Tekil hücre stili yerine ProseMirror `TableMap` motoru entegre edilerek `setColumnWidth` ve `setRowHeight` fonksiyonları yazıldı.
+     - Sütun genişliği girildiğinde o sütunun tüm hücrelerinin `colwidth` ve `style.width` öznitelikleri güncellenerek TipTap'in `<col style="width: ...px">` mekanizmasıyla sütunun anında 250px (veya girilen px) boyutuna gelmesi sağlandı.
+     - Satır yüksekliği girildiğinde satırdaki tüm hücreler `style.height` ve `min-height` ile genişletilerek dikey boyut görselleştirildi.
+     - "Oto" butonları bağlanarak sütun genişliği veya satır yüksekliği tek tıkla otomatik akışkan boyuta döndürülebilir kılındı.
+  3. **Dağınık "Uygula" Butonlarının Kaldırılması ve Tek Merkezi Buton:**
+     - Paneldeki 3 farklı dağınık "Uygula" butonu kaldırıldı.
+     - Panelin en altına tek, belirgin ve şık **"Değişiklikleri Uygula"** (`<Check /> Değişiklikleri Uygula`) butonu yerleştirildi; bu buton tıklandığında (veya input'larda Enter'a basıldığında) tüm boyut ve dolgu değişiklikleri tek seferde devreye alınır.
+  4. **CSS Kılavuz ve Uyumluluk İyileştirmesi (`editor.css`):**
+     - `.tiptap .tableWrapper` stili eklendi, `.tiptap table` kuralları `:not([style*="width"])` ve `:not([style*="margin"])` seçicileriyle şartlı fallback haline getirilerek inline CSS ile çakışması engellendi.
+  5. **Standart Doğrulama & Kural 2:**
+     - `frontend` derlemesi (`npm run build`) PASS (0 hata, 769ms).
+     - `backend` tip denetimi (`npx tsc --noEmit`) PASS (0 hata).
+     - Tüm modüller Kural 2 satır limitine tam uyumlu tutuldu (`TableCellDimensionControls.tsx`: 395 satır, `tableStyleHelper.ts`: 293 satır, `TableLayoutControls.tsx`: 152 satır, `customExtensions.ts`: 353 satır).
+* **Durum:** `DevAdmin` dalında çalışıldı, `main` korundu.
+
+## [16.10.2026 - 14:35] — TABLO STÜDYOSU ODAK KAYBI GİDERİLDİ, TABLO GENİŞLİK/HİZALAMA (2/3, %50, %100) & TİTLE CASE BAŞLIKLAR
 * **Yapılan İşlem:**
   1. **Odak Kaybı (Focus Stealing) Giderildi & "Uygula" Butonları Eklendi (`TableCellDimensionControls.tsx`, `TableBorderControls.tsx`):**
      - Hücre genişliği, yüksekliği ve padding alanlarına sayı girilirken her karakterde imlecin tuvale kaçmasına sebep olan `.focus()` çağrıları kaldırıldı; `editor.commands.setCellAttribute(...)` doğrudan bağlandı.

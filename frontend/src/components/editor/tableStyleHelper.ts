@@ -1,7 +1,4 @@
-/**
- * MSKLabsDesk — Tablo Hücre Stili Yardımcı Fonksiyonları (tableStyleHelper.ts)
- * Hücre inline CSS stillerini parse eder, birleştirir ve günceller.
- */
+import { TableMap, selectionCell, isInTable } from '@tiptap/pm/tables';
 
 export interface ParsedCellStyle {
   borderTop?: string;
@@ -36,7 +33,6 @@ export function parseCellStyle(styleStr: string | null | undefined): Record<stri
     if (colonIdx > 0) {
       const key = trimmed.slice(0, colonIdx).trim().toLowerCase();
       let val = trimmed.slice(colonIdx + 1).trim();
-      // !important temizle
       val = val.replace(/\s*!important/gi, '').trim();
       if (key && val) {
         map[key] = val;
@@ -135,10 +131,163 @@ export function updateTableStyle(editor: any, updates: Record<string, string | n
   if (!match) return;
   const { state, dispatch } = editor.view;
   const current = match.node.attrs.style || '';
-  const merged = mergeCellStyle(current, updates);
+  const merged = mergeCellStyle(current, {
+    display: 'table',
+    ...updates,
+  });
   const tr = state.tr.setNodeMarkup(match.pos, undefined, {
     ...match.node.attrs,
     style: merged,
   });
   dispatch(tr);
+}
+
+/**
+ * Aktif hücrenin ait olduğu sütunun genişliğini okur.
+ */
+export function getActiveColumnWidth(editor: any): string {
+  if (!editor?.view?.state || !isInTable(editor.view.state)) return '';
+  try {
+    const $cell = selectionCell(editor.view.state);
+    if (!$cell) return '';
+    const table = $cell.node(-1);
+    const map = TableMap.get(table);
+    const start = $cell.start(-1);
+    const col = map.colCount($cell.pos - start) + ($cell.nodeAfter?.attrs.colspan || 1) - 1;
+
+    for (let row = 0; row < map.height; row++) {
+      const pos = map.map[row * map.width + col];
+      const cellNode = table.nodeAt(pos);
+      if (cellNode?.attrs.colwidth) {
+        const index = cellNode.attrs.colspan === 1 ? 0 : col - map.colCount(pos);
+        const w = cellNode.attrs.colwidth[index];
+        if (w) return `${w}px`;
+      }
+      const st = parseCellStyle(cellNode?.attrs.style);
+      if (st['width']) return st['width'];
+    }
+  } catch {
+    // hücresel ayrıştırma hatasında sessizce geç
+  }
+  return '';
+}
+
+/**
+ * Aktif hücrenin satır yüksekliğini okur.
+ */
+export function getActiveRowHeight(editor: any): string {
+  if (!editor?.view?.state || !isInTable(editor.view.state)) return '';
+  try {
+    const $cell = selectionCell(editor.view.state);
+    if (!$cell) return '';
+    const st = parseCellStyle($cell.nodeAfter?.attrs.style);
+    return st['height'] || st['min-height'] || '';
+  } catch {
+    return '';
+  }
+}
+
+/**
+ * Aktif sütundaki tüm hücrelerin colwidth ve style.width değerlerini günceller.
+ */
+export function setColumnWidth(editor: any, widthPx: number | null): void {
+  if (!editor?.view?.state || !isInTable(editor.view.state)) return;
+  try {
+    const { state, dispatch } = editor.view;
+    const $cell = selectionCell(state);
+    if (!$cell) return;
+    const table = $cell.node(-1);
+    const map = TableMap.get(table);
+    const start = $cell.start(-1);
+    const col = map.colCount($cell.pos - start) + ($cell.nodeAfter?.attrs.colspan || 1) - 1;
+    const tr = state.tr;
+
+    for (let row = 0; row < map.height; row++) {
+      const mapIndex = row * map.width + col;
+      if (row && map.map[mapIndex] === map.map[mapIndex - map.width]) continue;
+      const pos = map.map[mapIndex];
+      const cellNode = table.nodeAt(pos);
+      if (!cellNode) continue;
+      const attrs = cellNode.attrs;
+      const index = attrs.colspan === 1 ? 0 : col - map.colCount(pos);
+
+      let colwidth: number[] | null = null;
+      if (widthPx && widthPx > 0) {
+        const arr = attrs.colwidth ? attrs.colwidth.slice() : new Array(attrs.colspan).fill(0);
+        arr[index] = widthPx;
+        colwidth = arr;
+      } else {
+        colwidth = null;
+      }
+
+      const currentStyle = attrs.style || '';
+      const mergedStyle = mergeCellStyle(currentStyle, {
+        width: widthPx && widthPx > 0 ? `${widthPx}px` : null,
+      });
+
+      tr.setNodeMarkup(start + pos, null, {
+        ...attrs,
+        colwidth,
+        style: mergedStyle,
+      });
+    }
+
+    if (tr.docChanged) {
+      dispatch(tr);
+    }
+  } catch (err) {
+    console.error('setColumnWidth error:', err);
+  }
+}
+
+/**
+ * Aktif satırdaki tüm hücrelerin yükseklik stillerini günceller.
+ */
+export function setRowHeight(editor: any, heightPx: number | null): void {
+  if (!editor?.view?.state || !isInTable(editor.view.state)) return;
+  try {
+    const { state, dispatch } = editor.view;
+    const $cell = selectionCell(state);
+    if (!$cell) return;
+    const table = $cell.node(-1);
+    const map = TableMap.get(table);
+    const start = $cell.start(-1);
+    const cellOffset = $cell.pos - start;
+
+    let targetRow = -1;
+    for (let r = 0; r < map.height; r++) {
+      for (let c = 0; c < map.width; c++) {
+        if (map.map[r * map.width + c] === cellOffset) {
+          targetRow = r;
+          break;
+        }
+      }
+      if (targetRow !== -1) break;
+    }
+    if (targetRow === -1) return;
+
+    const tr = state.tr;
+    const heightVal = heightPx && heightPx > 0 ? `${heightPx}px` : null;
+
+    for (let c = 0; c < map.width; c++) {
+      const pos = map.map[targetRow * map.width + c];
+      const cellNode = table.nodeAt(pos);
+      if (!cellNode) continue;
+      const currentStyle = cellNode.attrs.style || '';
+      const mergedStyle = mergeCellStyle(currentStyle, {
+        height: heightVal,
+        'min-height': heightVal,
+      });
+      tr.setNodeMarkup(start + pos, null, {
+        ...cellNode.attrs,
+        style: mergedStyle,
+      });
+    }
+
+    if (tr.docChanged) {
+      dispatch(tr);
+    }
+  } catch (err) {
+    console.error('setRowHeight error:', err);
+  }
 }

@@ -1,5 +1,5 @@
 import Image from '@tiptap/extension-image';
-import { Table } from '@tiptap/extension-table';
+import { Table, TableView, updateColumns } from '@tiptap/extension-table';
 import TableCell from '@tiptap/extension-table-cell';
 import TableHeader from '@tiptap/extension-table-header';
 import { Extension } from '@tiptap/core';
@@ -297,7 +297,45 @@ export const CustomTableHeader = TableHeader.extend({
   },
 });
 
+export class CustomTableView extends TableView {
+  constructor(node: any, cellMinWidth: number, view: any, HTMLAttributes: Record<string, any> = {}) {
+    super(node, cellMinWidth, view, HTMLAttributes);
+    if (node.attrs.style) {
+      this.table.style.cssText = node.attrs.style;
+    }
+  }
+
+  update(node: any) {
+    if (node.type !== this.node.type) return false;
+    this.node = node;
+    updateColumns(node, this.colgroup, this.table, this.cellMinWidth);
+    if (node.attrs.style) {
+      this.table.style.cssText = node.attrs.style;
+    } else {
+      this.table.removeAttribute('style');
+    }
+    return true;
+  }
+}
+
 export const CustomTable = Table.extend({
+  addOptions() {
+    const parentOpts = this.parent?.() || {
+      HTMLAttributes: {},
+      resizable: false,
+      renderWrapper: false,
+      handleWidth: 5,
+      cellMinWidth: 25,
+      View: TableView,
+      lastColumnResizable: true,
+      allowTableNodeSelection: false,
+    };
+    return {
+      ...parentOpts,
+      HTMLAttributes: parentOpts.HTMLAttributes || {},
+      View: CustomTableView,
+    };
+  },
   addAttributes() {
     return {
       ...this.parent?.(),

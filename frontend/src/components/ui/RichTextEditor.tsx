@@ -20,6 +20,7 @@ import {
   CustomTable,
   CustomTableCell,
   CustomTableHeader,
+  CustomTableView,
 } from '../editor/customExtensions';
 import { EditorToolbar } from '../editor/EditorToolbar';
 import { FloatingTableInspector } from '../editor/FloatingTableInspector';
@@ -65,6 +66,7 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
       }),
       CustomTable.configure({
         resizable: true,
+        View: CustomTableView,
       }),
       TableRow,
       CustomTableHeader,
