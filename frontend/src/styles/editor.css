@@ -171,10 +171,10 @@
 .tiptap table,
 .tiptap-content table {
   width: 100%;
+  max-width: 100%;
   border-collapse: collapse;
   margin: 18px 0;
-  table-layout: fixed;
-  overflow: hidden;
+  table-layout: auto;
   border-radius: 6px;
   font-size: 14px;
 }

@@ -8,7 +8,6 @@ import { TextStyle, FontFamily } from '@tiptap/extension-text-style';
 import Color from '@tiptap/extension-color';
 import Highlight from '@tiptap/extension-highlight';
 import TextAlign from '@tiptap/extension-text-align';
-import { Table } from '@tiptap/extension-table';
 import TableRow from '@tiptap/extension-table-row';
 import Link from '@tiptap/extension-link';
 import { Eye, Edit3, Clock, Type, AlignLeft } from 'lucide-react';
@@ -18,6 +17,7 @@ import {
   ParagraphSpacing,
   DuplicateSelection,
   CustomImage,
+  CustomTable,
   CustomTableCell,
   CustomTableHeader,
 } from '../editor/customExtensions';
@@ -63,7 +63,7 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
       TextAlign.configure({
         types: ['heading', 'paragraph'],
       }),
-      Table.configure({
+      CustomTable.configure({
         resizable: true,
       }),
       TableRow,

@@ -1,7 +1,25 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
-## 🟢 Son Güncelleme [15.10.2026 - 16:15] — 3 AŞAMALI DOĞRULAMALI AI ÇEVİRİ HATTI, HTML/STİL KORUMASI, DEEPL DESTEĞİ & TR ŞABLON KLONLAMA [*]
+## 🟢 Son Güncelleme [16.10.2026 - 14:35] — TABLO STÜDYOSU ODAK KAYBI GİDERİLDİ, TABLO GENİŞLİK/HİZALAMA (2/3, %50, %100) & TİTLE CASE BAŞLIKLAR [*]
+* **Yapılan İşlem:**
+  1. **Odak Kaybı (Focus Stealing) Giderildi & "Uygula" Butonları Eklendi (`TableCellDimensionControls.tsx`, `TableBorderControls.tsx`):**
+     - Hücre genişliği, yüksekliği ve padding alanlarına sayı girilirken her karakterde imlecin tuvale kaçmasına sebep olan `.focus()` çağrıları kaldırıldı; `editor.commands.setCellAttribute(...)` doğrudan bağlandı.
+     - Tüm sayısal boyut girişlerine belirgin `<Check /> Uygula` butonu, klavyeden `Enter` ve `onBlur` desteği eklenerek kesintisiz çok haneli sayı girişi sağlandı.
+  2. **Tablo Seviyesinde Genişlik ve Hizalama Desteği (`TableLayoutControls.tsx`, `tableStyleHelper.ts`, `customExtensions.ts`, `RichTextEditor.tsx`):**
+     - Tabloların `%100` genişlik zorunluluğu kırılarak `CustomTable` eklentisiyle ProseMirror seviyesinde `style` özniteliği şemaya dahil edildi.
+     - Hızlı genişlik butonları (`%100 Tam`, `%66.6 2/3`, `%50 Yarım`, `%75`) ve serbest piksel/yüzde giriş alanı eklendi.
+     - Tablo hizalama butonları eklendi: `Sola Yasla`, `Ortala`, `Sağa Yasla` (CSS `margin` kontrolüyle satırın 2/3'ünde duran ortalı/sola yaslı tablolar mümkün kılındı).
+  3. **Sola Yığılma Sorunu Çözüldü & Esnek Sütun Dağılımı (`editor.css`):**
+     - `.tiptap table` kuralları `table-layout: auto` ve `max-width: 100%` esnekliğine kavuşturularak tek bir hücreye piksel genişliği verildiğinde diğer sütunların sıkışıp sola yığılması önlendi.
+  4. **Başlık Okunurluğu İyileştirmesi — Title Case Standardı (`FloatingTableInspector.tsx`, `TableCellDimensionControls.tsx`, `TableBorderControls.tsx`):**
+     - Okunurluğu zorlaştıran tüm BÜYÜK HARF başlıklar, 600 font kalınlığı korunarak Title Case (ilk harfleri büyük) yazıma dönüştürüldü.
+  5. **Modülerlik ve Standart Doğrulama:**
+     - Tablo genişlik kontrolleri yeni `TableLayoutControls.tsx` (157 satır) modülüne ayrılarak `TableCellDimensionControls.tsx` 386 satıra indirildi (`<= 450` satır kuralı korundu).
+     - `frontend` derlemesi (`npm run build`) PASS (0 hata, 803ms).
+* **Durum:** `DevAdmin` dalında çalışıldı, `main` korundu.
+
+## [15.10.2026 - 16:15] — 3 AŞAMALI DOĞRULAMALI AI ÇEVİRİ HATTI, HTML/STİL KORUMASI, DEEPL DESTEĞİ & TR ŞABLON KLONLAMA
 * **Yapılan İşlem:**
   1. **TR Düzenini Hedef Dillere Klonlama Butonu (`BlogStudioView.tsx`):**
      - Üst stüdyo çubuğuna *"Düzeni Klonla"* butonu eklendi.

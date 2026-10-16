@@ -1,4 +1,5 @@
 import Image from '@tiptap/extension-image';
+import { Table } from '@tiptap/extension-table';
 import TableCell from '@tiptap/extension-table-cell';
 import TableHeader from '@tiptap/extension-table-header';
 import { Extension } from '@tiptap/core';
@@ -288,6 +289,22 @@ export const CustomTableHeader = TableHeader.extend({
         default: null,
         parseHTML: (element) => element.getAttribute('style') || null,
         renderHTML: (attributes) => {
+          if (!attributes.style) return {};
+          return { style: attributes.style };
+        },
+      },
+    };
+  },
+});
+
+export const CustomTable = Table.extend({
+  addAttributes() {
+    return {
+      ...this.parent?.(),
+      style: {
+        default: null,
+        parseHTML: (element: HTMLElement) => element.getAttribute('style') || null,
+        renderHTML: (attributes: Record<string, any>) => {
           if (!attributes.style) return {};
           return { style: attributes.style };
         },

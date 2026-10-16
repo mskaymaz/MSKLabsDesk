@@ -93,7 +93,7 @@ export const TableBorderControls: React.FC<TableBorderControlsProps> = ({ editor
     }
 
     const merged = mergeCellStyle(existingStyle, updates);
-    editor.chain().focus().setCellAttribute('style', merged).run();
+    editor.commands.setCellAttribute('style', merged);
   };
 
   const handleWidthChange = (delta: number) => {
@@ -121,8 +121,8 @@ export const TableBorderControls: React.FC<TableBorderControlsProps> = ({ editor
     <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
       {/* 1. Word Kenarlık Yönleri */}
       <div>
-        <span style={{ fontSize: '10px', fontWeight: 700, color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>
-          WORD KENARLIK YÖNLERİ
+        <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--text-primary)', display: 'block', marginBottom: '4px' }}>
+          Word Kenarlık Yönleri
         </span>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '3px', marginBottom: '3px' }}>
           {[
@@ -165,8 +165,8 @@ export const TableBorderControls: React.FC<TableBorderControlsProps> = ({ editor
 
       {/* 2. Çizgi Stili & Küsürlü Kalınlık Stepper */}
       <div>
-        <span style={{ fontSize: '10px', fontWeight: 700, color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>
-          ÇİZGİ STİLİ & KÜSÜRLÜ KALINLIK (PX)
+        <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--text-primary)', display: 'block', marginBottom: '4px' }}>
+          Çizgi Stili ve Kalınlık (px)
         </span>
         <div style={{ display: 'flex', gap: '4px', alignItems: 'center' }}>
           {/* Stil Seçici */}
@@ -238,8 +238,8 @@ export const TableBorderControls: React.FC<TableBorderControlsProps> = ({ editor
       {/* 3. Kenarlık Rengi, HTML5 Paleti & Şeffaf Seçeneği */}
       <div>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
-          <span style={{ fontSize: '10px', fontWeight: 700, color: 'var(--text-muted)' }}>
-            KENARLIK RENGİ & ŞEFFAFLIK
+          <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--text-primary)' }}>
+            Kenarlık Rengi ve Şeffaflık
           </span>
           <button
             type="button"

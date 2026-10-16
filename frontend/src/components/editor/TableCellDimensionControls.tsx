@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import type { Editor } from '@tiptap/react';
-import { Maximize, Palette, Link as LinkIcon, Unlink } from 'lucide-react';
+import { Maximize, Palette, Link as LinkIcon, Unlink, Check } from 'lucide-react';
 import { parseCellStyle, mergeCellStyle, parse4WayPadding } from './tableStyleHelper';
+import { TableLayoutControls } from './TableLayoutControls';
 
 interface TableCellDimensionControlsProps {
   editor: Editor;
@@ -33,14 +34,14 @@ export const TableCellDimensionControls: React.FC<TableCellDimensionControlsProp
   // Hücre Zemin Rengi
   const [cellBg, setCellBg] = useState<string>('transparent');
 
-  // Hücre seçiminde aktif değerleri yansıt
+  // Hücre seçiminde aktif değerleri oku
   useEffect(() => {
     const syncStyles = () => {
       const attrs = editor.getAttributes('tableCell')?.style || editor.getAttributes('tableHeader')?.style || '';
-      const parsed = parseCellStyle(attrs);
+      const parsedCell = parseCellStyle(attrs);
 
       // Padding yansıtma
-      const p = parsed['padding'];
+      const p = parsedCell['padding'];
       if (p) {
         const { top, right, bottom, left } = parse4WayPadding(p);
         setPadTop(top);
@@ -48,18 +49,18 @@ export const TableCellDimensionControls: React.FC<TableCellDimensionControlsProp
         setPadBottom(bottom);
         setPadLeft(left);
       } else {
-        if (parsed['padding-top']) setPadTop(parsed['padding-top'].replace('px', ''));
-        if (parsed['padding-right']) setPadRight(parsed['padding-right'].replace('px', ''));
-        if (parsed['padding-bottom']) setPadBottom(parsed['padding-bottom'].replace('px', ''));
-        if (parsed['padding-left']) setPadLeft(parsed['padding-left'].replace('px', ''));
+        if (parsedCell['padding-top']) setPadTop(parsedCell['padding-top'].replace('px', ''));
+        if (parsedCell['padding-right']) setPadRight(parsedCell['padding-right'].replace('px', ''));
+        if (parsedCell['padding-bottom']) setPadBottom(parsedCell['padding-bottom'].replace('px', ''));
+        if (parsedCell['padding-left']) setPadLeft(parsedCell['padding-left'].replace('px', ''));
       }
 
-      // Boyutlar
-      setCellWidth(parsed['width'] || '');
-      setCellHeight(parsed['height'] || parsed['min-height'] || '');
+      // Hücre Boyutları
+      setCellWidth(parsedCell['width'] || '');
+      setCellHeight(parsedCell['height'] || parsedCell['min-height'] || '');
 
       // Zemin Rengi
-      setCellBg(parsed['background-color'] || 'transparent');
+      setCellBg(parsedCell['background-color'] || 'transparent');
     };
 
     syncStyles();
@@ -69,37 +70,30 @@ export const TableCellDimensionControls: React.FC<TableCellDimensionControlsProp
     };
   }, [editor]);
 
-  // Dolgu uygulama
-  const applyPadding = (top: string, right: string, bottom: string, left: string) => {
-    setPadTop(top);
-    setPadRight(right);
-    setPadBottom(bottom);
-    setPadLeft(left);
-
+  // Dolgu uygulama (Odağı çalmadan uygular)
+  const applyPadding = (top = padTop, right = padRight, bottom = padBottom, left = padLeft) => {
     const padStr = `${parseFloat(top) || 0}px ${parseFloat(right) || 0}px ${parseFloat(bottom) || 0}px ${parseFloat(left) || 0}px`;
     const existing = editor.getAttributes('tableCell')?.style || editor.getAttributes('tableHeader')?.style || '';
     const merged = mergeCellStyle(existing, { padding: padStr });
-    editor.chain().focus().setCellAttribute('style', merged).run();
+    editor.commands.setCellAttribute('style', merged);
   };
 
   const handlePadChange = (direction: 'top' | 'right' | 'bottom' | 'left', val: string) => {
     if (isLinked) {
-      applyPadding(val, val, val, val);
+      setPadTop(val);
+      setPadRight(val);
+      setPadBottom(val);
+      setPadLeft(val);
     } else {
-      applyPadding(
-        direction === 'top' ? val : padTop,
-        direction === 'right' ? val : padRight,
-        direction === 'bottom' ? val : padBottom,
-        direction === 'left' ? val : padLeft
-      );
+      if (direction === 'top') setPadTop(val);
+      if (direction === 'right') setPadRight(val);
+      if (direction === 'bottom') setPadBottom(val);
+      if (direction === 'left') setPadLeft(val);
     }
   };
 
-  // Hücre Genişliği ve Yüksekliği Uygulama
-  const applyDimension = (widthVal: string, heightVal: string) => {
-    setCellWidth(widthVal);
-    setCellHeight(heightVal);
-
+  // Hücre Genişliği ve Yüksekliği Uygulama (Odağı çalmadan uygular)
+  const applyDimension = (widthVal = cellWidth, heightVal = cellHeight) => {
     const existing = editor.getAttributes('tableCell')?.style || editor.getAttributes('tableHeader')?.style || '';
     const updates: Record<string, string | null> = {};
 
@@ -120,7 +114,7 @@ export const TableCellDimensionControls: React.FC<TableCellDimensionControlsProp
     }
 
     const merged = mergeCellStyle(existing, updates);
-    editor.chain().focus().setCellAttribute('style', merged).run();
+    editor.commands.setCellAttribute('style', merged);
   };
 
   // Zemin Rengi Uygulama
@@ -130,37 +124,145 @@ export const TableCellDimensionControls: React.FC<TableCellDimensionControlsProp
     const merged = mergeCellStyle(existing, {
       'background-color': color === 'transparent' ? 'transparent' : color,
     });
-    editor.chain().focus().setCellAttribute('style', merged).run();
+    editor.commands.setCellAttribute('style', merged);
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-      {/* 1. 4 Yönlü Küsürlü Dolgu (Padding) */}
-      <div>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '9px' }}>
+      {/* 1. Tablo Genişliği ve Hizalama (Modüler Bileşen) */}
+      <TableLayoutControls editor={editor} />
+
+      {/* 2. Hücre Boyutları (Genişlik & Yükseklik) */}
+      <div style={{ paddingBottom: '6px', borderBottom: '1px solid var(--border-subtle)' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
-          <span style={{ fontSize: '10px', fontWeight: 700, color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '4px' }}>
-            <Maximize size={11} /> 4 YÖNLÜ DOLGU (PADDING - PX)
+          <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--text-primary)' }}>
+            Hücre Genişliği ve Yüksekliği
           </span>
           <button
             type="button"
-            onClick={() => setIsLinked(!isLinked)}
-            title={isLinked ? 'Tüm yönler bağlı (tıklayarak ayırın)' : 'Yönler bağımsız (tıklayarak bağlayın)'}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '3px',
-              padding: '1px 5px',
-              fontSize: '10px',
-              background: isLinked ? 'var(--accent-primary)' : 'var(--bg-secondary)',
-              color: isLinked ? '#FFFFFF' : 'var(--text-secondary)',
-              border: '1px solid var(--border-card)',
-              borderRadius: '3px',
-              cursor: 'pointer',
-            }}
+            onClick={() => applyDimension(cellWidth, cellHeight)}
+            className="admin-btn admin-btn-primary admin-btn-xs"
+            title="Hücre boyutunu uygula"
           >
-            {isLinked ? <LinkIcon size={10} /> : <Unlink size={10} />}
-            {isLinked ? 'Bağlı' : 'Ayrı'}
+            <Check size={11} /> Uygula
           </button>
+        </div>
+
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px' }}>
+          {/* Genişlik */}
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2px' }}>
+              <span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>Genişlik</span>
+              <button
+                type="button"
+                onClick={() => {
+                  setCellWidth('');
+                  applyDimension('', cellHeight);
+                }}
+                style={{ fontSize: '9px', background: 'transparent', border: 'none', color: 'var(--accent-cyan)', cursor: 'pointer', padding: 0 }}
+                title="Genişliği Otomatik Yap"
+              >
+                Oto
+              </button>
+            </div>
+            <input
+              type="text"
+              placeholder="Örn: 250px veya 33%"
+              value={cellWidth}
+              onChange={(e) => setCellWidth(e.target.value)}
+              onBlur={() => applyDimension(cellWidth, cellHeight)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') applyDimension(cellWidth, cellHeight);
+              }}
+              style={{
+                width: '100%',
+                fontSize: '11px',
+                padding: '3px 6px',
+                borderRadius: '3px',
+                border: '1px solid var(--border-card)',
+                background: 'var(--bg-secondary)',
+                color: 'var(--text-primary)',
+                fontWeight: 600,
+              }}
+            />
+          </div>
+
+          {/* Yükseklik */}
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2px' }}>
+              <span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>Yükseklik</span>
+              <button
+                type="button"
+                onClick={() => {
+                  setCellHeight('');
+                  applyDimension(cellWidth, '');
+                }}
+                style={{ fontSize: '9px', background: 'transparent', border: 'none', color: 'var(--accent-cyan)', cursor: 'pointer', padding: 0 }}
+                title="Yüksekliği Otomatik Yap"
+              >
+                Oto
+              </button>
+            </div>
+            <input
+              type="text"
+              placeholder="Örn: 40px"
+              value={cellHeight}
+              onChange={(e) => setCellHeight(e.target.value)}
+              onBlur={() => applyDimension(cellWidth, cellHeight)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') applyDimension(cellWidth, cellHeight);
+              }}
+              style={{
+                width: '100%',
+                fontSize: '11px',
+                padding: '3px 6px',
+                borderRadius: '3px',
+                border: '1px solid var(--border-card)',
+                background: 'var(--bg-secondary)',
+                color: 'var(--text-primary)',
+                fontWeight: 600,
+              }}
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* 3. 4 Yönlü Küsürlü Dolgu (Padding) */}
+      <div style={{ paddingBottom: '6px', borderBottom: '1px solid var(--border-subtle)' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
+          <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '4px' }}>
+            <Maximize size={11} /> 4 Yönlü Dolgu (Padding - px)
+          </span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+            <button
+              type="button"
+              onClick={() => setIsLinked(!isLinked)}
+              title={isLinked ? 'Tüm yönler bağlı' : 'Yönler bağımsız'}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '2px',
+                padding: '1px 5px',
+                fontSize: '9px',
+                background: isLinked ? 'var(--accent-primary)' : 'var(--bg-secondary)',
+                color: isLinked ? '#FFFFFF' : 'var(--text-secondary)',
+                border: '1px solid var(--border-card)',
+                borderRadius: '3px',
+                cursor: 'pointer',
+              }}
+            >
+              {isLinked ? <LinkIcon size={9} /> : <Unlink size={9} />}
+              {isLinked ? 'Bağlı' : 'Ayrı'}
+            </button>
+            <button
+              type="button"
+              onClick={() => applyPadding(padTop, padRight, padBottom, padLeft)}
+              className="admin-btn admin-btn-secondary admin-btn-xs"
+              title="Dolguyu uygula"
+            >
+              <Check size={11} />
+            </button>
+          </div>
         </div>
 
         {/* 4 Yönlü Sayısal Girişler */}
@@ -180,6 +282,10 @@ export const TableCellDimensionControls: React.FC<TableCellDimensionControlsProp
                 max="100"
                 value={d.val}
                 onChange={(e) => handlePadChange(d.key, e.target.value)}
+                onBlur={() => applyPadding(padTop, padRight, padBottom, padLeft)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') applyPadding(padTop, padRight, padBottom, padLeft);
+                }}
                 style={{
                   width: '100%',
                   textAlign: 'center',
@@ -197,89 +303,11 @@ export const TableCellDimensionControls: React.FC<TableCellDimensionControlsProp
         </div>
       </div>
 
-      {/* 2. Hücre Boyutları (Genişlik & Yükseklik) */}
-      <div>
-        <span style={{ fontSize: '10px', fontWeight: 700, color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>
-          HÜCRE GENİŞLİĞİ & YÜKSEKLİĞİ
-        </span>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px' }}>
-          {/* Genişlik */}
-          <div style={{ display: 'flex', flexDirection: 'column' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2px' }}>
-              <span style={{ fontSize: '9px', color: 'var(--text-muted)' }}>Genişlik (Width)</span>
-              <button
-                type="button"
-                onClick={() => applyDimension('', cellHeight)}
-                style={{ fontSize: '9px', background: 'transparent', border: 'none', color: 'var(--accent-cyan)', cursor: 'pointer', padding: 0 }}
-                title="Genişliği Otomatik Yap"
-              >
-                Oto
-              </button>
-            </div>
-            <input
-              type="text"
-              placeholder="Örn: 120px veya 30%"
-              value={cellWidth}
-              onChange={(e) => {
-                const val = e.target.value;
-                setCellWidth(val);
-                applyDimension(val, cellHeight);
-              }}
-              style={{
-                width: '100%',
-                fontSize: '11px',
-                padding: '3px 6px',
-                borderRadius: '3px',
-                border: '1px solid var(--border-card)',
-                background: 'var(--bg-secondary)',
-                color: 'var(--text-primary)',
-                fontWeight: 600,
-              }}
-            />
-          </div>
-
-          {/* Yükseklik */}
-          <div style={{ display: 'flex', flexDirection: 'column' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2px' }}>
-              <span style={{ fontSize: '9px', color: 'var(--text-muted)' }}>Yükseklik (Height)</span>
-              <button
-                type="button"
-                onClick={() => applyDimension(cellWidth, '')}
-                style={{ fontSize: '9px', background: 'transparent', border: 'none', color: 'var(--accent-cyan)', cursor: 'pointer', padding: 0 }}
-                title="Yüksekliği Otomatik Yap"
-              >
-                Oto
-              </button>
-            </div>
-            <input
-              type="text"
-              placeholder="Örn: 40px"
-              value={cellHeight}
-              onChange={(e) => {
-                const val = e.target.value;
-                setCellHeight(val);
-                applyDimension(cellWidth, val);
-              }}
-              style={{
-                width: '100%',
-                fontSize: '11px',
-                padding: '3px 6px',
-                borderRadius: '3px',
-                border: '1px solid var(--border-card)',
-                background: 'var(--bg-secondary)',
-                color: 'var(--text-primary)',
-                fontWeight: 600,
-              }}
-            />
-          </div>
-        </div>
-      </div>
-
-      {/* 3. Hücre Zemin Dolgu Rengi (Background Fill) */}
+      {/* 4. Hücre Zemin Dolgu Rengi (Background Fill) */}
       <div>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
-          <span style={{ fontSize: '10px', fontWeight: 700, color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '4px' }}>
-            <Palette size={11} /> HÜCRE DOLGU RENGİ & ŞEFFAFLIK
+          <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '4px' }}>
+            <Palette size={11} /> Hücre Dolgu Rengi ve Şeffaflık
           </span>
           <button
             type="button"
@@ -333,12 +361,10 @@ export const TableCellDimensionControls: React.FC<TableCellDimensionControlsProp
           <input
             type="text"
             value={cellBg}
-            onChange={(e) => {
-              const val = e.target.value.trim();
-              setCellBg(val);
-              if (val.length >= 3) {
-                applyBg(val);
-              }
+            onChange={(e) => setCellBg(e.target.value)}
+            onBlur={() => applyBg(cellBg)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') applyBg(cellBg);
             }}
             placeholder="#HEX veya rgba"
             style={{

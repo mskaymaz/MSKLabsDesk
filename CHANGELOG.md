@@ -1,6 +1,23 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [16.10.2026 - 14:35] - Tablo Stüdyosu Odak Kaybı Giderildi, Tablo Genişlik/Hizalama (2/3, %50, %100) ve Title Case Başlıklar
+- **Odak Kaybı (Focus Stealing) Giderildi & "Uygula" Butonları (`TableCellDimensionControls.tsx`, `TableBorderControls.tsx`):**
+  - Sayı girilirken imlecin editör tuvaline kaçmasına yol açan `.focus()` kaldırıldı; `editor.commands.setCellAttribute(...)` doğrudan bağlandı.
+  - Sayısal boyut girişlerine belirgin `<Check /> Uygula` butonu, `Enter` tuşu ve `onBlur` desteği eklenerek kesintisiz değer girişi sağlandı.
+- **Tablo Seviyesinde Genişlik ve Hizalama Desteği (`TableLayoutControls.tsx`, `tableStyleHelper.ts`, `customExtensions.ts`):**
+  - `%100` genişlik kısıtı aşıldı; `CustomTable` ile ProseMirror şemasına `style` desteği kazandırıldı.
+  - Hızlı genişlik seçenekleri: `%100 (Tam)`, `%66.6 (2/3)`, `%50 (Yarım)`, `%75`, serbest px / % alanı.
+  - Tablo hizalama kontrolleri: `Sola Yasla`, `Ortala`, `Sağa Yasla` (CSS `margin` kontrolüyle satırın 2/3'ünde duran 3 hücreli tablolar tam desteklendi).
+- **Tablo Sola Yığılma Çözümü (`editor.css`):**
+  - `.tiptap table` kuralları `table-layout: auto` ve `max-width: 100%` yapılarak tek hücreye piksel genişliği verildiğinde tablonun sola sıkışması önlendi.
+- **Başlık Okunurluğu — Title Case Standardı (`FloatingTableInspector.tsx`, `TableCellDimensionControls.tsx`, `TableBorderControls.tsx`):**
+  - Tüm BÜYÜK HARF başlıklar, 600 kalınlığı korunarak Title Case (ilk harfi büyük) formatına getirildi.
+- **Modüler Mimari ve Standart Doğrulama:**
+  - `TableLayoutControls.tsx` (157 satır) modülü ayrılarak `TableCellDimensionControls.tsx` 386 satırda tutuldu (`<= 450` satır kuralı korundu).
+  - `npm run build` PASS (0 hata, 803ms).
+- Yalnızca `DevAdmin` dalında çalışıldı, `main` korundu.
+
 ## [15.10.2026 - 16:15] - 3 Aşamalı Doğrulamalı AI Çeviri Hattı, HTML/Stil Koruması, DeepL Desteği ve TR Şablon Klonlama
 - **TR Düzenini Hedef Dillere Klonlama Butonu (`BlogStudioView.tsx`):**
   - Üst stüdyo çubuğuna *"Düzeni Klonla"* butonu eklendi; Türkçe tuvalindeki tüm tablo, görsel ve mizanpaj iskeletini tek tıkla `EN` ve/veya `AR` tuvaline kopyalayarak manuel çeviriyi hızlandırır.

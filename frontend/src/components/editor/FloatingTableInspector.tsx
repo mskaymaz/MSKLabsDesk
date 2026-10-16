@@ -194,8 +194,8 @@ export const FloatingTableInspector: React.FC<FloatingTableInspectorProps> = ({
             {activeTab === 'dimensions' && <TableCellDimensionControls editor={editor} />}
             {activeTab === 'layout' && (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                <span style={{ fontSize: '10px', fontWeight: 700, color: 'var(--text-muted)', display: 'block' }}>
-                  SATIR & SÜTUN İŞLEMLERİ
+                <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--text-primary)', display: 'block' }}>
+                  Satır ve Sütun İşlemleri
                 </span>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4px' }}>
                   {[
@@ -215,8 +215,8 @@ export const FloatingTableInspector: React.FC<FloatingTableInspectorProps> = ({
                   })}
                 </div>
 
-                <span style={{ fontSize: '10px', fontWeight: 700, color: 'var(--text-muted)', display: 'block', marginTop: '4px' }}>
-                  HÜCRE BİRLEŞTİRME & BÖLME
+                <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--text-primary)', display: 'block', marginTop: '6px' }}>
+                  Hücre Birleştirme ve Bölme
                 </span>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4px' }}>
                   <button type="button" style={btnStyle} onClick={() => editor.chain().focus().mergeCells().run()}>

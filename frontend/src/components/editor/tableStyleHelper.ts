@@ -102,3 +102,43 @@ export function parse4WayPadding(paddingStr: string | undefined): {
 
   return { top: '8', right: '12', bottom: '8', left: '12' };
 }
+
+/**
+ * İmlecin bulunduğu tablonun ProseMirror node'unu ve pozisyonunu bulur.
+ */
+export function getTableNodeAndPos(editor: any): { node: any; pos: number } | null {
+  if (!editor?.view?.state) return null;
+  const { state } = editor.view;
+  const { selection } = state;
+  for (let d = selection.$from.depth; d > 0; d--) {
+    const n = selection.$from.node(d);
+    if (n.type.name === 'table') {
+      return { node: n, pos: selection.$from.before(d) };
+    }
+  }
+  return null;
+}
+
+/**
+ * Aktif tablonun inline style dizesini okur.
+ */
+export function getTableStyle(editor: any): string {
+  const match = getTableNodeAndPos(editor);
+  return match?.node?.attrs?.style || '';
+}
+
+/**
+ * Tablo seviyesinde genişlik ve hizalama (margin) stillerini günceller.
+ */
+export function updateTableStyle(editor: any, updates: Record<string, string | null>): void {
+  const match = getTableNodeAndPos(editor);
+  if (!match) return;
+  const { state, dispatch } = editor.view;
+  const current = match.node.attrs.style || '';
+  const merged = mergeCellStyle(current, updates);
+  const tr = state.tr.setNodeMarkup(match.pos, undefined, {
+    ...match.node.attrs,
+    style: merged,
+  });
+  dispatch(tr);
+}
