@@ -165,7 +165,7 @@ export async function handleCmsPublic(request: Request, env: any): Promise<Respo
     const slug = path.split('/').pop();
 
     const app = await env.DB.prepare(
-      `SELECT * FROM apps WHERE (app_id = ? OR id = ?) AND is_active = 1`
+      `SELECT * FROM apps WHERE (app_id = ? OR id = ?)`
     ).bind(slug, slug).first();
 
     if (!app) {

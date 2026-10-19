@@ -1,7 +1,23 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
-## 🟢 Son Güncelleme [19.10.2026 - 15:15] — ANA UYGULAMALAR KART ÖZETLERİ (MAIN EŞİTLEMESİ) VE SABİT BOYUT DÜZENİ [*]
+## 🟢 Son Güncelleme [19.10.2026 - 15:20] — YAPIM AŞAMASINDAKİ UYGULAMALARIN YAYIN LİSTESİNDEN KALDIRILMASI & İKİLİ KATALOG DÜZENİ [*]
+* **Yapılan İşlem:**
+  1. **Kök Neden Tespiti & D1 Veritabanı Düzeltmesi (`0011_set_development_apps_inactive.sql`):**
+     - Migration `0009` içinde `deskpilot`, `enyakin` ve `gcpiluyari` uygulamaları sehven `is_active = 1` olarak tanımlanmıştı.
+     - `apps.html` üzerindeki `#activeAppsGrid` ("Yayındaki Uygulamalarımız") bölümü `/api/v1/apps` (`WHERE is_active = 1`) listesini çektiği için bu 3 yapım aşamasındaki uygulama 2. satır olarak yayında görünüyordu.
+     - `0011_set_development_apps_inactive.sql` migration'ı ile D1 veritabanında bu 3 uygulamanın durumu `is_active = 0` yapılarak yayındaki uygulamalar listesinden kaldırıldı.
+  2. **Backend API Ayrımı (`backend/src/routes/cmsPublic.ts`):**
+     - `/api/v1/apps` genel katalog endpoint'i yalnızca yayındaki aktif uygulamaları (`is_active = 1`) listelemeye devam etti (böylece sadece `haydinamaza`, `rekatsay`, `date_counter` 1. satır olarak döner).
+     - `/api/v1/apps/:slug` tekil detay sorgusundaki `AND is_active = 1` kısıtı kaldırılarak yapım aşamasındaki uygulamaların tekil tanıtım sayfalarının (`app.html?id=deskpilot`) 404 vermeden içerik çekebilmesi sağlandı.
+  3. **Doğrulama:**
+     - Local D1 üzerinde `0011_set_development_apps_inactive.sql` çalıştırıldı.
+     - `curl http://localhost:8787/api/v1/apps` ile sorgulandı: Yalnızca yayındaki 3 uygulama döndü.
+     - `curl http://localhost:8787/api/v1/apps/deskpilot` ile sorgulandı: Yapım aşamasındaki detay sayfası başarıyla 200 OK ile döndü.
+     - Frontend `npm run build` PASS (0 hata, 920ms).
+* **Durum:** `DevAdmin` dalında çalışıldı, `main` kesinlikle korundu.
+
+## [19.10.2026 - 15:15] — ANA UYGULAMALAR KART ÖZETLERİ (MAIN EŞİTLEMESİ) VE SABİT BOYUT DÜZENİ
 * **Yapılan İşlem:**
   1. **Ana Uygulamalarımız Sayfası Kart Özetleri (`webMSKLabs/apps.html`, `apps-data.js` & D1 `0010_standardize_app_summaries.sql`):**
      - Yanlışlıkla detay sayfasındaki uzun paragrafların kartlara dolması ve dikey bozulmaya yol açması giderildi.

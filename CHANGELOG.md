@@ -1,6 +1,18 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [19.10.2026 - 15:20] - Yapım Aşamasındaki Uygulamaların Yayın Listesinden Kaldırılması ve API Ayrımı
+- **Kök Neden Analizi ve D1 Veritabanı Düzeltmesi (`backend/migrations/0011_set_development_apps_inactive.sql`):**
+  - `0009` nolu migration'da `is_active = 1` olarak eklenen `deskpilot`, `enyakin`, `gcpiluyari` uygulamalarının yayındaki uygulamalar listesine (`#activeAppsGrid`) 2. satır olarak düşme hatası tespit edildi.
+  - `0011` nolu migration ile bu 3 uygulamanın `is_active` değeri `0` yapılarak sadece "Yapım Aşamasındaki Uygulamalar" kategorisinde kalması sağlandı.
+- **Backend API Ayrımı (`backend/src/routes/cmsPublic.ts`):**
+  - `/api/v1/apps` katalog endpoint'inde `is_active = 1` filtresi korunarak yalnızca `haydinamaza`, `rekatsay`, `date_counter` döndürüldü.
+  - `/api/v1/apps/:slug` tekil endpoint'inden `is_active = 1` şartı kaldırılarak yapım aşamasındaki uygulamaların tekil detay sayfalarının sorunsuz çalışması sağlandı.
+- **Doğrulama ve Kural Uyumu:**
+  - Local D1 veritabanında migration uygulandı, genel katalog ve tekil slug API çağrıları test edildi.
+  - Frontend `npm run build` PASS (0 hata, 920ms).
+  - Yalnızca `DevAdmin` dalında çalışıldı, `main` kesinlikle korundu.
+
 ## [19.10.2026 - 15:15] - Ana Uygulamalar Kart Özetleri (Main Eşitlemesi) ve Sabit Boyut Düzeni
 - **Ana Uygulamalarımız Sayfası Kart Özetleri (`webMSKLabs/apps.html`, `apps-data.js` & D1 `0010_standardize_app_summaries.sql`):**
   - Kartları dikey olarak bozan uzun detay metinleri yerine `origin/main` üzerindeki özgün, temiz 1 cümlelik özet vizyon metinleri (`haydinamaza`, `rekatsay`, `date_counter`, `deskpilot`, `enyakin`, `gcpiluyari`) D1 veritabanı ve `apps-data.js` içine işlendi.
