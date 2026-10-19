@@ -3,6 +3,7 @@ import { Edit2 } from 'lucide-react';
 import type { AppItem } from '../../../types';
 import type { CanvasLang, StudioSectionType } from './types';
 import { getAppIconUrl } from '../../../utils/appIcons';
+import { getLocalizedPlatform, getLocalizedCategory, getLocalizedStatus } from '../../../utils/appLocalization';
 
 interface AppStudioHeaderSectionProps {
   app: AppItem;
@@ -28,6 +29,11 @@ export const AppStudioHeaderSection: React.FC<AppStudioHeaderSectionProps> = ({
   const langActiveText = isAr ? 'نشط' : (isEn ? 'Active' : 'Aktif');
   const dlBtnText = isAr ? 'تنزيل التطبيق' : (isEn ? 'Download App' : 'Uygulamayı İndir');
   const guideBtnText = isAr ? 'دليل الاستخدام (PDF)' : (isEn ? 'User Guide (PDF)' : 'Kullanım Kılavuzu İndir');
+
+  // Başlık rozetlerinin yerelleştirilmesi (TR, EN, AR)
+  const platformBadge = getLocalizedPlatform(app.platform, canvasLang);
+  const categoryBadge = getLocalizedCategory(app.category, canvasLang);
+  const statusBadge = getLocalizedStatus(app.status, canvasLang);
 
   const guideUrl = app.guide_url || app.store_links?.guide_url;
 
@@ -56,19 +62,24 @@ export const AppStudioHeaderSection: React.FC<AppStudioHeaderSectionProps> = ({
           <h1>{appName || 'Uygulama Adı'}</h1>
           <div className="studio-badges">
             <span className="studio-badge studio-badge-platform">
-              {app.platform || 'Android'}
+              {platformBadge.full}
             </span>
             <span className="studio-badge studio-badge-status">
-              {app.category || 'Mobil'}
+              {categoryBadge.full}
             </span>
             {app.status === 'in_development' && (
               <span className="studio-badge" style={{ background: 'rgba(245, 158, 11, 0.2)', color: '#fcd34d' }}>
-                Geliştiriliyor
+                {statusBadge.full}
               </span>
             )}
             {app.status === 'planned' && (
               <span className="studio-badge" style={{ background: 'rgba(148, 163, 184, 0.2)', color: '#cbd5e1' }}>
-                Planlanıyor
+                {statusBadge.full}
+              </span>
+            )}
+            {app.status === 'active' && (
+              <span className="studio-badge" style={{ background: 'rgba(16, 185, 129, 0.2)', color: '#6ee7b7' }}>
+                {statusBadge.full}
               </span>
             )}
           </div>

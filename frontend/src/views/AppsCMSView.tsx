@@ -9,6 +9,7 @@ import { AppModal } from '../components/apps/AppModal';
 import { AppVersionModal } from '../components/apps/AppVersionModal';
 import { AppDetailStudioView } from './AppDetailStudioView';
 import { getAppIconUrl } from '../utils/appIcons';
+import { getLocalizedPlatform, getLocalizedCategory } from '../utils/appLocalization';
 
 export const AppsCMSView: React.FC = () => {
   const [apps, setApps] = useState<AppItem[]>([]);
@@ -368,13 +369,9 @@ export const AppsCMSView: React.FC = () => {
                     </div>
 
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px', justifyContent: 'flex-end', maxWidth: '160px' }}>
-                      {app.category ? app.category.split(',').map((c) => (
-                        <span key={c.trim()} className="admin-badge admin-badge-index" style={{ textTransform: 'capitalize', fontSize: '0.72rem' }}>
-                          {c.trim()}
-                        </span>
-                      )) : (
-                        <span className="admin-badge admin-badge-index" style={{ fontSize: '0.72rem' }}>Araç</span>
-                      )}
+                      <span className="admin-badge admin-badge-index" style={{ fontSize: '0.72rem' }}>
+                        {getLocalizedCategory(app.category, 'tr').full}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -392,7 +389,7 @@ export const AppsCMSView: React.FC = () => {
                 {/* Mağaza ve Platform Rozetleri */}
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', alignItems: 'center', marginBottom: '10px' }}>
                   <span className="admin-badge admin-badge-view" style={{ fontSize: '0.72rem' }}>
-                    {app.platform === 'all' ? 'Tüm Platformlar' : app.platform?.toUpperCase()}
+                    {getLocalizedPlatform(app.platform, 'tr').full}
                   </span>
 
                   {app.store_links?.google_play && (

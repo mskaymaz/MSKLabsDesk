@@ -323,26 +323,37 @@ export const AppStudioFloatingModal: React.FC<AppStudioFloatingModalProps> = ({
                     onChange={(e) => setDraftCategory(e.target.value)}
                     className="studio-select"
                   >
-                    <option value="Mobil">Mobil</option>
-                    <option value="Masaüstü">Masaüstü</option>
-                    <option value="Web">Web</option>
-                    <option value="Araçlar">Araçlar</option>
+                    <option value="utility">Araçlar & Yardımcılar</option>
+                    <option value="islamic">İslami / Dinî</option>
+                    <option value="productivity">Üretkenlik & Takip</option>
+                    <option value="education">Eğitim & İlim</option>
+                    <option value="lifestyle">Yaşam & Sağlık</option>
+                    <option value="multimedia">Multimedya & Ses</option>
+                    <option value="ai">Yapay Zekâ</option>
+                    <option value="system">Sistem & Güvenlik</option>
+                    {/* Eski serbest format kayıtlar için geriye uyumluluk */}
+                    {!['utility','islamic','productivity','education','lifestyle','multimedia','ai','system'].includes(draftCategory.toLowerCase()) && (
+                      <option value={draftCategory}>{draftCategory}</option>
+                    )}
                   </select>
                 </div>
 
                 <div className="studio-form-group">
                   <label className="studio-label">Platform</label>
                   <select
-                    value={draftPlatform}
+                    value={draftPlatform.toLowerCase()}
                     onChange={(e) => setDraftPlatform(e.target.value)}
                     className="studio-select"
                   >
-                    <option value="Android">Android</option>
-                    <option value="iOS">iOS</option>
-                    <option value="Android & iOS">Android & iOS</option>
-                    <option value="Windows">Windows</option>
-                    <option value="Web">Web</option>
+                    <option value="android">Android</option>
+                    <option value="ios">iOS</option>
+                    <option value="android / ios">Android & iOS</option>
+                    <option value="desktop">Windows Masaüstü</option>
+                    <option value="web">Web (PWA)</option>
                     <option value="all">Tüm Platformlar</option>
+                    {!['android','ios','android / ios','android & ios','desktop','windows','web','all'].includes(draftPlatform.toLowerCase()) && (
+                      <option value={draftPlatform}>{draftPlatform}</option>
+                    )}
                   </select>
                 </div>
 

@@ -1,7 +1,24 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
-## 🟢 Son Güncelleme [19.10.2026 - 16:45] — HAYDİ NAMAZA VERİLERİNİN GERİ YÜKLENMESİ VE KISMİ GÜNCELLEME KORUMASI [*]
+## 🟢 Son Güncelleme [19.10.2026 - 17:00] — PLATFORM, KATEGORİ VE DURUM ETİKETLERİNİN TR/EN/AR YERELLEŞTİRİLMESİ [*]
+* **Yapılan İşlem:**
+  1. **Kök Neden:**
+     - Görsel Stüdyo (`AppStudioHeaderSection.tsx`) ve web şablonunda (`app.html`), başlık yanındaki rozetlerde veritabanından gelen ham değerler (`desktop`, `utility`) doğrudan basılıyordu ve dile bağlı çeviri yapılmıyordu.
+  2. **Merkezi Yerelleştirme Yardımcısı (`frontend/src/utils/appLocalization.ts`):**
+     - Platform (`desktop`, `windows`, `mobile`, `android`, `ios`, `all`, `web`), kategori (`utility`, `islamic`, `productivity`, `education`, `lifestyle`, `multimedia`, `ai`, `system`) ve yayın durumu (`active`, `in_development`, `planned`) değerlerini TR, EN ve AR dillerinde standart rozetlere dönüştüren `getLocalizedPlatform`, `getLocalizedCategory` ve `getLocalizedStatus` fonksiyonları eklendi.
+     - Bayrak emojisi yasağı ve yalın gösterge kurallarına tam uyum sağlandı.
+  3. **Görsel Stüdyo Başlık Rozetleri (`AppStudioHeaderSection.tsx` & `AppStudioFloatingModal.tsx`):**
+     - Tuval dil seçimi (`canvasLang: 'tr' | 'en' | 'ar'`) değiştiğinde platform, kategori ve durum rozetleri anında ilgili dile çevrilecek şekilde entegre edildi.
+     - Açılır form penceresinde kategori ve platform seçim seçenekleri standart etiketlerle güncellendi.
+  4. **Yönetici Paneli Kartları (`AppsCMSView.tsx` & `AppDetailStudioView.tsx`):**
+     - Admin kartlarında ve varsayılan yüklerde Türkçe yerel rozetler entegre edildi.
+  5. **Web Vitrin Şablonu Senkronizasyonu (`webMSKLabs/app.html`):**
+     - Web detay sayfasında platform, kategori ve durum rozetleri çok dilli (`getPlatformBadgeInfo`, `getCategoryBadgeInfo`, `getStatusBadgeInfo`) yapıya kavuşturuldu.
+  6. **Doğrulama:**
+     - `frontend` `npm run build` PASS (0 hata, 814ms).
+* **Durum:** `DevAdmin` dalında çalışıldı, `main` kesinlikle korundu.
+
 * **Yapılan İşlem:**
   1. **Kök Neden:**
      - `cmsApps.ts` içerisindeki `PUT /api/v1/admin/apps/:id` endpoint'i, yalnızca sıralama veya tekil alan güncellendiğinde gönderilmeyen diğer alanları `null` olarak kaydediyordu.

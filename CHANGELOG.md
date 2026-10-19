@@ -1,6 +1,22 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [19.10.2026 - 17:00] - Platform, Kategori ve Durum Etiketlerinin TR/EN/AR Yerelleştirilmesi
+- **Merkezi Yerelleştirme Yardımcısı (`frontend/src/utils/appLocalization.ts`):**
+  - Platform (`desktop`, `windows`, `mobile`, `android`, `ios`, `all`, `web`), kategori (`utility`, `islamic`, `productivity`, `education`, `lifestyle`, `multimedia`, `ai`, `system`) ve yayın durumu (`active`, `in_development`, `planned`) değerlerini TR, EN ve AR dillerinde standart rozetlere dönüştüren `getLocalizedPlatform`, `getLocalizedCategory` ve `getLocalizedStatus` fonksiyonları eklendi.
+  - Dil bayrağı emojisi yasağı ve yalın gösterge kurallarına tam uyum sağlandı.
+- **Görsel Stüdyo Başlık Rozetleri (`AppStudioHeaderSection.tsx` & `AppStudioFloatingModal.tsx`):**
+  - Başlığın yanında yer alan platform ve kategori etiketlerinin doğrudan ham İngilizce terimler (`desktop`, `utility`) basması sorunu giderildi; seçili tuval diline (`canvasLang: 'tr' | 'en' | 'ar'`) göre dinamik ve yerel etiketler (`💻 Masaüstü Sistem (Windows)` / `💻 Desktop App (Windows)` / `💻 تطبيق سطح المكتب (Windows)` ve `🛠️ Araçlar & Yardımcılar` / `🛠️ Utilities & Tools` / `🛠️ أدوات ومساعدات`) basılması sağlandı.
+  - Açılır pencerede kategori ve platform seçim seçenekleri standart etiketlerle güncellendi.
+- **Yönetici Paneli Kartları (`AppsCMSView.tsx` & `AppDetailStudioView.tsx`):**
+  - Admin kartlarında ve varsayılan yüklerde Türkçe yerel rozetler entegre edildi.
+- **Web Vitrin Şablonu Senkronizasyonu (`webMSKLabs/app.html`):**
+  - Web detay sayfasında platform, kategori ve durum rozetleri çok dilli (`getPlatformBadgeInfo`, `getCategoryBadgeInfo`, `getStatusBadgeInfo`) yapıya kavuşturuldu.
+- **Doğrulama ve Kural Uyumu:**
+  - `frontend` `npm run build` PASS (0 hata).
+  - Yalnızca `DevAdmin` dalında çalışıldı, `main` kesinlikle korundu.
+
+
 ## [19.10.2026 - 16:45] - Haydi Namaza Verilerinin Geri Yüklenmesi ve Kısmi Güncelleme Koruması
 - **Defansif Backend Güncellemesi (`backend/src/routes/cmsApps.ts`):**
   - `PUT` rotası öncesinde mevcut kayıt çekilerek kısmi yük güncellemelerinde (örneğin sadece sıralama değiştiğinde) diğer kolonların null ile ezilmesi engellendi; alanlar güvenle birleştirildi.
