@@ -1,6 +1,16 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [19.10.2026 - 12:42] - Görsel Stüdyo Aydınlık (Light) Tema Senkronizasyonu
+- **Vitrin Tasarımıyla Birebir Aydınlık Tema Eşleştirmesi (`frontend/src/styles/app-studio.css`):**
+  - Tuval zemini vitrinin orijinal açık rengi (`#f8fafc`), ana kart beyaz (`#ffffff`), kenarlıklar (`#cbd5e1` / `#e2e8f0`) ve tipografi koyu kontrast (`#0f172a` başlık, `#334155` metin) olarak uyarlandı.
+  - Vitrindeki `‹ Uygulamalarımız Sayfasına Dön` butonu stili (`.studio-back-btn`) beyaz zemin, ince kenarlık ve hafif gölge ile birebir uygulandı.
+- **Uçar Modal Düzenleme Pencereleri Aydınlık Temaya Uyarlandı (`AppStudioFloatingModal.tsx`):**
+  - Floating dialog arka planı temiz açık gri/beyaz, başlık çubuğu `#f1f5f9`, form kutuları ve özellik kartları seçim hapları açık tema kontrastına tam uyarlandı.
+- **Doğrulama ve Kural Uyumu:**
+  - Frontend `npm run build` PASS (0 hata, 771ms).
+  - Yalnızca `DevAdmin` dalında çalışıldı, `main` kesinlikle korundu.
+
 ## [19.10.2026 - 12:35] - Uçar (Hareketli) Modal Editörü, Saf CSS Stilleri ve Yeni Uygulama Stüdyo Akışı
 - **Uçar / Hareketli Edit Dialog Mimarisi (`AppStudioFloatingModal.tsx`):**
   - Arkadaki sayfa kaybolmadan, üzerine tıklanan bölüme ait (Başlık/İkon, Açıklama, Özellik Kartları, Kılavuz, Mağaza Linkleri) uçar modal penceresi açıldı.

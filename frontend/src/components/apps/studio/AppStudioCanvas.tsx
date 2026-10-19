@@ -41,8 +41,7 @@ export const AppStudioCanvas: React.FC<AppStudioCanvasProps> = ({
           <button
             type="button"
             onClick={onBackToCatalog}
-            className="studio-btn studio-btn-subtle"
-            style={{ fontSize: '0.78rem', padding: '4px 10px' }}
+            className="studio-back-btn"
           >
             {backBtnText}
           </button>

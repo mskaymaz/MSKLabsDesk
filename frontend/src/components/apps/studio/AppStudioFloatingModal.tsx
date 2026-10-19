@@ -337,12 +337,13 @@ export const AppStudioFloatingModal: React.FC<AppStudioFloatingModalProps> = ({
                     key={idx}
                     type="button"
                     onClick={() => setActiveCardIdx(idx)}
-                    className="studio-btn studio-btn-subtle"
+                    className="studio-btn"
                     style={{
                       padding: '4px 8px',
                       fontSize: '0.74rem',
-                      background: activeCardIdx === idx ? '#4f46e5' : 'rgba(255,255,255,0.06)',
-                      borderColor: activeCardIdx === idx ? '#6366f1' : 'transparent',
+                      background: activeCardIdx === idx ? '#2563eb' : '#f1f5f9',
+                      color: activeCardIdx === idx ? '#ffffff' : '#334155',
+                      border: activeCardIdx === idx ? '1px solid #2563eb' : '1px solid #cbd5e1',
                     }}
                   >
                     <span>{card.icon || '📌'}</span>
@@ -352,9 +353,9 @@ export const AppStudioFloatingModal: React.FC<AppStudioFloatingModalProps> = ({
               </div>
 
               {draftFeatureCards[activeCardIdx] ? (
-                <div style={{ background: 'rgba(0,0,0,0.25)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '10px', padding: '12px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '10px', padding: '12px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <span style={{ fontSize: '0.8rem', fontWeight: 700, color: '#f8fafc' }}>
+                    <span style={{ fontSize: '0.8rem', fontWeight: 700, color: '#0f172a' }}>
                       Kart #{activeCardIdx + 1} İçeriği
                     </span>
                     <button

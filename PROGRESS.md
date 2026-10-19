@@ -1,7 +1,18 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
-## 🟢 Son Güncelleme [19.10.2026 - 12:35] — UÇAR (HAREKETLİ) MODAL EDİTÖRÜ, SAF CSS STİLLERİ & YENİ UYGULAMA STÜDYO AKIŞI [*]
+## 🟢 Son Güncelleme [19.10.2026 - 12:42] — GÖRSEL STÜDYO AYDINLIK (LIGHT) TEMA SENKRONİZASYONU [*]
+* **Yapılan İşlem:**
+  1. **Vitrin Tasarımıyla Birebir Aydınlık Tema Eşleştirmesi (`frontend/src/styles/app-studio.css`):**
+     - Tuval zemini vitrinin orijinal açık rengi (`#f8fafc`), ana kart beyaz (`#ffffff`), kenarlıklar (`#cbd5e1` / `#e2e8f0`) ve tipografi koyu kontrast (`#0f172a` başlık, `#334155` metin) olarak güncellendi.
+     - Vitrindeki `‹ Uygulamalarımız Sayfasına Dön` butonu stili (`.studio-back-btn`) beyaz zemin, ince kenarlık ve hafif gölge ile birebir uygulandı.
+  2. **Uçar Modal Düzenleme Pencereleri Aydınlık Temaya Uyarlandı (`AppStudioFloatingModal.tsx`):**
+     - Floating dialog arka planı temiz açık gri/beyaz, başlık çubuğu `#f1f5f9`, form kutuları ve özellik kartları seçim hapları açık tema kontrastına tam uyarlandı.
+  3. **Doğrulama:**
+     - Frontend `npm run build` PASS (0 hata, 771ms, `dist/` üretildi).
+* **Durum:** `DevAdmin` dalında çalışıldı, `main` kesinlikle korundu.
+
+## [19.10.2026 - 12:35] — UÇAR (HAREKETLİ) MODAL EDİTÖRÜ, SAF CSS STİLLERİ & YENİ UYGULAMA STÜDYO AKIŞI
 * **Yapılan İşlem:**
   1. **Uçar / Hareketli Edit Dialog Mimarisi (`AppStudioFloatingModal.tsx`):**
      - Arkadaki vitrin tuvali kaybolmadan, üzerine tıklanan bölüme ait (Başlık/İkon, Açıklama, Özellik Kartları, Kılavuz, Mağaza Linkleri) uçar modal penceresi açıldı.
