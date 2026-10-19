@@ -746,3 +746,93 @@
   from { opacity: 0; transform: scale(0.95); }
   to { opacity: 1; transform: scale(1); }
 }
+
+/* Zengin Metin Araç Çubuğu (Rich Text Toolbar) */
+.studio-rich-toolbar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 4px 8px;
+  background: var(--studio-bg-card);
+  border: 1px solid var(--studio-border-color);
+  border-bottom: none;
+  border-radius: 8px 8px 0 0;
+}
+
+.studio-rich-toolbar + .studio-textarea {
+  border-top-left-radius: 0 !important;
+  border-top-right-radius: 0 !important;
+}
+
+.studio-toolbar-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 7px;
+  background: var(--studio-bg-surface);
+  border: 1px solid var(--studio-border-subtle);
+  border-radius: 4px;
+  color: var(--studio-text-main);
+  font-size: 0.72rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+
+.studio-toolbar-btn:hover {
+  background: var(--studio-bg-surface-hover);
+  border-color: #2563eb;
+  color: #2563eb;
+}
+
+.studio-toolbar-btn.btn-clear {
+  color: #ef4444;
+}
+
+.studio-toolbar-btn.btn-clear:hover {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: #ef4444;
+}
+
+.studio-toolbar-divider {
+  width: 1px;
+  height: 16px;
+  background: var(--studio-border-color);
+  margin: 0 4px;
+}
+
+/* Canlı Tuval Açıklama Zengin Metin Alanı */
+.studio-desc-rich-content {
+  line-height: 1.6;
+}
+
+.studio-desc-rich-content strong,
+.studio-desc-rich-content b {
+  font-weight: 700;
+  color: var(--studio-text-main);
+}
+
+.studio-desc-rich-content em,
+.studio-desc-rich-content i {
+  font-style: italic;
+}
+
+.studio-desc-rich-content h4 {
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 10px 0 4px;
+  color: var(--studio-text-main);
+}
+
+.studio-desc-rich-content small {
+  font-size: 0.8rem;
+  opacity: 0.8;
+  display: inline-block;
+}
+
+.studio-desc-rich-content a {
+  color: #2563eb;
+  text-decoration: underline;
+}

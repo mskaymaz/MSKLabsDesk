@@ -1,6 +1,20 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [19.10.2026 - 16:20] - Uygulama Açıklama Editörüne Zengin Metin (Rich Text Toolbar) ve Canlı Tuval Önizlemesi
+- **Modüler Zengin Metin Araç Çubuğu (`AppStudioRichTextToolbar.tsx`):**
+  - Açıklama alanlarına güvenli ve Gece/Gündüz tema dostu semantik formatlama butonları eklendi: Kalın (`<strong>`), İtalik (`<em>`), Alt Başlık (`<h4>`), Küçük Metin (`<small>`), Madde İmi (`• `), Satır Sonu (`<br>`), Bağlantı (`<a>`) ve Etiket Temizleme (`Eraser`).
+  - Sıfır paket bağımlılığıyla doğrudan imleç aralığı (`selectionStart`/`selectionEnd`) üzerinden çalışan hafif mimari kuruldu.
+- **Modüler Açıklama Editörü (`AppStudioDescriptionEditor.tsx` & `AppStudioFloatingModal.tsx`):**
+  - Açıklama formu modüler bileşene taşındı; `AppStudioFloatingModal.tsx` satır sayısı 589'dan 508'e düşürülerek tavan kuralı korundu.
+  - TR, EN ve AR alanları için bağımsız ref ve araç çubuğu entegrasyonu sağlandı.
+- **Canlı Tuval Formatlı Önizleme (`AppStudioCanvas.tsx` & `app-studio.css`):**
+  - Tuval açıklama alanı `<div className="studio-desc-rich-content" dangerouslySetInnerHTML={{ __html: desc }} />` olarak güncellendi.
+  - Aydınlık ve karanlık mod ile %100 uyumlu tipografi ve bağlantı stilleri eklendi.
+- **Doğrulama ve Kural Uyumu:**
+  - Frontend `npm run build` PASS (0 hata).
+  - Yalnızca `DevAdmin` dalında çalışıldı, `main` kesinlikle korundu.
+
 ## [19.10.2026 - 16:05] - Haydi Namaza ve Uygulamaların Canlı Site (origin/main) Metinleriyle Eşitlenmesi
 - **Özgün Metin Senkronizasyonu (`backend/migrations/0013_restore_published_exact_texts.sql` & `apps-data.js`):**
   - Haydi Namaza uygulamasındaki mock açıklama metni kaldırıldı.

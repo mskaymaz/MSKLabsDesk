@@ -1,7 +1,22 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
-## 🟢 Son Güncelleme [19.10.2026 - 16:05] — HAYDİ NAMAZA VE TÜM UYGULAMALARIN CANLI SİTE (ORIGIN/MAIN) METİNLERİYLE %100 EŞİTLENMESİ [*]
+## 🟢 Son Güncelleme [19.10.2026 - 16:20] — UYGULAMA AÇIKLAMA EDİTÖRÜNE ZENGİN METİN (RICH TEXT TOOLBAR) VE CANLI TUVAL ÖNİZLEMESİ [*]
+* **Yapılan İşlem:**
+  1. **Modüler Zengin Metin Araç Çubuğu (`AppStudioRichTextToolbar.tsx`):**
+     - Açıklama alanlarına güvenli ve Gece/Gündüz tema dostu semantik formatlama butonları eklendi: Kalın (`<strong>`), İtalik (`<em>`), Alt Başlık (`<h4>`), Küçük Metin (`<small>`), Madde İmi (`• `), Satır Sonu (`<br>`), Bağlantı (`<a>`) ve Etiket Temizleme (`Eraser`).
+     - Sıfır harici WYSIWYG bağımlılığıyla, doğrudan textarea imleç seçimi (`selectionStart` / `selectionEnd`) üzerinde çalışan hafif ve hatasız bir yapı kuruldu.
+  2. **Modüler Açıklama Editörü (`AppStudioDescriptionEditor.tsx` & `AppStudioFloatingModal.tsx`):**
+     - Açıklama formu modüler bir alt bileşene taşınarak `AppStudioFloatingModal.tsx` dosyasının satır sayısı 589'dan 508'e düşürüldü ve modülerlik kuralı korundu.
+     - TR, EN ve AR açıklamaları bağımsız ref'ler ve toolbar'lar üzerinden zengin metin düzenleme yeteneğine kavuşturuldu.
+  3. **Canlı Tuval Formatlı Önizleme (`AppStudioCanvas.tsx` & `app-studio.css`):**
+     - Tuval üzerinde açıklama metni `<div className="studio-desc-rich-content" dangerouslySetInnerHTML={{ __html: desc }} />` ile canlı HTML olarak formatlandı.
+     - Açık ve koyu tema ile %100 uyumlu tipografi ve bağlantı stilleri tanımlandı.
+  4. **Doğrulama:**
+     - `npm run build` ile TypeScript derlemesi 0 hata ile başarıyla tamamlandı.
+* **Durum:** `DevAdmin` dalında çalışıldı, `main` kesinlikle korundu.
+
+## [19.10.2026 - 16:05] — HAYDİ NAMAZA VE TÜM UYGULAMALARIN CANLI SİTE (ORIGIN/MAIN) METİNLERİYLE %100 EŞİTLENMESİ
 * **Yapılan İşlem:**
   1. **Kök Neden:**
      - Haydi Namaza için daha önce `apps-data.js` içindeki eski mock/taslak açıklama ("Haydi Namaza, günlük namaz vakitlerini Diyanet uyumlu...") sehven kullanılmıştı.

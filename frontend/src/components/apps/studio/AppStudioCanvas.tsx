@@ -82,7 +82,10 @@ export const AppStudioCanvas: React.FC<AppStudioCanvasProps> = ({
                 </div>
               )}
               {desc ? (
-                desc
+                <div
+                  className="studio-desc-rich-content"
+                  dangerouslySetInnerHTML={{ __html: desc }}
+                />
               ) : (
                 <span style={{ color: '#64748b', fontStyle: 'italic' }}>
                   {isAr 

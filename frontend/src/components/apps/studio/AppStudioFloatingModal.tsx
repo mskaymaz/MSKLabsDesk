@@ -3,6 +3,7 @@ import { X, Check, GripVertical } from 'lucide-react';
 import type { AppItem, AppStoreLinks, AppFeatureCard } from '../../../types';
 import type { StudioSectionType } from './types';
 import { AppStudioFeatureCardEditor } from './AppStudioFeatureCardEditor';
+import { AppStudioDescriptionEditor } from './AppStudioDescriptionEditor';
 
 interface AppStudioFloatingModalProps {
   section: StudioSectionType;
@@ -375,101 +376,20 @@ export const AppStudioFloatingModal: React.FC<AppStudioFloatingModalProps> = ({
 
           {/* 2. DESCRIPTION (Kart Özet Vizyonu & Detay Açıklama) */}
           {section === 'description' && (
-            <>
-              {/* Bölüm A: Kart Vizyon Özet Metni (1 Cümle) */}
-              <div style={{ padding: '8px 12px', background: 'rgba(59, 130, 246, 0.08)', borderRadius: '8px', border: '1px solid rgba(59, 130, 246, 0.2)', marginBottom: '4px' }}>
-                <span style={{ fontSize: '0.82rem', fontWeight: 600, color: '#60a5fa' }}>📌 1. Ana Sayfa Kart Vizyonu (Kısa Özet - 1 Cümle)</span>
-                <p style={{ margin: '2px 0 0', fontSize: '0.74rem', color: '#94a3b8' }}>
-                  Ana uygulamalarımız sayfasındaki kutularda dikey şişmeyi önleyen, öz ve vurucu tek cümlelik metindir.
-                </p>
-              </div>
-
-              <div className="studio-lang-box">
-                <span className="studio-lang-tag" style={{ background: '#1e3a8a', color: '#bfdbfe' }}>
-                  TR (Özet Vizyon - TR)
-                </span>
-                <input
-                  type="text"
-                  value={draftSummaryTr}
-                  onChange={(e) => setDraftSummaryTr(e.target.value)}
-                  placeholder="Lokasyon bazlı ibadet planlaması ve zaman yönetimi otomasyonu."
-                  className="studio-input"
-                />
-              </div>
-
-              <div className="studio-lang-box">
-                <span className="studio-lang-tag" style={{ background: '#075985', color: '#bae6fd' }}>
-                  EN (Vision Summary - EN)
-                </span>
-                <input
-                  type="text"
-                  value={draftSummaryEn}
-                  onChange={(e) => setDraftSummaryEn(e.target.value)}
-                  placeholder="Location-based worship planning and time management automation."
-                  className="studio-input"
-                />
-              </div>
-
-              <div className="studio-lang-box" dir="rtl">
-                <span className="studio-lang-tag" style={{ background: '#065f46', color: '#a7f3d0' }}>
-                  AR (العربية - ملخص البطاقة)
-                </span>
-                <input
-                  type="text"
-                  value={draftSummaryAr}
-                  onChange={(e) => setDraftSummaryAr(e.target.value)}
-                  placeholder="تخطيط العبادة القائم على الموقع وأتمتة إدارة الوقت."
-                  className="studio-input"
-                />
-              </div>
-
-              {/* Bölüm B: Kapsamlı Uygulama Detay Açıklaması */}
-              <div style={{ padding: '8px 12px', background: 'rgba(16, 185, 129, 0.08)', borderRadius: '8px', border: '1px solid rgba(16, 185, 129, 0.2)', margin: '10px 0 4px' }}>
-                <span style={{ fontSize: '0.82rem', fontWeight: 600, color: '#34d399' }}>📖 2. Uygulama Detay Tanıtımı (Kapsamlı Açıklama)</span>
-                <p style={{ margin: '2px 0 0', fontSize: '0.74rem', color: '#94a3b8' }}>
-                  Kullanıcı karta tıkladığında açılan tekil tanıtım sayfasında başlığın altında görünen detaylı açıklama paragrafıdır.
-                </p>
-              </div>
-
-              <div className="studio-lang-box">
-                <span className="studio-lang-tag" style={{ background: '#1e3a8a', color: '#bfdbfe' }}>
-                  TR (Türkçe Açıklama)
-                </span>
-                <textarea
-                  rows={3}
-                  value={draftDescTr}
-                  onChange={(e) => setDraftDescTr(e.target.value)}
-                  placeholder="Uygulama hakkında detaylı açıklama..."
-                  className="studio-textarea"
-                />
-              </div>
-
-              <div className="studio-lang-box">
-                <span className="studio-lang-tag" style={{ background: '#075985', color: '#bae6fd' }}>
-                  EN (English Description)
-                </span>
-                <textarea
-                  rows={3}
-                  value={draftDescEn}
-                  onChange={(e) => setDraftDescEn(e.target.value)}
-                  placeholder="Application description in English..."
-                  className="studio-textarea"
-                />
-              </div>
-
-              <div className="studio-lang-box" dir="rtl">
-                <span className="studio-lang-tag" style={{ background: '#065f46', color: '#a7f3d0' }}>
-                  AR (العربية - الوصف)
-                </span>
-                <textarea
-                  rows={3}
-                  value={draftDescAr}
-                  onChange={(e) => setDraftDescAr(e.target.value)}
-                  placeholder="وصف التطبيق بالعربية..."
-                  className="studio-textarea"
-                />
-              </div>
-            </>
+            <AppStudioDescriptionEditor
+              summaryTr={draftSummaryTr}
+              setSummaryTr={setDraftSummaryTr}
+              summaryEn={draftSummaryEn}
+              setSummaryEn={setDraftSummaryEn}
+              summaryAr={draftSummaryAr}
+              setSummaryAr={setDraftSummaryAr}
+              descTr={draftDescTr}
+              setDescTr={setDraftDescTr}
+              descEn={draftDescEn}
+              setDescEn={setDraftDescEn}
+              descAr={draftDescAr}
+              setDescAr={setDraftDescAr}
+            />
           )}
 
           {/* 3. GUIDE & DİLLER (Kılavuz ve İndir Butonu) */}
