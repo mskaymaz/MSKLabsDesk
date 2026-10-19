@@ -1,7 +1,23 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
-## 🟢 Son Güncelleme [19.10.2026 - 15:00] — BUZCAMIN KALDIRILMASI & SERBEST SÜRÜKLENEBİLİR (DRAGGABLE) MODAL MİMARİSİ [*]
+## 🟢 Son Güncelleme [19.10.2026 - 15:15] — ANA UYGULAMALAR KART ÖZETLERİ (MAIN EŞİTLEMESİ) VE SABİT BOYUT DÜZENİ [*]
+* **Yapılan İşlem:**
+  1. **Ana Uygulamalarımız Sayfası Kart Özetleri (`webMSKLabs/apps.html`, `apps-data.js` & D1 `0010_standardize_app_summaries.sql`):**
+     - Yanlışlıkla detay sayfasındaki uzun paragrafların kartlara dolması ve dikey bozulmaya yol açması giderildi.
+     - `origin/main` üzerindeki özgün, temiz 1 cümlelik özet vizyon metinleri (`haydinamaza`, `rekatsay`, `date_counter`, `deskpilot`, `enyakin`, `gcpiluyari`) D1 veritabanına ve `apps-data.js` dosyasına işlendi.
+     - API (`/api/v1/apps`) ve vitrin sayfaları doğrudan bu özgün özet metinlerle senkronize edildi.
+  2. **Kart Boyut Standartı & Şişme/Uzama Koruması (`webMSKLabs/assets/css/global.css`):**
+     - `.app-card` yapısına `height: 100%;` ve `min-height: 360px;` standart kutu yüksekliği tanımlandı.
+     - `.app-name` için `min-height: 2.7em; -webkit-line-clamp: 2;` uygulanarak 1 veya 2 satırlık başlıkların kart yüksekliğini oynatması engellendi.
+     - `.app-vision` alanına `min-height: 4.5em; -webkit-line-clamp: 3;` sabit 3 satır sınırı ve taşma koruması (`text-overflow: ellipsis`) getirilerek metin uzunluğuna bağlı dikey şişme ve uzamalar tamamen önlendi.
+     - Kart altındaki rozet ve sayaçlar `margin-top: auto;` ile tüm satır boyunca aynı taban hizasına sabitlendi.
+  3. **Doğrulama:**
+     - Local D1 üzerinde `0010_standardize_app_summaries.sql` uygulandı ve `/api/v1/apps` üzerinden teyit edildi.
+     - Frontend `npm run build` PASS (0 hata, 1.58s, `dist/` üretildi).
+* **Durum:** `DevAdmin` dalında çalışıldı, `main` kesinlikle korundu.
+
+## [19.10.2026 - 15:00] — BUZCAMIN KALDIRILMASI & SERBEST SÜRÜKLENEBİLİR (DRAGGABLE) MODAL MİMARİSİ
 * **Yapılan İşlem:**
   1. **Buzcamın Kaldırılması & Kristal Netlikte Sayfa Görünümü (`app-studio.css`):**
      - `.studio-floating-backdrop` üzerindeki `backdrop-filter: blur(4px)` ve koyu karartma efekti tamamen kaldırıldı.

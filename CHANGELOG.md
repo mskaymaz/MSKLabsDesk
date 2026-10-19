@@ -1,6 +1,19 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [19.10.2026 - 15:15] - Ana Uygulamalar Kart Özetleri (Main Eşitlemesi) ve Sabit Boyut Düzeni
+- **Ana Uygulamalarımız Sayfası Kart Özetleri (`webMSKLabs/apps.html`, `apps-data.js` & D1 `0010_standardize_app_summaries.sql`):**
+  - Kartları dikey olarak bozan uzun detay metinleri yerine `origin/main` üzerindeki özgün, temiz 1 cümlelik özet vizyon metinleri (`haydinamaza`, `rekatsay`, `date_counter`, `deskpilot`, `enyakin`, `gcpiluyari`) D1 veritabanı ve `apps-data.js` içine işlendi.
+  - API (`/api/v1/apps`) yanıtları vitrin kartlarıyla tam uyumlu hale getirildi.
+- **Kart Boyut Standartı & Şişme/Uzama Koruması (`webMSKLabs/assets/css/global.css`):**
+  - `.app-card` için `height: 100%;` ve `min-height: 360px;` standart kutu yüksekliği tanımlandı.
+  - `.app-name` için `min-height: 2.7em; -webkit-line-clamp: 2;` ve `.app-vision` için `min-height: 4.5em; -webkit-line-clamp: 3;` kuralları ile dikey şişme ve uzamalar tamamen engellendi.
+  - Kart altındaki rozet ve sayaçlar `margin-top: auto;` ile tüm satır boyunca aynı taban çizgisine sabitlendi.
+- **Doğrulama ve Kural Uyumu:**
+  - Local D1 üzerinde `0010_standardize_app_summaries.sql` çalıştırıldı.
+  - Frontend `npm run build` PASS (0 hata, 1.58s).
+  - Yalnızca `DevAdmin` dalında çalışıldı, `main` kesinlikle korundu.
+
 ## [19.10.2026 - 15:00] - Buzcamın Kaldırılması ve Serbest Sürüklenebilir (Draggable) Modal Mimarisi
 - **Buzcamın Kaldırılması & Kristal Netlikte Sayfa Görünümü (`app-studio.css`):**
   - `.studio-floating-backdrop` üzerindeki `backdrop-filter: blur(4px)` ve koyu karartma kaldırıldı; `background: transparent; pointer-events: none;` ile arkadaki sayfanın %100 doğal netliği korundu.
