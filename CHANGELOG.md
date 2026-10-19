@@ -1,6 +1,22 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [19.10.2026 - 16:38] - Vitrin Sıralaması Doğrudan Düzenleme, İkon Linkleri Çözümleme ve Buton Sadelendirmesi
+- **Uygulama İkon Linklerinin Çözümlenmesi (`frontend/src/utils/appIcons.ts` & D1 `0014_fix_app_icons_and_orders.sql`):**
+  - CMS'te bulunan `media/{app}/icon.png` formatındaki yerel dosya yolları merkezi `getAppIconUrl` fonksiyonuna bağlandı (`https://msklabs.org/media/...`).
+  - Düzenleme kartlarında ve Görsel Stüdyo tuvalinde kırık olan uygulama logoları görünür hale getirildi.
+  - D1 tablosunda `enyakin` uygulamasının 404 veren `img/EnYakinLogo.svg` yolu `media/enyakin/icon.png` olarak düzeltildi.
+- **Doğrudan Vitrin Sırası (Display Order) Düzenleme (`AppsCMSView.tsx`):**
+  - Kart üzerindeki statik rozet yerine doğrudan sayı girişi yapılabilen `<input type="number" min={1} />` ve `▲ / ▼` butonları entegre edildi.
+  - Sayı değiştirilip Enter'a basıldığında veya dışına tıklandığında anında D1 veritabanına kaydedilir (`handleDirectOrderChange`).
+- **Kart Buton Sadelendirmesi (`AppsCMSView.tsx`):**
+  - Kartın altında aynı işi yapan mükerrer "Görsel Stüdyo" butonu kaldırıldı, düzenleme aksiyonu yalnızca kalem simgesi (`Edit2`) üzerinde tutuldu.
+- **Vitrin Sayfası Senkronizasyonu (`webMSKLabs/apps.html`):**
+  - İkon URL çözümü bağıl yolları kapsayacak şekilde güncellendi, canlı API'den gelen uygulamalar `display_order` bazında sıralandı.
+- **Doğrulama ve Kural Uyumu:**
+  - Frontend `npm run build` PASS (0 hata).
+  - Yalnızca `DevAdmin` dalında çalışıldı, `main` kesinlikle korundu.
+
 ## [19.10.2026 - 16:20] - Uygulama Açıklama Editörüne Zengin Metin (Rich Text Toolbar) ve Canlı Tuval Önizlemesi
 - **Modüler Zengin Metin Araç Çubuğu (`AppStudioRichTextToolbar.tsx`):**
   - Açıklama alanlarına güvenli ve Gece/Gündüz tema dostu semantik formatlama butonları eklendi: Kalın (`<strong>`), İtalik (`<em>`), Alt Başlık (`<h4>`), Küçük Metin (`<small>`), Madde İmi (`• `), Satır Sonu (`<br>`), Bağlantı (`<a>`) ve Etiket Temizleme (`Eraser`).

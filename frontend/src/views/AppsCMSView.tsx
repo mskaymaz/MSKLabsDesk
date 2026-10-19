@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import {
   Smartphone, Plus, Edit2, Trash2, Rocket,
-  Copy, Check, Download, Search, Layers, RefreshCw, Sparkles
+  Copy, Check, Download, Search, Layers, RefreshCw
 } from 'lucide-react';
 import type { AppItem } from '../types';
 import { api } from '../services/api';
 import { AppModal } from '../components/apps/AppModal';
 import { AppVersionModal } from '../components/apps/AppVersionModal';
 import { AppDetailStudioView } from './AppDetailStudioView';
+import { getAppIconUrl } from '../utils/appIcons';
 
 export const AppsCMSView: React.FC = () => {
   const [apps, setApps] = useState<AppItem[]>([]);
@@ -76,28 +77,34 @@ export const AppsCMSView: React.FC = () => {
     setTimeout(() => setCopiedSlug(null), 2500);
   };
 
-  const handleReorderApp = async (appId: string, direction: 'up' | 'down') => {
-    const sorted = [...apps].sort((a, b) => (a.display_order ?? 0) - (b.display_order ?? 0));
-    const currentIndex = sorted.findIndex((a) => a.id === appId);
-    if (currentIndex === -1) return;
-    const targetIndex = direction === 'up' ? currentIndex - 1 : currentIndex + 1;
-    if (targetIndex < 0 || targetIndex >= sorted.length) return;
-
-    const currentApp = sorted[currentIndex];
-    const targetApp = sorted[targetIndex];
-
-    const currentOrder = currentApp.display_order ?? currentIndex + 1;
-    let targetOrder = targetApp.display_order ?? targetIndex + 1;
-
-    if (currentOrder === targetOrder) {
-      targetOrder = direction === 'up' ? currentOrder - 1 : currentOrder + 1;
+  const handleDirectOrderChange = async (targetApp: AppItem, newOrder: number) => {
+    try {
+      await api.updateApp(targetApp.id, { ...targetApp, display_order: newOrder });
+      loadApps();
+    } catch (err: any) {
+      alert(`Sıralama kaydedilemedi: ${err.message || 'Bilinmeyen hata'}`);
     }
+  };
+
+  const handleReorderApp = async (appId: string, direction: 'up' | 'down') => {
+    const currentApp = apps.find((a) => a.id === appId);
+    if (!currentApp) return;
+
+    const currentOrder = currentApp.display_order ?? 0;
+    const newOrder = direction === 'up' ? Math.max(1, currentOrder - 1) : currentOrder + 1;
+    if (newOrder === currentOrder) return;
+
+    const conflictApp = apps.find((a) => a.id !== appId && (a.display_order ?? 0) === newOrder);
 
     try {
-      await Promise.all([
-        api.updateApp(currentApp.id, { ...currentApp, display_order: targetOrder }),
-        api.updateApp(targetApp.id, { ...targetApp, display_order: currentOrder }),
-      ]);
+      if (conflictApp) {
+        await Promise.all([
+          api.updateApp(currentApp.id, { ...currentApp, display_order: newOrder }),
+          api.updateApp(conflictApp.id, { ...conflictApp, display_order: currentOrder }),
+        ]);
+      } else {
+        await api.updateApp(currentApp.id, { ...currentApp, display_order: newOrder });
+      }
       loadApps();
     } catch (err: any) {
       alert(`Sıralama güncellenemedi: ${err.message || 'Bilinmeyen hata'}`);
@@ -261,11 +268,14 @@ export const AppsCMSView: React.FC = () => {
                     style={{ display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer' }}
                     title="Görsel Stüdyo'da Aç"
                   >
-                    {app.icon_url ? (
+                    {getAppIconUrl(app.icon_url, app.app_id) ? (
                       <img
-                        src={app.icon_url.startsWith('/media/') ? `https://msklabs.org${app.icon_url}` : app.icon_url}
+                        src={getAppIconUrl(app.icon_url, app.app_id)}
                         alt={app.name_tr}
                         style={{ width: '48px', height: '48px', borderRadius: '12px', objectFit: 'cover', border: '1px solid var(--border-subtle)' }}
+                        onError={(e) => {
+                          (e.target as HTMLElement).style.display = 'none';
+                        }}
                       />
                     ) : (
                       <div
@@ -302,25 +312,44 @@ export const AppsCMSView: React.FC = () => {
                   </div>
 
                   <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '6px' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                      <span
-                        className="admin-badge"
-                        style={{
-                          fontWeight: 700,
-                          fontSize: '0.72rem',
-                          background: 'rgba(99, 102, 241, 0.12)',
-                          color: '#818cf8',
-                          border: '1px solid rgba(99, 102, 241, 0.3)',
-                          padding: '2px 6px',
-                          borderRadius: '6px',
+                    <div 
+                      style={{ display: 'flex', alignItems: 'center', gap: '4px' }}
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', fontWeight: 600 }}>Sıra:</span>
+                      <input
+                        type="number"
+                        min={1}
+                        defaultValue={app.display_order ?? 0}
+                        key={`${app.id}_${app.display_order}`}
+                        onBlur={(e) => {
+                          const val = parseInt(e.target.value, 10);
+                          if (!isNaN(val) && val !== app.display_order) {
+                            handleDirectOrderChange(app, val);
+                          }
                         }}
-                        title="Vitrin Sıralaması (Küçük sayılar daha önce listelenir)"
-                      >
-                        #{app.display_order ?? 0}
-                      </span>
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter') {
+                            (e.target as HTMLInputElement).blur();
+                          }
+                        }}
+                        className="form-input"
+                        style={{
+                          width: '46px',
+                          padding: '2px 4px',
+                          fontSize: '0.75rem',
+                          fontWeight: 700,
+                          textAlign: 'center',
+                          borderRadius: '6px',
+                          border: '1px solid rgba(99, 102, 241, 0.4)',
+                          background: 'rgba(99, 102, 241, 0.08)',
+                          color: '#818cf8',
+                        }}
+                        title="Vitrin Sırası — Değiştirmek için sayıyı yazıp Enter'a basın veya dışarı tıklayın"
+                      />
                       <button
                         type="button"
-                        onClick={(e) => { e.stopPropagation(); handleReorderApp(app.id, 'up'); }}
+                        onClick={() => handleReorderApp(app.id, 'up')}
                         className="admin-btn admin-btn-xs"
                         style={{ padding: '2px 5px', fontSize: '0.68rem', lineHeight: 1 }}
                         title="Sırayı Yukarı Al (Öne Çıkar)"
@@ -329,7 +358,7 @@ export const AppsCMSView: React.FC = () => {
                       </button>
                       <button
                         type="button"
-                        onClick={(e) => { e.stopPropagation(); handleReorderApp(app.id, 'down'); }}
+                        onClick={() => handleReorderApp(app.id, 'down')}
                         className="admin-btn admin-btn-xs"
                         style={{ padding: '2px 5px', fontSize: '0.68rem', lineHeight: 1 }}
                         title="Sırayı Aşağı Al"
@@ -455,16 +484,6 @@ export const AppsCMSView: React.FC = () => {
                 </button>
 
                 <div style={{ display: 'flex', gap: '6px' }}>
-                  <button
-                    type="button"
-                    onClick={() => setStudioApp(app)}
-                    className="admin-btn admin-btn-sm"
-                    style={{ background: '#2563eb', color: '#fff', borderColor: '#2563eb', display: 'flex', alignItems: 'center', gap: '4px' }}
-                    title="Görsel Stüdyo ile Vitrin Sayfasını Canlı Düzenle"
-                  >
-                    <Sparkles size={13} />
-                    <span>Görsel Stüdyo</span>
-                  </button>
 
                   <button
                     type="button"

@@ -1,7 +1,25 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
-## 🟢 Son Güncelleme [19.10.2026 - 16:20] — UYGULAMA AÇIKLAMA EDİTÖRÜNE ZENGİN METİN (RICH TEXT TOOLBAR) VE CANLI TUVAL ÖNİZLEMESİ [*]
+## 🟢 Son Güncelleme [19.10.2026 - 16:38] — VİTRİN SIRALAMASI DOĞRUDAN DÜZENLEME, İKON LİNKLERİ ÇÖZÜMLEME VE BUTON SADELİĞİ [*]
+* **Yapılan İşlem:**
+  1. **Uygulama İkon Linklerinin Çözümlenmesi (`frontend/src/utils/appIcons.ts` & D1 `0014_fix_app_icons_and_orders.sql`):**
+     - Uygulamaların `media/{slug}/icon.png` formatındaki yerel dosya ve CMS yolları merkezi `getAppIconUrl` yardımcısına bağlandı (`https://msklabs.org/media/...`).
+     - Kartlarda ve Görsel Stüdyo kahraman başlığında kırık olan ikon görselleri tam olarak görünür hale getirildi.
+     - D1 veritabanında `enyakin` için 404 veren eski link `media/enyakin/icon.png` olarak düzeltildi.
+  2. **Doğrudan Vitrin Sıralaması (Display Order) Yönetimi (`AppsCMSView.tsx`):**
+     - Statik ve tıklanamayan sıra rozeti yerine, kart üzerine doğrudan düzenlenebilir `<input type="number" min={1} />` entegre edildi.
+     - Kullanıcı doğrudan sıra numarasını yazıp Enter'a bastığında veya `▲` / `▼` butonlarına bastığında D1 veritabanı anında güncellenir (`handleDirectOrderChange` ve `handleReorderApp`).
+     - D1 veritabanındaki başlangıç sıralaması 1'den 6'ya normalize edildi (`0014_fix_app_icons_and_orders.sql`).
+  3. **Kart Buton Sadelendirmesi (`AppsCMSView.tsx`):**
+     - Kartın altında aynı işi yapan mükerrer "Görsel Stüdyo" butonu kaldırıldı, düzenleme aksiyonu yalnızca kalem simgesi (`Edit2`) üzerinde toplandı.
+  4. **Vitrin Sayfası Senkronizasyonu (`webMSKLabs/apps.html`):**
+     - İkon URL çözümü bağıl yolları kapsayacak şekilde güncellendi, canlı API'den gelen uygulamalar `display_order` bazında kesin sıralandı.
+  5. **Doğrulama:**
+     - `frontend` `npm run build` PASS (0 hata, 909ms).
+* **Durum:** `DevAdmin` dalında çalışıldı, `main` kesinlikle korundu.
+
+## [19.10.2026 - 16:20] — UYGULAMA AÇIKLAMA EDİTÖRÜNE ZENGİN METİN (RICH TEXT TOOLBAR) VE CANLI TUVAL ÖNİZLEMESİ
 * **Yapılan İşlem:**
   1. **Modüler Zengin Metin Araç Çubuğu (`AppStudioRichTextToolbar.tsx`):**
      - Açıklama alanlarına güvenli ve Gece/Gündüz tema dostu semantik formatlama butonları eklendi: Kalın (`<strong>`), İtalik (`<em>`), Alt Başlık (`<h4>`), Küçük Metin (`<small>`), Madde İmi (`• `), Satır Sonu (`<br>`), Bağlantı (`<a>`) ve Etiket Temizleme (`Eraser`).

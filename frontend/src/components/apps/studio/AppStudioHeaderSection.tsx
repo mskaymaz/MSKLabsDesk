@@ -2,6 +2,7 @@ import React from 'react';
 import { Edit2 } from 'lucide-react';
 import type { AppItem } from '../../../types';
 import type { CanvasLang, StudioSectionType } from './types';
+import { getAppIconUrl } from '../../../utils/appIcons';
 
 interface AppStudioHeaderSectionProps {
   app: AppItem;
@@ -44,8 +45,8 @@ export const AppStudioHeaderSection: React.FC<AppStudioHeaderSectionProps> = ({
         </div>
 
         <div className="studio-big-icon">
-          {app.icon_url ? (
-            <img src={app.icon_url} alt={appName} onError={(e) => { (e.target as any).style.display = 'none'; }} />
+          {getAppIconUrl(app.icon_url, app.app_id) ? (
+            <img src={getAppIconUrl(app.icon_url, app.app_id)} alt={appName} onError={(e) => { (e.target as any).style.display = 'none'; }} />
           ) : (
             <span>📱</span>
           )}
