@@ -1,6 +1,17 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [19.10.2026 - 14:45] - 3xN Kare Kart Düzeni ve Canlı (Main) Verilerin Senkronizasyonu
+- **3xN Kare Kart Düzeni & Sade Tasarım (`webMSKLabs/app.html` & `app-studio.css`):**
+  - Özellik kartları ızgarası 3 eşit sütunlu (`repeat(3, 1fr)`) ve kareye yakın kompakt kutu stiline getirildi (`min-height: 155px`, `border-radius: 14px`).
+  - Kartların altındaki "🔍 Detayları Gör" bağlantısı kaldırılarak kart tıklandığında açılan popover balon etkileşimi korundu.
+- **Canlı (Main) Dalı Verileri ve D1 Senkronizasyonu (`apps-data.js` & D1 DB):**
+  - `origin/main` üzerindeki gerçek veriler incelenerek `rekatsay` (6 kart), `date_counter` (6 kart + PDF kılavuz), `deskpilot` (3 kart), `enyakin` (3 kart) ve `gcpiluyari` (3 kart) için 3 dilli (TR, EN, AR) zengin açıklamalar ve kartlar `apps-data.js` ve D1 veritabanına (`0009_sync_main_apps_data.sql`) işlendi; demo metinler temizlendi.
+- **Doğrulama ve Kural Uyumu:**
+  - Frontend `npm run build` PASS (0 hata, 983ms).
+  - D1 yerel veritabanında tüm 6 uygulama başarıyla güncellendi.
+  - Yalnızca `DevAdmin` dalında çalışıldı, `main` kesinlikle korundu.
+
 ## [19.10.2026 - 14:26] - İndirme Bölümü Başlık Hizalama ve Pürüzsüz Kaydırma Optimizasyonu
 - **İndirme Bölümü Başlık Hizalaması (`webMSKLabs/app.html` & `app-studio.css`):**
   - "Uygulamayı İndir" butonuna basıldığında sayfanın en dibe atması giderildi.

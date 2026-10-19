@@ -1,7 +1,19 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
-## 🟢 Son Güncelleme [19.10.2026 - 14:26] — İNDİRME BÖLÜMÜ BAŞLIK HİZALAMA VE PÜRÜZSÜZ KAYDIRMA OPTİMİZASYONU [*]
+## 🟢 Son Güncelleme [19.10.2026 - 14:45] — 3xN KARE KART DÜZENİ VE CANLI (MAIN) VERİLERİN SENKRONİZASYONU [*]
+* **Yapılan İşlem:**
+  1. **3xN Kare Kart Düzeni & Sade Görsel Hiyerarşi (`webMSKLabs/app.html` & `frontend/src/styles/app-studio.css`):**
+     - Konteyner genişliği nedeniyle 2 sütuna düşen özellik kutuları, orijinal `apps/rekatsay.html` referansındaki gibi kareye yakın, dengeli ve **3 sütunlu (3xN)** ızgara düzenine (`repeat(3, 1fr)`) kavuşturuldu.
+     - Kartların altındaki görsel kalabalık yaratan "🔍 Detayları Gör" bağlantısı kaldırıldı; kartın kendisine tıklandığında açılır popover balonu çalışmaya devam ediyor.
+  2. **Canlı (Main) Dalı Verileri ve D1 Senkronizasyonu (`webMSKLabs/assets/js/apps-data.js` & D1 `0009_sync_main_apps_data.sql`):**
+     - Canlı `main` dalındaki gerçek veriler incelendi; `rekatsay` (6 kart), `date_counter` (6 kart + PDF kılavuz), `deskpilot` (3 kart), `enyakin` (3 kart) ve `gcpiluyari` (3 kart) olmak üzere tüm 3 dilli (TR, EN, AR) zengin açıklamalar ve kartlar `apps-data.js` ve D1 veritabanına (`0009_sync_main_apps_data.sql`) eksiksiz işlendi.
+  3. **Doğrulama:**
+     - Local D1 veritabanında `0009_sync_main_apps_data.sql` çalıştırıldı, 6 uygulamanın tamamı doğrulandı.
+     - Frontend `npm run build` PASS (0 hata, 983ms, `dist/` üretildi).
+* **Durum:** `DevAdmin` dalında çalışıldı, `main` kesinlikle korundu.
+
+## [19.10.2026 - 14:26] — İNDİRME BÖLÜMÜ BAŞLIK HİZALAMA VE PÜRÜZSÜZ KAYDIRMA OPTİMİZASYONU
 * **Yapılan İşlem:**
   1. **İndirme Bölümü Başlık Hizalaması (`webMSKLabs/app.html` & `app-studio.css`):**
      - "Uygulamayı İndir" butonuna basıldığında sayfanın kontrolsüzce en dibe atması engellendi.
