@@ -1,6 +1,20 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [19.10.2026 - 14:20] - Standart Rozetler, Modüler Kart Editörü ve Açılır Balon (Popover) Mimarisi
+- **Standart Rozet Uyumu (`AppStudioTopBar.tsx`):**
+  - "Kayıtlı" ve "Değişiklik Var" rozetleri tasarım sistemindeki standart `.admin-badge.admin-badge-emerald` ve `.admin-badge.admin-badge-amber` sınıflarına taşındı.
+- **Modüler Kart Editörü (`AppStudioFeatureCardEditor.tsx` & `AppStudioFloatingModal.tsx`):**
+  - 28 ikonluk hazır palet, özel SVG/URL alanı, yan yana ikon-başlık düzeni ve canlı mini kart önizlemesi eklendi.
+- **Standart Kutu Kartlar ve Açılır Balon/Popover (`webMSKLabs/app.html` & `app-studio.css`):**
+  - 3xN kart yapısı standart kutulara dönüştürüldü (`min-height: 148px`, 3 satır `line-clamp`).
+  - Kart tıklandığında başlık, ikon ve metnin tamamını gösteren açılır balon (`#featureCardPopover`) eklendi.
+- **Logo ve D1 Veri Senkronizasyonu (`apps-data.js` & D1 DB):**
+  - `haydinamaza` D1 üzerinde aktifleştirildi (`is_active = 1`), `apps-data.js` içine 9 kart ve yerel disk fallback desteği eklendi.
+- **Doğrulama ve Kural Uyumu:**
+  - Frontend `npm run build` PASS (0 hata, 681ms).
+  - Yalnızca `DevAdmin` dalında çalışıldı, `main` kesinlikle korundu.
+
 ## [19.10.2026 - 13:40] - Stüdyo Üst Çubuğu Aydınlık Temaya Çekildi ve Canlı Açık/Koyu Tema Seçicisi Eklendi
 - **Stüdyo Üst Kontrol Çubuğu Aydınlık Temaya Uyarlandı (`AppStudioTopBar.tsx` & `app-studio.css`):**
   - Üst bar zemin rengi varsayılan olarak beyaz (`#ffffff`), kenarlık açık gri (`#e2e8f0`), başlık ve butonlar yüksek kontrastlı koyu renklerle (`#0f172a`, `#334155`) admin üst paneliyle tam uyumlu hale getirildi.

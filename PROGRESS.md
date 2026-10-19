@@ -1,7 +1,25 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
-## 🟢 Son Güncelleme [19.10.2026 - 13:40] — STÜDYO ÜST ÇUBUĞU AYDINLIK TEMAYA ÇEKİLDİ & CANLI AÇIK/KOYU TEMA ANAHTARI EKLENDİ [*]
+## 🟢 Son Güncelleme [19.10.2026 - 14:20] — STANDART ROZETLER, MODÜLER KART EDİTÖRÜ & AÇILIR BALON (POPOVER) MİMARİSİ [*]
+* **Yapılan İşlem:**
+  1. **Standart Rozet Uyumu (`AppStudioTopBar.tsx`):**
+     - "Kayıtlı" ve "Değişiklik Var" rozetleri keyfi inline stillerden arındırılarak tasarım sistemindeki standart `.admin-badge.admin-badge-emerald` ve `.admin-badge.admin-badge-amber` sınıflarına bağlandı.
+  2. **Modüler Kart Editörü & 28'li Hazır İkon Paleti (`AppStudioFeatureCardEditor.tsx` & `AppStudioFloatingModal.tsx`):**
+     - Kart editörü 270 satırlık bağımsız ve temiz bir bileşene ayrıştırıldı (`AppStudioFloatingModal.tsx` 410 satır bandına çekildi).
+     - 28 adet tıklanabilir hazır ikon paleti eklendi; dileyen kullanıcı için özel SVG / şeffaf PNG URL giriş desteği sunuldu.
+     - İkon ve başlık yan yana, altında açıklama ve canlı mini kart önizlemesi sağlandı.
+  3. **Vitrin & Stüdyo Standart Kutu Kartlar ve Açılır Balon/Popover (`webMSKLabs/app.html` & `app-studio.css`):**
+     - Kartlar standart kare/dikdörtgen kutular haline getirildi (`min-height: 148px`, `line-clamp: 3`).
+     - Kart tıklandığında sayfadan koparmadan açılan şık bir popover balonu (`#featureCardPopover`) ile başlık, ikon ve açıklamanın tamamı okunabilir hale getirildi.
+  4. **Logo ve Veri Fallback Onarımı (`webMSKLabs/assets/js/apps-data.js` & D1):**
+     - D1 yerel veritabanında `app_haydinamaza` aktifleştirildi (`is_active = 1`); API doğrudan 9 kart ve logoyla yanıt verir hale geldi.
+     - `apps-data.js` içine 9 özellik kartı ve doğru logo yolu işlendi; logoda oluşabilecek CDN gecikmelerine karşı yerel disk (`media/haydinamaza/icon.png`) otomatik fallback koruması getirildi.
+  5. **Doğrulama:**
+     - Frontend `npm run build` PASS (0 hata, 681ms, `dist/` üretildi).
+* **Durum:** `DevAdmin` dalında çalışıldı, `main` kesinlikle korundu.
+
+## [19.10.2026 - 13:40] — STÜDYO ÜST ÇUBUĞU AYDINLIK TEMAYA ÇEKİLDİ & CANLI AÇIK/KOYU TEMA ANAHTARI EKLENDİ
 * **Yapılan İşlem:**
   1. **Stüdyo Üst Kontrol Çubuğu Aydınlık Temaya Uyarlandı (`AppStudioTopBar.tsx` & `app-studio.css`):**
      - Üst bar zemin rengi varsayılan olarak beyaz (`#ffffff`), kenarlık açık gri (`#e2e8f0`), başlık ve butonlar yüksek kontrastlı koyu renklerle (`#0f172a`, `#334155`) admin üst paneliyle tam uyumlu hale getirildi.

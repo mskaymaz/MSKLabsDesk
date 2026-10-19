@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { X, Check } from 'lucide-react';
 import type { AppItem, AppStoreLinks, AppFeatureCard } from '../../../types';
 import type { StudioSectionType } from './types';
+import { AppStudioFeatureCardEditor } from './AppStudioFeatureCardEditor';
 
 interface AppStudioFloatingModalProps {
   section: StudioSectionType;
@@ -317,113 +318,14 @@ export const AppStudioFloatingModal: React.FC<AppStudioFloatingModalProps> = ({
 
           {/* 4. FEATURES (3xN Özellik Kartları) */}
           {section === 'features' && (
-            <>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <label className="studio-label">Kartlar ({draftFeatureCards.length})</label>
-                <button
-                  type="button"
-                  onClick={handleAddFeatureCard}
-                  className="studio-btn studio-btn-success"
-                  style={{ padding: '4px 10px', fontSize: '0.75rem' }}
-                >
-                  + Yeni Özellik Kartı
-                </button>
-              </div>
-
-              {/* Kart Hap Seçici */}
-              <div style={{ display: 'flex', gap: '6px', overflowX: 'auto', paddingBottom: '4px' }}>
-                {draftFeatureCards.map((card, idx) => (
-                  <button
-                    key={idx}
-                    type="button"
-                    onClick={() => setActiveCardIdx(idx)}
-                    className="studio-btn"
-                    style={{
-                      padding: '4px 8px',
-                      fontSize: '0.74rem',
-                      background: activeCardIdx === idx ? '#2563eb' : '#f1f5f9',
-                      color: activeCardIdx === idx ? '#ffffff' : '#334155',
-                      border: activeCardIdx === idx ? '1px solid #2563eb' : '1px solid #cbd5e1',
-                    }}
-                  >
-                    <span>{card.icon || '📌'}</span>
-                    <span>{card.title_tr || `Kart ${idx + 1}`}</span>
-                  </button>
-                ))}
-              </div>
-
-              {draftFeatureCards[activeCardIdx] ? (
-                <div style={{ background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '10px', padding: '12px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <span style={{ fontSize: '0.8rem', fontWeight: 700, color: '#0f172a' }}>
-                      Kart #{activeCardIdx + 1} İçeriği
-                    </span>
-                    <button
-                      type="button"
-                      onClick={() => handleRemoveCard(activeCardIdx)}
-                      style={{ background: 'transparent', border: 'none', color: '#f87171', fontSize: '0.74rem', cursor: 'pointer' }}
-                    >
-                      Kartı Sil
-                    </button>
-                  </div>
-
-                  <div className="studio-form-group">
-                    <label className="studio-label">İkon (Emoji veya Kısa Metin)</label>
-                    <input
-                      type="text"
-                      value={draftFeatureCards[activeCardIdx].icon || ''}
-                      onChange={(e) => handleUpdateCard(activeCardIdx, 'icon', e.target.value)}
-                      placeholder="Örn: ⏱️, 📍, 🔔"
-                      className="studio-input"
-                    />
-                  </div>
-
-                  <div className="studio-form-group">
-                    <label className="studio-label">Başlık (TR)</label>
-                    <input
-                      type="text"
-                      value={draftFeatureCards[activeCardIdx].title_tr || ''}
-                      onChange={(e) => handleUpdateCard(activeCardIdx, 'title_tr', e.target.value)}
-                      className="studio-input"
-                    />
-                  </div>
-
-                  <div className="studio-form-group">
-                    <label className="studio-label">Açıklama (TR)</label>
-                    <textarea
-                      rows={2}
-                      value={draftFeatureCards[activeCardIdx].description_tr || draftFeatureCards[activeCardIdx].desc_tr || ''}
-                      onChange={(e) => handleUpdateCard(activeCardIdx, 'description_tr', e.target.value)}
-                      className="studio-textarea"
-                    />
-                  </div>
-
-                  <div className="studio-form-group">
-                    <label className="studio-label">Title (EN)</label>
-                    <input
-                      type="text"
-                      value={draftFeatureCards[activeCardIdx].title_en || ''}
-                      onChange={(e) => handleUpdateCard(activeCardIdx, 'title_en', e.target.value)}
-                      className="studio-input"
-                    />
-                  </div>
-
-                  <div className="studio-form-group" dir="rtl">
-                    <label className="studio-label">العنوان (AR)</label>
-                    <input
-                      type="text"
-                      value={draftFeatureCards[activeCardIdx].title_ar || ''}
-                      onChange={(e) => handleUpdateCard(activeCardIdx, 'title_ar', e.target.value)}
-                      className="studio-input"
-                    />
-                  </div>
-                </div>
-              ) : (
-                <div style={{ textAlign: 'center', padding: '20px', color: '#64748b', fontSize: '0.8rem' }}>
-                  Henüz özellik kartı yok. Yukarıdaki butondan ekleyin.
-                </div>
-              )}
-            </>
+            <AppStudioFeatureCardEditor
+              cards={draftFeatureCards}
+              activeIdx={activeCardIdx}
+              onSelectIdx={setActiveCardIdx}
+              onAddCard={handleAddFeatureCard}
+              onRemoveCard={handleRemoveCard}
+              onUpdateCard={handleUpdateCard}
+            />
           )}
 
           {/* 5. STORE LINKS (Mağaza ve İndirme Bağlantıları) */}

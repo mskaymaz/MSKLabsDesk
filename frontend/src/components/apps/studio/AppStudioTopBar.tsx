@@ -46,11 +46,11 @@ export const AppStudioTopBar: React.FC<AppStudioTopBarProps> = ({
         <div className="studio-bar-title">
           <span>{app.name_tr || app.name || 'Yeni Uygulama'}</span>
           {isDirty ? (
-            <span style={{ fontSize: '0.72rem', background: '#fef3c7', color: '#b45309', border: '1px solid #fde68a', padding: '2px 8px', borderRadius: '4px', fontWeight: 700 }}>
+            <span className="admin-badge admin-badge-amber">
               Değişiklik Var
             </span>
           ) : (
-            <span style={{ fontSize: '0.72rem', background: '#dcfce7', color: '#15803d', border: '1px solid #bbf7d0', padding: '2px 8px', borderRadius: '4px', fontWeight: 600 }}>
+            <span className="admin-badge admin-badge-emerald">
               Kayıtlı
             </span>
           )}

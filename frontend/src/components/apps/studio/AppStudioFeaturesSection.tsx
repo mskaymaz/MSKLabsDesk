@@ -49,8 +49,8 @@ export const AppStudioFeaturesSection: React.FC<AppStudioFeaturesSectionProps> =
             return (
               <div key={idx} className="studio-feature-box">
                 <h4>
-                  <span>{card.icon || '✨'}</span>
-                  <span>{title}</span>
+                  <span className="studio-feature-icon">{card.icon || '✨'}</span>
+                  <span className="studio-feature-title">{title}</span>
                 </h4>
                 <p>{desc}</p>
               </div>
