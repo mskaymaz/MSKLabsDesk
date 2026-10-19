@@ -3,7 +3,7 @@ import type { AppItem } from '../types';
 import type { CanvasLang, StudioSectionType } from '../components/apps/studio/types';
 import { AppStudioTopBar } from '../components/apps/studio/AppStudioTopBar';
 import { AppStudioCanvas } from '../components/apps/studio/AppStudioCanvas';
-import { AppStudioDrawer } from '../components/apps/studio/AppStudioDrawer';
+import { AppStudioFloatingModal } from '../components/apps/studio/AppStudioFloatingModal';
 import { api } from '../services/api';
 
 interface AppDetailStudioViewProps {
@@ -19,14 +19,16 @@ export const AppDetailStudioView: React.FC<AppDetailStudioViewProps> = ({
 }) => {
   const [app, setApp] = useState<AppItem>({ ...initialApp });
   const [canvasLang, setCanvasLang] = useState<CanvasLang>('tr');
-  const [selectedSection, setSelectedSection] = useState<StudioSectionType | null>('header');
+  const [activeSection, setActiveSection] = useState<StudioSectionType | null>(null);
   const [isSaving, setIsSaving] = useState<boolean>(false);
   const [isDirty, setIsDirty] = useState<boolean>(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
-  const handleAppChange = (updated: AppItem) => {
-    setApp(updated);
+  // Uçar pencereden "Tamam, Sayfaya Yerleştir" dendiğinde
+  const handleApplySectionChanges = (updatedPartial: Partial<AppItem>) => {
+    setApp((prev) => ({ ...prev, ...updatedPartial }));
     setIsDirty(true);
+    setActiveSection(null);
   };
 
   const showToast = (msg: string) => {
@@ -40,8 +42,8 @@ export const AppDetailStudioView: React.FC<AppDetailStudioViewProps> = ({
     try {
       const payload = {
         ...app,
-        app_id: app.app_id || app.slug || app.id,
-        name_tr: app.name_tr || app.name || '',
+        app_id: app.app_id || app.slug || app.id || `app_${Date.now()}`,
+        name_tr: app.name_tr || app.name || 'Yeni Uygulama',
         name_en: app.name_en || null,
         name_ar: app.name_ar || null,
         description_tr: app.description_tr || app.description || '',
@@ -60,9 +62,17 @@ export const AppDetailStudioView: React.FC<AppDetailStudioViewProps> = ({
         feature_cards_json: JSON.stringify(app.feature_cards || []),
       };
 
-      await api.updateApp(app.id, payload);
+      if (app.id) {
+        await api.updateApp(app.id, payload);
+      } else {
+        const res = await api.createApp(payload);
+        if (res && res.id) {
+          setApp((prev) => ({ ...prev, id: res.id }));
+        }
+      }
+
       setIsDirty(false);
-      showToast('Uygulama başarıyla güncellendi ve vitrine yansıtıldı.');
+      showToast('Değişiklikler kaydedildi ve vitrin şablonuna yansıtıldı.');
       if (onSaveSuccess) {
         onSaveSuccess(app);
       }
@@ -75,7 +85,7 @@ export const AppDetailStudioView: React.FC<AppDetailStudioViewProps> = ({
   };
 
   return (
-    <div className="flex flex-col h-screen w-full bg-slate-950 text-slate-100 overflow-hidden select-none">
+    <div className="app-studio-wrapper">
       {/* 1. Stüdyo Üst Kontrol Çubuğu */}
       <AppStudioTopBar
         app={app}
@@ -87,31 +97,42 @@ export const AppDetailStudioView: React.FC<AppDetailStudioViewProps> = ({
         onSave={handleSave}
       />
 
-      {/* 2. Ana Çalışma Tuvali ve Yan Çekmece */}
-      <div className="flex-1 flex overflow-hidden relative">
-        {/* Canlı Önizleme Tuvali */}
-        <AppStudioCanvas
+      {/* 2. Canlı Önizleme Tuvali (Arkadaki Sayfa Asla Kaybolmaz) */}
+      <AppStudioCanvas
+        app={app}
+        canvasLang={canvasLang}
+        onSelectSection={(sec) => setActiveSection(sec)}
+        onBackToCatalog={onBack}
+      />
+
+      {/* 3. Uçar / Hareketli Edit Dialog'u (Tıklanınca Açılır) */}
+      {activeSection && (
+        <AppStudioFloatingModal
+          section={activeSection}
           app={app}
-          canvasLang={canvasLang}
-          selectedSection={selectedSection}
-          onSelectSection={(sec) => setSelectedSection(sec)}
-          onBackToCatalog={onBack}
+          onApply={handleApplySectionChanges}
+          onClose={() => setActiveSection(null)}
         />
+      )}
 
-        {/* Bağlamsal Düzenleme Çekmecesi */}
-        {selectedSection && (
-          <AppStudioDrawer
-            selectedSection={selectedSection}
-            app={app}
-            onChangeApp={handleAppChange}
-            onClose={() => setSelectedSection(null)}
-          />
-        )}
-      </div>
-
-      {/* Başarı / Bilgi Bildirimi Toast */}
+      {/* Başarı Toast Bildirimi */}
       {toastMessage && (
-        <div className="fixed bottom-5 right-5 z-50 flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-600 text-white text-xs font-semibold shadow-2xl animate-fade-in border border-emerald-400/30">
+        <div style={{
+          position: 'fixed',
+          bottom: '24px',
+          right: '24px',
+          zIndex: 1000,
+          background: '#16a34a',
+          color: '#fff',
+          padding: '10px 18px',
+          borderRadius: '10px',
+          fontSize: '0.82rem',
+          fontWeight: 600,
+          boxShadow: '0 10px 30px rgba(0,0,0,0.4)',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '8px'
+        }}>
           <span>✅</span>
           <span>{toastMessage}</span>
         </div>

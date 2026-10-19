@@ -1,7 +1,22 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
-## 🟢 Son Güncelleme [19.10.2026 - 12:20] — UYGULAMA VİTRİNİ İÇİN GÖRSEL STÜDYO (APP DETAIL STUDIO) GELİŞTİRİLDİ [*]
+## 🟢 Son Güncelleme [19.10.2026 - 12:35] — UÇAR (HAREKETLİ) MODAL EDİTÖRÜ, SAF CSS STİLLERİ & YENİ UYGULAMA STÜDYO AKIŞI [*]
+* **Yapılan İşlem:**
+  1. **Uçar / Hareketli Edit Dialog Mimarisi (`AppStudioFloatingModal.tsx`):**
+     - Arkadaki vitrin tuvali kaybolmadan, üzerine tıklanan bölüme ait (Başlık/İkon, Açıklama, Özellik Kartları, Kılavuz, Mağaza Linkleri) uçar modal penceresi açıldı.
+     - 3 dilli (TR/EN/AR) düzenleme sonrasında "Tamam, Sayfaya Yerleştir" butonuyla değişiklikler anında arka sayfadaki yerine yerleşir, "Vazgeç" ile iptal edilir.
+  2. **Edit İkonlarının Minimal Boyuta İndirilmesi & Saf CSS (`app-studio.css`):**
+     - Tailwind CSS bağımlılığı tamamen kaldırıldı; vitrinin ([app.html](file:///d:/Code/mskaymaz/webMSKLabs/app.html)) tüm tasarım kuralları `app-studio.css` saf stil modülüne aktarıldı.
+     - Ekranın %30'unu kaplayan kontrol ve ikonlar temizlendi; hover durumunda beliren zarif ince kesikli çerçeve ve 12px mikro kalem rozeti (`.studio-edit-badge`) uygulandı.
+  3. **Yeni Uygulama Ekleme & Kart Düzenleme Akışının Stüdyoya Bağlanması (`AppsCMSView.tsx`):**
+     - "Yeni Uygulama Ekle" butonuna basıldığında doğrudan boş bir tuvalle Görsel Stüdyo açılacak şekilde bağlandı.
+     - Uygulama kartlarındaki düzenle butonu ve başlık tıklamaları doğrudan Görsel Stüdyo tuvaline yönlendirildi.
+  4. **Doğrulama:**
+     - Frontend `npm run build` PASS (0 hata, 879ms, `dist/` üretildi).
+* **Durum:** `DevAdmin` dalında çalışıldı, `main` kesinlikle korundu.
+
+## [19.10.2026 - 12:20] — UYGULAMA VİTRİNİ İÇİN GÖRSEL STÜDYO (APP DETAIL STUDIO) GELİŞTİRİLDİ
 * **Yapılan İşlem:**
   1. **Görsel Stüdyo Mimarisi ve Bileşenleri İnşa Edildi (`frontend/src/components/apps/studio/`):**
      - `AppStudioTopBar.tsx`: Kataloğa dönüş, canlı TR/EN/AR dil anahtarı (bayrak emojisiz yalın etiket), vitrin önizleme bağlantısı (`/app.html?id=...`), kaydetme durumu ve dirty state takibi.

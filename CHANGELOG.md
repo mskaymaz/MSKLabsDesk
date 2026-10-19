@@ -1,6 +1,20 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [19.10.2026 - 12:35] - Uçar (Hareketli) Modal Editörü, Saf CSS Stilleri ve Yeni Uygulama Stüdyo Akışı
+- **Uçar / Hareketli Edit Dialog Mimarisi (`AppStudioFloatingModal.tsx`):**
+  - Arkadaki sayfa kaybolmadan, üzerine tıklanan bölüme ait (Başlık/İkon, Açıklama, Özellik Kartları, Kılavuz, Mağaza Linkleri) uçar modal penceresi açıldı.
+  - "Vazgeç" ve "Tamam, Sayfaya Yerleştir" butonlarıyla yerel draft verisi doğrulanıp doğrudan arkadaki tuvaldeki yerine anında yerleştirilir.
+- **Edit İkonlarının Minimal Boyuta İndirilmesi & Saf CSS (`app-studio.css`):**
+  - Tailwind CSS sınıfları kaldırıldı; vitrinin ([app.html](file:///d:/Code/mskaymaz/webMSKLabs/app.html)) tüm tasarım kuralları saf `app-studio.css` modülüyle entegre edildi.
+  - Aşırı büyük ikonlar ve hantal etiketler temizlendi; hover durumunda beliren zarif kesikli çerçeve ve 12px mikro kalem rozeti (`.studio-edit-badge`) uygulandı.
+- **Yeni Uygulama Ekleme & Kart Düzenleme Akışının Stüdyoya Bağlanması (`AppsCMSView.tsx`):**
+  - "Yeni Uygulama Ekle" butonuna basıldığında doğrudan boş bir tuvalle Görsel Stüdyo açılacak şekilde bağlandı.
+  - Uygulama kartlarındaki düzenle butonu ve başlık tıklamaları doğrudan Görsel Stüdyo tuvaline yönlendirildi.
+- **Doğrulama ve Kural Uyumu:**
+  - Frontend `npm run build` PASS (0 hata, 879ms).
+  - Yalnızca `DevAdmin` dalında çalışıldı, `main` kesinlikle korundu.
+
 ## [19.10.2026 - 12:20] - Uygulama Vitrini İçin Görsel Stüdyo (App Detail Studio) Geliştirildi
 - **Görsel Stüdyo Mimarisi Oluşturuldu (`frontend/src/components/apps/studio/`):**
   - `AppStudioTopBar.tsx`: Canlı dil değiştirici (TR/EN/AR yalın bayraksız), vitrinde önizleme, kaydetme durumu ve kataloğa dönüş kontrolleri.

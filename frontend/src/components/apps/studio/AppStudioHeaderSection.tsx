@@ -1,262 +1,104 @@
 import React from 'react';
-import { Edit2, Smartphone, BookOpen, Download } from 'lucide-react';
+import { Edit2 } from 'lucide-react';
 import type { AppItem } from '../../../types';
 import type { CanvasLang, StudioSectionType } from './types';
 
 interface AppStudioHeaderSectionProps {
   app: AppItem;
   canvasLang: CanvasLang;
-  activeSection?: StudioSectionType | null;
-  selectedSection?: StudioSectionType | null;
   onSelectSection: (section: StudioSectionType) => void;
 }
 
 export const AppStudioHeaderSection: React.FC<AppStudioHeaderSectionProps> = ({
   app,
   canvasLang,
-  activeSection,
-  selectedSection,
   onSelectSection,
 }) => {
-  const currentActive = selectedSection ?? activeSection;
-  const isHeaderActive = currentActive === 'header';
-  const isGuideActive = currentActive === 'guide';
+  const isAr = canvasLang === 'ar';
+  const isEn = canvasLang === 'en';
 
-  // Dinamik dil metinleri
-  const appName = canvasLang === 'ar' 
-    ? (app.name_ar || app.name_tr) 
-    : (canvasLang === 'en' ? (app.name_en || app.name_tr) : app.name_tr);
+  // Seçili dile göre isim
+  const appName = isAr
+    ? (app.name_ar || app.name_tr)
+    : (isEn ? (app.name_en || app.name_tr) : app.name_tr);
 
-  const categories = (app.category || 'utility').split(',').map((c) => c.trim()).filter(Boolean);
+  // Dil paneli metinleri
+  const langLabel = isAr ? 'حالة اللغة:' : (isEn ? 'Language Status:' : 'Dil Durumu:');
+  const langActiveText = isAr ? 'نشط' : (isEn ? 'Active' : 'Aktif');
+  const dlBtnText = isAr ? 'تنزيل التطبيق' : (isEn ? 'Download App' : 'Uygulamayı İndir');
+  const guideBtnText = isAr ? 'دليل الاستخدام (PDF)' : (isEn ? 'User Guide (PDF)' : 'Kullanım Kılavuzu İndir');
 
-  const formatPlatform = (p?: string) => {
-    if (!p || p === 'all') return canvasLang === 'ar' ? 'جميع المنصات' : (canvasLang === 'en' ? 'All Platforms' : 'Tüm Platformlar');
-    if (p === 'mobile') return canvasLang === 'ar' ? 'الهاتف' : (canvasLang === 'en' ? 'Mobile' : 'Mobil');
-    if (p === 'desktop') return canvasLang === 'ar' ? 'سطح المكتب' : (canvasLang === 'en' ? 'Desktop' : 'Masaüstü');
-    if (p === 'web') return 'Web';
-    return p.toUpperCase();
-  };
-
-  const dlBtnText = canvasLang === 'ar' ? 'تنزيل التطبيق' : (canvasLang === 'en' ? 'Download App' : 'Uygulamayı İndir');
-  const guideBtnText = canvasLang === 'ar' ? 'دليل الاستخدام (PDF)' : (canvasLang === 'en' ? 'User Guide (PDF)' : 'Kullanım Kılavuzu İndir');
+  const guideUrl = app.guide_url || app.store_links?.guide_url;
 
   return (
-    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '20px', flexWrap: 'wrap' }}>
-      
-      {/* Sol: İkon, İsim, Rozetler (Tıklanabilir Başlık Bölümü) */}
-      <div
-        role="button"
-        tabIndex={0}
+    <div className="studio-app-header">
+      {/* 1. Sol Başlık ve İkon Bölgesi (Tıklanabilir) */}
+      <div 
+        className="studio-app-header-left studio-editable-zone"
         onClick={() => onSelectSection('header')}
-        onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') onSelectSection('header'); }}
-        className={`studio-clickable-section ${isHeaderActive ? 'active' : ''}`}
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '20px',
-          flex: 1,
-          minWidth: '280px',
-          padding: '12px',
-          borderRadius: '14px',
-          position: 'relative',
-          cursor: 'pointer',
-        }}
-        title="Başlık, İkon, Kategori ve Platform bilgilerini düzenlemek için tıklayın"
+        title="Başlık ve ikonu düzenlemek için tıklayın"
       >
-        <span className="studio-section-badge">
+        <div className="studio-edit-badge">
           <Edit2 size={12} />
           <span>Başlık & İkon</span>
-        </span>
+        </div>
 
-        {/* 125px Büyük İkon */}
-        <div style={{
-          width: '125px',
-          height: '125px',
-          borderRadius: '24px',
-          background: 'var(--bg-surface, #f1f5f9)',
-          border: '1px solid var(--border-color, #e2e8f0)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          flexShrink: 0,
-          overflow: 'hidden',
-          padding: '8px',
-          boxSizing: 'border-box',
-          boxShadow: '0 4px 14px rgba(0,0,0,0.06)',
-        }}>
+        <div className="studio-big-icon">
           {app.icon_url ? (
-            <img
-              src={app.icon_url.startsWith('/media/') ? `https://msklabs.org${app.icon_url}` : app.icon_url}
-              alt={appName}
-              style={{ width: '100%', height: '100%', objectFit: 'contain', borderRadius: '18px' }}
-            />
+            <img src={app.icon_url} alt={appName} onError={(e) => { (e.target as any).style.display = 'none'; }} />
           ) : (
-            <Smartphone size={56} style={{ color: 'var(--accent-primary, #2563eb)' }} />
+            <span>📱</span>
           )}
         </div>
 
-        {/* Başlık ve Rozetler Grubu */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-          <h1 style={{
-            fontSize: '1.85rem',
-            fontWeight: 700,
-            margin: 0,
-            color: 'var(--text-main, #0f172a)',
-            lineHeight: 1.2,
-          }}>
-            {appName || 'Uygulama Adı'}
-          </h1>
-
-          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', alignItems: 'center' }}>
-            <span style={{
-              fontSize: '0.8rem',
-              fontWeight: 600,
-              padding: '4px 10px',
-              borderRadius: '20px',
-              background: '#eef2ff',
-              color: '#2563eb',
-              border: '1px solid #cbd5e1',
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '4px',
-            }}>
-              📱 {formatPlatform(app.platform)}
+        <div className="studio-title-group">
+          <h1>{appName || 'Uygulama Adı'}</h1>
+          <div className="studio-badges">
+            <span className="studio-badge studio-badge-platform">
+              {app.platform || 'Android'}
             </span>
-
-            <span style={{
-              fontSize: '0.8rem',
-              fontWeight: 600,
-              padding: '4px 10px',
-              borderRadius: '20px',
-              background: '#fffbeb',
-              color: '#b45309',
-              border: '1px solid #fef3c7',
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '4px',
-            }}>
-              🛠️ {canvasLang === 'ar' ? 'التطوير قيد التقدم' : (canvasLang === 'en' ? 'Development In Progress' : 'Geliştirme Devam Ediyor')}
+            <span className="studio-badge studio-badge-status">
+              {app.category || 'Mobil'}
             </span>
-
-            {categories.map((cat) => (
-              <span key={cat} style={{
-                fontSize: '0.8rem',
-                fontWeight: 600,
-                padding: '4px 10px',
-                borderRadius: '20px',
-                background: 'var(--bg-surface, #f8fafc)',
-                color: 'var(--text-muted, #64748b)',
-                border: '1px solid var(--border-color, #cbd5e1)',
-              }}>
-                🏷️ {cat}
+            {app.status === 'in_development' && (
+              <span className="studio-badge" style={{ background: 'rgba(245, 158, 11, 0.2)', color: '#fcd34d' }}>
+                Geliştiriliyor
               </span>
-            ))}
-
-            <span style={{
-              fontSize: '0.8rem',
-              fontWeight: 600,
-              padding: '4px 10px',
-              borderRadius: '20px',
-              background: 'var(--bg-surface, #f8fafc)',
-              color: '#2563eb',
-              border: '1px solid var(--border-color, #cbd5e1)',
-            }}>
-              v{app.latest_version || '1.0.0'}
-            </span>
+            )}
+            {app.status === 'planned' && (
+              <span className="studio-badge" style={{ background: 'rgba(148, 163, 184, 0.2)', color: '#cbd5e1' }}>
+                Planlanıyor
+              </span>
+            )}
           </div>
         </div>
       </div>
 
-      {/* Sağ: Dil Durumu, İndir ve Kılavuz Paneli (%15-20 Küçültülmüş) */}
-      <div
-        role="button"
-        tabIndex={0}
+      {/* 2. Sağ Dil ve Kılavuz Paneli (Tıklanabilir) */}
+      <div 
+        className="studio-header-right studio-editable-zone"
         onClick={() => onSelectSection('guide')}
-        onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') onSelectSection('guide'); }}
-        className={`studio-clickable-section ${isGuideActive ? 'active' : ''}`}
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'flex-end',
-          gap: '5px',
-          padding: '10px 14px',
-          borderRadius: '12px',
-          position: 'relative',
-          cursor: 'pointer',
-        }}
-        title="Kullanım Kılavuzu PDF ve İndirme linklerini düzenlemek için tıklayın"
+        title="Kılavuz ve indirme butonunu düzenlemek için tıklayın"
+        style={{ padding: '4px 6px' }}
       >
-        <span className="studio-section-badge">
+        <div className="studio-edit-badge">
           <Edit2 size={12} />
           <span>Kılavuz & İndirme</span>
-        </span>
-
-        {/* Dil Durumu Rozeti */}
-        <div style={{
-          background: 'var(--bg-surface, #f8fafc)',
-          border: '1px solid var(--border-color, #e2e8f0)',
-          borderRadius: '8px',
-          padding: '5px 10px',
-          fontSize: '0.74rem',
-          color: 'var(--text-main, #0f172a)',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '6px',
-          boxShadow: '0 1px 3px rgba(0,0,0,0.03)',
-        }}>
-          <span>🌐 {canvasLang === 'ar' ? 'حالة اللغة:' : (canvasLang === 'en' ? 'Language Status:' : 'Dil Durumu:')}</span>
-          <strong style={{
-            background: '#dbeafe',
-            color: '#1d4ed8',
-            padding: '1px 6px',
-            fontSize: '0.72rem',
-            borderRadius: '5px',
-            fontWeight: 700,
-          }}>
-            TR ({canvasLang === 'ar' ? 'نشط' : (canvasLang === 'en' ? 'Active' : 'Aktif')})
-          </strong>
         </div>
 
-        {/* Hızlı İndir Butonu (%20 Küçültülmüş) */}
-        <div style={{
-          display: 'inline-flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          background: '#16a34a',
-          color: '#ffffff',
-          padding: '6px 16px',
-          borderRadius: '8px',
-          fontWeight: 600,
-          fontSize: '0.78rem',
-          marginTop: '4px',
-          boxShadow: '0 2px 8px rgba(22, 163, 74, 0.25)',
-          gap: '5px',
-        }}>
-          <Download size={13} />
+        <div className="studio-status-panel">
+          <span>🌐 {langLabel} <strong className="studio-status-tag">TR ({langActiveText})</strong></span>
+        </div>
+
+        <a href="#download-section" className="studio-hero-download-btn">
           <span>{dlBtnText}</span>
-        </div>
+        </a>
 
-        {/* Kullanım Kılavuzu İndir Butonu (%20 Küçültülmüş) */}
-        <div style={{
-          display: 'inline-flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          gap: '5px',
-          background: 'var(--bg-surface, #f8fafc)',
-          color: 'var(--text-main, #334155)',
-          border: '1px solid var(--border-color, #cbd5e1)',
-          padding: '5px 14px',
-          borderRadius: '8px',
-          fontWeight: 600,
-          fontSize: '0.76rem',
-          marginTop: '2px',
-          boxShadow: '0 1px 3px rgba(0, 0, 0, 0.04)',
-        }}>
-          <BookOpen size={13} />
+        <div className="studio-hero-guide-btn" title={guideBtnText}>
           <span>📖 {guideBtnText}</span>
+          {!guideUrl && <small style={{ opacity: 0.6, fontSize: '10px' }}>(Yakında)</small>}
         </div>
       </div>
-
     </div>
   );
 };

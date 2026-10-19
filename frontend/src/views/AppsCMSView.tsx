@@ -100,6 +100,42 @@ export const AppsCMSView: React.FC = () => {
     );
   }
 
+  const handleAddNewAppInStudio = () => {
+    const newApp: AppItem = {
+      id: '',
+      app_id: '',
+      name_tr: 'Yeni Uygulama',
+      name_en: 'New Application',
+      name_ar: 'تطبيق جديد',
+      description_tr: 'Uygulama hakkında açıklama metnini buraya tıklayarak girin.',
+      description_en: 'Enter application description in English by clicking here.',
+      description_ar: 'أدخل وصف التطبيق باللغة العربية بالنقر هنا.',
+      category: 'Mobil',
+      platform: 'Android',
+      status: 'in_development',
+      icon_url: '',
+      store_links: {
+        google_play: '',
+        github: '',
+        google_drive: '',
+        app_store: '',
+        web_url: '',
+      },
+      feature_cards: [
+        {
+          icon: '✨',
+          title_tr: 'Öne Çıkan Özellik',
+          title_en: 'Featured Item',
+          title_ar: 'الميزة البارزة',
+          description_tr: 'Özellik hakkında açıklama...',
+          description_en: 'Description about feature...',
+          description_ar: 'وصف عن الميزة...',
+        }
+      ],
+    };
+    setStudioApp(newApp);
+  };
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
       
@@ -119,8 +155,9 @@ export const AppsCMSView: React.FC = () => {
             <RefreshCw size={16} />
           </button>
           <button
-            onClick={() => { setEditingApp(null); setShowAppModal(true); }}
+            onClick={handleAddNewAppInStudio}
             className="admin-btn admin-btn-primary admin-btn-md"
+            title="Görsel Stüdyo Tuvali ile Yeni Uygulama Ekle"
           >
             <Plus size={16} />
             <span>Yeni Uygulama Ekle</span>
@@ -371,9 +408,9 @@ export const AppsCMSView: React.FC = () => {
 
                   <button
                     type="button"
-                    onClick={() => { setEditingApp(app); setShowAppModal(true); }}
+                    onClick={() => setStudioApp(app)}
                     className="admin-btn admin-btn-sm admin-btn-view"
-                    title="Hızlı Form Düzenle"
+                    title="Görsel Stüdyo'da Düzenle"
                   >
                     <Edit2 size={13} />
                   </button>
