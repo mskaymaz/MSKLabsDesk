@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import {
   Smartphone, Plus, Edit2, Trash2, Rocket,
-  Copy, Check, Download, Search, Layers, RefreshCw
+  Copy, Check, Download, Search, Layers, RefreshCw, Sparkles
 } from 'lucide-react';
 import type { AppItem } from '../types';
 import { api } from '../services/api';
 import { AppModal } from '../components/apps/AppModal';
 import { AppVersionModal } from '../components/apps/AppVersionModal';
+import { AppDetailStudioView } from './AppDetailStudioView';
 
 export const AppsCMSView: React.FC = () => {
   const [apps, setApps] = useState<AppItem[]>([]);
@@ -14,6 +15,9 @@ export const AppsCMSView: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [platformFilter, setPlatformFilter] = useState<string>('all');
   
+  // Stüdyo Modu
+  const [studioApp, setStudioApp] = useState<AppItem | null>(null);
+
   // Modallar
   const [showAppModal, setShowAppModal] = useState<boolean>(false);
   const [editingApp, setEditingApp] = useState<AppItem | null>(null);
@@ -80,6 +84,21 @@ export const AppsCMSView: React.FC = () => {
     const matchesPlatform = platformFilter === 'all' || app.platform === 'all' || app.platform === platformFilter;
     return matchesSearch && matchesPlatform;
   });
+
+  if (studioApp) {
+    return (
+      <AppDetailStudioView
+        app={studioApp}
+        onBack={() => {
+          setStudioApp(null);
+          loadApps();
+        }}
+        onSaveSuccess={() => {
+          loadApps();
+        }}
+      />
+    );
+  }
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
@@ -172,7 +191,11 @@ export const AppsCMSView: React.FC = () => {
               <div>
                 {/* Kart Üst Bilgisi */}
                 <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '10px', marginBottom: '10px' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                  <div 
+                    onClick={() => setStudioApp(app)}
+                    style={{ display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer' }}
+                    title="Görsel Stüdyo'da Aç"
+                  >
                     {app.icon_url ? (
                       <img
                         src={app.icon_url.startsWith('/media/') ? `https://msklabs.org${app.icon_url}` : app.icon_url}
@@ -197,7 +220,7 @@ export const AppsCMSView: React.FC = () => {
                     )}
                     <div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                        <h3 className="admin-card-title" style={{ margin: 0, fontSize: '1.05rem' }}>{app.name_tr}</h3>
+                        <h3 className="admin-card-title hover:text-blue-400 transition" style={{ margin: 0, fontSize: '1.05rem' }}>{app.name_tr}</h3>
                         <span
                           style={{
                             display: 'inline-block',
@@ -326,6 +349,17 @@ export const AppsCMSView: React.FC = () => {
                 <div style={{ display: 'flex', gap: '6px' }}>
                   <button
                     type="button"
+                    onClick={() => setStudioApp(app)}
+                    className="admin-btn admin-btn-sm"
+                    style={{ background: '#2563eb', color: '#fff', borderColor: '#2563eb', display: 'flex', alignItems: 'center', gap: '4px' }}
+                    title="Görsel Stüdyo ile Vitrin Sayfasını Canlı Düzenle"
+                  >
+                    <Sparkles size={13} />
+                    <span>Görsel Stüdyo</span>
+                  </button>
+
+                  <button
+                    type="button"
                     onClick={() => { setSelectedAppForVersion(app); setShowVersionModal(true); }}
                     className="admin-btn admin-btn-sm admin-btn-primary"
                     style={{ background: '#10b981', borderColor: '#10b981', display: 'flex', alignItems: 'center', gap: '4px' }}
@@ -339,7 +373,7 @@ export const AppsCMSView: React.FC = () => {
                     type="button"
                     onClick={() => { setEditingApp(app); setShowAppModal(true); }}
                     className="admin-btn admin-btn-sm admin-btn-view"
-                    title="Uygulamayı Düzenle"
+                    title="Hızlı Form Düzenle"
                   >
                     <Edit2 size={13} />
                   </button>

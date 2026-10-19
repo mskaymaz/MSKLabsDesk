@@ -130,8 +130,11 @@ export interface AppStoreLinks {
   google_play?: string;
   app_store?: string;
   github?: string;
+  google_drive?: string;
   web_url?: string;
+  windows_store?: string;
   direct_apk?: string;
+  guide_url?: string;
 }
 
 export interface AppFeatureCard {
@@ -143,17 +146,27 @@ export interface AppFeatureCard {
   description_tr: string;
   description_en?: string;
   description_ar?: string;
+  desc_tr?: string;
+  desc_en?: string;
+  desc_ar?: string;
 }
 
 export interface AppItem {
   id: string;
   app_id: string;
+  slug?: string;
+  name?: string;
   name_tr: string;
   name_en?: string;
   name_ar?: string;
+  tagline_tr?: string;
+  tagline_en?: string;
+  tagline_ar?: string;
+  description?: string;
   description_tr: string;
   description_en?: string;
   description_ar?: string;
+  features?: string[];
   features_tr?: string;
   features_en?: string;
   features_ar?: string;
@@ -161,8 +174,11 @@ export interface AppItem {
   cover_url?: string;
   category?: string;
   platform?: string;
+  status?: 'active' | 'in_development' | 'planned';
+  sort_order?: number;
   display_order?: number;
   is_active?: boolean;
+  guide_url?: string;
   store_links?: AppStoreLinks;
   store_links_json?: string;
   feature_cards?: AppFeatureCard[];

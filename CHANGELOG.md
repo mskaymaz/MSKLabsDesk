@@ -1,6 +1,22 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [19.10.2026 - 12:20] - Uygulama Vitrini İçin Görsel Stüdyo (App Detail Studio) Geliştirildi
+- **Görsel Stüdyo Mimarisi Oluşturuldu (`frontend/src/components/apps/studio/`):**
+  - `AppStudioTopBar.tsx`: Canlı dil değiştirici (TR/EN/AR yalın bayraksız), vitrinde önizleme, kaydetme durumu ve kataloğa dönüş kontrolleri.
+  - `AppStudioHeaderSection.tsx`: 125px ikon, TR/EN/AR başlıklar, kategori/platform rozetleri, dil durumu paneli, hızlı indirme ve kılavuz butonları tuvali.
+  - `AppStudioFeaturesSection.tsx`: 3xN öne çıkan özellik kartları grid tuvali.
+  - `AppStudioDownloadsSection.tsx`: Google Play, GitHub APK, Drive APK, Web/PWA, Windows Store ve Apple App Store (resmi prosedür notuyla) indirme kanalları tuvali.
+  - `AppStudioCanvas.tsx`: Vitrin `app.html` düzenini birebir taklit eden ve RTL destekleyen ana tuval sarmalayıcısı.
+  - `AppStudioDrawer.tsx` & `AppStudioFeaturesDrawer.tsx`: Tuvaldeki her bölüme tıklandığında açılan, 3 dilli (TR/EN/AR) ve canlı güncellenen bağlamsal düzenleme çekmecesi.
+- **Ana Stüdyo Ekranı & CMS Entegrasyonu (`AppDetailStudioView.tsx` & `AppsCMSView.tsx`):**
+  - `AppDetailStudioView.tsx`: Stüdyo durum makineleri, Cloudflare D1 API PUT entegrasyonu ve bildirim sistemi.
+  - `AppsCMSView.tsx`: Uygulama kartlarına tıklandığında veya "Görsel Stüdyo" butonuna basıldığında stüdyo moduna geçiş sağlandı.
+- **Kod Standartları & Derleme:**
+  - Satır limitleri korundu (yardımcı modüller azami 400-450 satır, ana stüdyo görünümü 122 satır).
+  - Frontend `npm run build` PASS (0 hata, 924ms).
+  - Yalnızca `DevAdmin` dalında çalışıldı, `main` kesinlikle korundu.
+
 ## [19.10.2026 - 11:35] - Bildirim Metni 0.80rem (Tek Satır Korundu) ve "Uygulamalarımız" Başlığı %15 Küçültüldü
 - **Bildirim Metni Fontu 0.80rem Seviyesine Çekildi (`webMSKLabs/apps.html`):**
   - "Bu portföydeki uygulamalarımız..." metni `0.80rem` font ve `0` letter-spacing ile güncellendi; 900px konteyner genişliğinde 104 karakterlik metin (~707px) masaüstünde tek satırda rahatça kaldı (`white-space: nowrap;`).

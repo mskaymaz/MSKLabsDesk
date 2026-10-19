@@ -1,7 +1,25 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
-## 🟢 Son Güncelleme [19.10.2026 - 11:35] — BİLDİRİM METNİ 0.80REM (TEK SATIR SÖZLEŞMESİ KORUNDU) & SAYFA BAŞLIĞI %15 KÜÇÜLTME [*]
+## 🟢 Son Güncelleme [19.10.2026 - 12:20] — UYGULAMA VİTRİNİ İÇİN GÖRSEL STÜDYO (APP DETAIL STUDIO) GELİŞTİRİLDİ [*]
+* **Yapılan İşlem:**
+  1. **Görsel Stüdyo Mimarisi ve Bileşenleri İnşa Edildi (`frontend/src/components/apps/studio/`):**
+     - `AppStudioTopBar.tsx`: Kataloğa dönüş, canlı TR/EN/AR dil anahtarı (bayrak emojisiz yalın etiket), vitrin önizleme bağlantısı (`/app.html?id=...`), kaydetme durumu ve dirty state takibi.
+     - `AppStudioHeaderSection.tsx`: 125px ikon, TR/EN/AR başlıklar, kategori & platform rozetleri, dil durumu paneli, hızlı indirme ve kılavuz butonu tuvali.
+     - `AppStudioFeaturesSection.tsx`: 3xN öne çıkan özellik kartları grid tuvali.
+     - `AppStudioDownloadsSection.tsx`: Google Play, GitHub APK, Drive APK, Web/PWA, Windows Store ve Apple App Store (orijinal logo + resmi prosedür bilgilendirme notu) indirme kartları tuvali.
+     - `AppStudioCanvas.tsx`: Vitrin `app.html` düzenini birebir yansıtan, sağdan sola Arapça (`dir="rtl"`) desteğine sahip ana tuval sarmalayıcısı.
+     - `AppStudioDrawer.tsx` & `AppStudioFeaturesDrawer.tsx`: Tuvalde tıklanan bölüme (Başlık, Açıklama, Özellik Kartları, Mağaza Linkleri, Kılavuz PDF) göre açılan, anında canlı önizleme sağlayan bağlamsal 3 dilli düzenleme çekmecesi.
+  2. **Ana Stüdyo Ekranı ve CMS Entegrasyonu (`AppDetailStudioView.tsx` & `AppsCMSView.tsx`):**
+     - `AppDetailStudioView.tsx`: Stüdyo durum yönetimi, D1 API PUT (`/admin/apps/:id`) entegrasyonu ve toast bildirimleri (122 satır).
+     - `AppsCMSView.tsx`: Uygulama kartlarındaki ikon/başlığa veya yeni eklenen "Görsel Stüdyo" butonuna tıklandığında tam ekran stüdyo moduna geçiş bağlandı.
+  3. **Satır Sınırı ve Kod Standartları Uyumu:**
+     - Tüm yardımcı bileşenler azami 400-450 satır hedefinde tutuldu; ana stüdyo görünümü tavan 600 satır sınırının oldukça altında (122 satır) tamamlandı.
+  4. **Doğrulama:**
+     - Frontend `npm run build` PASS (0 hata, 924ms, `dist/` üretildi).
+* **Durum:** `DevAdmin` dalında çalışıldı, `main` kesinlikle korundu.
+
+## [19.10.2026 - 11:35] — BİLDİRİM METNİ 0.80REM (TEK SATIR SÖZLEŞMESİ KORUNDU) & SAYFA BAŞLIĞI %15 KÜÇÜLTME
 * **Yapılan İşlem:**
   1. **Bildirim Metni Fontu 0.80rem Seviyesine Yükseltildi (`webMSKLabs/apps.html`):**
      - "Bu portföydeki uygulamalarımız..." metninin font boyutu `0.80rem` yapıldı; harf aralığı `0` olarak korundu. 900px konteyner genişliğinde 104 karakterlik Türkçe metin (~707px) tek satıra rahatlıkla sığdırıldı (`white-space: nowrap;`).
