@@ -1,6 +1,16 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [19.10.2026 - 16:45] - Haydi Namaza Verilerinin Geri Yüklenmesi ve Kısmi Güncelleme Koruması
+- **Defansif Backend Güncellemesi (`backend/src/routes/cmsApps.ts`):**
+  - `PUT` rotası öncesinde mevcut kayıt çekilerek kısmi yük güncellemelerinde (örneğin sadece sıralama değiştiğinde) diğer kolonların null ile ezilmesi engellendi; alanlar güvenle birleştirildi.
+- **Haydi Namaza Verilerinin Geri Yüklenmesi (`backend/migrations/0015_restore_haydinamaza_full_data.sql`):**
+  - Haydi Namaza uygulamasının 3 dilli özet vizyonu, tekil tanıtım açıklaması, 9 adet özellik kartı (`card_1` - `card_9`) ve mağaza linkleri D1 veritabanına eksiksiz olarak geri yüklendi.
+- **Doğrulama ve Kural Uyumu:**
+  - Local D1 üzerinde `0015_restore_haydinamaza_full_data.sql` çalıştırıldı.
+  - Kısmi güncelleme testi yapılarak veri bütünlüğünün korunduğu doğrulandı.
+  - Yalnızca `DevAdmin` dalında çalışıldı, `main` kesinlikle korundu.
+
 ## [19.10.2026 - 16:38] - Vitrin Sıralaması Doğrudan Düzenleme, İkon Linkleri Çözümleme ve Buton Sadelendirmesi
 - **Uygulama İkon Linklerinin Çözümlenmesi (`frontend/src/utils/appIcons.ts` & D1 `0014_fix_app_icons_and_orders.sql`):**
   - CMS'te bulunan `media/{app}/icon.png` formatındaki yerel dosya yolları merkezi `getAppIconUrl` fonksiyonuna bağlandı (`https://msklabs.org/media/...`).

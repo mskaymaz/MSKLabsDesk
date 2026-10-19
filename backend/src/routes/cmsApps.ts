@@ -131,6 +131,11 @@ export async function handleCmsApps(request: Request, env: any): Promise<Respons
     const appId = path.split('/').pop();
     const body = await request.json() as any;
 
+    const existing: any = await env.DB.prepare(`SELECT * FROM apps WHERE id = ?`).bind(appId).first();
+    if (!existing) {
+      return new Response(JSON.stringify({ error: 'Uygulama bulunamadı' }), { status: 404 });
+    }
+
     const {
       app_id, name_tr, name_en, name_ar,
       summary_tr, summary_en, summary_ar,
@@ -140,10 +145,45 @@ export async function handleCmsApps(request: Request, env: any): Promise<Respons
       store_links_json, screenshots_json, feature_cards_json, feature_cards
     } = body;
 
-    const storeLinks = typeof store_links_json === 'object' ? JSON.stringify(store_links_json) : (store_links_json || '{}');
-    const screenshots = typeof screenshots_json === 'object' ? JSON.stringify(screenshots_json) : (screenshots_json || '[]');
+    const finalAppId = app_id !== undefined ? app_id.toLowerCase().trim() : existing.app_id;
+    const finalNameTr = name_tr !== undefined ? name_tr : existing.name_tr;
+    const finalNameEn = name_en !== undefined ? name_en : existing.name_en;
+    const finalNameAr = name_ar !== undefined ? name_ar : existing.name_ar;
+
+    const finalSummaryTr = summary_tr !== undefined ? summary_tr : existing.summary_tr;
+    const finalSummaryEn = summary_en !== undefined ? summary_en : existing.summary_en;
+    const finalSummaryAr = summary_ar !== undefined ? summary_ar : existing.summary_ar;
+
+    const finalDescTr = description_tr !== undefined ? description_tr : existing.description_tr;
+    const finalDescEn = description_en !== undefined ? description_en : existing.description_en;
+    const finalDescAr = description_ar !== undefined ? description_ar : existing.description_ar;
+
+    const finalFeaturesTr = features_tr !== undefined ? features_tr : existing.features_tr;
+    const finalFeaturesEn = features_en !== undefined ? features_en : existing.features_en;
+    const finalFeaturesAr = features_ar !== undefined ? features_ar : existing.features_ar;
+
+    const finalIcon = icon_url !== undefined ? icon_url : existing.icon_url;
+    const finalCover = cover_url !== undefined ? cover_url : existing.cover_url;
+    const finalCategory = category !== undefined ? category : existing.category;
+    const finalPlatform = platform !== undefined ? platform : existing.platform;
+    const finalDisplayOrder = display_order !== undefined ? Number(display_order) : existing.display_order;
+    const finalIsActive = is_active !== undefined ? (is_active ? 1 : 0) : existing.is_active;
+
+    let finalStoreLinks = existing.store_links_json || '{}';
+    if (store_links_json !== undefined) {
+      finalStoreLinks = typeof store_links_json === 'object' ? JSON.stringify(store_links_json) : store_links_json;
+    }
+
+    let finalScreenshots = existing.screenshots_json || '[]';
+    if (screenshots_json !== undefined) {
+      finalScreenshots = typeof screenshots_json === 'object' ? JSON.stringify(screenshots_json) : screenshots_json;
+    }
+
+    let finalFeatureCards = existing.feature_cards_json || '[]';
     const cardsSource = feature_cards !== undefined ? feature_cards : feature_cards_json;
-    const featureCards = typeof cardsSource === 'object' ? JSON.stringify(cardsSource) : (cardsSource || '[]');
+    if (cardsSource !== undefined) {
+      finalFeatureCards = typeof cardsSource === 'object' ? JSON.stringify(cardsSource) : cardsSource;
+    }
 
     await env.DB.prepare(
       `UPDATE apps SET
@@ -155,13 +195,13 @@ export async function handleCmsApps(request: Request, env: any): Promise<Respons
         store_links_json = ?, screenshots_json = ?, feature_cards_json = ?, updated_at = CURRENT_TIMESTAMP
        WHERE id = ?`
     ).bind(
-      app_id, name_tr, name_en || null, name_ar || null,
-      summary_tr || null, summary_en || null, summary_ar || null,
-      description_tr, description_en || null, description_ar || null,
-      features_tr || null, features_en || null, features_ar || null,
-      icon_url || null, cover_url || null, category || 'utility', platform || 'all',
-      display_order || 0, is_active !== undefined ? (is_active ? 1 : 0) : 1,
-      storeLinks, screenshots, featureCards, appId
+      finalAppId, finalNameTr, finalNameEn, finalNameAr,
+      finalSummaryTr, finalSummaryEn, finalSummaryAr,
+      finalDescTr, finalDescEn, finalDescAr,
+      finalFeaturesTr, finalFeaturesEn, finalFeaturesAr,
+      finalIcon, finalCover, finalCategory, finalPlatform,
+      finalDisplayOrder, finalIsActive,
+      finalStoreLinks, finalScreenshots, finalFeatureCards, appId
     ).run();
 
     return new Response(JSON.stringify({ success: true }));

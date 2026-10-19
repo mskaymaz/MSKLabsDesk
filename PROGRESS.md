@@ -1,7 +1,21 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
-## 🟢 Son Güncelleme [19.10.2026 - 16:38] — VİTRİN SIRALAMASI DOĞRUDAN DÜZENLEME, İKON LİNKLERİ ÇÖZÜMLEME VE BUTON SADELİĞİ [*]
+## 🟢 Son Güncelleme [19.10.2026 - 16:45] — HAYDİ NAMAZA VERİLERİNİN GERİ YÜKLENMESİ VE KISMİ GÜNCELLEME KORUMASI [*]
+* **Yapılan İşlem:**
+  1. **Kök Neden:**
+     - `cmsApps.ts` içerisindeki `PUT /api/v1/admin/apps/:id` endpoint'i, yalnızca sıralama veya tekil alan güncellendiğinde gönderilmeyen diğer alanları `null` olarak kaydediyordu.
+  2. **Defansif Backend Güncellemesi (`backend/src/routes/cmsApps.ts`):**
+     - `PUT` işlemi öncesinde mevcut veritabanı kaydı (`SELECT * FROM apps WHERE id = ?`) çekilerek kısmi güncellemelerde (örneğin sadece vitrin sırası değiştiğinde) başlık, açıklama, özet, özellik kartları ve linklerin ezilmesi kalıcı olarak engellendi.
+  3. **Verilerin Eksiksiz Geri Yüklenmesi (`0015_restore_haydinamaza_full_data.sql`):**
+     - Haydi Namaza uygulamasının 3 dilli özet vizyonu, tekil tanıtım açıklaması, 9 adet özellik kartı (`card_1` - `card_9`) ve mağaza linkleri D1 veritabanına eksiksiz olarak geri yüklendi.
+  4. **Doğrulama:**
+     - Local D1 üzerinde `0015_restore_haydinamaza_full_data.sql` çalıştırıldı.
+     - `haydinamaza` sorgulanarak özet, açıklama, 9 özellik kartı ve vitrin sırası (1) doğrulandı.
+     - Kısmi payload testi (`display_order`) ile diğer alanların korunduğu teyit edildi.
+* **Durum:** `DevAdmin` dalında çalışıldı, `main` kesinlikle korundu.
+
+## [19.10.2026 - 16:38] — VİTRİN SIRALAMASI DOĞRUDAN DÜZENLEME, İKON LİNKLERİ ÇÖZÜMLEME VE BUTON SADELİĞİ
 * **Yapılan İşlem:**
   1. **Uygulama İkon Linklerinin Çözümlenmesi (`frontend/src/utils/appIcons.ts` & D1 `0014_fix_app_icons_and_orders.sql`):**
      - Uygulamaların `media/{slug}/icon.png` formatındaki yerel dosya ve CMS yolları merkezi `getAppIconUrl` yardımcısına bağlandı (`https://msklabs.org/media/...`).
