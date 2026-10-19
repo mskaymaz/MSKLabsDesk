@@ -159,6 +159,9 @@ export interface AppItem {
   name_tr: string;
   name_en?: string;
   name_ar?: string;
+  summary_tr?: string;
+  summary_en?: string;
+  summary_ar?: string;
   tagline_tr?: string;
   tagline_en?: string;
   tagline_ar?: string;

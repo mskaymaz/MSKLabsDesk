@@ -26,6 +26,10 @@ export const AppStudioCanvas: React.FC<AppStudioCanvasProps> = ({
     ? (app.description_ar || app.description_tr)
     : (isEn ? (app.description_en || app.description_tr) : (app.description_tr || app.description));
 
+  const summary = isAr
+    ? (app.summary_ar || app.summary_tr)
+    : (isEn ? (app.summary_en || app.summary_tr) : app.summary_tr);
+
   const backBtnText = isAr
     ? '‹ العودة إلى صفحة تطبيقاتنا'
     : (isEn ? '‹ Back to Our Apps Page' : '‹ Uygulamalarımız Sayfasına Dön');
@@ -65,10 +69,18 @@ export const AppStudioCanvas: React.FC<AppStudioCanvasProps> = ({
           >
             <div className="studio-edit-badge">
               <Edit2 size={12} />
-              <span>Açıklama Metni</span>
+              <span>Özet & Açıklama Metni</span>
             </div>
 
             <div className="studio-app-description">
+              {summary && (
+                <div style={{ marginBottom: '10px', padding: '6px 10px', background: 'rgba(59, 130, 246, 0.08)', borderRadius: '6px', borderLeft: '3px solid #3b82f6', fontSize: '0.86rem', color: 'var(--text-main)' }}>
+                  <strong style={{ fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.05em', color: '#60a5fa', display: 'block', marginBottom: '2px' }}>
+                    📌 Ana Sayfa Kart Vizyonu (Özet):
+                  </strong>
+                  {summary}
+                </div>
+              )}
               {desc ? (
                 desc
               ) : (

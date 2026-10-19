@@ -76,6 +76,34 @@ export const AppsCMSView: React.FC = () => {
     setTimeout(() => setCopiedSlug(null), 2500);
   };
 
+  const handleReorderApp = async (appId: string, direction: 'up' | 'down') => {
+    const sorted = [...apps].sort((a, b) => (a.display_order ?? 0) - (b.display_order ?? 0));
+    const currentIndex = sorted.findIndex((a) => a.id === appId);
+    if (currentIndex === -1) return;
+    const targetIndex = direction === 'up' ? currentIndex - 1 : currentIndex + 1;
+    if (targetIndex < 0 || targetIndex >= sorted.length) return;
+
+    const currentApp = sorted[currentIndex];
+    const targetApp = sorted[targetIndex];
+
+    const currentOrder = currentApp.display_order ?? currentIndex + 1;
+    let targetOrder = targetApp.display_order ?? targetIndex + 1;
+
+    if (currentOrder === targetOrder) {
+      targetOrder = direction === 'up' ? currentOrder - 1 : currentOrder + 1;
+    }
+
+    try {
+      await Promise.all([
+        api.updateApp(currentApp.id, { ...currentApp, display_order: targetOrder }),
+        api.updateApp(targetApp.id, { ...targetApp, display_order: currentOrder }),
+      ]);
+      loadApps();
+    } catch (err: any) {
+      alert(`Sıralama güncellenemedi: ${err.message || 'Bilinmeyen hata'}`);
+    }
+  };
+
   const filteredApps = apps.filter((app) => {
     const matchesSearch =
       app.name_tr.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -273,19 +301,62 @@ export const AppsCMSView: React.FC = () => {
                     </div>
                   </div>
 
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px', justifyContent: 'flex-end', maxWidth: '160px' }}>
-                    {app.category ? app.category.split(',').map((c) => (
-                      <span key={c.trim()} className="admin-badge admin-badge-index" style={{ textTransform: 'capitalize', fontSize: '0.72rem' }}>
-                        {c.trim()}
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '6px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                      <span
+                        className="admin-badge"
+                        style={{
+                          fontWeight: 700,
+                          fontSize: '0.72rem',
+                          background: 'rgba(99, 102, 241, 0.12)',
+                          color: '#818cf8',
+                          border: '1px solid rgba(99, 102, 241, 0.3)',
+                          padding: '2px 6px',
+                          borderRadius: '6px',
+                        }}
+                        title="Vitrin Sıralaması (Küçük sayılar daha önce listelenir)"
+                      >
+                        #{app.display_order ?? 0}
                       </span>
-                    )) : (
-                      <span className="admin-badge admin-badge-index" style={{ fontSize: '0.72rem' }}>Araç</span>
-                    )}
+                      <button
+                        type="button"
+                        onClick={(e) => { e.stopPropagation(); handleReorderApp(app.id, 'up'); }}
+                        className="admin-btn admin-btn-xs"
+                        style={{ padding: '2px 5px', fontSize: '0.68rem', lineHeight: 1 }}
+                        title="Sırayı Yukarı Al (Öne Çıkar)"
+                      >
+                        ▲
+                      </button>
+                      <button
+                        type="button"
+                        onClick={(e) => { e.stopPropagation(); handleReorderApp(app.id, 'down'); }}
+                        className="admin-btn admin-btn-xs"
+                        style={{ padding: '2px 5px', fontSize: '0.68rem', lineHeight: 1 }}
+                        title="Sırayı Aşağı Al"
+                      >
+                        ▼
+                      </button>
+                    </div>
+
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px', justifyContent: 'flex-end', maxWidth: '160px' }}>
+                      {app.category ? app.category.split(',').map((c) => (
+                        <span key={c.trim()} className="admin-badge admin-badge-index" style={{ textTransform: 'capitalize', fontSize: '0.72rem' }}>
+                          {c.trim()}
+                        </span>
+                      )) : (
+                        <span className="admin-badge admin-badge-index" style={{ fontSize: '0.72rem' }}>Araç</span>
+                      )}
+                    </div>
                   </div>
                 </div>
 
-                {/* Açıklama */}
-                <p className="admin-card-desc" style={{ fontSize: '0.85rem', marginBottom: '12px', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                {/* Kart Özeti ve Açıklama */}
+                {app.summary_tr && (
+                  <div style={{ fontSize: '0.8rem', color: '#60a5fa', marginBottom: '4px', fontWeight: 500, display: '-webkit-box', WebkitLineClamp: 1, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                    📌 {app.summary_tr}
+                  </div>
+                )}
+                <p className="admin-card-desc" style={{ fontSize: '0.84rem', marginBottom: '12px', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
                   {app.description_tr || 'Açıklama belirtilmemiş.'}
                 </p>
 

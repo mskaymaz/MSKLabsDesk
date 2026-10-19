@@ -1,7 +1,26 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
-## 🟢 Son Güncelleme [19.10.2026 - 15:20] — YAPIM AŞAMASINDAKİ UYGULAMALARIN YAYIN LİSTESİNDEN KALDIRILMASI & İKİLİ KATALOG DÜZENİ [*]
+## 🟢 Son Güncelleme [19.10.2026 - 15:55] — ÖZET VİZYON ALANI (SUMMARY) & VİTRİN SIRALAMASI (DISPLAY_ORDER) YÖNETİMİ [*]
+* **Yapılan İşlem:**
+  1. **D1 Veritabanı Ayrımı (`0012_add_app_summaries.sql`):**
+     - `apps` tablosuna `summary_tr`, `summary_en`, `summary_ar` sütunları eklendi.
+     - Ana sayfa kart vizyon özetleri `summary` alanlarına aktarıldı, tekil detay sayfalarının kapsamlı açıklamaları `description` alanlarına geri yüklendi.
+     - Kartlar ve detay sayfalarının birbirinin metnini ezme sorunu kalıcı olarak çözüldü.
+  2. **Görsel Stüdyo & Admin Paneli Entegrasyonu:**
+     - `AppStudioFloatingModal.tsx`: Açıklama bölümüne 3 dilli (TR, EN, AR) "1. Ana Sayfa Kart Vizyonu (Kısa Özet)" ve "2. Uygulama Detay Tanıtımı (Kapsamlı Açıklama)" editörleri eklendi.
+     - Başlık bölümüne "Vitrin Sırası" (`display_order`) sayı girişi eklendi.
+     - `AppStudioCanvas.tsx`: Canlı tuvalde kart özeti mavi vizyon kutucuğu olarak görselleştirildi.
+     - `AppsCMSView.tsx`: Katalog kartlarına `#{display_order}` sıra rozeti ve tek tıkla çalışan "▲ Yukarı / ▼ Aşağı" sıralama butonları eklendi.
+  3. **Vitrin Sayfası Senkronizasyonu (`webMSKLabs/apps.html` & `apps-data.js`):**
+     - `apps.html` içindeki dinamik grid `summary_tr` (ve EN, AR) metnini öncelikli okuyacak şekilde güncellendi.
+  4. **Doğrulama:**
+     - Local D1 üzerinde `0012_add_app_summaries.sql` çalıştırıldı.
+     - `/api/v1/apps` çağrısı doğrulanarak özet metinlerin ve sıralamanın (`ORDER BY display_order ASC`) çalıştığı teyit edildi.
+     - Frontend `npm run build` PASS (0 hata, 856ms).
+* **Durum:** `DevAdmin` dalında çalışıldı, `main` kesinlikle korundu.
+
+## [19.10.2026 - 15:20] — YAPIM AŞAMASINDAKİ UYGULAMALARIN YAYIN LİSTESİNDEN KALDIRILMASI & İKİLİ KATALOG DÜZENİ
 * **Yapılan İşlem:**
   1. **Kök Neden Tespiti & D1 Veritabanı Düzeltmesi (`0011_set_development_apps_inactive.sql`):**
      - Migration `0009` içinde `deskpilot`, `enyakin` ve `gcpiluyari` uygulamaları sehven `is_active = 1` olarak tanımlanmıştı.

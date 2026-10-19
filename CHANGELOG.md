@@ -1,6 +1,23 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [19.10.2026 - 15:55] - Özet Vizyon Alanı (Summary) ve Vitrin Sıralaması (Display Order) Yönetimi
+- **D1 Veritabanı Ayrımı (`backend/migrations/0012_add_app_summaries.sql`):**
+  - `apps` tablosuna `summary_tr`, `summary_en`, `summary_ar` sütunları eklendi.
+  - Kart özetleri ile detay sayfası açıklamaları birbirinden ayrı kolonlara taşınarak kalıcı mimari ayrım sağlandı.
+- **Backend API ve Admin Yönetimi (`backend/src/routes/cmsApps.ts`):**
+  - POST ve PUT isteklerinde `summary_tr`, `summary_en`, `summary_ar` alanları eklendi.
+- **Görsel Stüdyo & Admin CMS Arayüzü:**
+  - `AppStudioFloatingModal.tsx`: Açıklama modalına "Ana Sayfa Kart Vizyonu" ve "Uygulama Detay Tanıtımı" şeklinde iki bağımsız 3 dilli editör eklendi; başlık bölümüne "Vitrin Sırası" (`display_order`) sayı kutusu yerleştirildi.
+  - `AppStudioCanvas.tsx`: Canlı tuvalde kart özeti mavi bildirim kutusuyla görselleştirildi.
+  - `AppsCMSView.tsx`: Kartlara `#{display_order}` rozeti ve tek tıkla çalışan "▲ / ▼" sıralama butonları eklendi.
+- **Vitrin Entegrasyonu (`webMSKLabs/apps.html` & `assets/js/apps-data.js`):**
+  - Ana sayfadaki kart vizyonu `summary` alanlarını öncelikli okuyacak şekilde yapılandırıldı.
+- **Doğrulama ve Kural Uyumu:**
+  - Local D1 üzerinde `0012_add_app_summaries.sql` çalıştırıldı.
+  - Frontend `npm run build` PASS (0 hata, 856ms).
+  - Yalnızca `DevAdmin` dalında çalışıldı, `main` kesinlikle korundu.
+
 ## [19.10.2026 - 15:20] - Yapım Aşamasındaki Uygulamaların Yayın Listesinden Kaldırılması ve API Ayrımı
 - **Kök Neden Analizi ve D1 Veritabanı Düzeltmesi (`backend/migrations/0011_set_development_apps_inactive.sql`):**
   - `0009` nolu migration'da `is_active = 1` olarak eklenen `deskpilot`, `enyakin`, `gcpiluyari` uygulamalarının yayındaki uygulamalar listesine (`#activeAppsGrid`) 2. satır olarak düşme hatası tespit edildi.

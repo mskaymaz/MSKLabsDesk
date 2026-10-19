@@ -59,6 +59,7 @@ export async function handleCmsApps(request: Request, env: any): Promise<Respons
     const body = await request.json() as any;
     const {
       app_id, name_tr, name_en, name_ar,
+      summary_tr, summary_en, summary_ar,
       description_tr, description_en, description_ar,
       features_tr, features_en, features_ar,
       icon_url, cover_url, category, platform, display_order,
@@ -78,14 +79,16 @@ export async function handleCmsApps(request: Request, env: any): Promise<Respons
     await env.DB.prepare(
       `INSERT INTO apps (
         id, app_id, name_tr, name_en, name_ar,
+        summary_tr, summary_en, summary_ar,
         description_tr, description_en, description_ar,
         features_tr, features_en, features_ar,
         icon_url, cover_url, category, platform, display_order,
         store_links_json, screenshots_json, feature_cards_json
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
     ).bind(
       id, app_id.toLowerCase().trim(),
       name_tr, name_en || null, name_ar || null,
+      summary_tr || null, summary_en || null, summary_ar || null,
       description_tr, description_en || null, description_ar || null,
       features_tr || null, features_en || null, features_ar || null,
       icon_url || null, cover_url || null,
@@ -130,6 +133,7 @@ export async function handleCmsApps(request: Request, env: any): Promise<Respons
 
     const {
       app_id, name_tr, name_en, name_ar,
+      summary_tr, summary_en, summary_ar,
       description_tr, description_en, description_ar,
       features_tr, features_en, features_ar,
       icon_url, cover_url, category, platform, display_order, is_active,
@@ -144,6 +148,7 @@ export async function handleCmsApps(request: Request, env: any): Promise<Respons
     await env.DB.prepare(
       `UPDATE apps SET
         app_id = ?, name_tr = ?, name_en = ?, name_ar = ?,
+        summary_tr = ?, summary_en = ?, summary_ar = ?,
         description_tr = ?, description_en = ?, description_ar = ?,
         features_tr = ?, features_en = ?, features_ar = ?,
         icon_url = ?, cover_url = ?, category = ?, platform = ?, display_order = ?, is_active = ?,
@@ -151,6 +156,7 @@ export async function handleCmsApps(request: Request, env: any): Promise<Respons
        WHERE id = ?`
     ).bind(
       app_id, name_tr, name_en || null, name_ar || null,
+      summary_tr || null, summary_en || null, summary_ar || null,
       description_tr, description_en || null, description_ar || null,
       features_tr || null, features_en || null, features_ar || null,
       icon_url || null, cover_url || null, category || 'utility', platform || 'all',
