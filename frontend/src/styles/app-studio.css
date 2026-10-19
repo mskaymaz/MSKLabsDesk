@@ -599,13 +599,10 @@
 .studio-floating-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(15, 23, 42, 0.65);
-  backdrop-filter: blur(4px);
+  background: transparent;
+  backdrop-filter: none;
   z-index: 999;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
+  pointer-events: none;
   animation: fadeIn 0.15s ease-out;
 }
 
@@ -613,24 +610,42 @@
   background: var(--studio-bg-card);
   border: 1px solid var(--studio-border-color);
   border-radius: 18px;
-  box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(0, 0, 0, 0.05);
   max-width: 620px;
-  width: 100%;
+  width: 90vw;
   max-height: 88vh;
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  animation: popIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   color: var(--studio-text-main);
+  pointer-events: auto;
+  z-index: 1000;
+  transition: box-shadow 0.15s ease;
+}
+
+.studio-floating-dialog.is-dragging {
+  box-shadow: 0 30px 70px -10px rgba(0, 0, 0, 0.35), 0 0 0 2px #2563eb;
+  user-select: none;
+}
+
+.app-studio-wrapper[data-studio-theme="dark"] .studio-floating-dialog {
+  box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.1);
 }
 
 .studio-floating-header {
-  padding: 14px 20px;
+  padding: 12px 18px;
   background: var(--studio-bg-surface);
   border-bottom: 1px solid var(--studio-border-subtle);
   display: flex;
   align-items: center;
   justify-content: space-between;
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
+}
+.studio-floating-header:active,
+.studio-floating-header.is-dragging {
+  cursor: grabbing;
 }
 
 .studio-floating-title {

@@ -1,6 +1,17 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [19.10.2026 - 15:00] - Buzcamın Kaldırılması ve Serbest Sürüklenebilir (Draggable) Modal Mimarisi
+- **Buzcamın Kaldırılması & Kristal Netlikte Sayfa Görünümü (`app-studio.css`):**
+  - `.studio-floating-backdrop` üzerindeki `backdrop-filter: blur(4px)` ve koyu karartma kaldırıldı; `background: transparent; pointer-events: none;` ile arkadaki sayfanın %100 doğal netliği korundu.
+- **Serbest Sürüklenebilir (Draggable) Modal Mimarisi (`AppStudioFloatingModal.tsx` & `app-studio.css`):**
+  - Sıfır paket bağımlılığıyla yerel React Pointer koordinat takibi (`position { x, y }`, `setPointerCapture`) entegre edildi.
+  - Başlık çubuğuna (`cursor: grab / grabbing`) taşıma imleci ve `GripVertical` simgesi eklendi; modal ekran içinde serbestçe taşınabilir hale getirildi.
+  - Tarayıcı sınır kontrolü (viewport clamping) ve `Esc` tuşu ile kapatma kısayolu uygulandı.
+- **Doğrulama ve Kural Uyumu:**
+  - Frontend `npm run build` PASS (0 hata, 760ms).
+  - Yalnızca `DevAdmin` dalında çalışıldı, `main` kesinlikle korundu.
+
 ## [19.10.2026 - 14:45] - 3xN Kare Kart Düzeni ve Canlı (Main) Verilerin Senkronizasyonu
 - **3xN Kare Kart Düzeni & Sade Tasarım (`webMSKLabs/app.html` & `app-studio.css`):**
   - Özellik kartları ızgarası 3 eşit sütunlu (`repeat(3, 1fr)`) ve kareye yakın kompakt kutu stiline getirildi (`min-height: 155px`, `border-radius: 14px`).

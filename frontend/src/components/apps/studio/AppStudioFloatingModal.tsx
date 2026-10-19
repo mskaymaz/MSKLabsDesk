@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { X, Check } from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
+import { X, Check, GripVertical } from 'lucide-react';
 import type { AppItem, AppStoreLinks, AppFeatureCard } from '../../../types';
 import type { StudioSectionType } from './types';
 import { AppStudioFeatureCardEditor } from './AppStudioFeatureCardEditor';
@@ -118,22 +118,120 @@ export const AppStudioFloatingModal: React.FC<AppStudioFloatingModalProps> = ({
     versions: 'Sürüm Yönetimi',
   };
 
+  // Serbest Sürükleme (Draggable) Koordinat Durumu
+  const [position, setPosition] = useState<{ x: number; y: number } | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const dragStartRef = useRef<{ mouseX: number; mouseY: number; startX: number; startY: number }>({
+    mouseX: 0,
+    mouseY: 0,
+    startX: 0,
+    startY: 0,
+  });
+  const modalRef = useRef<HTMLDivElement>(null);
+
+  // Esc tuşu ile kapatma dinleyicisi
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [onClose]);
+
+  // Pointer ile başlık çubuğundan serbest sürükleme
+  const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    if ((e.target as HTMLElement).closest('button, input, select, textarea, a')) return;
+    const modalEl = modalRef.current;
+    if (!modalEl) return;
+    const rect = modalEl.getBoundingClientRect();
+    dragStartRef.current = {
+      mouseX: e.clientX,
+      mouseY: e.clientY,
+      startX: rect.left,
+      startY: rect.top,
+    };
+    if (!position) {
+      setPosition({ x: rect.left, y: rect.top });
+    }
+    setIsDragging(true);
+    try {
+      e.currentTarget.setPointerCapture(e.pointerId);
+    } catch {
+      // ignore
+    }
+  };
+
+  const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!isDragging) return;
+    const deltaX = e.clientX - dragStartRef.current.mouseX;
+    const deltaY = e.clientY - dragStartRef.current.mouseY;
+    const modalEl = modalRef.current;
+    const modalWidth = modalEl ? modalEl.offsetWidth : 600;
+    const modalHeight = modalEl ? modalEl.offsetHeight : 500;
+    const minX = 10;
+    const maxX = Math.max(10, window.innerWidth - modalWidth - 10);
+    const minY = 10;
+    const maxY = Math.max(10, window.innerHeight - modalHeight - 10);
+    const newX = Math.min(Math.max(minX, dragStartRef.current.startX + deltaX), maxX);
+    const newY = Math.min(Math.max(minY, dragStartRef.current.startY + deltaY), maxY);
+    setPosition({ x: newX, y: newY });
+  };
+
+  const handlePointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (isDragging) {
+      setIsDragging(false);
+      try {
+        e.currentTarget.releasePointerCapture(e.pointerId);
+      } catch {
+        // ignore
+      }
+    }
+  };
+
   return (
-    <div className="studio-floating-backdrop" onClick={onClose}>
+    <div className="studio-floating-backdrop">
       <div 
-        className="studio-floating-dialog" 
+        ref={modalRef}
+        className={`studio-floating-dialog ${isDragging ? 'is-dragging' : ''}`}
+        style={
+          position
+            ? {
+                position: 'fixed',
+                left: `${position.x}px`,
+                top: `${position.y}px`,
+                transform: 'none',
+                margin: 0,
+              }
+            : {
+                position: 'fixed',
+                left: '50%',
+                top: '50%',
+                transform: 'translate(-50%, -50%)',
+                margin: 0,
+              }
+        }
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Başlık Çubuğu */}
-        <div className="studio-floating-header">
-          <div className="studio-floating-title">
+        {/* Başlık Çubuğu — Sürüklenebilir Alan */}
+        <div 
+          className={`studio-floating-header ${isDragging ? 'is-dragging' : ''}`}
+          onPointerDown={handlePointerDown}
+          onPointerMove={handlePointerMove}
+          onPointerUp={handlePointerUp}
+          onPointerCancel={handlePointerUp}
+        >
+          <div className="studio-floating-title" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <GripVertical size={16} style={{ color: 'var(--studio-text-subtle)', flexShrink: 0 }} />
             <span>✏️ {titles[section] || 'Bölüm Düzenle'}</span>
+            <span style={{ fontSize: '0.72rem', color: 'var(--studio-text-subtle)', fontWeight: 'normal' }}>
+              (Sürüklenebilir)
+            </span>
           </div>
           <button 
             type="button" 
             onClick={onClose} 
             className="studio-floating-close-btn"
-            title="Kapat"
+            title="Kapat (Esc)"
           >
             <X size={18} />
           </button>

@@ -1,7 +1,21 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
-## 🟢 Son Güncelleme [19.10.2026 - 14:45] — 3xN KARE KART DÜZENİ VE CANLI (MAIN) VERİLERİN SENKRONİZASYONU [*]
+## 🟢 Son Güncelleme [19.10.2026 - 15:00] — BUZCAMIN KALDIRILMASI & SERBEST SÜRÜKLENEBİLİR (DRAGGABLE) MODAL MİMARİSİ [*]
+* **Yapılan İşlem:**
+  1. **Buzcamın Kaldırılması & Kristal Netlikte Sayfa Görünümü (`app-studio.css`):**
+     - `.studio-floating-backdrop` üzerindeki `backdrop-filter: blur(4px)` ve koyu karartma efekti tamamen kaldırıldı.
+     - `background: transparent; pointer-events: none;` kuralı uygulanarak arkadaki vitrin sayfasının %100 doğal netliğiyle ve renkleriyle görünmesi sağlandı.
+  2. **Serbest Sürüklenebilir (Draggable Floating Window) Mimarisi (`AppStudioFloatingModal.tsx` & `app-studio.css`):**
+     - Harici kütüphane bağımlılığı olmadan yerel React Pointer koordinat kontrolü (`position { x, y }`, `setPointerCapture`) entegre edildi.
+     - Modal başlığına (`cursor: grab / grabbing`) taşıma imleci ve `GripVertical` simgesi yerleştirildi; başlık tutularak pencere ekranın istenen yerine serbestçe taşınabilir hale getirildi.
+     - Ekran sınırları koruması (viewport clamping) eklenerek pencerenin ekran dışına kaçması engellendi.
+     - `Esc` tuşu ile pencereyi kapatma kısayolu eklendi.
+  3. **Doğrulama:**
+     - Frontend `npm run build` PASS (0 hata, 760ms, `dist/` üretildi).
+* **Durum:** `DevAdmin` dalında çalışıldı, `main` kesinlikle korundu.
+
+## [19.10.2026 - 14:45] — 3xN KARE KART DÜZENİ VE CANLI (MAIN) VERİLERİN SENKRONİZASYONU
 * **Yapılan İşlem:**
   1. **3xN Kare Kart Düzeni & Sade Görsel Hiyerarşi (`webMSKLabs/app.html` & `frontend/src/styles/app-studio.css`):**
      - Konteyner genişliği nedeniyle 2 sütuna düşen özellik kutuları, orijinal `apps/rekatsay.html` referansındaki gibi kareye yakın, dengeli ve **3 sütunlu (3xN)** ızgara düzenine (`repeat(3, 1fr)`) kavuşturuldu.
