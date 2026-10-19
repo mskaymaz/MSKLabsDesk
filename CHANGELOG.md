@@ -1,6 +1,16 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [19.10.2026 - 13:40] - Stüdyo Üst Çubuğu Aydınlık Temaya Çekildi ve Canlı Açık/Koyu Tema Seçicisi Eklendi
+- **Stüdyo Üst Kontrol Çubuğu Aydınlık Temaya Uyarlandı (`AppStudioTopBar.tsx` & `app-studio.css`):**
+  - Üst bar zemin rengi varsayılan olarak beyaz (`#ffffff`), kenarlık açık gri (`#e2e8f0`), başlık ve butonlar yüksek kontrastlı koyu renklerle (`#0f172a`, `#334155`) admin üst paneliyle tam uyumlu hale getirildi.
+- **Canlı Açık / Koyu Tema Değiştirici (`studioTheme` Toggle):**
+  - Üst çubuğa canlı `[ 🌙 Koyu Mod ]` / `[ ☀️ Açık Mod ]` buton anahtarı entegre edildi.
+  - Kullanıcı tek tıkla vitrin tuvalini ve stüdyoyu hem **Aydınlık** (`#ffffff` kart, `#f8fafc` zemin) hem de **Koyu** (`#1e293b` kart, `#0f172a` zemin) modda gerçek zamanlı olarak test edebilir ve düzenleyebilir.
+- **Doğrulama ve Kural Uyumu:**
+  - Frontend `npm run build` PASS (0 hata, 812ms).
+  - Yalnızca `DevAdmin` dalında çalışıldı, `main` kesinlikle korundu.
+
 ## [19.10.2026 - 12:42] - Görsel Stüdyo Aydınlık (Light) Tema Senkronizasyonu
 - **Vitrin Tasarımıyla Birebir Aydınlık Tema Eşleştirmesi (`frontend/src/styles/app-studio.css`):**
   - Tuval zemini vitrinin orijinal açık rengi (`#f8fafc`), ana kart beyaz (`#ffffff`), kenarlıklar (`#cbd5e1` / `#e2e8f0`) ve tipografi koyu kontrast (`#0f172a` başlık, `#334155` metin) olarak uyarlandı.

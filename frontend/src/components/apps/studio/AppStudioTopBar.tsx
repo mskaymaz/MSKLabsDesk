@@ -1,12 +1,14 @@
 import React from 'react';
-import { ArrowLeft, Save, ExternalLink } from 'lucide-react';
+import { ArrowLeft, Save, ExternalLink, Sun, Moon } from 'lucide-react';
 import type { CanvasLang } from './types';
 import type { AppItem } from '../../../types';
 
 interface AppStudioTopBarProps {
   app: AppItem;
   canvasLang: CanvasLang;
+  theme: 'light' | 'dark';
   onLanguageChange: (lang: CanvasLang) => void;
+  onToggleTheme: () => void;
   onBack: () => void;
   onSave: () => void;
   isSaving: boolean;
@@ -16,7 +18,9 @@ interface AppStudioTopBarProps {
 export const AppStudioTopBar: React.FC<AppStudioTopBarProps> = ({
   app,
   canvasLang,
+  theme,
   onLanguageChange,
+  onToggleTheme,
   onBack,
   onSave,
   isSaving,
@@ -42,19 +46,20 @@ export const AppStudioTopBar: React.FC<AppStudioTopBarProps> = ({
         <div className="studio-bar-title">
           <span>{app.name_tr || app.name || 'Yeni Uygulama'}</span>
           {isDirty ? (
-            <span style={{ fontSize: '0.72rem', background: '#f59e0b', color: '#000', padding: '1px 6px', borderRadius: '4px', fontWeight: 700 }}>
+            <span style={{ fontSize: '0.72rem', background: '#fef3c7', color: '#b45309', border: '1px solid #fde68a', padding: '2px 8px', borderRadius: '4px', fontWeight: 700 }}>
               Değişiklik Var
             </span>
           ) : (
-            <span style={{ fontSize: '0.72rem', background: 'rgba(16, 185, 129, 0.2)', color: '#6ee7b7', padding: '1px 6px', borderRadius: '4px', fontWeight: 600 }}>
+            <span style={{ fontSize: '0.72rem', background: '#dcfce7', color: '#15803d', border: '1px solid #bbf7d0', padding: '2px 8px', borderRadius: '4px', fontWeight: 600 }}>
               Kayıtlı
             </span>
           )}
         </div>
       </div>
 
-      {/* Orta: Canlı Dil Önizleme Seçicisi (Yalın TR, EN, AR - Emojisiz) */}
+      {/* Orta: Canlı Dil Önizleme Seçicisi & Canlı Tema Değiştirici */}
       <div className="studio-bar-center">
+        {/* Dil Seçici (TR, EN, AR Yalın Standart - Emojisiz) */}
         <div className="studio-lang-switch">
           <button
             type="button"
@@ -78,6 +83,17 @@ export const AppStudioTopBar: React.FC<AppStudioTopBarProps> = ({
             AR
           </button>
         </div>
+
+        {/* Canlı Açık / Koyu Tema Seçicisi */}
+        <button
+          type="button"
+          onClick={onToggleTheme}
+          className="studio-theme-toggle-btn"
+          title={theme === 'dark' ? 'Açık Temaya Geç' : 'Koyu Temaya Geç'}
+        >
+          {theme === 'dark' ? <Sun size={14} /> : <Moon size={14} />}
+          <span>{theme === 'dark' ? 'Açık Mod' : 'Koyu Mod'}</span>
+        </button>
       </div>
 
       {/* Sağ: Vitrinde Önizle & Kaydet */}

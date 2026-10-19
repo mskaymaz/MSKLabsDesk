@@ -19,6 +19,7 @@ export const AppDetailStudioView: React.FC<AppDetailStudioViewProps> = ({
 }) => {
   const [app, setApp] = useState<AppItem>({ ...initialApp });
   const [canvasLang, setCanvasLang] = useState<CanvasLang>('tr');
+  const [studioTheme, setStudioTheme] = useState<'light' | 'dark'>('light');
   const [activeSection, setActiveSection] = useState<StudioSectionType | null>(null);
   const [isSaving, setIsSaving] = useState<boolean>(false);
   const [isDirty, setIsDirty] = useState<boolean>(false);
@@ -85,16 +86,18 @@ export const AppDetailStudioView: React.FC<AppDetailStudioViewProps> = ({
   };
 
   return (
-    <div className="app-studio-wrapper">
+    <div className="app-studio-wrapper" data-studio-theme={studioTheme}>
       {/* 1. Stüdyo Üst Kontrol Çubuğu */}
       <AppStudioTopBar
         app={app}
         canvasLang={canvasLang}
-        isDirty={isDirty}
-        isSaving={isSaving}
+        theme={studioTheme}
         onLanguageChange={(lang: CanvasLang) => setCanvasLang(lang)}
+        onToggleTheme={() => setStudioTheme((prev) => (prev === 'light' ? 'dark' : 'light'))}
         onBack={onBack}
         onSave={handleSave}
+        isDirty={isDirty}
+        isSaving={isSaving}
       />
 
       {/* 2. Canlı Önizleme Tuvali (Arkadaki Sayfa Asla Kaybolmaz) */}
