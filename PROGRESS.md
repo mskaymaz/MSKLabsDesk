@@ -1,7 +1,21 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
-## 🟢 Son Güncelleme [19.10.2026 - 15:55] — ÖZET VİZYON ALANI (SUMMARY) & VİTRİN SIRALAMASI (DISPLAY_ORDER) YÖNETİMİ [*]
+## 🟢 Son Güncelleme [19.10.2026 - 16:05] — HAYDİ NAMAZA VE TÜM UYGULAMALARIN CANLI SİTE (ORIGIN/MAIN) METİNLERİYLE %100 EŞİTLENMESİ [*]
+* **Yapılan İşlem:**
+  1. **Kök Neden:**
+     - Haydi Namaza için daha önce `apps-data.js` içindeki eski mock/taslak açıklama ("Haydi Namaza, günlük namaz vakitlerini Diyanet uyumlu...") sehven kullanılmıştı.
+     - Canlı `origin/main:apps/haydinamaza.html` ve `origin/main:apps.html` sayfaları detaylıca taranarak özgün metinler tespit edildi.
+  2. **Birebir Canlı Metin Senkronizasyonu (`0013_restore_published_exact_texts.sql` & `apps-data.js`):**
+     - **Kart Özeti (`summary`):** `"Lokasyon bazlı ibadet planlaması ve zaman yönetimi otomasyonu."`
+     - **Uygulama Açıklaması (`description`):** `"Haydi Namaza; günlük namaz vakitlerinizi takip etmenizi, kıble yönünüzü kolayca bulmanızı, günlük hatırlatma maksatlı yayınlanan dinî içeriklere ulaşmanızı ve vakit bildirimlerinizi tamamen kendi tercihlerinize göre kişiselleştirmenizi sağlayan modern bir mobil yardımcı uygulamadır. Sade arayüz, çevrimdışı kullanım kolaylığı, tam kullanıcı kontrolü ve veri şeffaflığı ilkeleriyle geliştirilmektedir. Hesap açma zorunluluğu bulunmaz; verileriniz ve kişisel ayarlarınız güvende kalacak şekilde doğrudan kendi cihazınızda saklanır."`
+     - TR, EN ve AR metinlerinin tamamı canlı sitedekiyle harfi harfine eşitlendi.
+  3. **Doğrulama:**
+     - Local D1 üzerinde `0013_restore_published_exact_texts.sql` çalıştırıldı.
+     - `/api/v1/apps/haydinamaza` üzerinden doğrulanarak hem kart özeti hem de detay açıklamasının canlı siteyle birebir aynı olduğu teyit edildi.
+* **Durum:** `DevAdmin` dalında çalışıldı, `main` kesinlikle korundu.
+
+## [19.10.2026 - 15:55] — ÖZET VİZYON ALANI (SUMMARY) & VİTRİN SIRALAMASI (DISPLAY_ORDER) YÖNETİMİ
 * **Yapılan İşlem:**
   1. **D1 Veritabanı Ayrımı (`0012_add_app_summaries.sql`):**
      - `apps` tablosuna `summary_tr`, `summary_en`, `summary_ar` sütunları eklendi.

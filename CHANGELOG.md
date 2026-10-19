@@ -1,6 +1,15 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [19.10.2026 - 16:05] - Haydi Namaza ve Uygulamaların Canlı Site (origin/main) Metinleriyle Eşitlenmesi
+- **Özgün Metin Senkronizasyonu (`backend/migrations/0013_restore_published_exact_texts.sql` & `apps-data.js`):**
+  - Haydi Namaza uygulamasındaki mock açıklama metni kaldırıldı.
+  - Canlı sitedeki (`origin/main:apps/haydinamaza.html` ve `origin/main:apps.html`) özgün kart özeti (`summary`) ve detaylı tanıtım paragrafı (`description`) TR, EN ve AR olarak D1 veritabanı ve `apps-data.js` dosyasına harfi harfine işlendi.
+- **Doğrulama ve Kural Uyumu:**
+  - Local D1 üzerinde `0013_restore_published_exact_texts.sql` çalıştırıldı.
+  - `/api/v1/apps/haydinamaza` sorgulanarak canlı siteyle tam eşleştiği teyit edildi.
+  - Yalnızca `DevAdmin` dalında çalışıldı, `main` kesinlikle korundu.
+
 ## [19.10.2026 - 15:55] - Özet Vizyon Alanı (Summary) ve Vitrin Sıralaması (Display Order) Yönetimi
 - **D1 Veritabanı Ayrımı (`backend/migrations/0012_add_app_summaries.sql`):**
   - `apps` tablosuna `summary_tr`, `summary_en`, `summary_ar` sütunları eklendi.
