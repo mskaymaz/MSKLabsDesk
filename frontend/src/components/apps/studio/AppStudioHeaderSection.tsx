@@ -90,7 +90,17 @@ export const AppStudioHeaderSection: React.FC<AppStudioHeaderSectionProps> = ({
           <span>🌐 {langLabel} <strong className="studio-status-tag">TR ({langActiveText})</strong></span>
         </div>
 
-        <a href="#download-section" className="studio-hero-download-btn">
+        <a 
+          href="#download-section" 
+          onClick={(e) => {
+            e.stopPropagation();
+            const target = document.getElementById('download-section');
+            if (target) {
+              target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+          }}
+          className="studio-hero-download-btn"
+        >
           <span>{dlBtnText}</span>
         </a>
 

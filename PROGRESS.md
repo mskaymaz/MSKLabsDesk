@@ -1,7 +1,17 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
-## 🟢 Son Güncelleme [19.10.2026 - 14:20] — STANDART ROZETLER, MODÜLER KART EDİTÖRÜ & AÇILIR BALON (POPOVER) MİMARİSİ [*]
+## 🟢 Son Güncelleme [19.10.2026 - 14:26] — İNDİRME BÖLÜMÜ BAŞLIK HİZALAMA VE PÜRÜZSÜZ KAYDIRMA OPTİMİZASYONU [*]
+* **Yapılan İşlem:**
+  1. **İndirme Bölümü Başlık Hizalaması (`webMSKLabs/app.html` & `app-studio.css`):**
+     - "Uygulamayı İndir" butonuna basıldığında sayfanın kontrolsüzce en dibe atması engellendi.
+     - Sabit üst gezinme çubuğunun yüksekliği hesaba katılarak `#download-section` alanına masaüstünde `scroll-margin-top: 140px;`, mobilde `85px;` tanımlandı.
+     - `scrollToDownloadSection` pürüzsüz kaydırma fonksiyonu ile "İndirme Seçenekleri ve Yayın Kanalları" başlığı doğrudan ekranın en üstüne hizalandı; `min-height: calc(100vh - 160px)` ile içerik eksik kalsa bile başlığın tam üstte kalması garanti altına alındı.
+  2. **Doğrulama:**
+     - Frontend `npm run build` PASS (0 hata, 874ms, `dist/` üretildi).
+* **Durum:** `DevAdmin` dalında çalışıldı, `main` kesinlikle korundu.
+
+## [19.10.2026 - 14:20] — STANDART ROZETLER, MODÜLER KART EDİTÖRÜ & AÇILIR BALON (POPOVER) MİMARİSİ
 * **Yapılan İşlem:**
   1. **Standart Rozet Uyumu (`AppStudioTopBar.tsx`):**
      - "Kayıtlı" ve "Değişiklik Var" rozetleri keyfi inline stillerden arındırılarak tasarım sistemindeki standart `.admin-badge.admin-badge-emerald` ve `.admin-badge.admin-badge-amber` sınıflarına bağlandı.

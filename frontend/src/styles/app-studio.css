@@ -502,6 +502,7 @@
   margin-top: 2rem;
   padding-top: 1.5rem;
   border-top: 2px dashed var(--studio-border-subtle);
+  scroll-margin-top: 80px;
 }
 
 .studio-download-title {

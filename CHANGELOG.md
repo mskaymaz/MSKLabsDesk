@@ -1,6 +1,15 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [19.10.2026 - 14:26] - İndirme Bölümü Başlık Hizalama ve Pürüzsüz Kaydırma Optimizasyonu
+- **İndirme Bölümü Başlık Hizalaması (`webMSKLabs/app.html` & `app-studio.css`):**
+  - "Uygulamayı İndir" butonuna basıldığında sayfanın en dibe atması giderildi.
+  - `#download-section` alanına `scroll-margin-top: 140px` (mobilde 85px) ve `min-height: calc(100vh - 160px)` tanımlandı.
+  - "İndirme Seçenekleri ve Yayın Kanalları" başlığının üst gezinme çubuğu altında tam hizalı görünmesi sağlandı.
+- **Doğrulama ve Kural Uyumu:**
+  - Frontend `npm run build` PASS (0 hata, 874ms).
+  - Yalnızca `DevAdmin` dalında çalışıldı, `main` kesinlikle korundu.
+
 ## [19.10.2026 - 14:20] - Standart Rozetler, Modüler Kart Editörü ve Açılır Balon (Popover) Mimarisi
 - **Standart Rozet Uyumu (`AppStudioTopBar.tsx`):**
   - "Kayıtlı" ve "Değişiklik Var" rozetleri tasarım sistemindeki standart `.admin-badge.admin-badge-emerald` ve `.admin-badge.admin-badge-amber` sınıflarına taşındı.
