@@ -250,7 +250,35 @@ export const api = {
       headers: getHeaders(),
       body: JSON.stringify(data),
     });
-    if (!res.ok) throw new Error('Uygulama oluşturulamadı.');
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.error || 'Uygulama oluşturulamadı.');
+    }
+    return res.json();
+  },
+
+  async updateApp(id: string, data: any) {
+    const res = await fetch(`${API_BASE}/admin/apps/${id}`, {
+      method: 'PUT',
+      headers: getHeaders(),
+      body: JSON.stringify(data),
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.error || 'Uygulama güncellenemedi.');
+    }
+    return res.json();
+  },
+
+  async deleteApp(id: string) {
+    const res = await fetch(`${API_BASE}/admin/apps/${id}`, {
+      method: 'DELETE',
+      headers: getHeaders(),
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.error || 'Uygulama silinemedi.');
+    }
     return res.json();
   },
 
@@ -260,7 +288,22 @@ export const api = {
       headers: getHeaders(),
       body: JSON.stringify(data),
     });
-    if (!res.ok) throw new Error('Sürüm eklenemedi.');
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.error || 'Sürüm eklenemedi.');
+    }
+    return res.json();
+  },
+
+  async deleteAppVersion(appId: string, versionId: string) {
+    const res = await fetch(`${API_BASE}/admin/apps/${appId}/versions/${versionId}`, {
+      method: 'DELETE',
+      headers: getHeaders(),
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.error || 'Sürüm silinemedi.');
+    }
     return res.json();
   },
 

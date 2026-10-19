@@ -126,6 +126,25 @@ export interface AppVersion {
   released_at?: string;
 }
 
+export interface AppStoreLinks {
+  google_play?: string;
+  app_store?: string;
+  github?: string;
+  web_url?: string;
+  direct_apk?: string;
+}
+
+export interface AppFeatureCard {
+  id?: string;
+  icon: string;
+  title_tr: string;
+  title_en?: string;
+  title_ar?: string;
+  description_tr: string;
+  description_en?: string;
+  description_ar?: string;
+}
+
 export interface AppItem {
   id: string;
   app_id: string;
@@ -135,12 +154,23 @@ export interface AppItem {
   description_tr: string;
   description_en?: string;
   description_ar?: string;
+  features_tr?: string;
+  features_en?: string;
+  features_ar?: string;
   icon_url?: string;
   cover_url?: string;
   category?: string;
   platform?: string;
   display_order?: number;
   is_active?: boolean;
+  store_links?: AppStoreLinks;
+  store_links_json?: string;
+  feature_cards?: AppFeatureCard[];
+  feature_cards_json?: string;
+  screenshots_json?: string;
+  downloads_count?: number;
+  latest_version?: string;
+  latest_download_url?: string;
   versions?: AppVersion[];
 }
 

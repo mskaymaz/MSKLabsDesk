@@ -1,6 +1,110 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [19.10.2026 - 11:35] - Bildirim Metni 0.80rem (Tek Satır Korundu) ve "Uygulamalarımız" Başlığı %15 Küçültüldü
+- **Bildirim Metni Fontu 0.80rem Seviyesine Çekildi (`webMSKLabs/apps.html`):**
+  - "Bu portföydeki uygulamalarımız..." metni `0.80rem` font ve `0` letter-spacing ile güncellendi; 900px konteyner genişliğinde 104 karakterlik metin (~707px) masaüstünde tek satırda rahatça kaldı (`white-space: nowrap;`).
+- **"Uygulamalarımız" Sayfa Başlığı %15 Küçültüldü (`webMSKLabs/apps.html`):**
+  - `.page-title` font boyutu `2.5rem`'den `2.1rem`'e (mobilde `1.35rem`) düşürülerek görsel denge sağlandı.
+- **Doğrulama ve Kural Uyumu:**
+  - Frontend `npm run build` PASS (0 hata, 11.85s).
+  - Yalnızca `DevAdmin` dalında çalışıldı, `main` kesinlikle korundu.
+
+## [19.10.2026 - 11:30] - Sağ Panel %15-20 Küçültme, Kullanım Kılavuzu İndir Butonu ve 0.75rem Narrow Bildirim
+- **Sağ Üst Panel Bileşenleri %15-20 Küçültüldü (`webMSKLabs/app.html`):**
+  - `.global-status-panel` (dil durumu) ve `.hero-download-btn` (uygulamayı indir) boyutları %20 oranında küçültüldü (padding, font-size 0.78rem, border-radius).
+- **Kullanım Kılavuzu İndir Butonu Eklendi (`webMSKLabs/app.html`):**
+  - İndir butonunun hemen altına çok dilli (TR: "📖 Kullanım Kılavuzu İndir", EN: "📖 User Guide (PDF)", AR: "📖 دليل الاستخدام (PDF)") `.hero-guide-btn` butonu yerleştirildi; dinamik `guide_url` varsa doğrudan indirme, henüz PDF yüklenmemişse kullanıcıyı bilgilendiren uyarı mekanizması bağlandı.
+- **Alt Başlık Bilgilendirme Notu Tipografisi (`webMSKLabs/apps.html`):**
+  - "Bu portföydeki uygulamalarımız..." metninin font boyutu `0.75rem` seviyesine çekildi ve harf aralığı (`letter-spacing`) tam `0` yapıldı.
+- **Doğrulama ve Kural Uyumu:**
+  - Frontend `npm run build` PASS (0 hata, 10.99s).
+  - Yalnızca `DevAdmin` dalında çalışıldı, `main` kesinlikle korundu.
+
+## [19.10.2026 - 11:22] - Üst Boşluk (20px), Sade Filtre Rozetleri (Mobil/Masaüstü/Web), Tek Satır Narrow Bildirim ve Inter Font Eşleştirmesi
+- **Üst Menü-Buton Boşluğu (`webMSKLabs/app.html`):**
+  - Sabit menü alt çizgisi ile `‹ Uygulamalarımız Sayfasına Dön` butonu arasındaki dikey mesafe tam **20 piksele** ayarlandı (`.top-nav { margin-top: 14px !important; }`).
+- **Katalog Filtre Rozetleri Sadeleştirildi (`webMSKLabs/apps.html`):**
+  - Filtre butonlarındaki gereksiz parantez ve platform ekleri temizlenerek `Mobil`, `Masaüstü`, `Web` ve `Tümü` şeklinde sadeleştirildi.
+- **Alt Başlık Bilgilendirme Notu Tek Satır & Narrow Tipografi (`webMSKLabs/apps.html`):**
+  - "Bu portföydeki uygulamalarımız..." metni masaüstünde tek satıra (`white-space: nowrap; max-width: 960px;`) çekildi; `font-size: 0.84rem`, `letter-spacing: -0.2px` (narrow/condensed) ve tema uyumlu renk tanımlandı.
+- **Hızlı Menü Fontu (Inter Typeface) Entegrasyonu:**
+  - Canlı yayındaki (`https://msklabs.org/apps/haydinamaza`) Google Fonts `Inter` bağlantısı `app.html` head bloğuna eklendi; `.top-main-nav` font ailesi doğrudan `'Inter'` olarak sabitlendi.
+- **Doğrulama ve Kural Uyumu:**
+  - Frontend `npm run build` PASS (0 hata, 11.19s).
+  - Yalnızca `DevAdmin` dalında çalışıldı, `main` kesinlikle korundu.
+
+## [19.10.2026 - 11:05] - Destek Butonu Kaldırıldı ve Üst Menü-Buton Dikey Boşluğu 1/3'e (15px) İndirildi
+- **Destek & SSS Butonu Kaldırıldı (`webMSKLabs/app.html`):**
+  - Sayfa altındaki `💬 Destek & SSS` (`.secondary-btn`) butonu ve ilgili CSS stilleri şablondan tamamen temizlendi.
+- **Dikey Boşluk Ölçümü ve 1/3 Oranına İndirme (46px -> 15px):**
+  - Gönderilen ekran görüntüsünde sabit menü alt çizgisi (`y=82`) ile `‹ Uygulamalarımız Sayfasına Dön` butonu (`y=128`) arasındaki mesafe net **46 piksel** olarak hesaplandı.
+  - `app.html` içerisindeki mükerrer statik header ve nav blokları kaldırılarak `layout.js` ile tam uyumlu `<header class="site-header-sticky"></header>` yapısına geçildi.
+  - `.top-nav` dikey marjini `8px` olarak dengelenerek üst menü alt çizgisi ile buton arasındaki boşluk tam 1/3'ü olan **~15 piksele** indirildi.
+- **Doğrulama ve Kural Uyumu:**
+  - Frontend `npm run build` PASS (0 hata, 20.61s).
+  - Canlı sunucu (`http://localhost:5174/app.html?id=haydinamaza`) curl ile doğrulandı.
+  - Yalnızca `DevAdmin` dalında çalışıldı, `main` kesinlikle korundu.
+
+## [19.10.2026 - 10:55] - Vitrin ve Detay Şablonları İnce Ayarları (Tek Satır Açıklama, 5-8px Boşluk, Büyük İkon, Apple Politika Notu)
+- **Uygulamalar Kataloğu Sayfası (`webMSKLabs/apps.html`):**
+  - Başlık altındaki 2 satırlık açıklama metni tek satır birleşik cümle haline getirildi (TR, EN, AR).
+  - "Planlama Aşamasındaki Projeler" başlığı ve rozetlerindeki `(2-3 Ay)` süresi kaldırıldı.
+- **Geri Dön Butonu & 5-8px Boşluk Kuralı (`webMSKLabs/app.html`):**
+  - Buton metni `‹ Uygulamalarımız Sayfasına Dön` olarak 3 dilde (TR, EN, AR) güncellendi.
+  - `.portfolio-container` üst dolgusu sıfırlanıp buton paddingi (`3px 12px`) küçültüldü; menü ile buton arasındaki mesafe net 5-8px bandına sabitlendi.
+- **Logo/İkon Büyüklüğü (%30+ Büyütme):**
+  - `.app-big-icon` boyutu 90px'den 125px'e çıkarıldı (%38 büyüme), köşe yuvarlaklığı 24px yapıldı; mobilde 90px olarak dengelendi.
+- **İndir Butonunun Konumu ve Sadeleşmesi:**
+  - `hero-download-btn` sol başlıktan alınıp sağdaki dil panelinin (`.app-header-right`) altına taşındı; `🚀` roket emojisi kaldırılarak yalın metinle sunuldu.
+- **App Store Orijinal Logosu & Apple Politika Notu:**
+  - Orijinal Apple SVG vektör logosu (`assets/img/store/apple.svg`) eklendi ve karta bağlandı.
+  - "Hazırlanıyor" etiketi kaldırılarak "Apple'a ait katı ve anlamsız prosedürler gereği henüz hazırlanamıyor." açıklaması eklendi (TR, EN, AR).
+- **Doğrulama ve Kural Uyumu:**
+  - Frontend `npm run build` PASS (0 hata, 864ms).
+  - Yalnızca `DevAdmin` dalında çalışıldı, `main` kesinlikle korundu.
+
+## [19.10.2026 - 10:40] - Web Detay Şablonu (app.html) Kibar Düzenleme, Zengin Mağaza Kartları ve 10px Üst Boşluk
+- **Üst Navigasyon & 10px Boşluk Kuralı (`webMSKLabs/app.html`):**
+  - Sabit üst panel ile uygulama detay kartı arasındaki dikey boşluk `.portfolio-container { padding-top: 10px !important; }` kuralı ile tam 10px seviyesine çekildi.
+  - Kart öncesine `‹ Tüm Uygulamalara Dön` (`apps.html`) geri dönüş butonu (`.top-nav .back-btn`) yerleştirildi; TR/EN/AR dil anahtarıyla otomatik güncellenmesi sağlandı.
+- **Zengin Sol & Sağ Hero Düzeni (`webMSKLabs/app.html`):**
+  - Sol kolonda: 90px taşmasız büyük ikon (`.app-big-icon`), başlık, platform rozeti, geliştirme durumu rozeti, çok dilli kategori rozetleri ve `#download-section` alanına akıcı kaydıran yeşil hızlı indir butonu (`.hero-download-btn`).
+  - Sağ kolonda: Emojisiz bayrak kuralına tam uyumlu (TR/EN/AR yalın) dil durum paneli (`.global-status-panel`) ve EN/AR modunda Lab'dan sürüm talep mailto butonu (`.lab-request-btn`).
+- **Zengin İndirme ve Yayın Kanalları Izgarası (`#download-section .download-grid`):**
+  - Google Play, GitHub Direct APK, Google Drive APK, App Store (iOS), Web/PWA ve Windows Store kartları bağlandı; link durumuna göre `⚡ Mağazaya Git / Doğrudan İndir` veya `🛠️ Hazırlanıyor` rozetleriyle render edildi.
+  - Mağaza marka ikonları (`assets/img/store/`) doğru kök yollarıyla entegre edildi.
+- **Schema.org JSON-LD & Koyu Tema Uyumu:**
+  - `SoftwareApplication` yapılandırılmış SEO verisi dinamik olarak bağlandı.
+  - Açık ve koyu tema CSS değişkenleri (`var(--bg-card)`, `var(--border-color)`) ile gece modunda mükemmel görsel netlik sağlandı.
+- **Doğrulama ve Kural Uyumu:**
+  - Frontend `npm run build` PASS (0 hata), Backend `npx tsc --noEmit` PASS (0 hata).
+  - `curl.exe http://localhost:5174/app.html?id=haydinamaza` ile canlı şablon doğrulaması yapıldı (0 hata).
+- Yalnızca `DevAdmin` dalında çalışıldı, `main` kesinlikle korundu.
+
+## [16.10.2026 - 16:50] - Uygulama Kataloğu (CMS), Hızlı Sürüm Yönetimi, Parçalı Özellik Kartları ve Çoklu Kategori Sistemi
+- **D1 Veritabanı ve REST API Altyapısı (`cmsApps.ts`, `cmsPublic.ts`, `0007_apps_store_and_features.sql`, `0008_apps_feature_cards.sql`):**
+  - `apps` ve `app_versions` tablolarına `store_links_json`, `feature_cards_json`, `screenshots_json` ve `downloads_count` sütunları eklendi.
+  - Kalıcı indirme linki `/api/v1/apps/:slug/download` üzerinden en güncel aktif sürüme 302 Found yönlendirmesi sağlandı.
+- **Admin Paneli Uygulama Stüdyosu (`AppsCMSView.tsx`, `AppModal.tsx`, `AppVersionModal.tsx`):**
+  - Uygulama listeleme, filtreleme, tek tıkla kalıcı URL kopyalama ve 30 saniyede hızlı sürüm yayınlama modalı tamamlandı.
+  - Sürüm güncellemesinde tanıtım kartının korunması için sıfır yeniden yazım ilkesi uygulandı.
+- **Parçalı Özellik Kartları & AI Çeviri Modülü (`AppModalFeatureCards.tsx`):**
+  - Büyük textarea yerine müstakil kartlar (ikon/emoji, TR başlık/açıklama, tek tıkla EN/AR AI çeviri, sıralama, silme) eklendi.
+  - HaydiNamaza'nın 9 zengin kartı D1 yerel veritabanında seed edildi.
+- **Çoklu Kategori Seçimi & Özel Kategori Ekleme (`AppModalCategorySelect.tsx`):**
+  - 8 hazır kategori rozeti ile çoklu seçim ve serbest etiket yazıp Enter ile yeni kategori ekleme altyapısı kuruldu.
+  - Tanıtım Metinleri sekmesindeki eski mükerrer alanlar (`features_tr/en/ar`) kaldırılarak form arındırıldı.
+- **webMSKLabs Dinamik Vitrin Şablonları Entegrasyonu (`webMSKLabs/apps.html`, `webMSKLabs/app.html`):**
+  - `apps.html` içine canlı D1 API kart ızgarası ve platform filtreleri bağlandı.
+  - `app.html` içine `.features-grid` ve `.feature-box` yapısı entegre edilerek TR/EN/AR dil anahtarıyla anlık reaksiyon sağlandı.
+  - Göreceli `/media/...` ikon yolları `https://msklabs.org/media/...` kalıcı adreslerine çekildi ve otomatik normalizer eklendi.
+- **Doğrulama ve Kural Uyumu:**
+  - `frontend` derlemesi (`npm run build`) PASS (0 hata, 835ms).
+  - `backend` tip denetimi (`npx tsc --noEmit`) PASS (0 hata).
+  - Kural 2 satır sınırı (`<= 450`) tüm dosyalarda korundu (`AppModal`: 408, `AppsCMSView`: 381, `AppModalFeatureCards`: 408, `AppModalCategorySelect`: 143, `AppModalLangFields`: 151).
+- Yalnızca `DevAdmin` dalında çalışıldı, `main` kesinlikle korundu.
+
 ## [16.10.2026 - 15:15] - CustomTableView ile Canlı Tablo Hizalama, TableMap Tabanlı Sütun/Satır Boyutlandırma ve Tek Merkezi Uygula Butonu
 - **CustomTableView ile Canlı Tablo Hizalama (`customExtensions.ts`, `RichTextEditor.tsx`, `TableLayoutControls.tsx`):**
   - TipTap'in `TableView` sınıfı genişletilerek `CustomTableView` oluşturuldu; `update(node)` çağrısında tablonun DOM öğesine `node.attrs.style` doğrudan aktarılarak canlı senkronizasyon sağlandı.

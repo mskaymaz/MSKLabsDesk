@@ -140,8 +140,18 @@ export default {
       response = new Response(JSON.stringify({ error: 'Endpoint bulunamadı.' }), { status: 404, headers: { 'Content-Type': 'application/json' } });
     }
 
-    Object.entries(corsHeaders).forEach(([k, v]) => response.headers.set(k, v));
-    return response;
+    try {
+      Object.entries(corsHeaders).forEach(([k, v]) => response.headers.set(k, v));
+      return response;
+    } catch {
+      const newHeaders = new Headers(response.headers);
+      Object.entries(corsHeaders).forEach(([k, v]) => newHeaders.set(k, v));
+      return new Response(response.body, {
+        status: response.status,
+        statusText: response.statusText,
+        headers: newHeaders,
+      });
+    }
   },
 
   async email(message: any, env: Env, ctx: ExecutionContext): Promise<void> {

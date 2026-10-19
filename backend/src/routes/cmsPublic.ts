@@ -3,7 +3,7 @@ export async function handleCmsPublic(request: Request, env: any): Promise<Respo
   const method = request.method;
   const path = url.pathname;
 
-  if (method !== 'GET') {
+  if (method !== 'GET' && method !== 'HEAD') {
     return new Response(JSON.stringify({ error: 'Method Not Allowed' }), { status: 405 });
   }
 
@@ -100,15 +100,117 @@ export async function handleCmsPublic(request: Request, env: any): Promise<Respo
     const result = (apps || []).map((app: any) => {
       const appVers = (versions || []).filter((v: any) => v.app_id === app.id);
       const latestVer = appVers[0];
+      let storeLinks = {};
+      try {
+        storeLinks = typeof app.store_links_json === 'string' ? JSON.parse(app.store_links_json || '{}') : app.store_links_json || {};
+      } catch {
+        storeLinks = {};
+      }
+
+      let featureCards = [];
+      try {
+        featureCards = typeof app.feature_cards_json === 'string' ? JSON.parse(app.feature_cards_json || '[]') : (app.feature_cards_json || []);
+      } catch {
+        featureCards = [];
+      }
+
       return {
         ...app,
+        store_links: storeLinks,
+        feature_cards: featureCards,
         latest_version: latestVer ? latestVer.version_name : '1.0.0',
-        download_url: latestVer ? latestVer.download_url : '#',
+        latest_download_url: latestVer ? latestVer.download_url : '#',
+        permanent_download_url: `/api/v1/apps/${app.app_id}/download`,
         versions: appVers,
       };
     });
 
     return new Response(JSON.stringify({ apps: result }), { headers });
+  }
+
+  // 4b. GET /api/v1/apps/:slug/download — En Son Sürüme Sabit İndirme Yönlendirmesi (Permanent Latest Redirect)
+  if (path.startsWith('/api/v1/apps/') && path.endsWith('/download')) {
+    const parts = path.split('/');
+    const slug = parts[parts.length - 2];
+
+    const app = await env.DB.prepare(
+      `SELECT id, app_id FROM apps WHERE (app_id = ? OR id = ?) AND is_active = 1`
+    ).bind(slug, slug).first();
+
+    if (!app) {
+      return new Response(JSON.stringify({ error: 'Uygulama bulunamadı' }), { status: 404, headers });
+    }
+
+    const latestVer = await env.DB.prepare(
+      `SELECT download_url FROM app_versions WHERE app_id = ? ORDER BY released_at DESC LIMIT 1`
+    ).bind(app.id).first();
+
+    if (!latestVer || !latestVer.download_url) {
+      return new Response(JSON.stringify({ error: 'İndirme bağlantısı bulunamadı' }), { status: 404, headers });
+    }
+
+    // İndirme sayacını artır
+    await env.DB.prepare(`UPDATE apps SET downloads_count = downloads_count + 1 WHERE id = ?`).bind(app.id).run();
+
+    const rawUrl = latestVer.download_url as string;
+    const targetUrl = rawUrl.startsWith('http://') || rawUrl.startsWith('https://')
+      ? rawUrl
+      : new URL(rawUrl, request.url).toString();
+
+    return Response.redirect(targetUrl, 302);
+  }
+
+  // 4c. GET /api/v1/apps/:slug — Tekil Uygulama Detayı & Sürümleri
+  if (path.startsWith('/api/v1/apps/') && path !== '/api/v1/apps') {
+    const slug = path.split('/').pop();
+
+    const app = await env.DB.prepare(
+      `SELECT * FROM apps WHERE (app_id = ? OR id = ?) AND is_active = 1`
+    ).bind(slug, slug).first();
+
+    if (!app) {
+      return new Response(JSON.stringify({ error: 'Uygulama bulunamadı' }), { status: 404, headers });
+    }
+
+    const { results: versions } = await env.DB.prepare(
+      `SELECT * FROM app_versions WHERE app_id = ? ORDER BY released_at DESC`
+    ).bind(app.id).all();
+
+    let storeLinks = {};
+    try {
+      storeLinks = typeof app.store_links_json === 'string' ? JSON.parse(app.store_links_json || '{}') : app.store_links_json || {};
+    } catch {
+      storeLinks = {};
+    }
+
+    let screenshots = [];
+    try {
+      screenshots = typeof app.screenshots_json === 'string' ? JSON.parse(app.screenshots_json || '[]') : app.screenshots_json || [];
+    } catch {
+      screenshots = [];
+    }
+
+    let featureCards = [];
+    try {
+      featureCards = typeof app.feature_cards_json === 'string' ? JSON.parse(app.feature_cards_json || '[]') : (app.feature_cards_json || []);
+    } catch {
+      featureCards = [];
+    }
+
+    const latestVer = (versions || [])[0] || null;
+
+    return new Response(JSON.stringify({
+      app: {
+        ...app,
+        store_links: storeLinks,
+        feature_cards: featureCards,
+        screenshots,
+        latest_version: latestVer ? latestVer.version_name : '1.0.0',
+        latest_download_url: latestVer ? latestVer.download_url : '#',
+        permanent_download_url: `/api/v1/apps/${app.app_id}/download`,
+        versions: versions || [],
+      }
+    }), { headers });
   }
 
   // 5. GET /api/v1/templates — Duyuru ve Şablonlar
