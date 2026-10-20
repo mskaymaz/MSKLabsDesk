@@ -1,10 +1,10 @@
 import React from 'react';
 import {
-  Smartphone, Edit2, Trash2, Rocket,
+  Edit2, Trash2, Rocket,
   Copy, Check, Download, Layers
 } from 'lucide-react';
 import type { AppItem } from '../../types';
-import { getAppIconUrl } from '../../utils/appIcons';
+import { resolveAppIcon } from '../../utils/appIcons';
 import { getLocalizedPlatform, getLocalizedCategory, getLocalizedStatus } from '../../utils/appLocalization';
 import { parseAppTitle } from '../../utils/appTitleHelper';
 
@@ -64,31 +64,58 @@ export const AppCMSCard: React.FC<AppCMSCardProps> = ({
             style={{ display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer' }}
             title="Görsel Stüdyo'da Aç"
           >
-            {getAppIconUrl(app.icon_url, app.app_id) ? (
-              <img
-                src={getAppIconUrl(app.icon_url, app.app_id)}
-                alt={app.name_tr}
-                style={{ width: '48px', height: '48px', borderRadius: '12px', objectFit: 'cover', border: '1px solid var(--border-subtle)' }}
-                onError={(e) => {
-                  (e.target as HTMLElement).style.display = 'none';
-                }}
-              />
-            ) : (
-              <div
-                style={{
-                  width: '48px',
-                  height: '48px',
-                  borderRadius: '12px',
-                  background: 'rgba(99, 102, 241, 0.12)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: 'var(--accent-primary)',
-                }}
-              >
-                <Smartphone size={24} />
-              </div>
-            )}
+            {(() => {
+              const icon = resolveAppIcon(app.icon_url, app.app_id);
+              if (icon.type === 'emoji') {
+                return (
+                  <div
+                    style={{
+                      width: '48px',
+                      height: '48px',
+                      borderRadius: '12px',
+                      background: 'rgba(99, 102, 241, 0.12)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontSize: '26px',
+                      border: '1px solid var(--border-subtle)',
+                      flexShrink: 0,
+                    }}
+                  >
+                    {icon.value}
+                  </div>
+                );
+              }
+              return (
+                <div
+                  style={{
+                    width: '48px',
+                    height: '48px',
+                    borderRadius: '12px',
+                    overflow: 'hidden',
+                    border: '1px solid var(--border-subtle)',
+                    background: 'rgba(0, 0, 0, 0.05)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    flexShrink: 0,
+                  }}
+                >
+                  <img
+                    src={icon.value}
+                    alt={app.name_tr}
+                    style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+                    onError={(e) => {
+                      const parent = e.currentTarget.parentElement;
+                      e.currentTarget.style.display = 'none';
+                      if (parent) {
+                        parent.innerHTML = '<span style="font-size:24px;">📱</span>';
+                      }
+                    }}
+                  />
+                </div>
+              );
+            })()}
             <div>
               {(() => {
                 const parsed = parseAppTitle(app.name_tr);

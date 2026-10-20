@@ -1,6 +1,21 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [20.10.2026 - 15:10] - Uygulama İkon ve Emojilerinin Merkezi Çözümlenmesi ve GÇ Pil Uyarı/En Yakın Düzeltmesi
+- **İkon Çözümleyici Geliştirmesi (`appIcons.ts`):**
+  - `resolveAppIcon` fonksiyonu eklendi; metin/emoji olan ikonlar (`🔋`, `📝`, `📄`, `🖨️`) ile görsel URL'leri ayrıştırıldı.
+  - `En Yakın` için sunucuda Content-Type uyuşmazlığı olan sahte PNG yerine doğrudan geçerli `img/EnYakinLogo.svg` vektör logosu bağlandı.
+  - `GÇ Pil Uyarı` için yeni vektörel SVG ikonu (`media/gcpiluyari/icon.svg`) oluşturuldu ve emoji fallback desteği sağlandı.
+- **Kart ve Stüdyo Başlık Bileşenleri (`AppCMSCard.tsx` & `AppStudioHeaderSection.tsx`):**
+  - Emoji ikonların `<span style="font-size: 26px;">` olarak temizce render edilmesi sağlandı.
+  - Görsel yükleme hatalarında (`onError`) görselin tamamen kaybolması yerine fallback ikona (`📱`) geçiş garantilendi.
+- **D1 Veritabanı Migration (`0018_fix_app_icons_and_emojis.sql`):**
+  - `enyakin`, `gcpiluyari`, `notes`, `docuedit` ve `pdflayout` ikon yolları ve emojileri D1'de güncellendi.
+- **Web Vitrin Senkronizasyonu (`webMSKLabs/apps.html` & `app.html`):**
+  - Dinamik katalog ve detay şablonunda emoji ikonların `https://msklabs.org/` ile bozulması engellendi.
+- **Doğrulama ve Kural Uyumu:**
+  - Frontend build PASS, backend testleri (57/57) %100 PASS. `DevAdmin` dalında çalışıldı, `main` kesinlikle korundu.
+
 ## [20.10.2026 - 14:40] - Admin Uygulama Kataloğu Responsif Izgara ve Kart Butonları Esnekliği
 - **Katalog Izgara Düzeni (`AppsCMSView.tsx`):**
   - Kart ızgarası minimum genişliği `minmax(360px, 1fr)` yerine `minmax(420px, 1fr)` olarak güncellendi.

@@ -2,7 +2,7 @@ import React from 'react';
 import { Edit2 } from 'lucide-react';
 import type { AppItem } from '../../../types';
 import type { CanvasLang, StudioSectionType } from './types';
-import { getAppIconUrl } from '../../../utils/appIcons';
+import { resolveAppIcon } from '../../../utils/appIcons';
 import { getLocalizedPlatform, getLocalizedCategory, getLocalizedStatus } from '../../../utils/appLocalization';
 import { parseAppTitle } from '../../../utils/appTitleHelper';
 
@@ -52,11 +52,25 @@ export const AppStudioHeaderSection: React.FC<AppStudioHeaderSectionProps> = ({
         </div>
 
         <div className="studio-big-icon">
-          {getAppIconUrl(app.icon_url, app.app_id) ? (
-            <img src={getAppIconUrl(app.icon_url, app.app_id)} alt={appName} onError={(e) => { (e.target as any).style.display = 'none'; }} />
-          ) : (
-            <span>📱</span>
-          )}
+          {(() => {
+            const icon = resolveAppIcon(app.icon_url, app.app_id);
+            if (icon.type === 'emoji') {
+              return <span style={{ fontSize: '3.6rem', lineHeight: 1 }}>{icon.value}</span>;
+            }
+            return (
+              <img
+                src={icon.value}
+                alt={appName}
+                onError={(e) => {
+                  const parent = (e.target as HTMLElement).parentElement;
+                  (e.target as HTMLElement).style.display = 'none';
+                  if (parent) {
+                    parent.innerHTML = '<span style="font-size:3.6rem;line-height:1;">📱</span>';
+                  }
+                }}
+              />
+            );
+          })()}
         </div>
 
         <div className="studio-title-group">

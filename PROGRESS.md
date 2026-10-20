@@ -1,7 +1,24 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
-## 🟢 Son Güncelleme [20.10.2026 - 14:40] — ADMİN UYGULAMA KATALOĞU İZGARA VE BUTON DÜZENLEMESİ [*]
+## 🟢 Son Güncelleme [20.10.2026 - 15:10] — UYGULAMA İKONLARI VE EMOJİ ÇÖZÜMLEME DÜZELTMESİ [*]
+* **Yapılan İşlem:**
+  1. **İkon ve Emoji Mimarisinin Standartlaştırılması:**
+     - `appIcons.ts` içine `resolveAppIcon` eklendi; hem emoji (`🔋`, `📝`, `📄`, `🖨️`) hem de görsel dosya yolları güvenle çözümlendi.
+     - `En Yakın` için sunucuda hata veren sahte PNG yerine `img/EnYakinLogo.svg` bağlandı.
+     - `GÇ Pil Uyarı` için `media/gcpiluyari/icon.svg` oluşturuldu ve D1'e işlendi.
+     - `notes`, `docuedit`, `pdflayout` için vitrindeki emojiler D1 `icon_url` alanına tanımlandı.
+  2. **Bileşenlerde Fallback Koruması:**
+     - `AppCMSCard.tsx` ve `AppStudioHeaderSection.tsx`: Emojiler doğrudan rozet kutusunda gösterildi; resim yüklenemediğinde alanın boş kalması engellendi.
+  3. **Web Vitrini Senkronizasyonu (`webMSKLabs`):**
+     - `apps.html` ve `app.html` dosyalarında emojilerin URL'ye dönüştürülüp bozulması engellendi.
+  4. **Doğrulama:**
+     - Frontend Build: PASS (`tsc -b && vite build`, 0 hata).
+     - Backend Testleri: PASS (57/57 test sıfır hatayla geçti).
+     - Satır sınırları: `AppCMSCard.tsx` 372 satır (<= 450), `AppStudioHeaderSection.tsx` 163 satır (<= 450).
+* **Durum:** `DevAdmin` dalında çalışıldı, `main` kesinlikle korundu.
+
+## [20.10.2026 - 14:40] — ADMİN UYGULAMA KATALOĞU İZGARA VE BUTON DÜZENLEMESİ [*]
 * **Yapılan İşlem:**
   1. **Izgara Min-Genişliği Güncellemesi (`AppsCMSView.tsx`):**
      - Ekran daraldığında kartların taşmasını önlemek amacıyla ızgara tabanı `minmax(420px, 1fr)` seviyesine çıkarıldı.
