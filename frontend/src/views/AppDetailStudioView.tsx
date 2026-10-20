@@ -40,40 +40,40 @@ export const AppDetailStudioView: React.FC<AppDetailStudioViewProps> = ({
     setTimeout(() => setToastMessage(null), 3500);
   };
 
-  const handleSave = async () => {
+  const executeSave = async (targetApp: AppItem) => {
     if (isSaving) return;
     setIsSaving(true);
     try {
       const payload = {
-        ...app,
-        app_id: app.app_id || app.slug || app.id || `app_${Date.now()}`,
-        name_tr: app.name_tr || app.name || 'Yeni Uygulama',
-        name_en: app.name_en || null,
-        name_ar: app.name_ar || null,
-        summary_tr: app.summary_tr || null,
-        summary_en: app.summary_en || null,
-        summary_ar: app.summary_ar || null,
-        description_tr: app.description_tr || app.description || '',
-        description_en: app.description_en || null,
-        description_ar: app.description_ar || null,
-        features_tr: Array.isArray(app.features) ? app.features.join('\n') : (app.features || null),
-        features_en: app.features_en || null,
-        features_ar: app.features_ar || null,
-        icon_url: app.icon_url || null,
-        cover_url: app.cover_url || null,
-        category: app.category || 'utility',
-        platform: app.platform || 'all',
-        display_order: app.display_order ?? app.sort_order ?? 0,
-        status: app.status || (app.is_active === 1 || app.is_active === true ? 'active' : 'in_development'),
-        is_active: app.status
-          ? (app.status === 'active' ? 1 : 0)
-          : (app.is_active === 1 || app.is_active === true ? 1 : 0),
-        store_links_json: JSON.stringify(app.store_links || {}),
-        feature_cards_json: JSON.stringify(app.feature_cards || []),
+        ...targetApp,
+        app_id: targetApp.app_id || targetApp.slug || targetApp.id || `app_${Date.now()}`,
+        name_tr: targetApp.name_tr || targetApp.name || 'Yeni Uygulama',
+        name_en: targetApp.name_en || null,
+        name_ar: targetApp.name_ar || null,
+        summary_tr: targetApp.summary_tr || null,
+        summary_en: targetApp.summary_en || null,
+        summary_ar: targetApp.summary_ar || null,
+        description_tr: targetApp.description_tr || targetApp.description || '',
+        description_en: targetApp.description_en || null,
+        description_ar: targetApp.description_ar || null,
+        features_tr: Array.isArray(targetApp.features) ? targetApp.features.join('\n') : (targetApp.features || null),
+        features_en: targetApp.features_en || null,
+        features_ar: targetApp.features_ar || null,
+        icon_url: targetApp.icon_url || null,
+        cover_url: targetApp.cover_url || null,
+        category: targetApp.category || 'utility',
+        platform: targetApp.platform || 'all',
+        display_order: targetApp.display_order ?? targetApp.sort_order ?? 0,
+        status: targetApp.status || (targetApp.is_active === 1 || targetApp.is_active === true ? 'active' : 'in_development'),
+        is_active: targetApp.status
+          ? (targetApp.status === 'active' ? 1 : 0)
+          : (targetApp.is_active === 1 || targetApp.is_active === true ? 1 : 0),
+        store_links_json: JSON.stringify(targetApp.store_links || {}),
+        feature_cards_json: JSON.stringify(targetApp.feature_cards || []),
       };
 
-      if (app.id) {
-        await api.updateApp(app.id, payload);
+      if (targetApp.id) {
+        await api.updateApp(targetApp.id, payload);
       } else {
         const res = await api.createApp(payload);
         if (res && res.id) {
@@ -84,7 +84,7 @@ export const AppDetailStudioView: React.FC<AppDetailStudioViewProps> = ({
       setIsDirty(false);
       showToast('Değişiklikler kaydedildi ve vitrin şablonuna yansıtıldı.');
       if (onSaveSuccess) {
-        onSaveSuccess(app);
+        onSaveSuccess(targetApp);
       }
     } catch (err: any) {
       console.error('Kaydetme hatası:', err);
@@ -92,6 +92,15 @@ export const AppDetailStudioView: React.FC<AppDetailStudioViewProps> = ({
     } finally {
       setIsSaving(false);
     }
+  };
+
+  const handleSave = () => executeSave(app);
+
+  const handleDirectSaveFromModal = async (updatedPartial: Partial<AppItem>) => {
+    const merged = { ...app, ...updatedPartial };
+    setApp(merged);
+    setActiveSection(null);
+    await executeSave(merged);
   };
 
   return (
@@ -124,6 +133,7 @@ export const AppDetailStudioView: React.FC<AppDetailStudioViewProps> = ({
           app={app}
           onApply={handleApplySectionChanges}
           onClose={() => setActiveSection(null)}
+          onSaveDirect={handleDirectSaveFromModal}
         />
       )}
 

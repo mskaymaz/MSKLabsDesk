@@ -1,7 +1,24 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
-## 🟢 Son Güncelleme [20.10.2026 - 12:30] — WEB VİTRİNİ PLANLAMA ÖNCESİ REKLAM ALANI YERLEŞİMİ [*]
+## 🟢 Son Güncelleme [20.10.2026 - 14:00] — UYGULAMA BAŞLIK/ALT AÇIKLAMA AYRIŞTIRMASI VE DOĞRUDAN KAYDETME [*]
+* **Yapılan İşlem:**
+  1. **Uygulama Başlık & Parantez İçi Alt Açıklama Ayrıştırması:**
+     - `frontend/src/utils/appTitleHelper.ts` (35 satır) eklendi: `parseAppTitle` ve `buildAppTitle` yardımcıları hazırlandı.
+     - `AppStudioHeaderFields.tsx`: Başlık düzenleme penceresinde TR, EN ve AR için "Ana Uygulama Adı" ve "Alt Açıklama (Parantez içi)" ayrı giriş alanları olarak yapılandırıldı.
+     - `AppStudioHeaderSection.tsx` ve `AppCMSCard.tsx`: Alt başlıklar hemen alt satıra taşındı, `%30 küçültülmüş` (`0.70em`) ve `normal kalınlıkta` (`font-weight: 400`) formatlandı.
+  2. **Doğrudan Kaydetme ve Taslak Senkronizasyonu:**
+     - Kullanıcının vitrinde görme zorunluluğu kaldırıldı; `AppStudioFloatingModal.tsx` içine doğrudan `Kaydet & Yayına Al` aksiyonu eklendi.
+     - Modal kapatıldığında veya üst çubuktan kaydet dendiğinde taslak state'in otomatik tuvale yansıtılması ve D1'e eksiksiz kaydedilmesi güvenceye alındı.
+  3. **Web Vitrini Senkronizasyonu (`webMSKLabs`):**
+     - `apps.html` ve `app.html` dosyalarına `formatAppTitleHtml` entegre edilerek hem statik hem dinamik listelemelerde alt açıklamalar 30% küçük ve alt satırda render edildi.
+  4. **Doğrulama:**
+     - Frontend Build: PASS (`tsc -b && vite build`, 0 hata).
+     - Backend Testleri: PASS (57/57 test sıfır hatayla geçti).
+     - Satır sınırları: Tüm bileşenler 450 satır tavanının altında.
+* **Durum:** `DevAdmin` dalında çalışıldı, `main` kesinlikle korundu.
+
+## [20.10.2026 - 12:30] — WEB VİTRİNİ PLANLAMA ÖNCESİ REKLAM ALANI YERLEŞİMİ [*]
 * **Yapılan İşlem:**
   - `webMSKLabs/apps.html`: "Yapım Aşamasındaki Uygulamalar" ile "Planlama Aşamasındaki Projeler" kategorileri arasına, üstteki gibi simetrik kategoriler arası reklam alanı (`<div class="infeed-ad-container"><div class="ad-placeholder">Kategoriler Arası Reklam Alanı (In-Feed Banner 728x90)</div></div>`) yerleştirildi.
   - Değişiklik `webMSKLabs` repo'sunda `DevAdmin` dalına commit edildi (`6c512ff`).

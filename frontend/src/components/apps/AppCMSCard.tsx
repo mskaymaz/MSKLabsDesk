@@ -6,6 +6,7 @@ import {
 import type { AppItem } from '../../types';
 import { getAppIconUrl } from '../../utils/appIcons';
 import { getLocalizedPlatform, getLocalizedCategory, getLocalizedStatus } from '../../utils/appLocalization';
+import { parseAppTitle } from '../../utils/appTitleHelper';
 
 interface AppCMSCardProps {
   app: AppItem;
@@ -89,24 +90,38 @@ export const AppCMSCard: React.FC<AppCMSCardProps> = ({
               </div>
             )}
             <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
-                <h3 className="admin-card-title hover:text-blue-400 transition" style={{ margin: 0, fontSize: '1.05rem' }}>{app.name_tr}</h3>
-                <span
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    padding: '1px 6px',
-                    borderRadius: '10px',
-                    fontSize: '0.68rem',
-                    fontWeight: 600,
-                    background: currentStatus === 'active' ? 'rgba(16, 185, 129, 0.12)' : currentStatus === 'planned' ? 'rgba(139, 92, 246, 0.12)' : 'rgba(245, 158, 11, 0.12)',
-                    color: currentStatus === 'active' ? '#10b981' : currentStatus === 'planned' ? '#a78bfa' : '#f59e0b',
-                    border: `1px solid ${currentStatus === 'active' ? 'rgba(16, 185, 129, 0.25)' : currentStatus === 'planned' ? 'rgba(139, 92, 246, 0.25)' : 'rgba(245, 158, 11, 0.25)'}`,
-                  }}
-                >
-                  {statusBadge.full}
-                </span>
-              </div>
+              {(() => {
+                const parsed = parseAppTitle(app.name_tr);
+                return (
+                  <div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
+                      <h3 className="admin-card-title hover:text-blue-400 transition" style={{ margin: 0, fontSize: '1.05rem' }}>
+                        {parsed.mainTitle}
+                      </h3>
+                      <span
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          padding: '1px 6px',
+                          borderRadius: '10px',
+                          fontSize: '0.68rem',
+                          fontWeight: 600,
+                          background: currentStatus === 'active' ? 'rgba(16, 185, 129, 0.12)' : currentStatus === 'planned' ? 'rgba(139, 92, 246, 0.12)' : 'rgba(245, 158, 11, 0.12)',
+                          color: currentStatus === 'active' ? '#10b981' : currentStatus === 'planned' ? '#a78bfa' : '#f59e0b',
+                          border: `1px solid ${currentStatus === 'active' ? 'rgba(16, 185, 129, 0.25)' : currentStatus === 'planned' ? 'rgba(139, 92, 246, 0.25)' : 'rgba(245, 158, 11, 0.25)'}`,
+                        }}
+                      >
+                        {statusBadge.full}
+                      </span>
+                    </div>
+                    {parsed.subtitle && (
+                      <div style={{ fontSize: '0.74rem', fontWeight: 400, color: 'var(--text-muted, #94a3b8)', marginTop: '2px' }}>
+                        {parsed.subtitle}
+                      </div>
+                    )}
+                  </div>
+                );
+              })()}
               <span className="admin-link-subtle" style={{ fontSize: '0.8rem' }}>slug: {app.app_id}</span>
             </div>
           </div>

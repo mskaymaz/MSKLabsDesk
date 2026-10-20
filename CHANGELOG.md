@@ -1,6 +1,22 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [20.10.2026 - 14:00] - Uygulama Başlık & Parantez İçi Alt Açıklama Ayrıştırması ve Doğrudan Kaydetme Altyapısı
+- **Başlık & Parantez İçi Alt Açıklama Ayrıştırması (`appTitleHelper.ts`):**
+  - "Date Counter (Tarih & Hedef Sayacı)" gibi isimleri `parseAppTitle` ve `buildAppTitle` fonksiyonları ile dinamik olarak ana ad ve alt açıklama olarak ayrıştıran modül eklendi.
+  - Veritabanı şemasında ek kolon açma ihtiyacı olmadan geriye dönük %100 uyumluluk korundu.
+- **Admin Stüdyosu Başlık Düzenleme Paneli (`AppStudioHeaderFields.tsx` & `AppStudioHeaderSection.tsx`):**
+  - Başlık düzenleme modalına TR, EN ve AR için hem "Ana Uygulama Adı" hem "Alt Açıklama (Parantez içi)" şeklinde ayrı giriş alanları eklendi.
+  - Tuval başlığında ve `AppCMSCard.tsx` liste kartlarında alt açıklamaların bir alt satıra geçmesi, %30 daha küçük (`font-size: 0.70em`) ve normal kalınlıkta (`font-weight: 400`) basılması sağlandı.
+- **Doğrudan Kaydetme ve Tuvale Otomatik Aktarma (`AppStudioFloatingModal.tsx` & `AppDetailStudioView.tsx`):**
+  - Kullanıcının modaldaki düzenlemeleri tuvalde görmeden de doğrudan kaydedebilmesi için modalın altına "Kaydet & Yayına Al" birincil butonu eklendi.
+  - Modal kapatıldığında veya üst bardaki "Tümünü Kaydet" tıklandığında taslak düzenlemelerin kaybolmasını önleyen otomatik tuval aktarımı ve doğrudan `executeSave` akışı entegre edildi.
+- **Web Vitrin Entegrasyonu (`webMSKLabs/apps.html` & `webMSKLabs/app.html`):**
+  - Dinamik katalog ve uygulama detay sayfalarına `formatAppTitleHtml` eklenerek alt açıklamalar web vitrininde de %30 küçültülmüş ve normal kalınlıkta alt satıra taşındı.
+- **Doğrulama ve Kural Uyumu:**
+  - Frontend build (`tsc -b && vite build`) PASS, backend testleri (57/57) %100 PASS.
+  - Tüm bileşenler 450 satır sınırının altında tutuldu; `DevAdmin` dalında çalışıldı, `main` kesinlikle korundu.
+
 ## [20.10.2026 - 12:25] - Uygulama WYSIWYG Açıklama Editörü ve Planlanan Projeler Entegrasyonu
 - **TipTap WYSIWYG Açıklama Editörü (`AppStudioTipTapEditor.tsx` & `AppStudioDescriptionEditor.tsx`):**
   - Ham HTML tagları basan eski araç çubuğu silindi; blog stüdyosundaki gibi canlı görsel biçimlendirme (kalın, italik, altı çizili, başlıklar, listeler, bağlantılar) sağlandı.

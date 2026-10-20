@@ -4,6 +4,7 @@ import type { AppItem } from '../../../types';
 import type { CanvasLang, StudioSectionType } from './types';
 import { getAppIconUrl } from '../../../utils/appIcons';
 import { getLocalizedPlatform, getLocalizedCategory, getLocalizedStatus } from '../../../utils/appLocalization';
+import { parseAppTitle } from '../../../utils/appTitleHelper';
 
 interface AppStudioHeaderSectionProps {
   app: AppItem;
@@ -59,7 +60,28 @@ export const AppStudioHeaderSection: React.FC<AppStudioHeaderSectionProps> = ({
         </div>
 
         <div className="studio-title-group">
-          <h1>{appName || 'Uygulama Adı'}</h1>
+          {(() => {
+            const parsed = parseAppTitle(appName || 'Uygulama Adı');
+            return (
+              <h1 style={{ margin: 0 }}>
+                <span>{parsed.mainTitle}</span>
+                {parsed.subtitle && (
+                  <span
+                    style={{
+                      display: 'block',
+                      fontSize: '0.70em',
+                      fontWeight: 400,
+                      opacity: 0.85,
+                      marginTop: '2px',
+                      color: 'var(--text-secondary, #94a3b8)',
+                    }}
+                  >
+                    {parsed.subtitle}
+                  </span>
+                )}
+              </h1>
+            );
+          })()}
           <div className="studio-badges">
             <span className="studio-badge studio-badge-platform">
               {platformBadge.full}

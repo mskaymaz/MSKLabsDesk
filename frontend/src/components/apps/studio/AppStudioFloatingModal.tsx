@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { X, Check, GripVertical } from 'lucide-react';
+import { X, Check, Save, GripVertical } from 'lucide-react';
 import type { AppItem, AppStoreLinks, AppFeatureCard } from '../../../types';
 import type { StudioSectionType } from './types';
 import { AppStudioFeatureCardEditor } from './AppStudioFeatureCardEditor';
@@ -11,6 +11,7 @@ interface AppStudioFloatingModalProps {
   app: AppItem;
   onApply: (updated: Partial<AppItem>) => void;
   onClose: () => void;
+  onSaveDirect?: (updated: Partial<AppItem>) => Promise<void>;
 }
 
 export const AppStudioFloatingModal: React.FC<AppStudioFloatingModalProps> = ({
@@ -18,6 +19,7 @@ export const AppStudioFloatingModal: React.FC<AppStudioFloatingModalProps> = ({
   app,
   onApply,
   onClose,
+  onSaveDirect,
 }) => {
   // 1. Bölüme göre geçici (draft) state
   const [draftAppId, setDraftAppId] = useState(app.app_id || app.slug || '');
@@ -29,21 +31,15 @@ export const AppStudioFloatingModal: React.FC<AppStudioFloatingModalProps> = ({
   const [draftPlatform, setDraftPlatform] = useState(app.platform || 'Android');
   const [draftStatus, setDraftStatus] = useState(app.status || 'active');
   const [draftDisplayOrder, setDraftDisplayOrder] = useState<number>(app.display_order ?? app.sort_order ?? 0);
-
   const [draftSummaryTr, setDraftSummaryTr] = useState(app.summary_tr || '');
   const [draftSummaryEn, setDraftSummaryEn] = useState(app.summary_en || '');
   const [draftSummaryAr, setDraftSummaryAr] = useState(app.summary_ar || '');
-
   const [draftDescTr, setDraftDescTr] = useState(app.description_tr || app.description || '');
   const [draftDescEn, setDraftDescEn] = useState(app.description_en || '');
   const [draftDescAr, setDraftDescAr] = useState(app.description_ar || '');
-
   const [draftGuideUrl, setDraftGuideUrl] = useState(app.guide_url || app.store_links?.guide_url || '');
-
   const [draftStoreLinks, setDraftStoreLinks] = useState<AppStoreLinks>({ ...(app.store_links || {}) });
-  const [draftFeatureCards, setDraftFeatureCards] = useState<AppFeatureCard[]>([
-    ...(app.feature_cards || [])
-  ]);
+  const [draftFeatureCards, setDraftFeatureCards] = useState<AppFeatureCard[]>([...(app.feature_cards || [])]);
 
   // Kart ekleme / silme / düzenleme
   const [activeCardIdx, setActiveCardIdx] = useState<number>(0);
@@ -74,10 +70,10 @@ export const AppStudioFloatingModal: React.FC<AppStudioFloatingModalProps> = ({
     setActiveCardIdx(Math.max(0, idx - 1));
   };
 
-  // Tamam / Uygula tıklandığında
-  const handleApply = () => {
+  // Geçerli taslak durumunu nesneye dönüştür
+  const getCurrentPartial = (): Partial<AppItem> => {
     if (section === 'header') {
-      onApply({
+      return {
         app_id: draftAppId || app.app_id,
         name_tr: draftNameTr,
         name: draftNameTr,
@@ -87,11 +83,12 @@ export const AppStudioFloatingModal: React.FC<AppStudioFloatingModalProps> = ({
         category: draftCategory,
         platform: draftPlatform,
         status: draftStatus as any,
+        is_active: draftStatus === 'active' ? 1 : 0,
         display_order: draftDisplayOrder,
         sort_order: draftDisplayOrder,
-      });
+      };
     } else if (section === 'description') {
-      onApply({
+      return {
         summary_tr: draftSummaryTr,
         summary_en: draftSummaryEn,
         summary_ar: draftSummaryAr,
@@ -99,25 +96,48 @@ export const AppStudioFloatingModal: React.FC<AppStudioFloatingModalProps> = ({
         description: draftDescTr,
         description_en: draftDescEn,
         description_ar: draftDescAr,
-      });
+      };
     } else if (section === 'guide') {
-      onApply({
+      return {
         guide_url: draftGuideUrl,
         store_links: {
           ...draftStoreLinks,
           guide_url: draftGuideUrl,
         },
-      });
+      };
     } else if (section === 'features') {
-      onApply({
+      return {
         feature_cards: draftFeatureCards,
-      });
+      };
     } else if (section === 'store_links') {
-      onApply({
+      return {
         store_links: draftStoreLinks,
-      });
+      };
     }
+    return {};
+  };
+
+  // Sayfaya Uygula (Yalnızca tuvale işler)
+  const handleApply = () => {
+    onApply(getCurrentPartial());
     onClose();
+  };
+
+  // Kapatıldığında dahi yapılan düzenlemeyi kaybetmemek için tuvale otomatik aktar
+  const handleClose = () => {
+    onApply(getCurrentPartial());
+    onClose();
+  };
+
+  // Doğrudan Kaydet & Yayına Al (Hem tuvale işler hem D1'e kalıcı kaydeder)
+  const handleDirectSave = async () => {
+    const partial = getCurrentPartial();
+    if (onSaveDirect) {
+      await onSaveDirect(partial);
+    } else {
+      onApply(partial);
+      onClose();
+    }
   };
 
   // Bölüm başlık ve açıklamaları
@@ -241,7 +261,7 @@ export const AppStudioFloatingModal: React.FC<AppStudioFloatingModalProps> = ({
           </div>
           <button 
             type="button" 
-            onClick={onClose} 
+            onClick={handleClose} 
             className="studio-floating-close-btn"
             title="Kapat (Esc)"
           >
@@ -385,23 +405,38 @@ export const AppStudioFloatingModal: React.FC<AppStudioFloatingModalProps> = ({
           )}
         </div>
 
-        {/* Aksiyon Butonları (Vazgeç & Tamam / Uygula) */}
-        <div className="studio-floating-footer">
+        {/* Aksiyon Butonları (Kapat & Sayfaya Uygula & Doğrudan Kaydet) */}
+        <div className="studio-floating-footer" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '8px' }}>
           <button 
             type="button" 
-            onClick={onClose} 
+            onClick={handleClose} 
             className="studio-btn studio-btn-subtle"
+            title="Pencereyi kapat ve değişiklikleri sayfaya aktar"
           >
-            Vazgeç
+            Kapat
           </button>
-          <button 
-            type="button" 
-            onClick={handleApply} 
-            className="studio-btn studio-btn-primary"
-          >
-            <Check size={14} />
-            <span>Tamam, Sayfaya Yerleştir</span>
-          </button>
+          
+          <div style={{ display: 'flex', gap: '8px' }}>
+            <button 
+              type="button" 
+              onClick={handleApply} 
+              className="studio-btn studio-btn-secondary"
+              title="Değişiklikleri tuval sayfasına yerleştir"
+            >
+              <Check size={14} />
+              <span>Sayfaya Uygula</span>
+            </button>
+            <button 
+              type="button" 
+              onClick={handleDirectSave} 
+              className="studio-btn studio-btn-primary"
+              style={{ background: 'var(--accent-primary, #3b82f6)', color: '#ffffff', fontWeight: 600 }}
+              title="Değişiklikleri hem tuvale aktar hem doğrudan D1 veritabanına kaydet"
+            >
+              <Save size={14} />
+              <span>Kaydet & Yayına Al</span>
+            </button>
+          </div>
         </div>
       </div>
     </div>

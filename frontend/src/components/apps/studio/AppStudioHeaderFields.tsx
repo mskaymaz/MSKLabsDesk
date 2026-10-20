@@ -1,4 +1,5 @@
 import React from 'react';
+import { parseAppTitle, buildAppTitle } from '../../../utils/appTitleHelper';
 
 export interface AppStudioHeaderFieldsProps {
   draftAppId: string;
@@ -65,44 +66,122 @@ export const AppStudioHeaderFields: React.FC<AppStudioHeaderFieldsProps> = ({
         />
       </div>
 
-      {/* 3 Dilli Başlıklar */}
+      {/* 3 Dilli Başlıklar ve Parantez İçi Alt Açıklamalar */}
       <div className="studio-lang-box">
         <span className="studio-lang-tag" style={{ background: '#1e3a8a', color: '#bfdbfe' }}>
-          TR (Türkçe Başlık)
+          TR (Türkçe)
         </span>
-        <input
-          type="text"
-          value={draftNameTr}
-          onChange={(e) => setDraftNameTr(e.target.value)}
-          placeholder="Uygulama adı..."
-          className="studio-input"
-        />
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+          <div>
+            <label style={{ fontSize: '0.72rem', color: 'var(--text-muted, #94a3b8)', display: 'block', marginBottom: '2px' }}>
+              Ana Uygulama Adı
+            </label>
+            <input
+              type="text"
+              value={parseAppTitle(draftNameTr).mainTitle}
+              onChange={(e) => {
+                const sub = parseAppTitle(draftNameTr).subtitle;
+                setDraftNameTr(buildAppTitle(e.target.value, sub));
+              }}
+              placeholder="Örn: Date Counter"
+              className="studio-input"
+            />
+          </div>
+          <div>
+            <label style={{ fontSize: '0.72rem', color: 'var(--text-muted, #94a3b8)', display: 'block', marginBottom: '2px' }}>
+              Alt Açıklama (Parantez içi — %30 küçük ve normal ağırlıkta görünür)
+            </label>
+            <input
+              type="text"
+              value={parseAppTitle(draftNameTr).subtitle}
+              onChange={(e) => {
+                const main = parseAppTitle(draftNameTr).mainTitle;
+                setDraftNameTr(buildAppTitle(main, e.target.value));
+              }}
+              placeholder="Örn: Tarih & Hedef Sayacı"
+              className="studio-input"
+              style={{ fontSize: '0.85rem' }}
+            />
+          </div>
+        </div>
       </div>
 
       <div className="studio-lang-box">
         <span className="studio-lang-tag" style={{ background: '#075985', color: '#bae6fd' }}>
-          EN (English Name)
+          EN (English)
         </span>
-        <input
-          type="text"
-          value={draftNameEn}
-          onChange={(e) => setDraftNameEn(e.target.value)}
-          placeholder="App name in English..."
-          className="studio-input"
-        />
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+          <div>
+            <label style={{ fontSize: '0.72rem', color: 'var(--text-muted, #94a3b8)', display: 'block', marginBottom: '2px' }}>
+              Main Application Name
+            </label>
+            <input
+              type="text"
+              value={parseAppTitle(draftNameEn).mainTitle}
+              onChange={(e) => {
+                const sub = parseAppTitle(draftNameEn).subtitle;
+                setDraftNameEn(buildAppTitle(e.target.value, sub));
+              }}
+              placeholder="e.g. Date Counter"
+              className="studio-input"
+            />
+          </div>
+          <div>
+            <label style={{ fontSize: '0.72rem', color: 'var(--text-muted, #94a3b8)', display: 'block', marginBottom: '2px' }}>
+              Subtitle / Sub-heading (shown 30% smaller, normal weight)
+            </label>
+            <input
+              type="text"
+              value={parseAppTitle(draftNameEn).subtitle}
+              onChange={(e) => {
+                const main = parseAppTitle(draftNameEn).mainTitle;
+                setDraftNameEn(buildAppTitle(main, e.target.value));
+              }}
+              placeholder="e.g. Date & Target Counter"
+              className="studio-input"
+              style={{ fontSize: '0.85rem' }}
+            />
+          </div>
+        </div>
       </div>
 
       <div className="studio-lang-box" dir="rtl">
         <span className="studio-lang-tag" style={{ background: '#065f46', color: '#a7f3d0' }}>
-          AR (العربية - اسم التطبيق)
+          AR (العربية)
         </span>
-        <input
-          type="text"
-          value={draftNameAr}
-          onChange={(e) => setDraftNameAr(e.target.value)}
-          placeholder="اسم التطبيق بالعربية..."
-          className="studio-input"
-        />
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+          <div>
+            <label style={{ fontSize: '0.72rem', color: 'var(--text-muted, #94a3b8)', display: 'block', marginBottom: '2px' }}>
+              اسم التطبيق الرئيسي
+            </label>
+            <input
+              type="text"
+              value={parseAppTitle(draftNameAr).mainTitle}
+              onChange={(e) => {
+                const sub = parseAppTitle(draftNameAr).subtitle;
+                setDraftNameAr(buildAppTitle(e.target.value, sub));
+              }}
+              placeholder="اسم التطبيق بالعربية..."
+              className="studio-input"
+            />
+          </div>
+          <div>
+            <label style={{ fontSize: '0.72rem', color: 'var(--text-muted, #94a3b8)', display: 'block', marginBottom: '2px' }}>
+              العنوان الفرعي التوضيحي (بين قوسين — بخط أصغر بنسبة 30%)
+            </label>
+            <input
+              type="text"
+              value={parseAppTitle(draftNameAr).subtitle}
+              onChange={(e) => {
+                const main = parseAppTitle(draftNameAr).mainTitle;
+                setDraftNameAr(buildAppTitle(main, e.target.value));
+              }}
+              placeholder="العنوان الفرعي بالعربية..."
+              className="studio-input"
+              style={{ fontSize: '0.85rem' }}
+            />
+          </div>
+        </div>
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 100px', gap: '10px' }}>
