@@ -1,7 +1,20 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
-## 🟢 Son Güncelleme [20.10.2026 - 14:00] — UYGULAMA BAŞLIK/ALT AÇIKLAMA AYRIŞTIRMASI VE DOĞRUDAN KAYDETME [*]
+## 🟢 Son Güncelleme [20.10.2026 - 14:40] — ADMİN UYGULAMA KATALOĞU İZGARA VE BUTON DÜZENLEMESİ [*]
+* **Yapılan İşlem:**
+  1. **Izgara Min-Genişliği Güncellemesi (`AppsCMSView.tsx`):**
+     - Ekran daraldığında kartların taşmasını önlemek amacıyla ızgara tabanı `minmax(420px, 1fr)` seviyesine çıkarıldı.
+     - Ekran daraldığında kartlar bozulmadan temizce 3 -> 2 -> 1 kolon akışına geçti.
+  2. **Kart Aksiyon Butonları Esnekliği (`AppCMSCard.tsx`):**
+     - Alt buton çubuğuna `flexWrap: 'wrap'`, `gap: '8px'` ve `whiteSpace: 'nowrap'` verildi; aşırı daraltmalarda dahi butonların kart sınırlarından taşması engellendi.
+  3. **Doğrulama:**
+     - Frontend Build: PASS (`tsc -b && vite build`, 0 hata).
+     - Backend Testleri: PASS (57/57 test sıfır hatayla geçti).
+     - Satır sınırları: `AppsCMSView.tsx` 354 satır (<= 600), `AppCMSCard.tsx` 345 satır (<= 450).
+* **Durum:** `DevAdmin` dalında çalışıldı, `main` kesinlikle korundu.
+
+## [20.10.2026 - 14:00] — UYGULAMA BAŞLIK/ALT AÇIKLAMA AYRIŞTIRMASI VE DOĞRUDAN KAYDETME [*]
 * **Yapılan İşlem:**
   1. **Uygulama Başlık & Parantez İçi Alt Açıklama Ayrıştırması:**
      - `frontend/src/utils/appTitleHelper.ts` (35 satır) eklendi: `parseAppTitle` ve `buildAppTitle` yardımcıları hazırlandı.

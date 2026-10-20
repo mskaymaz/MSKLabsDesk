@@ -1,6 +1,16 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [20.10.2026 - 14:40] - Admin Uygulama Kataloğu Responsif Izgara ve Kart Butonları Esnekliği
+- **Katalog Izgara Düzeni (`AppsCMSView.tsx`):**
+  - Kart ızgarası minimum genişliği `minmax(360px, 1fr)` yerine `minmax(420px, 1fr)` olarak güncellendi.
+  - Tarayıcı daraldığında kartların büzüşüp butonları taşırması engellendi; 3 kolondan doğal olarak 2 ve 1 kolona düşmesi sağlandı.
+- **Kart Aksiyon Butonları (`AppCMSCard.tsx`):**
+  - Buton kapsayıcısına `flexWrap: 'wrap'` ve `whiteSpace: 'nowrap'` tanımlandı; aşırı dar pencerelerde dahi butonların sınır dışına fırlaması önlendi.
+- **Doğrulama ve Kural Uyumu:**
+  - Frontend build PASS, backend 57 entegrasyon testi %100 PASS.
+  - `DevAdmin` dalı üzerinde çalışıldı, `main` kesinlikle korundu.
+
 ## [20.10.2026 - 14:00] - Uygulama Başlık & Parantez İçi Alt Açıklama Ayrıştırması ve Doğrudan Kaydetme Altyapısı
 - **Başlık & Parantez İçi Alt Açıklama Ayrıştırması (`appTitleHelper.ts`):**
   - "Date Counter (Tarih & Hedef Sayacı)" gibi isimleri `parseAppTitle` ve `buildAppTitle` fonksiyonları ile dinamik olarak ana ad ve alt açıklama olarak ayrıştıran modül eklendi.

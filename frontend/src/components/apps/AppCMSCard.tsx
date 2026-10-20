@@ -283,24 +283,24 @@ export const AppCMSCard: React.FC<AppCMSCardProps> = ({
       )}
 
       {/* Aksiyon Butonları */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid var(--border-subtle)', paddingTop: '12px' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px', borderTop: '1px solid var(--border-subtle)', paddingTop: '12px' }}>
         <button
           type="button"
           onClick={() => onToggleVersions(app.id)}
           className="admin-btn admin-btn-sm"
-          style={{ padding: '4px 8px', fontSize: '0.75rem', display: 'flex', alignItems: 'center', gap: '4px' }}
+          style={{ padding: '4px 8px', fontSize: '0.75rem', display: 'flex', alignItems: 'center', gap: '4px', whiteSpace: 'nowrap' }}
           title="Tüm sürümleri gör"
         >
           <Layers size={13} />
           <span>Sürümler ({app.versions?.length || 0})</span>
         </button>
 
-        <div style={{ display: 'flex', gap: '6px' }}>
+        <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', alignItems: 'center' }}>
           <button
             type="button"
             onClick={() => onOpenVersionModal(app)}
             className="admin-btn admin-btn-sm admin-btn-secondary"
-            style={{ padding: '4px 8px', fontSize: '0.75rem', display: 'flex', alignItems: 'center', gap: '4px' }}
+            style={{ padding: '4px 8px', fontSize: '0.75rem', display: 'flex', alignItems: 'center', gap: '4px', whiteSpace: 'nowrap' }}
             title="Hızlıca yeni APK / Dağıtım sürümü yayınla"
           >
             <Rocket size={13} />
@@ -311,7 +311,7 @@ export const AppCMSCard: React.FC<AppCMSCardProps> = ({
             type="button"
             onClick={() => onOpenStudio(app)}
             className="admin-btn admin-btn-sm admin-btn-primary"
-            style={{ padding: '4px 10px', fontSize: '0.75rem', display: 'flex', alignItems: 'center', gap: '4px' }}
+            style={{ padding: '4px 10px', fontSize: '0.75rem', display: 'flex', alignItems: 'center', gap: '4px', whiteSpace: 'nowrap' }}
             title="Görsel Tuval Stüdyosunu Başlat"
           >
             <Edit2 size={13} />
@@ -322,7 +322,7 @@ export const AppCMSCard: React.FC<AppCMSCardProps> = ({
             type="button"
             onClick={() => onEditAppModal(app)}
             className="admin-btn admin-btn-sm"
-            style={{ padding: '4px 8px', fontSize: '0.75rem' }}
+            style={{ padding: '4px 8px', fontSize: '0.75rem', whiteSpace: 'nowrap' }}
             title="Hızlı Ayarlar Modalı"
           >
             Ayarlar
@@ -332,6 +332,7 @@ export const AppCMSCard: React.FC<AppCMSCardProps> = ({
             type="button"
             onClick={() => onDeleteApp(app)}
             className="admin-btn admin-btn-sm admin-btn-delete"
+            style={{ flexShrink: 0 }}
             title="Uygulamayı Sil"
           >
             <Trash2 size={13} />
