@@ -1,21 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import {
-  Smartphone, Plus, Edit2, Trash2, Rocket,
-  Copy, Check, Download, Search, Layers, RefreshCw
-} from 'lucide-react';
+import { Smartphone, Plus, Search, RefreshCw } from 'lucide-react';
 import type { AppItem } from '../types';
 import { api } from '../services/api';
 import { AppModal } from '../components/apps/AppModal';
 import { AppVersionModal } from '../components/apps/AppVersionModal';
+import { AppCMSCard } from '../components/apps/AppCMSCard';
 import { AppDetailStudioView } from './AppDetailStudioView';
-import { getAppIconUrl } from '../utils/appIcons';
-import { getLocalizedPlatform, getLocalizedCategory } from '../utils/appLocalization';
 
 export const AppsCMSView: React.FC = () => {
   const [apps, setApps] = useState<AppItem[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [platformFilter, setPlatformFilter] = useState<string>('all');
+  const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'in_development' | 'planned'>('all');
   
   // Stüdyo Modu
   const [studioApp, setStudioApp] = useState<AppItem | null>(null);
@@ -112,13 +109,25 @@ export const AppsCMSView: React.FC = () => {
     }
   };
 
+  const getAppStatus = (app: AppItem): 'active' | 'in_development' | 'planned' => {
+    if (app.status === 'planned' || app.status === 'in_development' || app.status === 'active') {
+      return app.status;
+    }
+    return (app.is_active === 1 || app.is_active === true) ? 'active' : 'in_development';
+  };
+
+  const activeCount = apps.filter((a) => getAppStatus(a) === 'active').length;
+  const devCount = apps.filter((a) => getAppStatus(a) === 'in_development').length;
+  const plannedCount = apps.filter((a) => getAppStatus(a) === 'planned').length;
+
   const filteredApps = apps.filter((app) => {
     const matchesSearch =
       app.name_tr.toLowerCase().includes(searchQuery.toLowerCase()) ||
       app.app_id.toLowerCase().includes(searchQuery.toLowerCase()) ||
       (app.description_tr && app.description_tr.toLowerCase().includes(searchQuery.toLowerCase()));
     const matchesPlatform = platformFilter === 'all' || app.platform === 'all' || app.platform === platformFilter;
-    return matchesSearch && matchesPlatform;
+    const matchesStatus = statusFilter === 'all' || getAppStatus(app) === statusFilter;
+    return matchesSearch && matchesPlatform && matchesStatus;
   });
 
   if (studioApp) {
@@ -143,11 +152,14 @@ export const AppsCMSView: React.FC = () => {
       name_tr: 'Yeni Uygulama',
       name_en: 'New Application',
       name_ar: 'تطبيق جديد',
-      description_tr: 'Uygulama hakkında açıklama metnini buraya tıklayarak girin.',
-      description_en: 'Enter application description in English by clicking here.',
-      description_ar: 'أدخل وصف التطبيق باللغة العربية بالنقر هنا.',
-      category: 'Mobil',
-      platform: 'Android',
+      summary_tr: 'Kısa uygulama vizyon özeti...',
+      summary_en: 'Short application vision summary...',
+      summary_ar: 'ملخص رؤية التطبيق الموجز...',
+      description_tr: '<p>Uygulama hakkında detaylı açıklama...</p>',
+      description_en: '<p>Detailed description in English...</p>',
+      description_ar: '<p>الوصف التفصيلي للتطبيق...</p>',
+      category: 'utility',
+      platform: 'all',
       status: 'in_development',
       icon_url: '',
       store_links: {
@@ -201,6 +213,38 @@ export const AppsCMSView: React.FC = () => {
         </div>
       </div>
 
+      {/* Yayın ve Geliştirme Durumu Sekmeleri */}
+      <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', alignItems: 'center' }}>
+        <button
+          type="button"
+          onClick={() => setStatusFilter('all')}
+          style={statusTabStyle(statusFilter === 'all')}
+        >
+          Tümü ({apps.length})
+        </button>
+        <button
+          type="button"
+          onClick={() => setStatusFilter('active')}
+          style={statusTabStyle(statusFilter === 'active')}
+        >
+          🚀 Yayında ({activeCount})
+        </button>
+        <button
+          type="button"
+          onClick={() => setStatusFilter('in_development')}
+          style={statusTabStyle(statusFilter === 'in_development')}
+        >
+          🛠️ Yapım Aşamasında ({devCount})
+        </button>
+        <button
+          type="button"
+          onClick={() => setStatusFilter('planned')}
+          style={statusTabStyle(statusFilter === 'planned')}
+        >
+          📋 Planlama Aşamasında ({plannedCount})
+        </button>
+      </div>
+
       {/* Arama ve Filtreleme Çubuğu */}
       <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'center' }}>
         <div style={{ position: 'relative', flex: 1, minWidth: '240px' }}>
@@ -241,7 +285,7 @@ export const AppsCMSView: React.FC = () => {
           <p className="admin-card-desc" style={{ marginBottom: '16px' }}>
             {searchQuery ? 'Arama kriterlerinize uyan bir uygulama bulunamadı.' : 'Vitrin için ilk uygulamanızı ekleyerek başlayın.'}
           </p>
-          <button onClick={() => { setEditingApp(null); setShowAppModal(true); }} className="admin-btn admin-btn-primary admin-btn-md">
+          <button onClick={handleAddNewAppInStudio} className="admin-btn admin-btn-primary admin-btn-md">
             <Plus size={16} />
             <span>Yeni Uygulama Ekle</span>
           </button>
@@ -249,270 +293,27 @@ export const AppsCMSView: React.FC = () => {
       ) : (
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(360px, 1fr))', gap: '16px' }}>
           {filteredApps.map((app) => (
-            <div
+            <AppCMSCard
               key={app.id}
-              className="admin-list-card"
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'space-between',
-                gap: '14px',
-                padding: '18px',
-                border: '1px solid var(--border-color)',
+              app={app}
+              copiedSlug={copiedSlug}
+              expandedVersionsAppId={expandedVersionsAppId}
+              onOpenStudio={(selectedApp) => setStudioApp(selectedApp)}
+              onDirectOrderChange={handleDirectOrderChange}
+              onReorderApp={handleReorderApp}
+              onCopyDownloadUrl={handleCopyDownloadUrl}
+              onToggleVersions={(appId) => setExpandedVersionsAppId(expandedVersionsAppId === appId ? null : appId)}
+              onOpenVersionModal={(selectedApp) => {
+                setSelectedAppForVersion(selectedApp);
+                setShowVersionModal(true);
               }}
-            >
-              <div>
-                {/* Kart Üst Bilgisi */}
-                <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '10px', marginBottom: '10px' }}>
-                  <div 
-                    onClick={() => setStudioApp(app)}
-                    style={{ display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer' }}
-                    title="Görsel Stüdyo'da Aç"
-                  >
-                    {getAppIconUrl(app.icon_url, app.app_id) ? (
-                      <img
-                        src={getAppIconUrl(app.icon_url, app.app_id)}
-                        alt={app.name_tr}
-                        style={{ width: '48px', height: '48px', borderRadius: '12px', objectFit: 'cover', border: '1px solid var(--border-subtle)' }}
-                        onError={(e) => {
-                          (e.target as HTMLElement).style.display = 'none';
-                        }}
-                      />
-                    ) : (
-                      <div
-                        style={{
-                          width: '48px',
-                          height: '48px',
-                          borderRadius: '12px',
-                          background: 'rgba(99, 102, 241, 0.12)',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          color: 'var(--accent-primary)',
-                        }}
-                      >
-                        <Smartphone size={24} />
-                      </div>
-                    )}
-                    <div>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                        <h3 className="admin-card-title hover:text-blue-400 transition" style={{ margin: 0, fontSize: '1.05rem' }}>{app.name_tr}</h3>
-                        <span
-                          style={{
-                            display: 'inline-block',
-                            width: '8px',
-                            height: '8px',
-                            borderRadius: '50%',
-                            background: (app.is_active === 1 || app.is_active === true) ? '#10b981' : '#94a3b8',
-                          }}
-                          title={(app.is_active === 1 || app.is_active === true) ? 'Yayında' : 'Taslak'}
-                        />
-                      </div>
-                      <span className="admin-link-subtle" style={{ fontSize: '0.8rem' }}>slug: {app.app_id}</span>
-                    </div>
-                  </div>
-
-                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '6px' }}>
-                    <div 
-                      style={{ display: 'flex', alignItems: 'center', gap: '4px' }}
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', fontWeight: 600 }}>Sıra:</span>
-                      <input
-                        type="number"
-                        min={1}
-                        defaultValue={app.display_order ?? 0}
-                        key={`${app.id}_${app.display_order}`}
-                        onBlur={(e) => {
-                          const val = parseInt(e.target.value, 10);
-                          if (!isNaN(val) && val !== app.display_order) {
-                            handleDirectOrderChange(app, val);
-                          }
-                        }}
-                        onKeyDown={(e) => {
-                          if (e.key === 'Enter') {
-                            (e.target as HTMLInputElement).blur();
-                          }
-                        }}
-                        className="form-input"
-                        style={{
-                          width: '46px',
-                          padding: '2px 4px',
-                          fontSize: '0.75rem',
-                          fontWeight: 700,
-                          textAlign: 'center',
-                          borderRadius: '6px',
-                          border: '1px solid rgba(99, 102, 241, 0.4)',
-                          background: 'rgba(99, 102, 241, 0.08)',
-                          color: '#818cf8',
-                        }}
-                        title="Vitrin Sırası — Değiştirmek için sayıyı yazıp Enter'a basın veya dışarı tıklayın"
-                      />
-                      <button
-                        type="button"
-                        onClick={() => handleReorderApp(app.id, 'up')}
-                        className="admin-btn admin-btn-xs"
-                        style={{ padding: '2px 5px', fontSize: '0.68rem', lineHeight: 1 }}
-                        title="Sırayı Yukarı Al (Öne Çıkar)"
-                      >
-                        ▲
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => handleReorderApp(app.id, 'down')}
-                        className="admin-btn admin-btn-xs"
-                        style={{ padding: '2px 5px', fontSize: '0.68rem', lineHeight: 1 }}
-                        title="Sırayı Aşağı Al"
-                      >
-                        ▼
-                      </button>
-                    </div>
-
-                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px', justifyContent: 'flex-end', maxWidth: '160px' }}>
-                      <span className="admin-badge admin-badge-index" style={{ fontSize: '0.72rem' }}>
-                        {getLocalizedCategory(app.category, 'tr').full}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Kart Özeti ve Açıklama */}
-                {app.summary_tr && (
-                  <div style={{ fontSize: '0.8rem', color: '#60a5fa', marginBottom: '4px', fontWeight: 500, display: '-webkit-box', WebkitLineClamp: 1, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
-                    📌 {app.summary_tr}
-                  </div>
-                )}
-                <p className="admin-card-desc" style={{ fontSize: '0.84rem', marginBottom: '12px', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
-                  {app.description_tr || 'Açıklama belirtilmemiş.'}
-                </p>
-
-                {/* Mağaza ve Platform Rozetleri */}
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', alignItems: 'center', marginBottom: '10px' }}>
-                  <span className="admin-badge admin-badge-view" style={{ fontSize: '0.72rem' }}>
-                    {getLocalizedPlatform(app.platform, 'tr').full}
-                  </span>
-
-                  {app.store_links?.google_play && (
-                    <a href={app.store_links.google_play} target="_blank" rel="noreferrer" className="admin-link-subtle" style={{ fontSize: '0.75rem' }} title="Google Play">
-                      Play Store ↗
-                    </a>
-                  )}
-                  {app.store_links?.app_store && (
-                    <a href={app.store_links.app_store} target="_blank" rel="noreferrer" className="admin-link-subtle" style={{ fontSize: '0.75rem' }} title="App Store">
-                      App Store ↗
-                    </a>
-                  )}
-                  {app.store_links?.github && (
-                    <a href={app.store_links.github} target="_blank" rel="noreferrer" className="admin-link-subtle" style={{ fontSize: '0.75rem' }} title="GitHub">
-                      GitHub ↗
-                    </a>
-                  )}
-                </div>
-
-                {/* Sürüm & Kalıcı İndirme Çubuğu */}
-                <div style={{ padding: '8px 10px', background: 'rgba(255,255,255,0.03)', borderRadius: '6px', border: '1px solid var(--border-subtle)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.8rem' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                    <span style={{ fontWeight: 600, color: 'var(--accent-primary)' }}>
-                      v{app.latest_version || '1.0.0'}
-                    </span>
-                    <span style={{ color: 'var(--text-muted)' }}>•</span>
-                    <span style={{ color: 'var(--text-muted)' }}>
-                      {app.downloads_count || 0} indirme
-                    </span>
-                  </div>
-
-                  <button
-                    type="button"
-                    onClick={() => handleCopyDownloadUrl(app.app_id)}
-                    className="admin-btn admin-btn-sm"
-                    style={{ padding: '3px 8px', fontSize: '0.75rem', display: 'flex', alignItems: 'center', gap: '4px' }}
-                    title="Kalıcı indirme bağlantısını kopyala"
-                  >
-                    {copiedSlug === app.app_id ? <Check size={12} color="#10b981" /> : <Copy size={12} />}
-                    <span>{copiedSlug === app.app_id ? 'Kopyalandı' : 'Kalıcı URL'}</span>
-                  </button>
-                </div>
-              </div>
-
-              {/* Sürümler Geçmişi Akordeonu */}
-              {expandedVersionsAppId === app.id && (
-                <div style={{ borderTop: '1px solid var(--border-subtle)', paddingTop: '10px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                  <span style={{ fontSize: '0.78rem', fontWeight: 600, color: 'var(--text-muted)' }}>Sürüm Geçmişi ({app.versions?.length || 0}):</span>
-                  {(!app.versions || app.versions.length === 0) ? (
-                    <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Henüz sürüm kaydı yok.</span>
-                  ) : (
-                    <div style={{ maxHeight: '140px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                      {app.versions.map((ver) => (
-                        <div key={ver.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '4px 8px', background: 'rgba(0,0,0,0.15)', borderRadius: '4px', fontSize: '0.75rem' }}>
-                          <div>
-                            <strong>v{ver.version_name}</strong>
-                            <span style={{ color: 'var(--text-muted)', marginLeft: '6px' }}>(b:{ver.version_code})</span>
-                          </div>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                            <a href={ver.download_url} target="_blank" rel="noreferrer" className="admin-link-subtle" title="İndirme Linki">
-                              <Download size={12} />
-                            </a>
-                            <button
-                              type="button"
-                              onClick={() => handleDeleteVersion(app.id, ver.id, ver.version_name)}
-                              style={{ border: 'none', background: 'transparent', color: '#f87171', cursor: 'pointer', padding: '2px' }}
-                              title="Sürümü Sil"
-                            >
-                              <Trash2 size={12} />
-                            </button>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              )}
-
-              {/* Aksiyon Butonları */}
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid var(--border-subtle)', paddingTop: '10px' }}>
-                <button
-                  type="button"
-                  onClick={() => setExpandedVersionsAppId(expandedVersionsAppId === app.id ? null : app.id)}
-                  className="admin-btn admin-btn-sm"
-                  style={{ fontSize: '0.78rem', display: 'flex', alignItems: 'center', gap: '4px' }}
-                >
-                  <Layers size={13} />
-                  <span>Sürümler ({app.versions?.length || 0})</span>
-                </button>
-
-                <div style={{ display: 'flex', gap: '6px' }}>
-
-                  <button
-                    type="button"
-                    onClick={() => { setSelectedAppForVersion(app); setShowVersionModal(true); }}
-                    className="admin-btn admin-btn-sm admin-btn-primary"
-                    style={{ background: '#10b981', borderColor: '#10b981', display: 'flex', alignItems: 'center', gap: '4px' }}
-                    title="30 saniyede yeni sürüm yayınla"
-                  >
-                    <Rocket size={13} />
-                    <span>+ Sürüm</span>
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => setStudioApp(app)}
-                    className="admin-btn admin-btn-sm admin-btn-view"
-                    title="Görsel Stüdyo'da Düzenle"
-                  >
-                    <Edit2 size={13} />
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => handleDeleteApp(app)}
-                    className="admin-btn admin-btn-sm admin-btn-delete"
-                    title="Uygulamayı Sil"
-                  >
-                    <Trash2 size={13} />
-                  </button>
-                </div>
-              </div>
-            </div>
+              onEditAppModal={(selectedApp) => {
+                setEditingApp(selectedApp);
+                setShowAppModal(true);
+              }}
+              onDeleteApp={handleDeleteApp}
+              onDeleteVersion={handleDeleteVersion}
+            />
           ))}
         </div>
       )}
@@ -536,3 +337,17 @@ export const AppsCMSView: React.FC = () => {
     </div>
   );
 };
+
+function statusTabStyle(isActive: boolean): React.CSSProperties {
+  return {
+    padding: '6px 14px',
+    borderRadius: '20px',
+    fontSize: '0.82rem',
+    fontWeight: isActive ? 700 : 500,
+    border: isActive ? '1px solid var(--accent-primary, #3b82f6)' : '1px solid var(--border-color, #cbd5e1)',
+    background: isActive ? 'var(--accent-primary, #3b82f6)' : 'var(--bg-surface, #f8fafc)',
+    color: isActive ? '#ffffff' : 'var(--text-main, #334155)',
+    cursor: 'pointer',
+    transition: 'all 0.2s ease',
+  };
+}

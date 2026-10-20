@@ -64,6 +64,7 @@ export const AppDetailStudioView: React.FC<AppDetailStudioViewProps> = ({
         category: app.category || 'utility',
         platform: app.platform || 'all',
         display_order: app.display_order ?? app.sort_order ?? 0,
+        status: app.status || (app.is_active === 1 || app.is_active === true ? 'active' : 'in_development'),
         is_active: app.status
           ? (app.status === 'active' ? 1 : 0)
           : (app.is_active === 1 || app.is_active === true ? 1 : 0),

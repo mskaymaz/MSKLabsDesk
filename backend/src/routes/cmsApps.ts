@@ -41,6 +41,7 @@ export async function handleCmsApps(request: Request, env: any): Promise<Respons
 
       return {
         ...app,
+        status: app.status || ((app.is_active === 1 || app.is_active === true) ? 'active' : 'in_development'),
         store_links: storeLinks,
         feature_cards: featureCards,
         latest_version: latestVer ? latestVer.version_name : '1.0.0',
@@ -75,6 +76,8 @@ export async function handleCmsApps(request: Request, env: any): Promise<Respons
     const screenshots = typeof screenshots_json === 'object' ? JSON.stringify(screenshots_json) : (screenshots_json || '[]');
     const cardsSource = feature_cards !== undefined ? feature_cards : feature_cards_json;
     const featureCards = typeof cardsSource === 'object' ? JSON.stringify(cardsSource) : (cardsSource || '[]');
+    const finalStatus = body.status || (body.is_active ? 'active' : 'in_development');
+    const finalIsActive = finalStatus === 'active' ? 1 : 0;
 
     await env.DB.prepare(
       `INSERT INTO apps (
@@ -82,9 +85,9 @@ export async function handleCmsApps(request: Request, env: any): Promise<Respons
         summary_tr, summary_en, summary_ar,
         description_tr, description_en, description_ar,
         features_tr, features_en, features_ar,
-        icon_url, cover_url, category, platform, display_order,
+        icon_url, cover_url, category, platform, display_order, is_active, status,
         store_links_json, screenshots_json, feature_cards_json
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
     ).bind(
       id, app_id.toLowerCase().trim(),
       name_tr, name_en || null, name_ar || null,
@@ -93,6 +96,7 @@ export async function handleCmsApps(request: Request, env: any): Promise<Respons
       features_tr || null, features_en || null, features_ar || null,
       icon_url || null, cover_url || null,
       category || 'utility', platform || 'all', display_order || 0,
+      finalIsActive, finalStatus,
       storeLinks, screenshots, featureCards
     ).run();
 
@@ -167,7 +171,8 @@ export async function handleCmsApps(request: Request, env: any): Promise<Respons
     const finalCategory = category !== undefined ? category : existing.category;
     const finalPlatform = platform !== undefined ? platform : existing.platform;
     const finalDisplayOrder = display_order !== undefined ? Number(display_order) : existing.display_order;
-    const finalIsActive = is_active !== undefined ? (is_active ? 1 : 0) : existing.is_active;
+    const finalStatus = body.status !== undefined ? body.status : (is_active !== undefined ? (is_active ? 'active' : 'in_development') : existing.status || 'in_development');
+    const finalIsActive = finalStatus === 'active' ? 1 : 0;
 
     let finalStoreLinks = existing.store_links_json || '{}';
     if (store_links_json !== undefined) {
@@ -191,7 +196,7 @@ export async function handleCmsApps(request: Request, env: any): Promise<Respons
         summary_tr = ?, summary_en = ?, summary_ar = ?,
         description_tr = ?, description_en = ?, description_ar = ?,
         features_tr = ?, features_en = ?, features_ar = ?,
-        icon_url = ?, cover_url = ?, category = ?, platform = ?, display_order = ?, is_active = ?,
+        icon_url = ?, cover_url = ?, category = ?, platform = ?, display_order = ?, is_active = ?, status = ?,
         store_links_json = ?, screenshots_json = ?, feature_cards_json = ?, updated_at = CURRENT_TIMESTAMP
        WHERE id = ?`
     ).bind(
@@ -200,7 +205,7 @@ export async function handleCmsApps(request: Request, env: any): Promise<Respons
       finalDescTr, finalDescEn, finalDescAr,
       finalFeaturesTr, finalFeaturesEn, finalFeaturesAr,
       finalIcon, finalCover, finalCategory, finalPlatform,
-      finalDisplayOrder, finalIsActive,
+      finalDisplayOrder, finalIsActive, finalStatus,
       finalStoreLinks, finalScreenshots, finalFeatureCards, appId
     ).run();
 

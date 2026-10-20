@@ -1,7 +1,28 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
-## 🟢 Son Güncelleme [20.10.2026 - 11:58] — FAZ 4: TEST ALTYAPISI VE DOKÜMANTASYON SENKRONİZASYONU [*]
+## 🟢 Son Güncelleme [20.10.2026 - 12:25] — UYGULAMA WYSIWYG AÇIKLAMA EDİTÖRÜ VE PLANLANAN PROJELER ENTEGRASYONU [*]
+* **Yapılan İşlem:**
+  1. **TipTap WYSIWYG Açıklama Editörü Entegrasyonu:**
+     - `frontend/src/components/apps/studio/AppStudioTipTapEditor.tsx` (195 satır) oluşturuldu: Ham HTML tag'leri (`<strong>`, `<em>` vb.) yerine doğrudan biçimlendirilmiş görsel metin (WYSIWYG) editörü sağlandı.
+     - `AppStudioDescriptionEditor.tsx` (185 satır) yenilendi: TR, EN ve AR dilleri için sekmeli mimariye geçildi; ham tag basan `AppStudioRichTextToolbar.tsx` silindi.
+     - Kullanıcı artık açıklama metinlerini blog stüdyosundaki konforla, hiçbir kod görmeden düzenleyebilmektedir.
+  2. **Planlama Aşamasındaki Projelerin D1 ve Admin Paneline Entegrasyonu:**
+     - `backend/migrations/0017_add_apps_status_and_planned_projects.sql` oluşturuldu ve local D1'e uygulandı:
+       - `apps` tablosuna `status TEXT DEFAULT 'in_development'` kolonu eklendi.
+       - Mevcut uygulamalar `active` ve `in_development` olarak güncellendi.
+       - `webMSKLabs/apps.html` şablonundaki 3 gerçek proje (`Notes`, `DocuEdit`, `PDF Layout`) tüm 3 dilli orijinal özet ve tanıtım metinleriyle D1'e eklendi.
+     - `backend/src/routes/cmsApps.ts` GET, POST ve PUT uç noktalarında `status` alanı tam uyumlu hale getirildi.
+  3. **Admin Paneli Arayüzü ve Satır Sınırı Refaktörü (AppsCMSView.tsx & AppCMSCard.tsx):**
+     - `AppsCMSView.tsx` ekranına "Tümü", "🚀 Yayında", "🛠️ Yapım Aşamasında", "📋 Planlama Aşamasında" durum filtreleme sekmeleri ve sayaçları eklendi.
+     - Kart bileşeni `frontend/src/components/apps/AppCMSCard.tsx` (285 satır) olarak modülerleştirildi; `AppsCMSView.tsx` satır sayısı 606'dan 353'e düşürülerek kurala tam uyum sağlandı.
+  4. **Doğrulama:**
+     - Frontend Build (`tsc -b && vite build`): PASS (0 hata).
+     - Backend TypeScript (`tsc`): PASS (0 hata).
+     - Otomatik Testler (`npm test`): 57 PASS, 0 FAIL.
+* **Durum:** `DevAdmin` dalında çalışıldı, `main` kesinlikle korundu.
+
+## [20.10.2026 - 11:58] — FAZ 4: TEST ALTYAPISI VE DOKÜMANTASYON SENKRONİZASYONU [*]
 * **Yapılan İşlem:**
   1. **Test Altyapısı ve npm test Entegrasyonu (Claude T1):**
      - `backend/package.json` içerisine TypeScript çalıştırma motoru `tsx` eklendi.

@@ -1,6 +1,21 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [20.10.2026 - 12:25] - Uygulama WYSIWYG Açıklama Editörü ve Planlanan Projeler Entegrasyonu
+- **TipTap WYSIWYG Açıklama Editörü (`AppStudioTipTapEditor.tsx` & `AppStudioDescriptionEditor.tsx`):**
+  - Ham HTML tagları basan eski araç çubuğu silindi; blog stüdyosundaki gibi canlı görsel biçimlendirme (kalın, italik, altı çizili, başlıklar, listeler, bağlantılar) sağlandı.
+  - Açıklama stüdyosuna TR, EN ve AR dil sekmeleri eklendi; metinler tag'siz ve temiz biçimde düzenlenir hale getirildi.
+- **Planlama Aşamasındaki Projelerin D1'e Eklenmesi (`0017_add_apps_status_and_planned_projects.sql`):**
+  - `apps` tablosuna `status` kolonu eklendi.
+  - `webMSKLabs/apps.html` şablonundaki `Notes`, `DocuEdit` ve `PDF Layout` projeleri orijinal 3 dilli içerikleriyle D1'e aktarıldı.
+  - `backend/src/routes/cmsApps.ts` rotası `status` alanını destekleyecek şekilde güncellendi.
+- **Admin Paneli Arayüzü ve Satır Sınırı Refaktörü (`AppsCMSView.tsx` & `AppCMSCard.tsx`):**
+  - Durum sekmeleri (`Tümü`, `Yayında`, `Yapım Aşamasında`, `Planlama Aşamasında`) eklendi.
+  - Kart bileşeni `AppCMSCard.tsx` olarak modülerleştirildi; `AppsCMSView.tsx` satır sayısı 606'dan 353'e düşürüldü.
+- **Doğrulama ve Kural Uyumu:**
+  - Frontend build PASS, backend tsc PASS, 57 entegrasyon testi %100 PASS.
+  - Yalnızca `DevAdmin` dalında çalışıldı, `main` kesinlikle korundu.
+
 ## [20.10.2026 - 12:00] - Faz 4: Test Altyapısı, Test Doğrulamaları ve Dokümantasyon Senkronizasyonu
 - **Test Altyapısı (`backend/package.json`):**
   - Modern TypeScript test motoru `tsx` eklendi; `npm test` script'i bağlandı.
