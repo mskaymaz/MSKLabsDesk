@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import type { BlogPost, BlogChannel } from '../types';
+import type { BlogPost, BlogChannel, PostFormData } from '../types';
 import { api } from '../services/api';
 import { PostFilterBar } from '../components/posts/PostFilterBar';
 import { PostList } from '../components/posts/PostList';
 import { BlogStudioView } from './BlogStudioView';
-import type { PostFormData } from '../components/posts/PostEditorModal';
 import { useTranslation } from '../context/I18nContext';
 
 export const PostsView: React.FC = () => {

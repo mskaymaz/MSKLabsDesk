@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Bell, Mail, Save, Check, Shield, Globe, Sun, Moon } from 'lucide-react';
+import { api } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import { Switch } from '../components/ui/Input';
@@ -19,10 +20,45 @@ export const SettingsView: React.FC = () => {
 
   const isSuperAdmin = user?.role === 'super_admin' || user?.role === 'SUPER_ADMIN' || hasPermission('settings.manage');
 
-  const handleSave = (e: React.FormEvent) => {
+  useEffect(() => {
+    api.getTemplates().then((res) => {
+      const list = res.templates || [];
+      const item = list.find((tItem: any) => tItem.key_name === 'site_settings');
+      if (item && item.meta_json) {
+        try {
+          const cfg = typeof item.meta_json === 'string' ? JSON.parse(item.meta_json) : item.meta_json;
+          if (cfg.siteTitle) setSiteTitle(cfg.siteTitle);
+          if (cfg.siteUrl) setSiteUrl(cfg.siteUrl);
+          if (cfg.senderName) setSenderName(cfg.senderName);
+          if (cfg.senderEmail) setSenderEmail(cfg.senderEmail);
+          if (cfg.turnstileEnabled !== undefined) setTurnstileEnabled(cfg.turnstileEnabled);
+          if (cfg.pushEnabled !== undefined) setPushEnabled(cfg.pushEnabled);
+        } catch {}
+      }
+    }).catch(() => {});
+  }, []);
+
+  const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSaved(true);
-    setTimeout(() => setSaved(false), 2000);
+    try {
+      await api.updateTemplate({
+        key_name: 'site_settings',
+        content_tr: siteTitle,
+        meta_json: {
+          siteTitle,
+          siteUrl,
+          senderName,
+          senderEmail,
+          turnstileEnabled,
+          pushEnabled,
+        },
+        is_active: true,
+      });
+      setSaved(true);
+      setTimeout(() => setSaved(false), 2000);
+    } catch (err: any) {
+      alert(err.message || 'Ayarlar kaydedilemedi.');
+    }
   };
 
   const togglePush = () => {

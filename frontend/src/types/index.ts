@@ -111,6 +111,33 @@ export interface BlogPost {
   created_at?: string;
 }
 
+export interface LayoutBlock {
+  block_id: string;
+  block_type: string;
+  order: number;
+  schema_version: number;
+  payload: Record<string, any>;
+}
+
+export interface PostFormData {
+  channel_id: string;
+  slug: string;
+  title_tr: string;
+  title_en: string;
+  title_ar: string;
+  content_tr: string;
+  content_en: string;
+  content_ar: string;
+  summary_tr: string;
+  summary_en: string;
+  summary_ar: string;
+  cover_image: string;
+  video_url?: string;
+  meta_keywords: string;
+  status: 'draft' | 'published' | 'unpublished' | 'trash';
+  blocks?: LayoutBlock[];
+}
+
 export interface AppVersion {
   id: string;
   app_id: string;

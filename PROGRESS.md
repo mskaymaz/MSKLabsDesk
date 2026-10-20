@@ -1,7 +1,31 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
-## 🟢 Son Güncelleme [20.10.2026 - 11:26] — FAZ 2: SÖZLEŞME, E-POSTA DAYANIKLILIĞI VE WORKERS ASENKRON GÜVENCESİ [*]
+## 🟢 Son Güncelleme [20.10.2026 - 11:46] — FAZ 3: MİMARİ TEMİZLİK, ÖLÜ KOD VE KURAL UYUMU [*]
+* **Yapılan İşlem:**
+  1. **Frontend Ölü Kod Temizliği (Claude F1, F2):**
+     - Kullanılmayan 8 atıl dosya repo genelinden silindi: `ImageModal.tsx`, `TableModal.tsx`, `TranslationAuditModal.tsx`, `AudioPlayer.tsx`, `Toast.tsx`, `CouponModal.tsx`, `PostEditorModal.tsx`, `PostEditorLangFields.tsx`.
+     - Paylaşılan `PostFormData` ve `LayoutBlock` arayüzleri `frontend/src/types/index.ts` altına taşındı; `BlogStudioView`, `PostsView` ve `PostPreviewModal` importları güncellendi.
+  2. **Satır Sınırı Refaktörü (Claude T3 & AGENTS Kural 2):**
+     - `backend/src/routes/adminTts.ts` (659 satır) modüler mimariye bölündü:
+       - `backend/src/utils/ttsShared.ts` (80 satır, tipler ve hız limiti)
+       - `backend/src/routes/publicAudio.ts` (120 satır, HTTP Range 206 akışı)
+       - `backend/src/routes/adminTtsGenerate.ts` (250 satır, üretim ve yeniden üretim)
+       - `backend/src/routes/adminTts.ts` (215 satır, durum ve onay yönetimi)
+     - `frontend/src/components/apps/studio/AppStudioFloatingModal.tsx` (519 satır) içerisindeki başlık/kategori/sıra formu `AppStudioHeaderFields.tsx` (162 satır) olarak ayrıştırıldı ve ana modal 409 satıra düşürüldü.
+  3. **Ayarlar Ekranı Kalıcılığı (Claude F4 - SettingsView.tsx):**
+     - `SettingsView.tsx` ekranı `site_templates` tablosuna (`site_settings` anahtarı) bağlandı; sayfa açılışında veritabanından çekilip kaydetme anında kalıcı olarak D1'e yazılması sağlandı.
+  4. **Bilet Durum Sözlüğü ve ID Çakışma Önlemi (Claude A7, A8, D8):**
+     - `backend/src/utils/statuses.ts` oluşturuldu; `POST /api/admin/tickets/:id/status` endpoint'i whitelist doğrulamasına bağlandı (geçersiz durumlara 400).
+     - `backend/src/services/emailInbound.ts` içerisindeki bilet oluşturma durumu `'open'` yerine standart `'new'` yapıldı.
+     - Destek bilet ID'lerindeki rastgele kısım 6 karaktere genişletildi (`MSK-YYYY-XXXXXX`).
+  5. **Doğrulama:**
+     - Backend TypeScript (`tsc`): PASS (0 hata).
+     - Frontend Vite Build (`tsc -b && vite build`): PASS (0 hata).
+     - Canlı durum doğrulama (`invalid` durum 400, `in_progress` 200) ve ayarlar kalıcılık testi gerçek D1 ile teyit edildi.
+* **Durum:** `DevAdmin` dalında çalışıldı, `main` kesinlikle korundu.
+
+## [20.10.2026 - 11:26] — FAZ 2: SÖZLEŞME, E-POSTA DAYANIKLILIĞI VE WORKERS ASENKRON GÜVENCESİ [*]
 * **Yapılan İşlem:**
   1. **Bülten Gönderim Sözleşmesi (Claude A3, E3 - BroadcastView.tsx, api.ts, adminBroadcast.ts):**
      - Frontend bülten istek parametreleri `{ subject, content_html, category }` standardına geçirildi.

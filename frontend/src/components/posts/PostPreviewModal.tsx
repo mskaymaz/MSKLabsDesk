@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { X, Smartphone, Tablet, Monitor, Sun, Moon } from 'lucide-react';
-import type { PostFormData } from './PostEditorModal';
+import type { PostFormData } from '../../types';
 
 export interface PostPreviewModalProps {
   isOpen: boolean;

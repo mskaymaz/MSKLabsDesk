@@ -143,7 +143,7 @@ export async function handleInboundEmail(
     // D1 Veritabanına Destek Bileti Olarak Kayıt (category = 'email')
     await env.DB.prepare(`
       INSERT INTO messages (id, sender_name, sender_email, subject, content, category, status, urgency, ai_summary, ai_draft, created_at, updated_at)
-      VALUES (?, ?, ?, ?, ?, 'email', 'open', ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+      VALUES (?, ?, ?, ?, ?, 'email', 'new', ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
     `).bind(
       ticketId,
       senderName,

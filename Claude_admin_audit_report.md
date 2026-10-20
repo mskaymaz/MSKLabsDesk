@@ -46,17 +46,17 @@
   - [x] Reklam yönetimi henüz aktif olmadığından `TemplatesView.tsx` ve `api.ts` içindeki 404 veren reklam çağrılarını temizle veya pasife al.
 
 ### 🧹 FAZ 3: MİMARİ TEMİZLİK, ÖLÜ KOD VE KURAL UYUMU (MEDIUM)
-- [ ] **GÖREV 3.1: Frontend Ölü Kod Temizliği (F1, F2)**
-  - [ ] Kullanılmayan modal ve bileşenleri sil: `ImageModal.tsx`, `TableModal.tsx`, `TranslationAuditModal.tsx`, `AudioPlayer.tsx`, `Toast.tsx`, `CouponModal.tsx`.
-  - [ ] `PostEditorModal.tsx` ve `PostEditorLangFields.tsx` dosyalarını sil (`BlogStudioView` kullanılıyor); paylaşılan `PostFormData` tipini `types/index.ts` altına taşı.
-- [ ] **GÖREV 3.2: Satır Sınırı Aşımı Düzeltmeleri (T3 & AGENTS Kural 2)**
-  - [ ] `backend/src/routes/adminTts.ts` (714 satır): `ttsRoutes.ts` ve `ttsShared.ts` olarak modüllere böl (<= 400 satır).
-  - [ ] `frontend/src/components/apps/studio/AppStudioFloatingModal.tsx` (519 satır): Alt parçalara bölerek 450 satır altına çek.
-- [ ] **GÖREV 3.3: Ayarlar Ekranı Kalıcılığı (F4)**
-  - [ ] `SettingsView.tsx` ekranını backend `site_templates` tablosuna (`site_settings` anahtarıyla) bağla.
-- [ ] **GÖREV 3.4: Bilet Durum Sözlüğü ve ID Çakışma Önlemi (A7, A8, D8)**
-  - [ ] `backend/src/utils/statuses.ts` ile durum whitelist'i tanımla; e-posta biletlerinin `new` statüsüyle oluşmasını sağla.
-  - [ ] Destek bilet ID üretimindeki rastgele kısmı 6 karaktere genişlet.
+- [x] **GÖREV 3.1: Frontend Ölü Kod Temizliği (F1, F2)**
+  - [x] Kullanılmayan modal ve bileşenleri sil: `ImageModal.tsx`, `TableModal.tsx`, `TranslationAuditModal.tsx`, `AudioPlayer.tsx`, `Toast.tsx`, `CouponModal.tsx`.
+  - [x] `PostEditorModal.tsx` ve `PostEditorLangFields.tsx` dosyalarını sil (`BlogStudioView` kullanılıyor); paylaşılan `PostFormData` tipini `types/index.ts` altına taşı.
+- [x] **GÖREV 3.2: Satır Sınırı Aşımı Düzeltmeleri (T3 & AGENTS Kural 2)**
+  - [x] `backend/src/routes/adminTts.ts` (714 satır): `ttsRoutes.ts` ve `ttsShared.ts` olarak modüllere böl (<= 400 satır).
+  - [x] `frontend/src/components/apps/studio/AppStudioFloatingModal.tsx` (519 satır): Alt parçalara bölerek 450 satır altına çek.
+- [x] **GÖREV 3.3: Ayarlar Ekranı Kalıcılığı (F4)**
+  - [x] `SettingsView.tsx` ekranını backend `site_templates` tablosuna (`site_settings` anahtarıyla) bağla.
+- [x] **GÖREV 3.4: Bilet Durum Sözlüğü ve ID Çakışma Önlemi (A7, A8, D8)**
+  - [x] `backend/src/utils/statuses.ts` ile durum whitelist'i tanımla; e-posta biletlerinin `new` statüsüyle oluşmasını sağla.
+  - [x] Destek bilet ID üretimindeki rastgele kısmı 6 karaktere genişlet.
 
 ### 🧪 FAZ 4: TEST ALTYAPISI VE DOKÜMANTASYON SENKRONİZASYONU
 - [ ] **GÖREV 4.1: Gerçek D1 Test Altyapısı (T1)**

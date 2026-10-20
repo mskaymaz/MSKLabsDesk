@@ -6,6 +6,7 @@ import { AuthEnv, verifyAuthToken } from '../utils/auth';
 import { EmailEnv, sendEmail } from '../utils/email';
 import { AIEnv, analyzeSupportTicketWithAI, translateTicketToTurkishWithAI } from '../utils/ai';
 import { getTicketReplyEmail } from '../utils/emailTemplates';
+import { isValidTicketStatus, TICKET_STATUSES } from '../utils/statuses';
 
 /**
  * GET /api/admin/tickets — Mesaj Listeleme
@@ -162,8 +163,11 @@ export async function handleAdminUpdateTicketStatus(ticketId: string, request: R
   }
 
   const body = await request.json() as { status?: string };
-  if (!body.status) {
-    return new Response(JSON.stringify({ error: 'Durum bilgisi gereklidir.' }), { status: 400, headers: { 'Content-Type': 'application/json' } });
+  if (!body.status || !isValidTicketStatus(body.status)) {
+    return new Response(
+      JSON.stringify({ error: `Geçersiz durum bilgisi. İzin verilen durumlar: ${TICKET_STATUSES.join(', ')}` }),
+      { status: 400, headers: { 'Content-Type': 'application/json; charset=utf-8' } }
+    );
   }
 
   await env.DB.prepare('UPDATE messages SET status = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?').bind(body.status, ticketId).run();

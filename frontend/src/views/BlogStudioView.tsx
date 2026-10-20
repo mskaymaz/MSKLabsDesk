@@ -11,8 +11,7 @@ import {
   ChevronUp,
   Copy,
 } from 'lucide-react';
-import type { BlogPost, BlogChannel } from '../types';
-import type { PostFormData } from '../components/posts/PostEditorModal';
+import type { BlogPost, BlogChannel, PostFormData } from '../types';
 import { LayoutBuilder } from '../components/posts/LayoutBuilder';
 import { PostPreviewModal } from '../components/posts/PostPreviewModal';
 import { RichTextEditor } from '../components/ui/RichTextEditor';
