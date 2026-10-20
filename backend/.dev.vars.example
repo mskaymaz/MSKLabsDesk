@@ -1,0 +1,6 @@
+# MSKLabsDesk Backend Ortam Değişkenleri ve Gizli Anahtarlar Örneği
+# Bu dosyayı .dev.vars olarak kopyalayıp gerçek değerlerinizi yazın.
+
+ADMIN_JWT_SECRET=ornek_guclu_jwt_gizli_anahtari_2026
+RESEND_API_KEY=re_ornek_resend_api_key
+GEMINI_API_KEY=ornek_gemini_api_key

@@ -12,11 +12,11 @@ const getHeaders = (): HeadersInit => {
 
 export const api = {
   // Auth
-  async login(username: string, password_hash: string) {
+  async login(username: string, password: string) {
     const res = await fetch(`${API_BASE}/admin/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username, password_hash }),
+      body: JSON.stringify({ username, password }),
     });
     if (!res.ok) {
       const err = await res.json().catch(() => ({ error: 'Giriş başarısız.' }));

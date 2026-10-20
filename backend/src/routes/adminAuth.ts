@@ -1,14 +1,15 @@
 /**
  * MSKLabsDesk — Admin Giriş API Endpoint (POST /api/admin/login)
+ * Güvenli PBKDF2 / Salt + Rate Limiting Korumalı
  */
 
-import { AuthEnv, createSessionToken, hashPassword } from '../utils/auth';
+import { AuthEnv, createSessionToken, verifyPassword, hashPasswordWithSalt } from '../utils/auth';
 
 export async function handleAdminLogin(request: Request, env: { DB: D1Database } & AuthEnv): Promise<Response> {
   try {
-    const body = await request.json() as { email?: string; username?: string; password?: string; password_hash?: string };
+    const body = await request.json() as { email?: string; username?: string; password?: string };
     const identifier = (body.email || body.username || '').trim().toLowerCase();
-    const passwordInput = body.password || body.password_hash;
+    const passwordInput = body.password;
 
     if (!identifier || !passwordInput) {
       return new Response(
@@ -17,33 +18,70 @@ export async function handleAdminLogin(request: Request, env: { DB: D1Database }
       );
     }
 
-    // 1. Yönetici Hesabı Yoksa Varsayılan Oluştur (Auto-Seed)
-    const adminCount = await env.DB.prepare('SELECT COUNT(*) as count FROM admins').first<{ count: number }>();
-    if (!adminCount || adminCount.count === 0) {
-      const defaultHash = await hashPassword('MskLabs2026!');
-      await env.DB.prepare(`
-        INSERT INTO admins (id, email, password_hash, name, role, created_at)
-        VALUES ('admin_primary', 'msklabs.org@gmail.com', ?, 'MSK Labs Yönetici', 'superadmin', CURRENT_TIMESTAMP)
-      `).bind(defaultHash).run();
+    // 1. Rate Limiting Denetimi (IP bazlı dakikada azami 5 deneme)
+    const clientIp = request.headers.get('cf-connecting-ip') || request.headers.get('x-forwarded-for') || 'local';
+    const rateKey = `login_rl_${clientIp}`;
+    const now = Math.floor(Date.now() / 1000);
+    const windowSec = 60;
+    const maxAttempts = 5;
+
+    const rlRecord = await env.DB.prepare('SELECT count, reset_at FROM rate_limits WHERE key = ?')
+      .bind(rateKey)
+      .first<{ count: number; reset_at: number }>();
+
+    if (rlRecord && rlRecord.reset_at >= now && rlRecord.count >= maxAttempts) {
+      return new Response(
+        JSON.stringify({ error: 'Çok fazla başarısız deneme. Lütfen 1 dakika sonra tekrar deneyin.' }),
+        { status: 429, headers: { 'Content-Type': 'application/json; charset=utf-8' } }
+      );
     }
 
-    // 2. Hesabı Sorgula
-    const hashedPassword = body.password_hash || await hashPassword(body.password || '');
+    // 2. Hesabı Kullanıcı Adı/E-Posta İle Sorgula
     const admin = await env.DB.prepare(`
-      SELECT id, email, name, role FROM admins
+      SELECT id, email, password_hash, name, role FROM admins
       WHERE (email = ? OR (id = 'admin_primary' AND ? IN ('admin', 'msklabs.org@gmail.com')))
-        AND password_hash = ?
-    `).bind(identifier, identifier, hashedPassword).first<{ id: string; email: string; name: string; role: string }>();
+    `).bind(identifier, identifier).first<{ id: string; email: string; password_hash: string; name: string; role: string }>();
 
-    if (!admin) {
+    const isPasswordValid = admin ? await verifyPassword(passwordInput, admin.password_hash) : false;
+
+    if (!admin || !isPasswordValid) {
+      // Başarısız deneme: Rate limit sayacını artır
+      if (!rlRecord || rlRecord.reset_at < now) {
+        await env.DB.prepare('INSERT OR REPLACE INTO rate_limits (key, count, reset_at) VALUES (?, 1, ?)')
+          .bind(rateKey, now + windowSec)
+          .run();
+      } else {
+        await env.DB.prepare('UPDATE rate_limits SET count = count + 1 WHERE key = ?')
+          .bind(rateKey)
+          .run();
+      }
+
       return new Response(
         JSON.stringify({ error: 'Hatalı e-posta veya şifre.' }),
         { status: 401, headers: { 'Content-Type': 'application/json; charset=utf-8' } }
       );
     }
 
-    // 3. Oturum Token'ı Üret
-    const secret = env.ADMIN_JWT_SECRET || 'msklabs_default_secret_2026';
+    // Başarılı giriş: Başarısız deneme sayacını sıfırla
+    await env.DB.prepare('DELETE FROM rate_limits WHERE key = ?').bind(rateKey).run().catch(() => {});
+
+    // 3. Parola Eski SHA-256 İse PBKDF2'ye Otomatik Yükselt (Re-hash on login)
+    if (!admin.password_hash.startsWith('pbkdf2$')) {
+      const newPbkdf2Hash = await hashPasswordWithSalt(passwordInput);
+      await env.DB.prepare('UPDATE admins SET password_hash = ? WHERE id = ?')
+        .bind(newPbkdf2Hash, admin.id)
+        .run()
+        .catch(() => {});
+    }
+
+    // 4. Oturum Token'ı Üret
+    const secret = env.ADMIN_JWT_SECRET;
+    if (!secret) {
+      return new Response(
+        JSON.stringify({ error: 'Sunucu yapılandırma hatası: ADMIN_JWT_SECRET tanımlanmamış.' }),
+        { status: 500, headers: { 'Content-Type': 'application/json; charset=utf-8' } }
+      );
+    }
     const token = await createSessionToken(admin, secret);
 
     return new Response(
@@ -69,7 +107,7 @@ export async function handleAdminLogin(request: Request, env: { DB: D1Database }
   } catch (err: any) {
     console.error('[ADMIN LOGIN ERROR]', err);
     return new Response(
-      JSON.stringify({ error: 'Sunucu hatası oluştu.' }),
+      JSON.stringify({ error: 'Giriş işlemi sırasında sunucu hatası oluştu.' }),
       { status: 500, headers: { 'Content-Type': 'application/json; charset=utf-8' } }
     );
   }

@@ -12,17 +12,7 @@ export interface CommentPayload {
   content: string;
 }
 
-/**
- * Tablo şemasını otomatik tamamlama (Doğrulama kolonları yoksa ekler)
- */
-async function ensureCommentColumns(db: D1Database): Promise<void> {
-  try {
-    await db.prepare('ALTER TABLE comments ADD COLUMN verification_token TEXT').run();
-  } catch (_) {}
-  try {
-    await db.prepare('ALTER TABLE comments ADD COLUMN verified_at DATETIME').run();
-  } catch (_) {}
-}
+
 
 /**
  * POST /api/comments — Yeni Yorum Gönderme (Double Opt-In E-Posta Onayı ile)
@@ -74,8 +64,6 @@ export async function handleCommentSubmission(request: Request, env: { DB: D1Dat
         { status: 400, headers: { 'Content-Type': 'application/json; charset=utf-8' } }
       );
     }
-
-    await ensureCommentColumns(env.DB);
 
     const commentId = `cmt_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
     const verificationToken = `vt_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`;
@@ -202,8 +190,6 @@ export async function handleVerifyComment(request: Request, env: { DB: D1Databas
   if (!token) {
     return renderHtmlResponse('⚠️', 'Geçersiz Bağlantı', 'Doğrulama belirteci (token) bulunamadı. Lütfen e-postanızdaki bağlantıyı eksiksiz açtığınızdan emin olun.', false);
   }
-
-  await ensureCommentColumns(env.DB);
 
   if (action === 'cancel') {
     await env.DB.prepare("UPDATE comments SET status = 'cancelled' WHERE verification_token = ?").bind(token).run();

@@ -1,7 +1,47 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
-## 🟢 Son Güncelleme [19.10.2026 - 17:00] — PLATFORM, KATEGORİ VE DURUM ETİKETLERİNİN TR/EN/AR YERELLEŞTİRİLMESİ [*]
+## 🟢 Son Güncelleme [20.10.2026 - 11:00] — UYGULAMA YAYIN DURUMU (IS_ACTIVE) VE HAYDİ NAMAZA DÜZELTMESİ [*]
+* **Yapılan İşlem:**
+  1. **Kök Neden Tespiti:**
+     - SQLite D1 veritabanında boolean alanlar tamsayı (`1`/`0`) olarak saklanmaktadır.
+     - `AppDetailStudioView.tsx` içerisinde kayıt sırasında `app.is_active === true` kontrolü yapıldığından (`1 === true` ifadesi `false` ürettiği için), kullanıcı düzenleme yapıp kaydettiğinde `is_active` veritabanına `0` (pasif) olarak yazılıyordu.
+     - `AppsCMSView.tsx` listesindeki yayında rozeti ise `app.is_active !== false` kontrolü kullandığı için (`0 !== false` ifadesi `true` olduğundan) admin tarafında yanıltıcı biçimde yeşil (yayında) görünüyordu.
+  2. **Uygulanan Düzeltmeler:**
+     - `frontend/src/types/index.ts`: `AppItem.is_active` ve `SiteTemplate.is_active` tipleri `boolean | number` olarak güncellendi.
+     - `AppDetailStudioView.tsx`: Kayıt anındaki durum kontrolü `(app.is_active === 1 || app.is_active === true ? 1 : 0)` olarak düzeltildi.
+     - `AppsCMSView.tsx`: Rozet yayında kontrolü `(app.is_active === 1 || app.is_active === true)` standardına çekildi.
+     - D1 veritabanında `haydinamaza`, `date_counter`, `rekatsay` uygulamalarının `is_active = 1` değeri ve kalın metin (`<strong>Haydi Namaza</strong>`) korundu.
+  3. **Doğrulama:**
+     - `frontend` `tsc -b && vite build` PASS (0 hata).
+     - `GET /api/v1/apps` ve `GET /api/v1/apps/haydinamaza` gerçek API yanıtlarıyla doğrulandı.
+     - Web vitrini (`http://localhost:5174/apps.html`) 200 OK ile doğrulandı.
+* **Durum:** `DevAdmin` dalında çalışıldı, `main` kesinlikle korundu.
+
+## [20.10.2026 - 10:42] — FAZ 1: KRİTİK GÜVENLİK, D1 MİGRATION 0016 VE ROUTER DÜZELTMELERİ [*]
+* **Yapılan İşlem:**
+  1. **Router Öncelik Düzeltmesi (Claude A1 - backend/src/index.ts):**
+     - Satır 54'te bulunan genel path.startsWith('/api/v1/') yönlendiricisi, tüm /api/v1/admin/*, medya ve TTS rotalarını gölgeliyordu. Bu kural admin rotalarının altına taşındı.
+     - POST /api/v1/admin/media/upload isteğinin 405 Method Not Allowed yerine doğrudan kimlik doğrulamasına (401/201) ulaştığı gerçek testle doğrulandı.
+  2. **D1 Medya Şeması ve Altyapı Tabloları (Claude D1, D2, D5 - 0016_media_assets_and_admin_infra.sql):**
+     - 0016 migration dosyası oluşturularak media_assets tablosu r2_key, size_bytes, public_url, sha256 kolonlarıyla modernize edildi.
+     - rate_limits, audit_logs, post_audio_assets (post_id TEXT) ve post_revisions tabloları D1'e eklendi.
+     - adminMedia.ts, adminTts.ts içindeki çalışma zamanı CREATE TABLE DDL kodları ve comments.ts içindeki her istekte çalışan gereksiz ALTER TABLE kodları temizlendi.
+  3. **Auth Secret & HMAC-SHA256 İmza Bütünlüğü (Claude S1, S2 - auth.ts):**
+     - Varsayılan 'msklabs_default_secret_2026' sabiti kaldırıldı; WebCrypto crypto.subtle HMAC-SHA256 imzası ve timingSafeEqual sabit zamanlı karşılaştırma standardı getirildi.
+     - cmsPosts.ts, cmsChannels.ts, cmsApps.ts, cmsTemplates.ts rotalarına env.ADMIN_JWT_SECRET aktarılarak 401 riski ortadan kaldırıldı.
+  4. **Kimlik Doğrulama Sertleştirme (Claude S3, S4, S5 - adminAuth.ts, LoginView.tsx, api.ts):**
+     - İstemciden tuzsuz SHA-256 hash gönderimi kaldırıldı (Pass-the-hash engellendi); sunucu tarafında 100.000 iterasyonlu WebCrypto PBKDF2 + salt standardına geçildi.
+     - Giriş esnasında eski hash'ler otomatik olarak PBKDF2'ye yükseltildi.
+     - Kod içerisindeki açık parola ve auto-seed kaldırıldı.
+     - IP bazlı dakikada azami 5 başarısız deneme sınırı (HTTP 429) rate_limits tablosu üzerinden başarıyla doğrulandı.
+  5. **Doğrulama:**
+     - backend TypeScript: PASS (0 hata).
+     - frontend Vite Build: PASS (0 hata).
+     - Canlı login, PBKDF2 yükseltmesi, JWT HMAC-SHA256 token doğrulaması ve 5+1 kaba kuvvet (429) testi başarıyla geçti.
+* **Durum:** DevAdmin dalında çalışıldı, main kesinlikle korundu.
+
+## [19.10.2026 - 17:00] — PLATFORM, KATEGORİ VE DURUM ETİKETLERİNİN TR/EN/AR YERELLEŞTİRİLMESİ [*]
 * **Yapılan İşlem:**
   1. **Kök Neden:**
      - Görsel Stüdyo (`AppStudioHeaderSection.tsx`) ve web şablonunda (`app.html`), başlık yanındaki rozetlerde veritabanından gelen ham değerler (`desktop`, `utility`) doğrudan basılıyordu ve dile bağlı çeviri yapılmıyordu.

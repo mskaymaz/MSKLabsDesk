@@ -303,9 +303,9 @@ export const AppsCMSView: React.FC = () => {
                             width: '8px',
                             height: '8px',
                             borderRadius: '50%',
-                            background: app.is_active !== false ? '#10b981' : '#94a3b8',
+                            background: (app.is_active === 1 || app.is_active === true) ? '#10b981' : '#94a3b8',
                           }}
-                          title={app.is_active !== false ? 'Yayında' : 'Taslak'}
+                          title={(app.is_active === 1 || app.is_active === true) ? 'Yayında' : 'Taslak'}
                         />
                       </div>
                       <span className="admin-link-subtle" style={{ fontSize: '0.8rem' }}>slug: {app.app_id}</span>

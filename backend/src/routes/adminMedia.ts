@@ -70,14 +70,6 @@ async function checkUploadRateLimit(env: MediaEnv, identifier: string): Promise<
   const now = Math.floor(Date.now() / 1000);
 
   try {
-    await env.DB.prepare(`
-      CREATE TABLE IF NOT EXISTS rate_limits (
-        key TEXT PRIMARY KEY,
-        count INTEGER NOT NULL,
-        reset_at INTEGER NOT NULL
-      )
-    `).run().catch(() => {});
-
     const rateKey = `upload_rl_${identifier}`;
     const record = await env.DB.prepare('SELECT count, reset_at FROM rate_limits WHERE key = ?').bind(rateKey).first<{ count: number; reset_at: number }>();
 
@@ -95,34 +87,6 @@ async function checkUploadRateLimit(env: MediaEnv, identifier: string): Promise<
   } catch {
     return true;
   }
-}
-
-/**
- * Tablo ve Audit Hazırlığı
- */
-async function ensureTables(env: MediaEnv): Promise<void> {
-  await env.DB.prepare(`
-    CREATE TABLE IF NOT EXISTS media_assets (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      filename TEXT NOT NULL,
-      r2_key TEXT NOT NULL UNIQUE,
-      mime_type TEXT NOT NULL,
-      size_bytes INTEGER NOT NULL,
-      public_url TEXT NOT NULL,
-      sha256 TEXT,
-      created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-    )
-  `).run().catch(() => {});
-
-  await env.DB.prepare(`
-    CREATE TABLE IF NOT EXISTS audit_logs (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      action TEXT NOT NULL,
-      actor TEXT NOT NULL,
-      details TEXT,
-      created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-    )
-  `).run().catch(() => {});
 }
 
 /**
@@ -207,8 +171,6 @@ export async function handleAdminMediaUpload(request: Request, env: MediaEnv): P
         { status: 400, headers: { 'Content-Type': 'application/json; charset=utf-8' } }
       );
     }
-
-    await ensureTables(env);
 
     // 8. SHA-256 Hash Hesaplama ve Çakışma Denetimi
     const hashBuffer = await crypto.subtle.digest('SHA-256', arrayBuffer);
@@ -317,8 +279,6 @@ export async function handleAdminMediaDelete(keyParam: string, request: Request,
         { status: 400, headers: { 'Content-Type': 'application/json; charset=utf-8' } }
       );
     }
-
-    await ensureTables(env);
 
     // 2. D1 Metadata Kontrolü
     const existing = await env.DB.prepare('SELECT r2_key FROM media_assets WHERE r2_key = ?').bind(key).first();

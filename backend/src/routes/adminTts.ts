@@ -40,14 +40,6 @@ async function checkTTSRateLimit(env: TTSEnv, identifier: string): Promise<boole
   const now = Math.floor(Date.now() / 1000);
 
   try {
-    await env.DB.prepare(`
-      CREATE TABLE IF NOT EXISTS rate_limits (
-        key TEXT PRIMARY KEY,
-        count INTEGER NOT NULL,
-        reset_at INTEGER NOT NULL
-      )
-    `).run().catch(() => {});
-
     const rateKey = `tts_rl_${identifier}`;
     const record = await env.DB.prepare('SELECT count, reset_at FROM rate_limits WHERE key = ?').bind(rateKey).first<{ count: number; reset_at: number }>();
 
@@ -65,41 +57,6 @@ async function checkTTSRateLimit(env: TTSEnv, identifier: string): Promise<boole
   } catch {
     return true;
   }
-}
-
-/**
- * DB Tablo ve Audit Log Hazırlığı
- */
-async function ensureTables(env: TTSEnv): Promise<void> {
-  await env.DB.prepare(`
-    CREATE TABLE IF NOT EXISTS post_audio_assets (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      post_id INTEGER NOT NULL,
-      language TEXT NOT NULL CHECK(language IN ('TR', 'EN', 'AR')),
-      article_version INTEGER NOT NULL DEFAULT 1,
-      audio_version INTEGER NOT NULL DEFAULT 1,
-      provider TEXT NOT NULL DEFAULT 'DEFAULT',
-      model TEXT NOT NULL DEFAULT 'DEFAULT',
-      r2_object_key TEXT NOT NULL UNIQUE,
-      file_size INTEGER NOT NULL DEFAULT 0,
-      duration_seconds INTEGER NOT NULL DEFAULT 0,
-      status TEXT DEFAULT 'DRAFT' CHECK(status IN ('GENERATING', 'DRAFT', 'APPROVED', 'FAILED', 'STALE')),
-      validation_result_json TEXT,
-      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-      updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-      UNIQUE(post_id, language, audio_version)
-    )
-  `).run().catch(() => {});
-
-  await env.DB.prepare(`
-    CREATE TABLE IF NOT EXISTS audit_logs (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      action TEXT NOT NULL,
-      actor TEXT NOT NULL,
-      details TEXT,
-      created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-    )
-  `).run().catch(() => {});
 }
 
 /**
@@ -176,8 +133,6 @@ export async function handleAdminTTSGenerate(request: Request, env: TTSEnv): Pro
         { status: 400, headers: { 'Content-Type': 'application/json; charset=utf-8' } }
       );
     }
-
-    await ensureTables(env);
 
     // 5. Aktif Üretim Kontrolü (409 Conflict)
     const activeGen = await env.DB.prepare(
@@ -335,8 +290,6 @@ export async function handleAdminTTSRegenerate(request: Request, env: TTSEnv): P
       );
     }
 
-    await ensureTables(env);
-
     // 5. Eski Sürümleri STALE Yap
     await env.DB.prepare(
       "UPDATE post_audio_assets SET status = 'STALE', updated_at = CURRENT_TIMESTAMP WHERE post_id = ? AND language = ?"
@@ -431,8 +384,6 @@ export async function handleAdminTTSStatus(postIdParam: string, request: Request
       );
     }
 
-    await ensureTables(env);
-
     const { results } = await env.DB.prepare(
       'SELECT * FROM post_audio_assets WHERE post_id = ? ORDER BY audio_version DESC'
     ).bind(postId).all();
@@ -486,8 +437,6 @@ export async function handleAdminTTSApprove(request: Request, env: TTSEnv): Prom
         { status: 400, headers: { 'Content-Type': 'application/json; charset=utf-8' } }
       );
     }
-
-    await ensureTables(env);
 
     const asset = await env.DB.prepare('SELECT id, post_id, language FROM post_audio_assets WHERE id = ?').bind(audioId).first<{ id: number; post_id: number; language: string }>();
     if (!asset) {
@@ -555,8 +504,6 @@ export async function handleAdminTTSUnpublish(request: Request, env: TTSEnv): Pr
       );
     }
 
-    await ensureTables(env);
-
     const asset = await env.DB.prepare('SELECT id, post_id, language FROM post_audio_assets WHERE id = ?').bind(audioId).first<{ id: number; post_id: number; language: string }>();
     if (!asset) {
       return new Response(
@@ -598,7 +545,6 @@ export async function handleAdminTTSUnpublish(request: Request, env: TTSEnv): Pr
  */
 export async function handleTTSProductionFailure(env: TTSEnv, audioId: number, errorMessage: string): Promise<void> {
   try {
-    await ensureTables(env);
     const safeError = JSON.stringify({ status: 'FAILED', error: errorMessage.replace(/key=[^&]+/gi, 'key=***') });
     await env.DB.prepare(
       "UPDATE post_audio_assets SET status = 'FAILED', validation_result_json = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?"
@@ -618,7 +564,6 @@ export async function handlePublicAudioDelivery(
   params: { postId?: number; language?: string; audioId?: number }
 ): Promise<Response> {
   try {
-    await ensureTables(env);
 
     let asset: { id: number; post_id: number; language: string; r2_object_key: string; status: string; file_size: number } | null = null;
 

@@ -6,7 +6,7 @@ export async function handleCmsApps(request: Request, env: any): Promise<Respons
   const path = url.pathname;
 
   // Güvenli Yönetici Doğrulaması
-  const user = await verifyAuthToken(request);
+  const user = await verifyAuthToken(request, env.ADMIN_JWT_SECRET);
   if (!user) {
     return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401 });
   }

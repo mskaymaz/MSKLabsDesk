@@ -180,7 +180,7 @@ export interface AppItem {
   status?: 'active' | 'in_development' | 'planned';
   sort_order?: number;
   display_order?: number;
-  is_active?: boolean;
+  is_active?: boolean | number;
   guide_url?: string;
   store_links?: AppStoreLinks;
   store_links_json?: string;
@@ -200,6 +200,6 @@ export interface SiteTemplate {
   content_en?: string;
   content_ar?: string;
   meta_json?: string;
-  is_active?: boolean;
+  is_active?: boolean | number;
 }
 

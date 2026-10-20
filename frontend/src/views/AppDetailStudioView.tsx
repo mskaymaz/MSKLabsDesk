@@ -17,7 +17,10 @@ export const AppDetailStudioView: React.FC<AppDetailStudioViewProps> = ({
   onBack,
   onSaveSuccess,
 }) => {
-  const [app, setApp] = useState<AppItem>({ ...initialApp });
+  const [app, setApp] = useState<AppItem>(() => ({
+    ...initialApp,
+    status: initialApp.status || ((initialApp.is_active === 1 || initialApp.is_active === true) ? 'active' : 'in_development'),
+  }));
   const [canvasLang, setCanvasLang] = useState<CanvasLang>('tr');
   const [studioTheme, setStudioTheme] = useState<'light' | 'dark'>('light');
   const [activeSection, setActiveSection] = useState<StudioSectionType | null>(null);
@@ -61,7 +64,9 @@ export const AppDetailStudioView: React.FC<AppDetailStudioViewProps> = ({
         category: app.category || 'utility',
         platform: app.platform || 'all',
         display_order: app.display_order ?? app.sort_order ?? 0,
-        is_active: app.status === 'active' || app.is_active === true ? 1 : 0,
+        is_active: app.status
+          ? (app.status === 'active' ? 1 : 0)
+          : (app.is_active === 1 || app.is_active === true ? 1 : 0),
         store_links_json: JSON.stringify(app.store_links || {}),
         feature_cards_json: JSON.stringify(app.feature_cards || []),
       };
