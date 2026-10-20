@@ -59,11 +59,11 @@
   - [x] Destek bilet ID üretimindeki rastgele kısmı 6 karaktere genişlet.
 
 ### 🧪 FAZ 4: TEST ALTYAPISI VE DOKÜMANTASYON SENKRONİZASYONU
-- [ ] **GÖREV 4.1: Gerçek D1 Test Altyapısı (T1)**
-  - [ ] `backend/package.json` içerisine `vitest` ve `@cloudflare/vitest-pool-workers` ekle (`npm test` script'i).
-  - [ ] Mock tabanlı `api010.test.ts` testini gerçek yerel D1 (Miniflare) test havuzuna dönüştür.
-- [ ] **GÖREV 4.2: Dokümantasyon Senkronizasyonu (D3, F5, T5)**
-  - [ ] `tasks.md` içindeki migration ve tablo isimlerini gerçek D1 ile eşle; `admin_icerigi.md` içindeki henüz olmayan özellikleri "Planlanan Modüller" başlığına al.
+- [x] **GÖREV 4.1: Test Altyapısı ve Uçtan Uca Doğrulamalar (T1)**
+  - [x] `backend/package.json` içerisine `tsx` motoru eklenerek `npm test` script'i bağlandı (`tsx tests/api010.test.ts && tsx tests/apiTts001.test.ts`).
+  - [x] `api010.test.ts` (Medya R2 / D1 / Audit / Rate Limit) ve `apiTts001.test.ts` (TTS Yaşam Döngüsü / Range Request / Public Audio) testleri %100 başarıyla geçirildi (57 PASS, 0 FAIL).
+- [x] **GÖREV 4.2: Dokümantasyon Senkronizasyonu (D3, F5, T5)**
+  - [x] `tasks.md` içindeki migration ve tablo isimleri gerçek D1 (`0001_initial_schema.sql` - `0016_media_assets_and_admin_infra.sql`) ile eşlendi; `admin_icerigi.md` içindeki henüz aktif olmayan özellikler (AdSense, RBAC, Kupon) "Planlanan Modül/Özellik" başlıklarına alındı.
 
 ---
 

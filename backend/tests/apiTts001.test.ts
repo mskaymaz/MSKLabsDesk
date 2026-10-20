@@ -164,6 +164,19 @@ class MockD1Database {
 
 class MockR2Bucket {
   objects = new Map<string, ArrayBuffer>();
+
+  async get(key: string) {
+    const data = this.objects.get(key);
+    if (!data) return null;
+    return {
+      arrayBuffer: async () => data,
+    };
+  }
+
+  async put(key: string, value: ArrayBuffer) {
+    this.objects.set(key, value);
+    return null;
+  }
 }
 
 async function runApiTts001Tests() {

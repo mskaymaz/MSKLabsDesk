@@ -1,7 +1,22 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
-## 🟢 Son Güncelleme [20.10.2026 - 11:46] — FAZ 3: MİMARİ TEMİZLİK, ÖLÜ KOD VE KURAL UYUMU [*]
+## 🟢 Son Güncelleme [20.10.2026 - 11:58] — FAZ 4: TEST ALTYAPISI VE DOKÜMANTASYON SENKRONİZASYONU [*]
+* **Yapılan İşlem:**
+  1. **Test Altyapısı ve npm test Entegrasyonu (Claude T1):**
+     - `backend/package.json` içerisine TypeScript çalıştırma motoru `tsx` eklendi.
+     - `"test": "tsx tests/api010.test.ts && tsx tests/apiTts001.test.ts"` betiği tanımlandı.
+  2. **Testlerin Çalıştırılması ve Tam Başarı (57/57 PASS):**
+     - `api010.test.ts`: R2 medya yükleme, Magic Bytes, boyut kontrolü, D1 `media_assets` kaydı, SHA-256 deduplication, medya silme, audit log ve rate limit senaryoları doğrulandı (19 PASS, 0 FAIL).
+     - `apiTts001.test.ts`: TTS yaşam döngüsü (DRAFT -> GENERATING -> APPROVED -> STALE), R2 Mock get(), HTTP Range 206 akışı, 416 sınır kontrolü, audit logları ve idempotency senaryoları doğrulandı (38 PASS, 0 FAIL).
+     - Toplam 57 otomatik entegrasyon testi sıfır hatayla geçti.
+  3. **Dokümantasyon Senkronizasyonu (Claude D3, F5, T5):**
+     - `tasks.md`: Gerçek D1 migration dosyaları (`0001_initial_schema.sql` - `0016_media_assets_and_admin_infra.sql`) ve tablo yapısı açıkça belgelendi.
+     - `admin_icerigi.md`: Henüz canlıda olmayan AdSense yerleşimi, detaylı RBAC ve kupon tanımlama özellikleri "Planlanan Modül/Özellik" olarak işaretlendi.
+     - `Claude_admin_audit_report.md`: Tüm kontrol listesi (Faz 1, 2, 3, 4) `[x]` olarak eksiksiz tamamlandı.
+* **Durum:** `DevAdmin` dalında çalışıldı, `main` kesinlikle korundu.
+
+## [20.10.2026 - 11:46] — FAZ 3: MİMARİ TEMİZLİK, ÖLÜ KOD VE KURAL UYUMU [*]
 * **Yapılan İşlem:**
   1. **Frontend Ölü Kod Temizliği (Claude F1, F2):**
      - Kullanılmayan 8 atıl dosya repo genelinden silindi: `ImageModal.tsx`, `TableModal.tsx`, `TranslationAuditModal.tsx`, `AudioPlayer.tsx`, `Toast.tsx`, `CouponModal.tsx`, `PostEditorModal.tsx`, `PostEditorLangFields.tsx`.

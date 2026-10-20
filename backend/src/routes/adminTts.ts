@@ -77,7 +77,7 @@ export async function handleAdminTTSStatus(postIdParam: string, request: Request
     });
 
     return new Response(
-      JSON.stringify({ success: true, postId, assets }),
+      JSON.stringify({ success: true, postId, assets, data: { audioAssets: assets } }),
       { status: 200, headers: { 'Content-Type': 'application/json; charset=utf-8' } }
     );
 

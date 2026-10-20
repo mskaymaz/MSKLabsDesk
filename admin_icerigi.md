@@ -37,7 +37,7 @@ Ziyaretçilerden gelen mesajları, şikayetleri, iş birliği tekliflerini ve do
 * **Neler Yapabilir / Hangi Ayarları Değiştirir?**
   * [ ] **Yapay Zeka Taslağını Kullan:** AI'ın hazırladığı öneri yanıt metnini tek tıkla cevap kutusuna aktarıp düzenleyerek kullanıcının e-postasına doğrudan cevap gönderme.
   * [ ] **Durum Güncelleme:** Talebi *"İşlemde"*, *"Çözüldü"* veya *"Reddedildi"* olarak işaretleyip arşivleme.
-  * [ ] **Kupon & Hediye Tanımlama:** Değerli geri bildirim veya hata bildirimi yapan kullanıcıya tek tıkla indirim kuponu veya teşekkür rozeti tanımlayıp e-posta ile hediye etme.
+  * [ ] **(Planlanan Özellik) Kupon & Hediye Tanımlama:** Değerli geri bildirim veya hata bildirimi yapan kullanıcıya indirim kuponu veya teşekkür rozeti tanımlayıp e-posta ile hediye etme.
 
 ---
 
@@ -114,8 +114,8 @@ MSK Labs bünyesinde geliştirilen Android, iOS ve Web uygulamalarının tanıt�
 
 ---
 
-## 8. Reklam Yerleşimi & AdSense Ayarları
-Sitedeki reklam alanlarının ve gelir ortaklığı yerleşimlerinin görsel olarak yönetildiği reklam masasıdır.
+## 8. Reklam Yerleşimi & AdSense Ayarları (Planlanan Modül)
+> **Not:** Reklam yönetim motoru ve D1 ad_settings entegrasyonu yol haritasında planlanan modüller arasındadır. Arayüzde bilgilendirme paneli sunulmaktadır.
 
 * **Ekranda Ne Görür?**
   * [ ] **Reklam Yuvaları:** Üst Banner, Makale İçi, Yan Panel, Alt Bant yuvalarının listesi.
@@ -201,8 +201,8 @@ Panelde kimin ne yaptığının şeffafça kaydedildiği güvenlik hafızasıdı
 
 ---
 
-## 15. Yönetici Ekip & Rol Yetkilendirme (RBAC)
-Paneli kullanacak personelin erişim sınırlarını belirlediğiniz yetkilendirme tablosudur.
+## 15. Yönetici Ekip & Rol Yetkilendirme (RBAC - Planlanan Modül)
+> **Not:** Detaylı çok kullanıcılı rol tabanlı erişim kontrolü (RBAC) planlanan modüller arasındadır. Mevcut sürümde PBKDF2 + WebCrypto HMAC token tabanlı yönetici oturumu esastır.
 
 * **Hangi Roller Vardır ve Ne Yapabilirler?**
   * [ ] **Süper Admin (SUPER_ADMIN):** Tüm yetkilere sahiptir. Reklam, sistem ayarları ve personel yönetimi yapabilir.

@@ -171,7 +171,18 @@
 
 ### 2. DATA ARCHITECTURE, MIGRATIONS & DATABASE
 
-#### DATA-001 — Initial D1 Database Migration (`0001_devadmin_initial_schema.sql`)
+> [!NOTE]
+> **Gerçek D1 Migration & Tablo Eşlemesi (20.10.2026 Senkronizasyonu):**
+> Repo içerisindeki `backend/migrations/` yapısı aşağıdaki kesin dosya ve tabloları içerir:
+> - `0001_initial_schema.sql`: `messages`, `message_events`, `replies`, `comments`, `subscribers`, `subscriber_preferences`, `email_queue`, `coupons`, `admins`, `broadcasts`.
+> - `0002_cms_schema.sql`: `blog_channels`, `blog_posts`, `apps`, `app_versions`, `site_templates`, `media_assets`.
+> - `0003_comment_verification.sql` - `0005_vlog_and_video_url.sql`: Yorum, bilet ve vlog eklentileri.
+> - `0006_seed_blog_posts.sql`: Blog tohum verileri.
+> - `0007_apps_store_and_features.sql` - `0015_restore_haydinamaza_full_data.sql`: Uygulama vitrini, kartları ve mağaza entegrasyonu.
+> - `0016_media_assets_and_admin_infra.sql`: Modern `media_assets` (`r2_key`, `size_bytes`, `public_url`, `sha256`), `rate_limits`, `audit_logs`, `post_audio_assets`, `post_revisions`.
+> *(Tasarım notlarında adı geçen `push_subscriptions`, `ad_settings` tabloları planlanan şema uzantılarıdır; genel sistem ayarları `site_templates` içinde `site_settings` anahtarıyla saklanmaktadır).*
+
+#### DATA-001 — Initial D1 Database Migration (`0001_initial_schema.sql` / eski tasarım referansı `0001_devadmin_initial_schema.sql`)
 - **2. Amaç:** Destek biletleri, bilet tarihçesi, yanıtlar, blog yorumları, e-bülten aboneleri, bülten tercihleri, e-posta gönderim kuyruğu, kuponlar ve admin doğrulaması için çekirdek D1 SQLite veritabanı şemasını kurgulamak.
 - **3. Kapsam:** `migrations/0001_devadmin_initial_schema.sql` dosyası; `messages`, `message_events`, `replies`, `comments`, `subscribers`, `subscriber_preferences`, `email_queue`, `coupons`, `admins`, `broadcasts` tabloları.
 - **4. Teknik Gereksinimler:** SQLite D1 motoruna uyumlu strict veri tipleri (TEXT, INTEGER, REAL, BLOB), `PRAGMA foreign_keys = ON` uyumluluğu ve ISO8601 tarih standartları.

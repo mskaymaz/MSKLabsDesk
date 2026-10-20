@@ -1,6 +1,18 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [20.10.2026 - 12:00] - Faz 4: Test Altyapısı, Test Doğrulamaları ve Dokümantasyon Senkronizasyonu
+- **Test Altyapısı (`backend/package.json`):**
+  - Modern TypeScript test motoru `tsx` eklendi; `npm test` script'i bağlandı.
+- **Entegrasyon Testleri Doğrulaması (`tests/api010.test.ts` & `tests/apiTts001.test.ts`):**
+  - R2 Medya Yükleme/Silme/Deduplication/Audit/Rate Limit testleri (19 PASS).
+  - TTS Yaşam Döngüsü/Range 206 Akışı/Audit/Idempotency testleri (38 PASS).
+  - Toplam 57 test sıfır hatayla geçti.
+- **Dokümantasyon Senkronizasyonu (`tasks.md`, `admin_icerigi.md`, `Claude_admin_audit_report.md`):**
+  - `tasks.md`: Gerçek D1 migration listesi (`0001` - `0016`) ile şema belgelendi.
+  - `admin_icerigi.md`: Canlıda henüz olmayan AdSense, RBAC ve Kupon özellikleri "Planlanan Modül/Özellik" olarak etiketlendi.
+  - `Claude_admin_audit_report.md`: Tüm fazlar ve görev maddeleri tamamlandı (`[x]`).
+
 ## [19.10.2026 - 17:00] - Platform, Kategori ve Durum Etiketlerinin TR/EN/AR Yerelleştirilmesi
 - **Merkezi Yerelleştirme Yardımcısı (`frontend/src/utils/appLocalization.ts`):**
   - Platform (`desktop`, `windows`, `mobile`, `android`, `ios`, `all`, `web`), kategori (`utility`, `islamic`, `productivity`, `education`, `lifestyle`, `multimedia`, `ai`, `system`) ve yayın durumu (`active`, `in_development`, `planned`) değerlerini TR, EN ve AR dillerinde standart rozetlere dönüştüren `getLocalizedPlatform`, `getLocalizedCategory` ve `getLocalizedStatus` fonksiyonları eklendi.
