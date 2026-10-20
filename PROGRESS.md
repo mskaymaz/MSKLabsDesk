@@ -1,7 +1,13 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
-## 🟢 Son Güncelleme [20.10.2026 - 12:25] — UYGULAMA WYSIWYG AÇIKLAMA EDİTÖRÜ VE PLANLANAN PROJELER ENTEGRASYONU [*]
+## 🟢 Son Güncelleme [20.10.2026 - 12:30] — WEB VİTRİNİ PLANLAMA ÖNCESİ REKLAM ALANI YERLEŞİMİ [*]
+* **Yapılan İşlem:**
+  - `webMSKLabs/apps.html`: "Yapım Aşamasındaki Uygulamalar" ile "Planlama Aşamasındaki Projeler" kategorileri arasına, üstteki gibi simetrik kategoriler arası reklam alanı (`<div class="infeed-ad-container"><div class="ad-placeholder">Kategoriler Arası Reklam Alanı (In-Feed Banner 728x90)</div></div>`) yerleştirildi.
+  - Değişiklik `webMSKLabs` repo'sunda `DevAdmin` dalına commit edildi (`6c512ff`).
+* **Durum:** `DevAdmin` dalında çalışıldı, `main` kesinlikle korundu.
+
+## [20.10.2026 - 12:25] — UYGULAMA WYSIWYG AÇIKLAMA EDİTÖRÜ VE PLANLANAN PROJELER ENTEGRASYONU [*]
 * **Yapılan İşlem:**
   1. **TipTap WYSIWYG Açıklama Editörü Entegrasyonu:**
      - `frontend/src/components/apps/studio/AppStudioTipTapEditor.tsx` (195 satır) oluşturuldu: Ham HTML tag'leri (`<strong>`, `<em>` vb.) yerine doğrudan biçimlendirilmiş görsel metin (WYSIWYG) editörü sağlandı.
