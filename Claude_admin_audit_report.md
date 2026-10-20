@@ -32,18 +32,18 @@
   - [x] `adminAuth.ts` içindeki hardcoded `'MskLabs2026!'` ve auto-seed kodunu kaldır; `rate_limits` tablosuyla login'e dakikada azami 5 deneme sınırı koy.
 
 ### ⚡ FAZ 2: SÖZLEŞME VE İLETİŞİM UYUMSUZLUKLARI (HIGH)
-- [ ] **GÖREV 2.1: Bülten Gönderim Sözleşmesi (A3, E3)**
-  - [ ] `frontend/src/services/api.ts` ve `BroadcastView.tsx` payload alanlarını `{ subject, content_html, category }` olarak backend ile senkronize et.
-  - [ ] `backend/src/routes/adminBroadcast.ts`: Döngü içi subrequest kotasını aşmamak için kayıtları `email_queue` tablosuna yaz; cron handler altyapısını hazırla.
-- [ ] **GÖREV 2.2: E-Posta Gönderim Dayanıklılığı (E1, S6, E7)**
-  - [ ] `backend/src/utils/email.ts`: Resend `from` adresini `@gmail.com` yerine `destek@msklabs.org` yap; hata durumunda sessizce simülasyona düşüp `success: true` dönme açığını gider (`success: false` dön).
-  - [ ] HTML e-posta şablonlarında (`adminTickets.ts`, `support.ts`, `comments.ts`) kullanıcı girdilerini `escapeHtml()` süzgecinden geçir.
-  - [ ] Atıl durumdaki `emailTemplates.ts` dosyasını aktif kullanıma al.
-- [ ] **GÖREV 2.3: Workers Asenkron Süreç Güvencesi (E2)**
-  - [ ] `backend/src/index.ts` üzerinden `ctx: ExecutionContext` nesnesini handler'lara geçir.
-  - [ ] Yanıt sonrası çalışan AI analizi ve e-posta gönderimlerini `ctx.waitUntil(...)` içine alarak Workers kesilmelerini önle.
-- [ ] **GÖREV 2.4: Reklam (Ads) Uç Noktası Kararı (A4)**
-  - [ ] Reklam yönetimi henüz aktif olmadığından `TemplatesView.tsx` ve `api.ts` içindeki 404 veren reklam çağrılarını temizle veya pasife al.
+- [x] **GÖREV 2.1: Bülten Gönderim Sözleşmesi (A3, E3)**
+  - [x] `frontend/src/services/api.ts` ve `BroadcastView.tsx` payload alanlarını `{ subject, content_html, category }` olarak backend ile senkronize et.
+  - [x] `backend/src/routes/adminBroadcast.ts`: Döngü içi subrequest kotasını aşmamak için kayıtları `email_queue` tablosuna yaz; cron handler altyapısını hazırla.
+- [x] **GÖREV 2.2: E-Posta Gönderim Dayanıklılığı (E1, S6, E7)**
+  - [x] `backend/src/utils/email.ts`: Resend `from` adresini `@gmail.com` yerine `destek@msklabs.org` yap; hata durumunda sessizce simülasyona düşüp `success: true` dönme açığını gider (`success: false` dön).
+  - [x] HTML e-posta şablonlarında (`adminTickets.ts`, `support.ts`, `comments.ts`) kullanıcı girdilerini `escapeHtml()` süzgecinden geçir.
+  - [x] Atıl durumdaki `emailTemplates.ts` dosyasını aktif kullanıma al.
+- [x] **GÖREV 2.3: Workers Asenkron Süreç Güvencesi (E2)**
+  - [x] `backend/src/index.ts` üzerinden `ctx: ExecutionContext` nesnesini handler'lara geçir.
+  - [x] Yanıt sonrası çalışan AI analizi ve e-posta gönderimlerini `ctx.waitUntil(...)` içine alarak Workers kesilmelerini önle.
+- [x] **GÖREV 2.4: Reklam (Ads) Uç Noktası Kararı (A4)**
+  - [x] Reklam yönetimi henüz aktif olmadığından `TemplatesView.tsx` ve `api.ts` içindeki 404 veren reklam çağrılarını temizle veya pasife al.
 
 ### 🧹 FAZ 3: MİMARİ TEMİZLİK, ÖLÜ KOD VE KURAL UYUMU (MEDIUM)
 - [ ] **GÖREV 3.1: Frontend Ölü Kod Temizliği (F1, F2)**

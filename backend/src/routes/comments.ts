@@ -2,7 +2,7 @@
  * MSKLabsDesk — Blog Yorum API Endpoints (POST & GET /api/comments, GET /api/comments/verify)
  */
 
-import { EmailEnv, sendEmail } from '../utils/email';
+import { EmailEnv, sendEmail, escapeHtml } from '../utils/email';
 
 export interface CommentPayload {
   post_type: 'bizce' | 'aniltilar' | 'guncel';
@@ -17,7 +17,7 @@ export interface CommentPayload {
 /**
  * POST /api/comments — Yeni Yorum Gönderme (Double Opt-In E-Posta Onayı ile)
  */
-export async function handleCommentSubmission(request: Request, env: { DB: D1Database } & EmailEnv): Promise<Response> {
+export async function handleCommentSubmission(request: Request, env: { DB: D1Database } & EmailEnv, ctx?: ExecutionContext): Promise<Response> {
   try {
     const raw = await request.json() as any;
 
@@ -97,12 +97,12 @@ export async function handleCommentSubmission(request: Request, env: { DB: D1Dat
           <h2 style="color: #0284c7; margin: 0; font-size: 1.4rem;">MSK Labs</h2>
           <p style="color: #64748b; font-size: 0.88rem; margin: 4px 0 0 0;">Blog Yorumu E-Posta Onay Bildirimi</p>
         </div>
-        <p style="font-size: 0.95rem; margin: 0 0 12px 0;">Merhaba <strong>${authorName}</strong>,</p>
+        <p style="font-size: 0.95rem; margin: 0 0 12px 0;">Merhaba <strong>${escapeHtml(authorName)}</strong>,</p>
         <p style="font-size: 0.92rem; color: #334155; line-height: 1.5; margin: 0 0 16px 0;">
           MSK Labs blog makalesine göndermiş olduğunuz yorum başarıyla sisteme ulaştı. Yorumunuzun editörlerimiz tarafından incelenip sitede yayınlanabilmesi için lütfen e-posta adresinizi doğrulayınız:
         </p>
         <div style="background: #f8fafc; border-left: 4px solid #0284c7; padding: 12px 16px; margin: 0 0 20px 0; border-radius: 6px; font-size: 0.88rem; color: #1e293b; font-style: italic;">
-          "${content.replace(/</g, '&lt;').replace(/>/g, '&gt;')}"
+          "${escapeHtml(content)}"
         </div>
         <div style="text-align: center; margin: 24px 0 16px 0;">
           <a href="${confirmUrl}" style="background: #0284c7; color: #ffffff; text-decoration: none; padding: 12px 26px; font-size: 0.95rem; font-weight: 700; border-radius: 8px; display: inline-block;">
@@ -121,13 +121,19 @@ export async function handleCommentSubmission(request: Request, env: { DB: D1Dat
       </div>
     `;
 
-    await sendEmail({
+    const emailPromise = sendEmail({
       to: authorEmail,
       toName: authorName,
       subject: '[MSK Labs] Blog Yorumunuz İçin E-Posta Onayı',
       html: emailHtml,
       emailType: 'verification',
-    }, env);
+    }, env).catch(err => console.error('Yorum onay e-posta hatası:', err));
+
+    if (ctx) {
+      ctx.waitUntil(emailPromise);
+    } else {
+      await emailPromise;
+    }
 
     console.log(`[COMMENT VERIFICATION] Token: ${verificationToken} | Confirm: ${confirmUrl}`);
 

@@ -1,7 +1,29 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
-## 🟢 Son Güncelleme [20.10.2026 - 11:00] — UYGULAMA YAYIN DURUMU (IS_ACTIVE) VE HAYDİ NAMAZA DÜZELTMESİ [*]
+## 🟢 Son Güncelleme [20.10.2026 - 11:26] — FAZ 2: SÖZLEŞME, E-POSTA DAYANIKLILIĞI VE WORKERS ASENKRON GÜVENCESİ [*]
+* **Yapılan İşlem:**
+  1. **Bülten Gönderim Sözleşmesi (Claude A3, E3 - BroadcastView.tsx, api.ts, adminBroadcast.ts):**
+     - Frontend bülten istek parametreleri `{ subject, content_html, category }` standardına geçirildi.
+     - `adminBroadcast.ts` uç noktası hem yeni standardı hem de eski alanları (`title`, `content`, `target_preference`) defansif olarak destekleyecek şekilde güncellendi.
+     - Döngü içi subrequest sınırlarını aşmamak için D1 `batch()` ile toplu kuyruğa alma (`email_queue`) sağlandı; ilk 10 alıcıya gönderim `ctx.waitUntil(...)` arka planına alındı.
+  2. **E-Posta Gönderim Dayanıklılığı ve XSS Önleme (Claude E1, S6, E7 - email.ts, emailTemplates.ts):**
+     - `email.ts` içine `escapeHtml()` güvenlik fonksiyonu eklendi; e-posta parametreleri (isim, bilet no, mesaj) sanitize edildi.
+     - Resend gönderici adresi `destek@msklabs.org` standardına bağlandı; API hata verdiğinde sessiz simülasyon yerine gerçek `success: false` ve hata detayı dönmesi sağlandı.
+     - Atıl durumdaki çok dilli `emailTemplates.ts` (`getTicketConfirmationEmail`, `getTicketReplyEmail`) dosyası `support.ts` ve `adminTickets.ts` üzerinde aktif kullanıma alındı.
+  3. **Workers Asenkron Süreç Güvencesi (Claude E2 - index.ts, support.ts, adminTickets.ts, subscribe.ts, comments.ts):**
+     - Cloudflare Workers `ctx: ExecutionContext` nesnesi tüm ilgili handler'lara geçirildi.
+     - Yanıt dönüşünden sonra çalışan Gemini AI destek bileti analizi ve e-posta gönderimleri `ctx.waitUntil(...)` içine alınarak çalışma zamanı kesilmeleri engellendi.
+     - `index.ts` içerisine `email_queue` bekleyenlerini işleyen cron `scheduled()` handler'ı eklendi.
+  4. **Reklam (Ads) Uç Noktası Kararı (Claude A4 - TemplatesView.tsx, api.ts):**
+     - 404 veren atıl reklam istekleri temizlendi; `api.getAds()` sessizce boş liste dönecek şekilde pasife alındı ve `TemplatesView.tsx` arayüzünde bilgilendirme notu eklendi.
+  5. **Doğrulama:**
+     - Backend TypeScript (`tsc`): PASS (0 hata).
+     - Frontend Vite Build (`tsc -b && vite build`): PASS (0 hata).
+     - Canlı `POST /api/support`, `POST /api/admin/broadcast` ve `POST /api/admin/tickets/:id/reply` API istekleri gerçek D1 ve e-posta simülasyonuyla doğrulandı.
+* **Durum:** `DevAdmin` dalında çalışıldı, `main` kesinlikle korundu.
+
+## [20.10.2026 - 11:00] — UYGULAMA YAYIN DURUMU (IS_ACTIVE) VE HAYDİ NAMAZA DÜZELTMESİ [*]
 * **Yapılan İşlem:**
   1. **Kök Neden Tespiti:**
      - SQLite D1 veritabanında boolean alanlar tamsayı (`1`/`0`) olarak saklanmaktadır.

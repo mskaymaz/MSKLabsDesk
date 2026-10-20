@@ -26,9 +26,9 @@ export const BroadcastView: React.FC = () => {
 
     try {
       await api.broadcastNewsletter({
-        title,
-        content: contentHtml,
-        target_preference: targetPreference === 'ALL' ? undefined : targetPreference,
+        subject: title,
+        content_html: contentHtml,
+        category: targetPreference === 'ALL' ? 'all' : targetPreference,
       });
       clearInterval(interval);
       setProgress(100);

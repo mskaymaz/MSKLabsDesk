@@ -1,14 +1,18 @@
+import { escapeHtml } from './email';
+
 export type Language = 'tr' | 'en' | 'ar';
 
 export function getTicketConfirmationEmail(ticketNo: string, name: string, lang: Language = 'tr'): { subject: string; html: string } {
   const isRtl = lang === 'ar';
   const dir = isRtl ? 'rtl' : 'ltr';
   const textAlign = isRtl ? 'right' : 'left';
+  const safeName = escapeHtml(name);
+  const safeTicketNo = escapeHtml(ticketNo);
 
   const subjects: Record<Language, string> = {
-    tr: `[${ticketNo}] Destek Talebiniz Alındı — MSK Labs`,
-    en: `[${ticketNo}] Support Ticket Received — MSK Labs`,
-    ar: `[${ticketNo}] تم استلام طلب الدعم — MSK Labs`,
+    tr: `[${safeTicketNo}] Destek Talebiniz Alındı — MSK Labs`,
+    en: `[${safeTicketNo}] Support Ticket Received — MSK Labs`,
+    ar: `[${safeTicketNo}] تم استلام طلب الدعم — MSK Labs`,
   };
 
   const titles: Record<Language, string> = {
@@ -18,9 +22,9 @@ export function getTicketConfirmationEmail(ticketNo: string, name: string, lang:
   };
 
   const greetings: Record<Language, string> = {
-    tr: `Merhaba ${name || 'Değerli Ziyaretçimiz'},`,
-    en: `Hello ${name || 'Valued User'},`,
-    ar: `مرحباً ${name || 'عزيزنا المستخدم'}،`,
+    tr: `Merhaba ${safeName || 'Değerli Ziyaretçimiz'},`,
+    en: `Hello ${safeName || 'Valued User'},`,
+    ar: `مرحباً ${safeName || 'عزيزنا المستخدم'}،`,
   };
 
   const bodies: Record<Language, string> = {
@@ -59,7 +63,7 @@ export function getTicketConfirmationEmail(ticketNo: string, name: string, lang:
     <body>
       <div class="card">
         <div class="header">
-          <div class="badge">${ticketLabel[lang]}: ${ticketNo}</div>
+          <div class="badge">${ticketLabel[lang]}: ${safeTicketNo}</div>
           <div class="title">${titles[lang]}</div>
         </div>
         <div class="content">
@@ -81,23 +85,26 @@ export function getTicketReplyEmail(ticketNo: string, replyMessage: string, name
   const isRtl = lang === 'ar';
   const dir = isRtl ? 'rtl' : 'ltr';
   const textAlign = isRtl ? 'right' : 'left';
+  const safeName = escapeHtml(name);
+  const safeTicketNo = escapeHtml(ticketNo);
+  const safeReplyMessage = escapeHtml(replyMessage).replace(/\n/g, '<br />');
 
   const subjects: Record<Language, string> = {
-    tr: `[${ticketNo}] Destek Talebiniz Yanıtlandı — MSK Labs`,
-    en: `[${ticketNo}] Response to Your Support Ticket — MSK Labs`,
-    ar: `[${ticketNo}] تم الرد على طلب الدعم — MSK Labs`,
+    tr: `[${safeTicketNo}] Destek Talebiniz Yanıtlandı — MSK Labs`,
+    en: `[${safeTicketNo}] Response to Your Support Ticket — MSK Labs`,
+    ar: `[${safeTicketNo}] تم الرد على طلب الدعم — MSK Labs`,
   };
 
   const greetings: Record<Language, string> = {
-    tr: `Merhaba ${name || 'Değerli Kullanıcımız'},`,
-    en: `Hello ${name || 'Valued User'},`,
-    ar: `مرحباً ${name || 'عزيزنا المستخدم'}،`,
+    tr: `Merhaba ${safeName || 'Değerli Kullanıcımız'},`,
+    en: `Hello ${safeName || 'Valued User'},`,
+    ar: `مرحباً ${safeName || 'عزيزنا المستخدم'}،`,
   };
 
   const introTexts: Record<Language, string> = {
-    tr: `${ticketNo} numaralı destek talebiniz yöneticimiz tarafından yanıtlanmıştır:`,
-    en: `Your support ticket #${ticketNo} has been answered by our admin team:`,
-    ar: `تم الرد على طلب الدعم رقم ${ticketNo} من قبل فريق الإدارة:`,
+    tr: `${safeTicketNo} numaralı destek talebiniz yöneticimiz tarafından yanıtlanmıştır:`,
+    en: `Your support ticket #${safeTicketNo} has been answered by our admin team:`,
+    ar: `تم الرد على طلب الدعم رقم ${safeTicketNo} من قبل فريق الإدارة:`,
   };
 
   const footerTexts: Record<Language, string> = {
@@ -114,7 +121,7 @@ export function getTicketReplyEmail(ticketNo: string, replyMessage: string, name
       <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #0b0f19; color: #f3f4f6; margin: 0; padding: 20px; direction: ${dir}; text-align: ${textAlign}; }
         .card { max-width: 600px; margin: 0 auto; background: #121826; border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 32px; }
-        .reply-box { background: rgba(99, 102, 241, 0.1); border-left: ${isRtl ? 'none' : '4px solid #6366f1'}; border-right: ${isRtl ? '4px solid #6366f1' : 'none'}; padding: 16px; border-radius: 8px; margin: 20px 0; color: #f3f4f6; font-size: 15px; line-height: 1.6; white-space: pre-wrap; }
+        .reply-box { background: rgba(99, 102, 241, 0.1); border-left: ${isRtl ? 'none' : '4px solid #6366f1'}; border-right: ${isRtl ? '4px solid #6366f1' : 'none'}; padding: 16px; border-radius: 8px; margin: 20px 0; color: #f3f4f6; font-size: 15px; line-height: 1.6; }
         .footer { border-top: 1px solid rgba(255,255,255,0.08); margin-top: 32px; padding-top: 16px; font-size: 13px; color: #6b7280; text-align: center; }
       </style>
     </head>
@@ -122,7 +129,7 @@ export function getTicketReplyEmail(ticketNo: string, replyMessage: string, name
       <div class="card">
         <p>${greetings[lang]}</p>
         <p>${introTexts[lang]}</p>
-        <div class="reply-box">${replyMessage}</div>
+        <div class="reply-box">${safeReplyMessage}</div>
         <div class="footer">
           <p>© ${new Date().getFullYear()} MSK Labs — ${footerTexts[lang]}</p>
         </div>

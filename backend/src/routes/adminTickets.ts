@@ -5,6 +5,7 @@
 import { AuthEnv, verifyAuthToken } from '../utils/auth';
 import { EmailEnv, sendEmail } from '../utils/email';
 import { AIEnv, analyzeSupportTicketWithAI, translateTicketToTurkishWithAI } from '../utils/ai';
+import { getTicketReplyEmail } from '../utils/emailTemplates';
 
 /**
  * GET /api/admin/tickets — Mesaj Listeleme
@@ -90,7 +91,7 @@ export async function handleAdminGetTicketDetail(ticketId: string, request: Requ
 /**
  * POST /api/admin/tickets/:id/reply — Cevap Gönder
  */
-export async function handleAdminReplyTicket(ticketId: string, request: Request, env: { DB: D1Database } & AuthEnv & EmailEnv): Promise<Response> {
+export async function handleAdminReplyTicket(ticketId: string, request: Request, env: { DB: D1Database } & AuthEnv & EmailEnv, ctx?: ExecutionContext): Promise<Response> {
   const admin = await verifyAuthToken(request, env.ADMIN_JWT_SECRET);
   if (!admin) {
     return new Response(JSON.stringify({ error: 'Yetkisiz erişim.' }), { status: 401, headers: { 'Content-Type': 'application/json' } });
@@ -132,24 +133,18 @@ export async function handleAdminReplyTicket(ticketId: string, request: Request,
   `).bind(ticketId, `${admin.name} yanıt iletti.`).run();
 
   // 4. Kullanıcıya Yanıt E-Postası Gönder
-  const emailHtml = `
-    <div style="font-family: Arial, sans-serif; color: #333; line-height: 1.6;">
-      <h2>Merhaba ${ticket.sender_name},</h2>
-      <p><strong>[${ticketId}]</strong> numaralı destek talebinize yanıt verildi:</p>
-      <div style="background: #f8fafc; border-left: 4px solid #0284c7; padding: 12px 16px; margin: 16px 0; border-radius: 4px;">
-        ${replyContent.replace(/\n/g, '<br />')}
-      </div>
-      <p>Bizi tercih ettiğiniz için teşekkür ederiz,<br /><strong>MSK Labs Ekibi</strong></p>
-    </div>
-  `;
 
-  sendEmail({
+  const emailData = getTicketReplyEmail(ticketId, replyContent, ticket.sender_name, 'tr');
+  const emailPromise = sendEmail({
     to: ticket.sender_email,
     toName: ticket.sender_name,
-    subject: `Re: [${ticketId}] ${ticket.subject}`,
-    html: emailHtml,
+    subject: emailData.subject,
+    html: emailData.html,
     emailType: 'reply'
   }, env).catch(err => console.error('Yanıt e-posta hatası:', err));
+  if (ctx) {
+    ctx.waitUntil(emailPromise);
+  }
 
   return new Response(JSON.stringify({ success: true, message: 'Yanıt kullanıcıya iletildi ve bilet çözüldü olarak işaretlendi.' }), {
     status: 200,

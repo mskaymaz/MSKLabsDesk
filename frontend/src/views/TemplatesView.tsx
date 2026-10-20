@@ -47,7 +47,7 @@ export const TemplatesView: React.FC = () => {
         });
       }
 
-      const adsList = adsRes.data?.ads || adsRes.ads || [];
+      const adsList = (adsRes as any)?.data?.ads || (adsRes as any)?.ads || [];
       setAds(adsList);
     } catch (err) {
       console.error(err);
@@ -184,7 +184,12 @@ export const TemplatesView: React.FC = () => {
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-              {ads.map((ad) => (
+              {ads.length === 0 ? (
+                <p style={{ color: 'var(--text-muted)', fontSize: '0.88rem', margin: 0 }}>
+                  Google AdSense reklam alanları şu anda sistem genelinde pasife alınmıştır (Reklamsız Deneyim).
+                </p>
+              ) : (
+                ads.map((ad) => (
                 <div
                   key={ad.id || ad.slot_key}
                   style={{
@@ -306,7 +311,8 @@ export const TemplatesView: React.FC = () => {
                     </button>
                   </div>
                 </div>
-              ))}
+                ))
+              )}
             </div>
           </div>
         </div>

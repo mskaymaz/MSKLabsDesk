@@ -17,7 +17,7 @@ import { handleCmsPosts } from './routes/cmsPosts';
 import { handleCmsApps } from './routes/cmsApps';
 import { handleCmsTemplates } from './routes/cmsTemplates';
 import { handleCmsPublic } from './routes/cmsPublic';
-import { EmailEnv } from './utils/email';
+import { EmailEnv, sendEmail } from './utils/email';
 import { AIEnv } from './utils/ai';
 import { AuthEnv } from './utils/auth';
 import { handleInboundEmail } from './services/emailInbound';
@@ -46,7 +46,7 @@ export default {
 
     // 1. Kamusal & Destek API Base Endpoint'leri
     if ((path === '/api/comments' || path === '/api/v1/comments') && request.method === 'POST') {
-      response = await handleCommentSubmission(request, env);
+      response = await handleCommentSubmission(request, env, ctx);
     } else if ((path === '/api/comments/verify' || path === '/api/v1/comments/verify') && request.method === 'GET') {
       response = await handleVerifyComment(request, env);
     } else if ((path === '/api/comments' || path === '/api/v1/comments') && request.method === 'GET') {
@@ -56,9 +56,9 @@ export default {
         headers: { 'Content-Type': 'application/json; charset=utf-8' },
       });
     } else if (path === '/api/support' && request.method === 'POST') {
-      response = await handleSupportSubmission(request, env);
+      response = await handleSupportSubmission(request, env, ctx);
     } else if (path === '/api/subscribe' && request.method === 'POST') {
-      response = await handleSubscribe(request, env);
+      response = await handleSubscribe(request, env, ctx);
     } else if (path === '/api/unsubscribe' && request.method === 'POST') {
       response = await handleUnsubscribe(request, env);
     } 
@@ -84,7 +84,7 @@ export default {
       response = await handleAdminAnalyzeTicket(ticketId, request, env);
     } else if ((path.startsWith('/api/admin/tickets/') || path.startsWith('/api/v1/admin/tickets/')) && path.endsWith('/reply') && request.method === 'POST') {
       const ticketId = path.split('/')[4];
-      response = await handleAdminReplyTicket(ticketId, request, env);
+      response = await handleAdminReplyTicket(ticketId, request, env, ctx);
     } else if ((path.startsWith('/api/admin/tickets/') || path.startsWith('/api/v1/admin/tickets/')) && path.endsWith('/translate') && request.method === 'POST') {
       const ticketId = path.split('/')[4];
       response = await handleAdminTranslateTicket(ticketId, request, env);
@@ -102,7 +102,7 @@ export default {
     } else if ((path === '/api/admin/subscribers' || path === '/api/v1/admin/subscribers') && request.method === 'GET') {
       response = await handleAdminGetSubscribers(request, env);
     } else if ((path === '/api/admin/broadcast' || path === '/api/v1/admin/broadcast') && request.method === 'POST') {
-      response = await handleAdminBroadcastNewsletter(request, env);
+      response = await handleAdminBroadcastNewsletter(request, env, ctx);
     } else if ((path === '/api/v1/admin/media/upload' || path === '/api/admin/media/upload') && request.method === 'POST') {
       response = await handleAdminMediaUpload(request, env);
     } else if ((path.startsWith('/api/v1/admin/media/') || path.startsWith('/api/admin/media/')) && request.method === 'DELETE') {
@@ -158,5 +158,37 @@ export default {
 
   async email(message: any, env: Env, ctx: ExecutionContext): Promise<void> {
     await handleInboundEmail(message, env, ctx);
+  },
+
+  async scheduled(controller: any, env: Env, ctx: ExecutionContext): Promise<void> {
+    try {
+      const { results } = await env.DB.prepare(
+        "SELECT * FROM email_queue WHERE status = 'pending' ORDER BY scheduled_at ASC LIMIT 25"
+      ).all<any>();
+
+      if (results && results.length > 0) {
+        for (const item of results) {
+          try {
+            const res = await sendEmail({
+              to: item.recipient_email,
+              toName: item.recipient_name,
+              subject: item.subject,
+              html: item.body_html,
+              emailType: item.email_type,
+            }, env);
+
+            if (res.success) {
+              await env.DB.prepare("UPDATE email_queue SET status = 'sent', sent_at = CURRENT_TIMESTAMP WHERE id = ?").bind(item.id).run();
+            } else {
+              await env.DB.prepare("UPDATE email_queue SET attempts = attempts + 1, error_message = ? WHERE id = ?").bind(res.error || 'Send failed', item.id).run();
+            }
+          } catch (itemErr: any) {
+            await env.DB.prepare("UPDATE email_queue SET attempts = attempts + 1, error_message = ? WHERE id = ?").bind(itemErr.message || 'Error', item.id).run();
+          }
+        }
+      }
+    } catch (queueErr) {
+      console.error('[CRON EMAIL QUEUE ERROR]', queueErr);
+    }
   },
 };

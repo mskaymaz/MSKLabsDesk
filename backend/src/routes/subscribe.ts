@@ -18,7 +18,7 @@ export interface UnsubscribePayload {
 /**
  * POST /api/subscribe — Bülten Abone Olma
  */
-export async function handleSubscribe(request: Request, env: { DB: D1Database } & EmailEnv): Promise<Response> {
+export async function handleSubscribe(request: Request, env: { DB: D1Database } & EmailEnv, ctx?: ExecutionContext): Promise<Response> {
   try {
     const payload = await request.json() as SubscribePayload;
 
@@ -84,12 +84,15 @@ export async function handleSubscribe(request: Request, env: { DB: D1Database } 
       </div>
     `;
 
-    sendEmail({
+    const emailPromise = sendEmail({
       to: email,
       subject: emailSubject,
       html: emailHtml,
       emailType: 'verification'
     }, env).catch(err => console.error('Bülten e-posta hatası:', err));
+    if (ctx) {
+      ctx.waitUntil(emailPromise);
+    }
 
     return new Response(
       JSON.stringify({

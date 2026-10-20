@@ -30,18 +30,27 @@ export async function handleAdminGetSubscribers(request: Request, env: { DB: D1D
 /**
  * POST /api/admin/broadcast — Segmentasyon Bazlı Toplu Bülten Gönderimi
  */
-export async function handleAdminBroadcastNewsletter(request: Request, env: { DB: D1Database } & AuthEnv & EmailEnv): Promise<Response> {
+export async function handleAdminBroadcastNewsletter(
+  request: Request,
+  env: { DB: D1Database } & AuthEnv & EmailEnv,
+  ctx?: ExecutionContext
+): Promise<Response> {
   const admin = await verifyAuthToken(request, env.ADMIN_JWT_SECRET);
   if (!admin) {
     return new Response(JSON.stringify({ error: 'Yetkisiz erişim.' }), { status: 401, headers: { 'Content-Type': 'application/json' } });
   }
 
-  const body = await request.json() as { category?: string; subject?: string; content_html?: string };
-  if (!body.subject || !body.content_html) {
-    return new Response(JSON.stringify({ error: 'Konu ve HTML içeriği gereklidir.' }), { status: 400, headers: { 'Content-Type': 'application/json' } });
-  }
+  const rawBody = await request.json() as any;
+  const subject = (rawBody.subject || rawBody.title || '').trim();
+  const content_html = (rawBody.content_html || rawBody.content || '').trim();
+  const targetCategory = rawBody.category || rawBody.target_preference || 'all';
 
-  const targetCategory = body.category || 'all';
+  if (!subject || !content_html) {
+    return new Response(JSON.stringify({ error: 'Konu (subject) ve HTML içeriği (content_html) gereklidir.' }), {
+      status: 400,
+      headers: { 'Content-Type': 'application/json; charset=utf-8' }
+    });
+  }
 
   // 1. İlgili Kategoriye Abone Olmuş Aktif Kullanıcıları Sorgula
   let query = `
@@ -57,29 +66,48 @@ export async function handleAdminBroadcastNewsletter(request: Request, env: { DB
 
   const stmt = env.DB.prepare(query);
   const { results } = targetCategory !== 'all' ? await stmt.bind(targetCategory).all() : await stmt.all();
-
   const targetList = (results || []).map(r => r.email as string);
 
-  // 2. E-Posta Kuyruğuna Ekle
-  for (const email of targetList) {
-    await env.DB.prepare(`
-      INSERT INTO email_queue (recipient_email, subject, body_html, email_type, status, scheduled_at)
-      VALUES (?, ?, ?, 'newsletter', 'pending', CURRENT_TIMESTAMP)
-    `).bind(email, body.subject, body.content_html).run();
+  // 2. D1 Batch ile E-Posta Kuyruğuna Tek Seferde Ekle
+  if (targetList.length > 0) {
+    const batchStmts = targetList.map((email) =>
+      env.DB.prepare(`
+        INSERT INTO email_queue (recipient_email, subject, body_html, email_type, status, scheduled_at)
+        VALUES (?, ?, ?, 'newsletter', 'pending', CURRENT_TIMESTAMP)
+      `).bind(email, subject, content_html)
+    );
+    await env.DB.batch(batchStmts);
+  }
 
-    // Arka plan simülasyon gönderimi
-    sendEmail({
-      to: email,
-      subject: body.subject,
-      html: body.content_html,
-      emailType: 'newsletter'
-    }, env).catch(err => console.error('Bülten iletim hatası:', err));
+  // 3. Arka Plan İletimini Başlat (Workers subrequest kotasını aşmamak için ilk 10 alıcı)
+  if (targetList.length > 0 && ctx) {
+    const sendBatchPromise = (async () => {
+      const immediateList = targetList.slice(0, 10);
+      for (const email of immediateList) {
+        try {
+          const res = await sendEmail({
+            to: email,
+            subject,
+            html: content_html,
+            emailType: 'newsletter'
+          }, env);
+          if (res.success) {
+            await env.DB.prepare(
+              "UPDATE email_queue SET status = 'sent', sent_at = CURRENT_TIMESTAMP WHERE recipient_email = ? AND subject = ? AND status = 'pending'"
+            ).bind(email, subject).run();
+          }
+        } catch (err) {
+          console.error(`Bülten iletim hatası (${email}):`, err);
+        }
+      }
+    })();
+    ctx.waitUntil(sendBatchPromise);
   }
 
   return new Response(JSON.stringify({
     success: true,
     recipient_count: targetList.length,
-    message: `${targetList.length} aboneye bülten gönderimi başlatıldı.`,
+    message: `${targetList.length} aboneye bülten kuyruğa alındı ve gönderim başlatıldı.`,
   }), {
     status: 200,
     headers: { 'Content-Type': 'application/json; charset=utf-8' },

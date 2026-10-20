@@ -5,6 +5,7 @@
 import { EmailEnv, sendEmail } from '../utils/email';
 import { AIEnv, analyzeSupportTicketWithAI } from '../utils/ai';
 import { validateEmailAddress } from '../utils/emailValidation';
+import { getTicketConfirmationEmail, Language } from '../utils/emailTemplates';
 
 export interface SupportTicketPayload {
   sender_name: string;
@@ -15,13 +16,13 @@ export interface SupportTicketPayload {
 }
 
 /**
- * Benzersiz Bilet Numarası Üretici (Örn: MSK-2026-X8F2)
+ * Benzersiz Bilet Numarası Üretici (Örn: MSK-2026-X8F2K9)
  */
 export function generateTicketId(): string {
   const year = new Date().getFullYear();
   const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
   let randomPart = '';
-  for (let i = 0; i < 4; i++) {
+  for (let i = 0; i < 6; i++) {
     randomPart += chars.charAt(Math.floor(Math.random() * chars.length));
   }
   return `MSK-${year}-${randomPart}`;
@@ -30,7 +31,11 @@ export function generateTicketId(): string {
 /**
  * POST /api/support İşleyicisi
  */
-export async function handleSupportSubmission(request: Request, env: { DB: D1Database } & EmailEnv & AIEnv): Promise<Response> {
+export async function handleSupportSubmission(
+  request: Request,
+  env: { DB: D1Database } & EmailEnv & AIEnv,
+  ctx?: ExecutionContext
+): Promise<Response> {
   try {
     const rawPayload = await request.json() as any;
 
@@ -106,7 +111,7 @@ export async function handleSupportSubmission(request: Request, env: { DB: D1Dat
     `).bind(ticketId, eventDetails).run();
 
     // 3. Yapay Zeka (Gemini API) Otomatik Analizi
-    analyzeSupportTicketWithAI({
+    const aiPromise = analyzeSupportTicketWithAI({
       id: ticketId,
       sender_name,
       subject,
@@ -135,28 +140,26 @@ export async function handleSupportSubmission(request: Request, env: { DB: D1Dat
       }
     }).catch(err => console.error('AI Analiz Hatası:', err));
 
+    if (ctx) {
+      ctx.waitUntil(aiPromise);
+    }
+
     // 4. Otomatik E-Posta Gönderimi (Yalnızca e-posta geçerliyse)
     if (isEmailValid) {
-      const emailSubject = `[${ticketId}] Destek Talebiniz Alındı — MSK Labs`;
-      const emailHtml = `
-        <div style="font-family: Arial, sans-serif; color: #333; line-height: 1.6;">
-          <h2>Merhaba ${sender_name},</h2>
-          <p>Destek talebiniz başarıyla kayıtlarımıza alınmıştır.</p>
-          <p><strong>Bilet Numarası:</strong> <code style="background: #e2e8f0; padding: 2px 6px; border-radius: 4px;">${ticketId}</code></p>
-          <p><strong>Konu:</strong> ${subject}</p>
-          <hr style="border: none; border-top: 1px solid #e2e8f0;" />
-          <p>Talebiniz ekibimiz tarafından incelenip en kısa sürede bu e-posta adresi üzerinden yanıtlanacaktır.</p>
-          <p>Teşekkür ederiz,<br /><strong>MSK Labs Destek Ekibi</strong></p>
-        </div>
-      `;
+      const userLang = (rawPayload.lang === 'en' || rawPayload.lang === 'ar') ? (rawPayload.lang as Language) : 'tr';
+      const emailData = getTicketConfirmationEmail(ticketId, sender_name, userLang);
 
-      sendEmail({
+      const emailPromise = sendEmail({
         to: sender_email,
         toName: sender_name,
-        subject: emailSubject,
-        html: emailHtml,
+        subject: emailData.subject,
+        html: emailData.html,
         emailType: 'ticket_confirmation'
       }, env).catch(err => console.error('E-Posta gönderim hatası:', err));
+
+      if (ctx) {
+        ctx.waitUntil(emailPromise);
+      }
     }
 
     return new Response(

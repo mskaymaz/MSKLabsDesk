@@ -18,13 +18,28 @@ export interface EmailEnv {
 }
 
 /**
+ * XSS ve HTML Injection önleme süzgeci
+ */
+export function escapeHtml(str?: string | null): string {
+  if (!str) return '';
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+/**
  * E-Posta gönderim fonksiyonu
  * İşlem sonucunu ve durumunu döndürür.
  */
 export async function sendEmail(options: EmailOptions, env: EmailEnv): Promise<{ success: boolean; messageId?: string; error?: string }> {
   try {
-    const fromAddress = env.GMAIL_USER || 'msklabs.org@gmail.com';
-    const fromName = 'MSK Labs';
+    const fromAddress = (env.GMAIL_USER && env.GMAIL_USER.includes('@msklabs.org')) 
+      ? env.GMAIL_USER 
+      : 'destek@msklabs.org';
+    const fromName = 'MSK Labs Destek';
 
     // 1. Resend API Entegrasyonu (Cloudflare Workers için en kararlı HTTP REST yöntemi)
     if (env.RESEND_API_KEY) {
@@ -45,10 +60,14 @@ export async function sendEmail(options: EmailOptions, env: EmailEnv): Promise<{
       if (res.ok) {
         const data = await res.json() as { id: string };
         return { success: true, messageId: data.id };
+      } else {
+        const errText = await res.text().catch(() => '');
+        console.error(`[RESEND API ERROR] ${res.status}: ${errText}`);
+        return { success: false, error: `Resend error (${res.status}): ${errText}` };
       }
     }
 
-    // 2. Geliştirme / Simülasyon Modu (Local / Dev)
+    // 2. Geliştirme / Simülasyon Modu (Local / Dev - RESEND_API_KEY tanımlı değilse)
     console.log(`[EMAIL SIMULATION] To: ${options.to} | Subject: ${options.subject}`);
     return { success: true, messageId: `sim_${Date.now()}` };
   } catch (err: any) {

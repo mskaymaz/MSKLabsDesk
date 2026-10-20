@@ -127,13 +127,28 @@ export const api = {
     return res.json();
   },
 
-  async broadcastNewsletter(data: { title: string; content: string; target_preference?: string }) {
+  async broadcastNewsletter(data: {
+    subject?: string;
+    content_html?: string;
+    category?: string;
+    title?: string;
+    content?: string;
+    target_preference?: string;
+  }) {
+    const payload = {
+      subject: data.subject || data.title,
+      content_html: data.content_html || data.content,
+      category: data.category || data.target_preference || 'all',
+    };
     const res = await fetch(`${API_BASE}/admin/broadcast`, {
       method: 'POST',
       headers: getHeaders(),
-      body: JSON.stringify(data),
+      body: JSON.stringify(payload),
     });
-    if (!res.ok) throw new Error('Duyuru gönderilemedi.');
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.error || 'Duyuru gönderilemedi.');
+    }
     return res.json();
   },
 
@@ -324,37 +339,17 @@ export const api = {
     return res.json();
   },
 
-  // Headless CMS — Ads Management (ADS-001 & ADS-002)
+  // Headless CMS — Ads Management (ADS-001 & ADS-002 - Pasif / Reklamsız Mod)
   async getAds() {
-    const res = await fetch(`${API_BASE}/v1/admin/ads`, { headers: getHeaders() });
-    if (!res.ok) throw new Error('Reklam ayarları yüklenemedi.');
-    return res.json();
+    return { success: true, data: { ads: [] }, ads: [] };
   },
 
-  async updateAd(id: number | string, data: any) {
-    const res = await fetch(`${API_BASE}/v1/admin/ads/${id}`, {
-      method: 'PUT',
-      headers: getHeaders(),
-      body: JSON.stringify(data),
-    });
-    if (!res.ok) {
-      const errData = await res.json().catch(() => ({}));
-      throw new Error(errData.error || errData.message || 'Reklam ayarları güncellenemedi.');
-    }
-    return res.json();
+  async updateAd(_id: number | string, _data: any) {
+    return { success: true, message: 'Reklam modülü henüz devre dışıdır.' };
   },
 
-  async createAd(data: any) {
-    const res = await fetch(`${API_BASE}/v1/admin/ads`, {
-      method: 'POST',
-      headers: getHeaders(),
-      body: JSON.stringify(data),
-    });
-    if (!res.ok) {
-      const errData = await res.json().catch(() => ({}));
-      throw new Error(errData.error || errData.message || 'Reklam alanı oluşturulamadı.');
-    }
-    return res.json();
+  async createAd(_data: any) {
+    return { success: true, message: 'Reklam modülü henüz devre dışıdır.' };
   },
 
   // Media Management (API-010)
