@@ -8,6 +8,7 @@ export interface ModalProps {
   title?: string;
   children: React.ReactNode;
   maxWidth?: string;
+  disableBackdropBlur?: boolean;
 }
 
 export const Modal: React.FC<ModalProps> = ({
@@ -16,6 +17,7 @@ export const Modal: React.FC<ModalProps> = ({
   title,
   children,
   maxWidth = '600px',
+  disableBackdropBlur = true,
 }) => {
   const modalRef = useRef<HTMLDivElement>(null);
   const previousFocusRef = useRef<HTMLElement | null>(null);
@@ -72,8 +74,9 @@ export const Modal: React.FC<ModalProps> = ({
       style={{
         position: 'fixed',
         inset: 0,
-        background: 'rgba(0, 0, 0, 0.75)',
-        backdropFilter: 'blur(6px)',
+        background: 'rgba(0, 0, 0, 0.45)',
+        backdropFilter: disableBackdropBlur ? 'none' : 'blur(4px)',
+        WebkitBackdropFilter: disableBackdropBlur ? 'none' : 'blur(4px)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -87,15 +90,16 @@ export const Modal: React.FC<ModalProps> = ({
       <div
         ref={modalRef}
         tabIndex={-1}
-        className="modal-content glass-card"
+        className="modal-content"
         style={{
           width: '100%',
           maxWidth,
           maxHeight: '90vh',
           overflowY: 'auto',
-          background: '#121826',
+          background: 'var(--bg-modal, #1e293b)',
           borderRadius: 'var(--radius-lg)',
           border: '1px solid var(--border-subtle)',
+          boxShadow: '0 20px 50px rgba(0, 0, 0, 0.25)',
           outline: 'none',
           padding: '24px',
         }}
@@ -111,7 +115,7 @@ export const Modal: React.FC<ModalProps> = ({
               paddingBottom: '12px',
             }}
           >
-            <h3 style={{ fontSize: 'var(--font-lg)', fontWeight: 'var(--font-weight-bold)', color: '#FFF' }}>
+            <h3 style={{ fontSize: 'var(--font-lg)', fontWeight: 'var(--font-weight-bold)', color: 'var(--text-primary)' }}>
               {title}
             </h3>
             <button

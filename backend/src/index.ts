@@ -69,7 +69,10 @@ export default {
       response = await handleCmsPosts(request, env);
     } else if (path.startsWith('/api/admin/apps') || path.startsWith('/api/v1/admin/apps')) {
       response = await handleCmsApps(request, env);
-    } else if (path.startsWith('/api/admin/templates') || path.startsWith('/api/v1/admin/templates')) {
+    } else if (
+      path.startsWith('/api/admin/templates') || path.startsWith('/api/v1/admin/templates') ||
+      path.startsWith('/api/admin/ads') || path.startsWith('/api/v1/admin/ads')
+    ) {
       response = await handleCmsTemplates(request, env);
     }
     // 3. Destek & Bülten Admin API Endpoint'leri

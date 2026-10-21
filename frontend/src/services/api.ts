@@ -339,17 +339,37 @@ export const api = {
     return res.json();
   },
 
-  // Headless CMS — Ads Management (ADS-001 & ADS-002 - Pasif / Reklamsız Mod)
+  // Headless CMS — Ads Management (ADS-001 & ADS-002)
   async getAds() {
-    return { success: true, data: { ads: [] }, ads: [] };
+    const res = await fetch(`${API_BASE}/admin/ads`, { headers: getHeaders() });
+    if (!res.ok) throw new Error('Reklam ayarları yüklenemedi.');
+    return res.json();
   },
 
-  async updateAd(_id: number | string, _data: any) {
-    return { success: true, message: 'Reklam modülü henüz devre dışıdır.' };
+  async updateAd(slotKey: string, data: any) {
+    const res = await fetch(`${API_BASE}/admin/ads`, {
+      method: 'PUT',
+      headers: getHeaders(),
+      body: JSON.stringify({ ...data, slot_key: slotKey }),
+    });
+    if (!res.ok) throw new Error('Reklam ayarları kaydedilemedi.');
+    return res.json();
   },
 
-  async createAd(_data: any) {
-    return { success: true, message: 'Reklam modülü henüz devre dışıdır.' };
+  async createAd(data: any) {
+    return this.updateAd(data.slot_key, data);
+  },
+
+  async deleteAd(slotKey: string) {
+    const res = await fetch(`${API_BASE}/admin/ads?slot_key=${encodeURIComponent(slotKey)}`, {
+      method: 'DELETE',
+      headers: getHeaders(),
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.error || 'Reklam alanı silinemedi.');
+    }
+    return res.json();
   },
 
   // Media Management (API-010)

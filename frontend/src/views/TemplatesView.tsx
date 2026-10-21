@@ -1,40 +1,46 @@
 import React, { useState, useEffect } from 'react';
-import { Megaphone, DollarSign, CheckCircle, Eye, Save, Settings } from 'lucide-react';
-import type { SiteTemplate } from '../types';
+import { Megaphone, DollarSign, CheckCircle, Save, PlusCircle, Check, Info, Layers, Trash2 } from 'lucide-react';
+import type { SiteTemplate, AdPlacementSetting } from '../types';
 import { api } from '../services/api';
 import { useTranslation } from '../context/I18nContext';
-import { AdPreviewModal, type AdSetting } from '../components/modals/AdPreviewModal';
+import { AdStudioControls } from '../components/ads/AdStudioControls';
+import { AdLiveCanvas } from '../components/ads/AdLiveCanvas';
+import { NewAdSlotModal } from '../components/modals/NewAdSlotModal';
+import { AdSizeCatalogModal } from '../components/ads/AdSizeCatalogModal';
 import { Switch } from '../components/ui/Input';
-
-const PRESET_SIZES = [
-  'RESPONSIVE',
-  '728x90',
-  '300x250',
-  '336x280',
-  '320x50',
-  '300x600',
-  '160x600',
-  '970x90',
-  '970x250',
-  '320x100',
-];
+import { ADSENSE_MASTER_CATALOG, getEnabledPresets } from '../utils/adDimensions';
 
 export const TemplatesView: React.FC = () => {
   const { t } = useTranslation();
+  const [activeTab, setActiveTab] = useState<'ads' | 'announcement'>('ads');
   const [loading, setLoading] = useState<boolean>(true);
   const [message, setMessage] = useState<string>('');
 
+  // 1. Duyuru Bandı State
   const [announcementText, setAnnouncementText] = useState({ tr: '', en: '', ar: '' });
-  const [ads, setAds] = useState<AdSetting[]>([]);
-  const [selectedAd, setSelectedAd] = useState<AdSetting | null>(null);
-  const [showPreviewModal, setShowPreviewModal] = useState(false);
+  const [announcementActive, setAnnouncementActive] = useState<boolean>(true);
+
+  // 2. AdSense Reklam State
+  const [ads, setAds] = useState<AdPlacementSetting[]>([]);
+  const [selectedSlotKey, setSelectedSlotKey] = useState<string>('');
+  const [studioDevice, setStudioDevice] = useState<'desktop' | 'mobile'>('desktop');
+  const [savingSlot, setSavingSlot] = useState<boolean>(false);
+  const [savedSuccess, setSavedSuccess] = useState<boolean>(false);
+
+  // 3. AdSense Boyut Kataloğu ve Yeni Reklam Modalları
+  const [enabledPresets, setEnabledPresets] = useState<string[]>(getEnabledPresets());
+  const [showCatalogModal, setShowCatalogModal] = useState<boolean>(false);
+  const [showNewSlotModal, setShowNewSlotModal] = useState<boolean>(false);
+
+  // Global Publisher ID Yardımcısı
+  const [globalClient, setGlobalClient] = useState('');
 
   const loadData = async () => {
     setLoading(true);
     try {
       const [tmplRes, adsRes] = await Promise.all([
         api.getTemplates().catch(() => ({ templates: [] })),
-        api.getAds().catch(() => ({ data: { ads: [] } }))
+        api.getAds().catch(() => ({ ads: [] })),
       ]);
 
       const list: SiteTemplate[] = tmplRes.templates || [];
@@ -45,10 +51,18 @@ export const TemplatesView: React.FC = () => {
           en: ann.content_en || '',
           ar: ann.content_ar || '',
         });
+        setAnnouncementActive(ann.is_active !== undefined ? Boolean(ann.is_active) : true);
       }
 
-      const adsList = (adsRes as any)?.data?.ads || (adsRes as any)?.ads || [];
+      const adsList: AdPlacementSetting[] = (adsRes as any)?.ads || (adsRes as any)?.data?.ads || [];
       setAds(adsList);
+
+      if (adsList.length > 0 && !selectedSlotKey) {
+        setSelectedSlotKey(adsList[0].slot_key);
+      }
+
+      const firstWithClient = adsList.find((a: any) => a.ad_client);
+      if (firstWithClient) setGlobalClient(firstWithClient.ad_client);
     } catch (err) {
       console.error(err);
     } finally {
@@ -60,6 +74,8 @@ export const TemplatesView: React.FC = () => {
     loadData();
   }, []);
 
+  const currentAd = ads.find((a) => a.slot_key === selectedSlotKey) || ads[0];
+
   const handleSaveAnnouncement = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
@@ -68,264 +84,437 @@ export const TemplatesView: React.FC = () => {
         content_tr: announcementText.tr,
         content_en: announcementText.en,
         content_ar: announcementText.ar,
-        is_active: true,
+        is_active: announcementActive,
       });
-      setMessage(t('common.success'));
+      setMessage('Duyuru bandı başarıyla kaydedildi.');
       setTimeout(() => setMessage(''), 3000);
     } catch (err: any) {
       alert(err.message || t('common.error'));
     }
   };
 
-  const handleUpdateAdSetting = async (ad: AdSetting) => {
-    if (!ad.id) return;
+  const handleSaveCurrentAd = async () => {
+    if (!currentAd) return;
+    setSavingSlot(true);
     try {
-      await api.updateAd(ad.id, {
-        title: ad.title,
-        is_enabled: ad.is_enabled ? 1 : 0,
-        ad_client: ad.ad_client,
-        ad_slot: ad.ad_slot,
-        preset_size: ad.preset_size,
-        custom_width: ad.custom_width ? Number(ad.custom_width) : null,
-        custom_height: ad.custom_height ? Number(ad.custom_height) : null,
-        margin_top: Number(ad.margin_top || 16),
-        margin_bottom: Number(ad.margin_bottom || 16),
-        is_sticky: ad.is_sticky ? 1 : 0
-      });
-      setMessage(t('common.success'));
-      setTimeout(() => setMessage(''), 3000);
-      loadData();
+      await api.updateAd(currentAd.slot_key, currentAd);
+      setSavedSuccess(true);
+      setMessage(`"${currentAd.title}" reklam ayarları kaydedildi.`);
+      setTimeout(() => {
+        setSavedSuccess(false);
+        setMessage('');
+      }, 3000);
     } catch (err: any) {
       alert(err.message || t('common.error'));
+    } finally {
+      setSavingSlot(false);
     }
   };
 
-  const handleAdFieldChange = (id: number | undefined, field: keyof AdSetting, val: any) => {
-    if (!id) return;
-    setAds((prev) =>
-      prev.map((item) => (item.id === id ? { ...item, [field]: val } : item))
+  const handleCurrentAdChange = (updated: AdPlacementSetting) => {
+    setAds((prev) => prev.map((item) => (item.slot_key === updated.slot_key ? updated : item)));
+  };
+
+  const [deletingSlot, setDeletingSlot] = useState<boolean>(false);
+
+  const handleAddNewSlot = async (newSlot: AdPlacementSetting) => {
+    await api.updateAd(newSlot.slot_key, newSlot);
+    setAds((prev) => [...prev, newSlot]);
+    setSelectedSlotKey(newSlot.slot_key);
+    setMessage(`"${newSlot.title}" reklam alanı başarıyla oluşturuldu.`);
+    setTimeout(() => setMessage(''), 3000);
+  };
+
+  const handleDeleteCurrentAd = async () => {
+    if (!currentAd) return;
+    const ok = window.confirm(
+      `"${currentAd.title}" reklam alanını silmek istediğinizden emin misiniz?`
     );
+    if (!ok) return;
+
+    setDeletingSlot(true);
+    try {
+      await api.deleteAd(currentAd.slot_key);
+      const remaining = ads.filter((item) => item.slot_key !== currentAd.slot_key);
+      setAds(remaining);
+      setSelectedSlotKey(remaining.length > 0 ? remaining[0].slot_key : '');
+      setMessage(`"${currentAd.title}" reklam alanı silindi.`);
+      setTimeout(() => setMessage(''), 3000);
+    } catch (err: any) {
+      alert(err.message || 'Reklam alanı silinemedi.');
+    } finally {
+      setDeletingSlot(false);
+    }
+  };
+
+  const handleApplyGlobalClient = () => {
+    if (!globalClient.trim()) return;
+    setAds((prev) =>
+      prev.map((item) => ({
+        ...item,
+        ad_client: globalClient.trim(),
+      }))
+    );
+    setMessage(`Tüm alanlara "${globalClient.trim()}" uygulandı. Seçtiğiniz alanı kaydetmeyi unutmayın.`);
+    setTimeout(() => setMessage(''), 4000);
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-      {/* Header */}
-      <div>
-        <h1 className="admin-page-title">{t('templates.title')}</h1>
-        <p className="admin-page-desc">
-          Duyuru bandı metinlerini ve Google AdSense reklam yerleşimlerini yönetin
-        </p>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', position: 'relative' }}>
+      {/* 1. Sabit Üst Başlık Çubuğu (Sticky Header - Diğer Modüllerle Birebir Uyumlu) */}
+      <div
+        style={{
+          position: 'sticky',
+          top: 0,
+          zIndex: 20,
+          background: 'var(--bg-card, #1e293b)',
+          borderBottom: '1px solid var(--border-subtle, #334155)',
+          padding: '10px 14px',
+          margin: '-14px -14px 0 -14px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          flexWrap: 'wrap',
+          gap: '12px',
+          boxShadow: '0 2px 10px rgba(0,0,0,0.06)',
+          backdropFilter: 'blur(8px)',
+        }}
+      >
+        <div>
+          <h1 className="admin-page-title" style={{ margin: 0, fontSize: '1.2rem' }}>
+            Şablon & Reklam Stüdyosu
+          </h1>
+          <p className="admin-page-desc" style={{ margin: '2px 0 0', fontSize: '0.76rem' }}>
+            Google AdSense yerleşimleri (Açılır liste & canlı sahne) ve çok dilli duyuru bandı
+          </p>
+        </div>
+
+        {/* Sağ: AdSense Boyut Kataloğu Butonu */}
+        {activeTab === 'ads' && (
+          <button
+            type="button"
+            className="admin-btn admin-btn-secondary admin-btn-sm"
+            onClick={() => setShowCatalogModal(true)}
+            style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.8rem', padding: '5px 12px' }}
+            title="Google AdSense standart ebat kataloğunu yönet"
+          >
+            <Layers size={14} color="var(--accent-primary)" />
+            <span>AdSense Boyut Kataloğu</span>
+            <span className="admin-badge admin-badge-counter" style={{ fontSize: '0.7rem' }}>
+              {enabledPresets.length}/{ADSENSE_MASTER_CATALOG.length}
+            </span>
+          </button>
+        )}
       </div>
 
       {message && (
-        <div style={{ padding: '10px 14px', background: 'rgba(16, 185, 129, 0.15)', border: '1px solid var(--accent-emerald)', color: 'var(--accent-emerald)', borderRadius: 'var(--radius-md)', display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.85rem' }}>
-          <CheckCircle size={16} />
+        <div
+          style={{
+            padding: '8px 14px',
+            background: 'rgba(16, 185, 129, 0.15)',
+            border: '1px solid var(--accent-emerald)',
+            color: 'var(--accent-emerald)',
+            borderRadius: 'var(--radius-md)',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            fontSize: '0.84rem',
+          }}
+        >
+          <CheckCircle size={15} />
           <span>{message}</span>
         </div>
       )}
 
+      {/* 2. Ana Sekmeler */}
+      <div style={{ display: 'flex', gap: '8px', borderBottom: '1px solid var(--border-subtle, #334155)', paddingBottom: '2px' }}>
+        <button
+          type="button"
+          onClick={() => setActiveTab('ads')}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            padding: '8px 16px',
+            fontSize: '0.86rem',
+            fontWeight: activeTab === 'ads' ? 600 : 500,
+            background: activeTab === 'ads' ? 'var(--bg-card, #1e293b)' : 'transparent',
+            color: activeTab === 'ads' ? 'var(--accent-primary, #6366f1)' : 'var(--text-secondary)',
+            border: '1px solid',
+            borderColor: activeTab === 'ads' ? 'var(--border-subtle, #334155)' : 'transparent',
+            borderBottom: activeTab === 'ads' ? '2px solid var(--accent-primary, #6366f1)' : '2px solid transparent',
+            borderRadius: '6px 6px 0 0',
+            cursor: 'pointer',
+          }}
+        >
+          <DollarSign size={15} />
+          <span>Google AdSense Reklam Stüdyosu</span>
+          <span className="admin-badge admin-badge-counter">{ads.length}</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setActiveTab('announcement')}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            padding: '8px 16px',
+            fontSize: '0.86rem',
+            fontWeight: activeTab === 'announcement' ? 600 : 500,
+            background: activeTab === 'announcement' ? 'var(--bg-card, #1e293b)' : 'transparent',
+            color: activeTab === 'announcement' ? 'var(--accent-primary, #6366f1)' : 'var(--text-secondary)',
+            border: '1px solid',
+            borderColor: activeTab === 'announcement' ? 'var(--border-subtle, #334155)' : 'transparent',
+            borderBottom: activeTab === 'announcement' ? '2px solid var(--accent-primary, #6366f1)' : '2px solid transparent',
+            borderRadius: '6px 6px 0 0',
+            cursor: 'pointer',
+          }}
+        >
+          <Megaphone size={15} />
+          <span>Duyuru Bandı (Header Banner)</span>
+        </button>
+      </div>
+
       {loading ? (
         <p style={{ color: 'var(--text-muted)' }}>{t('common.loading')}</p>
-      ) : (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-          {/* Announcement Bar Form */}
-          <div className="admin-list-card" style={{ padding: '20px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '14px' }}>
-              <Megaphone size={18} color="var(--accent-amber)" />
-              <h2 className="admin-card-title">{t('templates.newTemplate')}</h2>
-            </div>
+      ) : activeTab === 'ads' ? (
+        /* ================= 3. ADSENSE STÜDYOSU (AÇILIR LİSTE & CANLI SAHNE) ================= */
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+          {/* Üst Kontrol Barı: Açılır Liste + Yeni Reklam Butonu + Aktiflik + Kaydet Butonu */}
+          <div
+            style={{
+              background: 'var(--bg-card, #1e293b)',
+              border: '1px solid var(--border-subtle, #334155)',
+              borderRadius: 'var(--radius-md, 8px)',
+              padding: '10px 14px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              flexWrap: 'wrap',
+              gap: '12px',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
+            }}
+          >
+            {/* Sol: Açılır Liste ve Yeni Ekle */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
+              <label style={{ fontSize: '0.86rem', fontWeight: 700, color: 'var(--text-primary)', whiteSpace: 'nowrap' }}>
+                📌 Reklam Yerleşimi:
+              </label>
+              <select
+                className="form-select"
+                value={selectedSlotKey}
+                onChange={(e) => setSelectedSlotKey(e.target.value)}
+                style={{ width: '280px', fontSize: '0.84rem', fontWeight: 600, padding: '5px 10px' }}
+              >
+                {ads.map((adItem) => (
+                  <option key={adItem.slot_key} value={adItem.slot_key}>
+                    {adItem.title} {adItem.is_enabled ? '●' : '○'}
+                  </option>
+                ))}
+              </select>
 
-            <form onSubmit={handleSaveAnnouncement} style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '12px' }}>
-                <div>
-                  <label className="form-label">TR (Türkçe)</label>
-                  <input
-                    type="text"
-                    className="form-input"
-                    value={announcementText.tr}
-                    onChange={(e) => setAnnouncementText({ ...announcementText, tr: e.target.value })}
-                  />
-                </div>
-                <div>
-                  <label className="form-label">EN (English)</label>
-                  <input
-                    type="text"
-                    className="form-input"
-                    value={announcementText.en}
-                    onChange={(e) => setAnnouncementText({ ...announcementText, en: e.target.value })}
-                  />
-                </div>
-                <div>
-                  <label className="form-label">AR (العربية)</label>
-                  <input
-                    type="text"
-                    className="form-input"
-                    value={announcementText.ar}
-                    onChange={(e) => setAnnouncementText({ ...announcementText, ar: e.target.value })}
-                  />
-                </div>
-              </div>
+              <button
+                type="button"
+                className="admin-btn admin-btn-secondary admin-btn-sm"
+                onClick={() => setShowNewSlotModal(true)}
+                style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: '0.78rem' }}
+                title="Yeni bir reklam alanı tanımla"
+              >
+                <PlusCircle size={13} />
+                <span>+ Yeni Reklam</span>
+              </button>
 
-              <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '6px' }}>
-                <button type="submit" className="admin-btn admin-btn-primary admin-btn-md">
-                  <Save size={15} /> {t('common.save')}
-                </button>
-              </div>
-            </form>
-          </div>
-
-          {/* AdSense Settings Section (ADS-001 & ADS-002) */}
-          <div className="admin-list-card" style={{ padding: '20px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
-              <DollarSign size={18} color="var(--accent-emerald)" />
-              <h2 className="admin-card-title">
-                AdSense Reklam Yerleşimleri ve Ayarları
-              </h2>
-            </div>
-
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-              {ads.length === 0 ? (
-                <p style={{ color: 'var(--text-muted)', fontSize: '0.88rem', margin: 0 }}>
-                  Google AdSense reklam alanları şu anda sistem genelinde pasife alınmıştır (Reklamsız Deneyim).
-                </p>
-              ) : (
-                ads.map((ad) => (
-                <div
-                  key={ad.id || ad.slot_key}
-                  style={{
-                    background: 'var(--bg-secondary)',
-                    padding: '16px',
-                    borderRadius: 'var(--radius-md)',
-                    border: '1px solid var(--border-color)',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '12px'
-                  }}
+              {currentAd && (
+                <button
+                  type="button"
+                  className="admin-btn admin-btn-danger admin-btn-sm"
+                  onClick={handleDeleteCurrentAd}
+                  disabled={deletingSlot}
+                  style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.78rem', padding: '4px 8px' }}
+                  title={`"${currentAd.title}" reklam alanını sil`}
                 >
-                  {/* Slot Title & Toggle Header */}
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <Settings size={16} color="var(--accent-primary)" />
-                      <strong style={{ color: 'var(--text-primary)', fontSize: '0.92rem' }}>{ad.title}</strong>
-                      <span className="admin-badge admin-badge-counter">{ad.slot_key}</span>
-                    </div>
-
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                      <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
-                        {ad.is_enabled ? 'Aktif' : 'Pasif'}
-                      </span>
-                      <Switch
-                        checked={Boolean(ad.is_enabled)}
-                        onChange={(e) => handleAdFieldChange(ad.id, 'is_enabled', e.target.checked)}
-                        aria-label={`Toggle ${ad.title}`}
-                      />
-                    </div>
-                  </div>
-
-                  {/* Form Inputs Grid */}
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '12px' }}>
-                    <div>
-                      <label style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', display: 'block', marginBottom: '4px' }}>
-                        AdSense Client ID (ca-pub-xxx)
-                      </label>
-                      <input
-                        type="text"
-                        className="form-input"
-                        placeholder="ca-pub-1234567890123456"
-                        value={ad.ad_client || ''}
-                        onChange={(e) => handleAdFieldChange(ad.id, 'ad_client', e.target.value)}
-                      />
-                    </div>
-
-                    <div>
-                      <label style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', display: 'block', marginBottom: '4px' }}>
-                        AdSense Slot ID
-                      </label>
-                      <input
-                        type="text"
-                        className="form-input"
-                        placeholder="1234567890"
-                        value={ad.ad_slot || ''}
-                        onChange={(e) => handleAdFieldChange(ad.id, 'ad_slot', e.target.value)}
-                      />
-                    </div>
-
-                    <div>
-                      <label style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', display: 'block', marginBottom: '4px' }}>
-                        Preset Size
-                      </label>
-                      <select
-                        className="form-select"
-                        value={ad.preset_size || 'RESPONSIVE'}
-                        onChange={(e) => handleAdFieldChange(ad.id, 'preset_size', e.target.value)}
-                      >
-                        {PRESET_SIZES.map((sz) => (
-                          <option key={sz} value={sz}>{sz}</option>
-                        ))}
-                      </select>
-                    </div>
-
-                    <div>
-                      <label style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', display: 'block', marginBottom: '4px' }}>
-                        Margin Top / Bottom (px)
-                      </label>
-                      <div style={{ display: 'flex', gap: '8px' }}>
-                        <input
-                          type="number"
-                          min={0}
-                          max={100}
-                          className="form-input"
-                          value={ad.margin_top ?? 16}
-                          onChange={(e) => handleAdFieldChange(ad.id, 'margin_top', Number(e.target.value))}
-                        />
-                        <input
-                          type="number"
-                          min={0}
-                          max={100}
-                          className="form-input"
-                          value={ad.margin_bottom ?? 16}
-                          onChange={(e) => handleAdFieldChange(ad.id, 'margin_bottom', Number(e.target.value))}
-                        />
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Actions Bar */}
-                  <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '8px', paddingTop: '8px' }}>
-                    <button
-                      type="button"
-                      className="admin-btn admin-btn-view admin-btn-sm"
-                      onClick={() => {
-                        setSelectedAd(ad);
-                        setShowPreviewModal(true);
-                      }}
-                    >
-                      <Eye size={13} /> Önizleme
-                    </button>
-                    <button
-                      type="button"
-                      className="admin-btn admin-btn-primary admin-btn-sm"
-                      onClick={() => handleUpdateAdSetting(ad)}
-                    >
-                      <Save size={13} /> {t('common.save')}
-                    </button>
-                  </div>
-                </div>
-                ))
+                  <Trash2 size={13} />
+                  <span>{deletingSlot ? 'Siliniyor...' : 'Sil'}</span>
+                </button>
               )}
             </div>
+
+            {/* Sağ: Genel Aktiflik ve Kaydet Butonu */}
+            {currentAd && (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <span style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--text-primary)' }}>
+                    {currentAd.is_enabled ? 'Genel: Aktif' : 'Genel: Pasif'}
+                  </span>
+                  <Switch
+                    checked={Boolean(currentAd.is_enabled)}
+                    onChange={(e) => handleCurrentAdChange({ ...currentAd, is_enabled: e.target.checked })}
+                    aria-label="Genel aktiflik"
+                  />
+                </div>
+
+                <button
+                  type="button"
+                  className="admin-btn admin-btn-primary admin-btn-sm"
+                  onClick={handleSaveCurrentAd}
+                  disabled={savingSlot}
+                  style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.82rem', padding: '6px 14px' }}
+                >
+                  {savedSuccess ? <Check size={14} color="#fff" /> : <Save size={14} />}
+                  <span>{savedSuccess ? 'Kaydedildi' : savingSlot ? 'Kaydediliyor...' : 'Kaydet'}</span>
+                </button>
+              </div>
+            )}
           </div>
+
+          {/* Hızlı ca-pub-xxx Yardımcı Şeridi (Kibar, Tek Satırda) */}
+          <div
+            style={{
+              background: 'var(--bg-secondary, #0f172a)',
+              border: '1px solid var(--border-subtle, #334155)',
+              borderRadius: '6px',
+              padding: '6px 12px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              flexWrap: 'wrap',
+              gap: '8px',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <Info size={14} color="var(--accent-primary)" />
+              <span style={{ fontSize: '0.76rem', color: 'var(--text-secondary)' }}>
+                Tüm alanlara aynı <code>ca-pub-xxx</code> kimliğini uygulamak için:
+              </span>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <input
+                type="text"
+                className="form-input"
+                placeholder="ca-pub-1234567890"
+                value={globalClient}
+                onChange={(e) => setGlobalClient(e.target.value)}
+                style={{ fontSize: '0.76rem', padding: '3px 8px', width: '180px' }}
+              />
+              <button
+                type="button"
+                className="admin-btn admin-btn-secondary admin-btn-sm"
+                onClick={handleApplyGlobalClient}
+                style={{ fontSize: '0.72rem', padding: '3px 8px' }}
+              >
+                Tümüne Dağıt
+              </button>
+            </div>
+          </div>
+
+          {/* Seçili Reklamın Kompakt Ayar Kontrolleri */}
+          {currentAd && (
+            <AdStudioControls
+              ad={currentAd}
+              onChange={handleCurrentAdChange}
+              activeDevice={studioDevice}
+              onDeviceChange={setStudioDevice}
+              enabledPresets={enabledPresets}
+            />
+          )}
+
+          {/* Gömülü Canlı Önizleme Sahnesi */}
+          {currentAd && (
+            <AdLiveCanvas
+              ad={currentAd}
+              activeDevice={studioDevice}
+              onDeviceChange={setStudioDevice}
+            />
+          )}
+        </div>
+      ) : (
+        /* ================= 4. DUYURU BANDI ================= */
+        <div className="admin-list-card" style={{ padding: '18px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px', borderBottom: '1px solid var(--border-subtle, #334155)', paddingBottom: '10px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <Megaphone size={18} color="var(--accent-amber, #f59e0b)" />
+              <div>
+                <h2 className="admin-card-title" style={{ margin: 0 }}>
+                  Çok Dilli Site Üst Duyuru Bandı
+                </h2>
+                <p style={{ margin: '1px 0 0', fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
+                  Web sitesinin en üstünde kullanıcılara gösterilecek duyuru metinleri
+                </p>
+              </div>
+            </div>
+
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-primary)' }}>
+                {announcementActive ? 'Yayında' : 'Pasif'}
+              </span>
+              <Switch
+                checked={announcementActive}
+                onChange={(e) => setAnnouncementActive(e.target.checked)}
+                aria-label="Duyuru aktiflik anahtarı"
+              />
+            </div>
+          </div>
+
+          <form onSubmit={handleSaveAnnouncement} style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '12px' }}>
+              <div>
+                <label className="form-label" style={{ fontWeight: 600, color: 'var(--text-primary)' }}>TR (Türkçe Duyuru)</label>
+                <input
+                  type="text"
+                  className="form-input"
+                  placeholder="Örn: Yeni DeskPilot 2.0 sürümü yayınlandı!"
+                  value={announcementText.tr}
+                  onChange={(e) => setAnnouncementText({ ...announcementText, tr: e.target.value })}
+                />
+              </div>
+
+              <div>
+                <label className="form-label" style={{ fontWeight: 600, color: 'var(--text-primary)' }}>EN (English Announcement)</label>
+                <input
+                  type="text"
+                  className="form-input"
+                  placeholder="e.g. New DeskPilot 2.0 has been released!"
+                  value={announcementText.en}
+                  onChange={(e) => setAnnouncementText({ ...announcementText, en: e.target.value })}
+                />
+              </div>
+
+              <div>
+                <label className="form-label" style={{ fontWeight: 600, color: 'var(--text-primary)' }}>AR (العربية - إعلان الموقع)</label>
+                <input
+                  type="text"
+                  dir="rtl"
+                  className="form-input"
+                  placeholder="تم إطلاق الإصدار الجديد من ديسك بايلوت 2.0!"
+                  value={announcementText.ar}
+                  onChange={(e) => setAnnouncementText({ ...announcementText, ar: e.target.value })}
+                />
+              </div>
+            </div>
+
+            <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '6px' }}>
+              <button type="submit" className="admin-btn admin-btn-primary admin-btn-md">
+                <Save size={14} /> {t('common.save')}
+              </button>
+            </div>
+          </form>
         </div>
       )}
 
-      {/* AdPreviewModal Component (ADS-002) */}
-      <AdPreviewModal
-        isOpen={showPreviewModal}
-        onClose={() => setShowPreviewModal(false)}
-        adSetting={selectedAd}
-        onPublish={async (ad) => {
-          await handleUpdateAdSetting(ad);
-        }}
+      {/* 5. Modallar */}
+      <NewAdSlotModal
+        isOpen={showNewSlotModal}
+        onClose={() => setShowNewSlotModal(false)}
+        onAdd={handleAddNewSlot}
+        existingKeys={ads.map((a) => a.slot_key)}
+      />
+
+      <AdSizeCatalogModal
+        isOpen={showCatalogModal}
+        onClose={() => setShowCatalogModal(false)}
+        enabledKeys={enabledPresets}
+        onSave={(keys) => setEnabledPresets(keys)}
       />
     </div>
   );

@@ -1,7 +1,103 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
-## 🟢 Son Güncelleme [21.10.2026 - 10:25] — SÜRÜMLER AÇILIR MENÜSÜ METİN VE RENK DÜZELTMESİ [*]
+## 🟢 Son Güncelleme [21.10.2026 - 12:32] — SAYFA BAŞI REKLAMININ KALDIRILMASI, REKLAM ALANI SİLME VE DİNAMİK YÖNETİM [*]
+* **Yapılan İşlem:**
+  1. **Sayfa Başı Yatay Reklamının Kaldırılması (`cmsTemplates.ts` & `AdLiveCanvas.tsx`):**
+     - Hiçbir zaman kullanılmayacak olan `ad_header_top` (Sayfa Başı Yatay Reklam) varsayılan reklam listesinden ve canlı önizleme sahnesinden tamamen kaldırıldı.
+  2. **Reklam Alanı Silme Altyapısı (`cmsTemplates.ts`, `api.ts`, `TemplatesView.tsx`):**
+     - Backend'e `DELETE /api/admin/ads?slot_key=...` endpoint'i eklendi (özel slotlar doğrudan tablodan silinir, varsayılan slotlar `is_deleted: true` olarak işaretlenir).
+     - Frontend API servisine `api.deleteAd(slotKey)` fonksiyonu eklendi.
+     - Açılır listenin hemen yanına `[+ Yeni Reklam]` butonunun yanına kırmızı `[🗑️ Sil]` butonu entegre edildi; onay sonrasında seçili reklam alanı panelden ve veritabanından kalıcı olarak silinmektedir.
+  3. **AdSense Ebat & Format Kataloğu (`AdSizeCatalogModal.tsx` & `adDimensions.ts`):**
+     - Tüm Google AdSense standart formatları Yatay ve Dikey & Kare olarak 2 sütunlu modern modal kataloğunda listelendi.
+     - Seçilen ebatlar `localStorage` üzerinde saklanarak stüdyo "Ebat" açılır listesine dinamik olarak bağlandı.
+  4. **Sabit Üst Başlık (Sticky Header - `TemplatesView.tsx`):**
+     - `sticky top-0 z-20` sabit üst başlık uygulandı, başlık çubuğuna `[📐 AdSense Boyut Kataloğu (X/Y)]` butonu eklendi.
+  5. **Dikey Reklamların Mobil Kısıtı ve Temiz Önizleme (`AdLiveCanvas.tsx` & `AdStudioControls.tsx`):**
+     - Yapay "Popüler Başlıklar" kutusu kaldırıldı. Sol/Sağ dikey reklamların mobilde `display: none` olması nedeniyle sarı bilgilendirme kartı ve `Mobilde Gizli` rozeti uygulandı.
+  6. **Doğrulama ve Kural Uyumu:**
+     - Frontend Build: PASS (`tsc -b && vite build`, 0 hata).
+     - Backend Testleri: PASS (57/57 test %100 başarılı).
+     - Satır sınırları: `TemplatesView.tsx` 521 satır (<= 600), `AdStudioControls.tsx` 377 satır (<= 450), `AdLiveCanvas.tsx` 435 satır (<= 450), `AdSizeCatalogModal.tsx` 271 satır (<= 450).
+* **Durum:** `DevAdmin` dalında çalışıldı, `main` kesinlikle korundu.
+
+## [21.10.2026 - 11:55] — DİNAMİK BOYUT ÇÖZÜMLEME, 120x600 SKYSCRAPER VE DOYGUN ÖNİZLEME [*]
+
+## [21.10.2026 - 11:55] — DİNAMİK BOYUT ÇÖZÜMLEME, 120x600 SKYSCRAPER VE DOYGUN ÖNİZLEME [*]
+* **Yapılan İşlem:**
+  1. **Dinamik Boyut Çözümleyici (`adDimensions.ts`):**
+     - Sabit sözlük bağımlılığı kaldırıldı; tüm `[Genişlik]x[Yükseklik]` formatları matematiksel olarak çözülüp tam piksele dönüştürüldü.
+     - Özel boyut (CUSTOM) girişlerinde kullanıcının girdiği W ve H değerleri %100 kesinlikle uygulandı.
+  2. **120x600 Ebadı ve [Şablon Yap] Yeteneği (`AdStudioControls.tsx`):**
+     - Standart listeye `120x600 — Skyscraper (Dikey Gökdelen)` eklendi.
+     - Özel girilen boyutları tek tıkla şablon listesine kaydeden `[Şablon Yap]` butonu entegre edildi.
+  3. **Doygun Makale Metni ve Sahne Üzerinde Cihaz Seçici (`AdLiveCanvas.tsx`):**
+     - 600px dikey reklamların sayfadaki gerçek oranını göstermek için ana makale metni 3 zengin paragrafla doygunlaştırıldı.
+     - Önizleme araç çubuğuna, Açık/Koyu modun hemen soluna `[🖥️ Masaüstü]` ve `[📱 Mobil]` butonları eklendi.
+  4. **Doğrulama:**
+     - Frontend Build: PASS (`tsc -b && vite build`, 0 hata).
+     - Backend Testleri: PASS (57/57 test %100 başarılı).
+     - Satır sınırları: `AdLiveCanvas.tsx` 366 satır, `AdStudioControls.tsx` 326 satır, `TemplatesView.tsx` 433 satır (tümü limitlerin altında).
+* **Durum:** `DevAdmin` dalında çalışıldı, `main` kesinlikle korundu.
+
+## [21.10.2026 - 11:40] — KOMPAKT REKLAM STÜDYOSU, AÇILIR LİSTE VE GÖMÜLÜ CANLI SAHNE [*]
+* **Yapılan İşlem:**
+  1. **Açılır Liste & Yeni Reklam Alanı Ekleme (`TemplatesView.tsx` & `NewAdSlotModal.tsx`):**
+     - Uzun kart yığını yerine üstte tek satırda: `[📌 Reklam Yerleşimi: Sayfa Başı ▾]` açılır listesi, `[+ Yeni Reklam]` butonu ve genel aktiflik switch'i konumlandırıldı.
+     - Yeni reklam alanlarını panelden doğrudan D1'e kaydeden dinamik `NewAdSlotModal.tsx` eklendi.
+  2. **Kompakt ve İsrafsız Form Kontrolleri (`AdStudioControls.tsx`):**
+     - Client ID (~210px) ve Slot ID (~150px) kutuları içeriğe uygun daraltıldı.
+     - Masaüstü ve Mobil geçişi tek satırda zarif pill butonlara çekildi.
+     - Ebat Şablonu açılır kutusu (~230px) ile sınırlandı.
+     - 4 Yönlü Marj ayarları yan yana 4 minik 50px kutucukta toplandı.
+     - Açık mod kontrastı koyulaştırıldı; başlıklar 1-2 pt büyütülüp okunabilirlik artırıldı.
+  3. **Gömülü Canlı Önizleme Sahnesi (`AdLiveCanvas.tsx`):**
+     - Modal açma-kapama döngüsü sonlandırıldı; formun hemen altında gerçek zamanlı tepki veren vitrin simülatörü gömüldü.
+     - Sağ dikey (iki kolon: içerik sol, reklam sağ), sol dikey (iki kolon: reklam sol, içerik sağ) ve yatay akışlar canlı olarak simüle edildi.
+  4. **Doğrulama:**
+     - Frontend Build: PASS (`tsc -b && vite build`, 0 hata).
+     - Backend Testleri: PASS (57/57 test %100 başarılı).
+     - Satır sınırları: `TemplatesView.tsx` 432 satır (<= 600), `AdStudioControls.tsx` 281 satır (<= 450), `AdLiveCanvas.tsx` 317 satır (<= 450), `NewAdSlotModal.tsx` 165 satır (<= 450).
+* **Durum:** `DevAdmin` dalında çalışıldı, `main` kesinlikle korundu.
+
+## [21.10.2026 - 11:15] — ÖNİZLEME MODALI ŞEFFAFLIK, AÇIK MOD VE DİKEY/YATAY DÜZEN DÜZELTMESİ [*]
+* **Yapılan İşlem:**
+  1. **Buzlu Cam Kaldırıldı & Şeffaflaştırıldı (`Modal.tsx` & `AdPreviewModal.tsx`):**
+     - Modal arka planındaki bulanıklaştırma (`backdropFilter: blur`) kaldırıldı; yerine saydam, temiz karartma (`rgba(0, 0, 0, 0.45)`) getirildi.
+     - Simülatör ekranının etrafı `transparent` yapılarak mat buzlu çerçeve tamamen ortadan kaldırıldı.
+  2. **Açık Mod Varsayılanı ve Tema Geçişi (`AdPreviewModal.tsx`):**
+     - Önizleme ekranı varsayılan olarak Açık Mod (Light Mode) olarak ayarlandı; ayrıca `[☀️ Açık]` ve `[🌙 Koyu]` butonlarıyla her iki tema canlı test edilebilir kılındı.
+  3. **Gerçekçi Dikey vs Yatay Yerleşim Düzenleri (`AdPreviewModal.tsx`):**
+     - Tek tip yatay gösterim sorunu çözüldü:
+       - *Sağ Dikey*: Sol ana makale + Sağ sütunda dikey 300x250/300x600 reklam.
+       - *Sol Dikey*: Sol sütunda 160x600 gökdelen reklamı + Sağ ana makale.
+       - *Bölümler Arası*: Paragraflar arasında akış içi banner.
+       - *Sayfa Başı / Sonu*: Üst navigasyon altı veya footer üstü yatay banner.
+  4. **Doğrulama:**
+     - Frontend Build: PASS (`tsc -b && vite build`, 0 hata).
+     - Backend Testleri: PASS (57/57 test %100 başarılı).
+     - Satır sınırları: `AdPreviewModal.tsx` 439 satır (<= 450), `Modal.tsx` 239 satır (<= 450).
+* **Durum:** `DevAdmin` dalında çalışıldı, `main` kesinlikle korundu.
+
+## [21.10.2026 - 10:55] — GOOGLE ADSENSE ÇOKLU CİHAZ (MASAÜSTÜ & MOBİL) VE 4 YÖNLÜ MARJ MİMARİSİ [*]
+* **Yapılan İşlem:**
+  1. **İkili Cihaz ve 4 Yönlü Marj Mimarisi (`AdPlacementCard.tsx`):**
+     - Her reklam alanı için `[Masaüstü (Web)]` ve `[Mobil]` cihaz sekmeleri oluşturuldu.
+     - Ebatlar (Standart AdSense hazır boyutları ve özel Genişlik x Yükseklik), 4 yönlü marjlar (Üst, Sağ, Alt, Sol px), hizalama ve masaüstü için yapışkan (sticky) ayarları entegre edildi.
+  2. **5 Standart Reklam Yerleşimi (`cmsTemplates.ts` & D1 `site_templates`):**
+     - Sayfa Başı (`ad_header_top`), Bölümler Arası (`ad_in_content`), Sağ Dikey (`ad_sidebar_right`), Sol Dikey (`ad_sidebar_left`), Sayfa Sonu (`ad_footer_bottom`).
+  3. **Canlı Mockup Önizleme Modalı (`AdPreviewModal.tsx`):**
+     - 4 yönlü marjları ve hizalamayı simüle eden Masaüstü ve Mobil canlı sandbox önizleme arayüzü bağlandı.
+  4. **Ekran Ayrımı (`TemplatesView.tsx`):**
+     - "Google AdSense Reklam Yönetimi" ve "Duyuru Bandı" iki bağımsız sekmeye ayrılarak şablon karmaşası giderildi.
+  5. **Doğrulama:**
+     - Frontend Build: PASS (`tsc -b && vite build`, 0 hata).
+     - Backend Testleri: PASS (57/57 test %100 başarılı).
+     - Satır sınırları: `TemplatesView.tsx` 345 satır (<= 600), `AdPlacementCard.tsx` 269 satır (<= 450), `AdPreviewModal.tsx` 298 satır (<= 450).
+* **Durum:** `DevAdmin` dalında çalışıldı, `main` kesinlikle korundu.
+
+## [21.10.2026 - 10:25] — SÜRÜMLER AÇILIR MENÜSÜ METİN VE RENK DÜZELTMESİ [*]
 * **Yapılan İşlem:**
   1. **Açılır Menü Metinleri ve Renkleri (`AppCMSCard.tsx`):**
      - Açılır menüdeki buton metinleri `Son Sürüm` ve `Eski Sürümler (N)` olarak netleştirildi.

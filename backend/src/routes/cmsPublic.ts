@@ -213,10 +213,10 @@ export async function handleCmsPublic(request: Request, env: any): Promise<Respo
     }), { headers });
   }
 
-  // 5. GET /api/v1/templates — Duyuru ve Şablonlar
-  if (path === '/api/v1/templates') {
+  // 5. GET /api/v1/templates & /api/v1/ads — Duyuru, Şablonlar ve Aktif Reklamlar
+  if (path === '/api/v1/templates' || path === '/api/v1/ads') {
     const { results } = await env.DB.prepare(`SELECT key_name, content_tr, content_en, content_ar, meta_json FROM site_templates WHERE is_active = 1`).all();
-    return new Response(JSON.stringify({ templates: results || [] }), { headers });
+    return new Response(JSON.stringify({ templates: results || [], ads: results || [] }), { headers });
   }
 
   // 6. GET /api/v1/sitemap.xml — Otomatik XML Sitemap

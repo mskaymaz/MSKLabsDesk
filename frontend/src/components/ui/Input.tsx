@@ -207,12 +207,15 @@ export const Switch: React.FC<SwitchProps> = ({ label, checked, onChange, id, ..
     >
       <div
         style={{
-          width: '44px',
+          width: '42px',
           height: '24px',
           borderRadius: '12px',
-          background: checked ? 'var(--accent-primary)' : 'rgba(255,255,255,0.15)',
+          background: checked ? 'var(--accent-primary, #6366f1)' : 'var(--switch-off-bg, #94a3b8)',
+          border: checked ? '1px solid var(--accent-primary, #6366f1)' : '1px solid #64748b',
           position: 'relative',
-          transition: 'background 0.2s ease',
+          transition: 'all 0.2s ease',
+          boxSizing: 'border-box',
+          flexShrink: 0,
         }}
       >
         <div
@@ -220,10 +223,11 @@ export const Switch: React.FC<SwitchProps> = ({ label, checked, onChange, id, ..
             width: '18px',
             height: '18px',
             borderRadius: '50%',
-            background: '#FFF',
+            background: '#ffffff',
+            boxShadow: '0 1px 3px rgba(0, 0, 0, 0.3)',
             position: 'absolute',
-            top: '3px',
-            left: checked ? '23px' : '3px',
+            top: '2px',
+            left: checked ? '20px' : '2px',
             transition: 'left 0.2s ease',
           }}
         />

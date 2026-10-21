@@ -230,3 +230,28 @@ export interface SiteTemplate {
   is_active?: boolean | number;
 }
 
+export interface AdDeviceConfig {
+  is_enabled: boolean;
+  preset_size: string;
+  custom_width?: number | null;
+  custom_height?: number | null;
+  margin_top: number;
+  margin_right: number;
+  margin_bottom: number;
+  margin_left: number;
+  align?: 'center' | 'left' | 'right';
+  is_sticky?: boolean;
+}
+
+export interface AdPlacementSetting {
+  id?: string;
+  slot_key: string;
+  title: string;
+  description?: string;
+  ad_client: string;
+  ad_slot: string;
+  is_enabled: boolean;
+  desktop: AdDeviceConfig;
+  mobile: AdDeviceConfig;
+}
+
