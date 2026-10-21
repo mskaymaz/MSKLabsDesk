@@ -1,6 +1,17 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [21.10.2026 - 10:15] - Kart Aksiyon Barı Sadeleştirmesi: Sürümler Açılır Menüsü ve Yalın Buton Mimarisi
+- **Tek Bir `Sürümler ▾` Açılır Menüsü (`AppCMSCard.tsx`):**
+  - İki ayrı sürüm butonu ("Sürüm" ve "+Sürüm") kaldırılarak tek bir açılır `Sürümler ▾` butonunda birleştirildi.
+  - Açılır menü üzerinden "Yeni Sürüm Yayınla" ve "Sürüm Geçmişi (N)" işlemleri tıklandığında popover ile sunuldu; dışarı tıklandığında otomatik kapanma sağlandı.
+- **Yalın Aksiyon Butonları (`AppCMSCard.tsx`):**
+  - "Görsel Stüdyo" yerine kalemsiz, net ve standart **"Düzenle"** butonu yerleştirildi.
+  - Ne yaptığı belirsiz olan çark ikonu yerine işlevini açıkça ifade eden **"Ayarlar"** metin butonu konuldu.
+  - "Sil" (`Trash2`) ikonu korundu; kart altındaki tüm aksiyonlar 4 temiz butonda (~250px) toplanarak 3'lü kart ızgarasında sıfır taşmayla tek satırda hizalandı.
+- **Doğrulama ve Kural Uyumu:**
+  - Frontend build PASS, backend testleri (57/57) %100 PASS. `DevAdmin` dalında çalışıldı, `main` kesinlikle korundu.
+
 ## [21.10.2026 - 09:55] - Admin Uygulama Kataloğu 3'lü Izgara (3xn) Düzeni ve Kompakt Aksiyon Butonları
 - **3'lü Kart Izgarası (3xn) Düzeni (`AppsCMSView.tsx`):**
   - Masaüstü görünümünde kartların 3'lü kolon (3xn) düzeninde yerleşmesi için ızgara tabanı `minmax(330px, 1fr)` olarak optimize edildi.

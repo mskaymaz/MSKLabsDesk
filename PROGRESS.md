@@ -1,7 +1,21 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
-## 🟢 Son Güncelleme [21.10.2026 - 09:55] — ADMİN UYGULAMA KATALOĞU 3'LÜ IZGARA (3xN) DÜZENLEMESİ [*]
+## 🟢 Son Güncelleme [21.10.2026 - 10:15] — KART AKSİYON BARI SADELEŞTİRMESİ VE AÇILIR SÜRÜMLER MENÜSÜ [*]
+* **Yapılan İşlem:**
+  1. **Sürümler Açılır Menüsü:**
+     - İki ayrı kafa karıştırıcı sürüm butonu yerine `Sürümler ▾` açılır listesi entegre edildi ("Yeni Sürüm Yayınla" + "Sürüm Geçmişi").
+  2. **Yalın Metin Butonları:**
+     - "Görsel Stüdyo" -> İkonsuz, doğrudan **"Düzenle"** olarak güncellendi.
+     - Çark simgesi -> Görevini açıkça belirten **"Ayarlar"** butonuna dönüştürüldü.
+     - Toplam satır genişliği ~250px seviyesine inerek 3'lü kart düzeninde tek satırda ferahça hizalandı.
+  3. **Doğrulama:**
+     - Frontend Build: PASS (`tsc -b && vite build`, 0 hata).
+     - Backend Testleri: PASS (57/57 test sıfır hatayla geçti).
+     - Satır sınırları: `AppCMSCard.tsx` 425 satır (<= 450).
+* **Durum:** `DevAdmin` dalında çalışıldı, `main` kesinlikle korundu.
+
+## [21.10.2026 - 09:55] — ADMİN UYGULAMA KATALOĞU 3'LÜ IZGARA (3xN) DÜZENLEMESİ [*]
 * **Yapılan İşlem:**
   1. **3'lü Kart Kolon Düzeni (3xn):**
      - `AppsCMSView.tsx`: Izgara tabanı `minmax(330px, 1fr)` yapılarak masaüstünde 3 kartlı (3xn) görünüm sağlandı.
