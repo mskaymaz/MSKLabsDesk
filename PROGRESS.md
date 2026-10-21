@@ -1,7 +1,25 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
-## 🟢 Son Güncelleme [21.10.2026 - 15:55] — ADSENSE MİMARİSİNİN VİTRİNLE (WEBMSKLABS) TAM ENTEGRASYONU [*]
+## 🟢 Son Güncelleme [21.10.2026 - 16:17] — DİKEY REKLAMLARDA ÜST PANEL MARJI VE YATAY HİZALAMA ORTALAMA DÜZELTMELERİ [*]
+* **Yapılan İşlem:**
+  1. **Dikey Reklamların Sabit Üst Panelden Ölçülmesi (`ads-loader.js` & `global.css`):**
+     - Dikey sol/sağ reklamların (`.desktop-ad`) üst marjı, doğrudan sabit üst panelin (`.site-header-sticky`) alt sınırından itibaren başlayacak şekilde dinamik yüksekliğe (`headerH + margin_top`) bağlandı.
+     - Sayfa kaydırıldığında (`sticky`) reklamın üst panelin altına girmemesi için sticky kilitlenme mesafesi `top: (headerH + margin_top)px` olarak sabitlendi.
+  2. **Yatay Reklamlarda Kusursuz Ortalama & Hizalama (`ads-loader.js`, `global.css`, `AdLiveCanvas.tsx`):**
+     - Bölümler arası (`ad_in_content`) ve sayfa altı (`ad_footer_bottom`) reklam alanları için `width: 100%` esnek kapsayıcı ve `margin: auto` ile sayfada tam dikey eksen ortalama kuralı getirildi.
+     - `align === 'center'` seçildiğinde `justifyContent: center` ile reklamın sayfaya ortalanması sağlandı; sol/sağ hizalamalar ise ilgili yönün marjını koruyarak çalışır hale getirildi.
+     - Eksik olan `.in-content-ad` şablon yerleşimleri ana sayfa, blog ve uygulama sayfalarına eklendi.
+  3. **Anlık Yansıma ve Önbellek Koruması (`cmsPublic.ts` & `ads-loader.js`):**
+     - `GET /api/v1/ads` uç noktası ve istemci `fetch` çağrısı `no-cache, no-store` kurallarıyla güncellenerek stüdyodan yapılan değişikliklerin sayfada anında etkili olması sağlandı.
+  4. **Doğrulama ve Kural Uyumu:**
+     - Frontend Build: PASS (`tsc -b && vite build`, 0 hata).
+     - WebMSKLabs Build: PASS (`tsc --noEmit && vite build`, 0 hata).
+     - Backend Testleri: PASS (57/57 test %100 başarılı).
+     - Satır sınırları: `AdLiveCanvas.tsx` 447 satır (<= 450), `ads-loader.js` 199 satır (<= 450).
+* **Durum:** `DevAdmin` dalında çalışıldı, `main` kesinlikle korundu.
+
+## [21.10.2026 - 15:55] — ADSENSE MİMARİSİNİN VİTRİNLE (WEBMSKLABS) TAM ENTEGRASYONU [*]
 * **Yapılan İşlem:**
   1. **Kamusal Reklam API Uç Noktası (`backend/src/routes/cmsPublic.ts`):**
      - `GET /api/v1/ads` uç noktası genişletildi; `site_templates WHERE key_name LIKE 'ad_%' AND is_active = 1` sorgulanarak aktif ve silinmemiş reklamlar `meta_json` ile birleştirilmiş saf JSON formatında sunuldu.
