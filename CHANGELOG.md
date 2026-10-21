@@ -1,6 +1,16 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [21.10.2026 - 10:25] - Sürümler Açılır Menüsünde Metin Görünürlüğü ve Renk Düzeltmesi
+- **Metin ve Renk Düzeltmesi (`AppCMSCard.tsx`):**
+  - Tanımsız CSS değişkeni (`var(--text-main)`) nedeniyle açık temada görünmeyen metin rengi `var(--text-primary)` olarak düzeltildi.
+  - Açılır menüdeki seçenekler açık ve net metinlerle yapılandırıldı:
+    - `Son Sürüm` (Roket ikonu ile, sürüm yayınlama modalını açar).
+    - `Eski Sürümler (N)` (Katman ikonu ile, sürüm geçmişi akordeonunu açıp kapatır).
+  - Menü kutusu zemin rengi `var(--bg-modal)` ve kenarlık `var(--border-subtle)` yapılarak hem açık hem koyu temada kusursuz kontrast sağlandı.
+- **Doğrulama ve Kural Uyumu:**
+  - Frontend derlemesi (`tsc -b && vite build`) PASS, backend testleri (57/57) %100 PASS. `DevAdmin` dalında çalışıldı, `main` korundu.
+
 ## [21.10.2026 - 10:15] - Kart Aksiyon Barı Sadeleştirmesi: Sürümler Açılır Menüsü ve Yalın Buton Mimarisi
 - **Tek Bir `Sürümler ▾` Açılır Menüsü (`AppCMSCard.tsx`):**
   - İki ayrı sürüm butonu ("Sürüm" ve "+Sürüm") kaldırılarak tek bir açılır `Sürümler ▾` butonunda birleştirildi.

@@ -346,13 +346,13 @@ export const AppCMSCard: React.FC<AppCMSCardProps> = ({
                 bottom: '100%',
                 left: 0,
                 marginBottom: '6px',
-                background: 'var(--bg-card, #1e293b)',
-                border: '1px solid var(--border-color, #334155)',
+                background: 'var(--bg-modal, #1e293b)',
+                border: '1px solid var(--border-subtle, #334155)',
                 borderRadius: '8px',
                 boxShadow: '0 8px 24px rgba(0,0,0,0.3)',
                 padding: '4px',
                 zIndex: 50,
-                minWidth: '180px',
+                minWidth: '170px',
                 display: 'flex',
                 flexDirection: 'column',
                 gap: '2px',
@@ -365,10 +365,10 @@ export const AppCMSCard: React.FC<AppCMSCardProps> = ({
                   onOpenVersionModal(app);
                 }}
                 className="admin-btn admin-btn-sm"
-                style={{ textAlign: 'left', justifyContent: 'flex-start', padding: '6px 10px', fontSize: '0.75rem', background: 'transparent', border: 'none', display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--text-main, #fff)' }}
+                style={{ textAlign: 'left', justifyContent: 'flex-start', padding: '6px 10px', fontSize: '0.75rem', fontWeight: 500, background: 'transparent', border: 'none', display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-primary)', cursor: 'pointer', width: '100%' }}
               >
-                <Rocket size={13} color="var(--accent-primary, #3b82f6)" />
-                <span>Yeni Sürüm Yayınla</span>
+                <Rocket size={13} color="var(--accent-primary, #6366f1)" />
+                <span>Son Sürüm</span>
               </button>
               <button
                 type="button"
@@ -377,10 +377,10 @@ export const AppCMSCard: React.FC<AppCMSCardProps> = ({
                   onToggleVersions(app.id);
                 }}
                 className="admin-btn admin-btn-sm"
-                style={{ textAlign: 'left', justifyContent: 'flex-start', padding: '6px 10px', fontSize: '0.75rem', background: 'transparent', border: 'none', display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--text-main, #fff)' }}
+                style={{ textAlign: 'left', justifyContent: 'flex-start', padding: '6px 10px', fontSize: '0.75rem', fontWeight: 500, background: 'transparent', border: 'none', display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-primary)', cursor: 'pointer', width: '100%' }}
               >
-                <Layers size={13} color="var(--text-muted, #94a3b8)" />
-                <span>Sürüm Geçmişi ({app.versions?.length || 0})</span>
+                <Layers size={13} color="var(--text-muted, #9ca3af)" />
+                <span>Eski Sürümler ({app.versions?.length || 0})</span>
               </button>
             </div>
           )}

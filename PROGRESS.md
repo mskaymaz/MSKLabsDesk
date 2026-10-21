@@ -1,7 +1,19 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
-## 🟢 Son Güncelleme [21.10.2026 - 10:15] — KART AKSİYON BARI SADELEŞTİRMESİ VE AÇILIR SÜRÜMLER MENÜSÜ [*]
+## 🟢 Son Güncelleme [21.10.2026 - 10:25] — SÜRÜMLER AÇILIR MENÜSÜ METİN VE RENK DÜZELTMESİ [*]
+* **Yapılan İşlem:**
+  1. **Açılır Menü Metinleri ve Renkleri (`AppCMSCard.tsx`):**
+     - Açılır menüdeki buton metinleri `Son Sürüm` ve `Eski Sürümler (N)` olarak netleştirildi.
+     - Metin rengi tanımsız değişken yerine sistem temasına uygun `var(--text-primary)` yapılarak açık ve koyu modda görünürlük sağlandı.
+     - Kutu arka planı `var(--bg-modal)` ve kenarlık `var(--border-subtle)` ile kontrast standartlarına bağlandı.
+  2. **Doğrulama:**
+     - Frontend Build: PASS (`tsc -b && vite build`, 0 hata).
+     - Backend Testleri: PASS (57/57 test %100 başarılı).
+     - Satır sınırları: `AppCMSCard.tsx` 424 satır (<= 450).
+* **Durum:** `DevAdmin` dalında çalışıldı, `main` kesinlikle korundu.
+
+## [21.10.2026 - 10:15] — KART AKSİYON BARI SADELEŞTİRMESİ VE AÇILIR SÜRÜMLER MENÜSÜ [*]
 * **Yapılan İşlem:**
   1. **Sürümler Açılır Menüsü:**
      - İki ayrı kafa karıştırıcı sürüm butonu yerine `Sürümler ▾` açılır listesi entegre edildi ("Yeni Sürüm Yayınla" + "Sürüm Geçmişi").
