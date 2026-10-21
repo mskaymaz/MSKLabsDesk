@@ -232,7 +232,13 @@ export async function handleCmsPublic(request: Request, env: any): Promise<Respo
       };
     }).filter((a: any) => !a.is_deleted && a.slot_key !== 'ad_header_top');
 
-    return new Response(JSON.stringify({ success: true, ads }), { headers });
+    return new Response(JSON.stringify({ success: true, ads }), {
+      headers: {
+        ...headers,
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        'Pragma': 'no-cache',
+      },
+    });
   }
 
   // 6. GET /api/v1/templates — Duyuru ve Şablonlar

@@ -68,92 +68,101 @@ export const AdLiveCanvas: React.FC<AdLiveCanvasProps> = ({
   const boxH = calcBoxHeight();
 
   // Reklam Kutusu
-  const renderAdCreative = () => (
-    <div
-      style={{
-        marginTop: `${deviceConfig.margin_top || 0}px`,
-        marginRight: `${deviceConfig.margin_right || 0}px`,
-        marginBottom: `${deviceConfig.margin_bottom || 0}px`,
-        marginLeft: `${deviceConfig.margin_left || 0}px`,
-        display: 'flex',
-        justifyContent: alignStyles[deviceConfig.align || 'center'] || 'center',
-        width: '100%',
-      }}
-    >
-      {!deviceConfig.is_enabled ? (
-        <div
-          style={{
-            width: boxW,
-            maxWidth: '100%',
-            height: boxH,
-            minHeight: boxH,
-            background: isLight ? '#fef2f2' : 'rgba(239, 68, 68, 0.08)',
-            border: isLight ? '2px dashed #f87171' : '2px dashed rgba(239, 68, 68, 0.4)',
-            borderRadius: '8px',
-            color: isLight ? '#b91c1c' : '#f87171',
-            fontSize: '0.76rem',
-            fontWeight: 600,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            padding: '12px',
-            textAlign: 'center',
-            boxSizing: 'border-box',
-          }}
-        >
-          <ShieldCheck size={16} />
-          <span style={{ marginTop: '4px' }}>{ad.title}</span>
-          <span style={{ fontSize: '0.72rem', color: isLight ? '#dc2626' : '#f87171', marginTop: '2px' }}>
-            ({boxW} x {boxH}) — Pasife Alınmıştır
-          </span>
-        </div>
-      ) : (
-        <div
-          style={{
-            width: boxW,
-            maxWidth: '100%',
-            height: boxH,
-            minHeight: boxH,
-            background: isLight
-              ? 'linear-gradient(135deg, rgba(99, 102, 241, 0.09), rgba(16, 185, 129, 0.09))'
-              : 'linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(16, 185, 129, 0.15))',
-            border: '2px dashed var(--accent-primary, #6366f1)',
-            borderRadius: '8px',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            padding: '10px',
-            textAlign: 'center',
-            boxSizing: 'border-box',
-          }}
-        >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '4px', color: 'var(--accent-primary, #6366f1)', fontWeight: 700, fontSize: '0.76rem' }}>
-            <ShieldCheck size={14} />
-            <span>{isVerticalSlot ? 'DİKEY REKLAM' : 'YATAY REKLAM'}</span>
-            {deviceConfig.is_sticky && (
-              <span className="badge badge-resolved" style={{ fontSize: '0.62rem', padding: '1px 4px' }}>
-                STICKY
-              </span>
-            )}
-          </div>
-          <p style={{ fontSize: '0.78rem', color: isLight ? '#0f172a' : '#FFF', margin: '4px 0 2px', fontWeight: 700 }}>
-            {boxW} x {boxH}
-          </p>
-          <div style={{ fontSize: '0.68rem', color: isLight ? '#475569' : 'var(--text-muted)', fontWeight: 600 }}>
-            {ad.title}
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginTop: '4px', fontSize: '0.65rem', color: isLight ? '#4338ca' : 'var(--accent-cyan)', fontWeight: 600 }}>
-            <Sliders size={10} />
-            <span>
-              M: {deviceConfig.margin_top}T {deviceConfig.margin_right}R {deviceConfig.margin_bottom}B {deviceConfig.margin_left}L
+  const renderAdCreative = () => {
+    const align = deviceConfig.align || 'center';
+    const mTop = `${deviceConfig.margin_top || 0}px`;
+    const mBottom = `${deviceConfig.margin_bottom || 0}px`;
+    const mLeft = align === 'center' ? 'auto' : align === 'left' ? `${deviceConfig.margin_left || 0}px` : 'auto';
+    const mRight = align === 'center' ? 'auto' : align === 'right' ? `${deviceConfig.margin_right || 0}px` : 'auto';
+
+    return (
+      <div
+        style={{
+          marginTop: mTop,
+          marginBottom: mBottom,
+          marginLeft: isVerticalSlot ? `${deviceConfig.margin_left || 0}px` : mLeft,
+          marginRight: isVerticalSlot ? `${deviceConfig.margin_right || 0}px` : mRight,
+          display: 'flex',
+          justifyContent: isVerticalSlot ? 'center' : alignStyles[align] || 'center',
+          width: '100%',
+          boxSizing: 'border-box',
+        }}
+      >
+        {!deviceConfig.is_enabled ? (
+          <div
+            style={{
+              width: boxW,
+              maxWidth: '100%',
+              height: boxH,
+              minHeight: boxH,
+              background: isLight ? '#fef2f2' : 'rgba(239, 68, 68, 0.08)',
+              border: isLight ? '2px dashed #f87171' : '2px dashed rgba(239, 68, 68, 0.4)',
+              borderRadius: '8px',
+              color: isLight ? '#b91c1c' : '#f87171',
+              fontSize: '0.76rem',
+              fontWeight: 600,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: '12px',
+              textAlign: 'center',
+              boxSizing: 'border-box',
+            }}
+          >
+            <ShieldCheck size={16} />
+            <span style={{ marginTop: '4px' }}>{ad.title}</span>
+            <span style={{ fontSize: '0.72rem', color: isLight ? '#dc2626' : '#f87171', marginTop: '2px' }}>
+              ({boxW} x {boxH}) — Pasife Alınmıştır
             </span>
           </div>
-        </div>
-      )}
-    </div>
-  );
+        ) : (
+          <div
+            style={{
+              width: boxW,
+              maxWidth: '100%',
+              height: boxH,
+              minHeight: boxH,
+              background: isLight
+                ? 'linear-gradient(135deg, rgba(99, 102, 241, 0.09), rgba(16, 185, 129, 0.09))'
+                : 'linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(16, 185, 129, 0.15))',
+              border: '2px dashed var(--accent-primary, #6366f1)',
+              borderRadius: '8px',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: '10px',
+              textAlign: 'center',
+              boxSizing: 'border-box',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '4px', color: 'var(--accent-primary, #6366f1)', fontWeight: 700, fontSize: '0.76rem' }}>
+              <ShieldCheck size={14} />
+              <span>{isVerticalSlot ? 'DİKEY REKLAM' : 'YATAY REKLAM'}</span>
+              {deviceConfig.is_sticky && (
+                <span className="badge badge-resolved" style={{ fontSize: '0.62rem', padding: '1px 4px' }}>
+                  STICKY
+                </span>
+              )}
+            </div>
+            <p style={{ fontSize: '0.78rem', color: isLight ? '#0f172a' : '#FFF', margin: '4px 0 2px', fontWeight: 700 }}>
+              {boxW} x {boxH}
+            </p>
+            <div style={{ fontSize: '0.68rem', color: isLight ? '#475569' : 'var(--text-muted)', fontWeight: 600 }}>
+              {ad.title}
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '4px', marginTop: '4px', fontSize: '0.65rem', color: isLight ? '#4338ca' : 'var(--accent-cyan)', fontWeight: 600 }}>
+              <Sliders size={10} />
+              <span>
+                M: {deviceConfig.margin_top}T {deviceConfig.margin_right}R {deviceConfig.margin_bottom}B {deviceConfig.margin_left}L
+              </span>
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  };
 
   // Köşeleri Yuvarlatılmış Sınırlı Kart Stili
   const cardBorder = {
