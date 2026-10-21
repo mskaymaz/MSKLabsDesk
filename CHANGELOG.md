@@ -1,6 +1,20 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [21.10.2026 - 09:55] - Admin Uygulama Kataloğu 3'lü Izgara (3xn) Düzeni ve Kompakt Aksiyon Butonları
+- **3'lü Kart Izgarası (3xn) Düzeni (`AppsCMSView.tsx`):**
+  - Masaüstü görünümünde kartların 3'lü kolon (3xn) düzeninde yerleşmesi için ızgara tabanı `minmax(330px, 1fr)` olarak optimize edildi.
+- **Kompakt ve İkon Buton Mimarisi (`AppCMSCard.tsx`):**
+  - Kart altındaki aksiyon butonları kompakt formata dönüştürüldü:
+    - "Görsel Stüdyo" -> "Stüdyo" (`Edit2` + metin).
+    - "Yeni Sürüm" -> "+Sürüm" (`Rocket` + metin).
+    - "Sürümler (N)" -> "Sürüm (N)" (`Layers` + metin).
+    - "Ayarlar" -> İkon buton (`Settings` + tooltip).
+    - "Sil" -> İkon buton (`Trash2` + tooltip).
+  - Toplam satır genişliği 300px altına indirilerek 3'lü ızgara kartlarının içine butonların taşmadan, tek satırda kusursuz sığması sağlandı.
+- **Doğrulama ve Kural Uyumu:**
+  - Frontend derlemesi ve 57 backend testi %100 PASS. `DevAdmin` dalında çalışıldı, `main` kesinlikle korundu.
+
 ## [20.10.2026 - 15:10] - Uygulama İkon ve Emojilerinin Merkezi Çözümlenmesi ve GÇ Pil Uyarı/En Yakın Düzeltmesi
 - **İkon Çözümleyici Geliştirmesi (`appIcons.ts`):**
   - `resolveAppIcon` fonksiyonu eklendi; metin/emoji olan ikonlar (`🔋`, `📝`, `📄`, `🖨️`) ile görsel URL'leri ayrıştırıldı.

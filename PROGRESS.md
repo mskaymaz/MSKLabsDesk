@@ -1,7 +1,20 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
-## 🟢 Son Güncelleme [20.10.2026 - 15:10] — UYGULAMA İKONLARI VE EMOJİ ÇÖZÜMLEME DÜZELTMESİ [*]
+## 🟢 Son Güncelleme [21.10.2026 - 09:55] — ADMİN UYGULAMA KATALOĞU 3'LÜ IZGARA (3xN) DÜZENLEMESİ [*]
+* **Yapılan İşlem:**
+  1. **3'lü Kart Kolon Düzeni (3xn):**
+     - `AppsCMSView.tsx`: Izgara tabanı `minmax(330px, 1fr)` yapılarak masaüstünde 3 kartlı (3xn) görünüm sağlandı.
+  2. **Kompakt Aksiyon Butonları:**
+     - `AppCMSCard.tsx`: Buton metinleri kısaltıldı ("Stüdyo", "+Sürüm", "Sürüm (N)"); "Ayarlar" ve "Sil" butonları Lucide ikon butonlarına dönüştürüldü.
+     - Buton satırı ~260px seviyesine çekilerek 3'lü kart sınırlarına tek satırda ferahça oturması sağlandı.
+  3. **Doğrulama:**
+     - Frontend Build: PASS (`tsc -b && vite build`, 0 hata).
+     - Backend Testleri: PASS (57/57 test sıfır hatayla geçti).
+     - Satır sınırları: `AppsCMSView.tsx` 354 satır (<= 600), `AppCMSCard.tsx` 372 satır (<= 450).
+* **Durum:** `DevAdmin` dalında çalışıldı, `main` kesinlikle korundu.
+
+## [20.10.2026 - 15:10] — UYGULAMA İKONLARI VE EMOJİ ÇÖZÜMLEME DÜZELTMESİ [*]
 * **Yapılan İşlem:**
   1. **İkon ve Emoji Mimarisinin Standartlaştırılması:**
      - `appIcons.ts` içine `resolveAppIcon` eklendi; hem emoji (`🔋`, `📝`, `📄`, `🖨️`) hem de görsel dosya yolları güvenle çözümlendi.

@@ -1,7 +1,7 @@
 import React from 'react';
 import {
   Edit2, Trash2, Rocket,
-  Copy, Check, Download, Layers
+  Copy, Check, Download, Layers, Settings
 } from 'lucide-react';
 import type { AppItem } from '../../types';
 import { resolveAppIcon } from '../../utils/appIcons';
@@ -309,57 +309,57 @@ export const AppCMSCard: React.FC<AppCMSCardProps> = ({
         </div>
       )}
 
-      {/* Aksiyon Butonları */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px', borderTop: '1px solid var(--border-subtle)', paddingTop: '12px' }}>
+      {/* Aksiyon Butonları (Kompakt 3'lü Izgara Uyumlu) */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '6px', borderTop: '1px solid var(--border-subtle)', paddingTop: '10px' }}>
         <button
           type="button"
           onClick={() => onToggleVersions(app.id)}
           className="admin-btn admin-btn-sm"
-          style={{ padding: '4px 8px', fontSize: '0.75rem', display: 'flex', alignItems: 'center', gap: '4px', whiteSpace: 'nowrap' }}
+          style={{ padding: '4px 6px', fontSize: '0.72rem', display: 'flex', alignItems: 'center', gap: '4px', whiteSpace: 'nowrap' }}
           title="Tüm sürümleri gör"
         >
           <Layers size={13} />
-          <span>Sürümler ({app.versions?.length || 0})</span>
+          <span>Sürüm ({app.versions?.length || 0})</span>
         </button>
 
-        <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', alignItems: 'center' }}>
+        <div style={{ display: 'flex', gap: '4px', alignItems: 'center' }}>
           <button
             type="button"
             onClick={() => onOpenVersionModal(app)}
             className="admin-btn admin-btn-sm admin-btn-secondary"
-            style={{ padding: '4px 8px', fontSize: '0.75rem', display: 'flex', alignItems: 'center', gap: '4px', whiteSpace: 'nowrap' }}
+            style={{ padding: '4px 6px', fontSize: '0.72rem', display: 'flex', alignItems: 'center', gap: '3px', whiteSpace: 'nowrap' }}
             title="Hızlıca yeni APK / Dağıtım sürümü yayınla"
           >
             <Rocket size={13} />
-            <span>Yeni Sürüm</span>
+            <span>+Sürüm</span>
           </button>
 
           <button
             type="button"
             onClick={() => onOpenStudio(app)}
             className="admin-btn admin-btn-sm admin-btn-primary"
-            style={{ padding: '4px 10px', fontSize: '0.75rem', display: 'flex', alignItems: 'center', gap: '4px', whiteSpace: 'nowrap' }}
+            style={{ padding: '4px 8px', fontSize: '0.72rem', display: 'flex', alignItems: 'center', gap: '4px', whiteSpace: 'nowrap' }}
             title="Görsel Tuval Stüdyosunu Başlat"
           >
             <Edit2 size={13} />
-            <span>Görsel Stüdyo</span>
+            <span>Stüdyo</span>
           </button>
 
           <button
             type="button"
             onClick={() => onEditAppModal(app)}
             className="admin-btn admin-btn-sm"
-            style={{ padding: '4px 8px', fontSize: '0.75rem', whiteSpace: 'nowrap' }}
+            style={{ padding: '4px 6px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
             title="Hızlı Ayarlar Modalı"
           >
-            Ayarlar
+            <Settings size={13} />
           </button>
 
           <button
             type="button"
             onClick={() => onDeleteApp(app)}
             className="admin-btn admin-btn-sm admin-btn-delete"
-            style={{ flexShrink: 0 }}
+            style={{ padding: '4px 6px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
             title="Uygulamayı Sil"
           >
             <Trash2 size={13} />
