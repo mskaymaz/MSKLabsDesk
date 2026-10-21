@@ -213,10 +213,34 @@ export async function handleCmsPublic(request: Request, env: any): Promise<Respo
     }), { headers });
   }
 
-  // 5. GET /api/v1/templates & /api/v1/ads — Duyuru, Şablonlar ve Aktif Reklamlar
-  if (path === '/api/v1/templates' || path === '/api/v1/ads') {
-    const { results } = await env.DB.prepare(`SELECT key_name, content_tr, content_en, content_ar, meta_json FROM site_templates WHERE is_active = 1`).all();
-    return new Response(JSON.stringify({ templates: results || [], ads: results || [] }), { headers });
+  // 5. GET /api/v1/ads — Kamusal Aktif Reklam Ayarları
+  if (path === '/api/v1/ads') {
+    const { results } = await env.DB.prepare(
+      `SELECT key_name, content_tr, meta_json FROM site_templates WHERE key_name LIKE 'ad_%' AND is_active = 1`
+    ).all();
+
+    const ads = (results || []).map((row: any) => {
+      let meta: any = {};
+      try {
+        if (row.meta_json) meta = JSON.parse(row.meta_json);
+      } catch (_) {}
+      return {
+        slot_key: row.key_name,
+        title: row.content_tr,
+        ...meta,
+        is_enabled: true,
+      };
+    }).filter((a: any) => !a.is_deleted && a.slot_key !== 'ad_header_top');
+
+    return new Response(JSON.stringify({ success: true, ads }), { headers });
+  }
+
+  // 6. GET /api/v1/templates — Duyuru ve Şablonlar
+  if (path === '/api/v1/templates') {
+    const { results } = await env.DB.prepare(
+      `SELECT key_name, content_tr, content_en, content_ar, meta_json FROM site_templates WHERE is_active = 1`
+    ).all();
+    return new Response(JSON.stringify({ success: true, templates: results || [] }), { headers });
   }
 
   // 6. GET /api/v1/sitemap.xml — Otomatik XML Sitemap

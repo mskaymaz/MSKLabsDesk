@@ -321,7 +321,16 @@ export const TemplatesView: React.FC = () => {
                   </span>
                   <Switch
                     checked={Boolean(currentAd.is_enabled)}
-                    onChange={(e) => handleCurrentAdChange({ ...currentAd, is_enabled: e.target.checked })}
+                    onChange={(e) => {
+                      const checked = e.target.checked;
+                      const isVert = currentAd.slot_key.includes('sidebar');
+                      handleCurrentAdChange({
+                        ...currentAd,
+                        is_enabled: checked,
+                        desktop: { ...currentAd.desktop, is_enabled: checked ? true : currentAd.desktop?.is_enabled },
+                        mobile: { ...currentAd.mobile, is_enabled: checked ? (!isVert) : currentAd.mobile?.is_enabled },
+                      });
+                    }}
                     aria-label="Genel aktiflik"
                   />
                 </div>
