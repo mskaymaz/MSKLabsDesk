@@ -26,6 +26,7 @@ export const TemplatesView: React.FC = () => {
   const [studioDevice, setStudioDevice] = useState<'desktop' | 'mobile'>('desktop');
   const [savingSlot, setSavingSlot] = useState<boolean>(false);
   const [savedSuccess, setSavedSuccess] = useState<boolean>(false);
+  const [deletingSlot, setDeletingSlot] = useState<boolean>(false);
 
   // 3. AdSense Boyut Kataloğu ve Yeni Reklam Modalları
   const [enabledPresets, setEnabledPresets] = useState<string[]>(getEnabledPresets());
@@ -115,8 +116,6 @@ export const TemplatesView: React.FC = () => {
     setAds((prev) => prev.map((item) => (item.slot_key === updated.slot_key ? updated : item)));
   };
 
-  const [deletingSlot, setDeletingSlot] = useState<boolean>(false);
-
   const handleAddNewSlot = async (newSlot: AdPlacementSetting) => {
     await api.updateAd(newSlot.slot_key, newSlot);
     setAds((prev) => [...prev, newSlot]);
@@ -161,151 +160,124 @@ export const TemplatesView: React.FC = () => {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', position: 'relative' }}>
-      {/* 1. Sabit Üst Başlık Çubuğu (Sticky Header - Diğer Modüllerle Birebir Uyumlu) */}
+      {/* ================= SABİT ÜST BÖLÜM (KULLANICININ İŞARET ETTİĞİ TÜM ALAN) ================= */}
       <div
         style={{
           position: 'sticky',
-          top: 0,
-          zIndex: 20,
-          background: 'var(--bg-card, #1e293b)',
-          borderBottom: '1px solid var(--border-subtle, #334155)',
-          padding: '10px 14px',
-          margin: '-14px -14px 0 -14px',
+          top: '40px', // Topbar'ın hemen altı
+          zIndex: 25,
+          background: 'var(--bg-primary, #0B0F19)',
+          paddingTop: '8px',
+          paddingBottom: '8px',
           display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          flexWrap: 'wrap',
-          gap: '12px',
-          boxShadow: '0 2px 10px rgba(0,0,0,0.06)',
-          backdropFilter: 'blur(8px)',
+          flexDirection: 'column',
+          gap: '10px',
         }}
       >
-        <div>
-          <h1 className="admin-page-title" style={{ margin: 0, fontSize: '1.2rem' }}>
-            Şablon & Reklam Stüdyosu
-          </h1>
-          <p className="admin-page-desc" style={{ margin: '2px 0 0', fontSize: '0.76rem' }}>
-            Google AdSense yerleşimleri (Açılır liste & canlı sahne) ve çok dilli duyuru bandı
-          </p>
+        {/* 1. Başlık ve AdSense Boyut Kataloğu Butonu */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px' }}>
+          <div>
+            <h1 className="admin-page-title" style={{ margin: 0, fontSize: '1.2rem' }}>
+              Şablon & Reklam Stüdyosu
+            </h1>
+            <p className="admin-page-desc" style={{ margin: '2px 0 0', fontSize: '0.76rem' }}>
+              Google AdSense yerleşimleri (Açılır liste & canlı sahne) ve çok dilli duyuru bandı
+            </p>
+          </div>
+
+          {activeTab === 'ads' && (
+            <button
+              type="button"
+              className="admin-btn admin-btn-secondary admin-btn-sm"
+              onClick={() => setShowCatalogModal(true)}
+              style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.8rem', padding: '5px 12px' }}
+              title="Google AdSense standart ebat kataloğunu yönet"
+            >
+              <Layers size={14} color="var(--accent-primary)" />
+              <span>AdSense Boyut Kataloğu</span>
+              <span className="admin-badge admin-badge-counter" style={{ fontSize: '0.7rem' }}>
+                {enabledPresets.length}/{ADSENSE_MASTER_CATALOG.length}
+              </span>
+            </button>
+          )}
         </div>
 
-        {/* Sağ: AdSense Boyut Kataloğu Butonu */}
-        {activeTab === 'ads' && (
+        {/* 2. Ana Sekmeler */}
+        <div style={{ display: 'flex', gap: '8px', borderBottom: '1px solid var(--border-subtle, #334155)', paddingBottom: '2px' }}>
           <button
             type="button"
-            className="admin-btn admin-btn-secondary admin-btn-sm"
-            onClick={() => setShowCatalogModal(true)}
-            style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.8rem', padding: '5px 12px' }}
-            title="Google AdSense standart ebat kataloğunu yönet"
+            onClick={() => setActiveTab('ads')}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              padding: '6px 14px',
+              fontSize: '0.84rem',
+              fontWeight: activeTab === 'ads' ? 600 : 500,
+              background: activeTab === 'ads' ? 'var(--bg-card, #1e293b)' : 'transparent',
+              color: activeTab === 'ads' ? 'var(--accent-primary, #6366f1)' : 'var(--text-secondary)',
+              border: '1px solid',
+              borderColor: activeTab === 'ads' ? 'var(--border-subtle, #334155)' : 'transparent',
+              borderBottom: activeTab === 'ads' ? '2px solid var(--accent-primary, #6366f1)' : '2px solid transparent',
+              borderRadius: '6px 6px 0 0',
+              cursor: 'pointer',
+            }}
           >
-            <Layers size={14} color="var(--accent-primary)" />
-            <span>AdSense Boyut Kataloğu</span>
-            <span className="admin-badge admin-badge-counter" style={{ fontSize: '0.7rem' }}>
-              {enabledPresets.length}/{ADSENSE_MASTER_CATALOG.length}
-            </span>
+            <DollarSign size={14} />
+            <span>Google AdSense Reklam Stüdyosu</span>
+            <span className="admin-badge admin-badge-counter">{ads.length}</span>
           </button>
-        )}
-      </div>
 
-      {message && (
-        <div
-          style={{
-            padding: '8px 14px',
-            background: 'rgba(16, 185, 129, 0.15)',
-            border: '1px solid var(--accent-emerald)',
-            color: 'var(--accent-emerald)',
-            borderRadius: 'var(--radius-md)',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px',
-            fontSize: '0.84rem',
-          }}
-        >
-          <CheckCircle size={15} />
-          <span>{message}</span>
+          <button
+            type="button"
+            onClick={() => setActiveTab('announcement')}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              padding: '6px 14px',
+              fontSize: '0.84rem',
+              fontWeight: activeTab === 'announcement' ? 600 : 500,
+              background: activeTab === 'announcement' ? 'var(--bg-card, #1e293b)' : 'transparent',
+              color: activeTab === 'announcement' ? 'var(--accent-primary, #6366f1)' : 'var(--text-secondary)',
+              border: '1px solid',
+              borderColor: activeTab === 'announcement' ? 'var(--border-subtle, #334155)' : 'transparent',
+              borderBottom: activeTab === 'announcement' ? '2px solid var(--accent-primary, #6366f1)' : '2px solid transparent',
+              borderRadius: '6px 6px 0 0',
+              cursor: 'pointer',
+            }}
+          >
+            <Megaphone size={14} />
+            <span>Duyuru Bandı (Header Banner)</span>
+          </button>
         </div>
-      )}
 
-      {/* 2. Ana Sekmeler */}
-      <div style={{ display: 'flex', gap: '8px', borderBottom: '1px solid var(--border-subtle, #334155)', paddingBottom: '2px' }}>
-        <button
-          type="button"
-          onClick={() => setActiveTab('ads')}
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px',
-            padding: '8px 16px',
-            fontSize: '0.86rem',
-            fontWeight: activeTab === 'ads' ? 600 : 500,
-            background: activeTab === 'ads' ? 'var(--bg-card, #1e293b)' : 'transparent',
-            color: activeTab === 'ads' ? 'var(--accent-primary, #6366f1)' : 'var(--text-secondary)',
-            border: '1px solid',
-            borderColor: activeTab === 'ads' ? 'var(--border-subtle, #334155)' : 'transparent',
-            borderBottom: activeTab === 'ads' ? '2px solid var(--accent-primary, #6366f1)' : '2px solid transparent',
-            borderRadius: '6px 6px 0 0',
-            cursor: 'pointer',
-          }}
-        >
-          <DollarSign size={15} />
-          <span>Google AdSense Reklam Stüdyosu</span>
-          <span className="admin-badge admin-badge-counter">{ads.length}</span>
-        </button>
-
-        <button
-          type="button"
-          onClick={() => setActiveTab('announcement')}
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px',
-            padding: '8px 16px',
-            fontSize: '0.86rem',
-            fontWeight: activeTab === 'announcement' ? 600 : 500,
-            background: activeTab === 'announcement' ? 'var(--bg-card, #1e293b)' : 'transparent',
-            color: activeTab === 'announcement' ? 'var(--accent-primary, #6366f1)' : 'var(--text-secondary)',
-            border: '1px solid',
-            borderColor: activeTab === 'announcement' ? 'var(--border-subtle, #334155)' : 'transparent',
-            borderBottom: activeTab === 'announcement' ? '2px solid var(--accent-primary, #6366f1)' : '2px solid transparent',
-            borderRadius: '6px 6px 0 0',
-            cursor: 'pointer',
-          }}
-        >
-          <Megaphone size={15} />
-          <span>Duyuru Bandı (Header Banner)</span>
-        </button>
-      </div>
-
-      {loading ? (
-        <p style={{ color: 'var(--text-muted)' }}>{t('common.loading')}</p>
-      ) : activeTab === 'ads' ? (
-        /* ================= 3. ADSENSE STÜDYOSU (AÇILIR LİSTE & CANLI SAHNE) ================= */
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-          {/* Üst Kontrol Barı: Açılır Liste + Yeni Reklam Butonu + Aktiflik + Kaydet Butonu */}
+        {/* 3. Reklam Yerleşimi Kontrol Barı (Açılır Liste + Yeni Reklam + Sil + Aktiflik + Kaydet) */}
+        {activeTab === 'ads' && !loading && (
           <div
             style={{
               background: 'var(--bg-card, #1e293b)',
               border: '1px solid var(--border-subtle, #334155)',
               borderRadius: 'var(--radius-md, 8px)',
-              padding: '10px 14px',
+              padding: '8px 12px',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
               flexWrap: 'wrap',
-              gap: '12px',
+              gap: '10px',
               boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
             }}
           >
-            {/* Sol: Açılır Liste ve Yeni Ekle */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
-              <label style={{ fontSize: '0.86rem', fontWeight: 700, color: 'var(--text-primary)', whiteSpace: 'nowrap' }}>
+            {/* Sol: Açılır Liste, Yeni Reklam ve Sil */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+              <label style={{ fontSize: '0.84rem', fontWeight: 700, color: 'var(--text-primary)', whiteSpace: 'nowrap' }}>
                 📌 Reklam Yerleşimi:
               </label>
               <select
                 className="form-select"
                 value={selectedSlotKey}
                 onChange={(e) => setSelectedSlotKey(e.target.value)}
-                style={{ width: '280px', fontSize: '0.84rem', fontWeight: 600, padding: '5px 10px' }}
+                style={{ width: '270px', fontSize: '0.82rem', fontWeight: 600, padding: '4px 8px' }}
               >
                 {ads.map((adItem) => (
                   <option key={adItem.slot_key} value={adItem.slot_key}>
@@ -318,7 +290,7 @@ export const TemplatesView: React.FC = () => {
                 type="button"
                 className="admin-btn admin-btn-secondary admin-btn-sm"
                 onClick={() => setShowNewSlotModal(true)}
-                style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: '0.78rem' }}
+                style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '0.78rem' }}
                 title="Yeni bir reklam alanı tanımla"
               >
                 <PlusCircle size={13} />
@@ -342,7 +314,7 @@ export const TemplatesView: React.FC = () => {
 
             {/* Sağ: Genel Aktiflik ve Kaydet Butonu */}
             {currentAd && (
-              <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                   <span style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--text-primary)' }}>
                     {currentAd.is_enabled ? 'Genel: Aktif' : 'Genel: Pasif'}
@@ -359,7 +331,7 @@ export const TemplatesView: React.FC = () => {
                   className="admin-btn admin-btn-primary admin-btn-sm"
                   onClick={handleSaveCurrentAd}
                   disabled={savingSlot}
-                  style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.82rem', padding: '6px 14px' }}
+                  style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.82rem', padding: '5px 14px' }}
                 >
                   {savedSuccess ? <Check size={14} color="#fff" /> : <Save size={14} />}
                   <span>{savedSuccess ? 'Kaydedildi' : savingSlot ? 'Kaydediliyor...' : 'Kaydet'}</span>
@@ -367,7 +339,33 @@ export const TemplatesView: React.FC = () => {
               </div>
             )}
           </div>
+        )}
+      </div>
 
+      {message && (
+        <div
+          style={{
+            padding: '8px 14px',
+            background: 'rgba(16, 185, 129, 0.15)',
+            border: '1px solid var(--accent-emerald)',
+            color: 'var(--accent-emerald)',
+            borderRadius: 'var(--radius-md)',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            fontSize: '0.84rem',
+          }}
+        >
+          <CheckCircle size={15} />
+          <span>{message}</span>
+        </div>
+      )}
+
+      {loading ? (
+        <p style={{ color: 'var(--text-muted)' }}>{t('common.loading')}</p>
+      ) : activeTab === 'ads' ? (
+        /* ================= HAREKETLİ ALT BÖLÜM (SCROLLABLE CONTENT) ================= */
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
           {/* Hızlı ca-pub-xxx Yardımcı Şeridi (Kibar, Tek Satırda) */}
           <div
             style={{

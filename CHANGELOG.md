@@ -1,6 +1,16 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [21.10.2026 - 15:15] - Bölümler Arası Reklamlarda Çift Kart Sınırı ve Sabit Üst Bölüm Mimarisi
+- **Bölümler Arası Reklamlar İçin Çift Kart Sınırları (`AdLiveCanvas.tsx`):**
+  - Akış içi / bölümler arası (in-content) reklam alanında üst ve alt metinler iki ayrı köşeleri yuvarlatılmış, belirgin çerçeveli (`border: 1px solid`) karta bölündü.
+  - Reklam kutusu doğrudan iki kart arasına yerleştirilerek üst/alt marj boşluklarının referans sınır çizgileri netleştirildi.
+- **Sabit Üst Bölüm (Sticky Header Container - `TemplatesView.tsx`):**
+  - Sayfa başlığı, sekme çubuğu ve reklam açılır listesi/Kaydet butonu tek bir yapışkan kapsayıcı (`sticky top-40px`) olarak sabitlendi; form kontrolleri ve canlı tuval altından akmaktadır.
+- **Doğrulama ve Kural Uyumu:**
+  - Frontend derlemesi (`tsc -b && vite build`) PASS, backend testleri (57/57) %100 PASS. `DevAdmin` dalı korundu.
+  - Satır sınırları: `AdLiveCanvas.tsx` 438 satır (<= 450), `TemplatesView.tsx` 519 satır (<= 600).
+
 ## [21.10.2026 - 12:32] - Sayfa Başı Reklamının Kaldırılması, Reklam Silme ve Dinamik Yönetim
 - **Sayfa Başı Yatay Reklamının Kaldırılması (`cmsTemplates.ts` & `AdLiveCanvas.tsx`):**
   - Hiçbir zaman kullanılmayacak olan `ad_header_top` (Sayfa Başı Yatay Reklam) varsayılan reklam listesinden ve canlı önizleme sahnesinden tamamen kaldırıldı.

@@ -1,7 +1,21 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
-## 🟢 Son Güncelleme [21.10.2026 - 12:32] — SAYFA BAŞI REKLAMININ KALDIRILMASI, REKLAM ALANI SİLME VE DİNAMİK YÖNETİM [*]
+## 🟢 Son Güncelleme [21.10.2026 - 15:15] — BÖLÜMLER ARASI REKLAMLARDA ÇİFT KART SINIRI VE SABİT ÜST BÖLÜM [*]
+* **Yapılan İşlem:**
+  1. **Bölümler Arası Reklamlar İçin Belirgin Kart Sınırları (`AdLiveCanvas.tsx`):**
+     - Bölümler arası (in-content) reklam yapısında önceden tek gövde içinde sınır çizgisi olmadan duran metin yapısı revize edildi.
+     - Metin gövdesi **Bölüm 1 Kartı** ve **Bölüm 2 Kartı** olarak iki ayrı, köşeleri yuvarlatılmış ve çerçeveli (`border: 1px solid #e2e8f0` / `#334155`) müstakil karta ayrıldı.
+     - Reklam kutusu doğrudan bu iki kartın arasına konumlandırıldı; böylece üst ve alt marj boşluklarının her iki kartın kenarlık sınırlarına göre piksel hassasiyetinde nasıl hizalandığı net olarak görünür kılındı.
+  2. **Sabit Üst Bölüm Mimarisi (`TemplatesView.tsx`):**
+     - Sayfa başlığı, sekme çubuğu ve reklam yerleşimi seçici barı tek bir yapışkan kapsayıcı (`sticky top-40px z-25`) içine alındı.
+     - Sayfa aşağı kaydırıldığında reklam seçimi, aktiflik anahtarı ve Kaydet butonu ekranda sabit kalarak alttaki tuval ve form elemanlarının üzerinden akması sağlandı.
+  3. **Doğrulama ve Kural Uyumu:**
+     - Frontend derlemesi (`tsc -b && vite build`) PASS, backend testleri (57/57) %100 PASS. `DevAdmin` dalı korundu.
+     - Satır sınırları: `AdLiveCanvas.tsx` 438 satır (<= 450), `TemplatesView.tsx` 519 satır (<= 600).
+* **Durum:** `DevAdmin` dalında çalışıldı, `main` kesinlikle korundu.
+
+## [21.10.2026 - 12:32] — SAYFA BAŞI REKLAMININ KALDIRILMASI, REKLAM ALANI SİLME VE DİNAMİK YÖNETİM [*]
 * **Yapılan İşlem:**
   1. **Sayfa Başı Yatay Reklamının Kaldırılması (`cmsTemplates.ts` & `AdLiveCanvas.tsx`):**
      - Hiçbir zaman kullanılmayacak olan `ad_header_top` (Sayfa Başı Yatay Reklam) varsayılan reklam listesinden ve canlı önizleme sahnesinden tamamen kaldırıldı.

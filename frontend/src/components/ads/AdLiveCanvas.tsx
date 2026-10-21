@@ -68,65 +68,47 @@ export const AdLiveCanvas: React.FC<AdLiveCanvasProps> = ({
   const boxH = calcBoxHeight();
 
   // Reklam Kutusu
-  const renderAdCreative = () => {
-    if (!deviceConfig.is_enabled) {
-      return (
+  const renderAdCreative = () => (
+    <div
+      style={{
+        marginTop: `${deviceConfig.margin_top || 0}px`,
+        marginRight: `${deviceConfig.margin_right || 0}px`,
+        marginBottom: `${deviceConfig.margin_bottom || 0}px`,
+        marginLeft: `${deviceConfig.margin_left || 0}px`,
+        display: 'flex',
+        justifyContent: alignStyles[deviceConfig.align || 'center'] || 'center',
+        width: '100%',
+      }}
+    >
+      {!deviceConfig.is_enabled ? (
         <div
           style={{
-            marginTop: `${deviceConfig.margin_top || 0}px`,
-            marginRight: `${deviceConfig.margin_right || 0}px`,
-            marginBottom: `${deviceConfig.margin_bottom || 0}px`,
-            marginLeft: `${deviceConfig.margin_left || 0}px`,
+            width: boxW,
+            maxWidth: '100%',
+            height: boxH,
+            minHeight: boxH,
+            background: isLight ? '#fef2f2' : 'rgba(239, 68, 68, 0.08)',
+            border: isLight ? '2px dashed #f87171' : '2px dashed rgba(239, 68, 68, 0.4)',
+            borderRadius: '8px',
+            color: isLight ? '#b91c1c' : '#f87171',
+            fontSize: '0.76rem',
+            fontWeight: 600,
             display: 'flex',
-            justifyContent: alignStyles[deviceConfig.align || 'center'] || 'center',
-            width: '100%',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '12px',
+            textAlign: 'center',
+            boxSizing: 'border-box',
           }}
         >
-          <div
-            style={{
-              width: boxW,
-              maxWidth: '100%',
-              height: boxH,
-              minHeight: boxH,
-              background: isLight ? '#fef2f2' : 'rgba(239, 68, 68, 0.08)',
-              border: isLight ? '2px dashed #f87171' : '2px dashed rgba(239, 68, 68, 0.4)',
-              borderRadius: '8px',
-              color: isLight ? '#b91c1c' : '#f87171',
-              fontSize: '0.76rem',
-              fontWeight: 600,
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-              padding: '12px',
-              textAlign: 'center',
-              boxSizing: 'border-box',
-            }}
-          >
-            <ShieldCheck size={16} />
-            <span style={{ marginTop: '4px' }}>
-              {ad.title}
-            </span>
-            <span style={{ fontSize: '0.72rem', color: isLight ? '#dc2626' : '#f87171', marginTop: '2px' }}>
-              ({boxW} x {boxH}) — Pasife Alınmıştır
-            </span>
-          </div>
+          <ShieldCheck size={16} />
+          <span style={{ marginTop: '4px' }}>{ad.title}</span>
+          <span style={{ fontSize: '0.72rem', color: isLight ? '#dc2626' : '#f87171', marginTop: '2px' }}>
+            ({boxW} x {boxH}) — Pasife Alınmıştır
+          </span>
         </div>
-      );
-    }
-
-    return (
-      <div
-        style={{
-          marginTop: `${deviceConfig.margin_top || 0}px`,
-          marginRight: `${deviceConfig.margin_right || 0}px`,
-          marginBottom: `${deviceConfig.margin_bottom || 0}px`,
-          marginLeft: `${deviceConfig.margin_left || 0}px`,
-          display: 'flex',
-          justifyContent: alignStyles[deviceConfig.align || 'center'] || 'center',
-          width: '100%',
-        }}
-      >
+      ) : (
         <div
           style={{
             width: boxW,
@@ -169,57 +151,79 @@ export const AdLiveCanvas: React.FC<AdLiveCanvasProps> = ({
             </span>
           </div>
         </div>
-      </div>
-    );
+      )}
+    </div>
+  );
+
+  // Köşeleri Yuvarlatılmış Sınırlı Kart Stili
+  const cardBorder = {
+    background: isLight ? '#ffffff' : '#1e293b',
+    border: isLight ? '1px solid #e2e8f0' : '1px solid #334155',
+    borderRadius: '10px',
+    padding: '16px 18px',
+    boxShadow: isLight ? '0 1px 4px rgba(0,0,0,0.04)' : 'none',
+    display: 'flex',
+    flexDirection: 'column' as const,
+    gap: '12px',
   };
 
-  // Köşeleri Yuvarlatılmış Sınırlı Ana Makale Kartı
-  const renderArticleCard = () => (
-    <div
-      style={{
-        background: isLight ? '#ffffff' : '#1e293b',
-        border: isLight ? '1px solid #e2e8f0' : '1px solid #334155',
-        borderRadius: '10px',
-        padding: '16px 18px',
-        boxShadow: isLight ? '0 1px 4px rgba(0,0,0,0.04)' : 'none',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '12px',
-      }}
-    >
+  const renderSection1 = () => (
+    <div style={cardBorder}>
       <div style={{ display: 'flex', alignItems: 'center', gap: '8px', borderBottom: isLight ? '1px solid #f1f5f9' : '1px solid #334155', paddingBottom: '8px' }}>
         <BookOpen size={14} color="var(--accent-primary)" />
         <span style={{ fontSize: '0.72rem', fontWeight: 700, padding: '2px 8px', borderRadius: '4px', background: 'rgba(99, 102, 241, 0.1)', color: 'var(--accent-primary)' }}>
-          TEKNOLOJİ & YAZILIM
+          BÖLÜM 1 • TEKNOLOJİ & YAZILIM
         </span>
-        <span style={{ fontSize: '0.72rem', color: isLight ? '#64748b' : 'var(--text-muted)' }}>
-          • 5 dk okuma süresi
-        </span>
+        <span style={{ fontSize: '0.72rem', color: isLight ? '#64748b' : 'var(--text-muted)' }}>• 3 dk okuma süresi</span>
       </div>
-
       <h2 style={{ fontSize: '1.02rem', fontWeight: 700, color: isLight ? '#0f172a' : '#ffffff', margin: 0, lineHeight: 1.35 }}>
         MSK Labs: Geleceğin Web ve Masaüstü Yazılım Mimarileri
       </h2>
-
       <p style={{ fontSize: '0.76rem', color: isLight ? '#334155' : 'var(--text-secondary)', lineHeight: 1.6, margin: 0 }}>
-        Modern bulut teknolojileri ve sunucusuz mimariler, sıfır maliyetli altyapı ile kurumsal seviyede güvenilir sistemler inşa etmeye olanak tanır. Cloudflare Workers ve D1 SQLite veritabanı sayesinde, küresel CDN ağında mikro saniyeler mertebesinde yanıt sürelerine ulaşmak mümkündür.
+        Modern bulut teknolojileri ve sunucusuz mimariler, sıfır maliyetli altyapı ile kurumsal seviyede güvenilir sistemler inşa etmeye olanak tanır. Cloudflare Workers ve D1 SQLite veritabanı sayesinde mikro saniyeler mertebesinde yanıt sürelerine ulaşmak mümkündür.
       </p>
+    </div>
+  );
 
-      {isInContent && renderAdCreative()}
-
-      <h3 style={{ fontSize: '0.88rem', fontWeight: 700, color: isLight ? '#0f172a' : '#ffffff', margin: '4px 0 0', lineHeight: 1.3 }}>
+  const renderSection2 = () => (
+    <div style={cardBorder}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', borderBottom: isLight ? '1px solid #f1f5f9' : '1px solid #334155', paddingBottom: '8px' }}>
+        <BookOpen size={14} color="var(--accent-emerald)" />
+        <span style={{ fontSize: '0.72rem', fontWeight: 700, padding: '2px 8px', borderRadius: '4px', background: 'rgba(16, 185, 129, 0.1)', color: 'var(--accent-emerald)' }}>
+          BÖLÜM 2 • DİJİTAL DENEYİM
+        </span>
+      </div>
+      <h3 style={{ fontSize: '0.94rem', fontWeight: 700, color: isLight ? '#0f172a' : '#ffffff', margin: 0, lineHeight: 1.3 }}>
         Akıllı Tasarım ve Kullanıcı Dostu Dijital Deneyim
       </h3>
-
       <p style={{ fontSize: '0.76rem', color: isLight ? '#334155' : 'var(--text-secondary)', lineHeight: 1.6, margin: 0 }}>
-        Web vitrininde kullanılan reklam yerleşimlerinin ana okuma akışını bölmemesi, kullanıcı deneyimini korumanın en kritik şartıdır. Yan sütunlarda dikey gökdelen (120x600 veya 160x600) ebatlarının kullanılması, metin gövdesinin ferah kalmasını temin eder.
+        Web vitrininde kullanılan reklam yerleşimlerinin ana okuma akışını bölmemesi, kullanıcı deneyimini korumanın en kritik şartıdır. Yan sütunlarda dikey gökdelen ebatlarının kullanılması metin gövdesini ferah tutar.
       </p>
-
       <p style={{ fontSize: '0.76rem', color: isLight ? '#334155' : 'var(--text-secondary)', lineHeight: 1.6, margin: 0 }}>
         Geliştirilen dinamik stüdyo paneli sayesinde hem masaüstü hem de mobil ekranlarda marj boşlukları piksel hassasiyetinde yapılandırılabilir.
       </p>
     </div>
   );
+
+  // Köşeleri Yuvarlatılmış Sınırlı Makale Bölümleri
+  const renderArticleCard = () => {
+    if (isInContent) {
+      return (
+        <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+          {renderSection1()}
+          {renderAdCreative()}
+          {renderSection2()}
+        </div>
+      );
+    }
+
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', width: '100%' }}>
+        {renderSection1()}
+        {renderSection2()}
+      </div>
+    );
+  };
 
   return (
     <div
@@ -394,7 +398,7 @@ export const AdLiveCanvas: React.FC<AdLiveCanvasProps> = ({
               </aside>
             </div>
           ) : !isMobile && isSidebarLeft ? (
-            /* 3. Sol Dikey Düzen (Desktop: Sol Sütun + Makale Kartı Sağ) */
+            /* 2. Sol Dikey Düzen (Desktop: Sol Sütun + Makale Kartı Sağ) */
             <div style={{ display: 'flex', gap: '14px', alignItems: 'flex-start' }}>
               <aside style={{ width: boxW, minWidth: boxW, flexShrink: 0, position: deviceConfig.is_sticky ? 'sticky' : 'static', top: '10px' }}>
                 {renderAdCreative()}
@@ -402,10 +406,9 @@ export const AdLiveCanvas: React.FC<AdLiveCanvasProps> = ({
               <div style={{ flex: 1 }}>{renderArticleCard()}</div>
             </div>
           ) : (
-            /* 4. Standart Akış (Mobilde veya Sayfa Sonu / Akış İçi) */
+            /* 3. Standart Akış (Mobilde veya Sayfa Sonu / Akış İçi) */
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
               {renderArticleCard()}
-              {/* Dikey reklamlar mobilde render edilmez; yalnızca footer ve yatay reklamlar render edilir */}
               {(!isMobile || !isVerticalSlot) && (isSidebarRight || isSidebarLeft || isFooter) && renderAdCreative()}
             </div>
           )}
