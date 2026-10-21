@@ -145,6 +145,9 @@ export const AdLiveCanvas: React.FC<AdLiveCanvasProps> = ({
                   STICKY
                 </span>
               )}
+              <span className="badge" style={{ fontSize: '0.62rem', padding: '1px 4px', background: 'rgba(99, 102, 241, 0.15)', color: 'var(--accent-primary)' }}>
+                {ad.target_scope === 'home' ? '🏠 Ana Sayfa' : ad.target_scope === 'blog' ? '📖 Blog' : ad.target_scope === 'apps' ? '📱 Uygulamalar' : ad.target_scope === 'custom' ? '🎯 Özel Sayfalar' : '🌐 Tüm Sayfalar'}
+              </span>
             </div>
             <p style={{ fontSize: '0.78rem', color: isLight ? '#0f172a' : '#FFF', margin: '4px 0 2px', fontWeight: 700 }}>
               {boxW} x {boxH}

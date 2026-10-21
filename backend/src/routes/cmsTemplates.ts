@@ -8,6 +8,9 @@ export const DEFAULT_AD_SLOTS = [
     ad_client: '',
     ad_slot: '',
     is_enabled: false,
+    target_scope: 'all',
+    target_paths: [],
+    excluded_paths: [],
     desktop: {
       is_enabled: true,
       preset_size: '300x250',
@@ -39,6 +42,9 @@ export const DEFAULT_AD_SLOTS = [
     ad_client: '',
     ad_slot: '',
     is_enabled: false,
+    target_scope: 'all',
+    target_paths: [],
+    excluded_paths: [],
     desktop: {
       is_enabled: true,
       preset_size: '120x600',
@@ -70,6 +76,9 @@ export const DEFAULT_AD_SLOTS = [
     ad_client: '',
     ad_slot: '',
     is_enabled: false,
+    target_scope: 'all',
+    target_paths: [],
+    excluded_paths: [],
     desktop: {
       is_enabled: true,
       preset_size: 'RESPONSIVE',
@@ -101,6 +110,9 @@ export const DEFAULT_AD_SLOTS = [
     ad_client: '',
     ad_slot: '',
     is_enabled: false,
+    target_scope: 'all',
+    target_paths: [],
+    excluded_paths: [],
     desktop: {
       is_enabled: true,
       preset_size: '728x90',

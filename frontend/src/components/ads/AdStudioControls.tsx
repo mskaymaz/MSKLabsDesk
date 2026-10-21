@@ -149,7 +149,57 @@ export const AdStudioControls: React.FC<AdStudioControlsProps> = ({
               placeholder="Örn: 9876543210"
               value={ad.ad_slot || ''}
               onChange={(e) => onChange({ ...ad, ad_slot: e.target.value })}
-              style={{ width: '140px', fontSize: '0.8rem', padding: '4px 8px' }}
+              style={{ width: '120px', fontSize: '0.8rem', padding: '4px 8px' }}
+            />
+          </div>
+
+          {/* Sayfa Kapsamı ve Filtreleme */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <label style={{ fontSize: '0.84rem', fontWeight: 700, color: 'var(--text-primary)', whiteSpace: 'nowrap' }}>
+              Kapsam:
+            </label>
+            <select
+              className="form-select"
+              value={ad.target_scope || 'all'}
+              onChange={(e) => onChange({ ...ad, target_scope: e.target.value as any })}
+              style={{ fontSize: '0.78rem', padding: '4px 8px', width: '135px' }}
+            >
+              <option value="all">🌐 Tüm Sitede</option>
+              <option value="home">🏠 Ana Sayfa</option>
+              <option value="blog">📖 Blog Sayfaları</option>
+              <option value="apps">📱 Uygulamalar</option>
+              <option value="custom">🎯 Özel Sayfalar</option>
+            </select>
+          </div>
+
+          {ad.target_scope === 'custom' && (
+            <input
+              type="text"
+              className="form-input"
+              placeholder="/index.html, /blog/blog.html"
+              value={(ad.target_paths || []).join(', ')}
+              onChange={(e) => onChange({
+                ...ad,
+                target_paths: e.target.value.split(',').map((s) => s.trim()).filter(Boolean),
+              })}
+              style={{ width: '150px', fontSize: '0.76rem', padding: '4px 6px' }}
+              title="Gösterilecek sayfalar (virgülle ayrılmış)"
+            />
+          )}
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+            <span style={{ fontSize: '0.74rem', color: 'var(--text-secondary)' }} title="Bu sayfalarda kesinlikle gizle">Hariç:</span>
+            <input
+              type="text"
+              className="form-input"
+              placeholder="Örn: /about.html"
+              value={(ad.excluded_paths || []).join(', ')}
+              onChange={(e) => onChange({
+                ...ad,
+                excluded_paths: e.target.value.split(',').map((s) => s.trim()).filter(Boolean),
+              })}
+              style={{ width: '115px', fontSize: '0.74rem', padding: '4px 6px' }}
+              title="Hariç tutulacak (gizlenecek) sayfalar (virgülle ayrılmış)"
             />
           </div>
         </div>
