@@ -162,13 +162,14 @@ export const AdStudioControls: React.FC<AdStudioControlsProps> = ({
               className="form-select"
               value={ad.target_scope || 'all'}
               onChange={(e) => onChange({ ...ad, target_scope: e.target.value as any })}
-              style={{ fontSize: '0.78rem', padding: '4px 8px', width: '135px' }}
+              style={{ fontSize: '0.78rem', padding: '4px 8px', width: '150px' }}
             >
               <option value="all">🌐 Tüm Sitede</option>
               <option value="home">🏠 Ana Sayfa</option>
               <option value="blog">📖 Blog Sayfaları</option>
               <option value="apps">📱 Uygulamalar</option>
-              <option value="custom">🎯 Özel Sayfalar</option>
+              <option value="corporate">ℹ️ İletişim &amp; Kurumsal</option>
+              <option value="custom">🎯 Belirli Sayfa (URL)</option>
             </select>
           </div>
 
@@ -176,13 +177,13 @@ export const AdStudioControls: React.FC<AdStudioControlsProps> = ({
             <input
               type="text"
               className="form-input"
-              placeholder="/index.html, /blog/blog.html"
+              placeholder="/contact.html, /about.html"
               value={(ad.target_paths || []).join(', ')}
               onChange={(e) => onChange({
                 ...ad,
                 target_paths: e.target.value.split(',').map((s) => s.trim()).filter(Boolean),
               })}
-              style={{ width: '150px', fontSize: '0.76rem', padding: '4px 6px' }}
+              style={{ width: '160px', fontSize: '0.76rem', padding: '4px 6px' }}
               title="Gösterilecek sayfalar (virgülle ayrılmış)"
             />
           )}

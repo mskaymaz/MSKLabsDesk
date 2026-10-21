@@ -253,7 +253,7 @@ export interface AdPlacementSetting {
   is_enabled: boolean;
   desktop: AdDeviceConfig;
   mobile: AdDeviceConfig;
-  target_scope?: 'all' | 'home' | 'blog' | 'apps' | 'custom';
+  target_scope?: 'all' | 'home' | 'blog' | 'apps' | 'corporate' | 'custom';
   target_paths?: string[];
   excluded_paths?: string[];
 }

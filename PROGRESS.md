@@ -1722,3 +1722,16 @@
 
 
 
+
+## 🚀 Son Güncelleme [21.10.2026 - 16:50] — REKLAM HEDEF KAPSAMI & ÖZEL/KURUMSAL SAYFA ENTEGRASYONU TAMAMLANDI ✅
+* **Yapılan İşlem:**
+  1. `contact.html` (İletişim) ve kurumsal/statik sayfalar için reklam hedefleme mimarisi entegre edildi.
+  2. `MSKLabsDesk`: `target_scope` yapısına `corporate` (ℹ️ İletişim & Kurumsal) kapsamı eklendi. `AdStudioControls.tsx` ve `types/index.ts` güncellendi.
+  3. `AdLiveCanvas.tsx`: Canlı önizleme sahnesindeki mükerrer masaüstü/mobil cihaz anahtarı kaldırılarak yalnızca açık/koyu tema kontrolü bırakıldı.
+  4. `webMSKLabs`: `assets/js/ads-loader.js` dosyasında `isAdAllowedOnCurrentPage` fonksiyonuna `corporate` desteği ve `custom` kapsamı için kurumsal sayfa fallback mekanizması eklendi. Eksik reklam yuvaları için otomatik DOM enjeksiyonu (`ensureContainer`) kurgulandı. `contact.html` içine statik reklam yuvası eklendi.
+* **Sonuçlar:**
+  - `MSKLabsDesk` frontend TypeScript build (`tsc -b && vite build`) 0 hata ile tamamlandı.
+  - Backend entegrasyon testleri (API-010 ve API-TTS-001) %100 PASS (57 PASS, 0 FAIL).
+  - Dosya satır kurallarına (`AdLiveCanvas.tsx`: 420 satır, `AdStudioControls.tsx`: 428 satır, `ads-loader.js`: 304 satır) titizlikle uyuldu.
+  - Her iki repo da yalnızca `DevAdmin` dalında çalıştırıldı, `main` dalı korundu.
+* **Durum:** İletişim ve kurumsal sayfalar reklam yerleşimi doğrulanarak kullanıma hazır hale getirildi.

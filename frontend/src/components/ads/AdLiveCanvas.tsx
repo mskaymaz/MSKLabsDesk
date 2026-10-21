@@ -1,18 +1,16 @@
 import React, { useState } from 'react';
-import { ShieldCheck, Sliders, Sun, Moon, Eye, Monitor, Smartphone, BookOpen, AlertCircle } from 'lucide-react';
+import { ShieldCheck, Sliders, Sun, Moon, Eye, BookOpen, AlertCircle } from 'lucide-react';
 import type { AdPlacementSetting, AdDeviceConfig } from '../../types';
 import { resolveAdDimensions } from '../../utils/adDimensions';
 
 interface AdLiveCanvasProps {
   ad: AdPlacementSetting;
   activeDevice: 'desktop' | 'mobile';
-  onDeviceChange?: (device: 'desktop' | 'mobile') => void;
 }
 
 export const AdLiveCanvas: React.FC<AdLiveCanvasProps> = ({
   ad,
   activeDevice,
-  onDeviceChange,
 }) => {
   const [canvasTheme, setCanvasTheme] = useState<'light' | 'dark'>('light');
   const isLight = canvasTheme === 'light';
@@ -146,7 +144,7 @@ export const AdLiveCanvas: React.FC<AdLiveCanvasProps> = ({
                 </span>
               )}
               <span className="badge" style={{ fontSize: '0.62rem', padding: '1px 4px', background: 'rgba(99, 102, 241, 0.15)', color: 'var(--accent-primary)' }}>
-                {ad.target_scope === 'home' ? '🏠 Ana Sayfa' : ad.target_scope === 'blog' ? '📖 Blog' : ad.target_scope === 'apps' ? '📱 Uygulamalar' : ad.target_scope === 'custom' ? '🎯 Özel Sayfalar' : '🌐 Tüm Sayfalar'}
+                {ad.target_scope === 'home' ? '🏠 Ana Sayfa' : ad.target_scope === 'blog' ? '📖 Blog' : ad.target_scope === 'apps' ? '📱 Uygulamalar' : ad.target_scope === 'corporate' ? 'ℹ️ Kurumsal / İletişim' : ad.target_scope === 'custom' ? '🎯 Özel Sayfa' : '🌐 Tüm Sayfalar'}
               </span>
             </div>
             <p style={{ fontSize: '0.78rem', color: isLight ? '#0f172a' : '#FFF', margin: '4px 0 2px', fontWeight: 700 }}>
@@ -260,37 +258,7 @@ export const AdLiveCanvas: React.FC<AdLiveCanvasProps> = ({
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
-          {/* Cihaz Seçimi */}
-          <div style={{ display: 'inline-flex', background: isLight ? '#e2e8f0' : 'rgba(0,0,0,0.3)', padding: '2px', borderRadius: '5px' }}>
-            <button
-              type="button"
-              onClick={() => onDeviceChange && onDeviceChange('desktop')}
-              style={{
-                display: 'inline-flex', alignItems: 'center', gap: '4px', fontSize: '0.74rem', padding: '3px 8px',
-                borderRadius: '3px', border: 'none', cursor: 'pointer',
-                background: !isMobile ? 'var(--accent-primary, #6366f1)' : 'transparent',
-                color: !isMobile ? '#ffffff' : 'var(--text-primary)',
-                fontWeight: !isMobile ? 700 : 500,
-              }}
-            >
-              <Monitor size={12} /> Masaüstü
-            </button>
-            <button
-              type="button"
-              onClick={() => onDeviceChange && onDeviceChange('mobile')}
-              style={{
-                display: 'inline-flex', alignItems: 'center', gap: '4px', fontSize: '0.74rem', padding: '3px 8px',
-                borderRadius: '3px', border: 'none', cursor: 'pointer',
-                background: isMobile ? 'var(--accent-primary, #6366f1)' : 'transparent',
-                color: isMobile ? '#ffffff' : 'var(--text-primary)',
-                fontWeight: isMobile ? 700 : 500,
-              }}
-            >
-              <Smartphone size={12} /> Mobil
-            </button>
-          </div>
-
-          {/* Tema Seçimi */}
+          {/* Tema Seçimi (Açık / Koyu) */}
           <div style={{ display: 'inline-flex', background: isLight ? '#e2e8f0' : 'rgba(0,0,0,0.3)', padding: '2px', borderRadius: '5px' }}>
             <button
               type="button"
