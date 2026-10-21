@@ -1735,3 +1735,8 @@
   - Dosya satır kurallarına (`AdLiveCanvas.tsx`: 420 satır, `AdStudioControls.tsx`: 428 satır, `ads-loader.js`: 304 satır) titizlikle uyuldu.
   - Her iki repo da yalnızca `DevAdmin` dalında çalıştırıldı, `main` dalı korundu.
 * **Durum:** İletişim ve kurumsal sayfalar reklam yerleşimi doğrulanarak kullanıma hazır hale getirildi.
+## 📌 Gelecek Oturum Gündemi [21.10.2026 - 16:55]
+1. **Görsel ve Kolay Reklam Yönetimi:**
+   - Reklam yuvası ekleme ve düzenleme sürecini, her kullanıcının teknik bilgi gerektirmeden görsel sayfa şeması üzerinden tıklayarak yönetebileceği rantabl bir arayüze kavuşturmak.
+2. **Statik ve Kurumsal Sayfalar İçin Gelişmiş CMS / Sayfa Düzenleyici:**
+   - Ana sayfa, Hakkımızda, Destek, İletişim, Biz Kimiz, SSS, Gizlilik Politikası, Kullanım Koşulları ve sonradan eklenecek yeni sayfaların blog stüdyosundaki gibi (veya daha gelişmiş blok/bölüm tabanlı) arayüzden tek tek düzenlenip yayına alınabilmesini sağlayan dinamik sayfa yönetim altyapısının kurulması.
