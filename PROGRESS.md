@@ -1,7 +1,25 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
-## 🟢 Son Güncelleme [21.10.2026 - 15:15] — BÖLÜMLER ARASI REKLAMLARDA ÇİFT KART SINIRI VE SABİT ÜST BÖLÜM [*]
+## 🟢 Son Güncelleme [21.10.2026 - 15:55] — ADSENSE MİMARİSİNİN VİTRİNLE (WEBMSKLABS) TAM ENTEGRASYONU [*]
+* **Yapılan İşlem:**
+  1. **Kamusal Reklam API Uç Noktası (`backend/src/routes/cmsPublic.ts`):**
+     - `GET /api/v1/ads` uç noktası genişletildi; `site_templates WHERE key_name LIKE 'ad_%' AND is_active = 1` sorgulanarak aktif ve silinmemiş reklamlar `meta_json` ile birleştirilmiş saf JSON formatında sunuldu.
+  2. **Dinamik AdSense Vitrin Yükleyicisi (`webMSKLabs/assets/js/ads-loader.js`):**
+     - 177 satırlık sıfır harici bağımlılıklı modül oluşturuldu (`ads-loader.js`).
+     - İlgili yerleşimleri (`.desktop-ad-left`, `.desktop-ad-right`, `.infeed-ad-between`, `.infeed-ad-container`) otomatik tarar, CMS API'sinden gelen ebat, marj, yapışkanlık (sticky) ve AdSense ins etiketlerini vitrine gerçek zamanlı uygular.
+     - Pasife alınan veya silinen reklam alanları vitrinde `display: none` ile gizlenerek boş kutu görünümü önlendi. Mobilde dikey reklamların otomatik gizlenme kuralı vitrine işlendi.
+  3. **Merkezi Şablon Enjeksiyonu (`webMSKLabs/assets/js/layout.js`):**
+     - `injectAdsLoader()` fonksiyonu ile `ads-loader.js` vitrindeki tüm sayfalara dinamik olarak bağlandı.
+     - `layout.js` dosyasının satır sayısı azami 600 sınırına tam uyumlu kılındı.
+  4. **Doğrulama ve Kural Uyumu:**
+     - Frontend Build: PASS (`tsc -b && vite build`, 0 hata).
+     - WebMSKLabs Build: PASS (`tsc --noEmit && vite build`, 0 hata).
+     - Backend Testleri: PASS (57/57 test %100 başarılı).
+     - `DevAdmin` dalında çalışıldı, her iki repo da commit & push edildi.
+* **Durum:** `DevAdmin` dalında çalışıldı, `main` kesinlikle korundu.
+
+## [21.10.2026 - 15:15] — BÖLÜMLER ARASI REKLAMLARDA ÇİFT KART SINIRI VE SABİT ÜST BÖLÜM [*]
 * **Yapılan İşlem:**
   1. **Bölümler Arası Reklamlar İçin Belirgin Kart Sınırları (`AdLiveCanvas.tsx`):**
      - Bölümler arası (in-content) reklam yapısında önceden tek gövde içinde sınır çizgisi olmadan duran metin yapısı revize edildi.
