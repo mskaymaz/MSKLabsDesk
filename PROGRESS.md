@@ -1,7 +1,21 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
-## 🟢 Son Güncelleme [21.10.2026 - 16:17] — DİKEY REKLAMLARDA ÜST PANEL MARJI VE YATAY HİZALAMA ORTALAMA DÜZELTMELERİ [*]
+## 🟢 Son Güncelleme [21.10.2026 - 16:25] — SAYFA KAPSAMI VE HEDEFLEME MİMARİSİ (WHITELIST / BLACKLIST) [*]
+* **Yapılan İşlem:**
+  1. **Sayfa Kapsamı Yönetimi (`AdStudioControls.tsx` & `cmsTemplates.ts`):**
+     - Her reklam alanına özel `Kapsam` seçici eklendi: `Tüm Sitede Göster`, `Yalnızca Ana Sayfa`, `Yalnızca Blog`, `Yalnızca Uygulamalar` ve `Özel Sayfalar (URL)`.
+     - Özel sayfalar için virgülle ayrılmış URL giriş desteği ile birlikte, reklamın kesinlikle gizleneceği `Hariç Tutulan Sayfalar (Blacklist)` alanı entegre edildi (Örn: `/about.html`, `/contact.html`).
+  2. **Vitrinde Dinamik Yol Eşleştirme (`ads-loader.js`):**
+     - `isAdAllowedOnCurrentPage(ad)` fonksiyonu oluşturuldu. `window.location.pathname` üzerinden anlık rota kontrolü yapılarak o sayfada gösterilmesi istenmeyen reklam alanları vitrinde otomatik olarak gizlendi (`display: none`).
+  3. **Canlı Önizleme Rozeti (`AdLiveCanvas.tsx`):**
+     - Stüdyo tuvalindeki reklam kartı üzerine seçili sayfa kapsamını gösteren rozet (Örn: `🌐 Tüm Sayfalar`, `📖 Blog`, `🏠 Ana Sayfa`) yerleştirildi.
+  4. **Doğrulama ve Kural Uyumu:**
+     - Frontend derlemesi (`tsc -b && vite build`) PASS, vitrin derlemesi (`webmsklabs build`) PASS, backend testleri (57/57) %100 PASS.
+     - Satır sınırları: `AdStudioControls.tsx` 427 satır (<= 450), `AdLiveCanvas.tsx` 450 satır (<= 450), `ads-loader.js` 256 satır (<= 450).
+* **Durum:** `DevAdmin` dalında çalışıldı, `main` kesinlikle korundu.
+
+## [21.10.2026 - 16:17] — DİKEY REKLAMLARDA ÜST PANEL MARJI VE YATAY HİZALAMA ORTALAMA DÜZELTMELERİ [*]
 * **Yapılan İşlem:**
   1. **Dikey Reklamların Sabit Üst Panelden Ölçülmesi (`ads-loader.js` & `global.css`):**
      - Dikey sol/sağ reklamların (`.desktop-ad`) üst marjı, doğrudan sabit üst panelin (`.site-header-sticky`) alt sınırından itibaren başlayacak şekilde dinamik yüksekliğe (`headerH + margin_top`) bağlandı.
