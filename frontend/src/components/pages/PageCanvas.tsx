@@ -25,6 +25,9 @@ export interface PageCanvasProps {
   device: 'desktop' | 'tablet' | 'mobile';
   canvasTheme: 'light' | 'dark';
   canvasZoom: 'fit' | '100' | '75';
+  canvasWidth?: '900' | '1024' | '1160' | '1200' | 'custom';
+  customWidthPx?: number;
+  showSideAds?: boolean;
   isLeftPanelOpen: boolean;
   setIsLeftPanelOpen: React.Dispatch<React.SetStateAction<boolean>>;
   isRightPanelOpen: boolean;
@@ -44,14 +47,18 @@ export const PageCanvas: React.FC<PageCanvasProps> = ({
   device,
   canvasTheme,
   canvasZoom,
+  canvasWidth = '900',
+  customWidthPx = 900,
+  showSideAds = true,
   isLeftPanelOpen,
   setIsLeftPanelOpen,
   isRightPanelOpen,
   setIsRightPanelOpen,
 }) => {
   const isRtl = lang === 'ar';
+  const desktopWidth = canvasWidth === 'custom' ? `${customWidthPx || 900}px` : `${canvasWidth}px`;
   const fixedWidth =
-    device === 'mobile' ? '390px' : device === 'tablet' ? '768px' : '1140px';
+    device === 'mobile' ? '390px' : device === 'tablet' ? '768px' : desktopWidth;
 
   const scaleStyle: React.CSSProperties =
     canvasZoom === '75'
@@ -138,26 +145,64 @@ export const PageCanvas: React.FC<PageCanvasProps> = ({
           </button>
         )}
 
-        <div
-          data-theme={canvasTheme}
-          style={{
-            width: fixedWidth,
-            minWidth: fixedWidth,
-            maxWidth: fixedWidth,
-            flexShrink: 0,
-            background: canvasTheme === 'dark' ? '#0f172a' : '#ffffff',
-            color: canvasTheme === 'dark' ? '#f8fafc' : '#0f172a',
-            border: canvasTheme === 'dark' ? '1px solid #334155' : '1px solid #cbd5e1',
-            borderRadius: device === 'desktop' ? '14px' : '20px',
-            boxShadow: canvasTheme === 'dark' ? '0 25px 50px -12px rgba(0,0,0,0.8)' : '0 20px 45px -10px rgba(0,0,0,0.18)',
-            display: 'flex',
-            flexDirection: 'column',
-            transition: 'background 0.2s ease, border-color 0.2s ease',
-            minHeight: '600px',
-            ...scaleStyle,
-          }}
-          dir={isRtl ? 'rtl' : 'ltr'}
-        >
+        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'center', gap: '24px', ...scaleStyle }}>
+          {/* Sol Dikey Reklam Kanadı (Canlı Önizleme) */}
+          {device === 'desktop' && showSideAds && (
+            <div
+              style={{
+                width: '120px',
+                minWidth: '120px',
+                height: '600px',
+                border: canvasTheme === 'dark' ? '1px dashed #334155' : '1px dashed #cbd5e1',
+                background: canvasTheme === 'dark' ? 'rgba(30, 41, 59, 0.45)' : 'rgba(255, 255, 255, 0.65)',
+                borderRadius: '10px',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: '12px',
+                textAlign: 'center',
+                color: 'var(--text-muted)',
+                flexShrink: 0,
+                userSelect: 'none',
+                position: 'sticky',
+                top: '20px',
+              }}
+            >
+              <span style={{ fontSize: '10px', fontWeight: 800, textTransform: 'uppercase', color: 'var(--accent-primary)', marginBottom: '4px' }}>
+                Sol Reklam
+              </span>
+              <span style={{ fontSize: '12px', fontWeight: 700, color: 'var(--text-secondary)' }}>
+                120 × 600
+              </span>
+              <span style={{ fontSize: '9px', opacity: 0.8, marginTop: '6px' }}>
+                Dikey Gökdelen
+              </span>
+              <div style={{ marginTop: 'auto', fontSize: '9px', padding: '2px 6px', borderRadius: '4px', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', fontFamily: 'monospace' }}>
+                ad_sidebar_left
+              </div>
+            </div>
+          )}
+
+          <div
+            data-theme={canvasTheme}
+            style={{
+              width: fixedWidth,
+              minWidth: fixedWidth,
+              maxWidth: fixedWidth,
+              flexShrink: 0,
+              background: canvasTheme === 'dark' ? '#0f172a' : '#ffffff',
+              color: canvasTheme === 'dark' ? '#f8fafc' : '#0f172a',
+              border: canvasTheme === 'dark' ? '1px solid #334155' : '1px solid #cbd5e1',
+              borderRadius: device === 'desktop' ? '14px' : '20px',
+              boxShadow: canvasTheme === 'dark' ? '0 25px 50px -12px rgba(0,0,0,0.8)' : '0 20px 45px -10px rgba(0,0,0,0.18)',
+              display: 'flex',
+              flexDirection: 'column',
+              transition: 'background 0.2s ease, border-color 0.2s ease',
+              minHeight: '600px',
+            }}
+            dir={isRtl ? 'rtl' : 'ltr'}
+          >
           {blocks.length === 0 ? (
             <div
               style={{
@@ -264,6 +309,45 @@ export const PageCanvas: React.FC<PageCanvasProps> = ({
             })
           )}
         </div>
+
+        {/* Sağ Dikey Reklam Kanadı (Canlı Önizleme) */}
+        {device === 'desktop' && showSideAds && (
+          <div
+            style={{
+              width: '120px',
+              minWidth: '120px',
+              height: '600px',
+              border: canvasTheme === 'dark' ? '1px dashed #334155' : '1px dashed #cbd5e1',
+              background: canvasTheme === 'dark' ? 'rgba(30, 41, 59, 0.45)' : 'rgba(255, 255, 255, 0.65)',
+              borderRadius: '10px',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: '12px',
+              textAlign: 'center',
+              color: 'var(--text-muted)',
+              flexShrink: 0,
+              userSelect: 'none',
+              position: 'sticky',
+              top: '20px',
+            }}
+          >
+            <span style={{ fontSize: '10px', fontWeight: 800, textTransform: 'uppercase', color: 'var(--accent-primary)', marginBottom: '4px' }}>
+              Sağ Reklam
+            </span>
+            <span style={{ fontSize: '12px', fontWeight: 700, color: 'var(--text-secondary)' }}>
+              120 × 600
+            </span>
+            <span style={{ fontSize: '9px', opacity: 0.8, marginTop: '6px' }}>
+              Dikey Gökdelen
+            </span>
+            <div style={{ marginTop: 'auto', fontSize: '9px', padding: '2px 6px', borderRadius: '4px', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', fontFamily: 'monospace' }}>
+              ad_sidebar_right
+            </div>
+          </div>
+        )}
+      </div>
       </div>
     </main>
   );

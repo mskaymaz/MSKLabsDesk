@@ -13,6 +13,7 @@ import {
   Check,
 } from 'lucide-react';
 import type { StudioBlock } from '../../types';
+import { getLang } from '../../utils/langHelpers';
 
 export interface BlockRendererProps {
   block: StudioBlock;
@@ -30,28 +31,20 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
   const isRtl = lang === 'ar';
   const isMobile = device === 'mobile';
 
-  const title = (lang === 'tr' ? block.title_tr : lang === 'en' ? block.title_en : block.title_ar) || block.title_tr || '';
-  const subtitle = (lang === 'tr' ? block.subtitle_tr : lang === 'en' ? block.subtitle_en : block.subtitle_ar) || block.subtitle_tr || '';
-  const content = (lang === 'tr' ? block.content_tr : lang === 'en' ? block.content_en : block.content_ar) || block.content_tr || '';
+  const title = getLang(block, 'title', lang);
+  const subtitle = getLang(block, 'subtitle', lang);
+  const content = getLang(block, 'content', lang);
 
-  const primaryBtnText =
-    (lang === 'tr' ? block.btn_primary_text : lang === 'en' ? (block.btn_primary_text_en || block.btn_primary_text) : (block.btn_primary_text_ar || block.btn_primary_text)) ||
-    (lang === 'tr' ? 'Hemen Keşfet' : lang === 'en' ? 'Explore Now' : 'اكتشف الآن');
-  const secondaryBtnText =
-    (lang === 'tr' ? block.btn_secondary_text : lang === 'en' ? (block.btn_secondary_text_en || block.btn_secondary_text) : (block.btn_secondary_text_ar || block.btn_secondary_text)) ||
-    (lang === 'tr' ? 'Daha Fazla Bilgi' : lang === 'en' ? 'Learn More' : 'معرفة المزيد');
-  const badge =
-    (lang === 'tr' ? block.badge_text : lang === 'en' ? (block.badge_text_en || block.badge_text) : (block.badge_text_ar || block.badge_text)) ||
-    block.badge_text || 'MSK Labs';
+  const defaultBtn1 = lang === 'tr' ? 'Hemen Keşfet' : lang === 'en' ? 'Explore Now' : 'اكتشف الآن';
+  const defaultBtn2 = lang === 'tr' ? 'Daha Fazla Bilgi' : lang === 'en' ? 'Learn More' : 'معرفة المزيد';
+  const primaryBtnText = getLang(block, 'btn_primary_text', lang, defaultBtn1);
+  const secondaryBtnText = getLang(block, 'btn_secondary_text', lang, defaultBtn2);
+  const badge = getLang(block, 'badge_text', lang, block.badge_text || 'MSK Labs');
 
-  const getItemTitle = (it: any) =>
-    (lang === 'tr' ? (it.title_tr || it.title) : lang === 'en' ? (it.title_en || it.title) : (it.title_ar || it.title)) || it.title || '';
-  const getItemText = (it: any) =>
-    (lang === 'tr' ? (it.text_tr || it.text) : lang === 'en' ? (it.text_en || it.text) : (it.text_ar || it.text)) || it.text || '';
-  const getItemPrice = (it: any) =>
-    (lang === 'tr' ? it.price : lang === 'en' ? (it.price_en || it.price) : (it.price_ar || it.price)) || it.price || '';
-  const getItemBadge = (it: any) =>
-    (lang === 'tr' ? it.badge : lang === 'en' ? (it.badge_en || it.badge) : (it.badge_ar || it.badge)) || it.badge;
+  const getItemTitle = (it: any) => getLang(it, 'title', lang, it.title || '');
+  const getItemText = (it: any) => getLang(it, 'text', lang, it.text || '');
+  const getItemPrice = (it: any) => getLang(it, 'price', lang, it.price || '');
+  const getItemBadge = (it: any) => getLang(it, 'badge', lang, it.badge);
 
   const getPaddingStyle = () => {
     switch (block.padding_y) {

@@ -444,6 +444,8 @@ export const PagesView: React.FC = () => {
         onSave={handleSavePage}
         onAiTranslate={handleAiTranslate}
         aiTranslating={aiTranslating}
+        allPages={pages}
+        onSelectPage={openEditPageStudio}
       />
     </div>
   );

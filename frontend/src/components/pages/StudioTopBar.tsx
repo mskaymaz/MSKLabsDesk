@@ -42,6 +42,14 @@ export interface StudioTopBarProps {
   setCanvasZoom: (z: 'fit' | '100' | '75') => void;
   canvasTheme: 'light' | 'dark';
   setCanvasTheme: (t: 'light' | 'dark') => void;
+  canvasWidth?: '900' | '1024' | '1160' | '1200' | 'custom';
+  setCanvasWidth?: (w: '900' | '1024' | '1160' | '1200' | 'custom') => void;
+  customWidthPx?: number;
+  setCustomWidthPx?: (px: number) => void;
+  showSideAds?: boolean;
+  setShowSideAds?: React.Dispatch<React.SetStateAction<boolean>>;
+  allPages?: SitePage[];
+  onSwitchPage?: (page: SitePage) => void;
   isLeftPanelOpen: boolean;
   setIsLeftPanelOpen: React.Dispatch<React.SetStateAction<boolean>>;
   isRightPanelOpen: boolean;
@@ -75,6 +83,14 @@ export const StudioTopBar: React.FC<StudioTopBarProps> = ({
   setCanvasZoom,
   canvasTheme,
   setCanvasTheme,
+  canvasWidth = '900',
+  setCanvasWidth,
+  customWidthPx = 900,
+  setCustomWidthPx,
+  showSideAds = true,
+  setShowSideAds,
+  allPages,
+  onSwitchPage,
   isLeftPanelOpen,
   setIsLeftPanelOpen,
   isRightPanelOpen,
@@ -108,9 +124,37 @@ export const StudioTopBar: React.FC<StudioTopBarProps> = ({
 
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <h2 style={{ fontSize: '13px', fontWeight: 800, margin: 0, color: 'var(--text-primary)' }}>
-                {editingPage ? editingPage.title_tr : 'Yeni Kurumsal Sayfa'}
-              </h2>
+              {allPages && allPages.length > 0 && onSwitchPage ? (
+                <select
+                  value={editingPage?.id || ''}
+                  onChange={(e) => {
+                    const target = allPages.find((p) => p.id === e.target.value);
+                    if (target) onSwitchPage(target);
+                  }}
+                  className="admin-select"
+                  style={{
+                    fontSize: '12px',
+                    fontWeight: 800,
+                    padding: '2px 8px',
+                    background: 'var(--bg-secondary)',
+                    border: '1px solid var(--border-color)',
+                    borderRadius: '6px',
+                    color: 'var(--text-primary)',
+                    maxWidth: '180px',
+                  }}
+                  title="Düzenlemek için sayfayı değiştirin"
+                >
+                  {allPages.map((p) => (
+                    <option key={p.id} value={p.id}>
+                      {p.title_tr || p.slug} {p.is_system ? '🔒' : ''}
+                    </option>
+                  ))}
+                </select>
+              ) : (
+                <h2 style={{ fontSize: '13px', fontWeight: 800, margin: 0, color: 'var(--text-primary)' }}>
+                  {editingPage ? editingPage.title_tr : 'Yeni Kurumsal Sayfa'}
+                </h2>
+              )}
               <span
                 className={`admin-badge ${
                   autosaveState === 'saved' ? 'admin-badge-emerald' : autosaveState === 'saving' ? 'admin-badge-cyan' : autosaveState === 'dirty' ? 'admin-badge-amber' : ''
@@ -127,12 +171,12 @@ export const StudioTopBar: React.FC<StudioTopBarProps> = ({
               )}
             </div>
             <span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>
-              /{formData.slug || 'slug'} • Durum: {formData.status === 'published' ? 'Yayında' : 'Taslak'}
+              /{formData.slug || 'slug'} • Durum: {formData.status === 'published' ? 'Yayında' : 'Taslak'} • {device === 'desktop' ? `${canvasWidth === 'custom' ? customWidthPx : canvasWidth}px tuval` : device}
             </span>
           </div>
         </div>
 
-        {/* Orta Araçlar: Panel, Cihaz, Zoom, Tema Kontrolleri */}
+        {/* Orta Araçlar: Panel, Cihaz, Genişlik, Kanatlar, Zoom, Tema Kontrolleri */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
           <button
             type="button"
@@ -151,7 +195,7 @@ export const StudioTopBar: React.FC<StudioTopBarProps> = ({
                 type="button"
                 onClick={() => setDevice(d)}
                 className={`admin-btn-icon ${device === d ? 'active text-cyan' : ''}`}
-                title={d === 'desktop' ? 'Masaüstü (1140px)' : d === 'tablet' ? 'Tablet (768px)' : 'Mobil (390px)'}
+                title={d === 'desktop' ? 'Masaüstü' : d === 'tablet' ? 'Tablet (768px)' : 'Mobil (390px)'}
                 style={{ padding: '3px 7px', background: device === d ? 'var(--bg-card)' : 'transparent', border: 'none', borderRadius: '5px', cursor: 'pointer' }}
               >
                 {d === 'desktop' ? <Monitor size={14} /> : d === 'tablet' ? <Tablet size={14} /> : <Smartphone size={14} />}
@@ -159,23 +203,50 @@ export const StudioTopBar: React.FC<StudioTopBarProps> = ({
             ))}
           </div>
 
+          {device === 'desktop' && setCanvasWidth && (
+            <div style={{ display: 'flex', alignItems: 'center', gap: '2px', background: 'var(--bg-secondary)', borderRadius: '6px', padding: '2px 4px' }}>
+              <select
+                value={canvasWidth}
+                onChange={(e) => setCanvasWidth(e.target.value as any)}
+                className="admin-select"
+                style={{ fontSize: '10px', padding: '2px 4px', border: 'none', background: 'transparent', fontWeight: 700 }}
+                title="Tuval Genişliği"
+              >
+                <option value="900">900px (Vitrin)</option>
+                <option value="1024">1024px</option>
+                <option value="1160">1160px</option>
+                <option value="1200">1200px</option>
+                <option value="custom">Özel px</option>
+              </select>
+              {canvasWidth === 'custom' && setCustomWidthPx && (
+                <input
+                  type="number"
+                  value={customWidthPx}
+                  onChange={(e) => setCustomWidthPx(Number(e.target.value))}
+                  className="admin-input"
+                  style={{ width: '48px', fontSize: '10px', padding: '1px 3px', height: '20px' }}
+                  min={400}
+                  max={1920}
+                />
+              )}
+            </div>
+          )}
+
+          {device === 'desktop' && setShowSideAds && (
+            <button
+              type="button"
+              onClick={() => setShowSideAds(!showSideAds)}
+              className={`admin-btn admin-btn-sm ${showSideAds ? 'admin-btn-primary' : 'admin-btn-secondary'}`}
+              style={{ fontSize: '10px', padding: '3px 6px' }}
+              title={showSideAds ? 'Sol/Sağ Dikey Reklam Kanatlarını Gizle' : 'Sol/Sağ Dikey Reklam Kanatlarını Göster (120x600)'}
+            >
+              <span>{showSideAds ? 'Kanatlar' : 'Kanatsız'}</span>
+            </button>
+          )}
+
           <div style={{ display: 'flex', background: 'var(--bg-secondary)', borderRadius: '6px', padding: '2px', gap: '2px' }}>
             {(['fit', '75', '100'] as const).map((z) => (
-              <button
-                key={z}
-                type="button"
-                onClick={() => setCanvasZoom(z)}
-                style={{
-                  padding: '3px 6px',
-                  fontSize: '10px',
-                  fontWeight: 700,
-                  border: 'none',
-                  borderRadius: '4px',
-                  background: canvasZoom === z ? 'var(--accent-primary)' : 'transparent',
-                  color: canvasZoom === z ? '#FFF' : 'var(--text-secondary)',
-                  cursor: 'pointer',
-                }}
-              >
+              <button key={z} type="button" onClick={() => setCanvasZoom(z)} style={{ padding: '3px 6px', fontSize: '10px', fontWeight: 700, border: 'none', borderRadius: '4px', background: canvasZoom === z ? 'var(--accent-primary)' : 'transparent', color: canvasZoom === z ? '#FFF' : 'var(--text-secondary)', cursor: 'pointer' }}>
                 {z === 'fit' ? 'Sığdır' : `%${z}`}
               </button>
             ))}
@@ -230,22 +301,7 @@ export const StudioTopBar: React.FC<StudioTopBarProps> = ({
 
           <div style={{ display: 'flex', background: 'var(--bg-secondary)', borderRadius: '6px', padding: '2px', border: '1px solid var(--border-color)', gap: '2px' }}>
             {(['tr', 'en', 'ar'] as const).map((lang) => (
-              <button
-                key={lang}
-                type="button"
-                onClick={() => setActiveTab(lang)}
-                style={{
-                  padding: '3px 10px',
-                  borderRadius: '4px',
-                  border: 'none',
-                  background: activeTab === lang ? 'var(--accent-primary)' : 'transparent',
-                  color: activeTab === lang ? '#FFF' : 'var(--text-secondary)',
-                  fontWeight: 800,
-                  fontSize: '11px',
-                  cursor: 'pointer',
-                  textTransform: 'uppercase',
-                }}
-              >
+              <button key={lang} type="button" onClick={() => setActiveTab(lang)} style={{ padding: '3px 10px', borderRadius: '4px', border: 'none', background: activeTab === lang ? 'var(--accent-primary)' : 'transparent', color: activeTab === lang ? '#FFF' : 'var(--text-secondary)', fontWeight: 800, fontSize: '11px', cursor: 'pointer', textTransform: 'uppercase' }}>
                 {lang}
               </button>
             ))}
@@ -348,6 +404,36 @@ export const StudioTopBar: React.FC<StudioTopBarProps> = ({
               placeholder="virgülle ayrılmış kelimeler..."
               style={{ fontSize: '11px' }}
             />
+          </div>
+          <div style={{ gridColumn: 'span 2', display: 'flex', flexDirection: 'column', gap: '4px' }}>
+            <label className="admin-label" style={{ fontSize: '11px' }}>SEO Meta Açıklamaları (TR / EN / AR)</label>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '8px' }}>
+              <input
+                type="text"
+                value={formData.meta_description_tr || ''}
+                onChange={(e) => setFormData((prev) => ({ ...prev, meta_description_tr: e.target.value }))}
+                className="admin-input"
+                placeholder="Açıklama (TR - max 160 kar.)..."
+                style={{ fontSize: '11px' }}
+              />
+              <input
+                type="text"
+                value={formData.meta_description_en || ''}
+                onChange={(e) => setFormData((prev) => ({ ...prev, meta_description_en: e.target.value }))}
+                className="admin-input"
+                placeholder="Description (EN)..."
+                style={{ fontSize: '11px' }}
+              />
+              <input
+                type="text"
+                value={formData.meta_description_ar || ''}
+                dir="rtl"
+                onChange={(e) => setFormData((prev) => ({ ...prev, meta_description_ar: e.target.value }))}
+                className="admin-input"
+                placeholder="الوصف (AR)..."
+                style={{ fontSize: '11px' }}
+              />
+            </div>
           </div>
         </div>
       )}

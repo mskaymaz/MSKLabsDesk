@@ -1,7 +1,29 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
-## 🟢 Son Güncelleme [22.10.2026 - 13:48] — KURUMSAL SAYFALAR GÖRSEL TASARIM STÜDYOSU (CMS-STUDIO-001 TAMAMLAMA) [*]
+## 🟢 Son Güncelleme [22.10.2026 - 14:35] — SAYFA STÜDYOSU GEZİNME, 900PX VİTRİN TUVALİ, DİKEY KANATLAR VE HIZLI KAZANIMLAR [*]
+* **Yapılan İşlem:**
+  1. **Sol Üst Sayfa Değiştirici Açılır Liste (`StudioTopBar.tsx` & `PagesView.tsx`):**
+     - Stüdyodan çıkmadan tüm kurumsal sayfalar arasında tek tıkla geçiş yapmayı sağlayan sayfa seçici eklendi.
+     - `isDirty` kontrolü getirilerek kaydedilmemiş değişiklik varken kullanıcı onayı mekanizması devreye alındı.
+  2. **900px Vitrin Tuval Genişliği & Seçici (`PageCanvas.tsx` & `StudioTopBar.tsx`):**
+     - Masaüstü tuval varsayılanı vitrindeki `.portfolio-container` ile %100 uyumlu olarak `900px`'e çekildi.
+     - Üst bara `900px (Vitrin)`, `1024px`, `1160px`, `1200px` ve `Özel px` seçenekli genişlik seçici entegre edildi.
+  3. **Canlı Dikey Reklam Kanatları (`PageCanvas.tsx`):**
+     - 900px tuvalin iki yanına 120x600 skyscraper reklam yuvaları (`ad_sidebar_left` / `ad_sidebar_right`) canlı kanatlar olarak eklendi; üst bardan gizle/göster anahtarı bağlandı.
+  4. **Ölü Kod Temizliği & Hızlı Kazanımlar:**
+     - `ModularSectionBuilder.tsx` (-342 satır) ölü dosyası kaldırıldı.
+     - `langHelpers.ts` ile `getLang()` DRY dil çözümlemesi uygulandı (`BlockRenderer.tsx` & `PageStudioView.tsx`).
+     - `BlockInspector.tsx`'e `bg_image` URL girişi ve EN/AR boş içerik yönlendirmesi eklendi.
+     - `StudioTopBar.tsx` SEO paneline `meta_description_tr/en/ar` alanları açıldı.
+     - History stack'e 50 adım sınırı getirildi ve kısayollar (Ctrl+S, Ctrl+Z, Ctrl+Y, Esc) bağlandı.
+  5. **Doğrulama ve Kural Uyumu:**
+     - Frontend Build: PASS (`tsc -b && vite build`, 1.12s, 0 hata).
+     - Backend Testleri: PASS (82/82 test %100 başarılı).
+     - Satır sınırları: `PageStudioView.tsx` 566 (<= 600), `StudioTopBar.tsx` 442 (<= 450), `PageCanvas.tsx` 354 (<= 450), `BlockInspector.tsx` 447 (<= 450), `BlockRenderer.tsx` 360 (<= 450).
+* **Durum:** `DevAdmin` dalında tamamlandı, `main` kesinlikle korundu.
+
+## [22.10.2026 - 13:48] — KURUMSAL SAYFALAR GÖRSEL TASARIM STÜDYOSU (CMS-STUDIO-001 TAMAMLAMA) [*]
 * **Yapılan İşlem:**
   1. **Çok Dilli Canlı RTL Simülasyonu ve Gemini AI Blok Çeviri (Faz 3):**
      - Tuvalde AR seçildiğinde anında `dir="rtl"` tersine ızgara, Arapça tipografi ve sağa yaslı akış uygulandı (`BlockRenderer.tsx`).

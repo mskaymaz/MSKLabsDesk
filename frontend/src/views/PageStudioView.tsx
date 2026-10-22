@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import type { SitePage, PageFormData, StudioBlock, StudioBlockType, PageRevision } from '../types';
 import { api } from '../services/api';
+import { getLang } from '../utils/langHelpers';
 import { BlockPalette } from '../components/pages/BlockPalette';
 import { PageCanvas } from '../components/pages/PageCanvas';
 import { BlockInspector } from '../components/pages/BlockInspector';
@@ -18,6 +19,8 @@ export interface PageStudioViewProps {
   onSave: (e: React.FormEvent) => void;
   onAiTranslate: () => void;
   aiTranslating: boolean;
+  allPages?: SitePage[];
+  onSelectPage?: (page: SitePage) => void;
 }
 
 export const PageStudioView: React.FC<PageStudioViewProps> = ({
@@ -29,6 +32,8 @@ export const PageStudioView: React.FC<PageStudioViewProps> = ({
   onSave,
   onAiTranslate,
   aiTranslating,
+  allPages,
+  onSelectPage,
 }) => {
   const [activeTab, setActiveTab] = useState<'tr' | 'en' | 'ar'>('tr');
   const [device, setDevice] = useState<'desktop' | 'tablet' | 'mobile'>('desktop');
@@ -40,6 +45,9 @@ export const PageStudioView: React.FC<PageStudioViewProps> = ({
   const [isRightPanelOpen, setIsRightPanelOpen] = useState(true);
   const [canvasTheme, setCanvasTheme] = useState<'light' | 'dark'>('light');
   const [canvasZoom, setCanvasZoom] = useState<'fit' | '100' | '75'>('100');
+  const [canvasWidth, setCanvasWidth] = useState<'900' | '1024' | '1160' | '1200' | 'custom'>('900');
+  const [customWidthPx, setCustomWidthPx] = useState<number>(900);
+  const [showSideAds, setShowSideAds] = useState<boolean>(true);
 
   // Bloklar ve Seçim Durumu
   const [blocks, setBlocks] = useState<StudioBlock[]>([]);
@@ -105,10 +113,13 @@ export const PageStudioView: React.FC<PageStudioViewProps> = ({
     setAutosaveState('idle');
   }, [isOpen, editingPage]);
 
-  // Geçmişe durum kaydet
+  // Geçmişe durum kaydet (Azami 50 adım sınırı)
   const pushHistory = (newBlocks: StudioBlock[]) => {
-    const updatedHistory = history.slice(0, historyIndex + 1);
+    let updatedHistory = history.slice(0, historyIndex + 1);
     updatedHistory.push(newBlocks);
+    if (updatedHistory.length > 50) {
+      updatedHistory = updatedHistory.slice(updatedHistory.length - 50);
+    }
     setHistory(updatedHistory);
     setHistoryIndex(updatedHistory.length - 1);
     setBlocks(newBlocks);
@@ -131,6 +142,39 @@ export const PageStudioView: React.FC<PageStudioViewProps> = ({
     }
   };
 
+  // Stüdyodan çıkmadan sayfa değiştirme (Kirli durum korumasıyla)
+  const handleSwitchPage = (targetPage: SitePage) => {
+    if (targetPage.id === editingPage?.id) return;
+    if (autosaveState === 'dirty') {
+      if (!window.confirm(`"${editingPage?.title_tr || editingPage?.slug}" sayfasında kaydedilmemiş değişiklikleriniz var. Sayfayı değiştirmek istediğinize emin misiniz?`)) {
+        return;
+      }
+    }
+    if (onSelectPage) onSelectPage(targetPage);
+  };
+
+  // Klavye Kısayolları (Ctrl+S, Ctrl+Z, Ctrl+Y, Esc)
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const isCtrl = e.ctrlKey || e.metaKey;
+      if (isCtrl && e.key.toLowerCase() === 's') {
+        e.preventDefault();
+        onSave(e as any);
+      } else if (isCtrl && e.key.toLowerCase() === 'z' && !e.shiftKey) {
+        e.preventDefault();
+        undo();
+      } else if (isCtrl && (e.key.toLowerCase() === 'y' || (e.key.toLowerCase() === 'z' && e.shiftKey))) {
+        e.preventDefault();
+        redo();
+      } else if (e.key === 'Escape') {
+        setSelectedBlockId(null);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onSave, historyIndex, history]);
+
   // 3000ms Debounced Autosave State Machine
   useEffect(() => {
     if (autosaveState === 'dirty') {
@@ -148,11 +192,11 @@ export const PageStudioView: React.FC<PageStudioViewProps> = ({
     const renderLang = (lang: 'tr' | 'en' | 'ar') => {
       let out = '';
       currBlocks.forEach((b) => {
-        const t = (lang === 'tr' ? b.title_tr : lang === 'en' ? b.title_en : b.title_ar) || b.title_tr || '';
-        const sub = (lang === 'tr' ? b.subtitle_tr : lang === 'en' ? b.subtitle_en : b.subtitle_ar) || b.subtitle_tr || '';
-        const pBtn = (lang === 'tr' ? b.btn_primary_text : lang === 'en' ? (b.btn_primary_text_en || b.btn_primary_text) : (b.btn_primary_text_ar || b.btn_primary_text)) || (lang === 'tr' ? 'Hemen Keşfet' : lang === 'en' ? 'Explore Now' : 'اكتشف الآن');
-        const sBtn = (lang === 'tr' ? b.btn_secondary_text : lang === 'en' ? (b.btn_secondary_text_en || b.btn_secondary_text) : (b.btn_secondary_text_ar || b.btn_secondary_text)) || (lang === 'tr' ? 'Daha Fazla Bilgi' : lang === 'en' ? 'Learn More' : 'معرفة المزيد');
-        const badge = (lang === 'tr' ? b.badge_text : lang === 'en' ? (b.badge_text_en || b.badge_text) : (b.badge_text_ar || b.badge_text)) || b.badge_text;
+        const t = getLang(b, 'title', lang);
+        const sub = getLang(b, 'subtitle', lang);
+        const pBtn = getLang(b, 'btn_primary_text', lang, lang === 'tr' ? 'Hemen Keşfet' : lang === 'en' ? 'Explore Now' : 'اكتشف الآن');
+        const sBtn = getLang(b, 'btn_secondary_text', lang, lang === 'tr' ? 'Daha Fazla Bilgi' : lang === 'en' ? 'Learn More' : 'معرفة المزيد');
+        const badge = getLang(b, 'badge_text', lang);
 
         if (b.type === 'hero') {
           const badgeHtml = badge ? `<span class="cms-badge">${badge}</span>` : '';
@@ -161,43 +205,43 @@ export const PageStudioView: React.FC<PageStudioViewProps> = ({
         } else if (b.type === 'features_grid') {
           const cols = b.grid_columns || 3;
           const itemsHtml = (b.items || []).map((it) => {
-            const itT = (lang === 'tr' ? (it.title_tr || it.title) : lang === 'en' ? (it.title_en || it.title) : (it.title_ar || it.title)) || it.title;
-            const itTxt = (lang === 'tr' ? (it.text_tr || it.text) : lang === 'en' ? (it.text_en || it.text) : (it.text_ar || it.text)) || it.text;
+            const itT = getLang(it, 'title', lang, it.title);
+            const itTxt = getLang(it, 'text', lang, it.text);
             return `  <div class="cms-card"><h4>${itT}</h4><p>${itTxt}</p></div>\n`;
           }).join('');
           out += `<div class="cms-features-section"><h2>${t}</h2>${sub ? `<p class="cms-sub">${sub}</p>` : ''}<div class="cms-grid cols-${cols}">\n${itemsHtml}</div></div>\n`;
         } else if (b.type === 'faq_accordion') {
           const itemsHtml = (b.items || []).map((it) => {
-            const itT = (lang === 'tr' ? (it.title_tr || it.title) : lang === 'en' ? (it.title_en || it.title) : (it.title_ar || it.title)) || it.title;
-            const itTxt = (lang === 'tr' ? (it.text_tr || it.text) : lang === 'en' ? (it.text_en || it.text) : (it.text_ar || it.text)) || it.text;
+            const itT = getLang(it, 'title', lang, it.title);
+            const itTxt = getLang(it, 'text', lang, it.text);
             return `  <details class="cms-faq-item"><summary><strong>${itT}</strong></summary><p>${itTxt}</p></details>\n`;
           }).join('');
           out += `<div class="cms-faq-group"><h2>${t}</h2>${sub ? `<p class="cms-sub">${sub}</p>` : ''}\n${itemsHtml}</div>\n`;
         } else if (b.type === 'contact_card') {
           const emailLbl = lang === 'tr' ? 'E-Posta' : lang === 'en' ? 'Email' : 'البريد الإلكتروني';
           const customRows = (b.items || []).map((it) => {
-            const itT = (lang === 'tr' ? (it.title_tr || it.title) : lang === 'en' ? (it.title_en || it.title) : (it.title_ar || it.title)) || it.title;
-            const itTxt = (lang === 'tr' ? (it.text_tr || it.text) : lang === 'en' ? (it.text_en || it.text) : (it.text_ar || it.text)) || it.text;
+            const itT = getLang(it, 'title', lang, it.title);
+            const itTxt = getLang(it, 'text', lang, it.text);
             return `  <div class="cms-contact-row"><strong>${itT}:</strong> <span>${itTxt}</span></div>\n`;
           }).join('');
           out += `<div class="cms-contact-box"><h3>${t}</h3>${sub ? `<p>${sub}</p>` : ''}<div class="cms-contact-grid">\n  <div class="cms-contact-row"><strong>${emailLbl}:</strong> <a href="mailto:destek@msklabs.org">destek@msklabs.org</a></div>\n${customRows}</div></div>\n`;
         } else if (b.type === 'cta_banner') {
-          const ctaBtn = (lang === 'tr' ? b.btn_primary_text : lang === 'en' ? (b.btn_primary_text_en || b.btn_primary_text) : (b.btn_primary_text_ar || b.btn_primary_text)) || (lang === 'tr' ? 'İletişime Geç' : lang === 'en' ? 'Get In Touch' : 'اتصل بنا');
+          const ctaBtn = getLang(b, 'btn_primary_text', lang, lang === 'tr' ? 'İletişime Geç' : lang === 'en' ? 'Get In Touch' : 'اتصل بنا');
           out += `<div class="cms-cta-banner text-${b.align || 'center'}"><h2>${t}</h2>${sub ? `<p>${sub}</p>` : ''}<a href="${b.btn_primary_link || '/contact.html'}" class="cms-btn cms-btn-primary">${ctaBtn}</a></div>\n`;
         } else if (b.type === 'comparison_table') {
           const cardsHtml = (b.items || []).map((it) => {
-            const itT = (lang === 'tr' ? (it.title_tr || it.title) : lang === 'en' ? (it.title_en || it.title) : (it.title_ar || it.title)) || it.title;
-            const itTxt = (lang === 'tr' ? (it.text_tr || it.text) : lang === 'en' ? (it.text_en || it.text) : (it.text_ar || it.text)) || it.text;
-            const itBdg = (lang === 'tr' ? it.badge : lang === 'en' ? (it.badge_en || it.badge) : (it.badge_ar || it.badge)) || it.badge;
-            const itPr = (lang === 'tr' ? it.price : lang === 'en' ? (it.price_en || it.price) : (it.price_ar || it.price)) || it.price;
-            const bullets = itTxt.split('\n').filter(Boolean).map((x) => `<li>${x}</li>`).join('');
+            const itT = getLang(it, 'title', lang, it.title);
+            const itTxt = getLang(it, 'text', lang, it.text);
+            const itBdg = getLang(it, 'badge', lang, it.badge);
+            const itPr = getLang(it, 'price', lang, it.price);
+            const bullets = (itTxt || '').split('\n').filter(Boolean).map((x) => `<li>${x}</li>`).join('');
             return `  <div class="cms-pricing-card ${it.highlight ? 'featured' : ''}">${itBdg ? `<span class="cms-badge">${itBdg}</span>` : ''}<h3>${itT}</h3><div class="cms-price">${itPr || '$0'}</div><ul>${bullets}</ul></div>\n`;
           }).join('');
           out += `<div class="cms-pricing-table"><h2>${t}</h2>${sub ? `<p class="cms-sub">${sub}</p>` : ''}<div class="cms-pricing-grid">\n${cardsHtml}</div></div>\n`;
         } else if (b.type === 'ad_hook') {
           out += `<!-- AD_SLOT: ${b.ad_slot_key || 'ad_in_content'} -->\n`;
         } else {
-          out += (lang === 'tr' ? b.content_tr : lang === 'en' ? b.content_en : b.content_ar) || b.content_tr || '';
+          out += getLang(b, 'content', lang);
         }
       });
       return out;
@@ -399,6 +443,14 @@ export const PageStudioView: React.FC<PageStudioViewProps> = ({
         setCanvasZoom={setCanvasZoom}
         canvasTheme={canvasTheme}
         setCanvasTheme={setCanvasTheme}
+        canvasWidth={canvasWidth}
+        setCanvasWidth={setCanvasWidth}
+        customWidthPx={customWidthPx}
+        setCustomWidthPx={setCustomWidthPx}
+        showSideAds={showSideAds}
+        setShowSideAds={setShowSideAds}
+        allPages={allPages}
+        onSwitchPage={handleSwitchPage}
         isLeftPanelOpen={isLeftPanelOpen}
         setIsLeftPanelOpen={setIsLeftPanelOpen}
         isRightPanelOpen={isRightPanelOpen}
@@ -430,6 +482,9 @@ export const PageStudioView: React.FC<PageStudioViewProps> = ({
           device={device}
           canvasTheme={canvasTheme}
           canvasZoom={canvasZoom}
+          canvasWidth={canvasWidth}
+          customWidthPx={customWidthPx}
+          showSideAds={showSideAds}
           isLeftPanelOpen={isLeftPanelOpen}
           setIsLeftPanelOpen={setIsLeftPanelOpen}
           isRightPanelOpen={isRightPanelOpen}

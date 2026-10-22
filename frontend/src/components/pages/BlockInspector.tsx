@@ -44,19 +44,20 @@ export const BlockInspector: React.FC<BlockInspectorProps> = ({
   }
 
   const isRtl = lang === 'ar';
-  const titleField = lang === 'tr' ? 'title_tr' : lang === 'en' ? 'title_en' : 'title_ar';
-  const subtitleField = lang === 'tr' ? 'subtitle_tr' : lang === 'en' ? 'subtitle_en' : 'subtitle_ar';
-  const contentField = lang === 'tr' ? 'content_tr' : lang === 'en' ? 'content_en' : 'content_ar';
-  const badgeField = lang === 'tr' ? 'badge_text' : lang === 'en' ? 'badge_text_en' : 'badge_text_ar';
-  const btn1Field = lang === 'tr' ? 'btn_primary_text' : lang === 'en' ? 'btn_primary_text_en' : 'btn_primary_text_ar';
-  const btn2Field = lang === 'tr' ? 'btn_secondary_text' : lang === 'en' ? 'btn_secondary_text_en' : 'btn_secondary_text_ar';
+  const f = (b: string) => (lang === 'tr' ? `${b}_tr` : `${b}_${lang}`) as keyof StudioBlock;
+  const currentTitle = (block[f('title')] as string) || '';
+  const currentSubtitle = (block[f('subtitle')] as string) || '';
+  const currentContent = (block[f('content')] as string) || '';
+  const badgeField = lang === 'tr' ? 'badge_text' : (`badge_text_${lang}` as keyof StudioBlock);
+  const btn1Field = lang === 'tr' ? 'btn_primary_text' : (`btn_primary_text_${lang}` as keyof StudioBlock);
+  const btn2Field = lang === 'tr' ? 'btn_secondary_text' : (`btn_secondary_text_${lang}` as keyof StudioBlock);
+  const currentBadge = (block[badgeField] as string) || '';
+  const currentBtn1 = (block[btn1Field] as string) || '';
+  const currentBtn2 = (block[btn2Field] as string) || '';
 
-  const currentTitle = block[titleField] || '';
-  const currentSubtitle = block[subtitleField] || '';
-  const currentContent = block[contentField] || '';
-  const currentBadge = block[badgeField] || '';
-  const currentBtn1 = block[btn1Field] || '';
-  const currentBtn2 = block[btn2Field] || '';
+  const titleField = f('title');
+  const subtitleField = f('subtitle');
+  const contentField = f('content');
 
   const getItemTitle = (it: StudioBlockItem) => (lang === 'tr' ? (it.title_tr || it.title) : lang === 'en' ? (it.title_en || '') : (it.title_ar || ''));
   const getItemText = (it: StudioBlockItem) => (lang === 'tr' ? (it.text_tr || it.text) : lang === 'en' ? (it.text_en || '') : (it.text_ar || ''));
@@ -140,9 +141,22 @@ export const BlockInspector: React.FC<BlockInspectorProps> = ({
 
         {/* 1. Metin İçerik Alanları */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-          <label className="admin-label" style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-            Metin İçerikleri ({lang.toUpperCase()})
-          </label>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <label className="admin-label" style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.05em', margin: 0 }}>
+              Metin İçerikleri ({lang.toUpperCase()})
+            </label>
+            {lang !== 'tr' && (
+              <span className="admin-badge admin-badge-cyan" style={{ fontSize: '9px', padding: '1px 5px' }}>
+                {lang.toUpperCase()}
+              </span>
+            )}
+          </div>
+
+          {lang !== 'tr' && !currentTitle && (
+            <div style={{ background: 'rgba(2, 132, 199, 0.08)', border: '1px dashed var(--accent-primary)', borderRadius: '6px', padding: '6px 10px', fontSize: '11px', color: 'var(--accent-primary)' }}>
+              💡 {lang.toUpperCase()} içeriği henüz girilmedi. Türkçe kaynak referans alınır.
+            </div>
+          )}
 
           <div>
             <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Blok Başlığı:</span>
@@ -248,6 +262,17 @@ export const BlockInspector: React.FC<BlockInspectorProps> = ({
                 />
               </div>
             )}
+            <div>
+              <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Arka Plan Görseli (URL):</span>
+              <input
+                type="text"
+                value={block.bg_image || ''}
+                onChange={(e) => onUpdate({ bg_image: e.target.value })}
+                className="admin-input"
+                style={{ fontSize: '11px', marginTop: '2px' }}
+                placeholder="Örn: https://... veya /assets/hero-bg.jpg"
+              />
+            </div>
           </div>
         )}
 
@@ -367,15 +392,7 @@ export const BlockInspector: React.FC<BlockInspectorProps> = ({
                     dir={isRtl ? 'rtl' : 'ltr'}
                     onChange={(e) => updateItem(item.id, lang === 'tr' ? { text_tr: e.target.value, text: e.target.value } : lang === 'en' ? { text_en: e.target.value } : { text_ar: e.target.value })}
                     placeholder={item.text || (block.type === 'comparison_table' ? 'Her satıra bir özellik yazınız...' : 'Madde açıklaması...')}
-                    style={{
-                      background: 'var(--bg-card)',
-                      border: '1px solid var(--border-color)',
-                      borderRadius: '4px',
-                      fontSize: '11px',
-                      padding: '3px 6px',
-                      color: 'var(--text-primary)',
-                      resize: 'vertical',
-                    }}
+                    style={{ background: 'var(--bg-card)', border: '1px solid var(--border-color)', borderRadius: '4px', fontSize: '11px', padding: '3px 6px', color: 'var(--text-primary)', resize: 'vertical' }}
                   />
                 </div>
               ))}
