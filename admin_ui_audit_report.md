@@ -525,45 +525,77 @@ Kütüphane: `cmdk` (~5kB) veya mevcut modal genişletilmeli.
 | 🔴 Kritik | `alert()` → `sonner` Toast | UX / Profesyonellik |
 | 🔴 Kritik | `window.confirm()` → `ConfirmationDialog` | UX / Profesyonellik |
 | 🔴 Kritik | Broadcast editörü → `<RichTextEditor>` | Fonksiyonel |
-| 🔴 Kritik | Focus ring / A11y | Erişilebilirlik |
+| 🔴 Kritik | Focus ring / A11y (:focus-visible) | Erişilebilirlik |
 | 🔴 Kritik | Görsel paste/drop → R2 upload (editör) | Fonksiyonel |
-| 🔴 Kritik | Editörde Undo/Redo butonları | UX/Editör |
+| 🔴 Kritik | Editörde Undo/Redo butonları | UX / Editör |
 | 🟠 Yüksek | Slash Commands (/) menüsü | Editör UX |
 | 🟠 Yüksek | Tablo araçları → tek `<TablePanel>` drawer | Editör / Bakım |
 | 🟠 Yüksek | Callout/Uyarı bloğu extension | Editör içerik |
 | 🟠 Yüksek | `@tiptap/extension-code-block-lowlight` | Editör görsellik |
 | 🟠 Yüksek | Toplu işlem (Bilet + Yorum + Yazı) | Verimlilik |
 | 🟠 Yüksek | Sayfalama (Posts + Aboneler) | Performans |
-| 🟠 Yüksek | Sidebar collapse + aktif bar | UI |
+| 🟠 Yüksek | Sidebar collapse + aktif bar | UI / Profesyonellik |
+| 🟠 Yüksek | Ayarlar sekme yapısı | UX |
 | 🟠 Yüksek | `@formkit/auto-animate` (geçişler) | UI kalitesi |
 | 🟡 Orta | Çoklu dil editörü — RTL çoklu instance | Editör stabilitesi |
-| 🟡 Orta | AI floating mini toolbar (seçili metin) | AI/UX |
+| 🟡 Orta | AI floating mini toolbar (seçili metin) | AI / UX |
 | 🟡 Orta | YouTube embed extension | İçerik zenginliği |
 | 🟡 Orta | HTML → Markdown / PDF export | Fonksiyonel |
 | 🟡 Orta | Klavye kısayolları sistematik | UX |
 | 🟡 Orta | Dashboard activity feed + sparkline | UX |
 | 🟡 Orta | Revizyon geçmişi (Blog Studio) | İçerik güvenliği |
 | 🟡 Orta | Bundle lazy load (Studio views) | Performans |
+| 🟡 Orta | CSV export (Aboneler) | Fonksiyonel |
 | 🟢 Düşük | Sağ tıklama context menu | UX |
 | 🟢 Düşük | Font seçici (Tema paneli) | UI |
 | 🟢 Düşük | Storybook / bileşen kataloğu | DX |
 | 🟢 Düşük | Kanal ikon seçici | UX |
 | 🟢 Düşük | `@dnd-kit` sürükle-bırak sıralama | UX |
-
-| Öncelik | Konu | Etki |
-|---|---|---|
-| 🔴 Kritik | `alert()` → `sonner` Toast | UX / Profesyonellik |
-| 🔴 Kritik | `window.confirm()` → `ConfirmationDialog` | UX / Profesyonellik |
-| 🔴 Kritik | Broadcast editörü → `<RichTextEditor>` | Fonksiyonel |
-| 🔴 Kritik | Focus ring / A11y | Erişilebilirlik |
-| 🟠 Yüksek | Toplu işlem (Bilet + Yorum + Yazı) | Verimlilik |
-| 🟠 Yüksek | Sayfalama (Posts + Aboneler) | Performans |
-| 🟠 Yüksek | Sidebar collapse + aktif bar | UI / Profesyonellik |
-| 🟠 Yüksek | Ayarlar sekme yapısı | UX |
-| 🟡 Orta | Dashboard activity feed + sparkline | UX |
-| 🟡 Orta | Revizyon geçmişi (Blog Studio) | İçerik güvenliği |
-| 🟡 Orta | Bundle lazy load (Studio views) | Performans |
-| 🟡 Orta | CSV export (Aboneler) | Fonksiyonel |
-| 🟢 Düşük | Kanal ikon seçici | UX |
-| 🟢 Düşük | Sürükle-bırak sıralama | UX |
 | 🟢 Düşük | Avatar + profil mini kart | UI |
+
+---
+
+## 24. EK: BAĞLAMA ALINAN VE HARİTALANAN YAPI & BİLEŞEN ENVANTERİ (MODEL KNOWLEDGE)
+
+Bu bölüm, önceki tarama ve bağlam oturumunda Claude tarafından çıkarılan, analiz edilen ve bellek özetine (checkpoint) işlenmiş olan somut bileşen, view ve CSS dosya envanterini içerir.
+
+### 24.1 Ekranlar (Views) Envanteri — `frontend/src/views/`
+1. `DashboardView.tsx` (12 KB) — İstatistik kartları (bilet, yorum, abone sayıları), son aktiviteler.
+2. `PostsView.tsx` (8.7 KB) — Blog listesi, arama, filtreleme, yayın durumu kartları.
+3. `BlogStudioView.tsx` (20.8 KB) — En büyük ekran; TipTap editörü, sayfa genişliği, kanallar, çok dilli sekmeler, yan/yüzen araç çubukları.
+4. `PageStudioView.tsx` (13.3 KB) — Kurumsal sayfa tuvali, yan reklam yerleşimi ve üst bar.
+5. `PagesView.tsx` (17.6 KB) — Kurumsal sayfalar listesi, hiyerarşi ve işlem aksiyonları.
+6. `AppsCMSView.tsx` (13.5 KB) — Uygulamalar listesi, platform/durum filtreleri, kategori kartları.
+7. `AppDetailStudioView.tsx` (6.1 KB) — Uygulama detay düzenleme stüdyosu.
+8. `TemplatesView.tsx` (25.3 KB) — En kapsamlı view; duyuru bandı ayarları + AdSense reklam stüdyosu + sayfa-reklam dağılım matrisi.
+9. `ChannelsView.tsx` (12.1 KB) — Blog türleri/kanalları listesi ve modal yönetimi.
+10. `CommentsView.tsx` (12.2 KB) — Blog yorumları listesi, moderasyon onay/ret butonları.
+11. `TicketsView.tsx` (16.5 KB) — Destek biletleri, kategori rozetleri, detay ve yapay zeka analiz modalları.
+12. `SubscribersView.tsx` (6.2 KB) — E-posta bülteni aboneleri, doğrulama filtresi ve arama.
+13. `BroadcastView.tsx` (5.5 KB) — Bülten e-posta gönderim ekranı, hedefleme ve gönderim simülasyonu.
+14. `SettingsView.tsx` (10.8 KB) — Sistem başlığı, e-posta ayarları, Turnstile ve Push bildirim ayarları.
+15. `LoginView.tsx` (8.3 KB) — Güvenlikli giriş, kilitlenme sayacı, tema değiştirici.
+
+### 24.2 UI ve Çekirdek Bileşenler — `frontend/src/components/`
+* **`components/ui/`:**
+  - `Button.tsx` (3.4 KB): `primary`, `secondary`, `danger`, `success`, `ghost` varyantları, `IconButton` bileşeni.
+  - `Input.tsx` (6.2 KB): `Input`, `Select`, `Checkbox`, `Switch` bileşenleri. *(Eksik: Textarea, DatePicker, TagInput)*.
+  - `Modal.tsx` (6.1 KB): `Modal`, `Drawer`, `ConfirmationDialog`.
+  - `CommonUI.tsx` (4.6 KB): `Skeleton`, `EmptyState`, `Tabs` bileşenleri.
+  - `RichTextEditor.tsx` (5.8 KB): TipTap wrapper, önizleme toggle ve tablo denetçisi entegrasyonu.
+* **`components/editor/` (13 Dosya — Editör Araç Seti):**
+  - `customExtensions.ts` (10.8 KB): FontSize, LineHeight, ParagraphSpacing, DuplicateSelection, CustomImage, CustomTable.
+  - `EditorToolbar.tsx` (10.7 KB), `EditorVerticalToolbar.tsx` (6.3 KB), `EditorTypographyControls.tsx` (7.6 KB).
+  - `FloatingImageToolbar.tsx` (8.8 KB), `FloatingTableInspector.tsx` (9.8 KB), `ImageDropdown.tsx` (14.2 KB), `LinkModal.tsx` (4.8 KB).
+  - `TableBorderControls.tsx` (12.8 KB), `TableCellDimensionControls.tsx` (15.9 KB), `TableDropdown.tsx` (8.5 KB), `TableLayoutControls.tsx` (5.2 KB), `tableStyleHelper.ts` (8.8 KB).
+* **`components/posts/`:** `LayoutBuilder`, `PostCard`, `PostCardActions`, `PostFilterBar`, `PostList`, `PostPreviewModal`.
+* **`components/apps/` & `studio/`:** `AppCMSCard`, `AppModal`, `AppModalCategorySelect`, `AppModalFeatureCards`, `AppModalLangFields`, `AppVersionModal` + 11 adet stüdyo alt bileşeni.
+* **`components/ads/`:** `AdLiveCanvas`, `AdPageMatrixMap`, `AdSizeCatalogModal`, `AdStudioControls`.
+* **`components/pages/`:** `CanvasSideAd`, `PageCanvas`, `PagePreviewModal`, `StudioTopBar` (20 KB).
+* **`components/modals/` & diğer:** `AdPreviewModal`, `GlobalSearchModal`, `NewAdSlotModal`, `CommentDetailModal`, `TicketDetailModal`, `Sidebar`, `ThemeCustomizerDrawer`.
+
+### 24.3 İncelenen Dosyalardaki Spesifik Kod Hataları ve İyileştirmeler
+* **`Input.tsx`:** `Select` bileşeninde `background: '#0F1522'` hardcoded olarak yazılmış; açık temada bozuluyor (`tokens.css` `--bg-input` kullanılmalı). `Textarea` bileşeni hiç yok.
+* **`Modal.tsx`:** `Drawer` içinde arka plan `#121826` sabit. Erişilebilirlik için `aria-labelledby` eksik. `disableBackdropBlur` varsayılan olarak `true` atanmış (arka plan bulanıklığı çalışmıyor). `ConfirmationDialog`'da `warning` varyantı tanımlı olmasına rağmen `Button` varyantına yansıtılmıyor.
+* **`tokens.css` & Stil Katmanı:** `design-system.css`, `editor.css`, `app-studio.css`, `responsive.css` dosyaları mevcut; ancak `:focus-visible` ring standardı ve merkezi toast/tooltip değişkenleri tanımlanmamış.
+* **İki Repo Durumu:** `MSKLabsDesk` ve `webMSKLabs` repoları `DevAdmin` dalında son commit'lerle tamamen güncel ve testleri başarılı (82/82 backend test PASS, 604 webMSKLabs test PASS, frontend 2048 modül build PASS).
