@@ -101,7 +101,7 @@ export const BlockPalette: React.FC<BlockPaletteProps> = ({ onAddBlock, onClose 
     <aside
       className="studio-palette-sidebar"
       style={{
-        width: '270px',
+        width: '295px',
         background: 'var(--bg-sidebar)',
         borderRight: '1px solid var(--border-color)',
         display: 'flex',
@@ -143,14 +143,14 @@ export const BlockPalette: React.FC<BlockPaletteProps> = ({ onAddBlock, onClose 
         </div>
 
         {/* Kategori Filtresi */}
-        <div style={{ display: 'flex', gap: '4px', marginTop: '10px', overflowX: 'auto' }}>
+        <div style={{ display: 'flex', gap: '3px', marginTop: '10px' }}>
           {(['all', 'core', 'content', 'marketing', 'ads'] as const).map((cat) => (
             <button
               key={cat}
               type="button"
               onClick={() => setSelectedCat(cat)}
               className={`admin-btn admin-btn-sm ${selectedCat === cat ? 'admin-btn-primary' : 'admin-btn-secondary'}`}
-              style={{ fontSize: '10px', padding: '2px 8px', textTransform: 'capitalize' }}
+              style={{ fontSize: '10px', padding: '3px 5px', flex: 1, textAlign: 'center', textTransform: 'capitalize' }}
             >
               {cat === 'all' ? 'Tümü' : cat === 'core' ? 'Temel' : cat === 'content' ? 'İçerik' : cat === 'marketing' ? 'Aksiyon' : 'Reklam'}
             </button>

@@ -1,7 +1,7 @@
 import React from 'react';
 import {
   SlidersHorizontal,
-  X,
+  ChevronRight,
   Trash2,
   Copy,
   ArrowUp,
@@ -112,8 +112,14 @@ export const BlockInspector: React.FC<BlockInspectorProps> = ({
           </span>
           <span style={{ fontSize: '12px', fontWeight: 800, color: 'var(--text-primary)' }}>Özellik Denetçisi</span>
         </div>
-        <button type="button" onClick={onClose} className="admin-btn-icon" title="Kapat" style={{ background: 'transparent', border: 'none', cursor: 'pointer' }}>
-          <X size={14} />
+        <button
+          type="button"
+          onClick={onClose}
+          className="admin-btn-icon"
+          title="Paneli Daralt"
+          style={{ background: 'transparent', border: 'none', cursor: 'pointer', padding: '2px' }}
+        >
+          <ChevronRight size={16} />
         </button>
       </div>
 

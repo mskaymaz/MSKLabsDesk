@@ -1,19 +1,12 @@
 import React from 'react';
 import {
-  Monitor,
-  Tablet,
-  Smartphone,
   Plus,
   ArrowUp,
   ArrowDown,
   Trash2,
   Copy,
   Sparkles,
-  Sun,
-  Moon,
-  PanelLeftClose,
   PanelLeftOpen,
-  PanelRightClose,
   PanelRightOpen,
 } from 'lucide-react';
 import type { StudioBlock } from '../../types';
@@ -30,11 +23,8 @@ export interface PageCanvasProps {
   onAddBlockPrompt: (afterIndex: number) => void;
   lang: 'tr' | 'en' | 'ar';
   device: 'desktop' | 'tablet' | 'mobile';
-  setDevice: (d: 'desktop' | 'tablet' | 'mobile') => void;
   canvasTheme: 'light' | 'dark';
-  setCanvasTheme: (t: 'light' | 'dark') => void;
   canvasZoom: 'fit' | '100' | '75';
-  setCanvasZoom: (z: 'fit' | '100' | '75') => void;
   isLeftPanelOpen: boolean;
   setIsLeftPanelOpen: React.Dispatch<React.SetStateAction<boolean>>;
   isRightPanelOpen: boolean;
@@ -52,11 +42,8 @@ export const PageCanvas: React.FC<PageCanvasProps> = ({
   onAddBlockPrompt,
   lang,
   device,
-  setDevice,
   canvasTheme,
-  setCanvasTheme,
   canvasZoom,
-  setCanvasZoom,
   isLeftPanelOpen,
   setIsLeftPanelOpen,
   isRightPanelOpen,
@@ -81,111 +68,12 @@ export const PageCanvas: React.FC<PageCanvasProps> = ({
         display: 'flex',
         flexDirection: 'column',
         height: '100%',
-        background: canvasTheme === 'dark' ? '#040711' : '#0f172a',
+        background: canvasTheme === 'dark' ? '#090d16' : '#e2e8f0',
         overflow: 'hidden',
         position: 'relative',
+        transition: 'background 0.2s ease',
       }}
     >
-      {/* Sahne Üst Cihaz & Genişlik Çubuğu */}
-      <div
-        style={{
-          padding: '8px 16px',
-          background: 'var(--bg-sidebar)',
-          borderBottom: '1px solid var(--border-color)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          zIndex: 10,
-        }}
-      >
-        {/* Sol Araçlar: Panel Toggle & Cihaz Seçimi */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <button
-            type="button"
-            onClick={() => setIsLeftPanelOpen(!isLeftPanelOpen)}
-            className={`admin-btn-icon ${isLeftPanelOpen ? 'text-cyan' : ''}`}
-            title={isLeftPanelOpen ? 'Bileşen Kütüphanesini Gizle' : 'Bileşen Kütüphanesini Aç'}
-            style={{ padding: '5px 8px', borderRadius: '6px', background: 'var(--bg-secondary)', border: 'none', cursor: 'pointer' }}
-          >
-            {isLeftPanelOpen ? <PanelLeftClose size={15} /> : <PanelLeftOpen size={15} />}
-          </button>
-
-          {/* Cihaz Genişlik Seçici */}
-          <div style={{ display: 'flex', background: 'var(--bg-secondary)', borderRadius: '8px', padding: '2px', gap: '2px' }}>
-            {(['desktop', 'tablet', 'mobile'] as const).map((d) => (
-              <button
-                key={d}
-                type="button"
-                onClick={() => setDevice(d)}
-                className={`admin-btn-icon ${device === d ? 'active text-cyan' : ''}`}
-                title={d === 'desktop' ? 'Masaüstü (1140px)' : d === 'tablet' ? 'Tablet (768px)' : 'Mobil (390px)'}
-                style={{ padding: '4px 8px', background: device === d ? 'var(--bg-card)' : 'transparent', border: 'none', borderRadius: '6px', cursor: 'pointer' }}
-              >
-                {d === 'desktop' ? <Monitor size={15} /> : d === 'tablet' ? <Tablet size={15} /> : <Smartphone size={15} />}
-              </button>
-            ))}
-          </div>
-
-          <span style={{ fontSize: '11px', color: 'var(--text-muted)', fontWeight: 600 }}>
-            {device === 'desktop' ? '1140px' : device === 'tablet' ? '768px' : '390px'}
-          </span>
-        </div>
-
-        {/* Orta Araçlar: Yakınlaştırma / Zoom & Tema */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          {/* Zoom Kontrolü */}
-          <div style={{ display: 'flex', background: 'var(--bg-secondary)', borderRadius: '8px', padding: '2px', gap: '2px' }}>
-            {(['fit', '75', '100'] as const).map((z) => (
-              <button
-                key={z}
-                type="button"
-                onClick={() => setCanvasZoom(z)}
-                style={{
-                  padding: '3px 8px',
-                  fontSize: '10px',
-                  fontWeight: 700,
-                  border: 'none',
-                  borderRadius: '5px',
-                  background: canvasZoom === z ? 'var(--accent-primary)' : 'transparent',
-                  color: canvasZoom === z ? '#FFF' : 'var(--text-secondary)',
-                  cursor: 'pointer',
-                }}
-              >
-                {z === 'fit' ? 'Sığdır' : `%${z}`}
-              </button>
-            ))}
-          </div>
-
-          {/* Canlı Açık / Koyu Tema Toggle */}
-          <button
-            type="button"
-            onClick={() => setCanvasTheme(canvasTheme === 'light' ? 'dark' : 'light')}
-            className="admin-btn admin-btn-secondary admin-btn-sm"
-            style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', fontSize: '11px', padding: '4px 8px' }}
-            title="Tasarlanan sayfanın canlı Açık/Koyu temasını değiştir"
-          >
-            {canvasTheme === 'light' ? <Moon size={13} className="text-purple" /> : <Sun size={13} className="text-amber" />}
-            <span>{canvasTheme === 'light' ? 'Koyu Mod' : 'Açık Mod'}</span>
-          </button>
-        </div>
-
-        {/* Sağ Araçlar: Denetçi Toggle & Blok Sayısı */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
-            {blocks.length} Blok
-          </span>
-          <button
-            type="button"
-            onClick={() => setIsRightPanelOpen(!isRightPanelOpen)}
-            className={`admin-btn-icon ${isRightPanelOpen ? 'text-cyan' : ''}`}
-            title={isRightPanelOpen ? 'Özellik Denetçisini Gizle' : 'Özellik Denetçisini Aç'}
-            style={{ padding: '5px 8px', borderRadius: '6px', background: 'var(--bg-secondary)', border: 'none', cursor: 'pointer' }}
-          >
-            {isRightPanelOpen ? <PanelRightClose size={15} /> : <PanelRightOpen size={15} />}
-          </button>
-        </div>
-      </div>
-
       {/* Tuval Kaydırma Sahnesi (Fixed Artboard Stage) */}
       <div
         style={{
@@ -259,12 +147,12 @@ export const PageCanvas: React.FC<PageCanvasProps> = ({
             flexShrink: 0,
             background: canvasTheme === 'dark' ? '#0f172a' : '#ffffff',
             color: canvasTheme === 'dark' ? '#f8fafc' : '#0f172a',
-            border: '1px solid var(--border-color)',
+            border: canvasTheme === 'dark' ? '1px solid #334155' : '1px solid #cbd5e1',
             borderRadius: device === 'desktop' ? '14px' : '20px',
-            boxShadow: '0 25px 50px -12px rgba(0,0,0,0.6)',
+            boxShadow: canvasTheme === 'dark' ? '0 25px 50px -12px rgba(0,0,0,0.8)' : '0 20px 45px -10px rgba(0,0,0,0.18)',
             display: 'flex',
             flexDirection: 'column',
-            transition: 'background 0.2s ease',
+            transition: 'background 0.2s ease, border-color 0.2s ease',
             minHeight: '600px',
             ...scaleStyle,
           }}
