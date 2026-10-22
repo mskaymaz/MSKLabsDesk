@@ -15,12 +15,9 @@ import {
   Smartphone,
   Sun,
   Moon,
-  PanelLeftClose,
-  PanelLeftOpen,
-  PanelRightClose,
-  PanelRightOpen,
   LayoutTemplate,
   History,
+  Copy,
 } from 'lucide-react';
 import type { SitePage, PageFormData } from '../../types';
 
@@ -50,19 +47,16 @@ export interface StudioTopBarProps {
   setShowSideAds?: React.Dispatch<React.SetStateAction<boolean>>;
   allPages?: SitePage[];
   onSwitchPage?: (page: SitePage) => void;
-  isLeftPanelOpen: boolean;
-  setIsLeftPanelOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  isRightPanelOpen: boolean;
-  setIsRightPanelOpen: React.Dispatch<React.SetStateAction<boolean>>;
   isMetaOpen: boolean;
   setIsMetaOpen: React.Dispatch<React.SetStateAction<boolean>>;
   onAiTranslate: () => void;
   aiTranslating: boolean;
   onPreview: () => void;
   onSave: (e: React.FormEvent) => void;
-  onOpenTemplates: () => void;
-  onOpenRevisions: () => void;
+  onOpenTemplates?: () => void;
+  onOpenRevisions?: () => void;
   revisionsCount?: number;
+  onCloneLayout?: () => void;
 }
 
 export const StudioTopBar: React.FC<StudioTopBarProps> = ({
@@ -91,10 +85,6 @@ export const StudioTopBar: React.FC<StudioTopBarProps> = ({
   setShowSideAds,
   allPages,
   onSwitchPage,
-  isLeftPanelOpen,
-  setIsLeftPanelOpen,
-  isRightPanelOpen,
-  setIsRightPanelOpen,
   isMetaOpen,
   setIsMetaOpen,
   onAiTranslate,
@@ -104,26 +94,28 @@ export const StudioTopBar: React.FC<StudioTopBarProps> = ({
   onOpenTemplates,
   onOpenRevisions,
   revisionsCount = 0,
+  onCloneLayout,
 }) => {
   const isSystemPage = Boolean(editingPage?.is_system);
 
   return (
     <>
-      <header className="studio-header" style={{ padding: '8px 16px', background: 'var(--bg-sidebar)', borderBottom: '1px solid var(--border-color)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', zIndex: 50 }}>
-        {/* Sol Aksiyonlar: Geri Dönüş ve Başlık */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <button
-            type="button"
-            onClick={onClose}
-            className="admin-btn admin-btn-secondary admin-btn-sm"
-            style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}
-          >
-            <ArrowLeft size={14} />
-            <span>Sayfalar</span>
-          </button>
+      <header className="studio-header" style={{ padding: 0, background: 'var(--bg-sidebar)', borderBottom: '1px solid var(--border-color)', display: 'flex', flexDirection: 'column', zIndex: 50 }}>
+        {/* 1. Üst Satır: Sayfa Kimliği ve Yayınlama Eylemleri */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '6px 14px', borderBottom: '1px solid var(--border-subtle, rgba(255,255,255,0.06))', gap: '10px' }}>
+          {/* Sol: Geri Dönüş ve Başlık/Slug */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <button
+              type="button"
+              onClick={onClose}
+              className="admin-btn admin-btn-secondary admin-btn-sm"
+              style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', fontSize: '11px', padding: '3px 8px' }}
+            >
+              <ArrowLeft size={13} />
+              <span>Sayfalar</span>
+            </button>
 
-          <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
               {allPages && allPages.length > 0 && onSwitchPage ? (
                 <select
                   value={editingPage?.id || ''}
@@ -133,12 +125,12 @@ export const StudioTopBar: React.FC<StudioTopBarProps> = ({
                   }}
                   className="admin-select"
                   style={{
-                    fontSize: '12px',
+                    fontSize: '11px',
                     fontWeight: 800,
-                    padding: '2px 8px',
+                    padding: '2px 6px',
                     background: 'var(--bg-secondary)',
                     border: '1px solid var(--border-color)',
-                    borderRadius: '6px',
+                    borderRadius: '5px',
                     color: 'var(--text-primary)',
                     maxWidth: '180px',
                   }}
@@ -151,7 +143,7 @@ export const StudioTopBar: React.FC<StudioTopBarProps> = ({
                   ))}
                 </select>
               ) : (
-                <h2 style={{ fontSize: '13px', fontWeight: 800, margin: 0, color: 'var(--text-primary)' }}>
+                <h2 style={{ fontSize: '12px', fontWeight: 800, margin: 0, color: 'var(--text-primary)' }}>
                   {editingPage ? editingPage.title_tr : 'Yeni Kurumsal Sayfa'}
                 </h2>
               )}
@@ -159,223 +151,226 @@ export const StudioTopBar: React.FC<StudioTopBarProps> = ({
                 className={`admin-badge ${
                   autosaveState === 'saved' ? 'admin-badge-emerald' : autosaveState === 'saving' ? 'admin-badge-cyan' : autosaveState === 'dirty' ? 'admin-badge-amber' : ''
                 }`}
-                style={{ fontSize: '10px' }}
+                style={{ fontSize: '9px', padding: '1px 5px' }}
               >
                 {autosaveState === 'saved' ? 'Kaydedildi' : autosaveState === 'saving' ? 'Kaydediliyor...' : autosaveState === 'dirty' ? 'Değişiklikler Var' : 'Hazır'}
               </span>
               {isSystemPage && (
-                <span className="admin-badge admin-badge-purple" style={{ fontSize: '10px', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-                  <Lock size={10} />
+                <span className="admin-badge admin-badge-purple" style={{ fontSize: '9px', display: 'inline-flex', alignItems: 'center', gap: '3px', padding: '1px 5px' }}>
+                  <Lock size={9} />
                   Sistem
                 </span>
               )}
-            </div>
-            <span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>
-              /{formData.slug || 'slug'} • Durum: {formData.status === 'published' ? 'Yayında' : 'Taslak'} • {device === 'desktop' ? `${canvasWidth === 'custom' ? customWidthPx : canvasWidth}px tuval` : device}
-            </span>
-          </div>
-        </div>
-
-        {/* Orta Araçlar: Panel, Cihaz, Genişlik, Kanatlar, Zoom, Tema Kontrolleri */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-          <button
-            type="button"
-            onClick={() => setIsLeftPanelOpen(!isLeftPanelOpen)}
-            className={`admin-btn-icon ${isLeftPanelOpen ? 'text-cyan' : ''}`}
-            title={isLeftPanelOpen ? 'Bileşen Kütüphanesini Gizle' : 'Bileşen Kütüphanesini Aç'}
-            style={{ padding: '5px 7px', borderRadius: '6px', background: 'var(--bg-secondary)', border: 'none', cursor: 'pointer' }}
-          >
-            {isLeftPanelOpen ? <PanelLeftClose size={14} /> : <PanelLeftOpen size={14} />}
-          </button>
-
-          <div style={{ display: 'flex', background: 'var(--bg-secondary)', borderRadius: '6px', padding: '2px', gap: '2px' }}>
-            {(['desktop', 'tablet', 'mobile'] as const).map((d) => (
-              <button
-                key={d}
-                type="button"
-                onClick={() => setDevice(d)}
-                className={`admin-btn-icon ${device === d ? 'active text-cyan' : ''}`}
-                title={d === 'desktop' ? 'Masaüstü' : d === 'tablet' ? 'Tablet (768px)' : 'Mobil (390px)'}
-                style={{ padding: '3px 7px', background: device === d ? 'var(--bg-card)' : 'transparent', border: 'none', borderRadius: '5px', cursor: 'pointer' }}
-              >
-                {d === 'desktop' ? <Monitor size={14} /> : d === 'tablet' ? <Tablet size={14} /> : <Smartphone size={14} />}
-              </button>
-            ))}
-          </div>
-
-          {device === 'desktop' && setCanvasWidth && (
-            <div style={{ display: 'flex', alignItems: 'center', gap: '2px', background: 'var(--bg-secondary)', borderRadius: '6px', padding: '2px 4px' }}>
-              <select
-                value={canvasWidth}
-                onChange={(e) => setCanvasWidth(e.target.value as any)}
-                className="admin-select"
-                style={{ fontSize: '10px', padding: '2px 4px', border: 'none', background: 'transparent', fontWeight: 700 }}
-                title="Tuval Genişliği"
-              >
-                <option value="900">900px (Vitrin)</option>
-                <option value="1024">1024px</option>
-                <option value="1160">1160px</option>
-                <option value="1200">1200px</option>
-                <option value="custom">Özel px</option>
-              </select>
-              {canvasWidth === 'custom' && setCustomWidthPx && (
-                <input
-                  type="number"
-                  value={customWidthPx}
-                  onChange={(e) => setCustomWidthPx(Number(e.target.value))}
-                  className="admin-input"
-                  style={{ width: '48px', fontSize: '10px', padding: '1px 3px', height: '20px' }}
-                  min={400}
-                  max={1920}
-                />
-              )}
-            </div>
-          )}
-
-          {device === 'desktop' && setShowSideAds && (
-            <button
-              type="button"
-              onClick={() => setShowSideAds(!showSideAds)}
-              className={`admin-btn admin-btn-sm ${showSideAds ? 'admin-btn-primary' : 'admin-btn-secondary'}`}
-              style={{ fontSize: '10px', padding: '3px 6px' }}
-              title={showSideAds ? 'Sol/Sağ Dikey Reklam Kanatlarını Gizle' : 'Sol/Sağ Dikey Reklam Kanatlarını Göster (120x600)'}
-            >
-              <span>{showSideAds ? 'Kanatlar' : 'Kanatsız'}</span>
-            </button>
-          )}
-
-          <div style={{ display: 'flex', background: 'var(--bg-secondary)', borderRadius: '6px', padding: '2px', gap: '2px' }}>
-            {(['fit', '75', '100'] as const).map((z) => (
-              <button key={z} type="button" onClick={() => setCanvasZoom(z)} style={{ padding: '3px 6px', fontSize: '10px', fontWeight: 700, border: 'none', borderRadius: '4px', background: canvasZoom === z ? 'var(--accent-primary)' : 'transparent', color: canvasZoom === z ? '#FFF' : 'var(--text-secondary)', cursor: 'pointer' }}>
-                {z === 'fit' ? 'Sığdır' : `%${z}`}
-              </button>
-            ))}
-          </div>
-
-          <button
-            type="button"
-            onClick={() => setCanvasTheme(canvasTheme === 'light' ? 'dark' : 'light')}
-            className="admin-btn admin-btn-secondary admin-btn-sm"
-            style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', fontSize: '11px', padding: '4px 8px' }}
-            title="Tasarlanan sayfanın canlı Açık/Koyu modunu değiştir"
-          >
-            {canvasTheme === 'light' ? <Moon size={13} className="text-purple" /> : <Sun size={13} className="text-amber" />}
-            <span>{canvasTheme === 'light' ? 'Koyu' : 'Açık'}</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setIsRightPanelOpen(!isRightPanelOpen)}
-            className={`admin-btn-icon ${isRightPanelOpen ? 'text-cyan' : ''}`}
-            title={isRightPanelOpen ? 'Özellik Denetçisini Gizle' : 'Özellik Denetçisini Aç'}
-            style={{ padding: '5px 7px', borderRadius: '6px', background: 'var(--bg-secondary)', border: 'none', cursor: 'pointer' }}
-          >
-            {isRightPanelOpen ? <PanelRightClose size={14} /> : <PanelRightOpen size={14} />}
-          </button>
-        </div>
-
-        {/* Sağ Aksiyonlar: Dil, Undo/Redo, AI Çevir, SEO, Önizle, Kaydet */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <div style={{ display: 'flex', background: 'var(--bg-secondary)', borderRadius: '6px', padding: '2px', gap: '2px' }}>
-            <button
-              type="button"
-              onClick={undo}
-              disabled={!canUndo}
-              className="admin-btn-icon"
-              title="Geri Al (Undo)"
-              style={{ padding: '4px', opacity: canUndo ? 1 : 0.3 }}
-            >
-              <RotateCcw size={13} />
-            </button>
-            <button
-              type="button"
-              onClick={redo}
-              disabled={!canRedo}
-              className="admin-btn-icon"
-              title="Yinele (Redo)"
-              style={{ padding: '4px', opacity: canRedo ? 1 : 0.3 }}
-            >
-              <RotateCw size={13} />
-            </button>
-          </div>
-
-          <div style={{ display: 'flex', background: 'var(--bg-secondary)', borderRadius: '6px', padding: '2px', border: '1px solid var(--border-color)', gap: '2px' }}>
-            {(['tr', 'en', 'ar'] as const).map((lang) => (
-              <button key={lang} type="button" onClick={() => setActiveTab(lang)} style={{ padding: '3px 10px', borderRadius: '4px', border: 'none', background: activeTab === lang ? 'var(--accent-primary)' : 'transparent', color: activeTab === lang ? '#FFF' : 'var(--text-secondary)', fontWeight: 800, fontSize: '11px', cursor: 'pointer', textTransform: 'uppercase' }}>
-                {lang}
-              </button>
-            ))}
-          </div>
-
-          <button
-            type="button"
-            onClick={onAiTranslate}
-            disabled={aiTranslating}
-            className="admin-btn admin-btn-secondary admin-btn-sm"
-            style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}
-            title="Türkçe kaynaktan İngilizce ve Arapça versiyonları otomatik üret"
-          >
-            <Sparkles size={13} className={aiTranslating ? 'animate-spin text-purple' : 'text-purple'} />
-            <span>{aiTranslating ? 'AI Çeviriyor...' : 'AI Çevir'}</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={onOpenTemplates}
-            className="admin-btn admin-btn-secondary admin-btn-sm"
-            style={{ display: 'inline-flex', alignItems: 'center', gap: '5px' }}
-            title="Hazır sayfa şablonları"
-          >
-            <LayoutTemplate size={13} className="text-cyan" />
-            <span>Şablonlar</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={onOpenRevisions}
-            className="admin-btn admin-btn-secondary admin-btn-sm"
-            style={{ display: 'inline-flex', alignItems: 'center', gap: '5px' }}
-            title="Sürüm ve revizyon geçmişi"
-          >
-            <History size={13} className="text-purple" />
-            <span>Geçmiş</span>
-            {revisionsCount > 0 && (
-              <span className="admin-badge admin-badge-purple" style={{ fontSize: '9px', padding: '1px 5px', borderRadius: '4px' }}>
-                {revisionsCount}
+              <span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>
+                /{formData.slug || 'slug'}
               </span>
+            </div>
+          </div>
+
+          {/* Sağ: Şablonlar, Geçmiş, SEO, Önizle, Yayına Al */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            {onOpenTemplates && (
+              <button
+                type="button"
+                onClick={onOpenTemplates}
+                className="admin-btn admin-btn-secondary admin-btn-sm"
+                style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', fontSize: '11px', padding: '3px 8px' }}
+                title="Hazır sayfa şablonları"
+              >
+                <LayoutTemplate size={12} className="text-cyan" />
+                <span>Şablonlar</span>
+              </button>
             )}
-          </button>
 
-          <button
-            type="button"
-            onClick={() => setIsMetaOpen(!isMetaOpen)}
-            className="admin-btn admin-btn-secondary admin-btn-sm"
-            style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}
-          >
-            <SlidersHorizontal size={13} />
-            <span>SEO</span>
-            {isMetaOpen ? <ChevronUp size={11} /> : <ChevronDown size={11} />}
-          </button>
+            {onOpenRevisions && (
+              <button
+                type="button"
+                onClick={onOpenRevisions}
+                className="admin-btn admin-btn-secondary admin-btn-sm"
+                style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', fontSize: '11px', padding: '3px 8px' }}
+                title="Sürüm ve revizyon geçmişi"
+              >
+                <History size={12} className="text-purple" />
+                <span>Geçmiş</span>
+                {revisionsCount > 0 && (
+                  <span className="admin-badge admin-badge-purple" style={{ fontSize: '9px', padding: '0 4px', borderRadius: '4px' }}>
+                    {revisionsCount}
+                  </span>
+                )}
+              </button>
+            )}
 
-          <button
-            type="button"
-            onClick={onPreview}
-            className="admin-btn admin-btn-secondary admin-btn-sm"
-            style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}
-          >
-            <Eye size={13} />
-            <span>Önizle</span>
-          </button>
+            <button
+              type="button"
+              onClick={() => setIsMetaOpen(!isMetaOpen)}
+              className="admin-btn admin-btn-secondary admin-btn-sm"
+              style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', fontSize: '11px', padding: '3px 8px' }}
+            >
+              <SlidersHorizontal size={12} />
+              <span>SEO</span>
+              {isMetaOpen ? <ChevronUp size={10} /> : <ChevronDown size={10} />}
+            </button>
 
-          <button
-            type="button"
-            onClick={onSave}
-            className="admin-btn admin-btn-primary admin-btn-sm"
-            style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}
-          >
-            <Save size={13} />
-            <span>Yayına Al</span>
-          </button>
+            <button
+              type="button"
+              onClick={onPreview}
+              className="admin-btn admin-btn-secondary admin-btn-sm"
+              style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', fontSize: '11px', padding: '3px 8px' }}
+            >
+              <Eye size={12} />
+              <span>Önizle</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={onSave}
+              className="admin-btn admin-btn-primary admin-btn-sm"
+              style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', fontSize: '11px', padding: '3px 10px' }}
+            >
+              <Save size={12} />
+              <span>Yayına Al</span>
+            </button>
+          </div>
+        </div>
+
+        {/* 2. Alt Satır: Tuval Görünümü (Sol) & İçerik Düzenleme/Dil (Sağ) */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '4px 14px', background: 'var(--bg-secondary)', gap: '8px' }}>
+          {/* Sol Araçlar: Cihaz, Genişlik, Kanatlar, Zoom, Açık/Koyu Tema */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+            <div style={{ display: 'flex', background: 'var(--bg-card)', borderRadius: '5px', padding: '1px', gap: '2px' }}>
+              {(['desktop', 'tablet', 'mobile'] as const).map((d) => (
+                <button
+                  key={d}
+                  type="button"
+                  onClick={() => setDevice(d)}
+                  className={`admin-btn-icon ${device === d ? 'active text-cyan' : ''}`}
+                  title={d === 'desktop' ? 'Masaüstü' : d === 'tablet' ? 'Tablet (768px)' : 'Mobil (390px)'}
+                  style={{ padding: '3px 6px', background: device === d ? 'var(--accent-primary)' : 'transparent', color: device === d ? '#FFF' : 'inherit', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
+                >
+                  {d === 'desktop' ? <Monitor size={12} /> : d === 'tablet' ? <Tablet size={12} /> : <Smartphone size={12} />}
+                </button>
+              ))}
+            </div>
+
+            {device === 'desktop' && setCanvasWidth && (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '2px', background: 'var(--bg-card)', borderRadius: '5px', padding: '2px 4px' }}>
+                <select
+                  value={canvasWidth}
+                  onChange={(e) => setCanvasWidth(e.target.value as any)}
+                  className="admin-select"
+                  style={{ fontSize: '10px', padding: '1px 3px', border: 'none', background: 'transparent', fontWeight: 700 }}
+                  title="Tuval Genişliği"
+                >
+                  <option value="900">900px (Vitrin)</option>
+                  <option value="1024">1024px</option>
+                  <option value="1160">1160px</option>
+                  <option value="1200">1200px</option>
+                  <option value="custom">Özel px</option>
+                </select>
+                {canvasWidth === 'custom' && setCustomWidthPx && (
+                  <input
+                    type="number"
+                    value={customWidthPx}
+                    onChange={(e) => setCustomWidthPx(Number(e.target.value))}
+                    className="admin-input"
+                    style={{ width: '44px', fontSize: '10px', padding: '1px 2px', height: '18px' }}
+                    min={400}
+                    max={1920}
+                  />
+                )}
+              </div>
+            )}
+
+            {device === 'desktop' && setShowSideAds && (
+              <button
+                type="button"
+                onClick={() => setShowSideAds(!showSideAds)}
+                className={`admin-btn admin-btn-sm ${showSideAds ? 'admin-btn-primary' : 'admin-btn-secondary'}`}
+                style={{ fontSize: '10px', padding: '2px 6px' }}
+                title={showSideAds ? 'Sol/Sağ Dikey Reklam Kanatlarını Gizle' : 'Sol/Sağ Dikey Reklam Kanatlarını Göster (120x600)'}
+              >
+                <span>{showSideAds ? 'Kanatlar' : 'Kanatsız'}</span>
+              </button>
+            )}
+
+            <div style={{ display: 'flex', background: 'var(--bg-card)', borderRadius: '5px', padding: '1px', gap: '2px' }}>
+              {(['fit', '75', '100'] as const).map((z) => (
+                <button key={z} type="button" onClick={() => setCanvasZoom(z)} style={{ padding: '2px 5px', fontSize: '10px', fontWeight: 700, border: 'none', borderRadius: '3px', background: canvasZoom === z ? 'var(--accent-primary)' : 'transparent', color: canvasZoom === z ? '#FFF' : 'var(--text-secondary)', cursor: 'pointer' }}>
+                  {z === 'fit' ? 'Sığdır' : `%${z}`}
+                </button>
+              ))}
+            </div>
+
+            <button
+              type="button"
+              onClick={() => setCanvasTheme(canvasTheme === 'light' ? 'dark' : 'light')}
+              className="admin-btn admin-btn-secondary admin-btn-sm"
+              style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', fontSize: '10px', padding: '2px 7px' }}
+              title="Açık / Koyu Tema Değiştir"
+            >
+              {canvasTheme === 'light' ? <Moon size={12} className="text-purple" /> : <Sun size={12} className="text-amber" />}
+              <span>{canvasTheme === 'light' ? 'Koyu' : 'Açık'}</span>
+            </button>
+          </div>
+
+          {/* Sağ Araçlar: Geri/İleri Alma, TR EN AR Dil Seçici, AI Çevir */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginLeft: 'auto' }}>
+            <div style={{ display: 'flex', background: 'var(--bg-card)', borderRadius: '5px', padding: '1px', gap: '2px' }}>
+              <button
+                type="button"
+                onClick={undo}
+                disabled={!canUndo}
+                className="admin-btn-icon"
+                title="Geri Al (Ctrl+Z)"
+                style={{ padding: '3px', opacity: canUndo ? 1 : 0.3 }}
+              >
+                <RotateCcw size={12} />
+              </button>
+              <button
+                type="button"
+                onClick={redo}
+                disabled={!canRedo}
+                className="admin-btn-icon"
+                title="Yinele (Ctrl+Y)"
+                style={{ padding: '3px', opacity: canRedo ? 1 : 0.3 }}
+              >
+                <RotateCw size={12} />
+              </button>
+            </div>
+
+            <div style={{ display: 'flex', background: 'var(--bg-card)', borderRadius: '5px', padding: '1px', border: '1px solid var(--border-color)', gap: '1px' }}>
+              {(['tr', 'en', 'ar'] as const).map((lang) => (
+                <button key={lang} type="button" onClick={() => setActiveTab(lang)} style={{ padding: '2px 8px', borderRadius: '3px', border: 'none', background: activeTab === lang ? 'var(--accent-primary)' : 'transparent', color: activeTab === lang ? '#FFF' : 'var(--text-secondary)', fontWeight: 800, fontSize: '10px', cursor: 'pointer', textTransform: 'uppercase' }}>
+                  {lang}
+                </button>
+              ))}
+            </div>
+
+            {onCloneLayout && (
+              <button
+                type="button"
+                onClick={onCloneLayout}
+                className="admin-btn admin-btn-secondary admin-btn-sm"
+                style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', fontSize: '10px', padding: '2px 7px' }}
+                title="Türkçe mizanpaj ve içeriği diğer dillere kopyalar"
+              >
+                <Copy size={11} />
+                <span>Klonla</span>
+              </button>
+            )}
+
+            <button
+              type="button"
+              onClick={onAiTranslate}
+              disabled={aiTranslating}
+              className="admin-btn admin-btn-secondary admin-btn-sm"
+              style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', fontSize: '10px', padding: '2px 8px' }}
+              title="Türkçe kaynaktan İngilizce ve Arapça versiyonları otomatik üret"
+            >
+              <Sparkles size={12} className={aiTranslating ? 'animate-spin text-purple' : 'text-purple'} />
+              <span>{aiTranslating ? 'AI Çeviriyor...' : 'AI Çevir'}</span>
+            </button>
+          </div>
         </div>
       </header>
 

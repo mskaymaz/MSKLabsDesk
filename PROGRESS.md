@@ -1,7 +1,29 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
-## 🟢 Son Güncelleme [22.10.2026 - 14:35] — SAYFA STÜDYOSU GEZİNME, 900PX VİTRİN TUVALİ, DİKEY KANATLAR VE HIZLI KAZANIMLAR [*]
+## 🟢 Son Güncelleme [22.10.2026 - 15:50] — KURUMSAL SAYFA STÜDYOSU BLOG WORD MİMARİSİNE GEÇİŞ & SADELEŞTİRME [*]
+* **Yapılan İşlem:**
+  1. **Yeni Kurumsal Sayfa Ekleme Hatasının Çözümü (PagesView.tsx & slugify.ts):**
+     - "Yeni Kurumsal Sayfa Ekle" tetiklendiğinde tuvalin boş açılması sağlandı; başlık girildikçe Türkçe karakter uyumlu otomatik kalıcı bağlantı (slug) üretim algoritması (slugifyTurkish) bağlandı.
+     - Kaydetme esnasında slug boşluğu nedeniyle oluşan kayıt engellemesi kaldırıldı; boş slug durumunda başlıktan veya sistem zaman damgasından otomatik türetim sağlandı.
+  2. **Blog Studio Word / TipTap Zengin Metin Mimarisine Geçiş (PageCanvas.tsx & PageStudioView.tsx):**
+     - Kısır ve parça bazlı biçimlendirmeyi bozan 8 bloklu karmaşık yapı tuvalden tamamen kaldırıldı.
+     - Doğrudan Blog Studio'da kanıtlanmış Word kağıt tuval mimarisi (word-paper-canvas) uyarlandı:
+       - Büyük Belge Başlığı (title_tr/en/ar) alanı.
+       - Kısa Özet / Alt Başlık (summary_tr/en/ar) alanı.
+       - Tam donanımlı TipTap RichTextEditor: Paragraf seviyesinde bağımsız 4 yönlü hizalama (sol, orta, sağ, iki yana), H1-H4 başlıklar, yazı tipi boyutu, kalın/italik/altı çizili/üstü çizili, metin ve arka plan renkleri, bağlantılar, resimler ve tablolar doğrudan kelime/paragraf bazında işler hale getirildi.
+  3. **Gökdelen Reklam Kanatlarının Korunması (CanvasSideAd.tsx):**
+     - Kullanıcı talimatı doğrultusunda 900px merkez Word tuvalini çevreleyen sol ve sağ 120x600 dikey reklam kanatları eksiksiz korundu.
+  4. **Açılır Panellerin Sadeleştirilmesi & Üst Çubuk İyileştirmesi (StudioTopBar.tsx):**
+     - Karmaşık ve kalabalık yapan sol blok paleti ve sağ blok denetçisi kaldırılarak arayüz sadeleştirildi.
+     - Üst bara tek tıkla mizanpajı TR'den EN/AR'a aktaran "Klonla" butonu ve debounced (3000ms) otomatik kaydetme durum makinesi entegre edildi.
+  5. **Doğrulama ve Kural Uyumu:**
+     - Frontend Build: PASS (tsc -b && vite build, 890ms, 0 hata).
+     - Backend Testleri: PASS (82/82 test %100 başarılı).
+     - Satır sınırları: PageStudioView.tsx 296 (<= 600), StudioTopBar.tsx 437 (<= 450), PageCanvas.tsx 200 (<= 450), PagesView.tsx 450 (<= 450).
+* **Durum:** DevAdmin dalında tamamlandı, main kesinlikle korundu.
+
+## [22.10.2026 - 14:35] — SAYFA STÜDYOSU GEZİNME, 900PX VİTRİN TUVALİ, DİKEY KANATLAR VE HIZLI KAZANIMLAR [*]
 * **Yapılan İşlem:**
   1. **Sol Üst Sayfa Değiştirici Açılır Liste (`StudioTopBar.tsx` & `PagesView.tsx`):**
      - Stüdyodan çıkmadan tüm kurumsal sayfalar arasında tek tıkla geçiş yapmayı sağlayan sayfa seçici eklendi.

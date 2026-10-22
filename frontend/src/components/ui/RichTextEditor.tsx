@@ -33,6 +33,8 @@ export interface RichTextEditorProps {
   error?: string;
   dir?: 'ltr' | 'rtl';
   editorRef?: React.MutableRefObject<any>;
+  hideToolbar?: boolean;
+  hideHeader?: boolean;
 }
 
 export const RichTextEditor: React.FC<RichTextEditorProps> = ({
@@ -43,6 +45,8 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
   error,
   dir = 'ltr',
   editorRef,
+  hideToolbar = false,
+  hideHeader = false,
 }) => {
   const [isPreview, setIsPreview] = useState(false);
   const [isFloatingTableOpen, setIsFloatingTableOpen] = useState(false);
@@ -118,34 +122,36 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
   return (
     <div style={{ marginBottom: 'var(--space-3, 12px)' }}>
       {/* Üst Başlık ve Önizleme Geçiş Butonu */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
-        {label && (
-          <label style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text-secondary)' }}>
-            {label}
-          </label>
-        )}
-        <button
-          type="button"
-          onClick={() => setIsPreview(!isPreview)}
-          className="admin-btn admin-btn-secondary"
-          style={{
-            padding: '3px 10px',
-            fontSize: '12px',
-            height: '28px',
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '6px',
-            cursor: 'pointer',
-          }}
-        >
-          {isPreview ? <Edit3 size={13} /> : <Eye size={13} />}
-          <span>{isPreview ? 'Editör Modu' : 'Önizleme'}</span>
-        </button>
-      </div>
+      {!hideHeader && (
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
+          {label && (
+            <label style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text-secondary)' }}>
+              {label}
+            </label>
+          )}
+          <button
+            type="button"
+            onClick={() => setIsPreview(!isPreview)}
+            className="admin-btn admin-btn-secondary"
+            style={{
+              padding: '3px 10px',
+              fontSize: '12px',
+              height: '28px',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '6px',
+              cursor: 'pointer',
+            }}
+          >
+            {isPreview ? <Edit3 size={13} /> : <Eye size={13} />}
+            <span>{isPreview ? 'Editör Modu' : 'Önizleme'}</span>
+          </button>
+        </div>
+      )}
 
       {/* Editör / Önizleme Kapsayıcısı */}
       <div className={`rich-editor-wrapper ${error ? 'has-error' : ''}`} dir={dir}>
-        {!isPreview && (
+        {!isPreview && !hideToolbar && (
           <EditorToolbar
             editor={editor}
             onOpenFloatingTable={() => setIsFloatingTableOpen(true)}

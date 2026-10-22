@@ -1,14 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import {
-  Plus,
-  Search,
-  Lock,
-  Edit3,
-  Trash2,
-  Layers,
-} from 'lucide-react';
+import { Plus, Search, Lock, Edit3, Trash2, Layers } from 'lucide-react';
 import type { SitePage, PageFormData } from '../types';
 import { api } from '../services/api';
+import { slugifyTurkish } from '../utils/slugify';
 import { PageStudioView } from './PageStudioView';
 
 export const PagesView: React.FC = () => {
@@ -143,16 +137,20 @@ export const PagesView: React.FC = () => {
       alert('Lütfen en azından Türkçe başlık ve içerik alanlarını doldurunuz.');
       return;
     }
-    if (!editingPage && !formData.slug) {
-      alert('Lütfen geçerli bir sayfa adresi (slug) giriniz.');
-      return;
+
+    let finalSlug = formData.slug ? formData.slug.trim().toLowerCase() : '';
+    if (!finalSlug && formData.title_tr) {
+      finalSlug = slugifyTurkish(formData.title_tr);
+    }
+    if (!editingPage && !finalSlug) {
+      finalSlug = `sayfa-${Date.now()}`;
     }
 
     try {
       let finalMeta: Record<string, any> = {};
       try { if (formData.meta_json) finalMeta = JSON.parse(formData.meta_json); } catch {}
       finalMeta.seo_keywords = formData.meta_keywords || finalMeta.seo_keywords;
-      const payload = { ...formData, meta_json: JSON.stringify(finalMeta) };
+      const payload = { ...formData, slug: finalSlug, meta_json: JSON.stringify(finalMeta) };
 
       if (editingPage) {
         await api.updatePage(editingPage.id, payload);

@@ -1,64 +1,48 @@
 import React from 'react';
-import {
-  Plus,
-  ArrowUp,
-  ArrowDown,
-  Trash2,
-  Copy,
-  Sparkles,
-  PanelLeftOpen,
-  PanelRightOpen,
-} from 'lucide-react';
-import type { StudioBlock } from '../../types';
-import { BlockRenderer } from './BlockRenderer';
+import type { PageFormData } from '../../types';
+import { RichTextEditor } from '../ui/RichTextEditor';
+import { CanvasSideAd } from './CanvasSideAd';
 
 export interface PageCanvasProps {
-  blocks: StudioBlock[];
-  selectedBlockId: string | null;
-  onSelectBlock: (id: string) => void;
-  onMoveUp: (id: string) => void;
-  onMoveDown: (id: string) => void;
-  onDelete: (id: string) => void;
-  onClone: (id: string) => void;
-  onAddBlockPrompt: (afterIndex: number) => void;
-  lang: 'tr' | 'en' | 'ar';
+  formData: PageFormData;
+  activeTab: 'tr' | 'en' | 'ar';
   device: 'desktop' | 'tablet' | 'mobile';
   canvasTheme: 'light' | 'dark';
   canvasZoom: 'fit' | '100' | '75';
   canvasWidth?: '900' | '1024' | '1160' | '1200' | 'custom';
   customWidthPx?: number;
   showSideAds?: boolean;
-  isLeftPanelOpen: boolean;
-  setIsLeftPanelOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  isRightPanelOpen: boolean;
-  setIsRightPanelOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  onTitleChange: (val: string) => void;
+  onSummaryChange: (val: string) => void;
+  onContentChange: (val: string) => void;
+  editorRef?: React.MutableRefObject<any>;
 }
 
 export const PageCanvas: React.FC<PageCanvasProps> = ({
-  blocks,
-  selectedBlockId,
-  onSelectBlock,
-  onMoveUp,
-  onMoveDown,
-  onDelete,
-  onClone,
-  onAddBlockPrompt,
-  lang,
+  formData,
+  activeTab,
   device,
   canvasTheme,
   canvasZoom,
   canvasWidth = '900',
   customWidthPx = 900,
   showSideAds = true,
-  isLeftPanelOpen,
-  setIsLeftPanelOpen,
-  isRightPanelOpen,
-  setIsRightPanelOpen,
+  onTitleChange,
+  onSummaryChange,
+  onContentChange,
+  editorRef,
 }) => {
-  const isRtl = lang === 'ar';
+  const isRtl = activeTab === 'ar';
   const desktopWidth = canvasWidth === 'custom' ? `${customWidthPx || 900}px` : `${canvasWidth}px`;
   const fixedWidth =
     device === 'mobile' ? '390px' : device === 'tablet' ? '768px' : desktopWidth;
+
+  const currentTitle =
+    activeTab === 'tr' ? formData.title_tr : activeTab === 'en' ? formData.title_en : formData.title_ar;
+  const currentSummary =
+    activeTab === 'tr' ? formData.summary_tr : activeTab === 'en' ? formData.summary_en : formData.summary_ar;
+  const currentContent =
+    activeTab === 'tr' ? formData.content_tr : activeTab === 'en' ? formData.content_en : formData.content_ar;
 
   const scaleStyle: React.CSSProperties =
     canvasZoom === '75'
@@ -70,6 +54,7 @@ export const PageCanvas: React.FC<PageCanvasProps> = ({
   return (
     <main
       className="studio-center-stage"
+      data-theme={canvasTheme}
       style={{
         flex: 1,
         display: 'flex',
@@ -81,13 +66,13 @@ export const PageCanvas: React.FC<PageCanvasProps> = ({
         transition: 'background 0.2s ease',
       }}
     >
-      {/* Tuval Kaydırma Sahnesi (Fixed Artboard Stage) */}
+      {/* Tuval Kaydırma Sahnesi (Word / TipTap Paper Stage) */}
       <div
         style={{
           flex: 1,
           overflowY: 'auto',
           overflowX: 'auto',
-          padding: '36px 40px',
+          padding: '24px 32px',
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'flex-start',
@@ -95,96 +80,23 @@ export const PageCanvas: React.FC<PageCanvasProps> = ({
           minWidth: 0,
         }}
       >
-        {/* Sol Kenar Hızlı Açma Sekmesi (Paneli Kapalıyken) */}
-        {!isLeftPanelOpen && (
-          <button
-            type="button"
-            onClick={() => setIsLeftPanelOpen(true)}
-            className="admin-btn admin-btn-secondary admin-btn-sm"
-            style={{
-              position: 'absolute',
-              top: '20px',
-              left: '12px',
-              zIndex: 25,
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '6px',
-              boxShadow: '0 4px 14px rgba(0,0,0,0.4)',
-              fontSize: '11px',
-              padding: '6px 12px',
-              borderRadius: '8px',
-            }}
-          >
-            <PanelLeftOpen size={14} className="text-cyan" />
-            <span>Kütüphane</span>
-          </button>
-        )}
-
-        {/* Sağ Kenar Hızlı Açma Sekmesi (Paneli Kapalıyken) */}
-        {!isRightPanelOpen && selectedBlockId && (
-          <button
-            type="button"
-            onClick={() => setIsRightPanelOpen(true)}
-            className="admin-btn admin-btn-secondary admin-btn-sm"
-            style={{
-              position: 'absolute',
-              top: '20px',
-              right: '12px',
-              zIndex: 25,
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '6px',
-              boxShadow: '0 4px 14px rgba(0,0,0,0.4)',
-              fontSize: '11px',
-              padding: '6px 12px',
-              borderRadius: '8px',
-            }}
-          >
-            <PanelRightOpen size={14} className="text-cyan" />
-            <span>Denetçi</span>
-          </button>
-        )}
-
-        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'center', gap: '24px', ...scaleStyle }}>
-          {/* Sol Dikey Reklam Kanadı (Canlı Önizleme) */}
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'flex-start',
+            justifyContent: 'center',
+            gap: '24px',
+            ...scaleStyle,
+          }}
+        >
+          {/* Sol Dikey Reklam Kanadı (120x600 Gökdelen) */}
           {device === 'desktop' && showSideAds && (
-            <div
-              style={{
-                width: '120px',
-                minWidth: '120px',
-                height: '600px',
-                border: canvasTheme === 'dark' ? '1px dashed #334155' : '1px dashed #cbd5e1',
-                background: canvasTheme === 'dark' ? 'rgba(30, 41, 59, 0.45)' : 'rgba(255, 255, 255, 0.65)',
-                borderRadius: '10px',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-                padding: '12px',
-                textAlign: 'center',
-                color: 'var(--text-muted)',
-                flexShrink: 0,
-                userSelect: 'none',
-                position: 'sticky',
-                top: '20px',
-              }}
-            >
-              <span style={{ fontSize: '10px', fontWeight: 800, textTransform: 'uppercase', color: 'var(--accent-primary)', marginBottom: '4px' }}>
-                Sol Reklam
-              </span>
-              <span style={{ fontSize: '12px', fontWeight: 700, color: 'var(--text-secondary)' }}>
-                120 × 600
-              </span>
-              <span style={{ fontSize: '9px', opacity: 0.8, marginTop: '6px' }}>
-                Dikey Gökdelen
-              </span>
-              <div style={{ marginTop: 'auto', fontSize: '9px', padding: '2px 6px', borderRadius: '4px', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', fontFamily: 'monospace' }}>
-                ad_sidebar_left
-              </div>
-            </div>
+            <CanvasSideAd side="left" canvasTheme={canvasTheme} />
           )}
 
+          {/* Merkez Sayfa Tuvali (Word Kağıt Tuval) */}
           <div
+            className="word-paper-canvas"
             data-theme={canvasTheme}
             style={{
               width: fixedWidth,
@@ -194,160 +106,94 @@ export const PageCanvas: React.FC<PageCanvasProps> = ({
               background: canvasTheme === 'dark' ? '#0f172a' : '#ffffff',
               color: canvasTheme === 'dark' ? '#f8fafc' : '#0f172a',
               border: canvasTheme === 'dark' ? '1px solid #334155' : '1px solid #cbd5e1',
-              borderRadius: device === 'desktop' ? '14px' : '20px',
-              boxShadow: canvasTheme === 'dark' ? '0 25px 50px -12px rgba(0,0,0,0.8)' : '0 20px 45px -10px rgba(0,0,0,0.18)',
+              borderRadius: device === 'desktop' ? '12px' : '18px',
+              boxShadow:
+                canvasTheme === 'dark'
+                  ? '0 25px 50px -12px rgba(0,0,0,0.8)'
+                  : '0 20px 45px -10px rgba(0,0,0,0.15)',
               display: 'flex',
               flexDirection: 'column',
+              padding: device === 'mobile' ? '20px 16px' : '36px 40px',
+              minHeight: '750px',
               transition: 'background 0.2s ease, border-color 0.2s ease',
-              minHeight: '600px',
             }}
             dir={isRtl ? 'rtl' : 'ltr'}
           >
-          {blocks.length === 0 ? (
-            <div
+            {/* Büyük Belge Başlığı (Word Başlık Alanı) */}
+            <input
+              type="text"
+              placeholder={
+                activeTab === 'tr'
+                  ? 'Sayfa Başlığı...'
+                  : activeTab === 'en'
+                  ? 'Page Title...'
+                  : 'عنوان الصفحة...'
+              }
+              value={currentTitle || ''}
+              onChange={(e) => onTitleChange(e.target.value)}
               style={{
-                flex: 1,
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-                padding: '60px 20px',
-                textAlign: 'center',
-                color: 'var(--text-muted)',
+                width: '100%',
+                background: 'transparent',
+                border: 'none',
+                borderBottom: `2px solid ${canvasTheme === 'dark' ? '#334155' : '#e2e8f0'}`,
+                padding: '8px 0',
+                fontSize: '1.75rem',
+                fontWeight: 800,
+                color: canvasTheme === 'dark' ? '#f8fafc' : '#0f172a',
+                outline: 'none',
+                fontFamily: isRtl ? 'Cairo' : 'inherit',
+                marginBottom: '16px',
               }}
-            >
-              <Sparkles size={36} className="text-cyan" style={{ opacity: 0.5, marginBottom: '14px' }} />
-              <h3 style={{ fontSize: '14px', fontWeight: 800, margin: '0 0 6px 0', color: 'var(--text-primary)' }}>
-                Tuval Henüz Boş
-              </h3>
-              <p style={{ margin: 0, fontSize: '12px', maxWidth: '360px', lineHeight: 1.5 }}>
-                Sol taraftaki bileşen kütüphanesinden dilediğiniz blokları tıklayarak sayfanızı inşa etmeye başlayın.
-              </p>
-            </div>
-          ) : (
-            blocks.map((block, index) => {
-              const isSelected = selectedBlockId === block.id;
+            />
 
-              return (
-                <React.Fragment key={block.id}>
-                  <div
-                    onClick={() => onSelectBlock(block.id)}
-                    style={{
-                      position: 'relative',
-                      border: isSelected ? '2px solid var(--accent-primary)' : '1px solid transparent',
-                      borderRadius: '10px',
-                      margin: '6px 8px',
-                      cursor: 'pointer',
-                      transition: 'all 0.15s ease',
-                      background: isSelected ? (canvasTheme === 'dark' ? 'rgba(2, 132, 199, 0.12)' : 'rgba(2, 132, 199, 0.05)') : 'transparent',
-                    }}
-                    className="canvas-block-wrapper"
-                  >
-                    {/* Seçili Blok Aksiyon Çubuğu */}
-                    {isSelected && (
-                      <div
-                        style={{
-                          position: 'absolute',
-                          top: '-14px',
-                          right: isRtl ? 'auto' : '16px',
-                          left: isRtl ? '16px' : 'auto',
-                          background: 'var(--bg-sidebar)',
-                          border: '1px solid var(--accent-primary)',
-                          borderRadius: '6px',
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '2px',
-                          padding: '2px 4px',
-                          zIndex: 10,
-                          boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
-                        }}
-                      >
-                        <button type="button" onClick={(e) => { e.stopPropagation(); onMoveUp(block.id); }} className="admin-btn-icon" title="Yukarı Taşı" style={{ padding: '3px' }}><ArrowUp size={12} /></button>
-                        <button type="button" onClick={(e) => { e.stopPropagation(); onMoveDown(block.id); }} className="admin-btn-icon" title="Aşağı Taşı" style={{ padding: '3px' }}><ArrowDown size={12} /></button>
-                        <button type="button" onClick={(e) => { e.stopPropagation(); onClone(block.id); }} className="admin-btn-icon" title="Çoğalt" style={{ padding: '3px' }}><Copy size={12} /></button>
-                        <button type="button" onClick={(e) => { e.stopPropagation(); onDelete(block.id); }} className="admin-btn-icon text-rose" title="Sil" style={{ padding: '3px' }}><Trash2 size={12} /></button>
-                      </div>
-                    )}
+            {/* Kısa Özet / Alt Başlık Metin Alanı */}
+            <textarea
+              rows={2}
+              placeholder={
+                activeTab === 'tr'
+                  ? 'Kısa Özet / Alt Başlık...'
+                  : activeTab === 'en'
+                  ? 'Short Summary / Subtitle...'
+                  : 'ملخص الصفحة...'
+              }
+              value={currentSummary || ''}
+              onChange={(e) => onSummaryChange(e.target.value)}
+              style={{
+                width: '100%',
+                padding: '10px 14px',
+                background: canvasTheme === 'dark' ? '#1e293b' : '#f8fafc',
+                border: `1px solid ${canvasTheme === 'dark' ? '#334155' : '#cbd5e1'}`,
+                borderRadius: '8px',
+                color: canvasTheme === 'dark' ? '#cbd5e1' : '#475569',
+                fontSize: '13px',
+                fontFamily: isRtl ? 'Cairo' : 'inherit',
+                outline: 'none',
+                resize: 'vertical',
+                marginBottom: '20px',
+              }}
+            />
 
-                    <BlockRenderer block={block} lang={lang} device={device} isInteractive={false} />
-                  </div>
+            {/* Zengin Metin Editörü (Word / TipTap Düzenleyici) */}
+            <RichTextEditor
+              label={
+                activeTab === 'tr'
+                  ? 'Sayfa İçeriği'
+                  : activeTab === 'en'
+                  ? 'Page Content'
+                  : 'محتوى الصفحة'
+              }
+              value={currentContent || ''}
+              onChange={onContentChange}
+              dir={isRtl ? 'rtl' : 'ltr'}
+              editorRef={editorRef}
+            />
+          </div>
 
-                  {/* Bloklar Arası Hızlı Ekleme Çizgisi */}
-                  <div
-                    style={{
-                      height: '8px',
-                      position: 'relative',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    }}
-                    className="canvas-gap-indicator"
-                  >
-                    <button
-                      type="button"
-                      onClick={() => onAddBlockPrompt(index + 1)}
-                      style={{
-                        background: 'var(--bg-secondary)',
-                        border: '1px solid var(--border-color)',
-                        borderRadius: '50%',
-                        width: '18px',
-                        height: '18px',
-                        display: 'none',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        cursor: 'pointer',
-                        color: 'var(--text-muted)',
-                      }}
-                      className="canvas-add-btn"
-                      title="Buraya Blok Ekle"
-                    >
-                      <Plus size={10} />
-                    </button>
-                  </div>
-                </React.Fragment>
-              );
-            })
+          {/* Sağ Dikey Reklam Kanadı (120x600 Gökdelen) */}
+          {device === 'desktop' && showSideAds && (
+            <CanvasSideAd side="right" canvasTheme={canvasTheme} />
           )}
         </div>
-
-        {/* Sağ Dikey Reklam Kanadı (Canlı Önizleme) */}
-        {device === 'desktop' && showSideAds && (
-          <div
-            style={{
-              width: '120px',
-              minWidth: '120px',
-              height: '600px',
-              border: canvasTheme === 'dark' ? '1px dashed #334155' : '1px dashed #cbd5e1',
-              background: canvasTheme === 'dark' ? 'rgba(30, 41, 59, 0.45)' : 'rgba(255, 255, 255, 0.65)',
-              borderRadius: '10px',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-              padding: '12px',
-              textAlign: 'center',
-              color: 'var(--text-muted)',
-              flexShrink: 0,
-              userSelect: 'none',
-              position: 'sticky',
-              top: '20px',
-            }}
-          >
-            <span style={{ fontSize: '10px', fontWeight: 800, textTransform: 'uppercase', color: 'var(--accent-primary)', marginBottom: '4px' }}>
-              Sağ Reklam
-            </span>
-            <span style={{ fontSize: '12px', fontWeight: 700, color: 'var(--text-secondary)' }}>
-              120 × 600
-            </span>
-            <span style={{ fontSize: '9px', opacity: 0.8, marginTop: '6px' }}>
-              Dikey Gökdelen
-            </span>
-            <div style={{ marginTop: 'auto', fontSize: '9px', padding: '2px 6px', borderRadius: '4px', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', fontFamily: 'monospace' }}>
-              ad_sidebar_right
-            </div>
-          </div>
-        )}
-      </div>
       </div>
     </main>
   );

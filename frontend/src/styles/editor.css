@@ -385,3 +385,22 @@
   box-shadow: 0 8px 28px rgba(0, 0, 0, 0.08);
 }
 
+/* Dreamweaver & Word tarzı tuval içi doğrudan düzenleme göstergeleri */
+.inline-canvas-editable {
+  transition: all 0.15s ease;
+  min-width: 1ch;
+  display: inline-block;
+}
+
+.inline-canvas-editable:hover {
+  outline: 1px dashed rgba(2, 132, 199, 0.5) !important;
+  background: rgba(2, 132, 199, 0.06);
+}
+
+.inline-canvas-editable:focus {
+  outline: 2px solid var(--accent-primary, #0284c7) !important;
+  outline-offset: 2px;
+  background: rgba(2, 132, 199, 0.12) !important;
+}
+
+
