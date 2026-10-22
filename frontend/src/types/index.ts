@@ -273,11 +273,21 @@ export type StudioBlockType =
 export interface StudioBlockItem {
   id: string;
   title: string;
+  title_tr?: string;
+  title_en?: string;
+  title_ar?: string;
   text: string;
+  text_tr?: string;
+  text_en?: string;
+  text_ar?: string;
   icon?: string;
   link?: string;
   price?: string;
+  price_en?: string;
+  price_ar?: string;
   badge?: string;
+  badge_en?: string;
+  badge_ar?: string;
   highlight?: boolean;
 }
 
@@ -301,9 +311,15 @@ export interface StudioBlock {
   ad_slot_key?: string;
   app_id?: string;
   badge_text?: string;
+  badge_text_en?: string;
+  badge_text_ar?: string;
   btn_primary_text?: string;
+  btn_primary_text_en?: string;
+  btn_primary_text_ar?: string;
   btn_primary_link?: string;
   btn_secondary_text?: string;
+  btn_secondary_text_en?: string;
+  btn_secondary_text_ar?: string;
   btn_secondary_link?: string;
   bg_image?: string;
   grid_columns?: 2 | 3 | 4;

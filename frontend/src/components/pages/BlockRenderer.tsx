@@ -34,6 +34,25 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
   const subtitle = (lang === 'tr' ? block.subtitle_tr : lang === 'en' ? block.subtitle_en : block.subtitle_ar) || block.subtitle_tr || '';
   const content = (lang === 'tr' ? block.content_tr : lang === 'en' ? block.content_en : block.content_ar) || block.content_tr || '';
 
+  const primaryBtnText =
+    (lang === 'tr' ? block.btn_primary_text : lang === 'en' ? (block.btn_primary_text_en || block.btn_primary_text) : (block.btn_primary_text_ar || block.btn_primary_text)) ||
+    (lang === 'tr' ? 'Hemen Keşfet' : lang === 'en' ? 'Explore Now' : 'اكتشف الآن');
+  const secondaryBtnText =
+    (lang === 'tr' ? block.btn_secondary_text : lang === 'en' ? (block.btn_secondary_text_en || block.btn_secondary_text) : (block.btn_secondary_text_ar || block.btn_secondary_text)) ||
+    (lang === 'tr' ? 'Daha Fazla Bilgi' : lang === 'en' ? 'Learn More' : 'معرفة المزيد');
+  const badge =
+    (lang === 'tr' ? block.badge_text : lang === 'en' ? (block.badge_text_en || block.badge_text) : (block.badge_text_ar || block.badge_text)) ||
+    block.badge_text || 'MSK Labs';
+
+  const getItemTitle = (it: any) =>
+    (lang === 'tr' ? (it.title_tr || it.title) : lang === 'en' ? (it.title_en || it.title) : (it.title_ar || it.title)) || it.title || '';
+  const getItemText = (it: any) =>
+    (lang === 'tr' ? (it.text_tr || it.text) : lang === 'en' ? (it.text_en || it.text) : (it.text_ar || it.text)) || it.text || '';
+  const getItemPrice = (it: any) =>
+    (lang === 'tr' ? it.price : lang === 'en' ? (it.price_en || it.price) : (it.price_ar || it.price)) || it.price || '';
+  const getItemBadge = (it: any) =>
+    (lang === 'tr' ? it.badge : lang === 'en' ? (it.badge_en || it.badge) : (it.badge_ar || it.badge)) || it.badge;
+
   const getPaddingStyle = () => {
     switch (block.padding_y) {
       case 'none': return '0';
@@ -85,15 +104,12 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
     borderRadius: getBorderRadius(),
     direction: isRtl ? 'rtl' : 'ltr',
     textAlign: block.align || (isRtl ? 'right' : 'left'),
+    fontFamily: isRtl ? "'Segoe UI', Tahoma, Arial, sans-serif" : undefined,
     ...getBgStyle(),
   };
 
   switch (block.type) {
     case 'hero': {
-      const primaryBtnText = block.btn_primary_text || (lang === 'tr' ? 'Hemen Keşfet' : lang === 'en' ? 'Explore Now' : 'اكتشف الآن');
-      const secondaryBtnText = block.btn_secondary_text || (lang === 'tr' ? 'Daha Fazla Bilgi' : lang === 'en' ? 'Learn More' : 'معرفة المزيد');
-      const badge = block.badge_text || 'MSK Labs';
-
       return (
         <section style={{ ...containerStyle, padding: isMobile ? '28px 16px' : '48px 24px', textAlign: block.align || 'center' }}>
           {badge && (
@@ -152,8 +168,8 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
                 <div style={{ width: '34px', height: '34px', borderRadius: '8px', background: 'var(--accent-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#FFF' }}>
                   <CheckCircle2 size={18} />
                 </div>
-                <h4 style={{ fontSize: '14px', fontWeight: 700, margin: 0, color: 'var(--text-primary)' }}>{it.title}</h4>
-                <p style={{ fontSize: '12px', color: 'var(--text-secondary)', margin: 0, lineHeight: 1.55 }}>{it.text}</p>
+                <h4 style={{ fontSize: '14px', fontWeight: 700, margin: 0, color: 'var(--text-primary)' }}>{getItemTitle(it)}</h4>
+                <p style={{ fontSize: '12px', color: 'var(--text-secondary)', margin: 0, lineHeight: 1.55 }}>{getItemText(it)}</p>
                 {it.link && (
                   <span style={{ fontSize: '11px', color: 'var(--accent-primary)', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '4px', marginTop: '4px' }}>
                     İncele <ExternalLink size={11} />
@@ -188,11 +204,11 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
                 }}
               >
                 <summary style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text-primary)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                  <span>{it.title}</span>
+                  <span>{getItemTitle(it)}</span>
                   <HelpCircle size={15} className="text-cyan" />
                 </summary>
                 <p style={{ fontSize: '12px', color: 'var(--text-secondary)', margin: '10px 0 0 0', lineHeight: 1.6 }}>
-                  {it.text}
+                  {getItemText(it)}
                 </p>
               </details>
             ))}
@@ -211,41 +227,44 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
             </div>
           )}
           <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : `repeat(${(block.items || []).length || 3}, minmax(0, 1fr))`, gap: '16px' }}>
-            {(block.items || []).map((it) => (
-              <div
-                key={it.id}
-                style={{
-                  background: it.highlight ? 'rgba(2, 132, 199, 0.08)' : 'var(--bg-secondary)',
-                  border: it.highlight ? '2px solid var(--accent-primary)' : '1px solid var(--border-color)',
-                  borderRadius: '12px',
-                  padding: '20px',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  position: 'relative',
-                }}
-              >
-                {it.badge && (
-                  <span className="admin-badge admin-badge-cyan" style={{ position: 'absolute', top: '12px', right: isRtl ? 'auto' : '12px', left: isRtl ? '12px' : 'auto', fontSize: '10px' }}>
-                    {it.badge}
-                  </span>
-                )}
-                <h3 style={{ fontSize: '1.15rem', fontWeight: 800, margin: '0 0 6px 0', color: 'var(--text-primary)' }}>{it.title}</h3>
-                <div style={{ fontSize: '1.45rem', fontWeight: 900, color: 'var(--accent-primary)', marginBottom: '12px' }}>
-                  {it.price || '$0'}
+            {(block.items || []).map((it) => {
+              const itemBadge = getItemBadge(it);
+              return (
+                <div
+                  key={it.id}
+                  style={{
+                    background: it.highlight ? 'rgba(2, 132, 199, 0.08)' : 'var(--bg-secondary)',
+                    border: it.highlight ? '2px solid var(--accent-primary)' : '1px solid var(--border-color)',
+                    borderRadius: '12px',
+                    padding: '20px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    position: 'relative',
+                  }}
+                >
+                  {itemBadge && (
+                    <span className="admin-badge admin-badge-cyan" style={{ position: 'absolute', top: '12px', right: isRtl ? 'auto' : '12px', left: isRtl ? '12px' : 'auto', fontSize: '10px' }}>
+                      {itemBadge}
+                    </span>
+                  )}
+                  <h3 style={{ fontSize: '1.15rem', fontWeight: 800, margin: '0 0 6px 0', color: 'var(--text-primary)' }}>{getItemTitle(it)}</h3>
+                  <div style={{ fontSize: '1.45rem', fontWeight: 900, color: 'var(--accent-primary)', marginBottom: '12px' }}>
+                    {getItemPrice(it) || '$0'}
+                  </div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', flex: 1, marginBottom: '16px' }}>
+                    {getItemText(it).split('\n').filter(Boolean).map((bullet: string, bIdx: number) => (
+                      <div key={bIdx} style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', color: 'var(--text-secondary)' }}>
+                        <Check size={14} className="text-emerald" />
+                        <span>{bullet}</span>
+                      </div>
+                    ))}
+                  </div>
+                  <button type="button" className={`admin-btn ${it.highlight ? 'admin-btn-primary' : 'admin-btn-secondary'}`} style={{ width: '100%', padding: '8px', fontSize: '12px' }}>
+                    {lang === 'tr' ? 'Planı Seç' : lang === 'en' ? 'Select Plan' : 'اختر الخطة'}
+                  </button>
                 </div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', flex: 1, marginBottom: '16px' }}>
-                  {it.text.split('\n').filter(Boolean).map((bullet, bIdx) => (
-                    <div key={bIdx} style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', color: 'var(--text-secondary)' }}>
-                      <Check size={14} className="text-emerald" />
-                      <span>{bullet}</span>
-                    </div>
-                  ))}
-                </div>
-                <button type="button" className={`admin-btn ${it.highlight ? 'admin-btn-primary' : 'admin-btn-secondary'}`} style={{ width: '100%', padding: '8px', fontSize: '12px' }}>
-                  {lang === 'tr' ? 'Planı Seç' : lang === 'en' ? 'Select Plan' : 'اختر الخطة'}
-                </button>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </section>
       );
@@ -275,8 +294,8 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
               <div key={it.id} style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '12px', background: 'var(--bg-secondary)', borderRadius: '8px' }}>
                 <Phone size={16} className="text-purple" />
                 <div>
-                  <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>{it.title}</div>
-                  <span style={{ fontSize: '12px', fontWeight: 700, color: 'var(--text-primary)' }}>{it.text}</span>
+                  <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>{getItemTitle(it)}</div>
+                  <span style={{ fontSize: '12px', fontWeight: 700, color: 'var(--text-primary)' }}>{getItemText(it)}</span>
                 </div>
               </div>
             ))}
@@ -286,8 +305,6 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
     }
 
     case 'cta_banner': {
-      const btnText = block.btn_primary_text || (lang === 'tr' ? 'İletişime Geç' : lang === 'en' ? 'Get In Touch' : 'اتصل بنا');
-
       return (
         <section
           style={{
@@ -302,7 +319,7 @@ export const BlockRenderer: React.FC<BlockRendererProps> = ({
           {subtitle && <p style={{ fontSize: '13px', color: 'var(--text-secondary)', maxWidth: '600px', margin: '0 auto 20px auto', lineHeight: 1.6 }}>{subtitle}</p>}
           <button type="button" className="admin-btn admin-btn-primary" style={{ padding: '8px 24px', fontSize: '13px', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
             <Send size={14} />
-            <span>{btnText}</span>
+            <span>{primaryBtnText}</span>
           </button>
         </section>
       );

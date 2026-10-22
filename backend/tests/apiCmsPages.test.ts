@@ -300,6 +300,31 @@ async function runTests() {
   const sitemapXml = await sitemapRes.text();
   assert(sitemapXml.includes('https://msklabs.org/about'), 'Sitemap içinde https://msklabs.org/about yer almalı');
 
+  // Test 11: POST /api/admin/pages/translate (Blok Çeviri Desteği)
+  const translateBlocksReq = new Request('http://localhost/api/admin/pages/translate', {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${validToken}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      blocks: [
+        {
+          id: 'blk_test_1',
+          type: 'hero',
+          title_tr: 'Yapay Zeka Çözümleri',
+          subtitle_tr: 'Geleceğe hazır olun',
+          btn_primary_text: 'Keşfet',
+          items: [{ id: 'it_1', title: 'Hızlı Entegrasyon', text: 'Dakikalar içinde entegre olun' }],
+        },
+      ],
+    }),
+  });
+  const translateBlocksRes = await handleCmsPages(translateBlocksReq, env);
+  assert(translateBlocksRes.status === 200, 'POST /api/admin/pages/translate (blocks) HTTP 200 dönmeli');
+  const translateBlocksData = (await translateBlocksRes.json()) as any;
+  assert(translateBlocksData.success === true, 'Blok çeviri success: true olmalı');
+  assert(translateBlocksData.blocks[0].title_en.includes('Yapay Zeka Çözümleri'), 'Blok title_en doldurulmalı');
+  assert(translateBlocksData.blocks[0].title_ar.includes('Yapay Zeka Çözümleri'), 'Blok title_ar doldurulmalı');
+  assert(translateBlocksData.blocks[0].items[0].title_en.includes('Hızlı Entegrasyon'), 'Madde title_en doldurulmalı');
+
   console.log(`=== TEST SONUÇLARI: ${passCount} PASS, ${failCount} FAIL ===`);
   if (failCount > 0) process.exit(1);
 }

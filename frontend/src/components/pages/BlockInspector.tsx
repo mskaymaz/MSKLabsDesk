@@ -33,26 +33,9 @@ export const BlockInspector: React.FC<BlockInspectorProps> = ({
 }) => {
   if (!block) {
     return (
-      <aside
-        className="studio-inspector-sidebar"
-        style={{
-          width: '310px',
-          background: 'var(--bg-sidebar)',
-          borderLeft: '1px solid var(--border-color)',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          padding: '24px',
-          color: 'var(--text-muted)',
-          textAlign: 'center',
-          flexShrink: 0,
-        }}
-      >
+      <aside className="studio-inspector-sidebar" style={{ width: '310px', background: 'var(--bg-sidebar)', borderLeft: '1px solid var(--border-color)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '24px', color: 'var(--text-muted)', textAlign: 'center', flexShrink: 0 }}>
         <SlidersHorizontal size={28} style={{ opacity: 0.4, marginBottom: '12px' }} />
-        <h4 style={{ fontSize: '13px', fontWeight: 700, margin: '0 0 6px 0', color: 'var(--text-primary)' }}>
-          Özellik Denetçisi
-        </h4>
+        <h4 style={{ fontSize: '13px', fontWeight: 700, margin: '0 0 6px 0', color: 'var(--text-primary)' }}>Özellik Denetçisi</h4>
         <p style={{ margin: 0, fontSize: '11px', lineHeight: 1.5 }}>
           Özelliklerini, butonlarını, boşluklarını ve renklerini düzenlemek için tuval üzerindeki herhangi bir bloğa tıklayın.
         </p>
@@ -60,20 +43,34 @@ export const BlockInspector: React.FC<BlockInspectorProps> = ({
     );
   }
 
+  const isRtl = lang === 'ar';
   const titleField = lang === 'tr' ? 'title_tr' : lang === 'en' ? 'title_en' : 'title_ar';
   const subtitleField = lang === 'tr' ? 'subtitle_tr' : lang === 'en' ? 'subtitle_en' : 'subtitle_ar';
   const contentField = lang === 'tr' ? 'content_tr' : lang === 'en' ? 'content_en' : 'content_ar';
+  const badgeField = lang === 'tr' ? 'badge_text' : lang === 'en' ? 'badge_text_en' : 'badge_text_ar';
+  const btn1Field = lang === 'tr' ? 'btn_primary_text' : lang === 'en' ? 'btn_primary_text_en' : 'btn_primary_text_ar';
+  const btn2Field = lang === 'tr' ? 'btn_secondary_text' : lang === 'en' ? 'btn_secondary_text_en' : 'btn_secondary_text_ar';
 
   const currentTitle = block[titleField] || '';
   const currentSubtitle = block[subtitleField] || '';
   const currentContent = block[contentField] || '';
+  const currentBadge = block[badgeField] || '';
+  const currentBtn1 = block[btn1Field] || '';
+  const currentBtn2 = block[btn2Field] || '';
+
+  const getItemTitle = (it: StudioBlockItem) => (lang === 'tr' ? (it.title_tr || it.title) : lang === 'en' ? (it.title_en || '') : (it.title_ar || ''));
+  const getItemText = (it: StudioBlockItem) => (lang === 'tr' ? (it.text_tr || it.text) : lang === 'en' ? (it.text_en || '') : (it.text_ar || ''));
+  const getItemPrice = (it: StudioBlockItem) => (lang === 'tr' ? (it.price || '') : lang === 'en' ? (it.price_en || '') : (it.price_ar || ''));
+  const getItemBadge = (it: StudioBlockItem) => (lang === 'tr' ? (it.badge || '') : lang === 'en' ? (it.badge_en || '') : (it.badge_ar || ''));
 
   const addItem = () => {
     const isPlan = block.type === 'comparison_table';
     const newItem: StudioBlockItem = {
       id: `it_${Date.now()}_${Math.random().toString(36).substring(2, 5)}`,
-      title: isPlan ? 'Yeni Paket' : lang === 'tr' ? 'Yeni Madde Başlığı' : 'New Item Title',
-      text: isPlan ? 'Özellik 1\nÖzellik 2' : lang === 'tr' ? 'Açıklama metni buraya yazılır.' : 'Description text.',
+      title: isPlan ? 'Yeni Paket' : 'Yeni Madde',
+      title_tr: isPlan ? 'Yeni Paket' : 'Yeni Madde',
+      text: isPlan ? 'Özellik 1\nÖzellik 2' : 'Açıklama metni.',
+      text_tr: isPlan ? 'Özellik 1\nÖzellik 2' : 'Açıklama metni.',
       price: isPlan ? '$0' : undefined,
     };
     onUpdate({ items: [...(block.items || []), newItem] });
@@ -81,7 +78,15 @@ export const BlockInspector: React.FC<BlockInspectorProps> = ({
 
   const updateItem = (itemId: string, patch: Partial<StudioBlockItem>) => {
     onUpdate({
-      items: (block.items || []).map((it) => (it.id === itemId ? { ...it, ...patch } : it)),
+      items: (block.items || []).map((it) => {
+        if (it.id !== itemId) return it;
+        const updated = { ...it, ...patch };
+        if (lang === 'tr') {
+          if (patch.title_tr !== undefined) updated.title = patch.title_tr;
+          if (patch.text_tr !== undefined) updated.text = patch.text_tr;
+        }
+        return updated;
+      }),
     });
   };
 
@@ -144,10 +149,11 @@ export const BlockInspector: React.FC<BlockInspectorProps> = ({
             <input
               type="text"
               value={currentTitle}
+              dir={isRtl ? 'rtl' : 'ltr'}
               onChange={(e) => onUpdate({ [titleField]: e.target.value })}
               className="admin-input"
               style={{ fontSize: '12px', marginTop: '2px' }}
-              placeholder="Başlık giriniz..."
+              placeholder={block.title_tr || 'Başlık giriniz...'}
             />
           </div>
 
@@ -156,10 +162,11 @@ export const BlockInspector: React.FC<BlockInspectorProps> = ({
             <input
               type="text"
               value={currentSubtitle}
+              dir={isRtl ? 'rtl' : 'ltr'}
               onChange={(e) => onUpdate({ [subtitleField]: e.target.value })}
               className="admin-input"
               style={{ fontSize: '12px', marginTop: '2px' }}
-              placeholder="İsteğe bağlı alt başlık..."
+              placeholder={block.subtitle_tr || 'İsteğe bağlı alt başlık...'}
             />
           </div>
 
@@ -168,11 +175,12 @@ export const BlockInspector: React.FC<BlockInspectorProps> = ({
               <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Rozet / Üst Etiket:</span>
               <input
                 type="text"
-                value={block.badge_text || ''}
-                onChange={(e) => onUpdate({ badge_text: e.target.value })}
+                value={currentBadge}
+                dir={isRtl ? 'rtl' : 'ltr'}
+                onChange={(e) => onUpdate({ [badgeField]: e.target.value })}
                 className="admin-input"
                 style={{ fontSize: '12px', marginTop: '2px' }}
-                placeholder="Örn: MSK Labs 2026"
+                placeholder={block.badge_text || 'Örn: MSK Labs 2026'}
               />
             </div>
           )}
@@ -183,6 +191,7 @@ export const BlockInspector: React.FC<BlockInspectorProps> = ({
               <textarea
                 rows={5}
                 value={currentContent}
+                dir={isRtl ? 'rtl' : 'ltr'}
                 onChange={(e) => onUpdate({ [contentField]: e.target.value })}
                 className="admin-input"
                 style={{ fontSize: '12px', marginTop: '2px', resize: 'vertical' }}
@@ -211,17 +220,18 @@ export const BlockInspector: React.FC<BlockInspectorProps> = ({
         {(block.type === 'hero' || block.type === 'cta_banner') && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', borderTop: '1px solid var(--border-color)', paddingTop: '10px' }}>
             <label className="admin-label" style={{ fontSize: '11px', textTransform: 'uppercase' }}>
-              Aksiyon Butonları (CTA)
+              Aksiyon Butonları ({lang.toUpperCase()})
             </label>
             <div>
               <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Birincil Buton Metni:</span>
               <input
                 type="text"
-                value={block.btn_primary_text || ''}
-                onChange={(e) => onUpdate({ btn_primary_text: e.target.value })}
+                value={currentBtn1}
+                dir={isRtl ? 'rtl' : 'ltr'}
+                onChange={(e) => onUpdate({ [btn1Field]: e.target.value })}
                 className="admin-input"
                 style={{ fontSize: '11px', marginTop: '2px' }}
-                placeholder="Örn: Hemen Keşfet"
+                placeholder={block.btn_primary_text || 'Örn: Hemen Keşfet'}
               />
             </div>
             {block.type === 'hero' && (
@@ -229,11 +239,12 @@ export const BlockInspector: React.FC<BlockInspectorProps> = ({
                 <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>İkincil Buton Metni:</span>
                 <input
                   type="text"
-                  value={block.btn_secondary_text || ''}
-                  onChange={(e) => onUpdate({ btn_secondary_text: e.target.value })}
+                  value={currentBtn2}
+                  dir={isRtl ? 'rtl' : 'ltr'}
+                  onChange={(e) => onUpdate({ [btn2Field]: e.target.value })}
                   className="admin-input"
                   style={{ fontSize: '11px', marginTop: '2px' }}
-                  placeholder="Örn: Daha Fazla Bilgi"
+                  placeholder={block.btn_secondary_text || 'Örn: Daha Fazla Bilgi'}
                 />
               </div>
             )}
@@ -264,7 +275,7 @@ export const BlockInspector: React.FC<BlockInspectorProps> = ({
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', borderTop: '1px solid var(--border-color)', paddingTop: '10px' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <label className="admin-label" style={{ fontSize: '11px', textTransform: 'uppercase', margin: 0 }}>
-                {block.type === 'comparison_table' ? 'Paketler / Sütunlar' : 'Maddeler'} ({block.items.length})
+                {block.type === 'comparison_table' ? 'Paketler' : 'Maddeler'} ({block.items.length}) - {lang.toUpperCase()}
               </label>
               <button
                 type="button"
@@ -297,9 +308,10 @@ export const BlockInspector: React.FC<BlockInspectorProps> = ({
                     </span>
                     <input
                       type="text"
-                      value={item.title}
-                      onChange={(e) => updateItem(item.id, { title: e.target.value })}
-                      placeholder="Madde başlığı"
+                      value={getItemTitle(item)}
+                      dir={isRtl ? 'rtl' : 'ltr'}
+                      onChange={(e) => updateItem(item.id, lang === 'tr' ? { title_tr: e.target.value, title: e.target.value } : lang === 'en' ? { title_en: e.target.value } : { title_ar: e.target.value })}
+                      placeholder={item.title || 'Madde başlığı'}
                       style={{
                         flex: 1,
                         background: 'var(--bg-card)',
@@ -324,16 +336,17 @@ export const BlockInspector: React.FC<BlockInspectorProps> = ({
                     <div style={{ display: 'flex', gap: '6px' }}>
                       <input
                         type="text"
-                        value={item.price || ''}
-                        onChange={(e) => updateItem(item.id, { price: e.target.value })}
-                        placeholder="Fiyat (örn: $0/Ay)"
+                        value={getItemPrice(item)}
+                        onChange={(e) => updateItem(item.id, lang === 'tr' ? { price: e.target.value } : lang === 'en' ? { price_en: e.target.value } : { price_ar: e.target.value })}
+                        placeholder={item.price || 'Fiyat (örn: $0/Ay)'}
                         style={{ flex: 1, background: 'var(--bg-card)', border: '1px solid var(--border-color)', borderRadius: '4px', fontSize: '10px', padding: '2px 4px', color: 'var(--text-primary)' }}
                       />
                       <input
                         type="text"
-                        value={item.badge || ''}
-                        onChange={(e) => updateItem(item.id, { badge: e.target.value })}
-                        placeholder="Rozet (örn: Popüler)"
+                        value={getItemBadge(item)}
+                        dir={isRtl ? 'rtl' : 'ltr'}
+                        onChange={(e) => updateItem(item.id, lang === 'tr' ? { badge: e.target.value } : lang === 'en' ? { badge_en: e.target.value } : { badge_ar: e.target.value })}
+                        placeholder={item.badge || 'Rozet'}
                         style={{ flex: 1, background: 'var(--bg-card)', border: '1px solid var(--border-color)', borderRadius: '4px', fontSize: '10px', padding: '2px 4px', color: 'var(--text-primary)' }}
                       />
                       <button
@@ -350,9 +363,10 @@ export const BlockInspector: React.FC<BlockInspectorProps> = ({
 
                   <textarea
                     rows={2}
-                    value={item.text}
-                    onChange={(e) => updateItem(item.id, { text: e.target.value })}
-                    placeholder={block.type === 'comparison_table' ? 'Her satıra bir özellik yazınız...' : 'Madde açıklaması...'}
+                    value={getItemText(item)}
+                    dir={isRtl ? 'rtl' : 'ltr'}
+                    onChange={(e) => updateItem(item.id, lang === 'tr' ? { text_tr: e.target.value, text: e.target.value } : lang === 'en' ? { text_en: e.target.value } : { text_ar: e.target.value })}
+                    placeholder={item.text || (block.type === 'comparison_table' ? 'Her satıra bir özellik yazınız...' : 'Madde açıklaması...')}
                     style={{
                       background: 'var(--bg-card)',
                       border: '1px solid var(--border-color)',
@@ -371,66 +385,39 @@ export const BlockInspector: React.FC<BlockInspectorProps> = ({
 
         {/* 4. Tasarım Token'ları (Boşluk, Renk, Yuvarlaklık) */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', borderTop: '1px solid var(--border-color)', paddingTop: '10px' }}>
-          <label className="admin-label" style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-            Tasarım & Boşluk Ayarları
-          </label>
-
+          <label className="admin-label" style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Tasarım & Boşluk Ayarları</label>
           <div>
             <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Dikey Boşluk (Padding):</span>
-            <select
-              value={block.padding_y || 'md'}
-              onChange={(e) => onUpdate({ padding_y: e.target.value as any })}
-              className="admin-select"
-              style={{ fontSize: '11px', marginTop: '2px' }}
-            >
+            <select value={block.padding_y || 'md'} onChange={(e) => onUpdate({ padding_y: e.target.value as any })} className="admin-select" style={{ fontSize: '11px', marginTop: '2px' }}>
               <option value="none">Sıfır Boşluk (0px)</option>
               <option value="sm">Kompakt (16px)</option>
               <option value="md">Standart (32px)</option>
               <option value="lg">Geniş (48px)</option>
             </select>
           </div>
-
           <div>
             <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Arka Plan Kart Stili:</span>
-            <select
-              value={block.bg_variant || 'default'}
-              onChange={(e) => onUpdate({ bg_variant: e.target.value as any })}
-              className="admin-select"
-              style={{ fontSize: '11px', marginTop: '2px' }}
-            >
+            <select value={block.bg_variant || 'default'} onChange={(e) => onUpdate({ bg_variant: e.target.value as any })} className="admin-select" style={{ fontSize: '11px', marginTop: '2px' }}>
               <option value="default">Varsayılan Kart (bg-card)</option>
               <option value="surface">İkincil Yüzey (bg-secondary)</option>
               <option value="gradient">Vurgulu Gradyan</option>
               <option value="muted">Şeffaf / Düz Metin</option>
             </select>
           </div>
-
           <div>
             <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Köşe Yuvarlaklığı:</span>
-            <select
-              value={block.border_radius || 'md'}
-              onChange={(e) => onUpdate({ border_radius: e.target.value as any })}
-              className="admin-select"
-              style={{ fontSize: '11px', marginTop: '2px' }}
-            >
+            <select value={block.border_radius || 'md'} onChange={(e) => onUpdate({ border_radius: e.target.value as any })} className="admin-select" style={{ fontSize: '11px', marginTop: '2px' }}>
               <option value="none">Keskin (0px)</option>
               <option value="sm">Hafif (6px)</option>
               <option value="md">Standart (12px)</option>
               <option value="lg">Yuvarlak (20px)</option>
             </select>
           </div>
-
           <div>
             <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Metin Hizalama:</span>
             <div style={{ display: 'flex', gap: '4px', marginTop: '2px' }}>
               {(['left', 'center', 'right'] as const).map((al) => (
-                <button
-                  key={al}
-                  type="button"
-                  onClick={() => onUpdate({ align: al })}
-                  className={`admin-btn admin-btn-sm ${block.align === al ? 'admin-btn-primary' : 'admin-btn-secondary'}`}
-                  style={{ flex: 1, fontSize: '10px' }}
-                >
+                <button key={al} type="button" onClick={() => onUpdate({ align: al })} className={`admin-btn admin-btn-sm ${block.align === al ? 'admin-btn-primary' : 'admin-btn-secondary'}`} style={{ flex: 1, fontSize: '10px' }}>
                   {al === 'left' ? 'Sola' : al === 'center' ? 'Ortala' : 'Sağa'}
                 </button>
               ))}

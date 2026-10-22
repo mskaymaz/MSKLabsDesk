@@ -1,4 +1,4 @@
-import type { Ticket, TicketDetailResponse, CommentItem, Subscriber } from '../types';
+import type { Ticket, TicketDetailResponse, CommentItem, Subscriber, StudioBlock } from '../types';
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8787/api';
 
@@ -458,8 +458,8 @@ export const api = {
     return res.json();
   },
 
-  async translatePage(data: { title_tr: string; content_tr: string; summary_tr?: string }) {
-    const res = await fetch(`${API_BASE}/admin/translate`, {
+  async translatePage(data: { title_tr?: string; content_tr?: string; summary_tr?: string; blocks?: StudioBlock[] }) {
+    const res = await fetch(`${API_BASE}/admin/pages/translate`, {
       method: 'POST',
       headers: getHeaders(),
       body: JSON.stringify(data),

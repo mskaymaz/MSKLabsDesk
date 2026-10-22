@@ -4,7 +4,7 @@
  */
 
 import { verifyAuthToken } from '../utils/auth';
-import { translatePostWithAI } from '../utils/ai';
+import { translatePostWithAI, translateBlocksWithAI } from '../utils/ai';
 
 export async function handleCmsPages(request: Request, env: any): Promise<Response> {
   const url = new URL(request.url);
@@ -22,8 +22,17 @@ export async function handleCmsPages(request: Request, env: any): Promise<Respon
   // 1. POST /api/admin/pages/translate — AI Çeviri & Özet Desteği
   if (url.pathname.endsWith('/translate') && method === 'POST') {
     const body = (await request.json()) as any;
-    const { title_tr, content_tr, summary_tr } = body;
+    const { title_tr, content_tr, summary_tr, blocks } = body;
 
+    // A. Blok tabanlı çeviri modu (Sayfa Stüdyosu Canlı Çeviri)
+    if (blocks && Array.isArray(blocks) && blocks.length > 0) {
+      const translatedBlocks = await translateBlocksWithAI(blocks, env);
+      return new Response(JSON.stringify({ success: true, blocks: translatedBlocks }), {
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+
+    // B. Klasik sayfa/metin çeviri modu
     if (!title_tr || !content_tr) {
       return new Response(JSON.stringify({ error: 'title_tr ve content_tr zorunludur' }), {
         status: 400,

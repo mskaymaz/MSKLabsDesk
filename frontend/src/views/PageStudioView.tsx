@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import type { SitePage, PageFormData, StudioBlock, StudioBlockType } from '../types';
+import { api } from '../services/api';
 import { BlockPalette } from '../components/pages/BlockPalette';
 import { PageCanvas } from '../components/pages/PageCanvas';
 import { BlockInspector } from '../components/pages/BlockInspector';
@@ -46,6 +47,7 @@ export const PageStudioView: React.FC<PageStudioViewProps> = ({
 
   // Autosave Durum Makinesi
   const [autosaveState, setAutosaveState] = useState<'idle' | 'dirty' | 'saving' | 'saved'>('idle');
+  const [internalAiTranslating, setInternalAiTranslating] = useState(false);
 
   // Sayfa açıldığında blokları başlat
   useEffect(() => {
@@ -135,58 +137,63 @@ export const PageStudioView: React.FC<PageStudioViewProps> = ({
   }, [autosaveState, blocks]);
 
   const compileBlocksToFormData = (currBlocks: StudioBlock[]) => {
-    let htmlTr = '';
-    let htmlEn = '';
-    let htmlAr = '';
+    const renderLang = (lang: 'tr' | 'en' | 'ar') => {
+      let out = '';
+      currBlocks.forEach((b) => {
+        const t = (lang === 'tr' ? b.title_tr : lang === 'en' ? b.title_en : b.title_ar) || b.title_tr || '';
+        const sub = (lang === 'tr' ? b.subtitle_tr : lang === 'en' ? b.subtitle_en : b.subtitle_ar) || b.subtitle_tr || '';
+        const pBtn = (lang === 'tr' ? b.btn_primary_text : lang === 'en' ? (b.btn_primary_text_en || b.btn_primary_text) : (b.btn_primary_text_ar || b.btn_primary_text)) || (lang === 'tr' ? 'Hemen Keşfet' : lang === 'en' ? 'Explore Now' : 'اكتشف الآن');
+        const sBtn = (lang === 'tr' ? b.btn_secondary_text : lang === 'en' ? (b.btn_secondary_text_en || b.btn_secondary_text) : (b.btn_secondary_text_ar || b.btn_secondary_text)) || (lang === 'tr' ? 'Daha Fazla Bilgi' : lang === 'en' ? 'Learn More' : 'معرفة المزيد');
+        const badge = (lang === 'tr' ? b.badge_text : lang === 'en' ? (b.badge_text_en || b.badge_text) : (b.badge_text_ar || b.badge_text)) || b.badge_text;
 
-    currBlocks.forEach((b) => {
-      const tTr = b.title_tr || '';
-      const tEn = b.title_en || tTr;
-      const tAr = b.title_ar || tTr;
-      const subTr = b.subtitle_tr || '';
-      const subEn = b.subtitle_en || subTr;
-      const subAr = b.subtitle_ar || subTr;
-
-      if (b.type === 'hero') {
-        const badge = b.badge_text ? `<span class="cms-badge">${b.badge_text}</span>` : '';
-        const pBtn = b.btn_primary_text || 'Hemen Keşfet';
-        const sBtn = b.btn_secondary_text || 'Daha Fazla Bilgi';
-        const btns = `<div class="cms-btn-group"><a href="${b.btn_primary_link || '#'}" class="cms-btn cms-btn-primary">${pBtn}</a><a href="${b.btn_secondary_link || '#'}" class="cms-btn cms-btn-secondary">${sBtn}</a></div>`;
-        const renderHero = (t: string, s: string) => `<div class="cms-hero text-${b.align || 'center'}">${badge}<h1>${t}</h1>${s ? `<p>${s}</p>` : ''}${btns}</div>\n`;
-        htmlTr += renderHero(tTr, subTr); htmlEn += renderHero(tEn, subEn); htmlAr += renderHero(tAr, subAr);
-      } else if (b.type === 'features_grid') {
-        const cols = b.grid_columns || 3;
-        const itemsHtml = (b.items || []).map((it) => `  <div class="cms-card"><h4>${it.title}</h4><p>${it.text}</p></div>\n`).join('');
-        const renderGrid = (t: string, s: string) => `<div class="cms-features-section"><h2>${t}</h2>${s ? `<p class="cms-sub">${s}</p>` : ''}<div class="cms-grid cols-${cols}">\n${itemsHtml}</div></div>\n`;
-        htmlTr += renderGrid(tTr, subTr); htmlEn += renderGrid(tEn, subEn); htmlAr += renderGrid(tAr, subAr);
-      } else if (b.type === 'faq_accordion') {
-        const itemsHtml = (b.items || []).map((it) => `  <details class="cms-faq-item"><summary><strong>${it.title}</strong></summary><p>${it.text}</p></details>\n`).join('');
-        const renderFaq = (t: string, s: string) => `<div class="cms-faq-group"><h2>${t}</h2>${s ? `<p class="cms-sub">${s}</p>` : ''}\n${itemsHtml}</div>\n`;
-        htmlTr += renderFaq(tTr, subTr); htmlEn += renderFaq(tEn, subEn); htmlAr += renderFaq(tAr, subAr);
-      } else if (b.type === 'contact_card') {
-        const customRows = (b.items || []).map((it) => `  <div class="cms-contact-row"><strong>${it.title}:</strong> <span>${it.text}</span></div>\n`).join('');
-        const renderContact = (t: string, s: string, emailLabel: string) => `<div class="cms-contact-box"><h3>${t}</h3>${s ? `<p>${s}</p>` : ''}<div class="cms-contact-grid">\n  <div class="cms-contact-row"><strong>${emailLabel}:</strong> <a href="mailto:destek@msklabs.org">destek@msklabs.org</a></div>\n${customRows}</div></div>\n`;
-        htmlTr += renderContact(tTr, subTr, 'E-Posta'); htmlEn += renderContact(tEn, subEn, 'Email'); htmlAr += renderContact(tAr, subAr, 'البريد');
-      } else if (b.type === 'cta_banner') {
-        const ctaBtn = b.btn_primary_text || 'İletişime Geç';
-        const renderCta = (t: string, s: string) => `<div class="cms-cta-banner text-${b.align || 'center'}"><h2>${t}</h2>${s ? `<p>${s}</p>` : ''}<a href="${b.btn_primary_link || '/contact.html'}" class="cms-btn cms-btn-primary">${ctaBtn}</a></div>\n`;
-        htmlTr += renderCta(tTr, subTr); htmlEn += renderCta(tEn, subEn); htmlAr += renderCta(tAr, subAr);
-      } else if (b.type === 'comparison_table') {
-        const cardsHtml = (b.items || []).map((it) => {
-          const bullets = it.text.split('\n').filter(Boolean).map((x) => `<li>${x}</li>`).join('');
-          return `  <div class="cms-pricing-card ${it.highlight ? 'featured' : ''}">${it.badge ? `<span class="cms-badge">${it.badge}</span>` : ''}<h3>${it.title}</h3><div class="cms-price">${it.price || '$0'}</div><ul>${bullets}</ul></div>\n`;
-        }).join('');
-        const renderPricing = (t: string, s: string) => `<div class="cms-pricing-table"><h2>${t}</h2>${s ? `<p class="cms-sub">${s}</p>` : ''}<div class="cms-pricing-grid">\n${cardsHtml}</div></div>\n`;
-        htmlTr += renderPricing(tTr, subTr); htmlEn += renderPricing(tEn, subEn); htmlAr += renderPricing(tAr, subAr);
-      } else if (b.type === 'ad_hook') {
-        const slotComment = `<!-- AD_SLOT: ${b.ad_slot_key || 'ad_in_content'} -->\n`;
-        htmlTr += slotComment; htmlEn += slotComment; htmlAr += slotComment;
-      } else {
-        htmlTr += b.content_tr || '';
-        htmlEn += b.content_en || b.content_tr || '';
-        htmlAr += b.content_ar || b.content_tr || '';
-      }
-    });
+        if (b.type === 'hero') {
+          const badgeHtml = badge ? `<span class="cms-badge">${badge}</span>` : '';
+          const btns = `<div class="cms-btn-group"><a href="${b.btn_primary_link || '#'}" class="cms-btn cms-btn-primary">${pBtn}</a><a href="${b.btn_secondary_link || '#'}" class="cms-btn cms-btn-secondary">${sBtn}</a></div>`;
+          out += `<div class="cms-hero text-${b.align || 'center'}">${badgeHtml}<h1>${t}</h1>${sub ? `<p>${sub}</p>` : ''}${btns}</div>\n`;
+        } else if (b.type === 'features_grid') {
+          const cols = b.grid_columns || 3;
+          const itemsHtml = (b.items || []).map((it) => {
+            const itT = (lang === 'tr' ? (it.title_tr || it.title) : lang === 'en' ? (it.title_en || it.title) : (it.title_ar || it.title)) || it.title;
+            const itTxt = (lang === 'tr' ? (it.text_tr || it.text) : lang === 'en' ? (it.text_en || it.text) : (it.text_ar || it.text)) || it.text;
+            return `  <div class="cms-card"><h4>${itT}</h4><p>${itTxt}</p></div>\n`;
+          }).join('');
+          out += `<div class="cms-features-section"><h2>${t}</h2>${sub ? `<p class="cms-sub">${sub}</p>` : ''}<div class="cms-grid cols-${cols}">\n${itemsHtml}</div></div>\n`;
+        } else if (b.type === 'faq_accordion') {
+          const itemsHtml = (b.items || []).map((it) => {
+            const itT = (lang === 'tr' ? (it.title_tr || it.title) : lang === 'en' ? (it.title_en || it.title) : (it.title_ar || it.title)) || it.title;
+            const itTxt = (lang === 'tr' ? (it.text_tr || it.text) : lang === 'en' ? (it.text_en || it.text) : (it.text_ar || it.text)) || it.text;
+            return `  <details class="cms-faq-item"><summary><strong>${itT}</strong></summary><p>${itTxt}</p></details>\n`;
+          }).join('');
+          out += `<div class="cms-faq-group"><h2>${t}</h2>${sub ? `<p class="cms-sub">${sub}</p>` : ''}\n${itemsHtml}</div>\n`;
+        } else if (b.type === 'contact_card') {
+          const emailLbl = lang === 'tr' ? 'E-Posta' : lang === 'en' ? 'Email' : 'البريد الإلكتروني';
+          const customRows = (b.items || []).map((it) => {
+            const itT = (lang === 'tr' ? (it.title_tr || it.title) : lang === 'en' ? (it.title_en || it.title) : (it.title_ar || it.title)) || it.title;
+            const itTxt = (lang === 'tr' ? (it.text_tr || it.text) : lang === 'en' ? (it.text_en || it.text) : (it.text_ar || it.text)) || it.text;
+            return `  <div class="cms-contact-row"><strong>${itT}:</strong> <span>${itTxt}</span></div>\n`;
+          }).join('');
+          out += `<div class="cms-contact-box"><h3>${t}</h3>${sub ? `<p>${sub}</p>` : ''}<div class="cms-contact-grid">\n  <div class="cms-contact-row"><strong>${emailLbl}:</strong> <a href="mailto:destek@msklabs.org">destek@msklabs.org</a></div>\n${customRows}</div></div>\n`;
+        } else if (b.type === 'cta_banner') {
+          const ctaBtn = (lang === 'tr' ? b.btn_primary_text : lang === 'en' ? (b.btn_primary_text_en || b.btn_primary_text) : (b.btn_primary_text_ar || b.btn_primary_text)) || (lang === 'tr' ? 'İletişime Geç' : lang === 'en' ? 'Get In Touch' : 'اتصل بنا');
+          out += `<div class="cms-cta-banner text-${b.align || 'center'}"><h2>${t}</h2>${sub ? `<p>${sub}</p>` : ''}<a href="${b.btn_primary_link || '/contact.html'}" class="cms-btn cms-btn-primary">${ctaBtn}</a></div>\n`;
+        } else if (b.type === 'comparison_table') {
+          const cardsHtml = (b.items || []).map((it) => {
+            const itT = (lang === 'tr' ? (it.title_tr || it.title) : lang === 'en' ? (it.title_en || it.title) : (it.title_ar || it.title)) || it.title;
+            const itTxt = (lang === 'tr' ? (it.text_tr || it.text) : lang === 'en' ? (it.text_en || it.text) : (it.text_ar || it.text)) || it.text;
+            const itBdg = (lang === 'tr' ? it.badge : lang === 'en' ? (it.badge_en || it.badge) : (it.badge_ar || it.badge)) || it.badge;
+            const itPr = (lang === 'tr' ? it.price : lang === 'en' ? (it.price_en || it.price) : (it.price_ar || it.price)) || it.price;
+            const bullets = itTxt.split('\n').filter(Boolean).map((x) => `<li>${x}</li>`).join('');
+            return `  <div class="cms-pricing-card ${it.highlight ? 'featured' : ''}">${itBdg ? `<span class="cms-badge">${itBdg}</span>` : ''}<h3>${itT}</h3><div class="cms-price">${itPr || '$0'}</div><ul>${bullets}</ul></div>\n`;
+          }).join('');
+          out += `<div class="cms-pricing-table"><h2>${t}</h2>${sub ? `<p class="cms-sub">${sub}</p>` : ''}<div class="cms-pricing-grid">\n${cardsHtml}</div></div>\n`;
+        } else if (b.type === 'ad_hook') {
+          out += `<!-- AD_SLOT: ${b.ad_slot_key || 'ad_in_content'} -->\n`;
+        } else {
+          out += (lang === 'tr' ? b.content_tr : lang === 'en' ? b.content_en : b.content_ar) || b.content_tr || '';
+        }
+      });
+      return out;
+    };
 
     let existingMeta: Record<string, any> = {};
     try {
@@ -197,11 +204,37 @@ export const PageStudioView: React.FC<PageStudioViewProps> = ({
 
     setFormData((prev) => ({
       ...prev,
-      content_tr: htmlTr,
-      content_en: htmlEn,
-      content_ar: htmlAr,
+      content_tr: renderLang('tr'),
+      content_en: renderLang('en'),
+      content_ar: renderLang('ar'),
       meta_json: JSON.stringify(existingMeta),
     }));
+  };
+
+  const handleAiTranslateUnified = async () => {
+    if (blocks.length > 0) {
+      setInternalAiTranslating(true);
+      try {
+        const res = await api.translatePage({
+          title_tr: formData.title_tr || editingPage?.title_tr || 'Sayfa',
+          blocks,
+        });
+        if (res.success && res.blocks) {
+          setBlocks(res.blocks);
+          pushHistory(res.blocks);
+          compileBlocksToFormData(res.blocks);
+          alert('Tüm bloklar Gemini AI ile İngilizce ve Arapça dillerine başarıyla çevrildi.');
+        } else {
+          throw new Error('Blok çeviri sonucu alınamadı.');
+        }
+      } catch (err: any) {
+        alert(err.message || 'AI blok çevirisi sırasında hata oluştu.');
+      } finally {
+        setInternalAiTranslating(false);
+      }
+    } else {
+      onAiTranslate();
+    }
   };
 
   const handleAddBlock = (type: StudioBlockType, insertAt?: number) => {
@@ -327,8 +360,8 @@ export const PageStudioView: React.FC<PageStudioViewProps> = ({
         setIsRightPanelOpen={setIsRightPanelOpen}
         isMetaOpen={isMetaOpen}
         setIsMetaOpen={setIsMetaOpen}
-        onAiTranslate={onAiTranslate}
-        aiTranslating={aiTranslating}
+        onAiTranslate={handleAiTranslateUnified}
+        aiTranslating={aiTranslating || internalAiTranslating}
         onPreview={() => { compileBlocksToFormData(blocks); setIsPreviewOpen(true); }}
         onSave={handleSaveAndPublish}
       />

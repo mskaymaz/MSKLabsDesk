@@ -261,6 +261,8 @@ Başlık: "${post.title_tr}"
   }
 }
 
+export { translateBlocksWithAI } from './aiBlocks';
+
 export interface TicketTranslationResult {
   detected_language: string;
   translated_subject: string;
