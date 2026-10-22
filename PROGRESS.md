@@ -1740,3 +1740,16 @@
    - Reklam yuvası ekleme ve düzenleme sürecini, her kullanıcının teknik bilgi gerektirmeden görsel sayfa şeması üzerinden tıklayarak yönetebileceği rantabl bir arayüze kavuşturmak.
 2. **Statik ve Kurumsal Sayfalar İçin Gelişmiş CMS / Sayfa Düzenleyici:**
    - Ana sayfa, Hakkımızda, Destek, İletişim, Biz Kimiz, SSS, Gizlilik Politikası, Kullanım Koşulları ve sonradan eklenecek yeni sayfaların blog stüdyosundaki gibi (veya daha gelişmiş blok/bölüm tabanlı) arayüzden tek tek düzenlenip yayına alınabilmesini sağlayan dinamik sayfa yönetim altyapısının kurulması.
+## 🚀 Son Güncelleme [22.10.2026 - 10:05] — GÖRSEL SAYFA-REKLAM DAĞILIM HARİTASI & SIFIR KALINTI ENTEGRASYONU TAMAMLANDI ✅
+* **Yapılan İşlem:**
+  1. **8 Reklam Yuvası Mimarisi:** `ad_header_top` (Sayfa Başı), `ad_sidebar_left` & `ad_sidebar_left_2` (Sol Dikey 1-2 Askılı), `ad_sidebar_right` & `ad_sidebar_right_2` (Sağ Dikey 1-2 Askılı), `ad_in_content` & `ad_in_content_2` (Sayfa Ortası / Akış İçi 1-2) ve `ad_footer_bottom` (Sayfa Sonu) yuvaları sisteme tanımlandı.
+  2. **Görsel Dağılım Matrisi Bileşeni (`AdPageMatrixMap.tsx`):** Kullanıcı şemasına birebir sadık kalınarak sayfa bazlı görsel yerleşim haritası geliştirildi. Her sayfa için onay kutularıyla (checkbox) anlık aktif/pasif yönetimi, özel sayfa ekleme ve tek tıkla matris kaydetme arayüzü kuruldu.
+  3. **Backend ve D1 Entegrasyonu (`cmsTemplates.ts` & `cmsPublic.ts`):** `ad_page_matrix` D1 şablon kaydı, varsayılan matris haritası ve `/api/v1/ads` kamusal uç noktasıyla senkronize edildi.
+  4. **Vitrin Sıfır Kalıntı Boşluk (Zero Residual Spacing) Koruması (`ads-loader.js` & `global.css`):** Pasif reklam yuvaları için `collapseElement` ve `:empty` kurallarıyla 0px margin/padding/height garantisi sağlandı. Çift dikey reklamların askılı yerleşimi ve tümü pasifse yan sütunun tamamen kapatılması kurgulandı.
+* **Sonuçlar:**
+  - MSKLabsDesk frontend build (`tsc -b && vite build`) 0 hata ile tamamlandı.
+  - Backend API testleri (57 test) %100 PASS (0 FAIL).
+  - webMSKLabs vitest regresyon test paketi (61 test dosyası, 604 test) %100 PASS (0 FAIL).
+  - Dosya satır sınırları kontrol edildi: `AdPageMatrixMap.tsx` (281 satır), `TemplatesView.tsx` (580 satır), `cmsTemplates.ts` (405 satır), `ads-loader.js` (415 satır).
+  - Her iki depoda da yalnızca `DevAdmin` dalında çalışıldı, `main` dalı korundu.
+* **Durum:** 1. Basamak (Görsel Sayfa-Reklam Yönetimi) başarıyla tamamlandı.

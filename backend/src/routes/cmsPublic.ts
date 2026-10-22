@@ -1,3 +1,5 @@
+import { DEFAULT_PAGE_MATRIX } from './cmsTemplates';
+
 export async function handleCmsPublic(request: Request, env: any): Promise<Response> {
   const url = new URL(request.url);
   const method = request.method;
@@ -219,20 +221,27 @@ export async function handleCmsPublic(request: Request, env: any): Promise<Respo
       `SELECT key_name, content_tr, meta_json FROM site_templates WHERE key_name LIKE 'ad_%' AND is_active = 1`
     ).all();
 
+    let matrix: any = null;
     const ads = (results || []).map((row: any) => {
       let meta: any = {};
       try {
         if (row.meta_json) meta = JSON.parse(row.meta_json);
       } catch (_) {}
+
+      if (row.key_name === 'ad_page_matrix') {
+        matrix = meta.matrix || meta;
+        return null;
+      }
+
       return {
         slot_key: row.key_name,
         title: row.content_tr,
         ...meta,
         is_enabled: true,
       };
-    }).filter((a: any) => !a.is_deleted && a.slot_key !== 'ad_header_top');
+    }).filter((a: any) => a && !a.is_deleted);
 
-    return new Response(JSON.stringify({ success: true, ads }), {
+    return new Response(JSON.stringify({ success: true, ads, matrix: matrix || DEFAULT_PAGE_MATRIX }), {
       headers: {
         ...headers,
         'Cache-Control': 'no-cache, no-store, must-revalidate',

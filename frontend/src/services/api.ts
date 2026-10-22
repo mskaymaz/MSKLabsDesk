@@ -360,6 +360,16 @@ export const api = {
     return this.updateAd(data.slot_key, data);
   },
 
+  async updateAdMatrix(matrix: any) {
+    const res = await fetch(`${API_BASE}/admin/ads`, {
+      method: 'PUT',
+      headers: getHeaders(),
+      body: JSON.stringify({ matrix }),
+    });
+    if (!res.ok) throw new Error('Sayfa reklam matrisi kaydedilemedi.');
+    return res.json();
+  },
+
   async deleteAd(slotKey: string) {
     const res = await fetch(`${API_BASE}/admin/ads?slot_key=${encodeURIComponent(slotKey)}`, {
       method: 'DELETE',

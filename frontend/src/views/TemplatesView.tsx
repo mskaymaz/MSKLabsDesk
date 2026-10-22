@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Megaphone, DollarSign, CheckCircle, Save, PlusCircle, Check, Info, Layers, Trash2 } from 'lucide-react';
-import type { SiteTemplate, AdPlacementSetting } from '../types';
+import { Megaphone, DollarSign, CheckCircle, Save, PlusCircle, Check, Info, Layers, Trash2, Sliders, Map } from 'lucide-react';
+import type { SiteTemplate, AdPlacementSetting, AdPageMatrixConfig } from '../types';
 import { api } from '../services/api';
 import { useTranslation } from '../context/I18nContext';
 import { AdStudioControls } from '../components/ads/AdStudioControls';
 import { AdLiveCanvas } from '../components/ads/AdLiveCanvas';
+import { AdPageMatrixMap } from '../components/ads/AdPageMatrixMap';
 import { NewAdSlotModal } from '../components/modals/NewAdSlotModal';
 import { AdSizeCatalogModal } from '../components/ads/AdSizeCatalogModal';
 import { Switch } from '../components/ui/Input';
@@ -27,6 +28,11 @@ export const TemplatesView: React.FC = () => {
   const [savingSlot, setSavingSlot] = useState<boolean>(false);
   const [savedSuccess, setSavedSuccess] = useState<boolean>(false);
   const [deletingSlot, setDeletingSlot] = useState<boolean>(false);
+
+  // Sayfa-Reklam Dağılım Matrisi State
+  const [adSubTab, setAdSubTab] = useState<'matrix' | 'controls'>('matrix');
+  const [adMatrix, setAdMatrix] = useState<AdPageMatrixConfig>({});
+  const [isSavingMatrix, setIsSavingMatrix] = useState<boolean>(false);
 
   // 3. AdSense Boyut Kataloğu ve Yeni Reklam Modalları
   const [enabledPresets, setEnabledPresets] = useState<string[]>(getEnabledPresets());
@@ -57,6 +63,9 @@ export const TemplatesView: React.FC = () => {
 
       const adsList: AdPlacementSetting[] = (adsRes as any)?.ads || (adsRes as any)?.data?.ads || [];
       setAds(adsList);
+      if ((adsRes as any)?.matrix || (adsRes as any)?.data?.matrix) {
+        setAdMatrix((adsRes as any).matrix || (adsRes as any).data.matrix);
+      }
 
       if (adsList.length > 0 && !selectedSlotKey) {
         setSelectedSlotKey(adsList[0].slot_key);
@@ -114,6 +123,20 @@ export const TemplatesView: React.FC = () => {
 
   const handleCurrentAdChange = (updated: AdPlacementSetting) => {
     setAds((prev) => prev.map((item) => (item.slot_key === updated.slot_key ? updated : item)));
+  };
+
+  const handleSaveMatrix = async (newMatrix: AdPageMatrixConfig) => {
+    setIsSavingMatrix(true);
+    try {
+      await api.updateAdMatrix(newMatrix);
+      setAdMatrix(newMatrix);
+      setMessage('Sayfa reklam dağılım matrisi başarıyla kaydedildi.');
+      setTimeout(() => setMessage(''), 3000);
+    } catch (err: any) {
+      alert(err.message || 'Matris kaydedilemedi.');
+    } finally {
+      setIsSavingMatrix(false);
+    }
   };
 
   const handleAddNewSlot = async (newSlot: AdPlacementSetting) => {
@@ -208,19 +231,12 @@ export const TemplatesView: React.FC = () => {
             type="button"
             onClick={() => setActiveTab('ads')}
             style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px',
-              padding: '6px 14px',
-              fontSize: '0.84rem',
-              fontWeight: activeTab === 'ads' ? 600 : 500,
-              background: activeTab === 'ads' ? 'var(--bg-card, #1e293b)' : 'transparent',
-              color: activeTab === 'ads' ? 'var(--accent-primary, #6366f1)' : 'var(--text-secondary)',
-              border: '1px solid',
+              display: 'flex', alignItems: 'center', gap: '8px', padding: '6px 14px', fontSize: '0.84rem',
+              fontWeight: activeTab === 'ads' ? 600 : 500, background: activeTab === 'ads' ? 'var(--bg-card, #1e293b)' : 'transparent',
+              color: activeTab === 'ads' ? 'var(--accent-primary, #6366f1)' : 'var(--text-secondary)', border: '1px solid',
               borderColor: activeTab === 'ads' ? 'var(--border-subtle, #334155)' : 'transparent',
               borderBottom: activeTab === 'ads' ? '2px solid var(--accent-primary, #6366f1)' : '2px solid transparent',
-              borderRadius: '6px 6px 0 0',
-              cursor: 'pointer',
+              borderRadius: '6px 6px 0 0', cursor: 'pointer',
             }}
           >
             <DollarSign size={14} />
@@ -232,19 +248,12 @@ export const TemplatesView: React.FC = () => {
             type="button"
             onClick={() => setActiveTab('announcement')}
             style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px',
-              padding: '6px 14px',
-              fontSize: '0.84rem',
-              fontWeight: activeTab === 'announcement' ? 600 : 500,
-              background: activeTab === 'announcement' ? 'var(--bg-card, #1e293b)' : 'transparent',
-              color: activeTab === 'announcement' ? 'var(--accent-primary, #6366f1)' : 'var(--text-secondary)',
-              border: '1px solid',
+              display: 'flex', alignItems: 'center', gap: '8px', padding: '6px 14px', fontSize: '0.84rem',
+              fontWeight: activeTab === 'announcement' ? 600 : 500, background: activeTab === 'announcement' ? 'var(--bg-card, #1e293b)' : 'transparent',
+              color: activeTab === 'announcement' ? 'var(--accent-primary, #6366f1)' : 'var(--text-secondary)', border: '1px solid',
               borderColor: activeTab === 'announcement' ? 'var(--border-subtle, #334155)' : 'transparent',
               borderBottom: activeTab === 'announcement' ? '2px solid var(--accent-primary, #6366f1)' : '2px solid transparent',
-              borderRadius: '6px 6px 0 0',
-              cursor: 'pointer',
+              borderRadius: '6px 6px 0 0', cursor: 'pointer',
             }}
           >
             <Megaphone size={14} />
@@ -252,8 +261,52 @@ export const TemplatesView: React.FC = () => {
           </button>
         </div>
 
-        {/* 3. Reklam Yerleşimi Kontrol Barı (Açılır Liste + Yeni Reklam + Sil + Aktiflik + Kaydet) */}
+        {/* 3. Reklam Yönetimi Alt Sekmeler & İçerik */}
         {activeTab === 'ads' && !loading && (
+          <div style={{ display: 'flex', gap: '8px', marginBottom: '14px' }}>
+            <button
+              type="button"
+              onClick={() => setAdSubTab('matrix')}
+              style={{
+                display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '7px 14px', fontSize: '0.84rem',
+                fontWeight: adSubTab === 'matrix' ? 700 : 500, borderRadius: '6px', border: '1px solid',
+                borderColor: adSubTab === 'matrix' ? 'var(--accent-primary, #6366f1)' : 'var(--border-subtle, #334155)',
+                background: adSubTab === 'matrix' ? 'rgba(99, 102, 241, 0.12)' : 'transparent',
+                color: adSubTab === 'matrix' ? 'var(--accent-primary, #6366f1)' : 'var(--text-secondary)',
+                cursor: 'pointer',
+              }}
+            >
+              <Map size={15} /> 🗺️ Sayfa Dağılım Haritası
+            </button>
+            <button
+              type="button"
+              onClick={() => setAdSubTab('controls')}
+              style={{
+                display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '7px 14px', fontSize: '0.84rem',
+                fontWeight: adSubTab === 'controls' ? 700 : 500, borderRadius: '6px', border: '1px solid',
+                borderColor: adSubTab === 'controls' ? 'var(--accent-primary, #6366f1)' : 'var(--border-subtle, #334155)',
+                background: adSubTab === 'controls' ? 'rgba(99, 102, 241, 0.12)' : 'transparent',
+                color: adSubTab === 'controls' ? 'var(--accent-primary, #6366f1)' : 'var(--text-secondary)',
+                cursor: 'pointer',
+              }}
+            >
+              <Sliders size={15} /> ⚙️ Reklam Ebat & Marj Ayarları
+            </button>
+          </div>
+        )}
+
+        {/* 3.A: Sayfa Dağılım Haritası Görünümü */}
+        {activeTab === 'ads' && !loading && adSubTab === 'matrix' && (
+          <AdPageMatrixMap
+            ads={ads}
+            matrix={adMatrix}
+            onSaveMatrix={handleSaveMatrix}
+            isSaving={isSavingMatrix}
+          />
+        )}
+
+        {/* 3.B: Reklam Ebat & Marj Ayarları Görünümü */}
+        {activeTab === 'ads' && !loading && adSubTab === 'controls' && (
           <div
             style={{
               background: 'var(--bg-card, #1e293b)',

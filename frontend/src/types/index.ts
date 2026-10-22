@@ -258,3 +258,6 @@ export interface AdPlacementSetting {
   excluded_paths?: string[];
 }
 
+export type AdPageMatrixConfig = Record<string, Record<string, boolean>>;
+
+

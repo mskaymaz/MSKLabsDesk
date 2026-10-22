@@ -2,9 +2,9 @@ import { verifyAuthToken } from '../utils/auth';
 
 export const DEFAULT_AD_SLOTS = [
   {
-    slot_key: 'ad_sidebar_right',
-    title: 'Sağ Dikey Reklam (Right Sidebar)',
-    description: 'Masaüstünde sağ sütunda yer alan, isteğe bağlı yapışkan (sticky) dikey reklam.',
+    slot_key: 'ad_header_top',
+    title: 'Sayfa Başı Reklam (Top Banner)',
+    description: 'Sabit üst panelin veya sayfa başlığının hemen altında yer alan tepe banner.',
     ad_client: '',
     ad_slot: '',
     is_enabled: false,
@@ -12,23 +12,23 @@ export const DEFAULT_AD_SLOTS = [
     target_paths: [],
     excluded_paths: [],
     desktop: {
-      is_enabled: true,
-      preset_size: '300x250',
+      is_enabled: false,
+      preset_size: '728x90',
       custom_width: null,
       custom_height: null,
-      margin_top: 16,
+      margin_top: 12,
       margin_right: 0,
       margin_bottom: 16,
       margin_left: 0,
       align: 'center',
-      is_sticky: true,
+      is_sticky: false,
     },
     mobile: {
       is_enabled: false,
-      preset_size: '300x250',
+      preset_size: '320x50',
       custom_width: null,
       custom_height: null,
-      margin_top: 12,
+      margin_top: 8,
       margin_right: 0,
       margin_bottom: 12,
       margin_left: 0,
@@ -37,8 +37,8 @@ export const DEFAULT_AD_SLOTS = [
   },
   {
     slot_key: 'ad_sidebar_left',
-    title: 'Sol Dikey Reklam (Left Skyscraper)',
-    description: 'Geniş ekranlarda sol kenar boşluğunda duran gökdelen reklamı (mobilde otomatik pasif).',
+    title: 'Sol Dikey Reklam 1 (Left Skyscraper 1)',
+    description: 'Geniş ekranlarda sol kenar boşluğunda duran ana gökdelen reklamı.',
     ad_client: '',
     ad_slot: '',
     is_enabled: false,
@@ -54,7 +54,7 @@ export const DEFAULT_AD_SLOTS = [
       margin_right: 0,
       margin_bottom: 20,
       margin_left: 0,
-      align: 'center',
+      align: 'right',
       is_sticky: true,
     },
     mobile: {
@@ -70,8 +70,110 @@ export const DEFAULT_AD_SLOTS = [
     },
   },
   {
+    slot_key: 'ad_sidebar_left_2',
+    title: 'Sol Dikey Reklam 2 (Left Skyscraper 2)',
+    description: 'Sol sütunda birinci dikey reklamın hemen altında askılı duran ikinci reklam.',
+    ad_client: '',
+    ad_slot: '',
+    is_enabled: false,
+    target_scope: 'all',
+    target_paths: [],
+    excluded_paths: [],
+    desktop: {
+      is_enabled: false,
+      preset_size: '120x600',
+      custom_width: null,
+      custom_height: null,
+      margin_top: 16,
+      margin_right: 0,
+      margin_bottom: 20,
+      margin_left: 0,
+      align: 'right',
+      is_sticky: false,
+    },
+    mobile: {
+      is_enabled: false,
+      preset_size: '320x50',
+      custom_width: null,
+      custom_height: null,
+      margin_top: 0,
+      margin_right: 0,
+      margin_bottom: 0,
+      margin_left: 0,
+      align: 'center',
+    },
+  },
+  {
+    slot_key: 'ad_sidebar_right',
+    title: 'Sağ Dikey Reklam 1 (Right Sidebar 1)',
+    description: 'Masaüstünde sağ sütunda yer alan, isteğe bağlı yapışkan (sticky) birinci dikey reklam.',
+    ad_client: '',
+    ad_slot: '',
+    is_enabled: false,
+    target_scope: 'all',
+    target_paths: [],
+    excluded_paths: [],
+    desktop: {
+      is_enabled: true,
+      preset_size: '120x600',
+      custom_width: null,
+      custom_height: null,
+      margin_top: 20,
+      margin_right: 0,
+      margin_bottom: 16,
+      margin_left: 0,
+      align: 'left',
+      is_sticky: true,
+    },
+    mobile: {
+      is_enabled: false,
+      preset_size: '300x250',
+      custom_width: null,
+      custom_height: null,
+      margin_top: 12,
+      margin_right: 0,
+      margin_bottom: 12,
+      margin_left: 0,
+      align: 'center',
+    },
+  },
+  {
+    slot_key: 'ad_sidebar_right_2',
+    title: 'Sağ Dikey Reklam 2 (Right Sidebar 2)',
+    description: 'Sağ sütunda birinci dikey reklamın hemen altında askılı duran ikinci reklam.',
+    ad_client: '',
+    ad_slot: '',
+    is_enabled: false,
+    target_scope: 'all',
+    target_paths: [],
+    excluded_paths: [],
+    desktop: {
+      is_enabled: false,
+      preset_size: '120x600',
+      custom_width: null,
+      custom_height: null,
+      margin_top: 16,
+      margin_right: 0,
+      margin_bottom: 16,
+      margin_left: 0,
+      align: 'left',
+      is_sticky: false,
+    },
+    mobile: {
+      is_enabled: false,
+      preset_size: '300x250',
+      custom_width: null,
+      custom_height: null,
+      margin_top: 12,
+      margin_right: 0,
+      margin_bottom: 12,
+      margin_left: 0,
+      align: 'center',
+    },
+  },
+  {
     slot_key: 'ad_in_content',
-    title: 'Bölümler Arası / Akış İçi (In-Content / In-Feed)',
+    title: 'Sayfa Ortası / Akış İçi 1 (In-Content 1)',
     description: 'Blog yazıları ve sayfa bölümleri arasında doğal olarak akan reklam.',
     ad_client: '',
     ad_slot: '',
@@ -81,7 +183,7 @@ export const DEFAULT_AD_SLOTS = [
     excluded_paths: [],
     desktop: {
       is_enabled: true,
-      preset_size: 'RESPONSIVE',
+      preset_size: '728x90',
       custom_width: null,
       custom_height: null,
       margin_top: 24,
@@ -93,6 +195,40 @@ export const DEFAULT_AD_SLOTS = [
     },
     mobile: {
       is_enabled: true,
+      preset_size: 'RESPONSIVE',
+      custom_width: null,
+      custom_height: null,
+      margin_top: 16,
+      margin_right: 0,
+      margin_bottom: 16,
+      margin_left: 0,
+      align: 'center',
+    },
+  },
+  {
+    slot_key: 'ad_in_content_2',
+    title: 'Sayfa Ortası / Akış İçi 2 (In-Content 2)',
+    description: 'Uzun makalelerde, SSS veya uygulama kartları aralarında ikinci akış içi reklam.',
+    ad_client: '',
+    ad_slot: '',
+    is_enabled: false,
+    target_scope: 'all',
+    target_paths: [],
+    excluded_paths: [],
+    desktop: {
+      is_enabled: false,
+      preset_size: '728x90',
+      custom_width: null,
+      custom_height: null,
+      margin_top: 24,
+      margin_right: 0,
+      margin_bottom: 24,
+      margin_left: 0,
+      align: 'center',
+      is_sticky: false,
+    },
+    mobile: {
+      is_enabled: false,
       preset_size: 'RESPONSIVE',
       custom_width: null,
       custom_height: null,
@@ -139,6 +275,109 @@ export const DEFAULT_AD_SLOTS = [
   },
 ];
 
+export const DEFAULT_PAGE_MATRIX: Record<string, Record<string, boolean>> = {
+  'index.html': {
+    ad_header_top: false,
+    ad_sidebar_left: true,
+    ad_sidebar_left_2: false,
+    ad_sidebar_right: true,
+    ad_sidebar_right_2: false,
+    ad_in_content: true,
+    ad_in_content_2: false,
+    ad_footer_bottom: true,
+  },
+  'blog.html': {
+    ad_header_top: false,
+    ad_sidebar_left: true,
+    ad_sidebar_left_2: false,
+    ad_sidebar_right: true,
+    ad_sidebar_right_2: false,
+    ad_in_content: true,
+    ad_in_content_2: true,
+    ad_footer_bottom: true,
+  },
+  'apps.html': {
+    ad_header_top: false,
+    ad_sidebar_left: true,
+    ad_sidebar_left_2: false,
+    ad_sidebar_right: true,
+    ad_sidebar_right_2: false,
+    ad_in_content: true,
+    ad_in_content_2: false,
+    ad_footer_bottom: true,
+  },
+  'about.html': {
+    ad_header_top: false,
+    ad_sidebar_left: true,
+    ad_sidebar_left_2: false,
+    ad_sidebar_right: true,
+    ad_sidebar_right_2: false,
+    ad_in_content: false,
+    ad_in_content_2: false,
+    ad_footer_bottom: true,
+  },
+  'destek.html': {
+    ad_header_top: false,
+    ad_sidebar_left: true,
+    ad_sidebar_left_2: false,
+    ad_sidebar_right: true,
+    ad_sidebar_right_2: false,
+    ad_in_content: false,
+    ad_in_content_2: false,
+    ad_footer_bottom: true,
+  },
+  'contact.html': {
+    ad_header_top: false,
+    ad_sidebar_left: true,
+    ad_sidebar_left_2: false,
+    ad_sidebar_right: true,
+    ad_sidebar_right_2: false,
+    ad_in_content: false,
+    ad_in_content_2: false,
+    ad_footer_bottom: true,
+  },
+  'who-we-are.html': {
+    ad_header_top: false,
+    ad_sidebar_left: true,
+    ad_sidebar_left_2: false,
+    ad_sidebar_right: true,
+    ad_sidebar_right_2: false,
+    ad_in_content: false,
+    ad_in_content_2: false,
+    ad_footer_bottom: true,
+  },
+  'faq.html': {
+    ad_header_top: false,
+    ad_sidebar_left: true,
+    ad_sidebar_left_2: false,
+    ad_sidebar_right: true,
+    ad_sidebar_right_2: false,
+    ad_in_content: true,
+    ad_in_content_2: false,
+    ad_footer_bottom: true,
+  },
+  'privacy.html': {
+    ad_header_top: false,
+    ad_sidebar_left: true,
+    ad_sidebar_left_2: false,
+    ad_sidebar_right: true,
+    ad_sidebar_right_2: false,
+    ad_in_content: false,
+    ad_in_content_2: false,
+    ad_footer_bottom: true,
+  },
+  'terms.html': {
+    ad_header_top: false,
+    ad_sidebar_left: true,
+    ad_sidebar_left_2: false,
+    ad_sidebar_right: true,
+    ad_sidebar_right_2: false,
+    ad_in_content: false,
+    ad_in_content_2: false,
+    ad_footer_bottom: true,
+  },
+};
+
 export async function handleCmsTemplates(request: Request, env: any): Promise<Response> {
   const url = new URL(request.url);
   const method = request.method;
@@ -176,7 +415,13 @@ export async function handleCmsTemplates(request: Request, env: any): Promise<Re
       const ads: any[] = [];
       const handledKeys = new Set<string>();
 
-      // Varsayılan slotlar (silinmiş olanlar veya ad_header_top filtrelenir)
+      let matrix = DEFAULT_PAGE_MATRIX;
+      const matrixRow = dbMap.get('ad_page_matrix');
+      if (matrixRow && matrixRow.matrix) {
+        matrix = { ...DEFAULT_PAGE_MATRIX, ...matrixRow.matrix };
+      }
+
+      // Varsayılan slotlar
       DEFAULT_AD_SLOTS.forEach((def) => {
         handledKeys.add(def.slot_key);
         const dbData = dbMap.get(def.slot_key);
@@ -195,12 +440,12 @@ export async function handleCmsTemplates(request: Request, env: any): Promise<Re
 
       // Kullanıcının DB'ye eklediği özel slotlar
       dbMap.forEach((dbData, key) => {
-        if (!handledKeys.has(key) && key !== 'ad_header_top' && !dbData.is_deleted) {
+        if (!handledKeys.has(key) && key !== 'ad_page_matrix' && !dbData.is_deleted) {
           ads.push(dbData);
         }
       });
 
-      return new Response(JSON.stringify({ success: true, data: { ads }, ads }), {
+      return new Response(JSON.stringify({ success: true, data: { ads, matrix }, ads, matrix }), {
         headers: { 'Content-Type': 'application/json' },
       });
     }
@@ -214,6 +459,22 @@ export async function handleCmsTemplates(request: Request, env: any): Promise<Re
   // 2. PUT / POST İstekleri (Şablon veya Reklam Kaydetme)
   if (method === 'PUT' || method === 'POST') {
     const body = (await request.json()) as any;
+
+    // Sayfa-Reklam Dağılım Matrisi Kaydı
+    if (isAdsRoute && body.matrix) {
+      const id = 'tpl_ad_page_matrix';
+      const metaJson = JSON.stringify({ matrix: body.matrix });
+      await env.DB.prepare(
+        `INSERT INTO site_templates (id, key_name, content_tr, meta_json, is_active, updated_at)
+         VALUES (?, 'ad_page_matrix', 'Sayfa Reklam Dağılım Matrisi', ?, 1, CURRENT_TIMESTAMP)
+         ON CONFLICT(key_name) DO UPDATE SET
+          meta_json = excluded.meta_json,
+          is_active = 1,
+          updated_at = CURRENT_TIMESTAMP`
+      ).bind(id, metaJson).run();
+
+      return new Response(JSON.stringify({ success: true, message: 'Sayfa reklam dağılım matrisi kaydedildi.', matrix: body.matrix }));
+    }
 
     if (isAdsRoute || body.slot_key) {
       const slotKey = body.slot_key;
