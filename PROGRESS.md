@@ -1,7 +1,21 @@
-# MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
+﻿# MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
-## 🟢 Son Güncelleme [22.10.2026 - 17:10] — EDİTÖRDE KAYDEDİLEN RESİMLERİN YENİDEN AÇILIŞTA KAYBOLMA SORUNUNUN ÇÖZÜMÜ VE ETKİLEŞİMLİ RESİM ARAÇ ÇUBUĞU [*]
+## 🟢 Son Güncelleme [22.10.2026 - 21:58] — ADMİN PANELİ KAPSAMLI UI/UX, TOOL VE EDİTÖR DENETİM RAPORU (admin_ui_audit_report.md) [*]
+* **Yapılan İşlem:**
+  1. **Tüm Admin Paneli UI/UX & Fonksiyonel Denetimi:**
+     - 15 View (Dashboard, BlogStudio, PageStudio, Pages, Apps, Templates, Channels, Comments, Tickets, Subscribers, Broadcast, Settings, Login vb.) ve 50+ bileşen taranarak dmin_ui_audit_report.md dosyası oluşturuldu.
+     - Global çapraz kesim sorunları tespit edildi: lert() kullanımları, window.confirm() uyumsuzlukları, Skeleton/Loading boşlukları, focus-ring ve erişilebilirlik (:focus-visible).
+  2. **İleri Seviye Tool ve Editör Geliştirme Önerileri Eklendi:**
+     - TipTap Slash Commands (/), Callout/Uyarı bloğu eklentisi, kod renklendirme (@tiptap/extension-code-block-lowlight), YouTube embed ve Notion tarzı drag-handle tavsiyeleri işlendi.
+     - Görsel yüklemede R2 sürükle-bırak/paste akışı, dağınık tablo araçlarının tek bir <TablePanel> drawer'ında birleştirilmesi, Undo/Redo araç çubuğu butonları ve animasyon entegrasyonu (@formkit/auto-animate) maddelendi.
+  3. **Önceki Oturumun Çekirdek Kod & Mimari Taranması Eklendi:**
+     - Claude oturumunda bağlama alınarak tespit edilen spesifik hatalar (Input.tsx Select hardcoded #0F1522 renk ve eksik Textarea, Modal.tsx Drawer #121826, eksik ria-labelledby, disableBackdropBlur: true ve warning buton aktarım hatası) Bölüm 24 olarak rapora bağlandı.
+  4. **Kural ve Dal Uyumu:**
+     - Çalışmalar yalnızca DevAdmin dalında yürütüldü, main korundu.
+* **Durum:** DevAdmin dalında commit ve push aşamasına getirildi.
+
+## [22.10.2026 - 17:10] — EDİTÖRDE KAYDEDİLEN RESİMLERİN YENİDEN AÇILIŞTA KAYBOLMA SORUNUNUN ÇÖZÜMÜ VE ETKİLEŞİMLİ RESİM ARAÇ ÇUBUĞU [*]
 * **Yapılan İşlem:**
   1. **Resim Kaybolma Kök Nedeninin Tespiti & Giderilmesi (customExtensions.ts & RichTextEditor.tsx):**
      - Sorun araştırıldığında, editöre eklenen resmin veritabanına (site_pages.content_tr) eksiksiz olarak Base64/URL formatında kaydedildiği, ancak sayfa yeniden açıldığında TipTap HTML ayrıştırıcısının varsayılan allowBase64: false ayarı nedeniyle img[src]:not([src^="data:"]) kuralını çalıştırdığı ve data:image/... kaynaklı tüm görselleri belgeden ayıkladığı tespit edildi.
