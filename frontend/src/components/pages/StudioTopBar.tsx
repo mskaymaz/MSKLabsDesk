@@ -19,6 +19,8 @@ import {
   PanelLeftOpen,
   PanelRightClose,
   PanelRightOpen,
+  LayoutTemplate,
+  History,
 } from 'lucide-react';
 import type { SitePage, PageFormData } from '../../types';
 
@@ -50,6 +52,9 @@ export interface StudioTopBarProps {
   aiTranslating: boolean;
   onPreview: () => void;
   onSave: (e: React.FormEvent) => void;
+  onOpenTemplates: () => void;
+  onOpenRevisions: () => void;
+  revisionsCount?: number;
 }
 
 export const StudioTopBar: React.FC<StudioTopBarProps> = ({
@@ -80,6 +85,9 @@ export const StudioTopBar: React.FC<StudioTopBarProps> = ({
   aiTranslating,
   onPreview,
   onSave,
+  onOpenTemplates,
+  onOpenRevisions,
+  revisionsCount = 0,
 }) => {
   const isSystemPage = Boolean(editingPage?.is_system);
 
@@ -253,6 +261,33 @@ export const StudioTopBar: React.FC<StudioTopBarProps> = ({
           >
             <Sparkles size={13} className={aiTranslating ? 'animate-spin text-purple' : 'text-purple'} />
             <span>{aiTranslating ? 'AI Çeviriyor...' : 'AI Çevir'}</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={onOpenTemplates}
+            className="admin-btn admin-btn-secondary admin-btn-sm"
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '5px' }}
+            title="Hazır sayfa şablonları"
+          >
+            <LayoutTemplate size={13} className="text-cyan" />
+            <span>Şablonlar</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={onOpenRevisions}
+            className="admin-btn admin-btn-secondary admin-btn-sm"
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '5px' }}
+            title="Sürüm ve revizyon geçmişi"
+          >
+            <History size={13} className="text-purple" />
+            <span>Geçmiş</span>
+            {revisionsCount > 0 && (
+              <span className="admin-badge admin-badge-purple" style={{ fontSize: '9px', padding: '1px 5px', borderRadius: '4px' }}>
+                {revisionsCount}
+              </span>
+            )}
           </button>
 
           <button

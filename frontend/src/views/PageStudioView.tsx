@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import type { SitePage, PageFormData, StudioBlock, StudioBlockType } from '../types';
+import type { SitePage, PageFormData, StudioBlock, StudioBlockType, PageRevision } from '../types';
 import { api } from '../services/api';
 import { BlockPalette } from '../components/pages/BlockPalette';
 import { PageCanvas } from '../components/pages/PageCanvas';
 import { BlockInspector } from '../components/pages/BlockInspector';
 import { PagePreviewModal } from '../components/pages/PagePreviewModal';
 import { StudioTopBar } from '../components/pages/StudioTopBar';
+import { StudioTemplatesModal } from '../components/pages/StudioTemplatesModal';
+import { StudioRevisionsModal } from '../components/pages/StudioRevisionsModal';
 
 export interface PageStudioViewProps {
   isOpen: boolean;
@@ -32,6 +34,8 @@ export const PageStudioView: React.FC<PageStudioViewProps> = ({
   const [device, setDevice] = useState<'desktop' | 'tablet' | 'mobile'>('desktop');
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [isMetaOpen, setIsMetaOpen] = useState(false);
+  const [isTemplatesOpen, setIsTemplatesOpen] = useState(false);
+  const [isRevisionsOpen, setIsRevisionsOpen] = useState(false);
   const [isLeftPanelOpen, setIsLeftPanelOpen] = useState(true);
   const [isRightPanelOpen, setIsRightPanelOpen] = useState(true);
   const [canvasTheme, setCanvasTheme] = useState<'light' | 'dark'>('light');
@@ -40,6 +44,7 @@ export const PageStudioView: React.FC<PageStudioViewProps> = ({
   // Bloklar ve Seçim Durumu
   const [blocks, setBlocks] = useState<StudioBlock[]>([]);
   const [selectedBlockId, setSelectedBlockId] = useState<string | null>(null);
+  const [revisions, setRevisions] = useState<PageRevision[]>([]);
 
   // Geri Al / Yinele (Undo/Redo History Stack)
   const [history, setHistory] = useState<StudioBlock[][]>([]);
@@ -59,6 +64,9 @@ export const PageStudioView: React.FC<PageStudioViewProps> = ({
         const meta = JSON.parse(editingPage.meta_json);
         if (Array.isArray(meta.blocks) && meta.blocks.length > 0) {
           initialBlocks = meta.blocks;
+        }
+        if (Array.isArray(meta.revisions)) {
+          setRevisions(meta.revisions);
         }
       } catch {}
     }
@@ -312,7 +320,44 @@ export const PageStudioView: React.FC<PageStudioViewProps> = ({
     pushHistory(next);
   };
 
+  const addRevisionSnapshot = (blocksToSave: StudioBlock[], note = 'Düzenleme') => {
+    const now = new Date();
+    const newRev: PageRevision = {
+      id: `rev_${Date.now()}_${Math.random().toString(36).substring(2, 5)}`,
+      timestamp: now.toISOString(),
+      formattedDate: `${now.toLocaleDateString('tr-TR')} - ${now.toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' })}`,
+      author: 'Yönetici',
+      note,
+      blocks_count: blocksToSave.length,
+      blocks: JSON.parse(JSON.stringify(blocksToSave)),
+    };
+    setRevisions((prev) => {
+      const updated = [newRev, ...prev.filter((r) => r.id !== newRev.id)].slice(0, 15);
+      try {
+        let meta = formData.meta_json ? JSON.parse(formData.meta_json) : {};
+        meta.revisions = updated;
+        setFormData((f) => ({ ...f, meta_json: JSON.stringify(meta) }));
+      } catch {}
+      return updated;
+    });
+  };
+
+  const handleApplyTemplate = (tmplBlocks: StudioBlock[], templateName: string) => {
+    pushHistory(tmplBlocks);
+    compileBlocksToFormData(tmplBlocks);
+    setSelectedBlockId(tmplBlocks[0]?.id || null);
+    addRevisionSnapshot(tmplBlocks, `${templateName} Şablonu`);
+  };
+
+  const handleRestoreRevision = (rev: PageRevision) => {
+    pushHistory(rev.blocks);
+    compileBlocksToFormData(rev.blocks);
+    setSelectedBlockId(rev.blocks[0]?.id || null);
+    addRevisionSnapshot(rev.blocks, `Geri Yükleme (${rev.formattedDate})`);
+  };
+
   const handleSaveAndPublish = (e: React.FormEvent) => {
+    addRevisionSnapshot(blocks, 'Yayınlama Kaydı');
     compileBlocksToFormData(blocks);
     onSave(e);
   };
@@ -364,6 +409,9 @@ export const PageStudioView: React.FC<PageStudioViewProps> = ({
         aiTranslating={aiTranslating || internalAiTranslating}
         onPreview={() => { compileBlocksToFormData(blocks); setIsPreviewOpen(true); }}
         onSave={handleSaveAndPublish}
+        onOpenTemplates={() => setIsTemplatesOpen(true)}
+        onOpenRevisions={() => setIsRevisionsOpen(true)}
+        revisionsCount={revisions.length}
       />
 
       {/* 2. Ana İş İstasyonu Gövdesi (Flyout & Fixed Artboard) */}
@@ -442,6 +490,21 @@ export const PageStudioView: React.FC<PageStudioViewProps> = ({
         formData={formData}
         blocks={blocks}
         activeLanguage={activeTab}
+      />
+
+      {/* Hazır Sayfa Şablonları Modalı */}
+      <StudioTemplatesModal
+        isOpen={isTemplatesOpen}
+        onClose={() => setIsTemplatesOpen(false)}
+        onApplyTemplate={handleApplyTemplate}
+      />
+
+      {/* Revizyon ve Sürüm Kontrolü Modalı */}
+      <StudioRevisionsModal
+        isOpen={isRevisionsOpen}
+        onClose={() => setIsRevisionsOpen(false)}
+        revisions={revisions}
+        onRestore={handleRestoreRevision}
       />
     </div>
   );

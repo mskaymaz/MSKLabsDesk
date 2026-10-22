@@ -325,6 +325,16 @@ export interface StudioBlock {
   grid_columns?: 2 | 3 | 4;
 }
 
+export interface PageRevision {
+  id: string;
+  timestamp: string;
+  formattedDate: string;
+  author: string;
+  note: string;
+  blocks_count: number;
+  blocks: StudioBlock[];
+}
+
 export interface SitePage {
   id: string;
   slug: string;
