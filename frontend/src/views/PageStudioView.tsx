@@ -58,8 +58,9 @@ export const PageStudioView: React.FC<PageStudioViewProps> = ({
       const currentTitle = activeTab === 'tr' ? next.title_tr : activeTab === 'en' ? next.title_en : next.title_ar;
       const currentSummary = activeTab === 'tr' ? next.summary_tr : activeTab === 'en' ? next.summary_en : next.summary_ar;
 
-      // Eğer içerik boşsa veya <h1 içermiyorsa, başlık ve alt başlığı doğrudan biçimlendirilebilir H1 ve P olarak tuvale ekle
-      if (!currentContent || !currentContent.toLowerCase().includes('<h1')) {
+      // Yalnızca içerik tamamen boşsa varsayılan başlık ve paragraf şablonunu oluştur
+      const isBlank = !currentContent || currentContent.trim() === '' || currentContent.trim() === '<p></p>';
+      if (isBlank) {
         const titleText = currentTitle || (activeTab === 'tr' ? 'Sayfa Başlığı' : activeTab === 'en' ? 'Page Title' : 'عنوان الصفحة');
         const summaryText = currentSummary || (activeTab === 'tr' ? 'Kısa açıklama veya alt başlık...' : activeTab === 'en' ? 'Short summary or subtitle...' : 'ملخص الصفحة...');
         const newHtml = `<h1 style="text-align: center; font-size: 2.25rem; font-weight: 800; color: #0284c7;">${titleText}</h1><p style="text-align: center; color: #64748b; font-size: 1.05rem; margin-bottom: 24px;">${summaryText}</p><p>Sayfa içeriğinizi buraya yazmaya başlayın...</p>`;

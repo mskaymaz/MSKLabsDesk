@@ -30,6 +30,11 @@ declare module '@tiptap/core' {
         layout?: 'left' | 'right' | 'center' | 'full';
         width?: string;
       }) => ReturnType;
+      updateImageAttributes: (attrs: {
+        layout?: 'left' | 'right' | 'center' | 'full';
+        width?: string;
+        alt?: string;
+      }) => ReturnType;
     };
   }
 }
@@ -214,6 +219,22 @@ export const DuplicateSelection = Extension.create({
 // 5. Metin Saran ve Satır Açan Özel Resim Eklentisi (Word-style Image Wrap)
 export const CustomImage = Image.extend({
   name: 'customImage',
+  addOptions() {
+    return {
+      ...(this.parent?.() || {}),
+      inline: false,
+      allowBase64: true,
+      HTMLAttributes: {},
+      resize: false,
+    } as any;
+  },
+  parseHTML() {
+    return [
+      {
+        tag: 'img[src]',
+      },
+    ];
+  },
   addAttributes() {
     return {
       ...this.parent?.(),
@@ -226,7 +247,7 @@ export const CustomImage = Image.extend({
       },
       width: {
         default: 'auto',
-        parseHTML: (element) => element.style.width || 'auto',
+        parseHTML: (element) => element.style.width || element.getAttribute('width') || 'auto',
         renderHTML: (attributes) => {
           return { style: `width: ${attributes.width}` };
         },
@@ -259,6 +280,11 @@ export const CustomImage = Image.extend({
             type: this.name,
             attrs: options,
           });
+        },
+      updateImageAttributes:
+        (attrs) =>
+        ({ commands }) => {
+          return commands.updateAttributes(this.name, attrs);
         },
     };
   },

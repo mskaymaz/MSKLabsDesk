@@ -1,7 +1,24 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
-## 🟢 Son Güncelleme [22.10.2026 - 16:25] — KAYDETME MANTIĞI DÜZELTMESİ, BAŞLIK & ÖZET ZENGİN BİÇİMLENDİRMESİ VE ÖLÜ KOD TEMİZLİĞİ [*]
+## 🟢 Son Güncelleme [22.10.2026 - 17:10] — EDİTÖRDE KAYDEDİLEN RESİMLERİN YENİDEN AÇILIŞTA KAYBOLMA SORUNUNUN ÇÖZÜMÜ VE ETKİLEŞİMLİ RESİM ARAÇ ÇUBUĞU [*]
+* **Yapılan İşlem:**
+  1. **Resim Kaybolma Kök Nedeninin Tespiti & Giderilmesi (customExtensions.ts & RichTextEditor.tsx):**
+     - Sorun araştırıldığında, editöre eklenen resmin veritabanına (site_pages.content_tr) eksiksiz olarak Base64/URL formatında kaydedildiği, ancak sayfa yeniden açıldığında TipTap HTML ayrıştırıcısının varsayılan allowBase64: false ayarı nedeniyle img[src]:not([src^="data:"]) kuralını çalıştırdığı ve data:image/... kaynaklı tüm görselleri belgeden ayıkladığı tespit edildi.
+     - CustomImage eklentisine allowBase64: true seçeneği ve parseHTML: [{ tag: 'img[src]' }] kuralı eklenerek Base64 ve tüm harici/yerel görsel etiketlerinin yeniden yükleme esnasında korunması garanti altına alındı.
+     - RichTextEditor.tsx içinde CustomImage.configure({ allowBase64: true }) tanımlandı.
+  2. **Sayfa Açılış Şablonunun İçerik Koruma Düzeltmesi (PageStudioView.tsx):**
+     - useEffect içindeki !currentContent.toLowerCase().includes('<h1') kontrolü, kullanıcının başlığı H2 yaptığı veya sildiği durumlarda mevcut içeriği sıfırlamasın diye yalnızca içerik tamamen boş olduğunda (isBlank) tetiklenecek şekilde düzeltildi.
+  3. **Etkileşimli Resim Boyutlandırma & Hizalama Araç Çubuğu (FloatingImageToolbar.tsx):**
+     - Editör tuvalinde herhangi bir resme tıklandığında beliren dinamik floating araç çubuğu geliştirildi.
+     - %25, %50, %75, %100 hazır genişlik butonları, serbest piksel (px veya %) genişlik girişi, sola sarmalı float, ortalama, sağa sarmalı float, tam satır mizanpajı, SEO alt metin düzenleyicisi ve görsel silme aksiyonları bağlandı.
+  4. **Doğrulama ve Kural Uyumu:**
+     - Frontend Build: PASS (tsc -b && vite build, 944ms, 0 hata).
+     - Backend Testleri: PASS (82/82 test %100 başarılı).
+     - Satır sınırları: customExtensions.ts 378 (<= 450), RichTextEditor.tsx 226 (<= 450), FloatingImageToolbar.tsx 275 (<= 450), PageStudioView.tsx 358 (<= 600).
+* **Durum:** DevAdmin dalında tamamlandı, main kesinlikle korundu.
+
+## [22.10.2026 - 16:25] — KAYDETME MANTIĞI DÜZELTMESİ, BAŞLIK & ÖZET ZENGİN BİÇİMLENDİRMESİ VE ÖLÜ KOD TEMİZLİĞİ [*]
 * **Yapılan İşlem:**
   1. **Kaydet Butonu ve Çift Kayıt Engellemesi (PagesView.tsx & StudioTopBar.tsx):**
      - "Yayına Al" butonu kafa karışıklığını önlemek için doğrudan "Kaydet" butonuyla değiştirildi.

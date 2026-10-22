@@ -24,6 +24,7 @@ import {
 } from '../editor/customExtensions';
 import { EditorToolbar } from '../editor/EditorToolbar';
 import { FloatingTableInspector } from '../editor/FloatingTableInspector';
+import { FloatingImageToolbar } from '../editor/FloatingImageToolbar';
 
 export interface RichTextEditorProps {
   label?: string;
@@ -86,7 +87,9 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
       LineHeight,
       ParagraphSpacing,
       DuplicateSelection,
-      CustomImage,
+      CustomImage.configure({
+        allowBase64: true,
+      }),
     ],
     content: value || '',
     onUpdate: ({ editor: activeEditor }) => {
@@ -177,6 +180,9 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
             <EditorContent editor={editor} placeholder={placeholder} />
           </div>
         )}
+
+        {/* Seçili Görsel Boyutlandırma & Hizalama Yüzen Araç Çubuğu */}
+        {!isPreview && <FloatingImageToolbar editor={editor} />}
 
         {/* Alt Bilgi / İstatistik Çubuğu */}
         <div className="rich-editor-footer">
