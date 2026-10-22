@@ -362,7 +362,193 @@
 
 ---
 
-## 20. ÖNCELİK SIRASI
+## 20. EDİTÖR SİSTEMİ — İLERİ SEVİYE GELİŞTİRMELER
+
+Mevcut editör altyapısı: TipTap v3 + özel extensions (`FontSize`, `LineHeight`, `ParagraphSpacing`, `CustomImage`, `CustomTable`). Eksik veya geliştirilebilecek yapılar:
+
+### 20.1 Eksik TipTap Extension'ları
+
+| Extension | Paket | Kullanım |
+|---|---|---|
+| `@tiptap/extension-mention` | Resmi | `@kişi` veya `#etiket` mention desteği — blog yazarlarını etiketleme |
+| `@tiptap/extension-character-count` | Resmi | Kelime/karakter sayısı (durum çubuğu entegrasyonu — şu an elle hesaplanıyor) |
+| `@tiptap/extension-placeholder` | Resmi | Placeholder metin sadece dış `<div>`'de var; TipTap'ın kendi `Placeholder` extension'ı her boş blok için çalışır |
+| `@tiptap/extension-youtube` | Resmi | YouTube embed iframe ekleme — tek komut + URL parse |
+| `@tiptap/extension-code-block-lowlight` | Resmi + `lowlight` | Sözdizim renklendirmeli kod bloğu; mevcut `code_block` renksiz |
+| `@tiptap/extension-task-list` + `task-item` | Resmi | Checkbox görev listesi — teknik blog yazıları için |
+| `@tiptap/extension-details` | Topluluk | `<details>/<summary>` — spoiler / açılır bölüm bloğu |
+| `@tiptap/extension-global-drag-handle` | Topluluk | Notion-tarzı sol kenarda blok sürükleme tutamacı |
+| `@tiptap/extension-slash-commands` | Topluluk | `/` yazınca açılan blok ekleme menüsü (en kritik UX iyileştirmesi) |
+
+### 20.2 Slash Commands (/) — En Kritik UX Eksikliği
+**Sorun:** Editöre her yeni blok eklemek için toolbar'ı kullanmak gerekiyor. Modern editörlerin tamamında (Notion, Linear, Ghost) `/` menüsü standart.
+**Çözüm:**
+```
+/ yazınca açılan arama menüsü:
+  Başlık 1/2/3/4
+  Paragraf
+  Madde Listesi / Numaralı Liste / Görev Listesi
+  Tablo
+  Görsel
+  YouTube
+  Kod Bloğu
+  Alıntı (Blockquote)
+  Yatay Çizgi
+  Duyuru/Callout Kutusu
+```
+Kütüphane: `@tiptap-pro/extension-slash-commands` (Pro, lisanslı) **veya** topluluk paketi `tiptap-extension-slash-commands` ile özel implementasyon. Custom implementasyon mevcut TipTap altyapısıyla 1-2 günlük iş.
+
+### 20.3 Callout / Uyarı Bloğu Extension Yok
+**Sorun:** Blog yazılarında "Not:", "Uyarı:", "İpucu:" gibi vurgulu bölümler için özel blok yok.
+**Çözüm:** `Node.create()` ile özel `CalloutBlock` extension yazılmalı. Tip seçenekleri: `info | warning | danger | success | tip`. Renk ve ikon token'lardan otomatik alınır.
+
+### 20.4 Görsel Yükleme Akışı — R2 Entegrasyonu Doğrudan Editörde Yok
+**Sorun:** `ImageDropdown.tsx` görseli URL olarak ekliyor. Gerçek dosya yükleme (sürükle-bırak veya clipboard paste) editör içinde desteklenmiyor.
+**Çözüm:**
+- TipTap `CustomImage` extension'ına `addPasteRules` + `addDropHandler` eklenmeli
+- Paste/drop → R2 upload API → dönen URL → `setImageWithLayout()` akışı
+- Yükleme sırasında placeholder görseli ve progress indicator
+
+### 20.5 Tablo Araçları Çok Dağınık
+**Sorun:** Tablo ile ilgili 6 ayrı dosya var: `TableDropdown`, `FloatingTableInspector`, `TableBorderControls`, `TableCellDimensionControls`, `TableLayoutControls`, `tableStyleHelper`. Toplam ~62kB. Her araç ayrı floating panel açıyor.
+**Çözüm:** Tüm tablo kontrolleri tek bir `<TablePanel>` drawer içinde birleştirilmeli. Sekmeli yapı: **Düzen | Hücre | Kenarlık | Boyutlar**. `FloatingTableInspector` → `Drawer` varyantına taşınmalı.
+
+### 20.6 Markdown Kısayolları Sınırlı
+**Sorun:** `StarterKit` varsayılan markdown input kuralları var (`**bold**`, `_italic_` vb.) ama:
+- `---` → yatay çizgi çalışmıyor (custom table extension çakışıyor)
+- ` ```kod``` ` → code block dönüşümü yok
+- `> alıntı` → blockquote çalışıyor ama görsel stilsiz
+
+**Çözüm:** `addInputRules` ile eksik dönüşümler tamamlanmalı.
+
+### 20.7 Geri Al / İleri Al (History) Göstergesi Yok
+**Sorun:** `Ctrl+Z` / `Ctrl+Y` çalışıyor (StarterKit'ten geliyor) ama toolbar'da Undo/Redo butonları hiç yok.
+**Çözüm:** `EditorToolbar`'a Undo/Redo ikonları eklenmeli. `editor.can().undo()` ile disable durumu yönetilmeli.
+
+### 20.8 Editörden Dışa Aktarma (Export) Yok
+**Sorun:** Editör içeriği yalnızca HTML olarak kaydediliyor. Markdown veya PDF export yok.
+**Çözüm:**
+- HTML → Markdown: `@tiptap/pm` + `prosemirror-markdown` (~8kB)
+- HTML → PDF: Tarayıcı `window.print()` + özel `@media print` CSS (sıfır bağımlılık)
+- Blog sayfalarına "Makaleyi PDF İndir" butonu için hazır altyapı olur
+
+### 20.9 Çoklu Dil Editörü — RTL Geçişi Sorunlu
+**Sorun:** TR/EN/AR sekmeleri arasında geçişte `dir` prop değişiyor ama editör instance yeniden oluşturuluyor (`key` değişiyor). Her dil geçişinde editör içeriği sıfırlanma riski var.
+**Çözüm:** Her dil için ayrı `useEditor` instance tutulmalı, sekme geçişinde `display: none / block` ile gizleme yapılmalı (yeniden mount değil). Bu hem performansı artırır hem RTL/LTR geçişi güvence altına alır.
+
+### 20.10 AI Entegrasyonu — Araç Çubuğu Düzeyi
+**Sorun:** AI çeviri sadece tüm içerik için tek bir "AI Çevir" butonu olarak üst çubukta var. Seçili metin üzerinde AI aksiyonları yok.
+**Çözüm:** Metin seçildiğinde floating mini toolbar'a AI menüsü eklenmeli:
+- Seçili metni düzelt (gramer)
+- Seçili metni yeniden yaz (ton: resmi / günlük)
+- Seçili metni özet çıkar
+- Seçili metni farklı dile çevir
+
+---
+
+## 21. ARAÇ ÇUBUĞU (TOOLBAR) MİMARİSİ ÖNERİSİ
+
+Mevcut durum: `EditorToolbar` (yatay, üstte) + `EditorVerticalToolbar` (sol dikey). İkisi arasında özellik örtüşmesi var, hangisi ne yapıyor belirsiz.
+
+**Önerilen mimari:**
+
+```
+┌─────────────────────────────────────────────┐
+│  Üst Toolbar: Metin formatlama               │
+│  (Bold, Italic, Renkler, Başlıklar, Hizalama)│
+├────┬────────────────────────────────────────┤
+│    │  Canvas (Yazı Alanı)                   │
+│Sol │                                        │
+│Bar │  /  → Slash commands menüsü            │
+│(+) │  Seçim → Floating mini toolbar        │
+│    │                                        │
+│Blok│  [Tablo seçilince] → Tablo paneli     │
+│Ekle│  [Görsel seçilince] → Görsel araçları │
+└────┴────────────────────────────────────────┘
+```
+
+- **Sol bar:** Yalnızca blok ekleme (Tablo, Görsel, Kod, Callout, YouTube). `/` menüsü ile büyük ölçüde örtüşeceğinden sadeleştirilebilir.
+- **Üst toolbar:** Yalnızca karakter/satır formatlama (mevcut `EditorToolbar`).
+- **Floating context toolbar:** Metin seçince açılır → kalın/italik/link/AI/renk.
+- **Panel drawer'ları:** Tablo kontrolleri + görsel ayarları (araç çubuğu yerine sağ drawer).
+
+---
+
+## 22. GENEL UI TOOL ÖNERİLERİ (ARAYÜZ KALİTESİ)
+
+### 22.1 Animasyon Kütüphanesi Eksik
+**Sorun:** Geçişler `transition: all 0.2s ease` ile CSS-only. Modal/drawer açılışı, liste item animasyonları, sayfa geçişleri yok.
+**Çözüm:** `motion` (Framer Motion v12, yeni paket adı, ~20kB) veya daha hafif `@formkit/auto-animate` (~2.5kB). Kullanım: Modal giriş/çıkış, liste item mount/unmount, sayfa geçişleri.
+**Kütüphane:** `npm i @formkit/auto-animate` (sıfır config, 3 satır entegrasyon)
+
+### 22.2 Tema Özelleştirici Eksik Bölümler
+**Sorun:** `ThemeCustomizerDrawer` açıkça mevcut ama token'lardan yalnızca `--accent-primary` gibi birkaç rengi etkiliyor. Yazı tipi seçimi aktif değil (7 font `tokens.css`'te tanımlı ama seçici yok).
+**Çözüm:** Tema paneline font seçici eklenmeli. `tokens.css`'te tanımlı 7 font (Inter, Poppins, Outfit, vb.) seçilebilir olmalı.
+
+### 22.3 Komponent Storybook / Kataloğu Yok
+**Sorun:** Bileşenler var ama görsel dokümantasyon/katalog yok. Yeni geliştirici veya Gemini'nin nelerin mevcut olduğunu anlaması zor.
+**Çözüm:** `Storybook` veya daha hafif `Histoire` (Vite native, ~1dk kurulum). En azından `ui/` klasöründeki temel bileşenler kataloglanmalı.
+
+### 22.4 Klavye Kısayolları Sistematik Değil
+**Mevcut kısayollar:** `Ctrl+K` (global arama), `Ctrl+Z/Y` (undo/redo editörde)
+**Eksik kısayollar:**
+- `Ctrl+S` → Kaydet (Studio)
+- `Ctrl+P` → Önizleme aç/kapat
+- `Ctrl+B/I/U` → Bold/Italic/Underline (editörde var, diğer yerlerde yok)
+- `Esc` → Modal kapat (tutarsız)
+
+**Çözüm:** Merkezi `useKeyboardShortcuts()` hook + kısayol yardım paneli (`?` tuşuna basınca açılır, Notion gibi).
+
+### 22.5 Sağ Tıklama (Context Menu) Yok
+**Sorun:** Liste kartlarına sağ tıklamak işe yaramıyor. Modern admin panellerinde sağ tık menüsü standart.
+**Çözüm:** Kart üzerinde sağ tıklamak → `[Düzenle | Kopyala | Sil | Önizle]` context menüsü. Özel implementasyon veya `@radix-ui/react-context-menu` (~4kB).
+
+### 22.6 Komut Paleti (Command Palette) Genişletilmeli
+**Mevcut `GlobalSearchModal`:** 4 statik navigasyon öğesi.
+**Olması gereken:**
+```
+Ctrl+K açıldığında:
+  > Yeni Blog Yazısı Oluştur       [Eylem]
+  > Yeni Kanal Ekle                 [Eylem]
+  > Tema: Koyu/Açık Geçiş          [Eylem]
+  > "react" → blog arama sonuçları  [İçerik]
+  > Ayarlar > E-posta               [Navigasyon]
+```
+Kütüphane: `cmdk` (~5kB) veya mevcut modal genişletilmeli.
+
+---
+
+## 23. ÖNCELİK SIRASI (GÜNCEL — TÜM BÖLÜMLER DAHİL)
+
+| Öncelik | Konu | Etki |
+|---|---|---|
+| 🔴 Kritik | `alert()` → `sonner` Toast | UX / Profesyonellik |
+| 🔴 Kritik | `window.confirm()` → `ConfirmationDialog` | UX / Profesyonellik |
+| 🔴 Kritik | Broadcast editörü → `<RichTextEditor>` | Fonksiyonel |
+| 🔴 Kritik | Focus ring / A11y | Erişilebilirlik |
+| 🔴 Kritik | Görsel paste/drop → R2 upload (editör) | Fonksiyonel |
+| 🔴 Kritik | Editörde Undo/Redo butonları | UX/Editör |
+| 🟠 Yüksek | Slash Commands (/) menüsü | Editör UX |
+| 🟠 Yüksek | Tablo araçları → tek `<TablePanel>` drawer | Editör / Bakım |
+| 🟠 Yüksek | Callout/Uyarı bloğu extension | Editör içerik |
+| 🟠 Yüksek | `@tiptap/extension-code-block-lowlight` | Editör görsellik |
+| 🟠 Yüksek | Toplu işlem (Bilet + Yorum + Yazı) | Verimlilik |
+| 🟠 Yüksek | Sayfalama (Posts + Aboneler) | Performans |
+| 🟠 Yüksek | Sidebar collapse + aktif bar | UI |
+| 🟠 Yüksek | `@formkit/auto-animate` (geçişler) | UI kalitesi |
+| 🟡 Orta | Çoklu dil editörü — RTL çoklu instance | Editör stabilitesi |
+| 🟡 Orta | AI floating mini toolbar (seçili metin) | AI/UX |
+| 🟡 Orta | YouTube embed extension | İçerik zenginliği |
+| 🟡 Orta | HTML → Markdown / PDF export | Fonksiyonel |
+| 🟡 Orta | Klavye kısayolları sistematik | UX |
+| 🟡 Orta | Dashboard activity feed + sparkline | UX |
+| 🟡 Orta | Revizyon geçmişi (Blog Studio) | İçerik güvenliği |
+| 🟡 Orta | Bundle lazy load (Studio views) | Performans |
+| 🟢 Düşük | Sağ tıklama context menu | UX |
+| 🟢 Düşük | Font seçici (Tema paneli) | UI |
+| 🟢 Düşük | Storybook / bileşen kataloğu | DX |
+| 🟢 Düşük | Kanal ikon seçici | UX |
+| 🟢 Düşük | `@dnd-kit` sürükle-bırak sıralama | UX |
 
 | Öncelik | Konu | Etki |
 |---|---|---|
