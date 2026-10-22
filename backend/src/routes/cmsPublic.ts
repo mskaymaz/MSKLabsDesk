@@ -285,14 +285,50 @@ export async function handleCmsPublic(request: Request, env: any): Promise<Respo
     return new Response(JSON.stringify({ success: true, templates: results || [] }), { headers });
   }
 
-  // 6. GET /api/v1/sitemap.xml — Otomatik XML Sitemap
+  // 7. GET /api/v1/pages — Yayındaki Kurumsal Sayfalar Listesi
+  if (path === '/api/v1/pages') {
+    const { results } = await env.DB.prepare(
+      `SELECT slug, title_tr, title_en, title_ar, summary_tr, summary_en, summary_ar, hero_image, display_order, updated_at
+       FROM site_pages
+       WHERE status = 'published'
+       ORDER BY display_order ASC, created_at DESC`
+    ).all();
+    return new Response(JSON.stringify({ success: true, pages: results || [] }), { headers });
+  }
+
+  // 8. GET /api/v1/pages/:slug — Tekil Kurumsal Sayfa Detayı
+  if (path.startsWith('/api/v1/pages/')) {
+    const pageSlug = path.split('/')[4]?.toLowerCase();
+    const page = await env.DB.prepare(
+      `SELECT * FROM site_pages WHERE slug = ? AND status = 'published'`
+    ).bind(pageSlug).first();
+
+    if (!page) {
+      return new Response(JSON.stringify({ error: 'Sayfa bulunamadı' }), { status: 404, headers });
+    }
+
+    return new Response(JSON.stringify({ success: true, page }), { headers });
+  }
+
+  // 9. GET /api/v1/sitemap.xml — Otomatik XML Sitemap (Blog Yazıları + Kurumsal Sayfalar)
   if (path === '/api/v1/sitemap.xml') {
     const { results: posts } = await env.DB.prepare(
       `SELECT slug, published_at FROM blog_posts WHERE status = 'published'`
     ).all();
 
+    const { results: pages } = await env.DB.prepare(
+      `SELECT slug, updated_at FROM site_pages WHERE status = 'published'`
+    ).all();
+
     let xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
     xml += `  <url><loc>https://msklabs.org/</loc><priority>1.0</priority></url>\n`;
+
+    (pages || []).forEach((pg: any) => {
+      const urlPath = pg.slug === 'index' ? '' : pg.slug;
+      if (urlPath) {
+        xml += `  <url><loc>https://msklabs.org/${urlPath}</loc><lastmod>${pg.updated_at ? pg.updated_at.split('T')[0] : new Date().toISOString().split('T')[0]}</lastmod><priority>0.7</priority></url>\n`;
+      }
+    });
 
     (posts || []).forEach((p: any) => {
       xml += `  <url><loc>https://msklabs.org/blog/${p.slug}</loc><lastmod>${p.published_at ? p.published_at.split('T')[0] : new Date().toISOString().split('T')[0]}</lastmod><priority>0.8</priority></url>\n`;

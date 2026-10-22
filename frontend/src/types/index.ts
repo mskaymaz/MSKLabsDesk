@@ -260,4 +260,45 @@ export interface AdPlacementSetting {
 
 export type AdPageMatrixConfig = Record<string, Record<string, boolean>>;
 
+export interface SitePage {
+  id: string;
+  slug: string;
+  title_tr: string;
+  title_en?: string;
+  title_ar?: string;
+  summary_tr?: string;
+  summary_en?: string;
+  summary_ar?: string;
+  content_tr: string;
+  content_en?: string;
+  content_ar?: string;
+  hero_image?: string;
+  meta_json?: string;
+  status: 'draft' | 'published' | 'archived';
+  display_order?: number;
+  is_system?: boolean | number;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface PageFormData {
+  slug: string;
+  title_tr: string;
+  title_en: string;
+  title_ar: string;
+  summary_tr: string;
+  summary_en: string;
+  summary_ar: string;
+  content_tr: string;
+  content_en: string;
+  content_ar: string;
+  hero_image: string;
+  meta_keywords?: string;
+  meta_description_tr?: string;
+  meta_description_en?: string;
+  meta_description_ar?: string;
+  status: 'draft' | 'published' | 'archived';
+  display_order: number;
+}
+
 

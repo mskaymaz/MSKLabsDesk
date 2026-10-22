@@ -15,6 +15,7 @@ import { handleAdminTTSGenerate, handleAdminTTSStatus, handleAdminTTSApprove, ha
 import { handleCmsChannels } from './routes/cmsChannels';
 import { handleCmsPosts } from './routes/cmsPosts';
 import { handleCmsApps } from './routes/cmsApps';
+import { handleCmsPages } from './routes/cmsPages';
 import { handleCmsTemplates } from './routes/cmsTemplates';
 import { handleCmsPublic } from './routes/cmsPublic';
 import { EmailEnv, sendEmail } from './utils/email';
@@ -69,6 +70,8 @@ export default {
       response = await handleCmsPosts(request, env);
     } else if (path.startsWith('/api/admin/apps') || path.startsWith('/api/v1/admin/apps')) {
       response = await handleCmsApps(request, env);
+    } else if (path.startsWith('/api/admin/pages') || path.startsWith('/api/v1/admin/pages')) {
+      response = await handleCmsPages(request, env);
     } else if (
       path.startsWith('/api/admin/templates') || path.startsWith('/api/v1/admin/templates') ||
       path.startsWith('/api/admin/ads') || path.startsWith('/api/v1/admin/ads')

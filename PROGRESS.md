@@ -1764,3 +1764,24 @@
   - Vitrin testleri (604 test) %100 PASS.
   - Satır limitleri (`ads-loader.js`: 429 satır, `cmsPublic.ts`: 308 satır) korundu.
   - Her iki depo da `DevAdmin` dalında çalıştırıldı.
+
+## 🚀 Son Güncelleme [22.10.2026 - 10:50] — 2. GÜNDEM: KURUMSAL SAYFALAR STÜDYOSU (CMS) MİMARİSİ VE TAM ENTEGRASYONU ✅
+* **Yapılan İşlem:**
+  1. **Veri Tabanı Şeması ve Başlangıç Verileri (`0019_site_pages.sql`):** `site_pages` tablosu oluşturuldu; `index`, `about`, `contact`, `faq`, `privacy`, `terms`, `support` sistem sayfaları 3 dilli (TR/EN/AR), özetleri ve meta verileriyle seed edildi.
+  2. **Backend Admin & Public API (`cmsPages.ts`, `cmsPublic.ts`, `index.ts`):**
+     - Yönetici rotaları: `GET /api/admin/pages`, `POST /api/admin/pages`, `PUT /api/admin/pages/:id`, `DELETE /api/admin/pages/:id`, `POST /api/admin/pages/translate`. Sistem sayfaları silinmeye karşı kilitlendi, slug benzersizlik kontrolü eklendi.
+     - Kamusal rotalar: `GET /api/v1/pages`, `GET /api/v1/pages/:slug` eklendi; `/api/v1/sitemap.xml` tüm kurumsal sayfaları dinamik indeksleyecek şekilde güncellendi.
+  3. **Backend Test Paketi (`apiCmsPages.test.ts`):** 20 yeni entegrasyon testi yazıldı; backend genelinde toplam 77 test %100 PASS sağlandı.
+  4. **Sol Menü ve Navigasyon Entegrasyonu (`Sidebar.tsx`, `MobileDrawer.tsx`, `Topbar.tsx`, `App.tsx`):** `Uygulamalar` ile `Şablon & Reklam` arasına `pages` sekmesi ("Kurumsal Sayfalar") yerleştirildi. Bayrak emojileri kaldırılarak yalın dil göstergesi standardı korundu.
+  5. **Modüler Bölüm Editörü (`ModularSectionBuilder.tsx`):** Sayfalara tek tıkla SSS Akordeonları, Özellik/İlke Kartları, İletişim Bilgi Kutuları ve Hero Sloganları ekleme/çıkarma yeteneği sağlandı.
+  6. **Canlı Cihaz Simülasyonu (`PagePreviewModal.tsx`):** Masaüstü, tablet (768px) ve mobil (390px) kanvas modları ve TR/EN/AR anlık dil geçişi ile canlı önizleme modalı geliştirildi.
+  7. **Gelişmiş Sayfa Stüdyosu (`PageStudioView.tsx`):** 3 Dilli sekme yönetimi, Gemini AI otomatik çeviri motoru, serbest RichText ve modüler blok modları, 3000ms debounce autosave durum makinesi ve SEO akordeonu ile tam donanımlı stüdyo hayata geçirildi.
+  8. **Yönetim Kontrol Paneli (`PagesView.tsx`):** Arama, yayın durumu filtreleme, dil doluluk rozetleri (TR/EN/AR), sistem/özel sayfa ayrımı ve hızlı yayınlama/taslak toggle butonları sunuldu.
+  9. **Vitrin İstemci Yükleyicisi (`page-loader.js` & `layout.js`):** Panelden güncellenen veya yayına alınan kurumsal içeriklerin vitrinde anında canlı yansımasını sağlayan, çevrim dışı veya API yokluğunda mevcut statik HTML'i koruyan hafif istemci entegrasyonu tamamlandı.
+* **Sonuçlar & Kabul Kriterleri (DoD):**
+  - Backend API testleri: 77 PASS, 0 FAIL (`npm --prefix backend test`).
+  - Frontend derlemesi: 0 hata ile TypeScript ve Vite üretimi (`npm --prefix frontend run build`).
+  - Vitrin test paketi: 61 test dosyası, 604 test %100 PASS (`npm --prefix webMSKLabs test`).
+  - Dosya satır sınırları denetlendi: `cmsPages.ts` (256 satır), `cmsPublic.ts` (348 satır), `PagesView.tsx` (450 satır), `PageStudioView.tsx` (467 satır), `ModularSectionBuilder.tsx` (342 satır), `PagePreviewModal.tsx` (227 satır), `layout.js` (600 satır).
+  - Her iki depoda da yalnızca `DevAdmin` dalında çalışıldı, `main` korundu.
+* **Durum:** 2. Gündem (Kurumsal Sayfalar Stüdyosu CMS) eksiksiz tamamlandı.

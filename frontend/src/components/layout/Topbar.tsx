@@ -19,6 +19,7 @@ const tabLabels: Record<TabType, string> = {
   channels: 'Blog Türleri',
   posts: 'Blog Yazıları',
   apps: 'Uygulamalar',
+  pages: 'Kurumsal Sayfalar',
   templates: 'Şablon & Reklam',
   broadcast: 'Duyuru Gönder',
   subscribers: 'Aboneler',

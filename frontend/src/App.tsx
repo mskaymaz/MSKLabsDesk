@@ -15,6 +15,7 @@ import { SettingsView } from './views/SettingsView';
 import { ChannelsView } from './views/ChannelsView';
 import { PostsView } from './views/PostsView';
 import { AppsCMSView } from './views/AppsCMSView';
+import { PagesView } from './views/PagesView';
 import { TemplatesView } from './views/TemplatesView';
 import type { Ticket, CommentItem, Subscriber } from './types';
 import { api } from './services/api';
@@ -90,6 +91,7 @@ const AdminPanelContent: React.FC = () => {
       {activeTab === 'channels' && <ChannelsView />}
       {activeTab === 'posts' && <PostsView />}
       {activeTab === 'apps' && <AppsCMSView />}
+      {activeTab === 'pages' && <PagesView />}
       {activeTab === 'templates' && <TemplatesView />}
       {activeTab === 'broadcast' && <BroadcastView />}
       {activeTab === 'subscribers' && <SubscribersView subscribers={subscribers} />}

@@ -402,5 +402,74 @@ export const api = {
     }
     return res.json();
   },
+
+  // Headless CMS — Corporate Pages (CMS-PAGES)
+  async getPages() {
+    const res = await fetch(`${API_BASE}/admin/pages`, { headers: getHeaders() });
+    if (!res.ok) throw new Error('Kurumsal sayfalar yüklenemedi.');
+    return res.json();
+  },
+
+  async getPage(id: string) {
+    const res = await fetch(`${API_BASE}/admin/pages/${encodeURIComponent(id)}`, { headers: getHeaders() });
+    if (!res.ok) throw new Error('Sayfa detayı yüklenemedi.');
+    return res.json();
+  },
+
+  async createPage(data: any) {
+    const res = await fetch(`${API_BASE}/admin/pages`, {
+      method: 'POST',
+      headers: getHeaders(),
+      body: JSON.stringify(data),
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.error || 'Sayfa oluşturulamadı.');
+    }
+    return res.json();
+  },
+
+  async updatePage(id: string, data: any) {
+    const res = await fetch(`${API_BASE}/admin/pages/${encodeURIComponent(id)}`, {
+      method: 'PUT',
+      headers: getHeaders(),
+      body: JSON.stringify(data),
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.error || 'Sayfa güncellenemedi.');
+    }
+    return res.json();
+  },
+
+  async updatePageStatus(id: string, status: string) {
+    return this.updatePage(id, { status });
+  },
+
+  async deletePage(id: string) {
+    const res = await fetch(`${API_BASE}/admin/pages/${encodeURIComponent(id)}`, {
+      method: 'DELETE',
+      headers: getHeaders(),
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.error || 'Sayfa silinemedi.');
+    }
+    return res.json();
+  },
+
+  async translatePage(data: { title_tr: string; content_tr: string; summary_tr?: string }) {
+    const res = await fetch(`${API_BASE}/admin/translate`, {
+      method: 'POST',
+      headers: getHeaders(),
+      body: JSON.stringify(data),
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.error || 'AI çeviri başarısız oldu.');
+    }
+    return res.json();
+  },
 };
+
 

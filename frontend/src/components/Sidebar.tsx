@@ -12,6 +12,7 @@ import {
   BookOpen,
   FileText,
   Smartphone,
+  Layers,
   Layout,
   Sun,
   Moon
@@ -21,7 +22,7 @@ import { useTheme } from '../context/ThemeContext';
 import { useTranslation } from '../context/I18nContext';
 import type { Language } from '../i18n/translations';
 
-export type TabType = 'dashboard' | 'tickets' | 'comments' | 'broadcast' | 'subscribers' | 'settings' | 'channels' | 'posts' | 'apps' | 'templates';
+export type TabType = 'dashboard' | 'tickets' | 'comments' | 'broadcast' | 'subscribers' | 'settings' | 'channels' | 'posts' | 'apps' | 'pages' | 'templates';
 
 interface SidebarProps {
   activeTab: TabType;
@@ -57,6 +58,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
     { id: 'channels' as TabType, label: 'Blog Türleri', icon: BookOpen },
     { id: 'posts' as TabType, label: 'Blog Yazıları', icon: FileText },
     { id: 'apps' as TabType, label: 'Uygulamalar', icon: Smartphone },
+    { id: 'pages' as TabType, label: 'Kurumsal Sayfalar', icon: Layers },
     { id: 'templates' as TabType, label: 'Şablon & Reklam', icon: Layout },
     { id: 'broadcast' as TabType, label: t('broadcasts'), icon: Send },
     { id: 'subscribers' as TabType, label: t('subscribers'), icon: Users },
@@ -65,9 +67,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
 
   const languages: { code: Language; flag: string; label: string }[] = [
-    { code: 'tr', flag: '🇹🇷', label: 'TR' },
-    { code: 'en', flag: '🇬🇧', label: 'EN' },
-    { code: 'ar', flag: '🇸🇦', label: 'AR' },
+    { code: 'tr', flag: '', label: 'TR' },
+    { code: 'en', flag: '', label: 'EN' },
+    { code: 'ar', flag: '', label: 'AR' },
   ];
 
   return (
