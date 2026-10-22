@@ -9,6 +9,12 @@ import {
   Trash2,
   Copy,
   Sparkles,
+  Sun,
+  Moon,
+  PanelLeftClose,
+  PanelLeftOpen,
+  PanelRightClose,
+  PanelRightOpen,
 } from 'lucide-react';
 import type { StudioBlock } from '../../types';
 import { BlockRenderer } from './BlockRenderer';
@@ -25,6 +31,14 @@ export interface PageCanvasProps {
   lang: 'tr' | 'en' | 'ar';
   device: 'desktop' | 'tablet' | 'mobile';
   setDevice: (d: 'desktop' | 'tablet' | 'mobile') => void;
+  canvasTheme: 'light' | 'dark';
+  setCanvasTheme: (t: 'light' | 'dark') => void;
+  canvasZoom: 'fit' | '100' | '75';
+  setCanvasZoom: (z: 'fit' | '100' | '75') => void;
+  isLeftPanelOpen: boolean;
+  setIsLeftPanelOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  isRightPanelOpen: boolean;
+  setIsRightPanelOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const PageCanvas: React.FC<PageCanvasProps> = ({
@@ -39,10 +53,23 @@ export const PageCanvas: React.FC<PageCanvasProps> = ({
   lang,
   device,
   setDevice,
+  canvasTheme,
+  setCanvasTheme,
+  canvasZoom,
+  setCanvasZoom,
+  isLeftPanelOpen,
+  setIsLeftPanelOpen,
+  isRightPanelOpen,
+  setIsRightPanelOpen,
 }) => {
   const isRtl = lang === 'ar';
   const widthStyle =
-    device === 'mobile' ? '390px' : device === 'tablet' ? '768px' : '100%';
+    device === 'mobile' ? '390px' : device === 'tablet' ? '768px' : canvasZoom === 'fit' ? '100%' : '1140px';
+
+  const scaleStyle: React.CSSProperties =
+    canvasZoom === '75'
+      ? { transform: 'scale(0.75)', transformOrigin: 'top center', marginBottom: '-25%' }
+      : {};
 
   return (
     <main
@@ -52,44 +79,109 @@ export const PageCanvas: React.FC<PageCanvasProps> = ({
         display: 'flex',
         flexDirection: 'column',
         height: '100%',
-        background: '#090d16',
+        background: canvasTheme === 'dark' ? '#040711' : '#0f172a',
         overflow: 'hidden',
+        position: 'relative',
       }}
     >
       {/* Sahne Üst Cihaz & Genişlik Çubuğu */}
       <div
         style={{
-          padding: '10px 20px',
+          padding: '8px 16px',
           background: 'var(--bg-sidebar)',
           borderBottom: '1px solid var(--border-color)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
+          zIndex: 10,
         }}
       >
-        <span style={{ fontSize: '11px', color: 'var(--text-muted)', fontWeight: 600 }}>
-          İnteraktif Tuval ({device.toUpperCase()})
-        </span>
+        {/* Sol Araçlar: Panel Toggle & Cihaz Seçimi */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <button
+            type="button"
+            onClick={() => setIsLeftPanelOpen(!isLeftPanelOpen)}
+            className={`admin-btn-icon ${isLeftPanelOpen ? 'text-cyan' : ''}`}
+            title={isLeftPanelOpen ? 'Bileşen Kütüphanesini Gizle' : 'Bileşen Kütüphanesini Aç'}
+            style={{ padding: '5px 8px', borderRadius: '6px', background: 'var(--bg-secondary)', border: 'none', cursor: 'pointer' }}
+          >
+            {isLeftPanelOpen ? <PanelLeftClose size={15} /> : <PanelLeftOpen size={15} />}
+          </button>
 
-        {/* Cihaz Genişlik Seçici */}
-        <div style={{ display: 'flex', background: 'var(--bg-secondary)', borderRadius: '8px', padding: '3px', gap: '2px' }}>
-          {(['desktop', 'tablet', 'mobile'] as const).map((d) => (
-            <button
-              key={d}
-              type="button"
-              onClick={() => setDevice(d)}
-              className={`admin-btn-icon ${device === d ? 'active text-cyan' : ''}`}
-              title={d === 'desktop' ? 'Masaüstü' : d === 'tablet' ? 'Tablet' : 'Mobil'}
-              style={{ padding: '4px 8px', background: device === d ? 'var(--bg-card)' : 'transparent', border: 'none', borderRadius: '6px', cursor: 'pointer' }}
-            >
-              {d === 'desktop' ? <Monitor size={15} /> : d === 'tablet' ? <Tablet size={15} /> : <Smartphone size={15} />}
-            </button>
-          ))}
+          {/* Cihaz Genişlik Seçici */}
+          <div style={{ display: 'flex', background: 'var(--bg-secondary)', borderRadius: '8px', padding: '2px', gap: '2px' }}>
+            {(['desktop', 'tablet', 'mobile'] as const).map((d) => (
+              <button
+                key={d}
+                type="button"
+                onClick={() => setDevice(d)}
+                className={`admin-btn-icon ${device === d ? 'active text-cyan' : ''}`}
+                title={d === 'desktop' ? 'Masaüstü (1140px)' : d === 'tablet' ? 'Tablet (768px)' : 'Mobil (390px)'}
+                style={{ padding: '4px 8px', background: device === d ? 'var(--bg-card)' : 'transparent', border: 'none', borderRadius: '6px', cursor: 'pointer' }}
+              >
+                {d === 'desktop' ? <Monitor size={15} /> : d === 'tablet' ? <Tablet size={15} /> : <Smartphone size={15} />}
+              </button>
+            ))}
+          </div>
+
+          <span style={{ fontSize: '11px', color: 'var(--text-muted)', fontWeight: 600 }}>
+            {device === 'desktop' ? '1140px' : device === 'tablet' ? '768px' : '390px'}
+          </span>
         </div>
 
-        <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
-          {blocks.length} Blok Yerleşti
-        </span>
+        {/* Orta Araçlar: Yakınlaştırma / Zoom & Tema */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          {/* Zoom Kontrolü */}
+          <div style={{ display: 'flex', background: 'var(--bg-secondary)', borderRadius: '8px', padding: '2px', gap: '2px' }}>
+            {(['fit', '75', '100'] as const).map((z) => (
+              <button
+                key={z}
+                type="button"
+                onClick={() => setCanvasZoom(z)}
+                style={{
+                  padding: '3px 8px',
+                  fontSize: '10px',
+                  fontWeight: 700,
+                  border: 'none',
+                  borderRadius: '5px',
+                  background: canvasZoom === z ? 'var(--accent-primary)' : 'transparent',
+                  color: canvasZoom === z ? '#FFF' : 'var(--text-secondary)',
+                  cursor: 'pointer',
+                }}
+              >
+                {z === 'fit' ? 'Sığdır' : `%${z}`}
+              </button>
+            ))}
+          </div>
+
+          {/* Canlı Açık / Koyu Tema Toggle */}
+          <button
+            type="button"
+            onClick={() => setCanvasTheme(canvasTheme === 'light' ? 'dark' : 'light')}
+            className="admin-btn admin-btn-secondary admin-btn-sm"
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', fontSize: '11px', padding: '4px 8px' }}
+            title="Tasarlanan sayfanın canlı Açık/Koyu temasını değiştir"
+          >
+            {canvasTheme === 'light' ? <Moon size={13} className="text-purple" /> : <Sun size={13} className="text-amber" />}
+            <span>{canvasTheme === 'light' ? 'Koyu Mod' : 'Açık Mod'}</span>
+          </button>
+        </div>
+
+        {/* Sağ Araçlar: Denetçi Toggle & Blok Sayısı */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
+            {blocks.length} Blok
+          </span>
+          <button
+            type="button"
+            onClick={() => setIsRightPanelOpen(!isRightPanelOpen)}
+            className={`admin-btn-icon ${isRightPanelOpen ? 'text-cyan' : ''}`}
+            title={isRightPanelOpen ? 'Özellik Denetçisini Gizle' : 'Özellik Denetçisini Aç'}
+            style={{ padding: '5px 8px', borderRadius: '6px', background: 'var(--bg-secondary)', border: 'none', cursor: 'pointer' }}
+          >
+            {isRightPanelOpen ? <PanelRightClose size={15} /> : <PanelRightOpen size={15} />}
+          </button>
+        </div>
       </div>
 
       {/* Tuval Kaydırma Sahnesi */}
@@ -97,23 +189,28 @@ export const PageCanvas: React.FC<PageCanvasProps> = ({
         style={{
           flex: 1,
           overflowY: 'auto',
-          padding: '30px 20px',
+          overflowX: 'auto',
+          padding: '24px 20px',
           display: 'flex',
           justifyContent: 'center',
+          alignItems: 'flex-start',
         }}
       >
         <div
+          data-theme={canvasTheme}
           style={{
             width: widthStyle,
-            maxWidth: '1000px',
-            background: 'var(--bg-card)',
+            maxWidth: device === 'desktop' ? '1140px' : widthStyle,
+            background: canvasTheme === 'dark' ? '#0f172a' : '#ffffff',
+            color: canvasTheme === 'dark' ? '#f8fafc' : '#0f172a',
             border: '1px solid var(--border-color)',
             borderRadius: device === 'desktop' ? '14px' : '20px',
-            boxShadow: '0 20px 40px -15px rgba(0,0,0,0.5)',
+            boxShadow: '0 25px 50px -12px rgba(0,0,0,0.6)',
             display: 'flex',
             flexDirection: 'column',
-            transition: 'width 0.25s ease-in-out',
-            minHeight: '400px',
+            transition: 'width 0.25s ease-in-out, background 0.2s ease',
+            minHeight: '480px',
+            ...scaleStyle,
           }}
           dir={isRtl ? 'rtl' : 'ltr'}
         >
@@ -153,7 +250,7 @@ export const PageCanvas: React.FC<PageCanvasProps> = ({
                       margin: '6px 8px',
                       cursor: 'pointer',
                       transition: 'all 0.15s ease',
-                      background: isSelected ? 'rgba(2, 132, 199, 0.04)' : 'transparent',
+                      background: isSelected ? (canvasTheme === 'dark' ? 'rgba(2, 132, 199, 0.12)' : 'rgba(2, 132, 199, 0.05)') : 'transparent',
                     }}
                     className="canvas-block-wrapper"
                   >

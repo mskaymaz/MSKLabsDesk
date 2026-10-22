@@ -1824,3 +1824,17 @@
   - Dosya satır sınırları denetlendi: `BlockInspector.tsx` (437 satır), `BlockRenderer.tsx` (350 satır), `PageCanvas.tsx` (229 satır), `PagePreviewModal.tsx` (247 satır), `PageStudioView.tsx` (557 satır), `PagesView.tsx` (450 satır) — tümü limitler içinde.
   - Sadece `DevAdmin` dalında çalışıldı, `main` korundu.
 * **Durum:** CMS-STUDIO-001 Faz 2 (Zengin Blok ve Şablon Kütüphanesi) başarıyla tamamlandı. Sıradaki aşama Faz 3: Çok Dilli Canlı RTL Dönüşüm Motoru & AI Çeviri.
+
+## 📌 Son Güncelleme [22.10.2026 - 11:45] — TAM EKRAN İZOLE ÇALIŞMA İSTASYONU VE ERGONOMİK TUVAL MİMARİSİ ✅
+* **Yapılan İşlemler:**
+  1. **Tam Ekran Katman Dönüşümü (`PageStudioView.tsx` - 573 satır):** Stüdyo penceresi `fixed inset-0 w-screen h-screen z-[1200]` katmanına alınarak admin panelinin sol menüsünden bağımsız, tam ekran bir workstation haline getirildi.
+  2. **Katlanabilir Yan Paneller (Collapsible Docks):** Sol bileşen kütüphanesi ve sağ özellik denetçisi tek tıkla gizlenip açılabilir hale getirildi (`BlockPalette.tsx` - 215 satır, `PageCanvas.tsx` - 326 satır).
+  3. **Canlı Açık/Koyu Tema Geçişi:** Tuval üst barına Güneş/Ay ikonu eklenerek, sayfanın vitrindeki `data-theme="dark"` ve açık moddaki renk kontrastı anında test edilebilir hale getirildi.
+  4. **Oransal Tuval Ölçeği (Zoom & Fit-to-Width):** 1140px gerçek masaüstü tuval genişliğinin paneller açıkken dahi taşmaması için `%100`, `%75` ve `Sığdır (Fit)` ölçekleme seçenekleri eklendi.
+  5. **Geniş Tuval / Zen Modu:** Üst barda tek tıkla her iki paneli birden gizleyen "Geniş Tuval" butonu ile harici modal açmaya gerek kalmadan 1:1 canlı vitrin görünümüne geçiş sağlandı.
+* **Sonuçlar & Kabul Kriterleri (DoD):**
+  - Frontend derlemesi: 0 hata ile TypeScript ve Vite üretimi (`npm --prefix frontend run build`).
+  - Backend API testleri: 77/77 PASS (`npm --prefix backend test`).
+  - Satır sınırları kontrol edildi: `PageStudioView.tsx` (573 satır, tavan <= 600), `PageCanvas.tsx` (326 satır, tavan <= 450), `BlockPalette.tsx` (215 satır, tavan <= 400).
+  - Sadece `DevAdmin` dalında çalışıldı, `main` korundu.
+* **Durum:** Tam Ekran İzole Çalışma İstasyonu ve Ergonomik Tuval Mimarisi tamamlandı. Sırada Faz 3: Çok Dilli Canlı RTL Dönüşüm Motoru & AI Çeviri.

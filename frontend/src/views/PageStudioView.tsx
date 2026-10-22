@@ -10,6 +10,7 @@ import {
   SlidersHorizontal,
   ChevronDown,
   ChevronUp,
+  Maximize2,
 } from 'lucide-react';
 import type { SitePage, PageFormData, StudioBlock, StudioBlockType } from '../types';
 import { BlockPalette } from '../components/pages/BlockPalette';
@@ -42,6 +43,10 @@ export const PageStudioView: React.FC<PageStudioViewProps> = ({
   const [device, setDevice] = useState<'desktop' | 'tablet' | 'mobile'>('desktop');
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [isMetaOpen, setIsMetaOpen] = useState(false);
+  const [isLeftPanelOpen, setIsLeftPanelOpen] = useState(true);
+  const [isRightPanelOpen, setIsRightPanelOpen] = useState(true);
+  const [canvasTheme, setCanvasTheme] = useState<'light' | 'dark'>('light');
+  const [canvasZoom, setCanvasZoom] = useState<'fit' | '100' | '75'>('100');
 
   // Bloklar ve Seçim Durumu
   const [blocks, setBlocks] = useState<StudioBlock[]>([]);
@@ -159,68 +164,35 @@ export const PageStudioView: React.FC<PageStudioViewProps> = ({
         const pBtn = b.btn_primary_text || 'Hemen Keşfet';
         const sBtn = b.btn_secondary_text || 'Daha Fazla Bilgi';
         const btns = `<div class="cms-btn-group"><a href="${b.btn_primary_link || '#'}" class="cms-btn cms-btn-primary">${pBtn}</a><a href="${b.btn_secondary_link || '#'}" class="cms-btn cms-btn-secondary">${sBtn}</a></div>`;
-        htmlTr += `<div class="cms-hero text-${b.align || 'center'}">${badge}<h1>${tTr}</h1>${subTr ? `<p>${subTr}</p>` : ''}${btns}</div>\n`;
-        htmlEn += `<div class="cms-hero text-${b.align || 'center'}">${badge}<h1>${tEn}</h1>${subEn ? `<p>${subEn}</p>` : ''}${btns}</div>\n`;
-        htmlAr += `<div class="cms-hero text-${b.align || 'center'}">${badge}<h1>${tAr}</h1>${subAr ? `<p>${subAr}</p>` : ''}${btns}</div>\n`;
+        const renderHero = (t: string, s: string) => `<div class="cms-hero text-${b.align || 'center'}">${badge}<h1>${t}</h1>${s ? `<p>${s}</p>` : ''}${btns}</div>\n`;
+        htmlTr += renderHero(tTr, subTr); htmlEn += renderHero(tEn, subEn); htmlAr += renderHero(tAr, subAr);
       } else if (b.type === 'features_grid') {
         const cols = b.grid_columns || 3;
-        htmlTr += `<div class="cms-features-section"><h2>${tTr}</h2>${subTr ? `<p class="cms-sub">${subTr}</p>` : ''}<div class="cms-grid cols-${cols}">\n`;
-        htmlEn += `<div class="cms-features-section"><h2>${tEn}</h2>${subEn ? `<p class="cms-sub">${subEn}</p>` : ''}<div class="cms-grid cols-${cols}">\n`;
-        htmlAr += `<div class="cms-features-section"><h2>${tAr}</h2>${subAr ? `<p class="cms-sub">${subAr}</p>` : ''}<div class="cms-grid cols-${cols}">\n`;
-        (b.items || []).forEach((it) => {
-          htmlTr += `  <div class="cms-card"><h4>${it.title}</h4><p>${it.text}</p></div>\n`;
-          htmlEn += `  <div class="cms-card"><h4>${it.title}</h4><p>${it.text}</p></div>\n`;
-          htmlAr += `  <div class="cms-card"><h4>${it.title}</h4><p>${it.text}</p></div>\n`;
-        });
-        htmlTr += `</div></div>\n`;
-        htmlEn += `</div></div>\n`;
-        htmlAr += `</div></div>\n`;
+        const itemsHtml = (b.items || []).map((it) => `  <div class="cms-card"><h4>${it.title}</h4><p>${it.text}</p></div>\n`).join('');
+        const renderGrid = (t: string, s: string) => `<div class="cms-features-section"><h2>${t}</h2>${s ? `<p class="cms-sub">${s}</p>` : ''}<div class="cms-grid cols-${cols}">\n${itemsHtml}</div></div>\n`;
+        htmlTr += renderGrid(tTr, subTr); htmlEn += renderGrid(tEn, subEn); htmlAr += renderGrid(tAr, subAr);
       } else if (b.type === 'faq_accordion') {
-        htmlTr += `<div class="cms-faq-group"><h2>${tTr}</h2>${subTr ? `<p class="cms-sub">${subTr}</p>` : ''}\n`;
-        htmlEn += `<div class="cms-faq-group"><h2>${tEn}</h2>${subEn ? `<p class="cms-sub">${subEn}</p>` : ''}\n`;
-        htmlAr += `<div class="cms-faq-group"><h2>${tAr}</h2>${subAr ? `<p class="cms-sub">${subAr}</p>` : ''}\n`;
-        (b.items || []).forEach((it) => {
-          htmlTr += `  <details class="cms-faq-item"><summary><strong>${it.title}</strong></summary><p>${it.text}</p></details>\n`;
-          htmlEn += `  <details class="cms-faq-item"><summary><strong>${it.title}</strong></summary><p>${it.text}</p></details>\n`;
-          htmlAr += `  <details class="cms-faq-item"><summary><strong>${it.title}</strong></summary><p>${it.text}</p></details>\n`;
-        });
-        htmlTr += `</div>\n`;
-        htmlEn += `</div>\n`;
-        htmlAr += `</div>\n`;
+        const itemsHtml = (b.items || []).map((it) => `  <details class="cms-faq-item"><summary><strong>${it.title}</strong></summary><p>${it.text}</p></details>\n`).join('');
+        const renderFaq = (t: string, s: string) => `<div class="cms-faq-group"><h2>${t}</h2>${s ? `<p class="cms-sub">${s}</p>` : ''}\n${itemsHtml}</div>\n`;
+        htmlTr += renderFaq(tTr, subTr); htmlEn += renderFaq(tEn, subEn); htmlAr += renderFaq(tAr, subAr);
       } else if (b.type === 'contact_card') {
-        htmlTr += `<div class="cms-contact-box"><h3>${tTr}</h3>${subTr ? `<p>${subTr}</p>` : ''}<div class="cms-contact-grid">\n  <div class="cms-contact-row"><strong>E-Posta:</strong> <a href="mailto:destek@msklabs.org">destek@msklabs.org</a></div>\n`;
-        htmlEn += `<div class="cms-contact-box"><h3>${tEn}</h3>${subEn ? `<p>${subEn}</p>` : ''}<div class="cms-contact-grid">\n  <div class="cms-contact-row"><strong>Email:</strong> <a href="mailto:destek@msklabs.org">destek@msklabs.org</a></div>\n`;
-        htmlAr += `<div class="cms-contact-box"><h3>${tAr}</h3>${subAr ? `<p>${subAr}</p>` : ''}<div class="cms-contact-grid">\n  <div class="cms-contact-row"><strong>البريد:</strong> <a href="mailto:destek@msklabs.org">destek@msklabs.org</a></div>\n`;
-        (b.items || []).forEach((it) => {
-          htmlTr += `  <div class="cms-contact-row"><strong>${it.title}:</strong> <span>${it.text}</span></div>\n`;
-          htmlEn += `  <div class="cms-contact-row"><strong>${it.title}:</strong> <span>${it.text}</span></div>\n`;
-          htmlAr += `  <div class="cms-contact-row"><strong>${it.title}:</strong> <span>${it.text}</span></div>\n`;
-        });
-        htmlTr += `</div></div>\n`;
-        htmlEn += `</div></div>\n`;
-        htmlAr += `</div></div>\n`;
+        const customRows = (b.items || []).map((it) => `  <div class="cms-contact-row"><strong>${it.title}:</strong> <span>${it.text}</span></div>\n`).join('');
+        const renderContact = (t: string, s: string, emailLabel: string) => `<div class="cms-contact-box"><h3>${t}</h3>${s ? `<p>${s}</p>` : ''}<div class="cms-contact-grid">\n  <div class="cms-contact-row"><strong>${emailLabel}:</strong> <a href="mailto:destek@msklabs.org">destek@msklabs.org</a></div>\n${customRows}</div></div>\n`;
+        htmlTr += renderContact(tTr, subTr, 'E-Posta'); htmlEn += renderContact(tEn, subEn, 'Email'); htmlAr += renderContact(tAr, subAr, 'البريد');
       } else if (b.type === 'cta_banner') {
         const ctaBtn = b.btn_primary_text || 'İletişime Geç';
-        htmlTr += `<div class="cms-cta-banner text-${b.align || 'center'}"><h2>${tTr}</h2>${subTr ? `<p>${subTr}</p>` : ''}<a href="${b.btn_primary_link || '/contact.html'}" class="cms-btn cms-btn-primary">${ctaBtn}</a></div>\n`;
-        htmlEn += `<div class="cms-cta-banner text-${b.align || 'center'}"><h2>${tEn}</h2>${subEn ? `<p>${subEn}</p>` : ''}<a href="${b.btn_primary_link || '/contact.html'}" class="cms-btn cms-btn-primary">${ctaBtn}</a></div>\n`;
-        htmlAr += `<div class="cms-cta-banner text-${b.align || 'center'}"><h2>${tAr}</h2>${subAr ? `<p>${subAr}</p>` : ''}<a href="${b.btn_primary_link || '/contact.html'}" class="cms-btn cms-btn-primary">${ctaBtn}</a></div>\n`;
+        const renderCta = (t: string, s: string) => `<div class="cms-cta-banner text-${b.align || 'center'}"><h2>${t}</h2>${s ? `<p>${s}</p>` : ''}<a href="${b.btn_primary_link || '/contact.html'}" class="cms-btn cms-btn-primary">${ctaBtn}</a></div>\n`;
+        htmlTr += renderCta(tTr, subTr); htmlEn += renderCta(tEn, subEn); htmlAr += renderCta(tAr, subAr);
       } else if (b.type === 'comparison_table') {
-        htmlTr += `<div class="cms-pricing-table"><h2>${tTr}</h2>${subTr ? `<p class="cms-sub">${subTr}</p>` : ''}<div class="cms-pricing-grid">\n`;
-        htmlEn += `<div class="cms-pricing-table"><h2>${tEn}</h2>${subEn ? `<p class="cms-sub">${subEn}</p>` : ''}<div class="cms-pricing-grid">\n`;
-        htmlAr += `<div class="cms-pricing-table"><h2>${tAr}</h2>${subAr ? `<p class="cms-sub">${subAr}</p>` : ''}<div class="cms-pricing-grid">\n`;
-        (b.items || []).forEach((it) => {
-          const bullets = it.text.split('\n').filter(Boolean).map(x => `<li>${x}</li>`).join('');
-          htmlTr += `  <div class="cms-pricing-card ${it.highlight ? 'featured' : ''}">${it.badge ? `<span class="cms-badge">${it.badge}</span>` : ''}<h3>${it.title}</h3><div class="cms-price">${it.price || '$0'}</div><ul>${bullets}</ul></div>\n`;
-          htmlEn += `  <div class="cms-pricing-card ${it.highlight ? 'featured' : ''}">${it.badge ? `<span class="cms-badge">${it.badge}</span>` : ''}<h3>${it.title}</h3><div class="cms-price">${it.price || '$0'}</div><ul>${bullets}</ul></div>\n`;
-          htmlAr += `  <div class="cms-pricing-card ${it.highlight ? 'featured' : ''}">${it.badge ? `<span class="cms-badge">${it.badge}</span>` : ''}<h3>${it.title}</h3><div class="cms-price">${it.price || '$0'}</div><ul>${bullets}</ul></div>\n`;
-        });
-        htmlTr += `</div></div>\n`;
-        htmlEn += `</div></div>\n`;
-        htmlAr += `</div></div>\n`;
+        const cardsHtml = (b.items || []).map((it) => {
+          const bullets = it.text.split('\n').filter(Boolean).map((x) => `<li>${x}</li>`).join('');
+          return `  <div class="cms-pricing-card ${it.highlight ? 'featured' : ''}">${it.badge ? `<span class="cms-badge">${it.badge}</span>` : ''}<h3>${it.title}</h3><div class="cms-price">${it.price || '$0'}</div><ul>${bullets}</ul></div>\n`;
+        }).join('');
+        const renderPricing = (t: string, s: string) => `<div class="cms-pricing-table"><h2>${t}</h2>${s ? `<p class="cms-sub">${s}</p>` : ''}<div class="cms-pricing-grid">\n${cardsHtml}</div></div>\n`;
+        htmlTr += renderPricing(tTr, subTr); htmlEn += renderPricing(tEn, subEn); htmlAr += renderPricing(tAr, subAr);
       } else if (b.type === 'ad_hook') {
-        htmlTr += `<!-- AD_SLOT: ${b.ad_slot_key || 'ad_in_content'} -->\n`;
-        htmlEn += `<!-- AD_SLOT: ${b.ad_slot_key || 'ad_in_content'} -->\n`;
-        htmlAr += `<!-- AD_SLOT: ${b.ad_slot_key || 'ad_in_content'} -->\n`;
+        const slotComment = `<!-- AD_SLOT: ${b.ad_slot_key || 'ad_in_content'} -->\n`;
+        htmlTr += slotComment; htmlEn += slotComment; htmlAr += slotComment;
       } else {
         htmlTr += b.content_tr || '';
         htmlEn += b.content_en || b.content_tr || '';
@@ -330,7 +302,20 @@ export const PageStudioView: React.FC<PageStudioViewProps> = ({
   const selectedBlock = blocks.find((b) => b.id === selectedBlockId) || null;
 
   return (
-    <div className="studio-container animate-fade-in" style={{ zIndex: 1100, display: 'flex', flexDirection: 'column', height: '100vh', background: 'var(--bg-primary)' }}>
+    <div
+      className="studio-container animate-fade-in"
+      style={{
+        position: 'fixed',
+        inset: 0,
+        width: '100vw',
+        height: '100vh',
+        zIndex: 1200,
+        display: 'flex',
+        flexDirection: 'column',
+        background: 'var(--bg-primary)',
+        overflow: 'hidden',
+      }}
+    >
       {/* 1. Üst Kontrol Çubuğu */}
       <header className="studio-header" style={{ padding: '8px 16px', background: 'var(--bg-sidebar)', borderBottom: '1px solid var(--border-color)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', zIndex: 20 }}>
         {/* Sol Aksiyonlar: Geri Dönüş ve Başlık */}
@@ -446,6 +431,22 @@ export const PageStudioView: React.FC<PageStudioViewProps> = ({
             {isMetaOpen ? <ChevronUp size={11} /> : <ChevronDown size={11} />}
           </button>
 
+          {/* Canlı Tuval / Zen Modu */}
+          <button
+            type="button"
+            onClick={() => {
+              const shouldClose = isLeftPanelOpen || isRightPanelOpen;
+              setIsLeftPanelOpen(!shouldClose);
+              setIsRightPanelOpen(!shouldClose);
+            }}
+            className={`admin-btn ${!isLeftPanelOpen && !isRightPanelOpen ? 'admin-btn-primary' : 'admin-btn-secondary'} admin-btn-sm`}
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}
+            title="Panelleri gizleyerek tam genişlikte çalış"
+          >
+            <Maximize2 size={13} />
+            <span>{!isLeftPanelOpen && !isRightPanelOpen ? 'Paneller' : 'Geniş Tuval'}</span>
+          </button>
+
           {/* Önizle Butonu */}
           <button
             type="button"
@@ -512,15 +513,20 @@ export const PageStudioView: React.FC<PageStudioViewProps> = ({
       )}
 
       {/* 2. Ana İş İstasyonu Gövdesi (3 Panelli Grid) */}
-      <div style={{ flex: 1, display: 'flex', overflow: 'hidden' }}>
+      <div style={{ flex: 1, display: 'flex', overflow: 'hidden', position: 'relative' }}>
         {/* Sol Panel: Bileşen Kütüphanesi */}
-        <BlockPalette onAddBlock={handleAddBlock} />
+        {isLeftPanelOpen && (
+          <BlockPalette
+            onAddBlock={handleAddBlock}
+            onClose={() => setIsLeftPanelOpen(false)}
+          />
+        )}
 
         {/* Orta Sahne: İnteraktif Tuval */}
         <PageCanvas
           blocks={blocks}
           selectedBlockId={selectedBlockId}
-          onSelectBlock={setSelectedBlockId}
+          onSelectBlock={(id) => { setSelectedBlockId(id); setIsRightPanelOpen(true); }}
           onMoveUp={(id) => handleMoveBlock(id, 'up')}
           onMoveDown={(id) => handleMoveBlock(id, 'down')}
           onDelete={handleDeleteBlock}
@@ -529,19 +535,29 @@ export const PageStudioView: React.FC<PageStudioViewProps> = ({
           lang={activeTab}
           device={device}
           setDevice={setDevice}
+          canvasTheme={canvasTheme}
+          setCanvasTheme={setCanvasTheme}
+          canvasZoom={canvasZoom}
+          setCanvasZoom={setCanvasZoom}
+          isLeftPanelOpen={isLeftPanelOpen}
+          setIsLeftPanelOpen={setIsLeftPanelOpen}
+          isRightPanelOpen={isRightPanelOpen}
+          setIsRightPanelOpen={setIsRightPanelOpen}
         />
 
         {/* Sağ Panel: Özellik Denetçisi */}
-        <BlockInspector
-          block={selectedBlock}
-          onUpdate={handleUpdateBlock}
-          onDelete={handleDeleteBlock}
-          onClone={handleCloneBlock}
-          onMoveUp={(id) => handleMoveBlock(id, 'up')}
-          onMoveDown={(id) => handleMoveBlock(id, 'down')}
-          onClose={() => setSelectedBlockId(null)}
-          lang={activeTab}
-        />
+        {isRightPanelOpen && selectedBlock && (
+          <BlockInspector
+            block={selectedBlock}
+            onUpdate={handleUpdateBlock}
+            onDelete={handleDeleteBlock}
+            onClone={handleCloneBlock}
+            onMoveUp={(id) => handleMoveBlock(id, 'up')}
+            onMoveDown={(id) => handleMoveBlock(id, 'down')}
+            onClose={() => setIsRightPanelOpen(false)}
+            lang={activeTab}
+          />
+        )}
       </div>
 
       {/* Canlı Önizleme Modalı */}

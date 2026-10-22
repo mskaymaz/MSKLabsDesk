@@ -10,6 +10,7 @@ import {
   Megaphone,
   Plus,
   Search,
+  ChevronLeft,
 } from 'lucide-react';
 import type { StudioBlockType } from '../../types';
 
@@ -82,9 +83,10 @@ export const BLOCK_TEMPLATES: BlockTemplateDef[] = [
 
 export interface BlockPaletteProps {
   onAddBlock: (type: StudioBlockType) => void;
+  onClose?: () => void;
 }
 
-export const BlockPalette: React.FC<BlockPaletteProps> = ({ onAddBlock }) => {
+export const BlockPalette: React.FC<BlockPaletteProps> = ({ onAddBlock, onClose }) => {
   const [search, setSearch] = useState('');
   const [selectedCat, setSelectedCat] = useState<'all' | 'core' | 'content' | 'marketing' | 'ads'>('all');
 
@@ -109,11 +111,24 @@ export const BlockPalette: React.FC<BlockPaletteProps> = ({ onAddBlock }) => {
       }}
     >
       {/* Palet Başlığı ve Arama */}
-      <div style={{ padding: '16px', borderBottom: '1px solid var(--border-color)' }}>
-        <h3 style={{ fontSize: '13px', fontWeight: 800, margin: '0 0 10px 0', color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '6px' }}>
-          <Layers size={15} className="text-cyan" />
-          <span>Bileşen Kütüphanesi</span>
-        </h3>
+      <div style={{ padding: '14px 16px', borderBottom: '1px solid var(--border-color)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
+          <h3 style={{ fontSize: '13px', fontWeight: 800, margin: 0, color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <Layers size={15} className="text-cyan" />
+            <span>Bileşen Kütüphanesi</span>
+          </h3>
+          {onClose && (
+            <button
+              type="button"
+              onClick={onClose}
+              className="admin-btn-icon"
+              title="Paneli Daralt"
+              style={{ background: 'transparent', border: 'none', cursor: 'pointer', padding: '2px' }}
+            >
+              <ChevronLeft size={16} />
+            </button>
+          )}
+        </div>
 
         <div style={{ position: 'relative' }}>
           <Search size={13} style={{ position: 'absolute', left: '8px', top: '9px', color: 'var(--text-muted)' }} />
