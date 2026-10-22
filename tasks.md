@@ -34,6 +34,44 @@
 
 ## 🚨 ÖNCELİKLİ YENİ GÖREVLER (IMMEDIATE ACTION BACKLOG)
 
+### CMS-STUDIO-001 — Kurumsal Sayfalar İleri Düzey Görsel Tasarım Stüdyosu (Visual Page Builder Workstation) [ ]
+- **Amaç:** MSK Labs kurumsal sayfalarını (Ana Sayfa, Hakkımızda, SSS, İletişim, Gizlilik, Kullanım Koşulları ve gelecekteki tüm özel sayfalar) kod yazmadan, masaüstü iş istasyonu ergonomisinde, 3 panelli profesyonel bir görsel stüdyo ile tasarlamak, çok dilli (TR/EN/AR) ve canlı Arapça RTL motoruyla inşa etmek, reklam ve uygulama kataloğuyla entegre ederek yayına almak.
+- **Kapsam:** `MSKLabsDesk/frontend/src/views/PageStudioView.tsx`, `MSKLabsDesk/frontend/src/components/pages/*`, `MSKLabsDesk/backend/src/routes/cmsPages.ts`, `webMSKLabs/assets/js/page-loader.js`.
+- **Mimari Karar:** 
+  1. Masaüstü İş İstasyonu Odaklı (3 Panelli Workstation): Sol Bileşen Paleti (~260px), Orta İnteraktif Tuval (Canvas), Sağ Özellik Denetçisi (Inspector ~300px).
+  2. JSON Blok Şeması (Section-Based): Serbest piksel dağınıklığı yerine kılavuzlu Grid/Flex blokları; mobilde ve vitrinde sıfır tasarım kırılması.
+  3. $0 Maliyet & Mikro-Modüler Mimari: Her yardımcı bileşen <= 400-450 satır, ana stüdyo <= 600 satır.
+
+#### 📋 Takip Edilebilir Aşama ve Görev Listesi:
+
+##### Faz 1: Çekirdek 3-Panelli Masaüstü Stüdyo Çerçevesi [ ]
+- [ ] **Task 1.1 — D1 Yerel Veritabanı ve Şema Doğrulaması:** `site_pages` tablosunun ve 7 sistem sayfasının yerel D1 üzerinde eksiksiz çalıştığının doğrulanması (Tamamlandı).
+- [ ] **Task 1.2 — 3 Panelli İş İstasyonu Düzeni:** `PageStudioView.tsx` tuvalinin Sol Palet, Orta Sahne ve Sağ Denetçi olarak 3 panelli profesyonel grid düzenine genişletilmesi.
+- [ ] **Task 1.3 — İnteraktif Tuval & Cihaz Ölçekleme:** Tuval üzerinde Masaüstü (1200px), Tablet (768px) ve Mobil (390px) canlı çerçeve kontrolleri ve blok sıralama mimarisi.
+- [ ] **Task 1.4 — Özellik Denetçisi (Inspector Panel):** Tıklanan bloğun başlık, açıklama, boşluklar (padding/margin), arka plan rengi ve hizalama ayarlarını canlı yöneten sağ panel bileşeni (`BlockInspector.tsx`).
+- [ ] **Task 1.5 — Geri Al / Yinele (Undo/Redo) & Debounced Autosave:** Durum makinesine geçmiş (history stack) eklenmesi ve 3000ms gecikmeli otomatik taslak koruması.
+
+##### Faz 2: Zengin Blok ve Şablon Kütüphanesi [ ]
+- [ ] **Task 2.1 — Hero & Başlık Blokları:** Başlık, slogan, arka plan görseli/rengi, birincil/ikincil aksiyon butonları içeren karşılama blokları.
+- [ ] **Task 2.2 — Çoklu Kart Izgarası (2'li, 3'lü, 4'lü Grid):** Özellik, vizyon, ekip ve değer kartları; hover efektleri ve ikon desteği.
+- [ ] **Task 2.3 — Akordeon SSS & Liste Blokları:** Açılır-kapanır soru-cevap kartları, sıralama ve dinamik arama desteği.
+- [ ] **Task 2.4 — İletişim, Destek & Bilgi Kutuları:** İletişim formu köprüsü, e-posta/telefon kartları ve destek yönlendirme şeritleri.
+- [ ] **Task 2.5 — Fiyatlandırma ve Karşılaştırma Tablosu:** Kurumsal paket veya özellik karşılaştırma tabloları.
+- [ ] **Task 2.6 — Çağrı Şeritleri (CTA - Call to Action):** Sayfa sonu veya ara bölümlerde dikkat çekici yönlendirme blokları.
+
+##### Faz 3: Çok Dilli Canlı RTL Dönüşüm Motoru & AI Çeviri [ ]
+- [ ] **Task 3.1 — Canlı Arapça RTL Simülasyonu:** Dil sekmesinde AR seçildiğinde tuvalin anında sağdan sola (RTL) akışa, tersine ızgaraya ve Arapça font kurallarına bürünmesi.
+- [ ] **Task 3.2 — Gemini AI Blok Bazlı & Sayfa Bazlı Çeviri:** İster tek bir bloğu ister tüm sayfayı Türkçe kaynaktan İngilizce ve edebi Arapça'ya tek tıkla çeviren motor.
+- [ ] **Task 3.3 — Dil Etiketi Standartı Denetimi:** Bayrak emojisi yasağı ve yalın TR / EN / AR göstergelerinin korunması.
+
+##### Faz 4: Reklam Kancaları, Dinamik Uygulama Kataloğu & Sürümleme [ ]
+- [ ] **Task 4.1 — Reklam Yuvası Kancaları (Ad Hooks):** 8 yuvalı reklam altyapısının tuvalde görsel olarak bloklar arasına yerleştirilebilmesi ve sayfa matrisi ile senkronizasyonu.
+- [ ] **Task 4.2 — Canlı Uygulama Kataloğu Bağlantısı:** Bloğa "Uygulama Seç (Örn: HaydiNamaza)" dendiğinde son sürüm ve mağaza indirme butonlarının API'den otomatik çekilmesi.
+- [ ] **Task 4.3 — Şablon Kütüphanesi & Snapshot Geri Alma (Rollback):** Tasarlanan bir bloğun "Özel Şablon" kaydedilmesi ve sayfanın geçmiş versiyonlarına tek tıkla geri dönülebilmesi.
+- [ ] **Task 4.4 — Vitrin İstemcisi & Regresyon Testleri:** `webMSKLabs` üzerinde yeni blokların kusursuz render edilmesi, 604 vitrin testinin ve backend testlerinin %100 PASS korunması.
+
+---
+
 ### INT-COM-001 — Kamusal Blog Yorum Formu & Onaylı Yorum Akışı Arayüzü [*]
 - **Amaç:** `webMSKLabs` blog okuyucu arayüzünde (`blog/blog.html`) kullanıcıların makalelere yorum yapabilmesi için duyarlı (responsive) bir yorum formu ve ilgili yazıya ait moderatör onayından geçmiş yorumları listeleyen Vanilla JS bileşeninin entegrasyonu.
 - **Kapsam:** `webMSKLabs/blog/blog.html`, `webMSKLabs/blog/blog.js`, `webMSKLabs/blog/comments.js`, `webMSKLabs/src/routes/publicRoutes.ts`.
