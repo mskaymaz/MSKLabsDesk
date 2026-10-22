@@ -155,33 +155,68 @@ export const PageStudioView: React.FC<PageStudioViewProps> = ({
       const subAr = b.subtitle_ar || subTr;
 
       if (b.type === 'hero') {
-        htmlTr += `<div class="hero-block text-${b.align || 'center'}"><h1>${tTr}</h1>${subTr ? `<p>${subTr}</p>` : ''}</div>\n`;
-        htmlEn += `<div class="hero-block text-${b.align || 'center'}"><h1>${tEn}</h1>${subEn ? `<p>${subEn}</p>` : ''}</div>\n`;
-        htmlAr += `<div class="hero-block text-${b.align || 'center'}"><h1>${tAr}</h1>${subAr ? `<p>${subAr}</p>` : ''}</div>\n`;
+        const badge = b.badge_text ? `<span class="cms-badge">${b.badge_text}</span>` : '';
+        const pBtn = b.btn_primary_text || 'Hemen Keşfet';
+        const sBtn = b.btn_secondary_text || 'Daha Fazla Bilgi';
+        const btns = `<div class="cms-btn-group"><a href="${b.btn_primary_link || '#'}" class="cms-btn cms-btn-primary">${pBtn}</a><a href="${b.btn_secondary_link || '#'}" class="cms-btn cms-btn-secondary">${sBtn}</a></div>`;
+        htmlTr += `<div class="cms-hero text-${b.align || 'center'}">${badge}<h1>${tTr}</h1>${subTr ? `<p>${subTr}</p>` : ''}${btns}</div>\n`;
+        htmlEn += `<div class="cms-hero text-${b.align || 'center'}">${badge}<h1>${tEn}</h1>${subEn ? `<p>${subEn}</p>` : ''}${btns}</div>\n`;
+        htmlAr += `<div class="cms-hero text-${b.align || 'center'}">${badge}<h1>${tAr}</h1>${subAr ? `<p>${subAr}</p>` : ''}${btns}</div>\n`;
       } else if (b.type === 'features_grid') {
-        htmlTr += `<div class="features-section"><h2>${tTr}</h2><div class="features-grid">\n`;
-        htmlEn += `<div class="features-section"><h2>${tEn}</h2><div class="features-grid">\n`;
-        htmlAr += `<div class="features-section"><h2>${tAr}</h2><div class="features-grid">\n`;
+        const cols = b.grid_columns || 3;
+        htmlTr += `<div class="cms-features-section"><h2>${tTr}</h2>${subTr ? `<p class="cms-sub">${subTr}</p>` : ''}<div class="cms-grid cols-${cols}">\n`;
+        htmlEn += `<div class="cms-features-section"><h2>${tEn}</h2>${subEn ? `<p class="cms-sub">${subEn}</p>` : ''}<div class="cms-grid cols-${cols}">\n`;
+        htmlAr += `<div class="cms-features-section"><h2>${tAr}</h2>${subAr ? `<p class="cms-sub">${subAr}</p>` : ''}<div class="cms-grid cols-${cols}">\n`;
         (b.items || []).forEach((it) => {
-          htmlTr += `  <div class="feature-item"><h4>${it.title}</h4><p>${it.text}</p></div>\n`;
-          htmlEn += `  <div class="feature-item"><h4>${it.title}</h4><p>${it.text}</p></div>\n`;
-          htmlAr += `  <div class="feature-item"><h4>${it.title}</h4><p>${it.text}</p></div>\n`;
+          htmlTr += `  <div class="cms-card"><h4>${it.title}</h4><p>${it.text}</p></div>\n`;
+          htmlEn += `  <div class="cms-card"><h4>${it.title}</h4><p>${it.text}</p></div>\n`;
+          htmlAr += `  <div class="cms-card"><h4>${it.title}</h4><p>${it.text}</p></div>\n`;
         });
         htmlTr += `</div></div>\n`;
         htmlEn += `</div></div>\n`;
         htmlAr += `</div></div>\n`;
       } else if (b.type === 'faq_accordion') {
-        htmlTr += `<div class="faq-accordion-group"><h2>${tTr}</h2>\n`;
-        htmlEn += `<div class="faq-accordion-group"><h2>${tEn}</h2>\n`;
-        htmlAr += `<div class="faq-accordion-group"><h2>${tAr}</h2>\n`;
+        htmlTr += `<div class="cms-faq-group"><h2>${tTr}</h2>${subTr ? `<p class="cms-sub">${subTr}</p>` : ''}\n`;
+        htmlEn += `<div class="cms-faq-group"><h2>${tEn}</h2>${subEn ? `<p class="cms-sub">${subEn}</p>` : ''}\n`;
+        htmlAr += `<div class="cms-faq-group"><h2>${tAr}</h2>${subAr ? `<p class="cms-sub">${subAr}</p>` : ''}\n`;
         (b.items || []).forEach((it) => {
-          htmlTr += `  <div class="faq-item-card"><h3>${it.title}</h3><p>${it.text}</p></div>\n`;
-          htmlEn += `  <div class="faq-item-card"><h3>${it.title}</h3><p>${it.text}</p></div>\n`;
-          htmlAr += `  <div class="faq-item-card"><h3>${it.title}</h3><p>${it.text}</p></div>\n`;
+          htmlTr += `  <details class="cms-faq-item"><summary><strong>${it.title}</strong></summary><p>${it.text}</p></details>\n`;
+          htmlEn += `  <details class="cms-faq-item"><summary><strong>${it.title}</strong></summary><p>${it.text}</p></details>\n`;
+          htmlAr += `  <details class="cms-faq-item"><summary><strong>${it.title}</strong></summary><p>${it.text}</p></details>\n`;
         });
         htmlTr += `</div>\n`;
         htmlEn += `</div>\n`;
         htmlAr += `</div>\n`;
+      } else if (b.type === 'contact_card') {
+        htmlTr += `<div class="cms-contact-box"><h3>${tTr}</h3>${subTr ? `<p>${subTr}</p>` : ''}<div class="cms-contact-grid">\n  <div class="cms-contact-row"><strong>E-Posta:</strong> <a href="mailto:destek@msklabs.org">destek@msklabs.org</a></div>\n`;
+        htmlEn += `<div class="cms-contact-box"><h3>${tEn}</h3>${subEn ? `<p>${subEn}</p>` : ''}<div class="cms-contact-grid">\n  <div class="cms-contact-row"><strong>Email:</strong> <a href="mailto:destek@msklabs.org">destek@msklabs.org</a></div>\n`;
+        htmlAr += `<div class="cms-contact-box"><h3>${tAr}</h3>${subAr ? `<p>${subAr}</p>` : ''}<div class="cms-contact-grid">\n  <div class="cms-contact-row"><strong>البريد:</strong> <a href="mailto:destek@msklabs.org">destek@msklabs.org</a></div>\n`;
+        (b.items || []).forEach((it) => {
+          htmlTr += `  <div class="cms-contact-row"><strong>${it.title}:</strong> <span>${it.text}</span></div>\n`;
+          htmlEn += `  <div class="cms-contact-row"><strong>${it.title}:</strong> <span>${it.text}</span></div>\n`;
+          htmlAr += `  <div class="cms-contact-row"><strong>${it.title}:</strong> <span>${it.text}</span></div>\n`;
+        });
+        htmlTr += `</div></div>\n`;
+        htmlEn += `</div></div>\n`;
+        htmlAr += `</div></div>\n`;
+      } else if (b.type === 'cta_banner') {
+        const ctaBtn = b.btn_primary_text || 'İletişime Geç';
+        htmlTr += `<div class="cms-cta-banner text-${b.align || 'center'}"><h2>${tTr}</h2>${subTr ? `<p>${subTr}</p>` : ''}<a href="${b.btn_primary_link || '/contact.html'}" class="cms-btn cms-btn-primary">${ctaBtn}</a></div>\n`;
+        htmlEn += `<div class="cms-cta-banner text-${b.align || 'center'}"><h2>${tEn}</h2>${subEn ? `<p>${subEn}</p>` : ''}<a href="${b.btn_primary_link || '/contact.html'}" class="cms-btn cms-btn-primary">${ctaBtn}</a></div>\n`;
+        htmlAr += `<div class="cms-cta-banner text-${b.align || 'center'}"><h2>${tAr}</h2>${subAr ? `<p>${subAr}</p>` : ''}<a href="${b.btn_primary_link || '/contact.html'}" class="cms-btn cms-btn-primary">${ctaBtn}</a></div>\n`;
+      } else if (b.type === 'comparison_table') {
+        htmlTr += `<div class="cms-pricing-table"><h2>${tTr}</h2>${subTr ? `<p class="cms-sub">${subTr}</p>` : ''}<div class="cms-pricing-grid">\n`;
+        htmlEn += `<div class="cms-pricing-table"><h2>${tEn}</h2>${subEn ? `<p class="cms-sub">${subEn}</p>` : ''}<div class="cms-pricing-grid">\n`;
+        htmlAr += `<div class="cms-pricing-table"><h2>${tAr}</h2>${subAr ? `<p class="cms-sub">${subAr}</p>` : ''}<div class="cms-pricing-grid">\n`;
+        (b.items || []).forEach((it) => {
+          const bullets = it.text.split('\n').filter(Boolean).map(x => `<li>${x}</li>`).join('');
+          htmlTr += `  <div class="cms-pricing-card ${it.highlight ? 'featured' : ''}">${it.badge ? `<span class="cms-badge">${it.badge}</span>` : ''}<h3>${it.title}</h3><div class="cms-price">${it.price || '$0'}</div><ul>${bullets}</ul></div>\n`;
+          htmlEn += `  <div class="cms-pricing-card ${it.highlight ? 'featured' : ''}">${it.badge ? `<span class="cms-badge">${it.badge}</span>` : ''}<h3>${it.title}</h3><div class="cms-price">${it.price || '$0'}</div><ul>${bullets}</ul></div>\n`;
+          htmlAr += `  <div class="cms-pricing-card ${it.highlight ? 'featured' : ''}">${it.badge ? `<span class="cms-badge">${it.badge}</span>` : ''}<h3>${it.title}</h3><div class="cms-price">${it.price || '$0'}</div><ul>${bullets}</ul></div>\n`;
+        });
+        htmlTr += `</div></div>\n`;
+        htmlEn += `</div></div>\n`;
+        htmlAr += `</div></div>\n`;
       } else if (b.type === 'ad_hook') {
         htmlTr += `<!-- AD_SLOT: ${b.ad_slot_key || 'ad_in_content'} -->\n`;
         htmlEn += `<!-- AD_SLOT: ${b.ad_slot_key || 'ad_in_content'} -->\n`;
@@ -193,11 +228,19 @@ export const PageStudioView: React.FC<PageStudioViewProps> = ({
       }
     });
 
+    let existingMeta: Record<string, any> = {};
+    try {
+      if (formData.meta_json) existingMeta = JSON.parse(formData.meta_json);
+    } catch {}
+    existingMeta.blocks = currBlocks;
+    if (formData.meta_keywords) existingMeta.seo_keywords = formData.meta_keywords;
+
     setFormData((prev) => ({
       ...prev,
       content_tr: htmlTr,
       content_en: htmlEn,
       content_ar: htmlAr,
+      meta_json: JSON.stringify(existingMeta),
     }));
   };
 
@@ -205,15 +248,23 @@ export const PageStudioView: React.FC<PageStudioViewProps> = ({
     const newBlock: StudioBlock = {
       id: `blk_${type}_${Date.now()}_${Math.random().toString(36).substring(2, 5)}`,
       type,
-      title_tr: type === 'hero' ? 'Yeni Karşılama Başlığı' : type === 'features_grid' ? 'Özelliklerimiz' : type === 'faq_accordion' ? 'Sıkça Sorulan Sorular' : type === 'contact_card' ? 'İletişim Bilgileri' : type === 'cta_banner' ? 'Hemen Başlayın' : 'Yeni Blok',
+      title_tr: type === 'hero' ? 'Yeni Karşılama Başlığı' : type === 'features_grid' ? 'Özelliklerimiz' : type === 'faq_accordion' ? 'Sıkça Sorulan Sorular' : type === 'contact_card' ? 'İletişim Bilgileri' : type === 'cta_banner' ? 'Hemen Başlayın' : type === 'comparison_table' ? 'Paket Karşılaştırması' : 'Yeni Blok',
       subtitle_tr: 'Açıklama veya alt başlık...',
       padding_y: 'md',
       bg_variant: 'default',
       border_radius: 'md',
       align: type === 'hero' || type === 'cta_banner' ? 'center' : 'left',
+      badge_text: type === 'hero' ? 'MSK Labs' : undefined,
+      btn_primary_text: type === 'hero' ? 'Hemen Keşfet' : type === 'cta_banner' ? 'İletişime Geç' : undefined,
+      btn_secondary_text: type === 'hero' ? 'Daha Fazla Bilgi' : undefined,
+      grid_columns: type === 'features_grid' ? 3 : undefined,
       items: (type === 'features_grid' || type === 'faq_accordion' || type === 'contact_card') ? [
         { id: `it_1`, title: 'Örnek Madde 1', text: 'Detaylı açıklama metni...' },
         { id: `it_2`, title: 'Örnek Madde 2', text: 'Detaylı açıklama metni...' },
+        { id: `it_3`, title: 'Örnek Madde 3', text: 'Detaylı açıklama metni...' },
+      ] : type === 'comparison_table' ? [
+        { id: `it_plan_1`, title: 'Başlangıç', price: 'Ücretsiz', text: 'Temel Özellikler\nTopluluk Desteği\nTemel Güncellemeler', badge: 'Standart', highlight: false },
+        { id: `it_plan_2`, title: 'Profesyonel', price: '$0 / Özgür', text: 'Tüm Özellikler\nÖncelikli Destek\nErken Erişim\nReklamsız Deneyim', badge: 'Popüler', highlight: true },
       ] : undefined,
     };
 
@@ -498,6 +549,7 @@ export const PageStudioView: React.FC<PageStudioViewProps> = ({
         isOpen={isPreviewOpen}
         onClose={() => setIsPreviewOpen(false)}
         formData={formData}
+        blocks={blocks}
         activeLanguage={activeTab}
       />
     </div>

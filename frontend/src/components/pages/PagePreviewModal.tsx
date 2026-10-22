@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { X, Monitor, Tablet, Smartphone } from 'lucide-react';
-import type { PageFormData } from '../../types';
+import type { PageFormData, StudioBlock } from '../../types';
+import { BlockRenderer } from './BlockRenderer';
 
 export interface PagePreviewModalProps {
   isOpen: boolean;
   onClose: () => void;
   formData: PageFormData;
+  blocks?: StudioBlock[];
   activeLanguage: 'tr' | 'en' | 'ar';
 }
 
@@ -13,6 +15,7 @@ export const PagePreviewModal: React.FC<PagePreviewModalProps> = ({
   isOpen,
   onClose,
   formData,
+  blocks,
   activeLanguage,
 }) => {
   const [device, setDevice] = useState<'desktop' | 'tablet' | 'mobile'>('desktop');
@@ -26,7 +29,7 @@ export const PagePreviewModal: React.FC<PagePreviewModalProps> = ({
 
   const isRtl = previewLang === 'ar';
   const widthStyle =
-    device === 'mobile' ? '390px' : device === 'tablet' ? '768px' : '100%';
+    device === 'mobile' ? '390px' : device === 'tablet' ? '768px' : '1000px';
 
   return (
     <div
@@ -51,25 +54,26 @@ export const PagePreviewModal: React.FC<PagePreviewModalProps> = ({
           padding: '12px 24px',
           background: 'var(--bg-sidebar)',
           borderBottom: '1px solid var(--border-color)',
-          color: 'var(--text-primary)',
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <span style={{ fontSize: '14px', fontWeight: 700 }}>Canlı Sayfa Önizlemesi</span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           <span className="admin-badge admin-badge-cyan" style={{ fontSize: '11px' }}>
-            /{formData.slug || 'sayfa'}
+            Canlı Vitrin Simülasyonu
+          </span>
+          <span style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text-primary)' }}>
+            /{formData.slug || 'kurumsal-sayfa'}
           </span>
         </div>
 
-        {/* Cihaz ve Dil Seçici */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-          {/* Cihaz Genişliği */}
-          <div style={{ display: 'flex', background: 'var(--bg-secondary)', borderRadius: '8px', padding: '3px' }}>
+        {/* Cihaz & Dil Seçicileri */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          {/* Cihaz Değiştirici */}
+          <div style={{ display: 'flex', background: 'var(--bg-secondary)', borderRadius: '8px', padding: '3px', gap: '3px' }}>
             <button
               type="button"
               onClick={() => setDevice('desktop')}
               className={`admin-btn-icon ${device === 'desktop' ? 'active text-cyan' : ''}`}
-              title="Masaüstü (Tam Genişlik)"
+              title="Masaüstü (1140px)"
               style={{ padding: '6px 10px', background: device === 'desktop' ? 'var(--bg-card)' : 'transparent', border: 'none', borderRadius: '6px', cursor: 'pointer' }}
             >
               <Monitor size={16} />
@@ -190,21 +194,37 @@ export const PagePreviewModal: React.FC<PagePreviewModalProps> = ({
               </div>
             )}
 
-            <h1 style={{ fontSize: '2rem', fontWeight: 800, color: '#0f172a', marginBottom: '12px', lineHeight: 1.25 }}>
-              {title || 'Başlıksız Kurumsal Sayfa'}
-            </h1>
+            {blocks && blocks.length > 0 ? (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+                {blocks.map((block) => (
+                  <BlockRenderer
+                    key={block.id}
+                    block={block}
+                    lang={previewLang}
+                    device={device}
+                    isInteractive={true}
+                  />
+                ))}
+              </div>
+            ) : (
+              <>
+                <h1 style={{ fontSize: '2rem', fontWeight: 800, color: '#0f172a', marginBottom: '12px', lineHeight: 1.25 }}>
+                  {title || 'Başlıksız Kurumsal Sayfa'}
+                </h1>
 
-            {summary && (
-              <p style={{ fontSize: '1.05rem', color: '#475569', lineHeight: 1.6, marginBottom: '24px', borderLeft: isRtl ? 'none' : '4px solid #0284c7', borderRight: isRtl ? '4px solid #0284c7' : 'none', paddingLeft: isRtl ? 0 : '16px', paddingRight: isRtl ? '16px' : 0 }}>
-                {summary}
-              </p>
+                {summary && (
+                  <p style={{ fontSize: '1.05rem', color: '#475569', lineHeight: 1.6, marginBottom: '24px', borderLeft: isRtl ? 'none' : '4px solid #0284c7', borderRight: isRtl ? '4px solid #0284c7' : 'none', paddingLeft: isRtl ? 0 : '16px', paddingRight: isRtl ? '16px' : 0 }}>
+                    {summary}
+                  </p>
+                )}
+
+                <div
+                  className="static-page-card-content"
+                  style={{ fontSize: '0.95rem', lineHeight: 1.75, color: '#1e293b' }}
+                  dangerouslySetInnerHTML={{ __html: content || '<p><em>İçerik henüz girilmedi...</em></p>' }}
+                />
+              </>
             )}
-
-            <div
-              className="static-page-card-content"
-              style={{ fontSize: '0.95rem', lineHeight: 1.75, color: '#1e293b' }}
-              dangerouslySetInnerHTML={{ __html: content || '<p><em>İçerik henüz girilmedi...</em></p>' }}
-            />
           </main>
 
           {/* Sahte Footer */}

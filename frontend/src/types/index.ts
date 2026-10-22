@@ -276,6 +276,9 @@ export interface StudioBlockItem {
   text: string;
   icon?: string;
   link?: string;
+  price?: string;
+  badge?: string;
+  highlight?: boolean;
 }
 
 export interface StudioBlock {
@@ -297,6 +300,13 @@ export interface StudioBlock {
   align?: 'left' | 'center' | 'right';
   ad_slot_key?: string;
   app_id?: string;
+  badge_text?: string;
+  btn_primary_text?: string;
+  btn_primary_link?: string;
+  btn_secondary_text?: string;
+  btn_secondary_link?: string;
+  bg_image?: string;
+  grid_columns?: 2 | 3 | 4;
 }
 
 export interface SitePage {
@@ -332,6 +342,7 @@ export interface PageFormData {
   content_en: string;
   content_ar: string;
   hero_image: string;
+  meta_json?: string;
   meta_keywords?: string;
   meta_description_tr?: string;
   meta_description_en?: string;

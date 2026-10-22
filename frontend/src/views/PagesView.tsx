@@ -149,10 +149,10 @@ export const PagesView: React.FC = () => {
     }
 
     try {
-      const payload = {
-        ...formData,
-        meta_json: JSON.stringify({ seo_keywords: formData.meta_keywords }),
-      };
+      let finalMeta: Record<string, any> = {};
+      try { if (formData.meta_json) finalMeta = JSON.parse(formData.meta_json); } catch {}
+      finalMeta.seo_keywords = formData.meta_keywords || finalMeta.seo_keywords;
+      const payload = { ...formData, meta_json: JSON.stringify(finalMeta) };
 
       if (editingPage) {
         await api.updatePage(editingPage.id, payload);

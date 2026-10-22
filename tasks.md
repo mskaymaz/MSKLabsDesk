@@ -51,13 +51,13 @@
 - [*] **Task 1.4 — Özellik Denetçisi (Inspector Panel):** Tıklanan bloğun başlık, açıklama, boşluklar (padding/margin), arka plan rengi ve hizalama ayarlarını canlı yöneten sağ panel bileşeni (`BlockInspector.tsx` - Tamamlandı).
 - [*] **Task 1.5 — Geri Al / Yinele (Undo/Redo) & Debounced Autosave:** Durum makinesine geçmiş (history stack) eklenmesi ve 3000ms gecikmeli otomatik taslak koruması (Tamamlandı).
 
-##### Faz 2: Zengin Blok ve Şablon Kütüphanesi [ ]
-- [ ] **Task 2.1 — Hero & Başlık Blokları:** Başlık, slogan, arka plan görseli/rengi, birincil/ikincil aksiyon butonları içeren karşılama blokları.
-- [ ] **Task 2.2 — Çoklu Kart Izgarası (2'li, 3'lü, 4'lü Grid):** Özellik, vizyon, ekip ve değer kartları; hover efektleri ve ikon desteği.
-- [ ] **Task 2.3 — Akordeon SSS & Liste Blokları:** Açılır-kapanır soru-cevap kartları, sıralama ve dinamik arama desteği.
-- [ ] **Task 2.4 — İletişim, Destek & Bilgi Kutuları:** İletişim formu köprüsü, e-posta/telefon kartları ve destek yönlendirme şeritleri.
-- [ ] **Task 2.5 — Fiyatlandırma ve Karşılaştırma Tablosu:** Kurumsal paket veya özellik karşılaştırma tabloları.
-- [ ] **Task 2.6 — Çağrı Şeritleri (CTA - Call to Action):** Sayfa sonu veya ara bölümlerde dikkat çekici yönlendirme blokları.
+##### Faz 2: Zengin Blok ve Şablon Kütüphanesi [*]
+- [*] **Task 2.1 — Hero & Başlık Blokları:** Başlık, slogan, arka plan görseli/rengi, birincil/ikincil aksiyon butonları içeren karşılama blokları (`BlockRenderer.tsx` & `BlockInspector.tsx` - Tamamlandı).
+- [*] **Task 2.2 — Çoklu Kart Izgarası (2'li, 3'lü, 4'lü Grid):** Özellik, vizyon, ekip ve değer kartları; 2/3/4 sütun seçimi, hover efektleri ve ikon desteği (Tamamlandı).
+- [*] **Task 2.3 — Akordeon SSS & Liste Blokları:** Açılır-kapanır soru-cevap kartları, interaktif `<details><summary>` ve önizleme desteği (Tamamlandı).
+- [*] **Task 2.4 — İletişim, Destek & Bilgi Kutuları:** İletişim formu köprüsü, e-posta/telefon kartları ve destek yönlendirme şeritleri (Tamamlandı).
+- [*] **Task 2.5 — Fiyatlandırma ve Karşılaştırma Tablosu:** Kurumsal paket veya özellik karşılaştırma tabloları, fiyat etiketleri ve öne çıkan sütun vurgusu (Tamamlandı).
+- [*] **Task 2.6 — Çağrı Şeritleri (CTA - Call to Action):** Sayfa sonu veya ara bölümlerde dikkat çekici yönlendirme blokları ve aksiyon butonu (Tamamlandı).
 
 ##### Faz 3: Çok Dilli Canlı RTL Dönüşüm Motoru & AI Çeviri [ ]
 - [ ] **Task 3.1 — Canlı Arapça RTL Simülasyonu:** Dil sekmesinde AR seçildiğinde tuvalin anında sağdan sola (RTL) akışa, tersine ızgaraya ve Arapça font kurallarına bürünmesi.

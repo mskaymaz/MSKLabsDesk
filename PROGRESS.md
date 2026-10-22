@@ -1799,3 +1799,28 @@
   - Satır sınırları kontrol edildi: `BlockPalette` (200 satır), `BlockInspector` (389 satır), `PageCanvas` (436 satır), `PageStudioView` (505 satır) - tüm kurallar sağlandı.
   - Sadece `DevAdmin` dalında çalışıldı.
 * **Durum:** CMS-STUDIO-001 Faz 1 (3 Panelli Masaüstü Stüdyo Çerçevesi) başarıyla tamamlandı.
+
+## 📌 Son Güncelleme [22.10.2026 - 11:30] — GÖRSEL SAYFA STÜDYOSU FAZ 2 (ZENGİN BLOK VE ŞABLON KÜTÜPHANESİ) TAMAMLANDI ✅
+* **Yapılan İşlemler:**
+  1. **Modüler Blok Render Motoru (`BlockRenderer.tsx` - 350 satır):**
+     - Hero, Çoklu Kart Izgarası (2'li, 3'lü, 4'lü), Akordeon SSS (`<details><summary>`), İletişim & Destek Kartları, Fiyatlandırma/Paket Karşılaştırma Tablosu, CTA Eylem Çağrısı Şeritleri, Serbest Metin ve Reklam Yuvası blokları için bağımsız render mimarisi kuruldu.
+     - TR/EN/AR çok dilli metinler ve Arapça için anlık RTL yönlendirme kuralları entegre edildi.
+  2. **İnteraktif Tuval ve Önizleme Entegrasyonu (`PageCanvas.tsx` - 229 satır & `PagePreviewModal.tsx` - 247 satır):**
+     - Render mantığı `BlockRenderer` ile birleştirilerek tuval ve canlı vitrin önizlemesi arasında %100 görsel tutarlılık sağlandı.
+     - `PageCanvas.tsx` 436 satırdan 229 satıra indirilerek hafifletildi.
+  3. **Gelişmiş Özellik Denetçisi (`BlockInspector.tsx` - 437 satır):**
+     - Hero için rozet metni, birincil/ikincil aksiyon butonları ve linkleri eklendi.
+     - Çoklu Kartlar için 2'li, 3'lü, 4'lü ızgara sütun seçimi sağlandı.
+     - Karşılaştırma tabloları için madde fiyatı, rozet ve öne çıkan sütun vurgulama (`highlight`) kontrolleri eklendi.
+  4. **Stüdyo Durum Makinesi ve JSON Blok Saklama (`PageStudioView.tsx` - 557 satır & `PagesView.tsx` - 450 satır):**
+     - `compileBlocksToFormData` tüm 8 blok tipini semantik HTML sınıflarına dönüştürecek şekilde genişletildi.
+     - Blok yapılandırması `meta_json.blocks` içinde korunarak sayfa tekrar açıldığında blokların eksiksiz yüklenmesi sağlandı.
+  5. **Vitrin CSS Entegrasyonu (`webMSKLabs/assets/css/global.css`):**
+     - `.cms-hero`, `.cms-grid`, `.cms-faq-group`, `.cms-contact-box`, `.cms-pricing-table`, `.cms-cta-banner` sınıfları koyu tema ve RTL kurallarıyla eklendi.
+* **Sonuçlar & Kabul Kriterleri (DoD):**
+  - Frontend derlemesi: 0 hata ile tamamlandı (`tsc -b && vite build`).
+  - Backend API testleri: 77 PASS, 0 FAIL (`npm --prefix backend test`).
+  - Vitrin test paketi: 61 test dosyası, 604 test %100 PASS (`npm --prefix webMSKLabs test`).
+  - Dosya satır sınırları denetlendi: `BlockInspector.tsx` (437 satır), `BlockRenderer.tsx` (350 satır), `PageCanvas.tsx` (229 satır), `PagePreviewModal.tsx` (247 satır), `PageStudioView.tsx` (557 satır), `PagesView.tsx` (450 satır) — tümü limitler içinde.
+  - Sadece `DevAdmin` dalında çalışıldı, `main` korundu.
+* **Durum:** CMS-STUDIO-001 Faz 2 (Zengin Blok ve Şablon Kütüphanesi) başarıyla tamamlandı. Sıradaki aşama Faz 3: Çok Dilli Canlı RTL Dönüşüm Motoru & AI Çeviri.

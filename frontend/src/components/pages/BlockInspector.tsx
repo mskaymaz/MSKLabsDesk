@@ -36,7 +36,7 @@ export const BlockInspector: React.FC<BlockInspectorProps> = ({
       <aside
         className="studio-inspector-sidebar"
         style={{
-          width: '300px',
+          width: '310px',
           background: 'var(--bg-sidebar)',
           borderLeft: '1px solid var(--border-color)',
           display: 'flex',
@@ -54,7 +54,7 @@ export const BlockInspector: React.FC<BlockInspectorProps> = ({
           Özellik Denetçisi
         </h4>
         <p style={{ margin: 0, fontSize: '11px', lineHeight: 1.5 }}>
-          Özelliklerini, boşluklarını ve renklerini düzenlemek için tuval üzerindeki herhangi bir bloğa tıklayın.
+          Özelliklerini, butonlarını, boşluklarını ve renklerini düzenlemek için tuval üzerindeki herhangi bir bloğa tıklayın.
         </p>
       </aside>
     );
@@ -69,10 +69,12 @@ export const BlockInspector: React.FC<BlockInspectorProps> = ({
   const currentContent = block[contentField] || '';
 
   const addItem = () => {
+    const isPlan = block.type === 'comparison_table';
     const newItem: StudioBlockItem = {
       id: `it_${Date.now()}_${Math.random().toString(36).substring(2, 5)}`,
-      title: lang === 'tr' ? 'Yeni Madde Başlığı' : lang === 'en' ? 'New Item Title' : 'عنوان بند جديد',
-      text: lang === 'tr' ? 'Açıklama metni buraya yazılır.' : lang === 'en' ? 'Description text goes here.' : 'نص الشرح هنا.',
+      title: isPlan ? 'Yeni Paket' : lang === 'tr' ? 'Yeni Madde Başlığı' : 'New Item Title',
+      text: isPlan ? 'Özellik 1\nÖzellik 2' : lang === 'tr' ? 'Açıklama metni buraya yazılır.' : 'Description text.',
+      price: isPlan ? '$0' : undefined,
     };
     onUpdate({ items: [...(block.items || []), newItem] });
   };
@@ -93,7 +95,7 @@ export const BlockInspector: React.FC<BlockInspectorProps> = ({
     <aside
       className="studio-inspector-sidebar"
       style={{
-        width: '310px',
+        width: '320px',
         background: 'var(--bg-sidebar)',
         borderLeft: '1px solid var(--border-color)',
         display: 'flex',
@@ -103,81 +105,32 @@ export const BlockInspector: React.FC<BlockInspectorProps> = ({
       }}
     >
       {/* Üst Denetçi Başlığı */}
-      <div
-        style={{
-          padding: '14px 16px',
-          borderBottom: '1px solid var(--border-color)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-        }}
-      >
+      <div style={{ padding: '12px 16px', borderBottom: '1px solid var(--border-color)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <span className="admin-badge admin-badge-cyan" style={{ fontSize: '10px', textTransform: 'uppercase' }}>
             {block.type.replace('_', ' ')}
           </span>
-          <span style={{ fontSize: '12px', fontWeight: 800, color: 'var(--text-primary)' }}>
-            Blok Özellikleri
-          </span>
+          <span style={{ fontSize: '12px', fontWeight: 800, color: 'var(--text-primary)' }}>Özellik Denetçisi</span>
         </div>
-
-        <button
-          type="button"
-          onClick={onClose}
-          className="admin-btn-icon"
-          title="Kapat"
-          style={{ background: 'transparent', border: 'none', cursor: 'pointer' }}
-        >
+        <button type="button" onClick={onClose} className="admin-btn-icon" title="Kapat" style={{ background: 'transparent', border: 'none', cursor: 'pointer' }}>
           <X size={14} />
         </button>
       </div>
 
       {/* Denetçi Gövdesi */}
-      <div style={{ flex: 1, overflowY: 'auto', padding: '16px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+      <div style={{ flex: 1, overflowY: 'auto', padding: '14px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
         {/* Hızlı Eylemler (Taşı, Çoğalt, Sil) */}
         <div style={{ display: 'flex', gap: '4px', background: 'var(--bg-secondary)', padding: '4px', borderRadius: '8px' }}>
-          <button
-            type="button"
-            onClick={() => onMoveUp(block.id)}
-            className="admin-btn admin-btn-secondary admin-btn-sm"
-            style={{ flex: 1, padding: '4px' }}
-            title="Yukarı Taşı"
-          >
-            <ArrowUp size={13} />
-          </button>
-          <button
-            type="button"
-            onClick={() => onMoveDown(block.id)}
-            className="admin-btn admin-btn-secondary admin-btn-sm"
-            style={{ flex: 1, padding: '4px' }}
-            title="Aşağı Taşı"
-          >
-            <ArrowDown size={13} />
-          </button>
-          <button
-            type="button"
-            onClick={() => onClone(block.id)}
-            className="admin-btn admin-btn-secondary admin-btn-sm"
-            style={{ flex: 1, padding: '4px' }}
-            title="Bloğu Çoğalt"
-          >
-            <Copy size={13} />
-          </button>
-          <button
-            type="button"
-            onClick={() => onDelete(block.id)}
-            className="admin-btn admin-btn-danger admin-btn-sm"
-            style={{ flex: 1, padding: '4px' }}
-            title="Bloğu Sil"
-          >
-            <Trash2 size={13} />
-          </button>
+          <button type="button" onClick={() => onMoveUp(block.id)} className="admin-btn admin-btn-secondary admin-btn-sm" style={{ flex: 1, padding: '4px' }} title="Yukarı Taşı"><ArrowUp size={13} /></button>
+          <button type="button" onClick={() => onMoveDown(block.id)} className="admin-btn admin-btn-secondary admin-btn-sm" style={{ flex: 1, padding: '4px' }} title="Aşağı Taşı"><ArrowDown size={13} /></button>
+          <button type="button" onClick={() => onClone(block.id)} className="admin-btn admin-btn-secondary admin-btn-sm" style={{ flex: 1, padding: '4px' }} title="Bloğu Çoğalt"><Copy size={13} /></button>
+          <button type="button" onClick={() => onDelete(block.id)} className="admin-btn admin-btn-danger admin-btn-sm" style={{ flex: 1, padding: '4px' }} title="Bloğu Sil"><Trash2 size={13} /></button>
         </div>
 
         {/* 1. Metin İçerik Alanları */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
           <label className="admin-label" style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-            İçerik Metinleri ({lang.toUpperCase()})
+            Metin İçerikleri ({lang.toUpperCase()})
           </label>
 
           <div>
@@ -203,6 +156,20 @@ export const BlockInspector: React.FC<BlockInspectorProps> = ({
               placeholder="İsteğe bağlı alt başlık..."
             />
           </div>
+
+          {block.type === 'hero' && (
+            <div>
+              <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Rozet / Üst Etiket:</span>
+              <input
+                type="text"
+                value={block.badge_text || ''}
+                onChange={(e) => onUpdate({ badge_text: e.target.value })}
+                className="admin-input"
+                style={{ fontSize: '12px', marginTop: '2px' }}
+                placeholder="Örn: MSK Labs 2026"
+              />
+            </div>
+          )}
 
           {block.type === 'rich_text' && (
             <div>
@@ -234,12 +201,64 @@ export const BlockInspector: React.FC<BlockInspectorProps> = ({
           )}
         </div>
 
-        {/* 2. Maddeler / Kartlar Yöneticisi (Varsa) */}
+        {/* 2. Blok Tipine Özel Alanlar (Butonlar, Izgara Sütunu, Arka Plan) */}
+        {(block.type === 'hero' || block.type === 'cta_banner') && (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', borderTop: '1px solid var(--border-color)', paddingTop: '10px' }}>
+            <label className="admin-label" style={{ fontSize: '11px', textTransform: 'uppercase' }}>
+              Aksiyon Butonları (CTA)
+            </label>
+            <div>
+              <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Birincil Buton Metni:</span>
+              <input
+                type="text"
+                value={block.btn_primary_text || ''}
+                onChange={(e) => onUpdate({ btn_primary_text: e.target.value })}
+                className="admin-input"
+                style={{ fontSize: '11px', marginTop: '2px' }}
+                placeholder="Örn: Hemen Keşfet"
+              />
+            </div>
+            {block.type === 'hero' && (
+              <div>
+                <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>İkincil Buton Metni:</span>
+                <input
+                  type="text"
+                  value={block.btn_secondary_text || ''}
+                  onChange={(e) => onUpdate({ btn_secondary_text: e.target.value })}
+                  className="admin-input"
+                  style={{ fontSize: '11px', marginTop: '2px' }}
+                  placeholder="Örn: Daha Fazla Bilgi"
+                />
+              </div>
+            )}
+          </div>
+        )}
+
+        {block.type === 'features_grid' && (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', borderTop: '1px solid var(--border-color)', paddingTop: '10px' }}>
+            <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Izgara Sütun Sayısı:</span>
+            <div style={{ display: 'flex', gap: '4px' }}>
+              {([2, 3, 4] as const).map((cols) => (
+                <button
+                  key={cols}
+                  type="button"
+                  onClick={() => onUpdate({ grid_columns: cols })}
+                  className={`admin-btn admin-btn-sm ${block.grid_columns === cols || (!block.grid_columns && cols === 3) ? 'admin-btn-primary' : 'admin-btn-secondary'}`}
+                  style={{ flex: 1, fontSize: '11px' }}
+                >
+                  {cols}'lü Izgara
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* 3. Maddeler / Kartlar Yöneticisi */}
         {block.items && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', borderTop: '1px solid var(--border-color)', paddingTop: '12px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', borderTop: '1px solid var(--border-color)', paddingTop: '10px' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <label className="admin-label" style={{ fontSize: '11px', textTransform: 'uppercase', margin: 0 }}>
-                Maddeler ({block.items.length})
+                {block.type === 'comparison_table' ? 'Paketler / Sütunlar' : 'Maddeler'} ({block.items.length})
               </label>
               <button
                 type="button"
@@ -257,10 +276,10 @@ export const BlockInspector: React.FC<BlockInspectorProps> = ({
                 <div
                   key={item.id}
                   style={{
-                    background: 'var(--bg-secondary)',
+                    background: item.highlight ? 'rgba(2, 132, 199, 0.08)' : 'var(--bg-secondary)',
                     borderRadius: '6px',
                     padding: '8px',
-                    border: '1px solid var(--border-color)',
+                    border: item.highlight ? '1px solid var(--accent-primary)' : '1px solid var(--border-color)',
                     display: 'flex',
                     flexDirection: 'column',
                     gap: '6px',
@@ -294,11 +313,40 @@ export const BlockInspector: React.FC<BlockInspectorProps> = ({
                       <Trash2 size={12} className="text-rose" />
                     </button>
                   </div>
+
+                  {block.type === 'comparison_table' && (
+                    <div style={{ display: 'flex', gap: '6px' }}>
+                      <input
+                        type="text"
+                        value={item.price || ''}
+                        onChange={(e) => updateItem(item.id, { price: e.target.value })}
+                        placeholder="Fiyat (örn: $0/Ay)"
+                        style={{ flex: 1, background: 'var(--bg-card)', border: '1px solid var(--border-color)', borderRadius: '4px', fontSize: '10px', padding: '2px 4px', color: 'var(--text-primary)' }}
+                      />
+                      <input
+                        type="text"
+                        value={item.badge || ''}
+                        onChange={(e) => updateItem(item.id, { badge: e.target.value })}
+                        placeholder="Rozet (örn: Popüler)"
+                        style={{ flex: 1, background: 'var(--bg-card)', border: '1px solid var(--border-color)', borderRadius: '4px', fontSize: '10px', padding: '2px 4px', color: 'var(--text-primary)' }}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => updateItem(item.id, { highlight: !item.highlight })}
+                        className={`admin-btn admin-btn-sm ${item.highlight ? 'admin-btn-primary' : 'admin-btn-secondary'}`}
+                        style={{ fontSize: '9px', padding: '2px 6px' }}
+                        title="Öne Çıkarılan Plan Olarak İşaretle"
+                      >
+                        Vurgula
+                      </button>
+                    </div>
+                  )}
+
                   <textarea
                     rows={2}
                     value={item.text}
                     onChange={(e) => updateItem(item.id, { text: e.target.value })}
-                    placeholder="Madde açıklaması..."
+                    placeholder={block.type === 'comparison_table' ? 'Her satıra bir özellik yazınız...' : 'Madde açıklaması...'}
                     style={{
                       background: 'var(--bg-card)',
                       border: '1px solid var(--border-color)',
@@ -315,14 +363,14 @@ export const BlockInspector: React.FC<BlockInspectorProps> = ({
           </div>
         )}
 
-        {/* 3. Tasarım Token'ları (Boşluk, Renk, Yuvarlaklık) */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', borderTop: '1px solid var(--border-color)', paddingTop: '12px' }}>
+        {/* 4. Tasarım Token'ları (Boşluk, Renk, Yuvarlaklık) */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', borderTop: '1px solid var(--border-color)', paddingTop: '10px' }}>
           <label className="admin-label" style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
             Tasarım & Boşluk Ayarları
           </label>
 
           <div>
-            <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Dikey Boşluk (Padding Y):</span>
+            <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Dikey Boşluk (Padding):</span>
             <select
               value={block.padding_y || 'md'}
               onChange={(e) => onUpdate({ padding_y: e.target.value as any })}
