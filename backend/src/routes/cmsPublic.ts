@@ -1,4 +1,4 @@
-import { DEFAULT_PAGE_MATRIX } from './cmsTemplates';
+import { DEFAULT_AD_SLOTS, DEFAULT_PAGE_MATRIX } from './cmsTemplates';
 
 export async function handleCmsPublic(request: Request, env: any): Promise<Response> {
   const url = new URL(request.url);
@@ -218,11 +218,13 @@ export async function handleCmsPublic(request: Request, env: any): Promise<Respo
   // 5. GET /api/v1/ads — Kamusal Aktif Reklam Ayarları
   if (path === '/api/v1/ads') {
     const { results } = await env.DB.prepare(
-      `SELECT key_name, content_tr, meta_json FROM site_templates WHERE key_name LIKE 'ad_%' AND is_active = 1`
+      `SELECT key_name, content_tr, meta_json, is_active FROM site_templates WHERE key_name LIKE 'ad_%'`
     ).all();
 
+    const dbMap = new Map<string, any>();
     let matrix: any = null;
-    const ads = (results || []).map((row: any) => {
+
+    (results || []).forEach((row: any) => {
       let meta: any = {};
       try {
         if (row.meta_json) meta = JSON.parse(row.meta_json);
@@ -230,16 +232,41 @@ export async function handleCmsPublic(request: Request, env: any): Promise<Respo
 
       if (row.key_name === 'ad_page_matrix') {
         matrix = meta.matrix || meta;
-        return null;
+        return;
       }
 
-      return {
+      dbMap.set(row.key_name, {
         slot_key: row.key_name,
         title: row.content_tr,
         ...meta,
-        is_enabled: true,
-      };
-    }).filter((a: any) => a && !a.is_deleted);
+        is_enabled: Boolean(row.is_active),
+      });
+    });
+
+    const ads: any[] = [];
+    const handledKeys = new Set<string>();
+
+    DEFAULT_AD_SLOTS.forEach((def) => {
+      handledKeys.add(def.slot_key);
+      const dbData = dbMap.get(def.slot_key);
+      if (dbData?.is_deleted) return;
+      if (!dbData) {
+        ads.push(def);
+      } else {
+        ads.push({
+          ...def,
+          ...dbData,
+          desktop: { ...def.desktop, ...(dbData.desktop || {}) },
+          mobile: { ...def.mobile, ...(dbData.mobile || {}) },
+        });
+      }
+    });
+
+    dbMap.forEach((dbData, key) => {
+      if (!handledKeys.has(key) && key !== 'ad_page_matrix' && !dbData.is_deleted) {
+        ads.push(dbData);
+      }
+    });
 
     return new Response(JSON.stringify({ success: true, ads, matrix: matrix || DEFAULT_PAGE_MATRIX }), {
       headers: {

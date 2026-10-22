@@ -1753,3 +1753,14 @@
   - Dosya satır sınırları kontrol edildi: `AdPageMatrixMap.tsx` (281 satır), `TemplatesView.tsx` (580 satır), `cmsTemplates.ts` (405 satır), `ads-loader.js` (415 satır).
   - Her iki depoda da yalnızca `DevAdmin` dalında çalışıldı, `main` dalı korundu.
 * **Durum:** 1. Basamak (Görsel Sayfa-Reklam Yönetimi) başarıyla tamamlandı.
+## 🚀 Son Güncelleme [22.10.2026 - 10:20] — 2. REKLAMLAR (ASKILI DİKEY & SAYFA ORTASI 2) VE STATİK/STICKY YAN SÜTUN DÜZELTMESİ ✅
+* **Yapılan İşlem:**
+  1. **Public API Eksik Yuvalar Düzeltmesi (`cmsPublic.ts`):** `/api/v1/ads` uç noktasına `DEFAULT_AD_SLOTS` harmanlama mantığı eklenerek `ad_sidebar_left_2`, `ad_sidebar_right_2` ve `ad_in_content_2` yuvalarının vitrine eksiksiz iletilmesi sağlandı.
+  2. **Askılı Dikey Reklamlar (Sol/Sağ 2) Ray Mimarisi (`ads-loader.js`):** `setupSidebarSlots` ile yan sütunlar Slot 1 ve Slot 2 olarak ikiye bölündü; Slot 2 birinci reklamın hemen altına askılı yerleştirildi. Dikey reklam kontrolü genişletildi.
+  3. **Sticky / Statik Sütun Yönetimi (`ads-loader.js` & `global.css`):** CSS'te hardcoded bulunan `position: sticky; top: 140px;` kaldırıldı. Sütunun yapışkanlığı stüdyodaki `is_sticky` seçimine bağlandı; pasifken sayfa ile akması, aktifken kilitlenmesi sağlandı.
+  4. **Sayfa Ortası 2. Reklam Konumu (`index.html`):** Ana sayfada 4'lü merkez kutularının (Hub Grid) ortasına (Bizce & Uygulamalar kartları ile Güncel & Anıltılar kartları arasına) konumlandırıldı; pasifken sıfır boşlukla gizlenme kuralı bağlandı.
+* **Sonuçlar:**
+  - Tüm backend API testleri (57 test) %100 PASS.
+  - Vitrin testleri (604 test) %100 PASS.
+  - Satır limitleri (`ads-loader.js`: 429 satır, `cmsPublic.ts`: 308 satır) korundu.
+  - Her iki depo da `DevAdmin` dalında çalıştırıldı.
