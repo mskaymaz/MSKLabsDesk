@@ -5,6 +5,23 @@ import { api } from '../services/api';
 import { slugifyTurkish } from '../utils/slugify';
 import { PageStudioView } from './PageStudioView';
 
+const EMPTY_PAGE_FORM: PageFormData = {
+  slug: '',
+  title_tr: '',
+  title_en: '',
+  title_ar: '',
+  summary_tr: '',
+  summary_en: '',
+  summary_ar: '',
+  content_tr: '',
+  content_en: '',
+  content_ar: '',
+  hero_image: '',
+  meta_keywords: '',
+  status: 'published',
+  display_order: 0,
+};
+
 export const PagesView: React.FC = () => {
   const [pages, setPages] = useState<SitePage[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -15,22 +32,7 @@ export const PagesView: React.FC = () => {
   const [editingPage, setEditingPage] = useState<SitePage | null>(null);
   const [aiTranslating, setAiTranslating] = useState(false);
 
-  const [formData, setFormData] = useState<PageFormData>({
-    slug: '',
-    title_tr: '',
-    title_en: '',
-    title_ar: '',
-    summary_tr: '',
-    summary_en: '',
-    summary_ar: '',
-    content_tr: '',
-    content_en: '',
-    content_ar: '',
-    hero_image: '',
-    meta_keywords: '',
-    status: 'published',
-    display_order: 0,
-  });
+  const [formData, setFormData] = useState<PageFormData>(EMPTY_PAGE_FORM);
 
   const loadPages = async () => {
     setLoading(true);
@@ -50,22 +52,7 @@ export const PagesView: React.FC = () => {
 
   const openNewPageStudio = () => {
     setEditingPage(null);
-    setFormData({
-      slug: '',
-      title_tr: '',
-      title_en: '',
-      title_ar: '',
-      summary_tr: '',
-      summary_en: '',
-      summary_ar: '',
-      content_tr: '',
-      content_en: '',
-      content_ar: '',
-      hero_image: '',
-      meta_keywords: '',
-      status: 'published',
-      display_order: pages.length + 1,
-    });
+    setFormData({ ...EMPTY_PAGE_FORM, display_order: pages.length + 1 });
     setIsStudioOpen(true);
   };
 
@@ -155,10 +142,21 @@ export const PagesView: React.FC = () => {
       if (editingPage) {
         await api.updatePage(editingPage.id, payload);
       } else {
-        await api.createPage(payload);
+        const res = await api.createPage(payload);
+        if (res.success && res.pageId) {
+          const newPage: SitePage = {
+            ...payload,
+            id: res.pageId,
+            slug: res.slug || payload.slug,
+            is_system: 0,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+          } as any;
+          setEditingPage(newPage);
+          setFormData((prev) => ({ ...prev, slug: res.slug || payload.slug }));
+        }
       }
 
-      setIsStudioOpen(false);
       await loadPages();
     } catch (err: any) {
       alert(err.message || 'Sayfa kaydedilirken hata oluştu.');

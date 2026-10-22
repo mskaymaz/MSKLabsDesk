@@ -225,10 +225,11 @@ export const StudioTopBar: React.FC<StudioTopBarProps> = ({
               type="button"
               onClick={onSave}
               className="admin-btn admin-btn-primary admin-btn-sm"
-              style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', fontSize: '11px', padding: '3px 10px' }}
+              style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', fontSize: '11px', padding: '3px 12px', fontWeight: 700 }}
+              title="Değişiklikleri Kaydet (Ctrl+S)"
             >
               <Save size={12} />
-              <span>Yayına Al</span>
+              <span>Kaydet</span>
             </button>
           </div>
         </div>
@@ -388,6 +389,17 @@ export const StudioTopBar: React.FC<StudioTopBarProps> = ({
               <option value="draft">Taslak</option>
               <option value="archived">Arşivlendi</option>
             </select>
+          </div>
+          <div>
+            <label className="admin-label" style={{ fontSize: '11px' }}>Kapak Görseli URL</label>
+            <input
+              type="text"
+              value={formData.hero_image || ''}
+              onChange={(e) => setFormData((prev) => ({ ...prev, hero_image: e.target.value }))}
+              className="admin-input"
+              placeholder="https://.../cover.webp"
+              style={{ fontSize: '11px' }}
+            />
           </div>
           <div style={{ gridColumn: 'span 2' }}>
             <label className="admin-label" style={{ fontSize: '11px' }}>SEO Anahtar Kelimeleri</label>

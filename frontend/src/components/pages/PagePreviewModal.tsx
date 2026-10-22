@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
 import { X, Monitor, Tablet, Smartphone } from 'lucide-react';
-import type { PageFormData, StudioBlock } from '../../types';
-import { BlockRenderer } from './BlockRenderer';
+import type { PageFormData } from '../../types';
 
 export interface PagePreviewModalProps {
   isOpen: boolean;
   onClose: () => void;
   formData: PageFormData;
-  blocks?: StudioBlock[];
   activeLanguage: 'tr' | 'en' | 'ar';
 }
 
@@ -15,7 +13,6 @@ export const PagePreviewModal: React.FC<PagePreviewModalProps> = ({
   isOpen,
   onClose,
   formData,
-  blocks,
   activeLanguage,
 }) => {
   const [device, setDevice] = useState<'desktop' | 'tablet' | 'mobile'>('desktop');
@@ -194,37 +191,23 @@ export const PagePreviewModal: React.FC<PagePreviewModalProps> = ({
               </div>
             )}
 
-            {blocks && blocks.length > 0 ? (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-                {blocks.map((block) => (
-                  <BlockRenderer
-                    key={block.id}
-                    block={block}
-                    lang={previewLang}
-                    device={device}
-                    isInteractive={true}
-                  />
-                ))}
-              </div>
-            ) : (
-              <>
-                <h1 style={{ fontSize: '2rem', fontWeight: 800, color: '#0f172a', marginBottom: '12px', lineHeight: 1.25 }}>
-                  {title || 'Başlıksız Kurumsal Sayfa'}
-                </h1>
-
-                {summary && (
-                  <p style={{ fontSize: '1.05rem', color: '#475569', lineHeight: 1.6, marginBottom: '24px', borderLeft: isRtl ? 'none' : '4px solid #0284c7', borderRight: isRtl ? '4px solid #0284c7' : 'none', paddingLeft: isRtl ? 0 : '16px', paddingRight: isRtl ? '16px' : 0 }}>
-                    {summary}
-                  </p>
-                )}
-
-                <div
-                  className="static-page-card-content"
-                  style={{ fontSize: '0.95rem', lineHeight: 1.75, color: '#1e293b' }}
-                  dangerouslySetInnerHTML={{ __html: content || '<p><em>İçerik henüz girilmedi...</em></p>' }}
-                />
-              </>
+            {!content.toLowerCase().includes('<h1') && (
+              <h1 style={{ fontSize: '2rem', fontWeight: 800, color: '#0f172a', marginBottom: '12px', lineHeight: 1.25 }}>
+                {title || 'Başlıksız Kurumsal Sayfa'}
+              </h1>
             )}
+
+            {!content.toLowerCase().includes('<h1') && summary && (
+              <p style={{ fontSize: '1.05rem', color: '#475569', lineHeight: 1.6, marginBottom: '24px', borderLeft: isRtl ? 'none' : '4px solid #0284c7', borderRight: isRtl ? '4px solid #0284c7' : 'none', paddingLeft: isRtl ? 0 : '16px', paddingRight: isRtl ? '16px' : 0 }}>
+                {summary}
+              </p>
+            )}
+
+            <div
+              className="static-page-card-content tiptap-content"
+              style={{ fontSize: '0.95rem', lineHeight: 1.75, color: '#1e293b' }}
+              dangerouslySetInnerHTML={{ __html: content || '<p><em>İçerik henüz girilmedi...</em></p>' }}
+            />
           </main>
 
           {/* Sahte Footer */}

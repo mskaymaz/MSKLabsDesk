@@ -81,11 +81,12 @@ export const ImageDropdown: React.FC<ImageDropdownProps> = ({ editor }) => {
       setIsUploading(true);
       try {
         const res = await api.uploadMedia(selectedFile, alt.trim() || selectedFile.name);
-        if (res.success && res.data?.url) {
+        const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+        if (res.success && res.data?.url && !isLocalhost) {
           finalSrc = res.data.url;
         } else {
-          // Fallback to local DataURL for dev environment
-          finalSrc = previewSrc || '';
+          // Yerel dev ortamında CDN URL'i çözümlenemeyeceği için Base64 DataURL ile doğrudan göster
+          finalSrc = previewSrc || res.data?.url || '';
         }
       } catch (err: any) {
         // Yerel dev ortamında veya offline durumda kullanıcıyı engellememek için veri URL'i fallback'i

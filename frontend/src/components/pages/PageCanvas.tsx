@@ -12,8 +12,6 @@ export interface PageCanvasProps {
   canvasWidth?: '900' | '1024' | '1160' | '1200' | 'custom';
   customWidthPx?: number;
   showSideAds?: boolean;
-  onTitleChange: (val: string) => void;
-  onSummaryChange: (val: string) => void;
   onContentChange: (val: string) => void;
   editorRef?: React.MutableRefObject<any>;
 }
@@ -27,8 +25,6 @@ export const PageCanvas: React.FC<PageCanvasProps> = ({
   canvasWidth = '900',
   customWidthPx = 900,
   showSideAds = true,
-  onTitleChange,
-  onSummaryChange,
   onContentChange,
   editorRef,
 }) => {
@@ -37,10 +33,6 @@ export const PageCanvas: React.FC<PageCanvasProps> = ({
   const fixedWidth =
     device === 'mobile' ? '390px' : device === 'tablet' ? '768px' : desktopWidth;
 
-  const currentTitle =
-    activeTab === 'tr' ? formData.title_tr : activeTab === 'en' ? formData.title_en : formData.title_ar;
-  const currentSummary =
-    activeTab === 'tr' ? formData.summary_tr : activeTab === 'en' ? formData.summary_en : formData.summary_ar;
   const currentContent =
     activeTab === 'tr' ? formData.content_tr : activeTab === 'en' ? formData.content_en : formData.content_ar;
 
@@ -94,7 +86,7 @@ export const PageCanvas: React.FC<PageCanvasProps> = ({
             <CanvasSideAd side="left" canvasTheme={canvasTheme} />
           )}
 
-          {/* Merkez Sayfa Tuvali (Word Kağıt Tuval) */}
+          {/* Merkez Sayfa Tuvali (Tam Biçimlendirilebilir Word Kağıt Tuvali) */}
           <div
             className="word-paper-canvas"
             data-theme={canvasTheme}
@@ -113,79 +105,19 @@ export const PageCanvas: React.FC<PageCanvasProps> = ({
                   : '0 20px 45px -10px rgba(0,0,0,0.15)',
               display: 'flex',
               flexDirection: 'column',
-              padding: device === 'mobile' ? '20px 16px' : '36px 40px',
+              padding: device === 'mobile' ? '16px' : '28px 36px',
               minHeight: '750px',
               transition: 'background 0.2s ease, border-color 0.2s ease',
             }}
             dir={isRtl ? 'rtl' : 'ltr'}
           >
-            {/* Büyük Belge Başlığı (Word Başlık Alanı) */}
-            <input
-              type="text"
-              placeholder={
-                activeTab === 'tr'
-                  ? 'Sayfa Başlığı...'
-                  : activeTab === 'en'
-                  ? 'Page Title...'
-                  : 'عنوان الصفحة...'
-              }
-              value={currentTitle || ''}
-              onChange={(e) => onTitleChange(e.target.value)}
-              style={{
-                width: '100%',
-                background: 'transparent',
-                border: 'none',
-                borderBottom: `2px solid ${canvasTheme === 'dark' ? '#334155' : '#e2e8f0'}`,
-                padding: '8px 0',
-                fontSize: '1.75rem',
-                fontWeight: 800,
-                color: canvasTheme === 'dark' ? '#f8fafc' : '#0f172a',
-                outline: 'none',
-                fontFamily: isRtl ? 'Cairo' : 'inherit',
-                marginBottom: '16px',
-              }}
-            />
-
-            {/* Kısa Özet / Alt Başlık Metin Alanı */}
-            <textarea
-              rows={2}
-              placeholder={
-                activeTab === 'tr'
-                  ? 'Kısa Özet / Alt Başlık...'
-                  : activeTab === 'en'
-                  ? 'Short Summary / Subtitle...'
-                  : 'ملخص الصفحة...'
-              }
-              value={currentSummary || ''}
-              onChange={(e) => onSummaryChange(e.target.value)}
-              style={{
-                width: '100%',
-                padding: '10px 14px',
-                background: canvasTheme === 'dark' ? '#1e293b' : '#f8fafc',
-                border: `1px solid ${canvasTheme === 'dark' ? '#334155' : '#cbd5e1'}`,
-                borderRadius: '8px',
-                color: canvasTheme === 'dark' ? '#cbd5e1' : '#475569',
-                fontSize: '13px',
-                fontFamily: isRtl ? 'Cairo' : 'inherit',
-                outline: 'none',
-                resize: 'vertical',
-                marginBottom: '20px',
-              }}
-            />
-
-            {/* Zengin Metin Editörü (Word / TipTap Düzenleyici) */}
+            {/* Zengin Metin Editörü: Başlık, Özet ve İçerik Tüm Araçlarla Doğrudan Düzenlenebilir */}
             <RichTextEditor
-              label={
-                activeTab === 'tr'
-                  ? 'Sayfa İçeriği'
-                  : activeTab === 'en'
-                  ? 'Page Content'
-                  : 'محتوى الصفحة'
-              }
               value={currentContent || ''}
               onChange={onContentChange}
               dir={isRtl ? 'rtl' : 'ltr'}
               editorRef={editorRef}
+              hideHeader={true}
             />
           </div>
 

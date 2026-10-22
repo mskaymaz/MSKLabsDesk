@@ -44,10 +44,42 @@ export const PageStudioView: React.FC<PageStudioViewProps> = ({
   const [customWidthPx, setCustomWidthPx] = useState<number>(900);
   const [showSideAds, setShowSideAds] = useState<boolean>(true);
 
-  // Autosave State Machine (3000ms debounce)
+  // Autosave & Kaydetme Durum Makinesi
   const [autosaveState, setAutosaveState] = useState<'idle' | 'dirty' | 'saving' | 'saved'>('idle');
   const [internalAiTranslating, setInternalAiTranslating] = useState(false);
 
+  // Sayfa açıldığında veya dil değiştiğinde başlık & özeti zengin tuval içine dahil et
+  useEffect(() => {
+    if (!isOpen) return;
+
+    setFormData((prev) => {
+      const next = { ...prev };
+      const currentContent = activeTab === 'tr' ? next.content_tr : activeTab === 'en' ? next.content_en : next.content_ar;
+      const currentTitle = activeTab === 'tr' ? next.title_tr : activeTab === 'en' ? next.title_en : next.title_ar;
+      const currentSummary = activeTab === 'tr' ? next.summary_tr : activeTab === 'en' ? next.summary_en : next.summary_ar;
+
+      // Eğer içerik boşsa veya <h1 içermiyorsa, başlık ve alt başlığı doğrudan biçimlendirilebilir H1 ve P olarak tuvale ekle
+      if (!currentContent || !currentContent.toLowerCase().includes('<h1')) {
+        const titleText = currentTitle || (activeTab === 'tr' ? 'Sayfa Başlığı' : activeTab === 'en' ? 'Page Title' : 'عنوان الصفحة');
+        const summaryText = currentSummary || (activeTab === 'tr' ? 'Kısa açıklama veya alt başlık...' : activeTab === 'en' ? 'Short summary or subtitle...' : 'ملخص الصفحة...');
+        const newHtml = `<h1 style="text-align: center; font-size: 2.25rem; font-weight: 800; color: #0284c7;">${titleText}</h1><p style="text-align: center; color: #64748b; font-size: 1.05rem; margin-bottom: 24px;">${summaryText}</p><p>Sayfa içeriğinizi buraya yazmaya başlayın...</p>`;
+
+        if (activeTab === 'tr') {
+          next.content_tr = newHtml;
+          if (!next.title_tr) next.title_tr = titleText;
+        } else if (activeTab === 'en') {
+          next.content_en = newHtml;
+          if (!next.title_en) next.title_en = titleText;
+        } else {
+          next.content_ar = newHtml;
+          if (!next.title_ar) next.title_ar = titleText;
+        }
+      }
+      return next;
+    });
+  }, [isOpen, editingPage?.id, activeTab]);
+
+  // 3000ms Debounced Autosave State Machine
   useEffect(() => {
     if (autosaveState === 'dirty') {
       const timer = setTimeout(() => {
@@ -58,42 +90,59 @@ export const PageStudioView: React.FC<PageStudioViewProps> = ({
     }
   }, [autosaveState]);
 
-  // Sayfa başlık değişikliği ve otomatik slug üretimi
-  const handleTitleChange = (val: string) => {
+  // Zengin metin içerik değişikliği (Başlık ve Özeti HTML'den otomatik senkronize eder)
+  const handleContentChange = (val: string) => {
+    let extractedTitle = '';
+    let extractedSummary = '';
+
+    try {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(val, 'text/html');
+      const h1El = doc.querySelector('h1') || doc.querySelector('h2');
+      if (h1El) extractedTitle = (h1El.textContent || '').trim();
+
+      const leadP = doc.querySelector('p.lead') || (h1El?.nextElementSibling?.tagName === 'P' ? h1El.nextElementSibling : null);
+      if (leadP) extractedSummary = (leadP.textContent || '').trim();
+    } catch {}
+
     setFormData((prev) => {
       const next = { ...prev };
       if (activeTab === 'tr') {
-        next.title_tr = val;
-        // Yeni sayfa eklenirken slug boşsa veya başlıkla eşleşiyorsa otomatik slugify et
-        if (!editingPage) {
-          next.slug = slugifyTurkish(val);
+        next.content_tr = val;
+        if (extractedTitle) {
+          next.title_tr = extractedTitle;
+          if (!editingPage && (!next.slug || next.slug.startsWith('sayfa-'))) {
+            next.slug = slugifyTurkish(extractedTitle);
+          }
         }
+        if (extractedSummary) next.summary_tr = extractedSummary;
       } else if (activeTab === 'en') {
-        next.title_en = val;
+        next.content_en = val;
+        if (extractedTitle) next.title_en = extractedTitle;
+        if (extractedSummary) next.summary_en = extractedSummary;
       } else {
-        next.title_ar = val;
+        next.content_ar = val;
+        if (extractedTitle) next.title_ar = extractedTitle;
+        if (extractedSummary) next.summary_ar = extractedSummary;
       }
       return next;
     });
     setAutosaveState('dirty');
   };
 
-  // Sayfa özet / alt başlık değişikliği
-  const handleSummaryChange = (val: string) => {
-    setFormData((prev) => ({
-      ...prev,
-      [activeTab === 'tr' ? 'summary_tr' : activeTab === 'en' ? 'summary_en' : 'summary_ar']: val,
-    }));
-    setAutosaveState('dirty');
-  };
-
-  // Zengin metin içerik değişikliği (TipTap HTML)
-  const handleContentChange = (val: string) => {
-    setFormData((prev) => ({
-      ...prev,
-      [activeTab === 'tr' ? 'content_tr' : activeTab === 'en' ? 'content_en' : 'content_ar']: val,
-    }));
-    setAutosaveState('dirty');
+  // Manuel Kaydetme Butonu (Anlık backend kaydı ve durum güncellemesi)
+  const handleManualSave = async (e: React.FormEvent) => {
+    if (editorRef.current) {
+      const currentHtml = editorRef.current.getHTML();
+      handleContentChange(currentHtml);
+    }
+    setAutosaveState('saving');
+    try {
+      await onSave(e);
+      setAutosaveState('saved');
+    } catch {
+      setAutosaveState('dirty');
+    }
   };
 
   // TipTap Undo / Redo
@@ -115,7 +164,7 @@ export const PageStudioView: React.FC<PageStudioViewProps> = ({
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') {
         e.preventDefault();
-        onSave(e as any);
+        handleManualSave(e as any);
       }
     };
     window.addEventListener('keydown', handleKeyDown);
@@ -216,6 +265,15 @@ export const PageStudioView: React.FC<PageStudioViewProps> = ({
     }
   };
 
+  // Canlı Önizleme Açmadan Önce Editör İçeriğini Senkronize Et
+  const handleOpenPreview = () => {
+    if (editorRef.current) {
+      const latestHtml = editorRef.current.getHTML();
+      handleContentChange(latestHtml);
+    }
+    setIsPreviewOpen(true);
+  };
+
   if (!isOpen) return null;
 
   return (
@@ -266,8 +324,8 @@ export const PageStudioView: React.FC<PageStudioViewProps> = ({
         setIsMetaOpen={setIsMetaOpen}
         onAiTranslate={handleAiTranslateDirect}
         aiTranslating={aiTranslating || internalAiTranslating}
-        onPreview={() => setIsPreviewOpen(true)}
-        onSave={onSave}
+        onPreview={handleOpenPreview}
+        onSave={handleManualSave}
         onCloneLayout={handleCloneLayout}
       />
 
@@ -282,8 +340,6 @@ export const PageStudioView: React.FC<PageStudioViewProps> = ({
           canvasWidth={canvasWidth}
           customWidthPx={customWidthPx}
           showSideAds={showSideAds}
-          onTitleChange={handleTitleChange}
-          onSummaryChange={handleSummaryChange}
           onContentChange={handleContentChange}
           editorRef={editorRef}
         />

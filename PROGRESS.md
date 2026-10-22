@@ -1,7 +1,24 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
-## 🟢 Son Güncelleme [22.10.2026 - 15:50] — KURUMSAL SAYFA STÜDYOSU BLOG WORD MİMARİSİNE GEÇİŞ & SADELEŞTİRME [*]
+## 🟢 Son Güncelleme [22.10.2026 - 16:25] — KAYDETME MANTIĞI DÜZELTMESİ, BAŞLIK & ÖZET ZENGİN BİÇİMLENDİRMESİ VE ÖLÜ KOD TEMİZLİĞİ [*]
+* **Yapılan İşlem:**
+  1. **Kaydet Butonu ve Çift Kayıt Engellemesi (PagesView.tsx & StudioTopBar.tsx):**
+     - "Yayına Al" butonu kafa karışıklığını önlemek için doğrudan "Kaydet" butonuyla değiştirildi.
+     - Yeni sayfa ilk kez kaydedildiğinde stüdyo kapatılmayarak açık bırakıldı; backend'den dönen `pageId` anında `editingPage` nesnesine bağlandı. Böylece stüdyodan çıkmadan peş peşe yapılan manuel kaydetmelerde mükerrer kayıt oluşumu kesin olarak engellendi.
+  2. **Sayfa Başlığı ve Özetine Tam Zengin Biçimlendirme (PageCanvas.tsx & PageStudioView.tsx):**
+     - Başlık ve özet için kullanılan kısıtlayıcı düz metin `<input>` ve `<textarea>` alanları kaldırıldı.
+     - Belge başlığı (H1) ve alt başlığı doğrudan Word tuvali (TipTap) içine entegre edildi. Kullanıcı artık başlığı ve özeti seçip TipTap araç çubuğundaki tüm araçlarla (renk seçimi, punto büyütme/küçültme, ortalama/sağa/sola hizalama, kalın/italik vb.) özgürce düzenleyebiliyor.
+     - SEO başlığı ve kalıcı bağlantı (slug), içerikteki H1 başlığından arka planda otomatik olarak senkronize ediliyor.
+  3. **Eski Blok Modüllerinin ve Ölü Kodların Temizliği:**
+     - Artık kullanılmayan 6 blok bileşeni (`BlockPalette.tsx`, `BlockInspector.tsx`, `BlockRenderer.tsx`, `StudioTemplatesModal.tsx`, `StudioRevisionsModal.tsx`, `studioTemplatePresets.ts`) ve ~1.700 satır ölü kod tamamen silindi.
+  4. **Doğrulama ve Kural Uyumu:**
+     - Frontend Build: PASS (`tsc -b && vite build`, 867ms, 0 hata, 15kB daha hafif paket).
+     - Backend Testleri: PASS (82/82 test %100 başarılı).
+     - Satır sınırları: `PageStudioView.tsx` 357 (<= 600), `StudioTopBar.tsx` 449 (<= 450), `PageCanvas.tsx` 132 (<= 450), `PagesView.tsx` 448 (<= 450), `PagePreviewModal.tsx` 220 (<= 450).
+* **Durum:** DevAdmin dalında tamamlandı, main kesinlikle korundu.
+
+## [22.10.2026 - 15:50] — KURUMSAL SAYFA STÜDYOSU BLOG WORD MİMARİSİNE GEÇİŞ & SADELEŞTİRME [*]
 * **Yapılan İşlem:**
   1. **Yeni Kurumsal Sayfa Ekleme Hatasının Çözümü (PagesView.tsx & slugify.ts):**
      - "Yeni Kurumsal Sayfa Ekle" tetiklendiğinde tuvalin boş açılması sağlandı; başlık girildikçe Türkçe karakter uyumlu otomatik kalıcı bağlantı (slug) üretim algoritması (slugifyTurkish) bağlandı.
