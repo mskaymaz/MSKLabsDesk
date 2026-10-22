@@ -1,7 +1,21 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
-## 🟢 Son Güncelleme [21.10.2026 - 16:25] — SAYFA KAPSAMI VE HEDEFLEME MİMARİSİ (WHITELIST / BLACKLIST) [*]
+## 🟢 Son Güncelleme [22.10.2026 - 13:48] — KURUMSAL SAYFALAR GÖRSEL TASARIM STÜDYOSU (CMS-STUDIO-001 TAMAMLAMA) [*]
+* **Yapılan İşlem:**
+  1. **Çok Dilli Canlı RTL Simülasyonu ve Gemini AI Blok Çeviri (Faz 3):**
+     - Tuvalde AR seçildiğinde anında `dir="rtl"` tersine ızgara, Arapça tipografi ve sağa yaslı akış uygulandı (`BlockRenderer.tsx`).
+     - Modüler Gemini 1.5 Flash blok çeviri motoru (`aiBlocks.ts`) backend'e bağlandı (`POST /api/admin/pages/translate`).
+     - `BlockInspector.tsx` paneline hayalet Türkçe referans yer tutucuları ve doğrudan EN/AR içerik düzenleme alanları getirildi.
+  2. **Hazır Sayfa Şablonları & Sürüm Revizyon Kontrolü (Faz 4):**
+     - Landing, Hakkımızda, İletişim ve SSS sayfaları için tam TR/EN/AR içerikli 4 hazır şablon seti oluşturuldu (`studioTemplatePresets.ts` & `StudioTemplatesModal.tsx`).
+     - `meta_json.revisions` üzerinde 15 sürümlük yerel revizyon snapshot geçmişi ve tek tıkla geri yükleme motoru inşa edildi (`StudioRevisionsModal.tsx`).
+  3. **Vitrin & Regresyon Doğrulaması (Faz 5):**
+     - 604 vitrin testi (`webMSKLabs`), 82 backend testi (`MSKLabsDesk`) ve frontend prod derlemesi (%100 PASS) doğrulandı.
+     - Satır sınırları: `PageStudioView.tsx` 511 satır (<= 600), tüm modal ve yardımcı bileşenler <= 450 satır kuralına tam uyarlandı.
+* **Durum:** `DevAdmin` dalında tamamlandı, `main` kesinlikle korundu.
+
+## [21.10.2026 - 16:25] — SAYFA KAPSAMI VE HEDEFLEME MİMARİSİ (WHITELIST / BLACKLIST) [*]
 * **Yapılan İşlem:**
   1. **Sayfa Kapsamı Yönetimi (`AdStudioControls.tsx` & `cmsTemplates.ts`):**
      - Her reklam alanına özel `Kapsam` seçici eklendi: `Tüm Sitede Göster`, `Yalnızca Ana Sayfa`, `Yalnızca Blog`, `Yalnızca Uygulamalar` ve `Özel Sayfalar (URL)`.

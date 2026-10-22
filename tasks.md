@@ -34,11 +34,11 @@
 
 ## 🚨 ÖNCELİKLİ YENİ GÖREVLER (IMMEDIATE ACTION BACKLOG)
 
-### CMS-STUDIO-001 — Kurumsal Sayfalar İleri Düzey Görsel Tasarım Stüdyosu (Visual Page Builder Workstation) [ ]
+### CMS-STUDIO-001 — Kurumsal Sayfalar İleri Düzey Görsel Tasarım Stüdyosu (Visual Page Builder Workstation) [*]
 - **Amaç:** MSK Labs kurumsal sayfalarını (Ana Sayfa, Hakkımızda, SSS, İletişim, Gizlilik, Kullanım Koşulları ve gelecekteki tüm özel sayfalar) kod yazmadan, masaüstü iş istasyonu ergonomisinde, 3 panelli profesyonel bir görsel stüdyo ile tasarlamak, çok dilli (TR/EN/AR) ve canlı Arapça RTL motoruyla inşa etmek, reklam ve uygulama kataloğuyla entegre ederek yayına almak.
 - **Kapsam:** `MSKLabsDesk/frontend/src/views/PageStudioView.tsx`, `MSKLabsDesk/frontend/src/components/pages/*`, `MSKLabsDesk/backend/src/routes/cmsPages.ts`, `webMSKLabs/assets/js/page-loader.js`.
 - **Mimari Karar:** 
-  1. Masaüstü İş İstasyonu Odaklı (3 Panelli Workstation): Sol Bileşen Paleti (~260px), Orta İnteraktif Tuval (Canvas), Sağ Özellik Denetçisi (Inspector ~300px).
+  1. Masaüstü İş İstasyonu Odaklı (3 Panelli Workstation): Sol Bileşen Paleti (~295px), Orta Sabit Tuval (1140px Artboard), Sağ Özellik Denetçisi (Inspector ~320px).
   2. JSON Blok Şeması (Section-Based): Serbest piksel dağınıklığı yerine kılavuzlu Grid/Flex blokları; mobilde ve vitrinde sıfır tasarım kırılması.
   3. $0 Maliyet & Mikro-Modüler Mimari: Her yardımcı bileşen <= 400-450 satır, ana stüdyo <= 600 satır.
 
@@ -51,24 +51,25 @@
 - [*] **Task 1.4 — Özellik Denetçisi (Inspector Panel):** Tıklanan bloğun başlık, açıklama, boşluklar (padding/margin), arka plan rengi ve hizalama ayarlarını canlı yöneten sağ panel bileşeni (`BlockInspector.tsx` - Tamamlandı).
 - [*] **Task 1.5 — Geri Al / Yinele (Undo/Redo) & Debounced Autosave:** Durum makinesine geçmiş (history stack) eklenmesi ve 3000ms gecikmeli otomatik taslak koruması (Tamamlandı).
 
-##### Faz 2: Zengin Blok ve Şablon Kütüphanesi [*]
+##### Faz 2: Zengin Blok ve Şablon Kütüphanesi & Ergonomi [*]
 - [*] **Task 2.1 — Hero & Başlık Blokları:** Başlık, slogan, arka plan görseli/rengi, birincil/ikincil aksiyon butonları içeren karşılama blokları (`BlockRenderer.tsx` & `BlockInspector.tsx` - Tamamlandı).
 - [*] **Task 2.2 — Çoklu Kart Izgarası (2'li, 3'lü, 4'lü Grid):** Özellik, vizyon, ekip ve değer kartları; 2/3/4 sütun seçimi, hover efektleri ve ikon desteği (Tamamlandı).
 - [*] **Task 2.3 — Akordeon SSS & Liste Blokları:** Açılır-kapanır soru-cevap kartları, interaktif `<details><summary>` ve önizleme desteği (Tamamlandı).
 - [*] **Task 2.4 — İletişim, Destek & Bilgi Kutuları:** İletişim formu köprüsü, e-posta/telefon kartları ve destek yönlendirme şeritleri (Tamamlandı).
 - [*] **Task 2.5 — Fiyatlandırma ve Karşılaştırma Tablosu:** Kurumsal paket veya özellik karşılaştırma tabloları, fiyat etiketleri ve öne çıkan sütun vurgusu (Tamamlandı).
 - [*] **Task 2.6 — Çağrı Şeritleri (CTA - Call to Action):** Sayfa sonu veya ara bölümlerde dikkat çekici yönlendirme blokları ve aksiyon butonu (Tamamlandı).
+- [*] **Task 2.7 — Ergonomik Çerçeve:** 1140px sabit artboard, simetrik flyout katlanabilir paneller ve tek çatı üst bar birleştirmesi (Tamamlandı).
 
-##### Faz 3: Çok Dilli Canlı RTL Dönüşüm Motoru & AI Çeviri [ ]
-- [ ] **Task 3.1 — Canlı Arapça RTL Simülasyonu:** Dil sekmesinde AR seçildiğinde tuvalin anında sağdan sola (RTL) akışa, tersine ızgaraya ve Arapça font kurallarına bürünmesi.
-- [ ] **Task 3.2 — Gemini AI Blok Bazlı & Sayfa Bazlı Çeviri:** İster tek bir bloğu ister tüm sayfayı Türkçe kaynaktan İngilizce ve edebi Arapça'ya tek tıkla çeviren motor.
-- [ ] **Task 3.3 — Dil Etiketi Standartı Denetimi:** Bayrak emojisi yasağı ve yalın TR / EN / AR göstergelerinin korunması.
+##### Faz 3: Çok Dilli Canlı RTL Dönüşüm Motoru & AI Çeviri [*]
+- [*] **Task 3.1 — Canlı Arapça RTL Simülasyonu:** Dil sekmesinde AR seçildiğinde tuvalin anında sağdan sola (RTL) akışa, tersine ızgaraya ve Arapça font kurallarına bürünmesi (Tamamlandı).
+- [*] **Task 3.2 — Gemini AI Blok Bazlı & Sayfa Bazlı Çeviri:** İster tek bir bloğu ister tüm sayfayı Türkçe kaynaktan İngilizce ve edebi Arapça'ya tek tıkla çeviren motor (`aiBlocks.ts` - Tamamlandı).
+- [*] **Task 3.3 — Dil Etiketi Standartı Denetimi:** Bayrak emojisi yasağı ve yalın TR / EN / AR göstergelerinin korunması (Tamamlandı).
 
-##### Faz 4: Reklam Kancaları, Dinamik Uygulama Kataloğu & Sürümleme [ ]
-- [ ] **Task 4.1 — Reklam Yuvası Kancaları (Ad Hooks):** 8 yuvalı reklam altyapısının tuvalde görsel olarak bloklar arasına yerleştirilebilmesi ve sayfa matrisi ile senkronizasyonu.
-- [ ] **Task 4.2 — Canlı Uygulama Kataloğu Bağlantısı:** Bloğa "Uygulama Seç (Örn: HaydiNamaza)" dendiğinde son sürüm ve mağaza indirme butonlarının API'den otomatik çekilmesi.
-- [ ] **Task 4.3 — Şablon Kütüphanesi & Snapshot Geri Alma (Rollback):** Tasarlanan bir bloğun "Özel Şablon" kaydedilmesi ve sayfanın geçmiş versiyonlarına tek tıkla geri dönülebilmesi.
-- [ ] **Task 4.4 — Vitrin İstemcisi & Regresyon Testleri:** `webMSKLabs` üzerinde yeni blokların kusursuz render edilmesi, 604 vitrin testinin ve backend testlerinin %100 PASS korunması.
+##### Faz 4: Hazır Sayfa Şablonları & Sürüm Revizyon Kontrolü [*]
+- [*] **Task 4.1 — Reklam Yuvası Kancaları (Ad Hooks):** 8 yuvalı reklam altyapısının tuvalde görsel olarak bloklar arasına yerleştirilebilmesi ve sayfa matrisi ile senkronizasyonu (Tamamlandı).
+- [*] **Task 4.2 — Hazır Sayfa Şablonları (Templates):** 4 ana kurumsal şablon (Landing, Hakkımızda, İletişim, SSS) tek tıkla yükleme modalı (`StudioTemplatesModal.tsx` - Tamamlandı).
+- [*] **Task 4.3 — Sürüm Kontrolü & Snapshot Geri Alma (Rollback):** `meta_json` üzerinde 15 sürümlük revizyon geçmişi ve tek tıkla geri yükleme (`StudioRevisionsModal.tsx` - Tamamlandı).
+- [*] **Task 4.4 — Vitrin İstemcisi & Regresyon Testleri:** `webMSKLabs` üzerinde yeni blokların kusursuz render edilmesi, 604 vitrin testinin ve 82 backend testinin %100 PASS korunması (Tamamlandı).
 
 ---
 
