@@ -63,12 +63,14 @@ export const PageCanvas: React.FC<PageCanvasProps> = ({
   setIsRightPanelOpen,
 }) => {
   const isRtl = lang === 'ar';
-  const widthStyle =
-    device === 'mobile' ? '390px' : device === 'tablet' ? '768px' : canvasZoom === 'fit' ? '100%' : '1140px';
+  const fixedWidth =
+    device === 'mobile' ? '390px' : device === 'tablet' ? '768px' : '1140px';
 
   const scaleStyle: React.CSSProperties =
     canvasZoom === '75'
       ? { transform: 'scale(0.75)', transformOrigin: 'top center', marginBottom: '-25%' }
+      : canvasZoom === 'fit'
+      ? { transform: 'scale(0.85)', transformOrigin: 'top center', marginBottom: '-15%' }
       : {};
 
   return (
@@ -184,23 +186,77 @@ export const PageCanvas: React.FC<PageCanvasProps> = ({
         </div>
       </div>
 
-      {/* Tuval Kaydırma Sahnesi */}
+      {/* Tuval Kaydırma Sahnesi (Fixed Artboard Stage) */}
       <div
         style={{
           flex: 1,
           overflowY: 'auto',
           overflowX: 'auto',
-          padding: '24px 20px',
+          padding: '36px 40px',
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'flex-start',
+          position: 'relative',
+          minWidth: 0,
         }}
       >
+        {/* Sol Kenar Hızlı Açma Sekmesi (Paneli Kapalıyken) */}
+        {!isLeftPanelOpen && (
+          <button
+            type="button"
+            onClick={() => setIsLeftPanelOpen(true)}
+            className="admin-btn admin-btn-secondary admin-btn-sm"
+            style={{
+              position: 'absolute',
+              top: '20px',
+              left: '12px',
+              zIndex: 25,
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '6px',
+              boxShadow: '0 4px 14px rgba(0,0,0,0.4)',
+              fontSize: '11px',
+              padding: '6px 12px',
+              borderRadius: '8px',
+            }}
+          >
+            <PanelLeftOpen size={14} className="text-cyan" />
+            <span>Kütüphane</span>
+          </button>
+        )}
+
+        {/* Sağ Kenar Hızlı Açma Sekmesi (Paneli Kapalıyken) */}
+        {!isRightPanelOpen && selectedBlockId && (
+          <button
+            type="button"
+            onClick={() => setIsRightPanelOpen(true)}
+            className="admin-btn admin-btn-secondary admin-btn-sm"
+            style={{
+              position: 'absolute',
+              top: '20px',
+              right: '12px',
+              zIndex: 25,
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '6px',
+              boxShadow: '0 4px 14px rgba(0,0,0,0.4)',
+              fontSize: '11px',
+              padding: '6px 12px',
+              borderRadius: '8px',
+            }}
+          >
+            <PanelRightOpen size={14} className="text-cyan" />
+            <span>Denetçi</span>
+          </button>
+        )}
+
         <div
           data-theme={canvasTheme}
           style={{
-            width: widthStyle,
-            maxWidth: device === 'desktop' ? '1140px' : widthStyle,
+            width: fixedWidth,
+            minWidth: fixedWidth,
+            maxWidth: fixedWidth,
+            flexShrink: 0,
             background: canvasTheme === 'dark' ? '#0f172a' : '#ffffff',
             color: canvasTheme === 'dark' ? '#f8fafc' : '#0f172a',
             border: '1px solid var(--border-color)',
@@ -208,8 +264,8 @@ export const PageCanvas: React.FC<PageCanvasProps> = ({
             boxShadow: '0 25px 50px -12px rgba(0,0,0,0.6)',
             display: 'flex',
             flexDirection: 'column',
-            transition: 'width 0.25s ease-in-out, background 0.2s ease',
-            minHeight: '480px',
+            transition: 'background 0.2s ease',
+            minHeight: '600px',
             ...scaleStyle,
           }}
           dir={isRtl ? 'rtl' : 'ltr'}

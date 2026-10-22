@@ -476,23 +476,11 @@ export const PageStudioView: React.FC<PageStudioViewProps> = ({
         <div style={{ background: 'var(--bg-secondary)', borderBottom: '1px solid var(--border-color)', padding: '12px 20px', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '12px', zIndex: 15 }}>
           <div>
             <label className="admin-label" style={{ fontSize: '11px' }}>Kalıcı Bağlantı (Slug)</label>
-            <input
-              type="text"
-              disabled={isSystemPage}
-              value={formData.slug}
-              onChange={(e) => setFormData((prev) => ({ ...prev, slug: e.target.value.toLowerCase().trim() }))}
-              className="admin-input"
-              style={{ fontSize: '11px' }}
-            />
+            <input type="text" disabled={isSystemPage} value={formData.slug} onChange={(e) => setFormData((prev) => ({ ...prev, slug: e.target.value.toLowerCase().trim() }))} className="admin-input" style={{ fontSize: '11px' }} />
           </div>
           <div>
             <label className="admin-label" style={{ fontSize: '11px' }}>Yayın Durumu</label>
-            <select
-              value={formData.status}
-              onChange={(e) => setFormData((prev) => ({ ...prev, status: e.target.value as any }))}
-              className="admin-select"
-              style={{ fontSize: '11px' }}
-            >
+            <select value={formData.status} onChange={(e) => setFormData((prev) => ({ ...prev, status: e.target.value as any }))} className="admin-select" style={{ fontSize: '11px' }}>
               <option value="published">Yayında (Canlı)</option>
               <option value="draft">Taslak</option>
               <option value="archived">Arşivlendi</option>
@@ -512,17 +500,9 @@ export const PageStudioView: React.FC<PageStudioViewProps> = ({
         </div>
       )}
 
-      {/* 2. Ana İş İstasyonu Gövdesi (3 Panelli Grid) */}
+      {/* 2. Ana İş İstasyonu Gövdesi (Flyout & Fixed Artboard) */}
       <div style={{ flex: 1, display: 'flex', overflow: 'hidden', position: 'relative' }}>
-        {/* Sol Panel: Bileşen Kütüphanesi */}
-        {isLeftPanelOpen && (
-          <BlockPalette
-            onAddBlock={handleAddBlock}
-            onClose={() => setIsLeftPanelOpen(false)}
-          />
-        )}
-
-        {/* Orta Sahne: İnteraktif Tuval */}
+        {/* Orta Sahne: İnteraktif Tuval (Tam Alan) */}
         <PageCanvas
           blocks={blocks}
           selectedBlockId={selectedBlockId}
@@ -545,18 +525,50 @@ export const PageStudioView: React.FC<PageStudioViewProps> = ({
           setIsRightPanelOpen={setIsRightPanelOpen}
         />
 
-        {/* Sağ Panel: Özellik Denetçisi */}
+        {/* Sol Yüzen Panel: Bileşen Kütüphanesi (Flyout Drawer) */}
+        {isLeftPanelOpen && (
+          <div
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              bottom: 0,
+              zIndex: 40,
+              boxShadow: '8px 0 32px rgba(0,0,0,0.5)',
+              background: 'var(--bg-sidebar)',
+            }}
+          >
+            <BlockPalette
+              onAddBlock={handleAddBlock}
+              onClose={() => setIsLeftPanelOpen(false)}
+            />
+          </div>
+        )}
+
+        {/* Sağ Yüzen Panel: Özellik Denetçisi (Flyout Drawer) */}
         {isRightPanelOpen && selectedBlock && (
-          <BlockInspector
-            block={selectedBlock}
-            onUpdate={handleUpdateBlock}
-            onDelete={handleDeleteBlock}
-            onClone={handleCloneBlock}
-            onMoveUp={(id) => handleMoveBlock(id, 'up')}
-            onMoveDown={(id) => handleMoveBlock(id, 'down')}
-            onClose={() => setIsRightPanelOpen(false)}
-            lang={activeTab}
-          />
+          <div
+            style={{
+              position: 'absolute',
+              top: 0,
+              right: 0,
+              bottom: 0,
+              zIndex: 40,
+              boxShadow: '-8px 0 32px rgba(0,0,0,0.5)',
+              background: 'var(--bg-sidebar)',
+            }}
+          >
+            <BlockInspector
+              block={selectedBlock}
+              onUpdate={handleUpdateBlock}
+              onDelete={handleDeleteBlock}
+              onClone={handleCloneBlock}
+              onMoveUp={(id) => handleMoveBlock(id, 'up')}
+              onMoveDown={(id) => handleMoveBlock(id, 'down')}
+              onClose={() => setIsRightPanelOpen(false)}
+              lang={activeTab}
+            />
+          </div>
         )}
       </div>
 

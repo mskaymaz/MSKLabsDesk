@@ -1837,4 +1837,21 @@
   - Backend API testleri: 77/77 PASS (`npm --prefix backend test`).
   - Satır sınırları kontrol edildi: `PageStudioView.tsx` (573 satır, tavan <= 600), `PageCanvas.tsx` (326 satır, tavan <= 450), `BlockPalette.tsx` (215 satır, tavan <= 400).
   - Sadece `DevAdmin` dalında çalışıldı, `main` korundu.
-* **Durum:** Tam Ekran İzole Çalışma İstasyonu ve Ergonomik Tuval Mimarisi tamamlandı. Sırada Faz 3: Çok Dilli Canlı RTL Dönüşüm Motoru & AI Çeviri.
+* **Durum:** Tam Ekran İzole Çalışma İstasyonu ve Ergonomik Tuval Mimarisi tamamlandı.
+
+## 📌 Son Güncelleme [22.10.2026 - 11:55] — SABİT PİKSEL ARTIK-TUVAL (1140PX ARTBOARD) VE YÜZEN FLYOUT PANELLER MİMARİSİ ✅
+* **Yapılan İşlemler:**
+  1. **Sabit Piksel Masaüstü Tuvali (`PageCanvas.tsx` - 382 satır):**
+     - Tuval genişliği `width: 1140px; min-width: 1140px; max-width: 1140px; flex-shrink: 0;` olarak kilitlendi.
+     - Tarayıcı daralsa dahi tuval asla esneyip içerikleri sıkıştırmaz; vitrindeki 1140px düzeni milimetrik olarak korunur, sahne yatay/dikey scroll ile serbestçe taranır.
+  2. **Yüzen Yan Paneller (Flyout Overlays - `PageStudioView.tsx` - 585 satır):**
+     - Sol bileşen paleti ve sağ özellik denetçisi `position: absolute; z-index: 40;` olarak tuvalin üzerine binen flyout çekmecelere dönüştürüldü.
+     - Paneller açıldığında veya kapandığında alttaki tuvali sıkıştırmaz ve yatay iteleme (layout reflow) yapmaz.
+  3. **Hızlı Yan Sekmeler (Side Flyout Tabs):**
+     - Paneller kapalıyken tuvalin sol ve sağ kenarlarında beliren yüzen mini sekmeler ile tek tıkla kütüphane veya denetçi açılabilir hale getirildi.
+* **Sonuçlar & Kabul Kriterleri (DoD):**
+  - Frontend derlemesi: 0 hata (`npm --prefix frontend run build`).
+  - Backend API testleri: 77/77 PASS (`npm --prefix backend test`).
+  - Dosya satır sınırları korundu: `PageStudioView.tsx` (585 satır <= 600), `PageCanvas.tsx` (382 satır <= 450).
+  - Yalnızca `DevAdmin` dalında çalışıldı, `main` korundu.
+* **Durum:** Sabit Piksel Artboard ve Yüzen Flyout Paneller mimarisi başarıyla tamamlandı. Sırada Faz 3: Çok Dilli Canlı RTL Dönüşüm Motoru & AI Çeviri.
