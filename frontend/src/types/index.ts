@@ -260,6 +260,45 @@ export interface AdPlacementSetting {
 
 export type AdPageMatrixConfig = Record<string, Record<string, boolean>>;
 
+export type StudioBlockType = 
+  | 'hero' 
+  | 'rich_text' 
+  | 'features_grid' 
+  | 'faq_accordion' 
+  | 'contact_card' 
+  | 'cta_banner' 
+  | 'comparison_table' 
+  | 'ad_hook';
+
+export interface StudioBlockItem {
+  id: string;
+  title: string;
+  text: string;
+  icon?: string;
+  link?: string;
+}
+
+export interface StudioBlock {
+  id: string;
+  type: StudioBlockType;
+  title_tr: string;
+  title_en?: string;
+  title_ar?: string;
+  subtitle_tr?: string;
+  subtitle_en?: string;
+  subtitle_ar?: string;
+  content_tr?: string;
+  content_en?: string;
+  content_ar?: string;
+  items?: StudioBlockItem[];
+  padding_y?: 'none' | 'sm' | 'md' | 'lg';
+  bg_variant?: 'default' | 'surface' | 'gradient' | 'muted';
+  border_radius?: 'none' | 'sm' | 'md' | 'lg' | 'full';
+  align?: 'left' | 'center' | 'right';
+  ad_slot_key?: string;
+  app_id?: string;
+}
+
 export interface SitePage {
   id: string;
   slug: string;

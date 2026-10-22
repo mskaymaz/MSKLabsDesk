@@ -44,12 +44,12 @@
 
 #### 📋 Takip Edilebilir Aşama ve Görev Listesi:
 
-##### Faz 1: Çekirdek 3-Panelli Masaüstü Stüdyo Çerçevesi [ ]
-- [ ] **Task 1.1 — D1 Yerel Veritabanı ve Şema Doğrulaması:** `site_pages` tablosunun ve 7 sistem sayfasının yerel D1 üzerinde eksiksiz çalıştığının doğrulanması (Tamamlandı).
-- [ ] **Task 1.2 — 3 Panelli İş İstasyonu Düzeni:** `PageStudioView.tsx` tuvalinin Sol Palet, Orta Sahne ve Sağ Denetçi olarak 3 panelli profesyonel grid düzenine genişletilmesi.
-- [ ] **Task 1.3 — İnteraktif Tuval & Cihaz Ölçekleme:** Tuval üzerinde Masaüstü (1200px), Tablet (768px) ve Mobil (390px) canlı çerçeve kontrolleri ve blok sıralama mimarisi.
-- [ ] **Task 1.4 — Özellik Denetçisi (Inspector Panel):** Tıklanan bloğun başlık, açıklama, boşluklar (padding/margin), arka plan rengi ve hizalama ayarlarını canlı yöneten sağ panel bileşeni (`BlockInspector.tsx`).
-- [ ] **Task 1.5 — Geri Al / Yinele (Undo/Redo) & Debounced Autosave:** Durum makinesine geçmiş (history stack) eklenmesi ve 3000ms gecikmeli otomatik taslak koruması.
+##### Faz 1: Çekirdek 3-Panelli Masaüstü Stüdyo Çerçevesi [*]
+- [*] **Task 1.1 — D1 Yerel Veritabanı ve Şema Doğrulaması:** `site_pages` tablosunun ve 7 sistem sayfasının yerel D1 üzerinde eksiksiz çalıştığının doğrulanması (Doğrulandı ve test edildi).
+- [*] **Task 1.2 — 3 Panelli İş İstasyonu Düzeni:** `PageStudioView.tsx` tuvalinin Sol Palet, Orta Sahne ve Sağ Denetçi olarak 3 panelli profesyonel grid düzenine genişletilmesi (Tamamlandı).
+- [*] **Task 1.3 — İnteraktif Tuval & Cihaz Ölçekleme:** Tuval üzerinde Masaüstü (1140px), Tablet (768px) ve Mobil (390px) canlı çerçeve kontrolleri ve blok sıralama mimarisi (Tamamlandı).
+- [*] **Task 1.4 — Özellik Denetçisi (Inspector Panel):** Tıklanan bloğun başlık, açıklama, boşluklar (padding/margin), arka plan rengi ve hizalama ayarlarını canlı yöneten sağ panel bileşeni (`BlockInspector.tsx` - Tamamlandı).
+- [*] **Task 1.5 — Geri Al / Yinele (Undo/Redo) & Debounced Autosave:** Durum makinesine geçmiş (history stack) eklenmesi ve 3000ms gecikmeli otomatik taslak koruması (Tamamlandı).
 
 ##### Faz 2: Zengin Blok ve Şablon Kütüphanesi [ ]
 - [ ] **Task 2.1 — Hero & Başlık Blokları:** Başlık, slogan, arka plan görseli/rengi, birincil/ikincil aksiyon butonları içeren karşılama blokları.
