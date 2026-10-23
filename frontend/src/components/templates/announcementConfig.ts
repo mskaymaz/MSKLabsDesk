@@ -14,6 +14,8 @@ export interface AnnouncementItem {
   sizePreset?: 'compact' | 'standard' | 'large';
   customHeight?: number;
   cardWidth?: number;
+  cardHeight?: number;
+  topOffset?: number;
   opacity?: number;
   isDismissable: boolean;
   ctaText?: string;
@@ -30,6 +32,8 @@ export interface AnnouncementMeta {
   sizePreset?: 'compact' | 'standard' | 'large';
   customHeight?: number;
   cardWidth?: number;
+  cardHeight?: number;
+  topOffset?: number;
   opacity?: number;
   isDismissable: boolean;
   ctaText?: string;
@@ -62,16 +66,18 @@ export const BANNER_THEMES: BannerThemeItem[] = [
   { id: 'custom', name: 'Özel Renk', bgDark: '#1e293b', bgLight: '#f8fafc', textColorDark: '#f8fafc', textColorLight: '#0f172a', borderDark: '1px solid #475569', borderLight: '1px solid #cbd5e1', icon: React.createElement(Palette, { size: 14 }) },
 ];
 
-export const getSizeMetrics = (meta: Partial<AnnouncementMeta>, placement: string = 'top_hanging') => {
+export const getSizeMetrics = (meta: Partial<AnnouncementMeta & AnnouncementItem>, placement: string = 'top_hanging') => {
   const p = meta.sizePreset || 'standard';
   if (placement === 'top_hanging') {
-    const minHeight = meta.customHeight || (p === 'compact' ? 36 : p === 'large' ? 62 : 46);
-    const padding = p === 'compact' ? '6px 14px' : p === 'large' ? '12px 20px' : '9px 16px';
-    const fontSize = p === 'compact' ? '11px' : p === 'large' ? '14px' : '12.5px';
+    const minHeight = meta.customHeight || (p === 'compact' ? 26 : p === 'large' ? 48 : 34);
+    const padding = p === 'compact' ? '1px 10px' : p === 'large' ? '3px 16px' : '2px 12px';
+    const fontSize = p === 'compact' ? '11px' : p === 'large' ? '14px' : '12px';
     return { minHeight: `${minHeight}px`, padding, fontSize, width: '100%' };
   }
   const width = meta.cardWidth || (p === 'compact' ? 260 : p === 'large' ? 380 : 310);
-  const padding = p === 'compact' ? '10px 12px' : p === 'large' ? '16px 18px' : '13px 15px';
-  const fontSize = p === 'compact' ? '11px' : p === 'large' ? '14px' : '12.5px';
-  return { width: `${width}px`, padding, fontSize, minHeight: 'auto' };
+  const height = meta.cardHeight ? `${meta.cardHeight}px` : 'auto';
+  const topOffset = meta.topOffset ?? 110;
+  const padding = p === 'compact' ? '8px 10px' : p === 'large' ? '14px 16px' : '10px 12px';
+  const fontSize = p === 'compact' ? '11px' : p === 'large' ? '14px' : '12px';
+  return { width: `${width}px`, height, topOffset, padding, fontSize, minHeight: 'auto' };
 };

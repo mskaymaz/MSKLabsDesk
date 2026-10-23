@@ -113,9 +113,14 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--text-secondary)' }}>Duyuru:</span>
           <select className="form-select" value={activeItem.id} onChange={(e) => setSelectedId(e.target.value)} style={{ fontSize: '11px', height: '28px', minWidth: '150px', fontWeight: 600, padding: '2px 6px' }}>
-            {items.map((it, idx) => (
-              <option key={it.id} value={it.id}>{it.title || `Duyuru #${idx + 1}`} {!it.isActive ? '(Pasif)' : ''}</option>
-            ))}
+            {items.map((it, idx) => {
+              const sym = it.placement === 'left_floating' ? '←' : it.placement === 'right_floating' ? '→' : '↑';
+              return (
+                <option key={it.id} value={it.id}>
+                  {sym} {it.title || `Duyuru #${idx + 1}`} {!it.isActive ? '(Pasif)' : ''}
+                </option>
+              );
+            })}
           </select>
           <button type="button" onClick={handleAddNewItem} className="admin-btn admin-btn-secondary admin-btn-sm" style={{ height: '28px', padding: '0 10px', fontSize: '11px', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
             <Plus size={13} /><span>Ekle</span>
@@ -131,9 +136,9 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
           <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
             <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--text-secondary)' }}>Yerleşim:</span>
             <select className="form-select" value={currentPlacement} onChange={(e) => updateCurrentItem({ placement: e.target.value as any })} style={{ fontSize: '11px', height: '28px', padding: '2px 6px' }}>
-              <option value="top_hanging">Üst Askılı</option>
-              <option value="right_floating">Sağ Askılı</option>
-              <option value="left_floating">Sol Askılı</option>
+              <option value="top_hanging">Üst</option>
+              <option value="right_floating">Sağ</option>
+              <option value="left_floating">Sol</option>
             </select>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
@@ -151,7 +156,7 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px', fontSize: '11px', color: 'var(--text-secondary)' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 600 }}>
             <Sparkles size={12} style={{ color: 'var(--accent-primary)' }} />
-            <span>Önizleme: {activeItem.title} ({currentPlacement === 'top_hanging' ? 'Üst Askılı' : currentPlacement === 'left_floating' ? 'Sol Askılı' : 'Sağ Askılı'})</span>
+            <span>Önizleme: {activeItem.title} ({currentPlacement === 'top_hanging' ? 'Üst' : currentPlacement === 'left_floating' ? 'Sol' : 'Sağ'})</span>
             {isTicker && <span className="admin-badge admin-badge-sm" style={{ background: 'rgba(16,185,129,0.15)', color: '#10b981' }}>Kayan Yazı (Hover Durdurur)</span>}
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -191,12 +196,12 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
           </div>
         ) : (
           <div style={{ display: 'flex', justifyContent: currentPlacement === 'left_floating' ? 'flex-start' : 'flex-end', gap: '12px', padding: '6px 0' }}>
-            <div dir={activeLangTab === 'ar' ? 'rtl' : 'ltr'} style={{ width: sizeMetrics.width, padding: sizeMetrics.padding, fontSize: sizeMetrics.fontSize, background: previewBg, color: previewText, border: isDark ? currentThemeObj.borderDark : currentThemeObj.borderLight, borderRadius: '8px', opacity: announcementActive ? currentOpacity / 100 : 0.45, boxShadow: '0 8px 24px rgba(0,0,0,0.18)' }}>
+            <div dir={activeLangTab === 'ar' ? 'rtl' : 'ltr'} style={{ width: sizeMetrics.width, height: sizeMetrics.height, padding: sizeMetrics.padding, fontSize: sizeMetrics.fontSize, background: previewBg, color: previewText, border: isDark ? currentThemeObj.borderDark : currentThemeObj.borderLight, borderRadius: '8px', opacity: announcementActive ? currentOpacity / 100 : 0.45, boxShadow: '0 8px 24px rgba(0,0,0,0.18)', display: 'flex', flexDirection: 'column' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '10px', fontWeight: 800 }}>{currentThemeObj.icon} <span>{activeItem.title}</span></div>
                 {activeItem.isDismissable && <button type="button" style={{ background: 'transparent', border: 'none', color: 'inherit', opacity: 0.7, padding: '2px' }}><X size={12} /></button>}
               </div>
-              <div style={{ overflowY: 'auto', marginBottom: '6px', whiteSpace: 'pre-wrap', wordBreak: 'break-word' }} dangerouslySetInnerHTML={{ __html: announcementText[activeLangTab] || 'Zengin içerik...' }} />
+              <div style={{ flex: 1, overflowY: 'auto', marginBottom: '6px', whiteSpace: 'pre-wrap', wordBreak: 'break-word' }} dangerouslySetInnerHTML={{ __html: announcementText[activeLangTab] || 'Zengin içerik...' }} />
               {activeItem.ctaText && <div style={{ display: 'flex', justifyContent: 'flex-end' }}><span style={{ fontSize: '10px', fontWeight: 700 }}>{activeItem.ctaText} ➔</span></div>}
             </div>
           </div>
@@ -239,34 +244,58 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
           )}
         </div>
 
-        <div>
-          <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: '4px' }}>Boyut & Şeffaflık</label>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px', marginBottom: '6px' }}>
-            <select
-              className="form-select" value={activeItem.sizePreset || 'standard'}
-              onChange={(e) => {
-                const preset = e.target.value as 'compact' | 'standard' | 'large';
-                updateCurrentItem({
-                  sizePreset: preset,
-                  ...(currentPlacement === 'top_hanging' ? { customHeight: preset === 'compact' ? 36 : preset === 'large' ? 62 : 46 } : { cardWidth: preset === 'compact' ? 260 : preset === 'large' ? 380 : 310 }),
-                });
-              }}
-              style={{ fontSize: '11px', height: '28px', padding: '2px 6px' }}
-            >
-              <option value="compact">Kompakt (İnce)</option>
-              <option value="standard">Standart (Orta)</option>
-              <option value="large">Geniş (Büyük)</option>
-            </select>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '3px' }}>
-              <input type="number" className="form-input" style={{ fontSize: '11px', height: '28px', width: '56px', textAlign: 'center', padding: '2px' }} value={currentPlacement === 'top_hanging' ? (activeItem.customHeight || 46) : (activeItem.cardWidth || 310)} onChange={(e) => updateCurrentItem(currentPlacement === 'top_hanging' ? { customHeight: parseInt(e.target.value, 10) } : { cardWidth: parseInt(e.target.value, 10) })} />
-              <span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>px</span>
+        {currentPlacement === 'top_hanging' ? (
+          <div>
+            <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: '4px' }}>Boyut & Şeffaflık</label>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px', marginBottom: '6px' }}>
+              <select
+                className="form-select" value={activeItem.sizePreset || 'standard'}
+                onChange={(e) => {
+                  const preset = e.target.value as 'compact' | 'standard' | 'large';
+                  updateCurrentItem({
+                    sizePreset: preset,
+                    customHeight: preset === 'compact' ? 26 : preset === 'large' ? 48 : 34,
+                  });
+                }}
+                style={{ fontSize: '11px', height: '28px', padding: '2px 6px' }}
+              >
+                <option value="compact">Kompakt (İnce)</option>
+                <option value="standard">Standart (Orta)</option>
+                <option value="large">Geniş (Büyük)</option>
+              </select>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '3px' }}>
+                <input type="number" className="form-input" style={{ fontSize: '11px', height: '28px', width: '56px', textAlign: 'center', padding: '2px' }} value={activeItem.customHeight || 34} onChange={(e) => updateCurrentItem({ customHeight: parseInt(e.target.value, 10) || 34 })} />
+                <span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>px</span>
+              </div>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <span style={{ fontSize: '10px', color: 'var(--text-muted)', minWidth: '55px' }}>Opaklık: %{currentOpacity}</span>
+              <input type="range" min="40" max="100" step="5" value={currentOpacity} onChange={(e) => updateCurrentItem({ opacity: parseInt(e.target.value, 10) })} style={{ flex: 1, cursor: 'pointer' }} />
             </div>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <span style={{ fontSize: '10px', color: 'var(--text-muted)', minWidth: '55px' }}>Opaklık: %{currentOpacity}</span>
-            <input type="range" min="40" max="100" step="5" value={currentOpacity} onChange={(e) => updateCurrentItem({ opacity: parseInt(e.target.value, 10) })} style={{ flex: 1, cursor: 'pointer' }} />
+        ) : (
+          <div>
+            <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: '4px' }}>Boyut & Konum (px)</label>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '4px', marginBottom: '6px' }}>
+              <div>
+                <span style={{ display: 'block', fontSize: '9px', color: 'var(--text-muted)' }}>Genişlik:</span>
+                <input type="number" className="form-input" placeholder="310" style={{ fontSize: '11px', height: '26px', padding: '2px', textAlign: 'center' }} value={activeItem.cardWidth || 310} onChange={(e) => updateCurrentItem({ cardWidth: parseInt(e.target.value, 10) || 310 })} />
+              </div>
+              <div>
+                <span style={{ display: 'block', fontSize: '9px', color: 'var(--text-muted)' }}>Yükseklik:</span>
+                <input type="number" className="form-input" placeholder="Oto" style={{ fontSize: '11px', height: '26px', padding: '2px', textAlign: 'center' }} value={activeItem.cardHeight || ''} onChange={(e) => updateCurrentItem({ cardHeight: e.target.value ? parseInt(e.target.value, 10) : undefined })} />
+              </div>
+              <div>
+                <span style={{ display: 'block', fontSize: '9px', color: 'var(--text-muted)' }}>Üstten:</span>
+                <input type="number" className="form-input" placeholder="110" style={{ fontSize: '11px', height: '26px', padding: '2px', textAlign: 'center' }} value={activeItem.topOffset ?? 110} onChange={(e) => updateCurrentItem({ topOffset: parseInt(e.target.value, 10) || 110 })} />
+              </div>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <span style={{ fontSize: '10px', color: 'var(--text-muted)', minWidth: '55px' }}>Opaklık: %{currentOpacity}</span>
+              <input type="range" min="40" max="100" step="5" value={currentOpacity} onChange={(e) => updateCurrentItem({ opacity: parseInt(e.target.value, 10) })} style={{ flex: 1, cursor: 'pointer' }} />
+            </div>
           </div>
-        </div>
+        )}
 
         <div>
           <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: '4px' }}>Etkileşim & Buton</label>

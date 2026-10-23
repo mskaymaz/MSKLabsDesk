@@ -1,7 +1,24 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
-## 🟢 Son Güncelleme [23.10.2026 - 15:16] — EDİTÖR FONT BOYUTU SENKRONİZASYONU, WORD TİPİ A RENK PALETİ (RENKSİZ DESTEĞİ) VE DÜZENLİ ŞERİT MİZANPAJI [*]
+## 🟢 Son Güncelleme [23.10.2026 - 15:32] — DUYURU YERLEŞİM YÖN İKONLARI (↑/→/←), İNCE ŞERİT PADDING (2PX) VE SAĞ/SOL SERBEST EBAT & KONUM [*]
+* **Yapılan İşlem:**
+  1. **Yalın Yerleşim İsimleri ve Açılır Liste Yön İkonları:**
+     - `Üst Askılı`, `Sağ Askılı`, `Sol Askılı` ifadelerinden 'Askılı' ibaresi kaldırılarak doğrudan **Üst**, **Sağ**, **Sol** olarak sadeleştirildi.
+     - Duyuru açılır listesindeki seçeneklerin başına yön belirten sezgisel Unicode okları (`↑`, `→`, `←`) eklendi; yöneticinin duyurunun nereye ait olduğunu liste açılır açılmaz anında ayırt etmesi sağlandı.
+  2. **İnce Şerit (Bant) İç Boşluğu (2px Padding):**
+     - Üst şeridin üst-alt padding'i `2px` seviyesine çekildi. Böylece 20-26px gibi ince yükseklik değerleri girildiğinde bant tam istenen zarifliğe kavuşturuldu.
+  3. **Sağ/Sol Kartlar İçin 3 Boyutlu Geometri (Genişlik, Yükseklik, Üstten Mesafe):**
+     - Sağ veya Sol yerleşim seçildiğinde dinamik `Genişlik (px)`, `Yükseklik (px / Oto)` ve `Üstten / Top (px)` kontrolleri panele entegre edildi.
+     - Vitrin yükleyicisine (`announcement-loader.js`) `topOffset` (varsayılan 110px) ve `cardHeight` parametreleri bağlandı.
+  4. **Doğrulama ve Kural Uyumu:**
+     - Frontend Typecheck: PASS (0 hata).
+     - Backend Testleri: PASS (82/82 test %100 başarılı).
+     - Satır Sınırı: `AnnouncementBarSection.tsx` 365 satır ($\le 450$ kuralına tam uyumlu).
+     - Tüm işlemler yalnızca `DevAdmin` dalında yürütüldü; `main` korundu.
+* **Durum:** DevAdmin dalında tamamlandı, doğrulamalar başarılı.
+
+## [23.10.2026 - 15:16] — EDİTÖR FONT BOYUTU SENKRONİZASYONU, WORD TİPİ A RENK PALETİ (RENKSİZ DESTEĞİ) VE DÜZENLİ ŞERİT MİZANPAJI [*]
 * **Yapılan İşlem:**
   1. **İmleç ve Seçim Odaklı Font Büyüklüğü (Punto) Senkronizasyonu:**
      - Farklı bir kelimeye geçildiğinde veya seçim değiştiğinde font boyutunun eski değerde takılı kalması kökten çözüldü. Düğümde özel fontSize yoksa aktif blok seviyesine (H1: 32px, H2: 24px, H3: 20px, H4: 18px, Paragraf: 16px) göre combobox anında ve canlı olarak dinamik eşitlenir hale getirildi.
