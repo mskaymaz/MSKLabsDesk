@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Megaphone, Save, Sparkles, X, ExternalLink, Sun, Moon, Plus, Trash2 } from 'lucide-react';
+import { Megaphone, Save, Sparkles, X, ExternalLink, Sun, Moon, Plus, Trash2, Smartphone, Monitor } from 'lucide-react';
 import { Switch } from '../ui/Input';
 import { RichTextEditor } from '../ui/RichTextEditor';
 import { type AnnouncementMeta, type AnnouncementItem, BANNER_THEMES, getSizeMetrics } from './announcementConfig';
@@ -23,6 +23,7 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
 }) => {
   const [activeLangTab, setActiveLangTab] = useState<'tr' | 'en' | 'ar'>('tr');
   const [previewTheme, setPreviewTheme] = useState<'dark' | 'light'>('light');
+  const [previewDevice, setPreviewDevice] = useState<'desktop' | 'mobile'>('desktop');
 
   const items: AnnouncementItem[] = (announcementMeta.items && announcementMeta.items.length > 0)
     ? announcementMeta.items
@@ -73,7 +74,7 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
   const isDark = previewTheme === 'dark';
   const currentOpacity = activeItem.opacity ?? 95;
   const sizeMetrics = getSizeMetrics(activeItem, currentPlacement);
-  const isTicker = (announcementMeta.displayMode || 'static') === 'ticker';
+  const isTicker = (activeItem.displayMode || 'static') === 'ticker';
 
   const isCustomTheme = activeItem.bannerType === 'custom';
   const previewBg = isCustomTheme
@@ -143,7 +144,7 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
             <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--text-secondary)' }}>Akış:</span>
-            <select className="form-select" value={announcementMeta.displayMode || 'static'} onChange={(e) => setAnnouncementMeta({ ...announcementMeta, displayMode: e.target.value as any })} style={{ fontSize: '11px', height: '28px', padding: '2px 6px' }}>
+            <select className="form-select" value={activeItem.displayMode || 'static'} onChange={(e) => updateCurrentItem({ displayMode: e.target.value as any })} style={{ fontSize: '11px', height: '28px', padding: '2px 6px' }}>
               <option value="static">Sabit / Çok Satırlı</option>
               <option value="ticker">Kayan Yazı (Ticker)</option>
             </select>
@@ -152,7 +153,16 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
       </div>
 
       {/* 3. Canlı Şerit Önizlemesi (Flyout + Ticker Simülasyonu) */}
-      <div style={{ background: isDark ? '#0B0F19' : '#F8FAFC', border: '1px solid var(--border-subtle, #E2E8F0)', borderRadius: '8px', padding: '12px', marginBottom: '14px' }}>
+      <div style={{
+        background: isDark ? '#0B0F19' : '#F8FAFC',
+        border: '1px solid var(--border-subtle, #E2E8F0)',
+        borderRadius: '8px',
+        padding: '12px',
+        marginBottom: '14px',
+        maxWidth: previewDevice === 'mobile' ? '390px' : '100%',
+        margin: previewDevice === 'mobile' ? '0 auto 14px auto' : '0 0 14px 0',
+        transition: 'max-width 0.25s ease',
+      }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px', fontSize: '11px', color: 'var(--text-secondary)' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 600 }}>
             <Sparkles size={12} style={{ color: 'var(--accent-primary)' }} />
@@ -160,6 +170,34 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
             {isTicker && <span className="admin-badge admin-badge-sm" style={{ background: 'rgba(16,185,129,0.15)', color: '#10b981' }}>Kayan Yazı (Hover Durdurur)</span>}
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            {/* Cihaz Seçici (Masaüstü vs Mobil) */}
+            <div style={{ display: 'inline-flex', borderRadius: '4px', overflow: 'hidden', border: '1px solid var(--border-subtle)' }}>
+              <button
+                type="button"
+                onClick={() => setPreviewDevice('desktop')}
+                style={{
+                  display: 'inline-flex', alignItems: 'center', gap: '3px', padding: '2px 6px', fontSize: '10px',
+                  border: 'none', background: previewDevice === 'desktop' ? 'var(--accent-primary)' : 'transparent',
+                  color: previewDevice === 'desktop' ? '#FFFFFF' : 'var(--text-secondary)', cursor: 'pointer',
+                }}
+                title="Masaüstü Görünümü"
+              >
+                <Monitor size={10} /><span>Web</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setPreviewDevice('mobile')}
+                style={{
+                  display: 'inline-flex', alignItems: 'center', gap: '3px', padding: '2px 6px', fontSize: '10px',
+                  border: 'none', background: previewDevice === 'mobile' ? 'var(--accent-primary)' : 'transparent',
+                  color: previewDevice === 'mobile' ? '#FFFFFF' : 'var(--text-secondary)', cursor: 'pointer',
+                }}
+                title="Mobil Cihaz Görünümü"
+              >
+                <Smartphone size={10} /><span>Mobil</span>
+              </button>
+            </div>
+
             <div style={{ display: 'inline-flex', borderRadius: '4px', overflow: 'hidden', border: '1px solid var(--border-subtle)' }}>
               {(['tr', 'en', 'ar'] as const).map((lang) => (
                 <button key={lang} type="button" onClick={() => setActiveLangTab(lang)} style={{ padding: '2px 7px', fontSize: '10px', fontWeight: activeLangTab === lang ? 700 : 500, border: 'none', background: activeLangTab === lang ? 'var(--accent-primary)' : 'transparent', color: activeLangTab === lang ? '#FFFFFF' : 'var(--text-secondary)', cursor: 'pointer' }}>{lang.toUpperCase()}</button>
@@ -180,7 +218,7 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
                   <div
                     className="ann-ticker-track"
                     style={{
-                      animation: `${announcementMeta.tickerDirection === 'ltr' ? 'marqueeLTR' : 'marqueeRTL'} ${announcementMeta.tickerSpeed === 'slow' ? '28s' : announcementMeta.tickerSpeed === 'fast' ? '10s' : '18s'} linear infinite`,
+                      animation: `${(activeItem.tickerDirection || 'rtl') === 'ltr' ? 'marqueeLTR' : 'marqueeRTL'} ${(activeItem.tickerSpeed || 'normal') === 'slow' ? '28s' : (activeItem.tickerSpeed || 'normal') === 'fast' ? '10s' : '18s'} linear infinite`,
                     }}
                     dangerouslySetInnerHTML={{ __html: announcementText[activeLangTab] || 'Duyuru metni...' }}
                   />
@@ -195,8 +233,37 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
             </div>
           </div>
         ) : (
-          <div style={{ display: 'flex', justifyContent: currentPlacement === 'left_floating' ? 'flex-start' : 'flex-end', gap: '12px', padding: '6px 0' }}>
-            <div dir={activeLangTab === 'ar' ? 'rtl' : 'ltr'} style={{ width: sizeMetrics.width, height: sizeMetrics.height, padding: sizeMetrics.padding, fontSize: sizeMetrics.fontSize, background: previewBg, color: previewText, border: isDark ? currentThemeObj.borderDark : currentThemeObj.borderLight, borderRadius: '8px', opacity: announcementActive ? currentOpacity / 100 : 0.45, boxShadow: '0 8px 24px rgba(0,0,0,0.18)', display: 'flex', flexDirection: 'column' }}>
+          <div style={{
+            position: 'relative',
+            minHeight: `${Math.max(180, Math.min(380, (activeItem.topOffset ?? 110) + 120))}px`,
+            background: isDark ? 'rgba(0,0,0,0.25)' : 'rgba(255,255,255,0.4)',
+            borderRadius: '6px',
+            padding: '8px',
+            overflow: 'hidden',
+            border: '1px dashed var(--border-subtle)',
+          }}>
+            <div
+              dir={activeLangTab === 'ar' ? 'rtl' : 'ltr'}
+              style={{
+                position: 'relative',
+                marginTop: `${Math.min(activeItem.topOffset ?? 110, 240)}px`,
+                marginLeft: currentPlacement === 'left_floating' ? 0 : 'auto',
+                marginRight: currentPlacement === 'right_floating' ? 0 : 'auto',
+                width: previewDevice === 'mobile' ? '100%' : sizeMetrics.width,
+                height: sizeMetrics.height,
+                padding: sizeMetrics.padding,
+                fontSize: sizeMetrics.fontSize,
+                background: previewBg,
+                color: previewText,
+                border: isDark ? currentThemeObj.borderDark : currentThemeObj.borderLight,
+                borderRadius: '8px',
+                opacity: announcementActive ? currentOpacity / 100 : 0.45,
+                boxShadow: '0 8px 24px rgba(0,0,0,0.18)',
+                display: 'flex',
+                flexDirection: 'column',
+                transition: 'margin-top 0.2s ease, width 0.2s ease',
+              }}
+            >
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '10px', fontWeight: 800 }}>{currentThemeObj.icon} <span>{activeItem.title}</span></div>
                 {activeItem.isDismissable && <button type="button" style={{ background: 'transparent', border: 'none', color: 'inherit', opacity: 0.7, padding: '2px' }}><X size={12} /></button>}
@@ -316,14 +383,14 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
           <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--accent-primary)' }}>Kayan Yazı (Ticker) Ayarları:</span>
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
             <span style={{ fontSize: '10px', color: 'var(--text-secondary)' }}>Yön:</span>
-            <select className="form-select" style={{ fontSize: '11px', height: '26px', padding: '2px 6px' }} value={announcementMeta.tickerDirection || 'rtl'} onChange={(e: any) => setAnnouncementMeta({ ...announcementMeta, tickerDirection: e.target.value })}>
+            <select className="form-select" style={{ fontSize: '11px', height: '26px', padding: '2px 6px' }} value={activeItem.tickerDirection || 'rtl'} onChange={(e: any) => updateCurrentItem({ tickerDirection: e.target.value })}>
               <option value="rtl">Sağdan Sola (RTL)</option>
               <option value="ltr">Soldan Sağa (LTR)</option>
             </select>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
             <span style={{ fontSize: '10px', color: 'var(--text-secondary)' }}>Hız:</span>
-            <select className="form-select" style={{ fontSize: '11px', height: '26px', padding: '2px 6px' }} value={announcementMeta.tickerSpeed || 'normal'} onChange={(e: any) => setAnnouncementMeta({ ...announcementMeta, tickerSpeed: e.target.value })}>
+            <select className="form-select" style={{ fontSize: '11px', height: '26px', padding: '2px 6px' }} value={activeItem.tickerSpeed || 'normal'} onChange={(e: any) => updateCurrentItem({ tickerSpeed: e.target.value })}>
               <option value="slow">Yavaş (28s)</option>
               <option value="normal">Normal (18s)</option>
               <option value="fast">Hızlı (10s)</option>

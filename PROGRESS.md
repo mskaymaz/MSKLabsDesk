@@ -1,7 +1,27 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
-## 🟢 Son Güncelleme [23.10.2026 - 15:32] — DUYURU YERLEŞİM YÖN İKONLARI (↑/→/←), İNCE ŞERİT PADDING (2PX) VE SAĞ/SOL SERBEST EBAT & KONUM [*]
+## 🟢 Son Güncelleme [23.10.2026 - 15:54] — BAĞIMSIZ AKIŞ MODU (HER DUYURUYA ÖZEL TICKER), CANLI CİHAZ VE DİKEY KONUM SİMÜLASYONU, WORD AÇILIR RENK PALETİ [*]
+* **Yapılan İşlem:**
+  1. **Her Duyuruya Bağımsız Akış Modu (DisplayMode İzolasyonu):**
+     - Bir duyuruda Kayan Yazı (Ticker) seçildiğinde diğer tüm duyuruların da kayan yazıya dönüşmesi sorunu giderildi; `displayMode`, `tickerDirection` ve `tickerSpeed` parametreleri doğrudan her bir `AnnouncementItem` nesnesi seviyesine indirilerek tamamen izole edildi.
+  2. **Canlı Önizlemede Gerçek Dikey Konum (topOffset) ve Cihaz Simülatörü:**
+     - Sol/Sağ kartların önizlemesinde `topOffset` dikey mesafe simülasyonu sağlandı (örn. 250px girildiğinde kart önizleme tuvalinde gerçek mesafesinde aşağı kayıyor).
+     - Canlı önizleme şeridine `[Web]` ve `[Mobil]` simülasyon geçişi entegre edildi; mobilde kartın ve bantların nasıl duracağı tek tıkla test edilir kılındı.
+  3. **Word Standardı Açılır Renk Paleti (`ColorMenuDropdown.tsx`):**
+     - Araç çubuğundaki kaba, yan yana duran iki parçalı 🚫 'Renksiz' butonları tamamen kaldırıldı.
+     - Tek parça açılır Word popover mimarisi (`ColorMenuDropdown.tsx`) geliştirildi:
+       - **En Üstte:** Tek tıkla çalışan şık `[ 🚫 Otomatik / Renksiz ]` butonu.
+       - **Ortada:** 16 renkli popüler tema ızgarası.
+       - **En Altta:** `🎨 Özel Renk Seç...` yerel renk seçicisi.
+  4. **Doğrulama ve Kural Uyumu:**
+     - Frontend Typecheck: PASS (0 hata).
+     - Backend Testleri: PASS (82/82 test %100 başarılı).
+     - Satır Sınırı: `AnnouncementBarSection.tsx` 432 satır, `EditorToolbar.tsx` 389 satır ($\le 450$ kuralına tam uyumlu).
+     - Çalışmalar yalnızca `DevAdmin` dalında yürütüldü; `main` korundu.
+* **Durum:** DevAdmin dalında tamamlandı, doğrulamalar başarılı.
+
+## [23.10.2026 - 15:32] — DUYURU YERLEŞİM YÖN İKONLARI (↑/→/←), İNCE ŞERİT PADDING (2PX) VE SAĞ/SOL SERBEST EBAT & KONUM [*]
 * **Yapılan İşlem:**
   1. **Yalın Yerleşim İsimleri ve Açılır Liste Yön İkonları:**
      - `Üst Askılı`, `Sağ Askılı`, `Sol Askılı` ifadelerinden 'Askılı' ibaresi kaldırılarak doğrudan **Üst**, **Sağ**, **Sol** olarak sadeleştirildi.

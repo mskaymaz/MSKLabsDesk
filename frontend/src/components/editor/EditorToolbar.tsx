@@ -13,8 +13,6 @@ import {
   List,
   ListOrdered,
   Link as LinkIcon,
-  Highlighter,
-  Ban,
 } from 'lucide-react';
 import { TableDropdown } from './TableDropdown';
 import { ImageDropdown } from './ImageDropdown';
@@ -25,6 +23,7 @@ import { AdvancedCharStyleDropdown } from './AdvancedCharStyleDropdown';
 import { CaseAndFormatControls } from './CaseAndFormatControls';
 import { SymbolDropdown } from './SymbolDropdown';
 import { ComponentDropdown } from './ComponentDropdown';
+import { ColorMenuDropdown } from './ColorMenuDropdown';
 
 interface EditorToolbarProps {
   editor: Editor | null;
@@ -141,37 +140,6 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
     <div style={{ width: '1px', height: '18px', background: 'var(--border-subtle)', margin: '0 2px', flexShrink: 0 }} />
   );
 
-  const colorGroupStyle: React.CSSProperties = {
-    display: 'inline-flex',
-    alignItems: 'center',
-    borderRadius: '4px',
-    background: 'rgba(255,255,255,0.04)',
-    border: '1px solid var(--border-subtle)',
-  };
-
-  const colorLabelStyle: React.CSSProperties = {
-    ...btnStyle(false),
-    cursor: 'pointer',
-    position: 'relative',
-    flexDirection: 'column',
-    gap: '1px',
-    padding: '2px 4px',
-    height: '24px',
-  };
-
-  const clearColorBtnStyle = (hasColor: boolean): React.CSSProperties => ({
-    padding: '0 3px',
-    border: 'none',
-    borderLeft: '1px solid var(--border-subtle)',
-    background: 'transparent',
-    color: hasColor ? '#EF4444' : 'var(--text-muted)',
-    cursor: 'pointer',
-    height: '24px',
-    display: 'inline-flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  });
-
   return (
     <>
       <div
@@ -273,51 +241,34 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
 
           {divider}
 
-          {/* Renk Seçiciler (Word Tipi 'A' Yazı Rengi & Zemin Vurgusu + Renksiz Seçeneği) */}
+          {/* Renk Seçiciler (Açılır Word Tipi Palet: 'A' Yazı Rengi & Zemin Vurgusu) */}
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: '3px', flexShrink: 0 }}>
-            {/* Yazı Rengi: A Harfi + Renk Çizgisi + Renksiz Butonu */}
-            <div style={colorGroupStyle}>
-              <label style={colorLabelStyle} title="Yazı Rengi">
-                <span style={{ fontSize: '12px', fontWeight: 900, lineHeight: 1, fontFamily: 'serif' }}>A</span>
-                <span style={{ width: '13px', height: '3px', borderRadius: '1px', background: activeTextColor || '#EF4444' }} />
-                <input
-                  type="color"
-                  value={activeTextColor || '#000000'}
-                  onChange={(e) => { editor.chain().focus().setColor(e.target.value).run(); setActiveTextColor(e.target.value); }}
-                  style={{ position: 'absolute', opacity: 0, width: '100%', height: '100%', cursor: 'pointer' }}
-                />
-              </label>
-              <button
-                type="button"
-                onClick={() => { editor.chain().focus().unsetColor().run(); setActiveTextColor(''); }}
-                style={clearColorBtnStyle(Boolean(activeTextColor))}
-                title="Yazı Rengini Sıfırla (Renksiz)"
-              >
-                <Ban size={10} />
-              </button>
-            </div>
-
-            {/* Vurgu Rengi: Highlighter + Vurgu Çizgisi + Renksiz Butonu */}
-            <div style={colorGroupStyle}>
-              <label style={colorLabelStyle} title="Metin Vurgu Rengi">
-                <Highlighter size={11} />
-                <span style={{ width: '13px', height: '3px', borderRadius: '1px', background: activeHighlightColor || '#FEF08A' }} />
-                <input
-                  type="color"
-                  defaultValue={activeHighlightColor || '#FEF08A'}
-                  onChange={(e) => { editor.chain().focus().toggleHighlight({ color: e.target.value }).run(); setActiveHighlightColor(e.target.value); }}
-                  style={{ position: 'absolute', opacity: 0, width: '100%', height: '100%', cursor: 'pointer' }}
-                />
-              </label>
-              <button
-                type="button"
-                onClick={() => { editor.chain().focus().unsetHighlight().run(); setActiveHighlightColor(''); }}
-                style={clearColorBtnStyle(Boolean(activeHighlightColor))}
-                title="Vurguyu Kaldır (Renksiz)"
-              >
-                <Ban size={10} />
-              </button>
-            </div>
+            <ColorMenuDropdown
+              type="text"
+              activeColor={activeTextColor}
+              onSelectColor={(color) => {
+                editor.chain().focus().setColor(color).run();
+                setActiveTextColor(color);
+              }}
+              onClearColor={() => {
+                editor.chain().focus().unsetColor().run();
+                setActiveTextColor('');
+              }}
+              title="Yazı Rengi"
+            />
+            <ColorMenuDropdown
+              type="highlight"
+              activeColor={activeHighlightColor}
+              onSelectColor={(color) => {
+                editor.chain().focus().toggleHighlight({ color }).run();
+                setActiveHighlightColor(color);
+              }}
+              onClearColor={() => {
+                editor.chain().focus().unsetHighlight().run();
+                setActiveHighlightColor('');
+              }}
+              title="Metin Vurgu Rengi"
+            />
           </div>
 
           {/* Inline Modda Yalnızca Bağlantı Ekle */}
