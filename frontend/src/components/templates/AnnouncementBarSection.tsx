@@ -112,7 +112,7 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '10px', marginBottom: '12px', flexWrap: 'wrap', background: 'var(--bg-secondary, rgba(15,23,42,0.3))', padding: '8px 10px', borderRadius: '8px', border: '1px solid var(--border-subtle)' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--text-secondary)' }}>Duyuru:</span>
-          <select className="form-input" value={activeItem.id} onChange={(e) => setSelectedId(e.target.value)} style={{ fontSize: '11px', height: '28px', minWidth: '150px', fontWeight: 600 }}>
+          <select className="form-select" value={activeItem.id} onChange={(e) => setSelectedId(e.target.value)} style={{ fontSize: '11px', height: '28px', minWidth: '150px', fontWeight: 600, padding: '2px 6px' }}>
             {items.map((it, idx) => (
               <option key={it.id} value={it.id}>{it.title || `Duyuru #${idx + 1}`} {!it.isActive ? '(Pasif)' : ''}</option>
             ))}
@@ -130,7 +130,7 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
             <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--text-secondary)' }}>Yerleşim:</span>
-            <select className="form-input" value={currentPlacement} onChange={(e) => updateCurrentItem({ placement: e.target.value as any })} style={{ fontSize: '11px', height: '28px' }}>
+            <select className="form-select" value={currentPlacement} onChange={(e) => updateCurrentItem({ placement: e.target.value as any })} style={{ fontSize: '11px', height: '28px', padding: '2px 6px' }}>
               <option value="top_hanging">Üst Askılı</option>
               <option value="right_floating">Sağ Askılı</option>
               <option value="left_floating">Sol Askılı</option>
@@ -138,7 +138,7 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
             <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--text-secondary)' }}>Akış:</span>
-            <select className="form-input" value={announcementMeta.displayMode || 'static'} onChange={(e) => setAnnouncementMeta({ ...announcementMeta, displayMode: e.target.value as any })} style={{ fontSize: '11px', height: '28px' }}>
+            <select className="form-select" value={announcementMeta.displayMode || 'static'} onChange={(e) => setAnnouncementMeta({ ...announcementMeta, displayMode: e.target.value as any })} style={{ fontSize: '11px', height: '28px', padding: '2px 6px' }}>
               <option value="static">Sabit / Çok Satırlı</option>
               <option value="ticker">Kayan Yazı (Ticker)</option>
             </select>
@@ -210,7 +210,7 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
 
         <div>
           <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: '4px' }}>Tema & Renkler</label>
-          <select className="form-input" value={activeItem.bannerType || 'info'} onChange={(e) => updateCurrentItem({ bannerType: e.target.value as any })} style={{ fontSize: '11px', height: '28px', marginBottom: '6px' }}>
+          <select className="form-select" value={activeItem.bannerType || 'info'} onChange={(e) => updateCurrentItem({ bannerType: e.target.value as any })} style={{ fontSize: '11px', height: '28px', marginBottom: '6px', padding: '2px 6px' }}>
             {BANNER_THEMES.map((theme) => (
               <option key={theme.id} value={theme.id}>{theme.name}</option>
             ))}
@@ -237,7 +237,7 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
           <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: '4px' }}>Boyut & Şeffaflık</label>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px', marginBottom: '6px' }}>
             <select
-              className="form-input" value={activeItem.sizePreset || 'standard'}
+              className="form-select" value={activeItem.sizePreset || 'standard'}
               onChange={(e) => {
                 const preset = e.target.value as 'compact' | 'standard' | 'large';
                 updateCurrentItem({
@@ -245,7 +245,7 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
                   ...(currentPlacement === 'top_hanging' ? { customHeight: preset === 'compact' ? 36 : preset === 'large' ? 62 : 46 } : { cardWidth: preset === 'compact' ? 260 : preset === 'large' ? 380 : 310 }),
                 });
               }}
-              style={{ fontSize: '11px', height: '28px' }}
+              style={{ fontSize: '11px', height: '28px', padding: '2px 6px' }}
             >
               <option value="compact">Kompakt (İnce)</option>
               <option value="standard">Standart (Orta)</option>
@@ -281,14 +281,14 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
           <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--accent-primary)' }}>Kayan Yazı (Ticker) Ayarları:</span>
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
             <span style={{ fontSize: '10px', color: 'var(--text-secondary)' }}>Yön:</span>
-            <select className="form-input" style={{ fontSize: '11px', height: '26px' }} value={announcementMeta.tickerDirection || 'rtl'} onChange={(e: any) => setAnnouncementMeta({ ...announcementMeta, tickerDirection: e.target.value })}>
+            <select className="form-select" style={{ fontSize: '11px', height: '26px', padding: '2px 6px' }} value={announcementMeta.tickerDirection || 'rtl'} onChange={(e: any) => setAnnouncementMeta({ ...announcementMeta, tickerDirection: e.target.value })}>
               <option value="rtl">Sağdan Sola (RTL)</option>
               <option value="ltr">Soldan Sağa (LTR)</option>
             </select>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
             <span style={{ fontSize: '10px', color: 'var(--text-secondary)' }}>Hız:</span>
-            <select className="form-input" style={{ fontSize: '11px', height: '26px' }} value={announcementMeta.tickerSpeed || 'normal'} onChange={(e: any) => setAnnouncementMeta({ ...announcementMeta, tickerSpeed: e.target.value })}>
+            <select className="form-select" style={{ fontSize: '11px', height: '26px', padding: '2px 6px' }} value={announcementMeta.tickerSpeed || 'normal'} onChange={(e: any) => setAnnouncementMeta({ ...announcementMeta, tickerSpeed: e.target.value })}>
               <option value="slow">Yavaş (28s)</option>
               <option value="normal">Normal (18s)</option>
               <option value="fast">Hızlı (10s)</option>
