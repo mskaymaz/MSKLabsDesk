@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Megaphone, DollarSign, CheckCircle, Save, PlusCircle, Check, Info, Layers, Trash2, Sliders, Map } from 'lucide-react';
+import { Megaphone, LayoutTemplate, CheckCircle, Save, PlusCircle, Check, Info, Layers, Trash2, Sliders, Map } from 'lucide-react';
 import type { SiteTemplate, AdPlacementSetting, AdPageMatrixConfig } from '../types';
 import { api } from '../services/api';
 import { useTranslation } from '../context/I18nContext';
@@ -23,6 +23,7 @@ export const TemplatesView: React.FC = () => {
   const [announcementActive, setAnnouncementActive] = useState<boolean>(true);
   const [announcementMeta, setAnnouncementMeta] = useState<AnnouncementMeta>({
     bannerType: 'info',
+    placement: 'top_hanging',
     isDismissable: true,
   });
 
@@ -253,7 +254,7 @@ export const TemplatesView: React.FC = () => {
               borderRadius: '6px 6px 0 0', cursor: 'pointer',
             }}
           >
-            <DollarSign size={14} />
+            <LayoutTemplate size={14} />
             <span>Reklam Stüdyosu</span>
             <span className="admin-badge admin-badge-counter">{ads.length}</span>
           </button>

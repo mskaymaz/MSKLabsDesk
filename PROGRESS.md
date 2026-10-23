@@ -1,7 +1,28 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
-## 🟢 Son Güncelleme [23.10.2026 - 10:20] — REKLAM & DUYURU İSİMLENDİRME VE ARAYÜZ ETİKETLERİ DÜZENLEMESİ [*]
+## 🟢 Son Güncelleme [23.10.2026 - 10:50] — REKLAM STÜDYOSU İKONU, DUYURU BANDI AÇIK MOD STANDARDI VE DİNAMİK YERLEŞİM [*]
+* **Yapılan İşlem:**
+  1. **Reklam Stüdyosu İkon Güncellemesi (TemplatesView.tsx):**
+     - Sekme başındaki `DollarSign` (dolar) ikonu tamamen kaldırıldı; yerine reklam ve yerleşim şablonlarını en iyi ifade eden `LayoutTemplate` ikonu yerleştirildi.
+  2. **Duyuru Bandı Açık Mod Optimizasyonu (AnnouncementBarSection.tsx & announcement-loader.js):**
+     - Admin paneli canlı simülatöründe varsayılan görünüm koyu moddan açık moda (`light`) çekildi; aydınlık ve ferah önizleme sağlandı.
+     - `webMSKLabs` duyuru yükleyicisinde inline koyu renk ezmeleri kaldırılarak tema-duyarlı CSS sınıfları (`.msk-theme-info`, `.msk-theme-success`, `.msk-theme-warning`, `.msk-theme-purple`) tanımlandı. Varsayılan olarak açık, net ve aydınlık tasarım sunuldu.
+     - Dil etiketleri `AGENTS.md` Kural 5 gereği yalın `TR`, `EN`, `AR` olarak standartlaştırıldı.
+  3. **Web Yenileme (Refresh) Sayfa Kayması Çözümü (layout.js):**
+     - Yenileme sırasında reklam ve DOM yüklemelerinden kaynaklı sayfanın en alta kayma davranışı `history.scrollRestoration = 'manual'` ve yükleme anı `scrollTo(0, 0)` ile giderildi.
+  4. **Zengin Duyuru ve Reklam Özellikleri:**
+     - Duyurunun sadece metinle sınırlı kalmayıp resim, başlık, biçimlendirme ve buton barındırabilmesi için `RichTextEditor preset="full"` entegre edildi.
+     - Kartın tamamına veya CTA butonuna tıklanarak harici/dahili linke yönlendirme altyapısı sağlandı.
+     - İki yerleşim modu kazandırıldı: Üst sabit panel altı askılı şerit (`top_hanging`) ve sağ reklam üzeri kayan kart (`right_floating`).
+  5. **Doğrulama ve Kural Uyumu:**
+     - Frontend Build: PASS (tsc -b && vite build, 922ms, 0 hata).
+     - Backend Testleri: PASS (82/82 test %100 başarılı).
+     - WebMSKLabs Typecheck: PASS (0 hata).
+     - Satır sınırları: AnnouncementBarSection.tsx 442 satır (azami 450), TemplatesView.tsx 534 satır (azami 600).
+* **Durum:** DevAdmin dalında tamamlandı, main kesinlikle korundu.
+
+## [23.10.2026 - 10:20] — REKLAM & DUYURU İSİMLENDİRME VE ARAYÜZ ETİKETLERİ DÜZENLEMESİ [*]
 * **Yapılan İşlem:**
   1. **Sol Kenar Menüsü (Sidebar.tsx):** "Şablon & Reklam" menü başlığı "Reklam & Duyuru" olarak güncellendi.
   2. **Sayfa ve Sekme İsimlendirmeleri (TemplatesView.tsx):**
