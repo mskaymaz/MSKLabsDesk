@@ -32,7 +32,21 @@ export const ImageDropdown: React.FC<ImageDropdownProps> = ({ editor }) => {
 
   const dropdownRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [openUpward, setOpenUpward] = useState(false);
+  const [popoverPos, setPopoverPos] = useState<{ top: number; left: number } | null>(null);
+
+  const updatePosition = () => {
+    if (dropdownRef.current) {
+      const rect = dropdownRef.current.getBoundingClientRect();
+      const formH = 390;
+      const formW = 300;
+      let top = rect.bottom + 4;
+      if (top + formH > window.innerHeight - 16) {
+        top = Math.max(60, window.innerHeight - formH - 16);
+      }
+      const left = Math.max(16, Math.min(window.innerWidth - formW - 16, rect.left));
+      setPopoverPos({ top, left });
+    }
+  };
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -42,15 +56,14 @@ export const ImageDropdown: React.FC<ImageDropdownProps> = ({ editor }) => {
     };
     if (isOpen) {
       document.addEventListener('mousedown', handleClickOutside);
-      if (dropdownRef.current) {
-        const rect = dropdownRef.current.getBoundingClientRect();
-        const spaceBelow = window.innerHeight - rect.bottom;
-        const spaceAbove = rect.top;
-        setOpenUpward(spaceBelow < 380 && spaceAbove > spaceBelow);
-      }
+      updatePosition();
+      window.addEventListener('resize', updatePosition);
+      window.addEventListener('scroll', updatePosition, true);
     }
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
+      window.removeEventListener('resize', updatePosition);
+      window.removeEventListener('scroll', updatePosition, true);
     };
   }, [isOpen]);
 
@@ -170,24 +183,29 @@ export const ImageDropdown: React.FC<ImageDropdownProps> = ({ editor }) => {
         <form
           onSubmit={handleInsertImage}
           style={{
-            position: 'absolute',
-            top: openUpward ? 'auto' : 'calc(100% + 4px)',
-            bottom: openUpward ? 'calc(100% + 4px)' : 'auto',
-            left: 0,
-            width: '290px',
-            maxHeight: 'min(420px, calc(100vh - 80px))',
+            position: 'fixed',
+            top: popoverPos ? `${popoverPos.top}px` : '100px',
+            left: popoverPos ? `${popoverPos.left}px` : '100px',
+            width: '300px',
+            maxHeight: 'calc(100vh - 90px)',
             overflowY: 'auto',
             background: 'var(--bg-card, #1F2937)',
             border: '1px solid var(--border-card-hover, rgba(99, 102, 241, 0.4))',
-            borderRadius: '6px',
-            boxShadow: '0 8px 24px rgba(0, 0, 0, 0.35)',
-            zIndex: 99,
-            padding: '10px',
+            borderRadius: '8px',
+            boxShadow: '0 12px 36px rgba(0, 0, 0, 0.45)',
+            zIndex: 10002,
+            padding: '10px 12px',
             display: 'flex',
             flexDirection: 'column',
             gap: '8px',
           }}
         >
+          {/* Başlık ve Kapat Butonu */}
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--border-subtle)', paddingBottom: '4px' }}>
+            <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--text-primary)' }}>Görsel Ekle / Yerleştir</span>
+            <button type="button" onClick={() => setIsOpen(false)} style={{ background: 'transparent', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', fontSize: '13px', lineHeight: 1, padding: '2px' }} title="Kapat">✕</button>
+          </div>
+
           {/* Üst Sekmeler: Dosya Yükle / URL */}
           <div style={{ display: 'flex', gap: '3px', borderBottom: '1px solid var(--border-subtle)', paddingBottom: '6px' }}>
             <button

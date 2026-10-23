@@ -1,7 +1,21 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
-## 🟢 Son Güncelleme [23.10.2026 - 16:38] — DİKEY NÖBETLEŞE AKIŞ (ROTATOR), RESİM MENÜSÜ VIEWPORT KORUMASI, PERSISTENCE VE ÇİFT KANAL DAĞILIMI [*]
+## 🟢 Son Güncelleme [23.10.2026 - 16:44] — GÖRSEL EKLEME MENÜSÜ FIXED/VIEWPORT YÜZEN POPOVER DÜZELTMESİ [*]
+* **Yapılan İşlem:**
+  1. **Kesilme (Clipping) Sorununun Kök Çözümü:**
+     - Editör kapsayıcısında (`.rich-editor-wrapper`) bulunan `overflow: hidden;` kuralı `overflow: visible;` yapılarak yukarı açılan menülerin üst sınırda kesilmesi engellendi.
+     - `ImageDropdown.tsx` menüsü doğrudan DOM hiyerarşisindeki taşma kısıtlarından kurtarılmak üzere `position: fixed` ve `zIndex: 10002` mimarisine geçirildi.
+  2. **Esnek ve Dinamik Ekran İçi Konumlandırma:**
+     - Menü katı bir şekilde tam aşağı veya tam yukarı fırlamak yerine, butonun ekran koordinatlarına (`getBoundingClientRect()`) göre dinamik hesaplanan `top` ve `left` değerleriyle pencerenin görünür alanına esnekçe yerleşir hale getirildi.
+     - Üstten başlık çubuğu ve sağ üst köşesine pratik bir `✕` kapatma butonu eklendi.
+  3. **Doğrulama ve Kural Uyumu:**
+     - Frontend Build: PASS (0 hata, 429 satır bileşen boyutu).
+     - Backend Testleri: PASS (82/82 test %100 başarılı).
+     - Yalnızca `DevAdmin` dalı üzerinde çalışıldı.
+* **Durum:** DevAdmin dalında tamamlandı, doğrulamalar başarılı.
+
+## [23.10.2026 - 16:38] — DİKEY NÖBETLEŞE AKIŞ (ROTATOR), RESİM MENÜSÜ VIEWPORT KORUMASI, PERSISTENCE VE ÇİFT KANAL DAĞILIMI [*]
 * **Yapılan İşlem:**
   1. **Duyuru Ayarlarının Kalıcılığı (D1 & State Persistence):**
      - `AnnouncementBarSection` içindeki duyuruların akış modu (`displayMode`), boyut, yön ve konum parametreleri kaydetme butonunda doğrudan `meta_json.items` içerisine tam senkronize edilerek Cloudflare D1'e aktarıldı.
