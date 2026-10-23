@@ -1,6 +1,25 @@
 import React from 'react';
 import { Info, CheckCircle2, AlertTriangle, Flame } from 'lucide-react';
 
+export interface AnnouncementItem {
+  id: string;
+  title: string;
+  content_tr: string;
+  content_en?: string;
+  content_ar?: string;
+  bannerType: 'info' | 'success' | 'warning' | 'purple';
+  placement?: 'top_hanging' | 'right_floating';
+  sizePreset?: 'compact' | 'standard' | 'large';
+  customHeight?: number;
+  cardWidth?: number;
+  opacity?: number;
+  isDismissable: boolean;
+  ctaText?: string;
+  ctaUrl?: string;
+  targetUrl?: string;
+  isActive: boolean;
+}
+
 export interface AnnouncementMeta {
   bannerType: 'info' | 'success' | 'warning' | 'purple';
   placement?: 'top_hanging' | 'right_floating';
@@ -12,6 +31,11 @@ export interface AnnouncementMeta {
   ctaText?: string;
   ctaUrl?: string;
   targetUrl?: string;
+  displayMode?: 'static' | 'ticker';
+  tickerDirection?: 'rtl' | 'ltr';
+  tickerSpeed?: 'slow' | 'normal' | 'fast';
+  items?: AnnouncementItem[];
+  activeItemId?: string;
 }
 
 export interface BannerThemeItem {
@@ -28,12 +52,12 @@ export interface BannerThemeItem {
 
 export const BANNER_THEMES: BannerThemeItem[] = [
   { id: 'info', name: 'Bilgi (Mavi)', bgDark: 'linear-gradient(135deg, rgba(15,23,42,0.95) 0%, rgba(30,58,138,0.95) 100%)', bgLight: 'linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%)', textColorDark: '#bfdbfe', textColorLight: '#1e40af', borderDark: '1px solid rgba(59, 130, 246, 0.4)', borderLight: '1px solid #bfdbfe', icon: React.createElement(Info, { size: 14 }) },
-  { id: 'success', name: 'Kampanya (Yeşil)', bgDark: 'linear-gradient(135deg, rgba(2,44,34,0.95) 0%, rgba(6,95,70,0.95) 100%)', bgLight: 'linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%)', textColorDark: '#a7f3d0', textColorLight: '#166534', borderDark: '1px solid rgba(16, 185, 129, 0.4)', borderLight: '1px solid #bbf7d0', icon: React.createElement(CheckCircle2, { size: 14 }) },
+  { id: 'success', name: 'Kampanya (Yeşil)', bgDark: 'linear-gradient(135deg, rgba(2,44,34,0.95) 0%, rgba(6,95,70,0.95) 100%)', bgLight: 'linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%)', textColorDark: '#a7f3d0', textColorLight: '#166534', borderDark: '1px solid rgba(168, 85, 247, 0.4)', borderLight: '1px solid #bbf7d0', icon: React.createElement(CheckCircle2, { size: 14 }) },
   { id: 'warning', name: 'Uyarı (Sarı)', bgDark: 'linear-gradient(135deg, rgba(69,26,3,0.95) 0%, rgba(120,53,15,0.95) 100%)', bgLight: 'linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%)', textColorDark: '#fef08a', textColorLight: '#92400e', borderDark: '1px solid rgba(245, 158, 11, 0.4)', borderLight: '1px solid #fde68a', icon: React.createElement(AlertTriangle, { size: 14 }) },
   { id: 'purple', name: 'Lansman (Mor)', bgDark: 'linear-gradient(135deg, rgba(46,16,101,0.95) 0%, rgba(88,28,135,0.95) 100%)', bgLight: 'linear-gradient(135deg, #faf5ff 0%, #ede9fe 100%)', textColorDark: '#e9d5ff', textColorLight: '#6b21a8', borderDark: '1px solid rgba(168, 85, 247, 0.4)', borderLight: '1px solid #e9d5ff', icon: React.createElement(Flame, { size: 14 }) },
 ];
 
-export const getSizeMetrics = (meta: AnnouncementMeta, placement: 'top_hanging' | 'right_floating') => {
+export const getSizeMetrics = (meta: Partial<AnnouncementMeta>, placement: 'top_hanging' | 'right_floating') => {
   const p = meta.sizePreset || 'standard';
   if (placement === 'top_hanging') {
     const minHeight = meta.customHeight || (p === 'compact' ? 36 : p === 'large' ? 62 : 46);

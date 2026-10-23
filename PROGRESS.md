@@ -1,7 +1,28 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
-## 🟢 Son Güncelleme [23.10.2026 - 11:15] — FLYOUT DUYURU MİMARİSİ (SAYFAYI İTMEYEN KATMAN), BOYUT VE ŞEFFAFLIK KONTROLÜ [*]
+## 🟢 Son Güncelleme [23.10.2026 - 11:35] — ÇOKLU DUYURU HAVUZU, ROUND-ROBIN SIRALI DÖNGÜ, KAYAN YAZI (TICKER) VE HEADER DUYURU BUTONU [*]
+* **Yapılan İşlem:**
+  1. **Çoklu Duyuru Havuzu Mimarisi (announcementConfig.ts & AnnouncementBarSection.tsx):**
+     - Tek duyuru kısıtı kaldırılarak 10 adede kadar duyuru eklenebilen havuz mimarisi (`AnnouncementItem[]`) kuruldu.
+     - Her duyuruya bağımsız başlık, içerik, tema, boyut, yerleşim ve aktiflik kontrolü sağlandı.
+  2. **Kayan Yazı (Ticker / Marquee) ve Sabit Çok Satırlı Mod:**
+     - Duyurunun sabit blok halinde veya yatay kesintisiz kayan yazı (`marquee`) olarak akması seçeneği eklendi.
+     - Akış yönü (`Sağdan Sola` / `Soldan Sağa`) ve akış hızı (`Yavaş`, `Normal`, `Hızlı`) parametreleri bağlandı; fare üzerine geldiğinde (`hover`) okuma ve tıklama kolaylığı için akış durdurma özelliği uygulandı.
+  3. **Header Sağ Üst Duyuru Butonu & Popover Çekmecesi (layout.js & announcement-loader.js):**
+     - Üst sabit çubuğa, tema anahtarının yanına 📢 duyuru butonu ve aktif duyuru sayaç rozeti eklendi.
+     - Butona tıklandığında aktif duyuruları listeleyen ve istenen duyuruyu tek tıkla şeride yükleyen şık bir Popover menüsü oluşturuldu.
+  4. **Round-Robin Sıralı Gösterim ve Kapatma Politikası:**
+     - Kullanıcı bir duyuruyu kapattığında aynı duyuru tekrar fırlatılmaz; yeni sayfa veya yenilemede havuzdaki sıradaki görülmemiş duyuru ekrana getirilir.
+     - Havuz bittiğinde döngü başa döner; kapatılan duyurular ise 📢 butonundaki listeden istenildiğinde yeniden görüntülenebilir.
+  5. **Doğrulama ve Kural Uyumu:**
+     - Frontend Build: PASS (tsc -b && vite build, 1.00s, 0 hata).
+     - Backend Testleri: PASS (82/82 test %100 başarılı).
+     - WebMSKLabs Typecheck: PASS (0 hata).
+     - Satır sınırları: AnnouncementBarSection.tsx 439 satır (azami 450).
+* **Durum:** DevAdmin dalında tamamlandı, main kesinlikle korundu.
+
+## [23.10.2026 - 11:15] — FLYOUT DUYURU MİMARİSİ (SAYFAYI İTMEYEN KATMAN), BOYUT VE ŞEFFAFLIK KONTROLÜ [*]
 * **Yapılan İşlem:**
   1. **Yayında Görünmeme Kök Neden Çözümü (cmsPublic.ts & announcement-loader.js):**
      - `/api/v1/templates` sorgusunda `is_active` ve `updated_at` kolonları SELECT listesine eklendi.
