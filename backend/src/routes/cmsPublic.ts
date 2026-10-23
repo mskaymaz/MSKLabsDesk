@@ -280,7 +280,7 @@ export async function handleCmsPublic(request: Request, env: any): Promise<Respo
   // 6. GET /api/v1/templates — Duyuru ve Şablonlar
   if (path === '/api/v1/templates') {
     const { results } = await env.DB.prepare(
-      `SELECT key_name, content_tr, content_en, content_ar, meta_json FROM site_templates WHERE is_active = 1`
+      `SELECT key_name, content_tr, content_en, content_ar, meta_json, is_active, updated_at FROM site_templates WHERE is_active = 1`
     ).all();
     return new Response(JSON.stringify({ success: true, templates: results || [] }), { headers });
   }

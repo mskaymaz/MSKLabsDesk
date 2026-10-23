@@ -1,7 +1,25 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
-## 🟢 Son Güncelleme [23.10.2026 - 10:50] — REKLAM STÜDYOSU İKONU, DUYURU BANDI AÇIK MOD STANDARDI VE DİNAMİK YERLEŞİM [*]
+## 🟢 Son Güncelleme [23.10.2026 - 11:15] — FLYOUT DUYURU MİMARİSİ (SAYFAYI İTMEYEN KATMAN), BOYUT VE ŞEFFAFLIK KONTROLÜ [*]
+* **Yapılan İşlem:**
+  1. **Yayında Görünmeme Kök Neden Çözümü (cmsPublic.ts & announcement-loader.js):**
+     - `/api/v1/templates` sorgusunda `is_active` ve `updated_at` kolonları SELECT listesine eklendi.
+     - `announcement-loader.js` içerisindeki undefined kontrol hatası giderildi; duyurunun yayında olduğu doğrulandı ve vitrinde anında yüklenmesi sağlandı.
+  2. **Flyout Katman Mimarisi (Sayfayı Aşağı/Sola İtmeme Kuralı):**
+     - `top_hanging` düzeni DOM akışından çıkartılarak `position: fixed !important; top: [headerH]px; width: 100%; z-index: 995;` yapıldı; sayfayı asla aşağı itmez, sabit panelin altında yüzer.
+     - `right_floating` düzeni `position: fixed !important; right: 20px; top: 110px; z-index: 9999;` yapıldı; sayfayı asla sola itmez, sağ sütun üzerinde yüzer.
+  3. **Boyut ve Şeffaflık (Opacity) Kontrolü (announcementConfig.ts & AnnouncementBarSection.tsx):**
+     - `sizePreset` ('compact' | 'standard' | 'large') ve özel sayısal px girişi (yükseklik/genişlik) eklendi.
+     - Şeffaflık (%40 - %100) ayar sürgüsü ve modern `backdrop-filter: blur(10px)` buzlu cam efekti entegre edildi.
+     - `AnnouncementBarSection.tsx` satır sınırı korundu (445 satır, tavan azami 450).
+  4. **Doğrulama ve Kural Uyumu:**
+     - Frontend Build: PASS (tsc -b && vite build, 1.00s, 0 hata).
+     - Backend Testleri: PASS (82/82 test %100 başarılı).
+     - WebMSKLabs Typecheck: PASS (0 hata).
+* **Durum:** DevAdmin dalında tamamlandı, main kesinlikle korundu.
+
+## [23.10.2026 - 10:50] — REKLAM STÜDYOSU İKONU, DUYURU BANDI AÇIK MOD STANDARDI VE DİNAMİK YERLEŞİM [*]
 * **Yapılan İşlem:**
   1. **Reklam Stüdyosu İkon Güncellemesi (TemplatesView.tsx):**
      - Sekme başındaki `DollarSign` (dolar) ikonu tamamen kaldırıldı; yerine reklam ve yerleşim şablonlarını en iyi ifade eden `LayoutTemplate` ikonu yerleştirildi.
