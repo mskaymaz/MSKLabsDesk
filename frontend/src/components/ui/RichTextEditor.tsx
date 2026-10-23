@@ -22,6 +22,13 @@ import {
   CustomTableHeader,
   CustomTableView,
 } from '../editor/customExtensions';
+import {
+  CalloutBlock,
+  DetailsBlock,
+  DetailsSummary,
+  GridBlock,
+  GridColumn,
+} from '../editor/componentExtensions';
 import { EditorToolbar } from '../editor/EditorToolbar';
 import { FloatingTableInspector } from '../editor/FloatingTableInspector';
 import { FloatingImageToolbar } from '../editor/FloatingImageToolbar';
@@ -90,6 +97,11 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
       CustomImage.configure({
         allowBase64: true,
       }),
+      CalloutBlock,
+      DetailsBlock,
+      DetailsSummary,
+      GridBlock,
+      GridColumn,
     ],
     content: value || '',
     onUpdate: ({ editor: activeEditor }) => {

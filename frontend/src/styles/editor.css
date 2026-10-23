@@ -403,4 +403,128 @@
   background: rgba(2, 132, 199, 0.12) !important;
 }
 
+/* Çoklu Kart Izgaraları (2'li & 3'lü Kartlar) */
+.tiptap .editor-grid,
+.tiptap-content .editor-grid {
+  display: grid;
+  gap: 16px;
+  margin: 18px 0;
+  width: 100%;
+}
+
+.tiptap .editor-grid-2,
+.tiptap-content .editor-grid-2 {
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.tiptap .editor-grid-3,
+.tiptap-content .editor-grid-3 {
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.tiptap .editor-card,
+.tiptap-content .editor-card {
+  border: 1px solid var(--border-card, #334155);
+  background: var(--bg-card, rgba(30, 41, 59, 0.5));
+  border-radius: 8px;
+  padding: 16px;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+[data-theme="light"] .tiptap .editor-card,
+[data-theme="light"] .tiptap-content .editor-card {
+  border-color: #cbd5e1;
+  background: #f8fafc;
+}
+
+.tiptap .editor-card:hover {
+  border-color: var(--accent-primary, #0284c7);
+}
+
+/* SSS Akordeon Bölümü (HTML5 Details / Summary) */
+.tiptap .faq-details,
+.tiptap-content .faq-details {
+  border: 1px solid var(--border-card, #334155);
+  border-radius: 8px;
+  margin: 10px 0;
+  background: var(--bg-secondary, rgba(15, 23, 42, 0.6));
+  overflow: hidden;
+  transition: all 0.2s ease;
+}
+
+[data-theme="light"] .tiptap .faq-details,
+[data-theme="light"] .tiptap-content .faq-details {
+  border-color: #cbd5e1;
+  background: #f8fafc;
+}
+
+.tiptap .faq-summary,
+.tiptap-content .faq-summary {
+  font-weight: 700;
+  font-size: 14px;
+  padding: 12px 16px;
+  cursor: pointer;
+  outline: none;
+  background: transparent;
+  color: var(--text-primary);
+  user-select: none;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justifyContent: space-between;
+}
+
+.tiptap .faq-summary::-webkit-details-marker,
+.tiptap-content .faq-summary::-webkit-details-marker {
+  display: none;
+}
+
+.tiptap .faq-summary::after,
+.tiptap-content .faq-summary::after {
+  content: "▾";
+  font-size: 14px;
+  opacity: 0.7;
+  transition: transform 0.2s ease;
+}
+
+.tiptap .faq-details[open] > .faq-summary::after,
+.tiptap-content .faq-details[open] > .faq-summary::after {
+  transform: rotate(180deg);
+}
+
+.tiptap .faq-details > *:not(summary),
+.tiptap-content .faq-details > *:not(summary) {
+  padding: 0 16px 14px 16px;
+  color: var(--text-secondary);
+}
+
+/* Vurgu / Callout Kutuları */
+.tiptap .content-callout,
+.tiptap-content .content-callout {
+  padding: 14px 18px;
+  border-radius: 8px;
+  margin: 16px 0;
+  border-left: 4px solid var(--accent-primary, #0284c7);
+  background: rgba(2, 132, 199, 0.08);
+}
+
+.tiptap .content-callout.callout-warning,
+.tiptap-content .content-callout.callout-warning {
+  border-left-color: #eab308;
+  background: rgba(234, 179, 8, 0.08);
+}
+
+.tiptap .content-callout.callout-danger,
+.tiptap-content .content-callout.callout-danger {
+  border-left-color: #ef4444;
+  background: rgba(239, 68, 68, 0.08);
+}
+
+.tiptap .content-callout.callout-tip,
+.tiptap-content .content-callout.callout-tip {
+  border-left-color: #10b981;
+  background: rgba(16, 185, 129, 0.08);
+}
+
+
 

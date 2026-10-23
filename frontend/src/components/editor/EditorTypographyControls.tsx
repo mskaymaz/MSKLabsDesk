@@ -22,6 +22,10 @@ const FONT_FAMILIES = [
   { label: 'Modern Başlık', value: 'Montserrat, sans-serif' },
 ];
 
+const FONT_SIZE_PRESETS = ['9', '10', '11', '12', '14', '16', '18', '20', '24', '28', '32', '36', '48', '72'];
+const LINE_HEIGHT_PRESETS = ['1.0', '1.15', '1.25', '1.5', '1.75', '2.0', '2.5'];
+const PARAGRAPH_SPACING_PRESETS = ['0', '4', '8', '12', '14', '18', '24', '32'];
+
 export const EditorTypographyControls: React.FC<EditorTypographyControlsProps> = ({
   editor,
   fontSize,
@@ -68,6 +72,17 @@ export const EditorTypographyControls: React.FC<EditorTypographyControlsProps> =
     background: 'var(--bg-secondary)',
   };
 
+  const selectStyle: React.CSSProperties = {
+    height: '22px',
+    fontSize: '10px',
+    background: 'transparent',
+    color: 'var(--text-muted)',
+    border: 'none',
+    outline: 'none',
+    cursor: 'pointer',
+    padding: '0 2px',
+  };
+
   return (
     <>
       {/* Font Ailesi (Font Family) */}
@@ -91,8 +106,8 @@ export const EditorTypographyControls: React.FC<EditorTypographyControlsProps> =
         ))}
       </select>
 
-      {/* Punto Değeri (Sayısal Giriş + Stepper) */}
-      <div style={containerStyle} title="Punto Değeri (Doğrudan yazabilir veya +/- kullanabilirsiniz)">
+      {/* Punto Değeri (Word Tipi Combobox: Açılır Liste + Doğrudan Değer Girişi + Stepper) */}
+      <div style={containerStyle} title="Punto Değeri (Seçebilir veya doğrudan yazabilirsiniz)">
         <button
           type="button"
           onClick={() => {
@@ -101,13 +116,14 @@ export const EditorTypographyControls: React.FC<EditorTypographyControlsProps> =
             editor.chain().focus().setFontSize(`${next}px`).run();
           }}
           style={btnStyle}
+          title="Puntoyu 1 pt küçült"
         >
           <Minus size={10} />
         </button>
         <input
           type="number"
           min={8}
-          max={72}
+          max={96}
           value={fontSize}
           onChange={(e) => {
             const val = e.target.value;
@@ -116,23 +132,40 @@ export const EditorTypographyControls: React.FC<EditorTypographyControlsProps> =
               editor.chain().focus().setFontSize(`${val}px`).run();
             }
           }}
-          style={{ ...inputStyle, width: '30px' }}
+          style={{ ...inputStyle, width: '28px' }}
         />
-        <span style={{ fontSize: '9px', color: 'var(--text-muted)', paddingRight: '2px' }}>pt</span>
+        {/* Hızlı Açılır Punto Seçici */}
+        <select
+          value={fontSize}
+          onChange={(e) => {
+            const val = e.target.value;
+            setFontSize(val);
+            editor.chain().focus().setFontSize(`${val}px`).run();
+          }}
+          style={selectStyle}
+          title="Hazır punto listesi"
+        >
+          {FONT_SIZE_PRESETS.map((p) => (
+            <option key={p} value={p}>
+              {p} pt
+            </option>
+          ))}
+        </select>
         <button
           type="button"
           onClick={() => {
-            const next = Math.min(72, (parseInt(fontSize, 10) || 16) + 1);
+            const next = Math.min(96, (parseInt(fontSize, 10) || 16) + 1);
             setFontSize(String(next));
             editor.chain().focus().setFontSize(`${next}px`).run();
           }}
           style={btnStyle}
+          title="Puntoyu 1 pt büyüt"
         >
           <Plus size={10} />
         </button>
       </div>
 
-      {/* Satır Aralığı (Sayısal Giriş + Stepper) */}
+      {/* Satır Aralığı (Word Tipi Combobox: Açılır Liste + Doğrudan Değer Girişi + Stepper) */}
       <div style={containerStyle} title="Satır Aralığı (Line Height)">
         <button
           type="button"
@@ -146,12 +179,11 @@ export const EditorTypographyControls: React.FC<EditorTypographyControlsProps> =
         >
           <Minus size={10} />
         </button>
-        <span style={{ fontSize: '9px', color: 'var(--text-muted)', padding: '0 2px' }}>Satır</span>
         <input
           type="number"
-          step="0.1"
+          step="0.05"
           min="0.8"
-          max="3.0"
+          max="3.5"
           value={lineHeight}
           onChange={(e) => {
             const val = e.target.value;
@@ -160,11 +192,28 @@ export const EditorTypographyControls: React.FC<EditorTypographyControlsProps> =
           }}
           style={{ ...inputStyle, width: '28px' }}
         />
+        {/* Hızlı Açılır Satır Aralığı Seçici */}
+        <select
+          value={lineHeight}
+          onChange={(e) => {
+            const val = e.target.value;
+            setLineHeight(val);
+            editor.chain().focus().setLineHeight(val).run();
+          }}
+          style={selectStyle}
+          title="Hazır satır aralığı listesi"
+        >
+          {LINE_HEIGHT_PRESETS.map((lh) => (
+            <option key={lh} value={lh}>
+              {lh}
+            </option>
+          ))}
+        </select>
         <button
           type="button"
           onClick={() => {
             const cur = parseFloat(lineHeight) || 1.5;
-            const next = Math.min(3.0, cur + 0.1).toFixed(1);
+            const next = Math.min(3.5, cur + 0.1).toFixed(1);
             setLineHeight(next);
             editor.chain().focus().setLineHeight(next).run();
           }}
@@ -174,7 +223,7 @@ export const EditorTypographyControls: React.FC<EditorTypographyControlsProps> =
         </button>
       </div>
 
-      {/* Paragraf Boşluğu (Sayısal Giriş + Stepper) */}
+      {/* Paragraf Boşluğu (Word Tipi Combobox: Açılır Liste + Doğrudan Değer Girişi + Stepper) */}
       <div style={containerStyle} title="Paragraf Alt Boşluğu (px)">
         <button
           type="button"
@@ -188,24 +237,40 @@ export const EditorTypographyControls: React.FC<EditorTypographyControlsProps> =
         >
           <Minus size={10} />
         </button>
-        <span style={{ fontSize: '9px', color: 'var(--text-muted)', padding: '0 2px' }}>Par</span>
         <input
           type="number"
           min="0"
-          max="48"
+          max="64"
           value={paragraphSpacing}
           onChange={(e) => {
             const val = e.target.value;
             setParagraphSpacing(val);
             if (val) editor.chain().focus().setParagraphSpacing(`${val}px`).run();
           }}
-          style={{ ...inputStyle, width: '26px' }}
+          style={{ ...inputStyle, width: '24px' }}
         />
+        {/* Hızlı Açılır Paragraf Boşluğu Seçici */}
+        <select
+          value={paragraphSpacing}
+          onChange={(e) => {
+            const val = e.target.value;
+            setParagraphSpacing(val);
+            editor.chain().focus().setParagraphSpacing(`${val}px`).run();
+          }}
+          style={selectStyle}
+          title="Hazır paragraf boşluğu listesi"
+        >
+          {PARAGRAPH_SPACING_PRESETS.map((ps) => (
+            <option key={ps} value={ps}>
+              {ps}px
+            </option>
+          ))}
+        </select>
         <button
           type="button"
           onClick={() => {
             const cur = parseInt(paragraphSpacing, 10) || 14;
-            const next = String(Math.min(48, cur + 2));
+            const next = String(Math.min(64, cur + 2));
             setParagraphSpacing(next);
             editor.chain().focus().setParagraphSpacing(`${next}px`).run();
           }}

@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import type { Editor } from '@tiptap/react';
 import {
+  Undo,
+  Redo,
   Bold,
   Italic,
   Underline as UnderlineIcon,
-  Strikethrough,
-  Subscript as SubscriptIcon,
-  Superscript as SuperscriptIcon,
   AlignLeft,
   AlignCenter,
   AlignRight,
@@ -16,16 +15,16 @@ import {
   Link as LinkIcon,
   Palette,
   Highlighter,
-  Heading1,
-  Heading2,
-  Heading3,
-  Heading4,
-  Pilcrow,
 } from 'lucide-react';
 import { TableDropdown } from './TableDropdown';
 import { ImageDropdown } from './ImageDropdown';
 import { LinkModal } from './LinkModal';
 import { EditorTypographyControls } from './EditorTypographyControls';
+import { HeadingStyleDropdown } from './HeadingStyleDropdown';
+import { AdvancedCharStyleDropdown } from './AdvancedCharStyleDropdown';
+import { CaseAndFormatControls } from './CaseAndFormatControls';
+import { SymbolDropdown } from './SymbolDropdown';
+import { ComponentDropdown } from './ComponentDropdown';
 
 interface EditorToolbarProps {
   editor: Editor | null;
@@ -114,52 +113,42 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
           userSelect: 'none',
         }}
       >
-        {/* Başlık / Paragraf Seçimi */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '2px' }}>
-          <button
-            type="button"
-            onClick={() => editor.chain().focus().setParagraph().run()}
-            style={btnStyle(editor.isActive('paragraph'))}
-            title="Normal Paragraf"
-          >
-            <Pilcrow size={13} />
-          </button>
-          <button
-            type="button"
-            onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
-            style={btnStyle(editor.isActive('heading', { level: 1 }))}
-            title="Başlık 1"
-          >
-            <Heading1 size={13} />
-          </button>
-          <button
-            type="button"
-            onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-            style={btnStyle(editor.isActive('heading', { level: 2 }))}
-            title="Başlık 2"
-          >
-            <Heading2 size={13} />
-          </button>
-          <button
-            type="button"
-            onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
-            style={btnStyle(editor.isActive('heading', { level: 3 }))}
-            title="Başlık 3"
-          >
-            <Heading3 size={13} />
-          </button>
-          <button
-            type="button"
-            onClick={() => editor.chain().focus().toggleHeading({ level: 4 }).run()}
-            style={btnStyle(editor.isActive('heading', { level: 4 }))}
-            title="Başlık 4"
-          >
-            <Heading4 size={13} />
-          </button>
-        </div>
+        {/* Geri Al / İleri Al (Undo / Redo) */}
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().undo().run()}
+          disabled={!editor.can().undo()}
+          style={{
+            ...btnStyle(false),
+            opacity: editor.can().undo() ? 1 : 0.4,
+            cursor: editor.can().undo() ? 'pointer' : 'not-allowed',
+          }}
+          title="Geri Al (Ctrl+Z)"
+        >
+          <Undo size={13} />
+        </button>
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().redo().run()}
+          disabled={!editor.can().redo()}
+          style={{
+            ...btnStyle(false),
+            opacity: editor.can().redo() ? 1 : 0.4,
+            cursor: editor.can().redo() ? 'pointer' : 'not-allowed',
+          }}
+          title="İleri Al (Ctrl+Y)"
+        >
+          <Redo size={13} />
+        </button>
 
         {divider}
 
+        {/* Word Tipi "Stil" Açılır Menüsü (Normal Metin, Başlık 1-4) */}
+        <HeadingStyleDropdown editor={editor} />
+
+        {divider}
+
+        {/* Tipografi Kontrolleri (Font Ailesi, Punto Combobox, Satır Aralığı Combobox, Paragraf Boşluğu, Girinti) */}
         <EditorTypographyControls
           editor={editor}
           fontSize={fontSize}
@@ -174,7 +163,7 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
 
         {divider}
 
-        {/* Karakter Biçimlendirme */}
+        {/* Karakter Biçimlendirme (Birincil: B, I, U) */}
         <button
           type="button"
           onClick={() => editor.chain().focus().toggleBold().run()}
@@ -199,30 +188,15 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
         >
           <UnderlineIcon size={13} />
         </button>
-        <button
-          type="button"
-          onClick={() => editor.chain().focus().toggleStrike().run()}
-          style={btnStyle(editor.isActive('strike'))}
-          title="Üstü Çizgili"
-        >
-          <Strikethrough size={13} />
-        </button>
-        <button
-          type="button"
-          onClick={() => editor.chain().focus().toggleSubscript().run()}
-          style={btnStyle(editor.isActive('subscript'))}
-          title="Alt Simge (X₂)"
-        >
-          <SubscriptIcon size={13} />
-        </button>
-        <button
-          type="button"
-          onClick={() => editor.chain().focus().toggleSuperscript().run()}
-          style={btnStyle(editor.isActive('superscript'))}
-          title="Üst Simge (X²)"
-        >
-          <SuperscriptIcon size={13} />
-        </button>
+
+        {/* İkincil Karakter Biçimleri (Üstü Çizili, Alt Simge, Üst Simge, Kod) */}
+        <AdvancedCharStyleDropdown editor={editor} />
+
+        {/* Biçim Boyacısı (Stil Boyama) & Büyük/Küçük Harf Dönüştürücü */}
+        <CaseAndFormatControls editor={editor} />
+
+        {/* Word "Simge" (Ω) ve Matematik Simgesi Kataloğu */}
+        <SymbolDropdown editor={editor} />
 
         {divider}
 
@@ -308,6 +282,9 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
         </button>
 
         {divider}
+
+        {/* Çoklu Kartlar & SSS Akordeon Bileşen Ekleyici */}
+        <ComponentDropdown editor={editor} />
 
         {/* Bağlantı (Link) */}
         <button

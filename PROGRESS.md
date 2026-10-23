@@ -1,7 +1,32 @@
 ﻿# MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
-## 🟢 Son Güncelleme [22.10.2026 - 21:58] — ADMİN PANELİ KAPSAMLI UI/UX, TOOL VE EDİTÖR DENETİM RAPORU (admin_ui_audit_report.md) [*]
+## 🟢 Son Güncelleme [23.10.2026 - 08:52] — WORD STANDARDI AÇILIR ARAÇ ÇUBUĞU, TİPOGRAFİ COMBOBOX, SİMGE (Ω), BİÇİM BOYACISI VE ÇOKLU KART/AKORDEON BİLEŞENLERİ [*]
+* **Yapılan İşlem:**
+  1. **Word Tipi "Stil" Açılır Menüsü (HeadingStyleDropdown.tsx & EditorToolbar.tsx):**
+     - Araç çubuğunu kalabalıklaştıran ayrı Pilcrow, H1, H2, H3, H4 butonları kaldırılarak yerine tek bir açılır "Stil" menüsü bağlandı.
+     - Seçilen bloğun durumuna göre "Normal Metin", "Başlık 1", "Başlık 2", "Başlık 3", "Başlık 4" etiketleri canlı güncelleniyor.
+  2. **Gelişmiş Karakter Stilleri Açılır Menüsü (AdvancedCharStyleDropdown.tsx):**
+     - Üstü çizili, alt simge (X₂), üst simge (X²) ve satır içi kod stilleri açılır "..." menüsüne toplandı; B, I, U birincil tek tık butonları olarak korundu.
+  3. **Tipografi Combobox'ları (EditorTypographyControls.tsx):**
+     - Punto (pt), satır aralığı ve paragraf boşluğu kontrolleri Microsoft Word standartlarında hem açılır hazır liste (9-72 pt, 1.0-2.5x, 0-32px) hem doğrudan sayısal klavye girişi hem de +/- stepper desteğine kavuşturuldu.
+  4. **Word "Simge" (Ω) ve Matematik Kataloğu (SymbolDropdown.tsx):**
+     - Para birimleri (₺, €, $, £, ₿), matematik (±, ≠, ≤, ≥, ÷, ×, ∞, ∑, √, π), Yunan harfleri (Ω, θ, α, β, λ, μ) ve özel imler için hızlı son kullanılanlar satırı ve kategorize edilmiş açılır sembol ızgarası geliştirildi.
+  5. **Biçim Boyacısı & Harf Düzeni Dönüştürücü (CaseAndFormatControls.tsx):**
+     - Stil Boyama (Format Painter): Seçili metnin tüm biçimini tek tıkla kopyalayıp bir sonraki seçime uygulayan Word standardı fırça aracı bağlandı.
+     - Türkçe uyumlu (i/İ, ı/I) TÜMÜ BÜYÜK, tümü küçük, Başlık Düzeni ve Tümce Düzeni dönüştürücüsü eklendi.
+  6. **Çoklu Kart (2'li / 3'lü) ve SSS Akordeon Bileşenleri (ComponentDropdown.tsx & componentExtensions.ts & editor.css):**
+     - Sayfa ve blog içeriklerine tek tıkla 2'li kart ızgarası, 3'lü kart ızgarası, HTML5 yerel (<details><summary>) SSS akordeon bloğu ve Callout (Bilgi, İpucu, Uyarı) kutuları ekleyen menü geliştirildi.
+     - TipTap için özel Node eklentileri (GridBlock, GridColumn, DetailsBlock, DetailsSummary, CalloutBlock) ve responsive CSS kuralları tanımlandı.
+  7. **Geri Al / İleri Al (Undo / Redo) Butonları:**
+     - EditorToolbar başına canlı can().undo() / can().redo() durumlu butonlar eklendi.
+  8. **Doğrulama ve Kural Uyumu:**
+     - Frontend Build: PASS (tsc -b && vite build, 5.56s, 0 hata).
+     - Backend Testleri: PASS (82/82 test %100 başarılı).
+     - Satır sınırları: EditorToolbar.tsx 313 (<= 450), EditorTypographyControls.tsx 302 (<= 450), ComponentDropdown.tsx 254 (<= 450), CaseAndFormatControls.tsx 239 (<= 450), SymbolDropdown.tsx 207 (<= 450), HeadingStyleDropdown.tsx 194 (<= 450), AdvancedCharStyleDropdown.tsx 145 (<= 450), componentExtensions.ts 105 (<= 450).
+* **Durum:** DevAdmin dalında tamamlandı, main kesinlikle korundu.
+
+## [22.10.2026 - 21:58] — ADMİN PANELİ KAPSAMLI UI/UX, TOOL VE EDİTÖR DENETİM RAPORU (admin_ui_audit_report.md) [*]
 * **Yapılan İşlem:**
   1. **Tüm Admin Paneli UI/UX & Fonksiyonel Denetimi:**
      - 15 View (Dashboard, BlogStudio, PageStudio, Pages, Apps, Templates, Channels, Comments, Tickets, Subscribers, Broadcast, Settings, Login vb.) ve 50+ bileşen taranarak dmin_ui_audit_report.md dosyası oluşturuldu.
