@@ -1,7 +1,18 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
-## 🟢 Son Güncelleme [23.10.2026 - 10:15] — DUYURU BANDI İÇİN INLINE EDİTÖR PRESETİ, CANLI ŞERİT ÖNİZLEMESİ VE GELİŞMİŞ BANT YÖNETİMİ [*]
+## 🟢 Son Güncelleme [23.10.2026 - 10:20] — REKLAM & DUYURU İSİMLENDİRME VE ARAYÜZ ETİKETLERİ DÜZENLEMESİ [*]
+* **Yapılan İşlem:**
+  1. **Sol Kenar Menüsü (Sidebar.tsx):** "Şablon & Reklam" menü başlığı "Reklam & Duyuru" olarak güncellendi.
+  2. **Sayfa ve Sekme İsimlendirmeleri (TemplatesView.tsx):**
+     - Ana sayfa başlığı "Şablon & Reklam Stüdyosu" yerine "Reklam & Duyuru Stüdyosu" yapıldı.
+     - Dolar ikonlu ana sekme etiketi "Google AdSense Reklam Stüdyosu" yerine doğrudan "Reklam Stüdyosu" olarak yalınlaştırıldı.
+  3. **Doğrulama ve Kural Uyumu:**
+     - Frontend Build: PASS (tsc -b && vite build, 778ms, 0 hata).
+     - Backend Testleri: PASS (82/82 test %100 başarılı).
+* **Durum:** DevAdmin dalında tamamlandı, main kesinlikle korundu.
+
+## [23.10.2026 - 10:15] — DUYURU BANDI İÇİN INLINE EDİTÖR PRESETİ, CANLI ŞERİT ÖNİZLEMESİ VE GELİŞMİŞ BANT YÖNETİMİ [*]
 * **Yapılan İşlem:**
   1. **Çekirdek Editöre Modüler Preset Mimarisi (RichTextEditor.tsx & EditorToolbar.tsx):**
      - Editöre `preset="full" | "inline" | "compact" | "email"` desteği kazandırıldı.

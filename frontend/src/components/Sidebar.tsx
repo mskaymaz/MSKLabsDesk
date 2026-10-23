@@ -59,7 +59,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
     { id: 'posts' as TabType, label: 'Blog Yazıları', icon: FileText },
     { id: 'apps' as TabType, label: 'Uygulamalar', icon: Smartphone },
     { id: 'pages' as TabType, label: 'Kurumsal Sayfalar', icon: Layers },
-    { id: 'templates' as TabType, label: 'Şablon & Reklam', icon: Layout },
+    { id: 'templates' as TabType, label: 'Reklam & Duyuru', icon: Layout },
     { id: 'broadcast' as TabType, label: t('broadcasts'), icon: Send },
     { id: 'subscribers' as TabType, label: t('subscribers'), icon: Users },
     { id: 'settings' as TabType, label: t('settings'), icon: Settings },

@@ -215,10 +215,10 @@ export const TemplatesView: React.FC = () => {
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px' }}>
           <div>
             <h1 className="admin-page-title" style={{ margin: 0, fontSize: '1.2rem' }}>
-              Şablon & Reklam Stüdyosu
+              Reklam & Duyuru Stüdyosu
             </h1>
             <p className="admin-page-desc" style={{ margin: '2px 0 0', fontSize: '0.76rem' }}>
-              Google AdSense yerleşimleri (Açılır liste & canlı sahne) ve çok dilli duyuru bandı
+              Reklam yerleşimleri (Açılır liste & canlı sahne) ve çok dilli duyuru bandı
             </p>
           </div>
 
@@ -254,7 +254,7 @@ export const TemplatesView: React.FC = () => {
             }}
           >
             <DollarSign size={14} />
-            <span>Google AdSense Reklam Stüdyosu</span>
+            <span>Reklam Stüdyosu</span>
             <span className="admin-badge admin-badge-counter">{ads.length}</span>
           </button>
 

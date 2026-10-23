@@ -103,7 +103,7 @@ export const trDict: NamespaceTranslations = {
     apiKey: 'API Anahtarı',
   },
   templates: {
-    title: 'Şablon Yönetimi',
+    title: 'Reklam & Duyuru Yönetimi',
     newTemplate: 'Yeni Şablon Ekle',
     templateName: 'Şablon Adı',
   },
