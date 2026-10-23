@@ -1,7 +1,20 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
-## 🟢 Son Güncelleme [23.10.2026 - 11:35] — ÇOKLU DUYURU HAVUZU, ROUND-ROBIN SIRALI DÖNGÜ, KAYAN YAZI (TICKER) VE HEADER DUYURU BUTONU [*]
+## 🟢 Son Güncelleme [23.10.2026 - 11:40] — HEADER DUYURU BUTONUNUN HIZLI LİNKLER SATIRINA TAŞINMASI VE DİNAMİK POPOVER HİZALAMASI [*]
+* **Yapılan İşlem:**
+  1. **Header Duyuru Butonu Konumlandırması (layout.js):**
+     - Üst satırdaki `lang-switcher` içinden çıkarılan `📢` duyuru tetikleme butonu, hemen bir alt satırdaki `.header-nav-row` hızlı linkler hizasına alındı.
+     - `position: absolute; right: 0; top: 50%; transform: translateY(-50%)` ile hızlı navigasyon linklerinin ortalanmış yapısı bozulmadan, üst satırdaki tema değiştirici (🌙) butonunun tam dikey altına hizalandı.
+  2. **Dinamik Popover Menü Konumlandırması (announcement-loader.js):**
+     - Butona basıldığında açılan Popover menüsü, `getBoundingClientRect()` ile tetikleyici butonun altına ve sağ kenarına dinamik olarak konumlandırıldı.
+  3. **Doğrulama ve Kural Uyumu:**
+     - Frontend Build: PASS (0 hata).
+     - Backend Testleri: PASS (82/82 test %100 başarılı).
+     - WebMSKLabs Typecheck: PASS (0 hata).
+* **Durum:** DevAdmin dalında tamamlandı, main kesinlikle korundu.
+
+## [23.10.2026 - 11:35] — ÇOKLU DUYURU HAVUZU, ROUND-ROBIN SIRALI DÖNGÜ, KAYAN YAZI (TICKER) VE HEADER DUYURU BUTONU [*]
 * **Yapılan İşlem:**
   1. **Çoklu Duyuru Havuzu Mimarisi (announcementConfig.ts & AnnouncementBarSection.tsx):**
      - Tek duyuru kısıtı kaldırılarak 10 adede kadar duyuru eklenebilen havuz mimarisi (`AnnouncementItem[]`) kuruldu.
