@@ -1,7 +1,23 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
-## 🟢 Son Güncelleme [23.10.2026 - 15:05] — CANLI DUYURU ÖNİZLEMESİ, HAREKETLİ TICKER, ÇOKLU BOŞLUK (PRE-WRAP) VE ÇOK SATIR İYİLEŞTİRMESİ [*]
+## 🟢 Son Güncelleme [23.10.2026 - 15:16] — EDİTÖR FONT BOYUTU SENKRONİZASYONU, WORD TİPİ A RENK PALETİ (RENKSİZ DESTEĞİ) VE DÜZENLİ ŞERİT MİZANPAJI [*]
+* **Yapılan İşlem:**
+  1. **İmleç ve Seçim Odaklı Font Büyüklüğü (Punto) Senkronizasyonu:**
+     - Farklı bir kelimeye geçildiğinde veya seçim değiştiğinde font boyutunun eski değerde takılı kalması kökten çözüldü. Düğümde özel fontSize yoksa aktif blok seviyesine (H1: 32px, H2: 24px, H3: 20px, H4: 18px, Paragraf: 16px) göre combobox anında ve canlı olarak dinamik eşitlenir hale getirildi.
+  2. **Word Tipi 'A' Yazı Rengi Barı ve 'Renksiz' Seçeneği:**
+     - Resim boya paleti ikonu kaldırılarak yerine Microsoft Word standardında **A** harfi ve altında aktif seçili rengi gösteren 3px'lik renk şeridi uygulandı.
+     - Hem Yazı Rengi hem de Zemin Vurgusu (Highlighter) için tek tıkla varsayılana sıfırlayan `Ban` ikonlu **Renksiz** (`unsetColor` / `unsetHighlight`) kontrolü eklendi.
+  3. **Araç Çubuğu Düzeni (Görsel Sağına Hizalama ve Listeler):**
+     - Hizalama grubu (Sol, Orta, Sağ, İki Yana) ve hemen yanındaki listeler (Madde İşareti, Numaralı), üst satırdan alınarak alt satırdaki Görsel ekleme butonunun 10px sağına dikey ayırıcıyla yerleştirildi. Üst satır ferahlatıldı.
+  4. **Doğrulama ve Kural Uyumu:**
+     - Frontend Typecheck: PASS (0 hata).
+     - Backend Testleri: PASS (82/82 test %100 başarılı).
+     - Satır Sınırı: `EditorToolbar.tsx` 438 satır ($\le 450$ kuralına tam uyumlu).
+     - Çalışmalar yalnızca `DevAdmin` dalında yürütüldü; `main` korundu.
+* **Durum:** DevAdmin dalında tamamlandı, doğrulamalar başarılı.
+
+## [23.10.2026 - 15:05] — CANLI DUYURU ÖNİZLEMESİ, HAREKETLİ TICKER, ÇOKLU BOŞLUK (PRE-WRAP) VE ÇOK SATIR İYİLEŞTİRMESİ [*]
 * **Yapılan İşlem:**
   1. **Kayan Yazı (Ticker / Marquee) Akış Animasyonu:**
      - `index.css` ve vitrin `global.css` / `announcement-loader.js` içerisine `padding-left: 100%` ve donanımsal ivmeli `translate3d(-100%, 0, 0)` pürüzsüz marquee keyframe'leri bağlandı; kayan yazının önizlemede sabit kalması kesin olarak giderildi.
