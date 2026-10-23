@@ -1,7 +1,20 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
-## 🟢 Son Güncelleme [23.10.2026 - 13:45] — DUYURU İKONUNUN LUCIDE MEGAPHONE SVG VEKTÖRÜNE DÖNÜŞTÜRÜLMESİ [*]
+## 🟢 Son Güncelleme [23.10.2026 - 14:20] — AÇILIR DUYURU POPOVER VE MOBİL BAŞLIK İZOLASYONUNUN KESİN ÇÖZÜMÜ [*]
+* **Yapılan İşlem:**
+  1. **Açılır Menünün Sayfa Altına Düşme Kök Neden Çözümü (announcement-loader.js & global.css):**
+     - Ziyaretçi duyuru bandını kapattığında (`dismiss`), sayfa yenilenmesinde `renderAnnouncementBanner()` çağrılmadığı için `injectStyles()` çalışmıyordu. Bu durum, megafona tıklandığında popover menüsünün `position: fixed` ve stil tanımları olmadan sayfanın en altına ham HTML blok olarak düşmesine neden oluyordu.
+     - `injectStyles()` fonksiyonu loader başlatılır başlatılmaz zorunlu olarak çalıştırıldı; ayrıca tüm popover stilleri ve mobil kurallar doğrudan `global.css` içine kalıcı olarak eklendi.
+     - Popover elementine doğrudan JavaScript üzerinde `position: fixed !important; z-index: 10001 !important;` fallback koruması verildi.
+  2. **Mobil Başlık İzolasyonu (global.css):**
+     - `@media (max-width: 768px)` içinde `.site-header-sticky .header-nav-row { display: none !important; }` kuralı eklenerek mobilde başlık yüksekliğinin bozulması engellendi.
+  3. **Doğrulama ve Kural Uyumu:**
+     - WebMSKLabs Typecheck: PASS (0 hata).
+     - DevAdmin dalı güncellendi ve push edildi.
+* **Durum:** DevAdmin dalında tamamlandı, main kesinlikle korundu.
+
+## [23.10.2026 - 13:45] — DUYURU İKONUNUN LUCIDE MEGAPHONE SVG VEKTÖRÜNE DÖNÜŞTÜRÜLMESİ [*]
 * **Yapılan İşlem:**
   1. **Vektörel Lucide Megaphone Entegrasyonu (layout.js & announcement-loader.js):**
      - Header duyuru butonu (`#mskAnnTriggerBtn`) içindeki `📢` emojisi kaldırılarak, yönetim panelinde (`AnnouncementBarSection.tsx`) kullanılan **Lucide `Megaphone`** SVG vektörel ikonu entegre edildi.
