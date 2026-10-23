@@ -105,9 +105,10 @@ export const ComponentDropdown: React.FC<ComponentDropdownProps> = ({ editor }) 
       .insertContent([
         {
           type: 'details',
+          attrs: { open: true },
           content: [
-            { type: 'detailsSummary', content: [{ type: 'text', text: 'Sıkça Sorulan Soru Başlığı?' }] },
-            { type: 'paragraph', content: [{ type: 'text', text: 'Sorunun ayrıntılı cevabını buraya yazınız...' }] },
+            { type: 'detailsSummary', content: [{ type: 'text', text: 'Akordeon Başlığı' }] },
+            { type: 'paragraph', content: [{ type: 'text', text: 'Akordeon açıklama metnini buraya yazınız...' }] },
           ],
         },
         { type: 'paragraph' },
@@ -183,7 +184,7 @@ export const ComponentDropdown: React.FC<ComponentDropdownProps> = ({ editor }) 
           borderRadius: '4px',
           cursor: 'pointer',
         }}
-        title="Bileşen Ekle (2'li / 3'lü Kartlar, SSS Akordeon, Vurgu Kutusu)"
+        title="Bileşen Ekle (2'li / 3'lü Kartlar, Akordeon Bloğu, Vurgu Kutusu)"
       >
         <LayoutGrid size={13} />
         <span>Bileşen</span>
@@ -225,9 +226,9 @@ export const ComponentDropdown: React.FC<ComponentDropdownProps> = ({ editor }) 
           <div style={{ fontSize: '10px', fontWeight: 700, color: 'var(--text-muted)', padding: '4px 8px 2px' }}>
             Akordeon & Açılır Yapılar
           </div>
-          <button type="button" onClick={insertAccordion} style={menuItemStyle}>
+          <button type="button" onClick={insertAccordion} style={menuItemStyle} title="Açılır / Kapanır Akordeon Bloğu">
             <HelpCircle size={13} style={{ color: '#10B981' }} />
-            <span>SSS Akordeon Bloğu</span>
+            <span>Akordeon Bloğu</span>
           </button>
 
           <div style={{ height: '1px', background: 'var(--border-subtle)', margin: '3px 0' }} />

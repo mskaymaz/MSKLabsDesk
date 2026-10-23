@@ -125,7 +125,7 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
   });
 
   const divider = (
-    <div style={{ width: '1px', height: '18px', background: 'var(--border-subtle)', margin: '0 2px' }} />
+    <div style={{ width: '1px', height: '18px', background: 'var(--border-subtle)', margin: '0 2px', flexShrink: 0 }} />
   );
 
   return (
@@ -144,32 +144,34 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
         }}
       >
         {/* Geri Al / İleri Al (Undo / Redo) */}
-        <button
-          type="button"
-          onClick={() => editor.chain().focus().undo().run()}
-          disabled={!activeMarks.canUndo}
-          style={{
-            ...btnStyle(false),
-            opacity: activeMarks.canUndo ? 1 : 0.4,
-            cursor: activeMarks.canUndo ? 'pointer' : 'not-allowed',
-          }}
-          title="Geri Al (Ctrl+Z)"
-        >
-          <Undo size={13} />
-        </button>
-        <button
-          type="button"
-          onClick={() => editor.chain().focus().redo().run()}
-          disabled={!activeMarks.canRedo}
-          style={{
-            ...btnStyle(false),
-            opacity: activeMarks.canRedo ? 1 : 0.4,
-            cursor: activeMarks.canRedo ? 'pointer' : 'not-allowed',
-          }}
-          title="İleri Al (Ctrl+Y)"
-        >
-          <Redo size={13} />
-        </button>
+        <div style={{ display: 'inline-flex', alignItems: 'center', gap: '1px', flexShrink: 0 }}>
+          <button
+            type="button"
+            onClick={() => editor.chain().focus().undo().run()}
+            disabled={!activeMarks.canUndo}
+            style={{
+              ...btnStyle(false),
+              opacity: activeMarks.canUndo ? 1 : 0.4,
+              cursor: activeMarks.canUndo ? 'pointer' : 'not-allowed',
+            }}
+            title="Geri Al (Ctrl+Z)"
+          >
+            <Undo size={13} />
+          </button>
+          <button
+            type="button"
+            onClick={() => editor.chain().focus().redo().run()}
+            disabled={!activeMarks.canRedo}
+            style={{
+              ...btnStyle(false),
+              opacity: activeMarks.canRedo ? 1 : 0.4,
+              cursor: activeMarks.canRedo ? 'pointer' : 'not-allowed',
+            }}
+            title="İleri Al (Ctrl+Y)"
+          >
+            <Redo size={13} />
+          </button>
+        </div>
 
         {divider}
 
@@ -193,144 +195,150 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
 
         {divider}
 
-        {/* Karakter Biçimlendirme (Birincil: B, I, U) — İmleç neredeyse canlı aydınlanır */}
-        <button
-          type="button"
-          onClick={() => editor.chain().focus().toggleBold().run()}
-          style={btnStyle(activeMarks.bold)}
-          title="Kalın (Ctrl+B)"
-        >
-          <Bold size={13} />
-        </button>
-        <button
-          type="button"
-          onClick={() => editor.chain().focus().toggleItalic().run()}
-          style={btnStyle(activeMarks.italic)}
-          title="İtalik (Ctrl+I)"
-        >
-          <Italic size={13} />
-        </button>
-        <button
-          type="button"
-          onClick={() => editor.chain().focus().toggleUnderline().run()}
-          style={btnStyle(activeMarks.underline)}
-          title="Altı Çizgili (Ctrl+U)"
-        >
-          <UnderlineIcon size={13} />
-        </button>
-
-        {/* İkincil Karakter Biçimleri (Üstü Çizili, Alt Simge, Üst Simge, Kod) */}
-        <AdvancedCharStyleDropdown editor={editor} />
-
-        {/* Biçim Boyacısı (Stil Boyama) & Büyük/Küçük Harf Dönüştürücü */}
-        <CaseAndFormatControls editor={editor} />
-
-        {/* Word "Simge" (Ω) ve Matematik Simgesi Kataloğu */}
-        <SymbolDropdown editor={editor} />
+        {/* Karakter Biçimlendirme & Tipografi Araçları (B, I, U, Gelişmiş Stiller, Biçim Boyacısı, Simge) */}
+        <div style={{ display: 'inline-flex', alignItems: 'center', gap: '1px', flexShrink: 0 }}>
+          <button
+            type="button"
+            onClick={() => editor.chain().focus().toggleBold().run()}
+            style={btnStyle(activeMarks.bold)}
+            title="Kalın (Ctrl+B)"
+          >
+            <Bold size={13} />
+          </button>
+          <button
+            type="button"
+            onClick={() => editor.chain().focus().toggleItalic().run()}
+            style={btnStyle(activeMarks.italic)}
+            title="İtalik (Ctrl+I)"
+          >
+            <Italic size={13} />
+          </button>
+          <button
+            type="button"
+            onClick={() => editor.chain().focus().toggleUnderline().run()}
+            style={btnStyle(activeMarks.underline)}
+            title="Altı Çizgili (Ctrl+U)"
+          >
+            <UnderlineIcon size={13} />
+          </button>
+          <AdvancedCharStyleDropdown editor={editor} />
+          <CaseAndFormatControls editor={editor} />
+          <SymbolDropdown editor={editor} />
+        </div>
 
         {divider}
 
-        {/* Renk Seçiciler */}
-        <label
-          style={{ ...btnStyle(false), cursor: 'pointer', position: 'relative' }}
-          title="Yazı Rengi"
-        >
-          <Palette size={13} />
-          <input
-            type="color"
-            onChange={(e) => editor.chain().focus().setColor(e.target.value).run()}
-            style={{ position: 'absolute', opacity: 0, width: '100%', height: '100%', cursor: 'pointer' }}
-          />
-        </label>
-        <label
-          style={{ ...btnStyle(false), cursor: 'pointer', position: 'relative' }}
-          title="Zemin Vurgusu (Highlighter)"
-        >
-          <Highlighter size={13} />
-          <input
-            type="color"
-            defaultValue="#FEF08A"
-            onChange={(e) => editor.chain().focus().toggleHighlight({ color: e.target.value }).run()}
-            style={{ position: 'absolute', opacity: 0, width: '100%', height: '100%', cursor: 'pointer' }}
-          />
-        </label>
+        {/* Renk Seçiciler (Yazı Rengi & Zemin Vurgusu) */}
+        <div style={{ display: 'inline-flex', alignItems: 'center', gap: '1px', flexShrink: 0 }}>
+          <label
+            style={{ ...btnStyle(false), cursor: 'pointer', position: 'relative' }}
+            title="Yazı Rengi"
+          >
+            <Palette size={13} />
+            <input
+              type="color"
+              onChange={(e) => editor.chain().focus().setColor(e.target.value).run()}
+              style={{ position: 'absolute', opacity: 0, width: '100%', height: '100%', cursor: 'pointer' }}
+            />
+          </label>
+          <label
+            style={{ ...btnStyle(false), cursor: 'pointer', position: 'relative' }}
+            title="Zemin Vurgusu (Highlighter)"
+          >
+            <Highlighter size={13} />
+            <input
+              type="color"
+              defaultValue="#FEF08A"
+              onChange={(e) => editor.chain().focus().toggleHighlight({ color: e.target.value }).run()}
+              style={{ position: 'absolute', opacity: 0, width: '100%', height: '100%', cursor: 'pointer' }}
+            />
+          </label>
+        </div>
 
         {divider}
 
-        {/* Hizalama — İmleçteki paragrafın hizalamasını canlı yansıtır */}
-        <button
-          type="button"
-          onClick={() => editor.chain().focus().setTextAlign('left').run()}
-          style={btnStyle(activeMarks.alignLeft)}
-          title="Sola Yasla"
+        {/* Hizalama Dörtlüsü (Sola Yasla, Ortala, Sağa Yasla, İki Yana Yasla / Blokla) — Ayrılmaz Tek Bütün */}
+        <div
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '1px',
+            flexShrink: 0,
+            whiteSpace: 'nowrap',
+          }}
         >
-          <AlignLeft size={13} />
-        </button>
-        <button
-          type="button"
-          onClick={() => editor.chain().focus().setTextAlign('center').run()}
-          style={btnStyle(activeMarks.alignCenter)}
-          title="Ortala"
-        >
-          <AlignCenter size={13} />
-        </button>
-        <button
-          type="button"
-          onClick={() => editor.chain().focus().setTextAlign('right').run()}
-          style={btnStyle(activeMarks.alignRight)}
-          title="Sağa Yasla"
-        >
-          <AlignRight size={13} />
-        </button>
-        <button
-          type="button"
-          onClick={() => editor.chain().focus().setTextAlign('justify').run()}
-          style={btnStyle(activeMarks.alignJustify)}
-          title="İki Yana Yasla"
-        >
-          <AlignJustify size={13} />
-        </button>
+          <button
+            type="button"
+            onClick={() => editor.chain().focus().setTextAlign('left').run()}
+            style={btnStyle(activeMarks.alignLeft)}
+            title="Sola Yasla"
+          >
+            <AlignLeft size={13} />
+          </button>
+          <button
+            type="button"
+            onClick={() => editor.chain().focus().setTextAlign('center').run()}
+            style={btnStyle(activeMarks.alignCenter)}
+            title="Ortala"
+          >
+            <AlignCenter size={13} />
+          </button>
+          <button
+            type="button"
+            onClick={() => editor.chain().focus().setTextAlign('right').run()}
+            style={btnStyle(activeMarks.alignRight)}
+            title="Sağa Yasla"
+          >
+            <AlignRight size={13} />
+          </button>
+          <button
+            type="button"
+            onClick={() => editor.chain().focus().setTextAlign('justify').run()}
+            style={btnStyle(activeMarks.alignJustify)}
+            title="İki Yana Yasla (Blokla)"
+          >
+            <AlignJustify size={13} />
+          </button>
+        </div>
 
         {divider}
 
-        {/* Listeler */}
-        <button
-          type="button"
-          onClick={() => editor.chain().focus().toggleBulletList().run()}
-          style={btnStyle(activeMarks.bulletList)}
-          title="Madde İşaretli Liste"
-        >
-          <List size={13} />
-        </button>
-        <button
-          type="button"
-          onClick={() => editor.chain().focus().toggleOrderedList().run()}
-          style={btnStyle(activeMarks.orderedList)}
-          title="Numaralı Liste"
-        >
-          <ListOrdered size={13} />
-        </button>
+        {/* Listeler (Madde İşaretli & Numaralı) */}
+        <div style={{ display: 'inline-flex', alignItems: 'center', gap: '1px', flexShrink: 0 }}>
+          <button
+            type="button"
+            onClick={() => editor.chain().focus().toggleBulletList().run()}
+            style={btnStyle(activeMarks.bulletList)}
+            title="Madde İşaretli Liste"
+          >
+            <List size={13} />
+          </button>
+          <button
+            type="button"
+            onClick={() => editor.chain().focus().toggleOrderedList().run()}
+            style={btnStyle(activeMarks.orderedList)}
+            title="Numaralı Liste"
+          >
+            <ListOrdered size={13} />
+          </button>
+        </div>
 
         {divider}
 
-        {/* Çoklu Kartlar & SSS Akordeon Bileşen Ekleyici */}
-        <ComponentDropdown editor={editor} />
-
-        {/* Bağlantı (Link) */}
-        <button
-          type="button"
-          onClick={() => setIsLinkModalOpen(true)}
-          style={btnStyle(activeMarks.link)}
-          title="Bağlantı Ekle / Düzenle"
-        >
-          <LinkIcon size={13} />
-        </button>
-
-        {/* Açılır Menülü Tablo Aracı */}
-        <TableDropdown editor={editor} onOpenFloating={onOpenFloatingTable} />
-
-        {/* Açılır Menülü Görsel Aracı */}
-        <ImageDropdown editor={editor} />
+        {/* Ekler & Blok Bileşenler (Akordeon/Kartlar, Bağlantı, Tablo, Görsel) */}
+        <div style={{ display: 'inline-flex', alignItems: 'center', gap: '2px', flexShrink: 0 }}>
+          <ComponentDropdown editor={editor} />
+          <button
+            type="button"
+            onClick={() => setIsLinkModalOpen(true)}
+            style={btnStyle(activeMarks.link)}
+            title="Bağlantı Ekle / Düzenle"
+          >
+            <LinkIcon size={13} />
+          </button>
+          <TableDropdown editor={editor} onOpenFloating={onOpenFloatingTable} />
+          <ImageDropdown editor={editor} />
+        </div>
       </div>
 
       <LinkModal

@@ -1,7 +1,28 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
-## 🟢 Son Güncelleme [23.10.2026 - 09:20] — SOL SPİNBOX, SAF SAYISAL TİPOGRAFİ, METİN SARMASIZ RESİM DÜZENİ VE CANLI FORMAT AKTİFLİK GÖSTERGESİ [*]
+## 🟢 Son Güncelleme [23.10.2026 - 09:32] — İNTERAKTİF AKORDEON BLOĞU, SABİT KONUMLU SİMGE KATALOĞU, BÖLÜNMEZ HİZALAMA GRUBU VE SERBEST RESİM GENİŞLİĞİ [*]
+* **Yapılan İşlem:**
+  1. **İnteraktif Akordeon Bloğu (componentExtensions.ts, ComponentDropdown.tsx, editor.css):**
+     - "SSS" ibaresi menü ve başlık yapısından tamamen kaldırıldı; "Akordeon Bloğu" olarak standartlaştırıldı.
+     - Varsayılan olarak `open: true` tanımlandı; başlık ile altındaki açıklama metni alanı anında görünür ve yazılabilir hale getirildi.
+     - TipTap için özel NodeView yazılarak summary sağına interaktif ok (▾ / ▸) eklendi; ok tıklandığında veya kapalı bloğa tıklandığında akordeon anlık açılıp kapanır hale getirildi.
+  2. **Simge Kataloğu Panel Taşması Çözümü (SymbolDropdown.tsx):**
+     - Popover yapısı `position: fixed` ve ekran sınır kontrolü (`getBoundingClientRect`) ile yeniden yapılandırıldı.
+     - Renk paletleri gibi z-index: 9999 ile tuvalin ve panellerin üzerinde açılarak sağ kenara taşma veya orta paneli gizleme sorunu giderildi.
+  3. **Bölünmez Hizalama ve Araç Grupları (EditorToolbar.tsx):**
+     - Sola Yasla, Ortala, Sağa Yasla, İki Yana Yasla (Blokla) butonları `display: inline-flex; flex-shrink: 0; white-space: nowrap;` kapsayıcısı içine alındı; satır sarımlarında sola yaslamanın üst satırda tek kalması engellendi.
+     - Toolbar'daki tüm mantıksal araç grupları (Geri Al/İleri Al, Tipografi, Format, Renk, Hizalama, Liste, Ekler) bölünmez atomik gruplara dönüştürüldü.
+  4. **Metin Saran Görsel Genişlik Kısıtının Kaldırılması (editor.css & FloatingImageToolbar.tsx):**
+     - editor.css içinde sola/sağa yaslamayı %48 ile sınırlandıran `max-width: 48%` kuralı `max-width: 100%` olarak güncellendi.
+     - Görselin sayfanın 2/3'ünü (%66) veya %75'ini kaplayıp metnin yanından akması tam çalışır hale getirildi; hazır listeye %33 ve %66 eklendi.
+  5. **Doğrulama ve Kural Uyumu:**
+     - Frontend Build: PASS (tsc -b && vite build, 812ms, 0 hata).
+     - Backend Testleri: PASS (82/82 test %100 başarılı).
+     - Satır sınırları: componentExtensions.ts 219, ComponentDropdown.tsx 255, SymbolDropdown.tsx 257, EditorToolbar.tsx 351, FloatingImageToolbar.tsx 383 (Tümü <= 450).
+* **Durum:** DevAdmin dalında tamamlandı, main kesinlikle korundu.
+
+## [23.10.2026 - 09:20] — SOL SPİNBOX, SAF SAYISAL TİPOGRAFİ, METİN SARMASIZ RESİM DÜZENİ VE CANLI FORMAT AKTİFLİK GÖSTERGESİ [*]
 * **Yapılan İşlem:**
   1. **Sol Dikey Spinbox ve Saf Sayısal Tipografi (WordCombobox.tsx & EditorTypographyControls.tsx):**
      - Dikey oklar (▲ / ▼) combobox'ın sol tarafına taşındı.

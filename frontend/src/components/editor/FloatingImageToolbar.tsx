@@ -19,7 +19,7 @@ interface FloatingImageToolbarProps {
 
 type ImageLayoutType = 'left' | 'right' | 'left-block' | 'right-block' | 'center' | 'full';
 
-const WIDTH_PRESETS = ['%25', '%35', '%50', '%65', '%75', '%85', '%100'];
+const WIDTH_PRESETS = ['%25', '%33', '%50', '%66', '%75', '%85', '%100'];
 
 const LAYOUT_OPTIONS: { id: ImageLayoutType; label: string; icon: React.ReactNode; desc: string }[] = [
   { id: 'left', label: 'Sola Yasla', icon: <AlignLeft size={13} />, desc: 'Metin sağdan sarar' },

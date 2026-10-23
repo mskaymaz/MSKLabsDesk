@@ -42,14 +42,104 @@ export const DetailsSummary = Node.create({
   renderHTML({ HTMLAttributes }) {
     return ['summary', mergeAttributes({ class: 'faq-summary' }, HTMLAttributes), 0];
   },
+
+  addNodeView() {
+    return ({ getPos, editor }) => {
+      const dom = document.createElement('summary');
+      dom.className = 'faq-summary';
+
+      const contentDOM = document.createElement('span');
+      contentDOM.className = 'faq-summary-text';
+      contentDOM.style.flex = '1';
+      contentDOM.style.outline = 'none';
+
+      const toggleBtn = document.createElement('span');
+      toggleBtn.className = 'faq-toggle-icon';
+      toggleBtn.contentEditable = 'false';
+      toggleBtn.title = 'Aç / Kapat';
+      toggleBtn.innerHTML = '▾';
+
+      const getParentDetailsInfo = () => {
+        if (typeof getPos !== 'function') return null;
+        const pos = getPos();
+        if (typeof pos !== 'number') return null;
+        const $pos = editor.state.doc.resolve(pos);
+        const parentPos = $pos.before($pos.depth);
+        const detailsNode = editor.state.doc.nodeAt(parentPos);
+        if (detailsNode && detailsNode.type.name === 'details') {
+          return { parentPos, detailsNode };
+        }
+        return null;
+      };
+
+      const toggleOpen = (e: MouseEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const info = getParentDetailsInfo();
+        if (info) {
+          const nextOpen = !info.detailsNode.attrs.open;
+          editor.view.dispatch(
+            editor.state.tr.setNodeMarkup(info.parentPos, undefined, {
+              ...info.detailsNode.attrs,
+              open: nextOpen,
+            })
+          );
+          toggleBtn.innerHTML = nextOpen ? '▾' : '▸';
+        }
+      };
+
+      toggleBtn.addEventListener('click', toggleOpen);
+
+      dom.addEventListener('click', (e) => {
+        if (e.target === toggleBtn || toggleBtn.contains(e.target as globalThis.Node)) return;
+        const info = getParentDetailsInfo();
+        if (info && !info.detailsNode.attrs.open) {
+          toggleOpen(e);
+        }
+      });
+
+      setTimeout(() => {
+        const info = getParentDetailsInfo();
+        if (info) {
+          toggleBtn.innerHTML = info.detailsNode.attrs.open ? '▾' : '▸';
+        }
+      }, 0);
+
+      dom.appendChild(contentDOM);
+      dom.appendChild(toggleBtn);
+
+      return {
+        dom,
+        contentDOM,
+        update: (updatedNode) => {
+          if (updatedNode.type.name !== 'detailsSummary') return false;
+          const info = getParentDetailsInfo();
+          if (info) {
+            toggleBtn.innerHTML = info.detailsNode.attrs.open ? '▾' : '▸';
+          }
+          return true;
+        },
+      };
+    };
+  },
 });
 
-// 3. Akordeon / SSS Bloğu (HTML5 <details>)
+// 3. Akordeon Bloğu (HTML5 <details>)
 export const DetailsBlock = Node.create({
   name: 'details',
   group: 'block',
   content: 'detailsSummary block+',
   defining: true,
+
+  addAttributes() {
+    return {
+      open: {
+        default: true,
+        parseHTML: (el) => (el.hasAttribute('open') ? el.getAttribute('open') !== 'false' : true),
+        renderHTML: (attrs) => (attrs.open ? { open: 'true' } : {}),
+      },
+    };
+  },
 
   parseHTML() {
     return [{ tag: 'details' }];
@@ -57,6 +147,30 @@ export const DetailsBlock = Node.create({
 
   renderHTML({ HTMLAttributes }) {
     return ['details', mergeAttributes({ class: 'faq-details' }, HTMLAttributes), 0];
+  },
+
+  addNodeView() {
+    return ({ node }) => {
+      const dom = document.createElement('details');
+      dom.className = 'faq-details';
+      if (node.attrs.open) {
+        dom.setAttribute('open', 'true');
+      }
+
+      return {
+        dom,
+        contentDOM: dom,
+        update: (updatedNode) => {
+          if (updatedNode.type.name !== 'details') return false;
+          if (updatedNode.attrs.open) {
+            dom.setAttribute('open', 'true');
+          } else {
+            dom.removeAttribute('open');
+          }
+          return true;
+        },
+      };
+    };
   },
 });
 

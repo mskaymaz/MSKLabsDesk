@@ -35,18 +35,65 @@ const SYMBOL_CATEGORIES: SymbolCategory[] = [
 
 export const SymbolDropdown: React.FC<SymbolDropdownProps> = ({ editor }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [coords, setCoords] = useState<{ top: number; left: number } | null>(null);
   const [activeCategory, setActiveCategory] = useState<string>('Para');
   const [recentSymbols, setRecentSymbols] = useState<string[]>(['₺', '€', '$', '•', '—', '±', 'Ω', '★']);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
+
+  const toggleDropdown = () => {
+    if (!isOpen && buttonRef.current) {
+      const rect = buttonRef.current.getBoundingClientRect();
+      const popoverWidth = 270;
+      let left = rect.left;
+      if (left + popoverWidth > window.innerWidth - 12) {
+        left = Math.max(12, window.innerWidth - popoverWidth - 12);
+      }
+      let top = rect.bottom + 6;
+      if (top + 280 > window.innerHeight - 12) {
+        top = Math.max(12, rect.top - 286);
+      }
+      setCoords({ top, left });
+      setIsOpen(true);
+    } else {
+      setIsOpen(false);
+    }
+  };
 
   useEffect(() => {
+    if (!isOpen) return;
+
     const handleClickOutside = (e: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+      const target = e.target as Node;
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(target) &&
+        buttonRef.current &&
+        !buttonRef.current.contains(target)
+      ) {
         setIsOpen(false);
       }
     };
-    if (isOpen) document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setIsOpen(false);
+    };
+
+    const handleScrollOrResize = () => {
+      setIsOpen(false);
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('keydown', handleKey);
+    window.addEventListener('scroll', handleScrollOrResize, true);
+    window.addEventListener('resize', handleScrollOrResize);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleKey);
+      window.removeEventListener('scroll', handleScrollOrResize, true);
+      window.removeEventListener('resize', handleScrollOrResize);
+    };
   }, [isOpen]);
 
   const handleInsertSymbol = (sym: string) => {
@@ -58,10 +105,11 @@ export const SymbolDropdown: React.FC<SymbolDropdownProps> = ({ editor }) => {
   const currentCategoryObj = SYMBOL_CATEGORIES.find((c) => c.name === activeCategory) || SYMBOL_CATEGORIES[0];
 
   return (
-    <div ref={dropdownRef} style={{ position: 'relative', display: 'inline-block' }}>
+    <div style={{ position: 'relative', display: 'inline-flex', flexShrink: 0 }}>
       <button
+        ref={buttonRef}
         type="button"
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={toggleDropdown}
         className="admin-btn admin-btn-secondary admin-btn-sm"
         style={{
           display: 'inline-flex',
@@ -78,25 +126,27 @@ export const SymbolDropdown: React.FC<SymbolDropdownProps> = ({ editor }) => {
           borderRadius: '4px',
           cursor: 'pointer',
           fontFamily: 'serif',
+          flexShrink: 0,
         }}
         title="Simge & Özel Karakter Ekle (Word Simge Kataloğu)"
       >
         Ω
       </button>
 
-      {isOpen && (
+      {isOpen && coords && (
         <div
+          ref={dropdownRef}
           style={{
-            position: 'absolute',
-            top: 'calc(100% + 4px)',
-            left: 0,
-            zIndex: 110,
+            position: 'fixed',
+            top: `${coords.top}px`,
+            left: `${coords.left}px`,
+            zIndex: 9999,
             background: 'var(--bg-card)',
             border: '1px solid var(--border-card)',
             borderRadius: '8px',
-            boxShadow: '0 12px 28px rgba(0,0,0,0.35)',
+            boxShadow: '0 12px 32px rgba(0,0,0,0.45)',
             padding: '8px',
-            width: '260px',
+            width: '270px',
             display: 'flex',
             flexDirection: 'column',
             gap: '8px',
