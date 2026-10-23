@@ -1,6 +1,17 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 📌 BİR SONRAKİ OTURUM YOL HARİTASI & YAPILACAKLAR (NEXT SESSION AGENDA) [23.10.2026 - 16:50]
+1. **Duyuru Sistemi Canlı Kabul & Son Denetim:**
+   - Panelde ve vitrinde yapılan duyuru geliştirmeleri (rotator dikey akış, kayan yazı, boyut/şeffaflık, çift kanal nöbetleşe havuz, görsel menüsü) kullanıcıyla birlikte son kez kontrol edilecek, varsa ufak pürüzler giderilecek.
+2. **E-Posta Bülteni (Broadcast) ve Bülten Aboneleri (Subscribers) Modülü:**
+   - E-posta bülten oluşturma, şablonlar, toplu gönderim mekanizması ve bülten abone listesi/yönetimi baştan uca denetlenerek tamamlanacak.
+3. **Sistem Ayarları (SettingsView) Yetki & Kapsam Yapılandırması:**
+   - Menüden "Sistem Ayarları"na tıklandığında çıkan `Erişim Engellendi (settings.manage / Super Admin)` yetki kontrolü incelenecek.
+   - Bu ekranda nelerin yer aldığı (Site Başlığı, Gönderen E-Posta / Resend API, Web Push Bildirimleri, Sistem Parametreleri) netleştirilerek yönetici erişimine uygun hale getirilecek.
+
+---
+
 ## 🟢 Son Güncelleme [23.10.2026 - 16:44] — GÖRSEL EKLEME MENÜSÜ FIXED/VIEWPORT YÜZEN POPOVER DÜZELTMESİ [*]
 * **Yapılan İşlem:**
   1. **Kesilme (Clipping) Sorununun Kök Çözümü:**
