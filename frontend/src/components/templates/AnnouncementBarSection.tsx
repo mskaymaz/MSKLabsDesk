@@ -121,7 +121,7 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
             <Plus size={13} /><span>Ekle</span>
           </button>
           {items.length > 1 && (
-            <button type="button" onClick={() => handleDeleteItem(activeItem.id)} className="admin-btn admin-btn-sm" style={{ marginLeft: '15px', color: '#ef4444', borderColor: 'rgba(239,68,68,0.3)', height: '28px', width: '28px', padding: 0, display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }} title="Duyuruyu sil">
+            <button type="button" onClick={() => handleDeleteItem(activeItem.id)} className="admin-btn admin-btn-sm" style={{ marginLeft: '15px', color: '#ef4444', borderColor: 'rgba(239,68,68,0.3)', height: '28px', width: '38px', padding: 0, display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }} title="Duyuruyu sil">
               <Trash2 size={13} />
             </button>
           )}
