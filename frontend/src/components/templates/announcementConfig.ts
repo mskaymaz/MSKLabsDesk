@@ -1,5 +1,5 @@
 import React from 'react';
-import { Info, CheckCircle2, AlertTriangle, Flame } from 'lucide-react';
+import { Info, CheckCircle2, AlertTriangle, Flame, Palette } from 'lucide-react';
 
 export interface AnnouncementItem {
   id: string;
@@ -7,8 +7,10 @@ export interface AnnouncementItem {
   content_tr: string;
   content_en?: string;
   content_ar?: string;
-  bannerType: 'info' | 'success' | 'warning' | 'purple';
-  placement?: 'top_hanging' | 'right_floating';
+  bannerType: 'info' | 'success' | 'warning' | 'purple' | 'custom';
+  customBg?: string;
+  customText?: string;
+  placement?: 'top_hanging' | 'right_floating' | 'left_floating';
   sizePreset?: 'compact' | 'standard' | 'large';
   customHeight?: number;
   cardWidth?: number;
@@ -21,8 +23,10 @@ export interface AnnouncementItem {
 }
 
 export interface AnnouncementMeta {
-  bannerType: 'info' | 'success' | 'warning' | 'purple';
-  placement?: 'top_hanging' | 'right_floating';
+  bannerType: 'info' | 'success' | 'warning' | 'purple' | 'custom';
+  customBg?: string;
+  customText?: string;
+  placement?: 'top_hanging' | 'right_floating' | 'left_floating';
   sizePreset?: 'compact' | 'standard' | 'large';
   customHeight?: number;
   cardWidth?: number;
@@ -39,7 +43,7 @@ export interface AnnouncementMeta {
 }
 
 export interface BannerThemeItem {
-  id: 'info' | 'success' | 'warning' | 'purple';
+  id: 'info' | 'success' | 'warning' | 'purple' | 'custom';
   name: string;
   bgDark: string;
   bgLight: string;
@@ -55,9 +59,10 @@ export const BANNER_THEMES: BannerThemeItem[] = [
   { id: 'success', name: 'Kampanya (Yeşil)', bgDark: 'linear-gradient(135deg, rgba(2,44,34,0.95) 0%, rgba(6,95,70,0.95) 100%)', bgLight: 'linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%)', textColorDark: '#a7f3d0', textColorLight: '#166534', borderDark: '1px solid rgba(168, 85, 247, 0.4)', borderLight: '1px solid #bbf7d0', icon: React.createElement(CheckCircle2, { size: 14 }) },
   { id: 'warning', name: 'Uyarı (Sarı)', bgDark: 'linear-gradient(135deg, rgba(69,26,3,0.95) 0%, rgba(120,53,15,0.95) 100%)', bgLight: 'linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%)', textColorDark: '#fef08a', textColorLight: '#92400e', borderDark: '1px solid rgba(245, 158, 11, 0.4)', borderLight: '1px solid #fde68a', icon: React.createElement(AlertTriangle, { size: 14 }) },
   { id: 'purple', name: 'Lansman (Mor)', bgDark: 'linear-gradient(135deg, rgba(46,16,101,0.95) 0%, rgba(88,28,135,0.95) 100%)', bgLight: 'linear-gradient(135deg, #faf5ff 0%, #ede9fe 100%)', textColorDark: '#e9d5ff', textColorLight: '#6b21a8', borderDark: '1px solid rgba(168, 85, 247, 0.4)', borderLight: '1px solid #e9d5ff', icon: React.createElement(Flame, { size: 14 }) },
+  { id: 'custom', name: 'Özel Renk', bgDark: '#1e293b', bgLight: '#f8fafc', textColorDark: '#f8fafc', textColorLight: '#0f172a', borderDark: '1px solid #475569', borderLight: '1px solid #cbd5e1', icon: React.createElement(Palette, { size: 14 }) },
 ];
 
-export const getSizeMetrics = (meta: Partial<AnnouncementMeta>, placement: 'top_hanging' | 'right_floating') => {
+export const getSizeMetrics = (meta: Partial<AnnouncementMeta>, placement: string = 'top_hanging') => {
   const p = meta.sizePreset || 'standard';
   if (placement === 'top_hanging') {
     const minHeight = meta.customHeight || (p === 'compact' ? 36 : p === 'large' ? 62 : 46);

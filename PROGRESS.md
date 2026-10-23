@@ -1,7 +1,26 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
-## 🟢 Son Güncelleme [23.10.2026 - 14:20] — AÇILIR DUYURU POPOVER VE MOBİL BAŞLIK İZOLASYONUNUN KESİN ÇÖZÜMÜ [*]
+## 🟢 Son Güncelleme [23.10.2026 - 14:45] — DUYURU HAVUZU DERLİ TOPLU AÇILIR LİSTE, SINIRSIZ DUYURU VE ÖZEL RENK MİMARİSİ [*]
+* **Yapılan İşlem:**
+  1. **Yönetim Paneli Duyuru Ayarları Refaktörü (AnnouncementBarSection.tsx & announcementConfig.ts):**
+     - **Havuz Yayında / Aktiflik:** "Havuz Yayında" ifadesi net `Aktif / Pasif` toggle anahtarına dönüştürüldü; pasif yapıldığında tüm duyurular pasifleşir.
+     - **Yerleşim Seçenekleri:** "Sağ Kayan" ifadesi kayan yazı (ticker) ile karışmaması için `Üst Askılı`, `Sağ Askılı` ve `Sol Askılı` (`top_hanging`, `right_floating`, `left_floating`) olarak yeniden adlandırıldı; başlık alanından çıkarılarak Akış modunun sol tarafına taşındı.
+     - **Sınırsız Duyuru & Kompakt Açılır Liste:** 10 duyuru ekleme kısıtı kaldırıldı. Buton tarlası yerine duyuruları seçen `<select>` açılır listesi, hemen yanında `+ Ekle` butonu ve 15px sağında çöp kutusu (`Trash2`) silme ikonu yerleştirildi.
+     - **Bant Teması & Özel Renk Paleti:** 4'lü butonlar yerine Bilgi, Kampanya, Uyarı, Lansman ve Özel Renk seçenekleri `<select>` açılır listesine dönüştürüldü. `Özel Renk` seçildiğinde zemin ve yazı rengi seçicileri (`<input type="color">`) devreye alındı.
+     - **Kayan Yazı (Ticker) Kontrolleri:** Boş duran liste elemanları temizlendi; varsayılan yön (`Sağdan Sola`) ve hız (`Normal`) seçimleri kompakt bir panel içinde derli toplu gruplandı.
+     - **Satır Sınırı:** Bileşen 330 satıra optimize edildi ($\le 450$ kuralına tam uyumlu).
+  2. **Vitrin Yükleyici Entegrasyonu (announcement-loader.js):**
+     - Özel renk paleti (`themeKey === 'custom'`) için `customBg` ve `customText` desteği vitrin kartı ve askı bandına uygulandı.
+     - `left_floating` yerleşimi vitrin loader'ına eklendi.
+  3. **Doğrulama ve Kural Uyumu:**
+     - Frontend Build: PASS (0 hata, 1.59s).
+     - Backend Testleri: PASS (82/82 test %100 başarılı).
+     - WebMSKLabs Typecheck: PASS (0 hata).
+     - `DevAdmin` dalı üzerinde yürütüldü; `main` korundu.
+* **Durum:** DevAdmin dalında tamamlandı, kullanıcı onayına sunuldu.
+
+## [23.10.2026 - 14:20] — AÇILIR DUYURU POPOVER VE MOBİL BAŞLIK İZOLASYONUNUN KESİN ÇÖZÜMÜ [*]
 * **Yapılan İşlem:**
   1. **Açılır Menünün Sayfa Altına Düşme Kök Neden Çözümü (announcement-loader.js & global.css):**
      - Ziyaretçi duyuru bandını kapattığında (`dismiss`), sayfa yenilenmesinde `renderAnnouncementBanner()` çağrılmadığı için `injectStyles()` çalışmıyordu. Bu durum, megafona tıklandığında popover menüsünün `position: fixed` ve stil tanımları olmadan sayfanın en altına ham HTML blok olarak düşmesine neden oluyordu.
