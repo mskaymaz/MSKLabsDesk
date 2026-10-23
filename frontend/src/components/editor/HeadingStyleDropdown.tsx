@@ -8,6 +8,7 @@ interface HeadingStyleDropdownProps {
 
 export const HeadingStyleDropdown: React.FC<HeadingStyleDropdownProps> = ({ editor }) => {
   const [isOpen, setIsOpen] = React.useState(false);
+  const [currentLabel, setCurrentLabel] = React.useState('Normal Metin');
   const dropdownRef = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
@@ -20,15 +21,30 @@ export const HeadingStyleDropdown: React.FC<HeadingStyleDropdownProps> = ({ edit
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [isOpen]);
 
-  const currentLabel = editor.isActive('heading', { level: 1 })
-    ? 'Başlık 1'
-    : editor.isActive('heading', { level: 2 })
-    ? 'Başlık 2'
-    : editor.isActive('heading', { level: 3 })
-    ? 'Başlık 3'
-    : editor.isActive('heading', { level: 4 })
-    ? 'Başlık 4'
-    : 'Normal Metin';
+  React.useEffect(() => {
+    if (!editor) return;
+
+    const updateLabel = () => {
+      const label = editor.isActive('heading', { level: 1 })
+        ? 'Başlık 1'
+        : editor.isActive('heading', { level: 2 })
+        ? 'Başlık 2'
+        : editor.isActive('heading', { level: 3 })
+        ? 'Başlık 3'
+        : editor.isActive('heading', { level: 4 })
+        ? 'Başlık 4'
+        : 'Normal Metin';
+      setCurrentLabel(label);
+    };
+
+    updateLabel();
+    editor.on('selectionUpdate', updateLabel);
+    editor.on('transaction', updateLabel);
+    return () => {
+      editor.off('selectionUpdate', updateLabel);
+      editor.off('transaction', updateLabel);
+    };
+  }, [editor]);
 
   const selectStyle = (action: () => void) => {
     action();

@@ -5,7 +5,6 @@ interface WordComboboxProps {
   value: string;
   onChange: (val: string) => void;
   presets: string[];
-  unit?: string;
   title?: string;
   min?: number;
   max?: number;
@@ -17,12 +16,11 @@ export const WordCombobox: React.FC<WordComboboxProps> = ({
   value,
   onChange,
   presets,
-  unit,
   title,
   min = 1,
   max = 100,
   step = 1,
-  inputWidth = '30px',
+  inputWidth = '28px',
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -75,44 +73,12 @@ export const WordCombobox: React.FC<WordComboboxProps> = ({
       }}
       title={title}
     >
-      {/* Doğrudan Değer Girişi Yapılabilen Alan */}
-      <input
-        type="text"
-        value={value}
-        onChange={handleInputChange}
-        style={{
-          width: inputWidth,
-          height: '22px',
-          textAlign: 'center',
-          border: 'none',
-          background: 'transparent',
-          color: 'var(--text-primary)',
-          fontSize: '11px',
-          fontWeight: 700,
-          outline: 'none',
-          padding: '0 2px',
-        }}
-      />
-
-      {unit && (
-        <span
-          style={{
-            fontSize: '9px',
-            color: 'var(--text-muted)',
-            paddingRight: '3px',
-            cursor: 'default',
-          }}
-        >
-          {unit}
-        </span>
-      )}
-
-      {/* Tek Tarafa Toplanmış Dikey Spinbox Okları (Yukarı / Aşağı) */}
+      {/* 1. Sol Tarafa Yerleştirilmiş Dikey Spinbox Okları (Yukarı / Aşağı) */}
       <div
         style={{
           display: 'flex',
           flexDirection: 'column',
-          borderLeft: '1px solid var(--border-subtle)',
+          borderRight: '1px solid var(--border-subtle)',
           height: '22px',
           width: '13px',
         }}
@@ -156,7 +122,26 @@ export const WordCombobox: React.FC<WordComboboxProps> = ({
         </button>
       </div>
 
-      {/* Açılır Liste Butonu (Tek birleşik kontrolün sağ ucu) */}
+      {/* 2. Doğrudan Değer Girişi Yapılabilen Alan (Yalnızca Sayısal) */}
+      <input
+        type="text"
+        value={value}
+        onChange={handleInputChange}
+        style={{
+          width: inputWidth,
+          height: '22px',
+          textAlign: 'center',
+          border: 'none',
+          background: 'transparent',
+          color: 'var(--text-primary)',
+          fontSize: '11px',
+          fontWeight: 700,
+          outline: 'none',
+          padding: '0 2px',
+        }}
+      />
+
+      {/* 3. Açılır Liste Butonu (Sağ uçta açılır ok) */}
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
@@ -177,7 +162,7 @@ export const WordCombobox: React.FC<WordComboboxProps> = ({
         <ChevronDown size={10} />
       </button>
 
-      {/* Açılır Hazır Değerler Menüsü */}
+      {/* 4. Açılır Hazır Değerler Menüsü (Yalnızca Sayısal Değerler, pt/px yok) */}
       {isOpen && (
         <div
           style={{
@@ -191,7 +176,7 @@ export const WordCombobox: React.FC<WordComboboxProps> = ({
             boxShadow: '0 8px 24px rgba(0,0,0,0.3)',
             maxHeight: '160px',
             overflowY: 'auto',
-            minWidth: '65px',
+            minWidth: '50px',
             padding: '2px',
             display: 'flex',
             flexDirection: 'column',
@@ -206,10 +191,10 @@ export const WordCombobox: React.FC<WordComboboxProps> = ({
                 type="button"
                 onClick={() => handleSelectPreset(preset)}
                 style={{
-                  padding: '4px 8px',
+                  padding: '4px 6px',
                   fontSize: '11px',
                   fontWeight: isSelected ? 700 : 500,
-                  textAlign: 'left',
+                  textAlign: 'center',
                   border: 'none',
                   borderRadius: '4px',
                   background: isSelected ? 'var(--accent-primary)' : 'transparent',
@@ -217,12 +202,11 @@ export const WordCombobox: React.FC<WordComboboxProps> = ({
                   cursor: 'pointer',
                   display: 'flex',
                   alignItems: 'center',
-                  justifyContent: 'space-between',
+                  justifyContent: 'center',
                   width: '100%',
                 }}
               >
                 <span>{preset}</span>
-                {unit && <span style={{ fontSize: '9px', opacity: 0.6 }}>{unit}</span>}
               </button>
             );
           })}

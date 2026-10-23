@@ -75,7 +75,7 @@ export const EditorTypographyControls: React.FC<EditorTypographyControlsProps> =
         ))}
       </select>
 
-      {/* Punto Büyüklüğü (Tek Birleşik Combobox + Tek Taraf Spinbox) */}
+      {/* Punto Büyüklüğü (Tek Birleşik Combobox + Sol Dikey Spinbox) */}
       <WordCombobox
         value={fontSize}
         onChange={(val) => {
@@ -85,15 +85,14 @@ export const EditorTypographyControls: React.FC<EditorTypographyControlsProps> =
           }
         }}
         presets={FONT_SIZE_PRESETS}
-        unit="pt"
-        title="Punto Büyüklüğü (Değer girebilir, listeden seçebilir veya oktan artırabilirsiniz)"
+        title="Punto Büyüklüğü"
         min={6}
         max={96}
         step={1}
         inputWidth="24px"
       />
 
-      {/* Satır Aralığı (Tek Birleşik Combobox + Tek Taraf Spinbox) */}
+      {/* Satır Aralığı (Tek Birleşik Combobox + Sol Dikey Spinbox) */}
       <WordCombobox
         value={lineHeight}
         onChange={(val) => {
@@ -103,15 +102,14 @@ export const EditorTypographyControls: React.FC<EditorTypographyControlsProps> =
           }
         }}
         presets={LINE_HEIGHT_PRESETS}
-        unit="x"
-        title="Satır Aralığı (Değer girebilir, listeden seçebilir veya oktan artırabilirsiniz)"
+        title="Satır Aralığı"
         min={0.8}
         max={3.5}
         step={0.1}
         inputWidth="24px"
       />
 
-      {/* Paragraf Boşluğu (Tek Birleşik Combobox + Tek Taraf Spinbox) */}
+      {/* Paragraf Boşluğu (Tek Birleşik Combobox + Sol Dikey Spinbox) */}
       <WordCombobox
         value={paragraphSpacing}
         onChange={(val) => {
@@ -121,8 +119,7 @@ export const EditorTypographyControls: React.FC<EditorTypographyControlsProps> =
           }
         }}
         presets={PARAGRAPH_SPACING_PRESETS}
-        unit="px"
-        title="Paragraf Alt Boşluğu (Değer girebilir, listeden seçebilir veya oktan artırabilirsiniz)"
+        title="Paragraf Boşluğu"
         min={0}
         max={64}
         step={2}

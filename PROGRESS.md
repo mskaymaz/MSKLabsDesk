@@ -1,7 +1,27 @@
-﻿# MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
+# MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
-## 🟢 Son Güncelleme [23.10.2026 - 08:58] — TEK BİRLEŞİK TİPOGRAFİ COMBOBOX VE DİKEY SPİNBOX DÜZENLEMESİ (WordCombobox.tsx) [*]
+## 🟢 Son Güncelleme [23.10.2026 - 09:20] — SOL SPİNBOX, SAF SAYISAL TİPOGRAFİ, METİN SARMASIZ RESİM DÜZENİ VE CANLI FORMAT AKTİFLİK GÖSTERGESİ [*]
+* **Yapılan İşlem:**
+  1. **Sol Dikey Spinbox ve Saf Sayısal Tipografi (WordCombobox.tsx & EditorTypographyControls.tsx):**
+     - Dikey oklar (▲ / ▼) combobox'ın sol tarafına taşındı.
+     - Giriş alanlarından ve açılır liste seçeneklerinden "pt", "px", "x" gibi birim metinleri temizlendi; tamamen saf sayısal değerler (9, 10, 12..., 1.0, 1.15..., 0, 4, 8...) sunuldu.
+  2. **Görsel Boyutlandırma & Ara Değer Girişi (FloatingImageToolbar.tsx & customExtensions.ts):**
+     - Görsel genişlik butonları açılır liste haline getirildi (%25, %35, %50, %65, %75, %85, %100).
+     - Kullanıcının doğrudan 15, 23, 36, 55, 72 gibi ara değerler girebileceği serbest genişlik alanı eklendi.
+     - Sola/sağa yaslamada %75 ve üzeri genişliklerin kısıtlanmasına neden olan `max-width: 48%` engeli kaldırıldı; artık her oranda kusursuz boyutlandırılıyor.
+  3. **Metin Saran vs. Metin Sarmasız Resim Yerleşimi:**
+     - Resim sağa/sola yerleştirildiğinde yazının etrafını sarmasını istemeyen durumlar için `left-block` ve `right-block` (Sola Blok Sarmasız / Sağa Blok Sarmasız) seçenekleri geliştirildi (`clear: both; margin: ...`).
+     - Yerleşim kontrolleri kompakt açılır liste (Yerleşim ▾) altında toplandı.
+  4. **Canlı Buton Aktiflik Göstergesi (EditorToolbar.tsx, HeadingStyleDropdown.tsx, AdvancedCharStyleDropdown.tsx):**
+     - TipTap `selectionUpdate` ve `transaction` olaylarına bağlanılarak imleç kalın, italik, altı çizili veya belirli bir başlık stilindeyken yukarıdaki ilgili butonların canlı olarak aktif vurguyla (accent color) parlaması sağlandı.
+  5. **Doğrulama ve Kural Uyumu:**
+     - Frontend Build: PASS (tsc -b && vite build, 1.05s, 0 hata).
+     - Backend Testleri: PASS (82/82 test %100 başarılı).
+     - Satır sınırları: WordCombobox.tsx 202, EditorTypographyControls.tsx 139, FloatingImageToolbar.tsx 283, EditorToolbar.tsx 342, HeadingStyleDropdown.tsx 210, AdvancedCharStyleDropdown.tsx 172, customExtensions.ts 382 (Tümü <= 450).
+* **Durum:** DevAdmin dalında tamamlandı, main kesinlikle korundu.
+
+## [23.10.2026 - 08:58] — TEK BİRLEŞİK TİPOGRAFİ COMBOBOX VE DİKEY SPİNBOX DÜZENLEMESİ (WordCombobox.tsx) [*]
 * **Yapılan İşlem:**
   1. **Tek Birleşik Combobox Bileşeni (WordCombobox.tsx):**
      - Yan yana duran ayrı <input> ve ayrı <select> ikiliği tamamen kaldırıldı.

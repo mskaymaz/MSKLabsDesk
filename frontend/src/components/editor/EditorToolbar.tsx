@@ -41,34 +41,64 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
   const [lineHeight, setLineHeight] = useState<string>('1.5');
   const [paragraphSpacing, setParagraphSpacing] = useState<string>('14');
 
-  // Canlı Durum Yansıtma (Seçim değiştikçe aktif nitelikleri araçlara aktar)
+  // Canlı Aktif İşaretler & Formatlar (İmleç her hareket ettiğinde UI anında güncellenir)
+  const [activeMarks, setActiveMarks] = useState({
+    bold: false,
+    italic: false,
+    underline: false,
+    alignLeft: false,
+    alignCenter: false,
+    alignRight: false,
+    alignJustify: false,
+    bulletList: false,
+    orderedList: false,
+    link: false,
+    canUndo: false,
+    canRedo: false,
+  });
+
+  // Canlı Durum Yansıtma (Seçim veya imleç değiştikçe aktif nitelikleri araçlara aktar)
   useEffect(() => {
     if (!editor) return;
 
     const updateActiveAttrs = () => {
-      // Font Size
+      // 1. Tipografi
       const curFontSize = editor.getAttributes('textStyle').fontSize;
       if (curFontSize) {
         setFontSize(curFontSize.replace('px', ''));
       }
 
-      // Font Family
       const curFontFamily = editor.getAttributes('textStyle').fontFamily;
       setFontFamily(curFontFamily || '');
 
-      // Line Height
       const curLh = editor.getAttributes('paragraph').lineHeight || editor.getAttributes('heading').lineHeight;
       if (curLh) {
         setLineHeight(curLh);
       }
 
-      // Paragraph Spacing
       const curMb = editor.getAttributes('paragraph').marginBottom || editor.getAttributes('heading').marginBottom;
       if (curMb) {
         setParagraphSpacing(curMb.replace('px', ''));
       }
+
+      // 2. Buton Aktiflik Durumları (Kalın, İtalik, Altı Çizgili, Hizalama, Listeler vb.)
+      setActiveMarks({
+        bold: editor.isActive('bold'),
+        italic: editor.isActive('italic'),
+        underline: editor.isActive('underline'),
+        alignLeft: editor.isActive({ textAlign: 'left' }),
+        alignCenter: editor.isActive({ textAlign: 'center' }),
+        alignRight: editor.isActive({ textAlign: 'right' }),
+        alignJustify: editor.isActive({ textAlign: 'justify' }),
+        bulletList: editor.isActive('bulletList'),
+        orderedList: editor.isActive('orderedList'),
+        link: editor.isActive('link'),
+        canUndo: editor.can().undo(),
+        canRedo: editor.can().redo(),
+      });
     };
 
+    updateActiveAttrs();
     editor.on('selectionUpdate', updateActiveAttrs);
     editor.on('transaction', updateActiveAttrs);
     return () => {
@@ -91,7 +121,7 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
     justifyContent: 'center',
     minWidth: '24px',
     height: '24px',
-    transition: 'background 0.15s ease',
+    transition: 'background 0.15s ease, color 0.15s ease',
   });
 
   const divider = (
@@ -117,11 +147,11 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
         <button
           type="button"
           onClick={() => editor.chain().focus().undo().run()}
-          disabled={!editor.can().undo()}
+          disabled={!activeMarks.canUndo}
           style={{
             ...btnStyle(false),
-            opacity: editor.can().undo() ? 1 : 0.4,
-            cursor: editor.can().undo() ? 'pointer' : 'not-allowed',
+            opacity: activeMarks.canUndo ? 1 : 0.4,
+            cursor: activeMarks.canUndo ? 'pointer' : 'not-allowed',
           }}
           title="Geri Al (Ctrl+Z)"
         >
@@ -130,11 +160,11 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
         <button
           type="button"
           onClick={() => editor.chain().focus().redo().run()}
-          disabled={!editor.can().redo()}
+          disabled={!activeMarks.canRedo}
           style={{
             ...btnStyle(false),
-            opacity: editor.can().redo() ? 1 : 0.4,
-            cursor: editor.can().redo() ? 'pointer' : 'not-allowed',
+            opacity: activeMarks.canRedo ? 1 : 0.4,
+            cursor: activeMarks.canRedo ? 'pointer' : 'not-allowed',
           }}
           title="İleri Al (Ctrl+Y)"
         >
@@ -148,7 +178,7 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
 
         {divider}
 
-        {/* Tipografi Kontrolleri (Font Ailesi, Punto Combobox, Satır Aralığı Combobox, Paragraf Boşluğu, Girinti) */}
+        {/* Tipografi Kontrolleri (Font Ailesi, Punto, Satır Aralığı, Paragraf Boşluğu, Girinti) */}
         <EditorTypographyControls
           editor={editor}
           fontSize={fontSize}
@@ -163,11 +193,11 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
 
         {divider}
 
-        {/* Karakter Biçimlendirme (Birincil: B, I, U) */}
+        {/* Karakter Biçimlendirme (Birincil: B, I, U) — İmleç neredeyse canlı aydınlanır */}
         <button
           type="button"
           onClick={() => editor.chain().focus().toggleBold().run()}
-          style={btnStyle(editor.isActive('bold'))}
+          style={btnStyle(activeMarks.bold)}
           title="Kalın (Ctrl+B)"
         >
           <Bold size={13} />
@@ -175,7 +205,7 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
         <button
           type="button"
           onClick={() => editor.chain().focus().toggleItalic().run()}
-          style={btnStyle(editor.isActive('italic'))}
+          style={btnStyle(activeMarks.italic)}
           title="İtalik (Ctrl+I)"
         >
           <Italic size={13} />
@@ -183,7 +213,7 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
         <button
           type="button"
           onClick={() => editor.chain().focus().toggleUnderline().run()}
-          style={btnStyle(editor.isActive('underline'))}
+          style={btnStyle(activeMarks.underline)}
           title="Altı Çizgili (Ctrl+U)"
         >
           <UnderlineIcon size={13} />
@@ -227,11 +257,11 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
 
         {divider}
 
-        {/* Hizalama */}
+        {/* Hizalama — İmleçteki paragrafın hizalamasını canlı yansıtır */}
         <button
           type="button"
           onClick={() => editor.chain().focus().setTextAlign('left').run()}
-          style={btnStyle(editor.isActive({ textAlign: 'left' }))}
+          style={btnStyle(activeMarks.alignLeft)}
           title="Sola Yasla"
         >
           <AlignLeft size={13} />
@@ -239,7 +269,7 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
         <button
           type="button"
           onClick={() => editor.chain().focus().setTextAlign('center').run()}
-          style={btnStyle(editor.isActive({ textAlign: 'center' }))}
+          style={btnStyle(activeMarks.alignCenter)}
           title="Ortala"
         >
           <AlignCenter size={13} />
@@ -247,7 +277,7 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
         <button
           type="button"
           onClick={() => editor.chain().focus().setTextAlign('right').run()}
-          style={btnStyle(editor.isActive({ textAlign: 'right' }))}
+          style={btnStyle(activeMarks.alignRight)}
           title="Sağa Yasla"
         >
           <AlignRight size={13} />
@@ -255,7 +285,7 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
         <button
           type="button"
           onClick={() => editor.chain().focus().setTextAlign('justify').run()}
-          style={btnStyle(editor.isActive({ textAlign: 'justify' }))}
+          style={btnStyle(activeMarks.alignJustify)}
           title="İki Yana Yasla"
         >
           <AlignJustify size={13} />
@@ -267,7 +297,7 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
         <button
           type="button"
           onClick={() => editor.chain().focus().toggleBulletList().run()}
-          style={btnStyle(editor.isActive('bulletList'))}
+          style={btnStyle(activeMarks.bulletList)}
           title="Madde İşaretli Liste"
         >
           <List size={13} />
@@ -275,7 +305,7 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
         <button
           type="button"
           onClick={() => editor.chain().focus().toggleOrderedList().run()}
-          style={btnStyle(editor.isActive('orderedList'))}
+          style={btnStyle(activeMarks.orderedList)}
           title="Numaralı Liste"
         >
           <ListOrdered size={13} />
@@ -290,7 +320,7 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
         <button
           type="button"
           onClick={() => setIsLinkModalOpen(true)}
-          style={btnStyle(editor.isActive('link'))}
+          style={btnStyle(activeMarks.link)}
           title="Bağlantı Ekle / Düzenle"
         >
           <LinkIcon size={13} />

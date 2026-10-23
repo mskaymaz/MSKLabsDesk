@@ -14,6 +14,12 @@ interface AdvancedCharStyleDropdownProps {
 
 export const AdvancedCharStyleDropdown: React.FC<AdvancedCharStyleDropdownProps> = ({ editor }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [activeMarks, setActiveMarks] = useState({
+    strike: false,
+    subscript: false,
+    superscript: false,
+    code: false,
+  });
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -26,11 +32,32 @@ export const AdvancedCharStyleDropdown: React.FC<AdvancedCharStyleDropdownProps>
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [isOpen]);
 
+  useEffect(() => {
+    if (!editor) return;
+
+    const updateMarks = () => {
+      setActiveMarks({
+        strike: editor.isActive('strike'),
+        subscript: editor.isActive('subscript'),
+        superscript: editor.isActive('superscript'),
+        code: editor.isActive('code'),
+      });
+    };
+
+    updateMarks();
+    editor.on('selectionUpdate', updateMarks);
+    editor.on('transaction', updateMarks);
+    return () => {
+      editor.off('selectionUpdate', updateMarks);
+      editor.off('transaction', updateMarks);
+    };
+  }, [editor]);
+
   const hasActiveSub =
-    editor.isActive('strike') ||
-    editor.isActive('subscript') ||
-    editor.isActive('superscript') ||
-    editor.isActive('code');
+    activeMarks.strike ||
+    activeMarks.subscript ||
+    activeMarks.superscript ||
+    activeMarks.code;
 
   const btnStyle = (active: boolean): React.CSSProperties => ({
     padding: '3px 5px',
@@ -97,7 +124,7 @@ export const AdvancedCharStyleDropdown: React.FC<AdvancedCharStyleDropdownProps>
               editor.chain().focus().toggleStrike().run();
               setIsOpen(false);
             }}
-            style={itemStyle(editor.isActive('strike'))}
+            style={itemStyle(activeMarks.strike)}
           >
             <Strikethrough size={12} />
             <span>Üstü Çizili</span>
@@ -109,7 +136,7 @@ export const AdvancedCharStyleDropdown: React.FC<AdvancedCharStyleDropdownProps>
               editor.chain().focus().toggleSubscript().run();
               setIsOpen(false);
             }}
-            style={itemStyle(editor.isActive('subscript'))}
+            style={itemStyle(activeMarks.subscript)}
           >
             <SubscriptIcon size={12} />
             <span>Alt Simge (X₂)</span>
@@ -121,7 +148,7 @@ export const AdvancedCharStyleDropdown: React.FC<AdvancedCharStyleDropdownProps>
               editor.chain().focus().toggleSuperscript().run();
               setIsOpen(false);
             }}
-            style={itemStyle(editor.isActive('superscript'))}
+            style={itemStyle(activeMarks.superscript)}
           >
             <SuperscriptIcon size={12} />
             <span>Üst Simge (X²)</span>
@@ -133,7 +160,7 @@ export const AdvancedCharStyleDropdown: React.FC<AdvancedCharStyleDropdownProps>
               editor.chain().focus().toggleCode().run();
               setIsOpen(false);
             }}
-            style={itemStyle(editor.isActive('code'))}
+            style={itemStyle(activeMarks.code)}
           >
             <Code size={12} />
             <span>Satır İçi Kod</span>

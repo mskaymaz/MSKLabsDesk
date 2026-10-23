@@ -27,11 +27,11 @@ declare module '@tiptap/core' {
         src: string;
         alt?: string;
         title?: string;
-        layout?: 'left' | 'right' | 'center' | 'full';
+        layout?: 'left' | 'right' | 'left-block' | 'right-block' | 'center' | 'full';
         width?: string;
       }) => ReturnType;
       updateImageAttributes: (attrs: {
-        layout?: 'left' | 'right' | 'center' | 'full';
+        layout?: 'left' | 'right' | 'left-block' | 'right-block' | 'center' | 'full';
         width?: string;
         alt?: string;
       }) => ReturnType;
@@ -259,13 +259,17 @@ export const CustomImage = Image.extend({
     let style = '';
 
     if (layout === 'left') {
-      style = 'float: left; margin: 4px 18px 14px 0; max-width: 48%; border-radius: 6px;';
+      style = 'float: left; margin: 6px 18px 14px 0; border-radius: 6px;';
     } else if (layout === 'right') {
-      style = 'float: right; margin: 4px 0 14px 18px; max-width: 48%; border-radius: 6px;';
+      style = 'float: right; margin: 6px 0 14px 18px; border-radius: 6px;';
+    } else if (layout === 'left-block') {
+      style = 'display: block; margin: 14px auto 14px 0; clear: both; border-radius: 6px;';
+    } else if (layout === 'right-block') {
+      style = 'display: block; margin: 14px 0 14px auto; clear: both; border-radius: 6px;';
     } else if (layout === 'full') {
       style = 'display: block; width: 100%; margin: 18px auto; border-radius: 6px; clear: both;';
     } else {
-      style = 'display: block; margin: 18px auto; max-width: 100%; border-radius: 6px; clear: both;';
+      style = 'display: block; margin: 18px auto; border-radius: 6px; clear: both;';
     }
 
     const existingStyle = HTMLAttributes.style || '';
