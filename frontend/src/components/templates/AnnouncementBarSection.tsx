@@ -167,18 +167,24 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
         </div>
 
         {currentPlacement === 'top_hanging' ? (
-          <div dir={activeLangTab === 'ar' ? 'rtl' : 'ltr'} style={{ background: previewBg, color: previewText, borderBottom: isDark ? currentThemeObj.borderDark : currentThemeObj.borderLight, borderRadius: '6px', padding: sizeMetrics.padding, fontSize: sizeMetrics.fontSize, minHeight: sizeMetrics.minHeight, opacity: announcementActive ? currentOpacity / 100 : 0.45, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px', boxShadow: '0 4px 18px rgba(0,0,0,0.1)', overflow: 'hidden' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flex: 1, minWidth: 0, overflow: 'hidden' }}>
-              <span style={{ display: 'inline-flex', flexShrink: 0 }}>{currentThemeObj.icon}</span>
+          <div dir={activeLangTab === 'ar' ? 'rtl' : 'ltr'} style={{ background: previewBg, color: previewText, borderBottom: isDark ? currentThemeObj.borderDark : currentThemeObj.borderLight, borderRadius: '6px', padding: sizeMetrics.padding, fontSize: sizeMetrics.fontSize, minHeight: sizeMetrics.minHeight, opacity: announcementActive ? currentOpacity / 100 : 0.45, display: 'flex', alignItems: isTicker ? 'center' : 'flex-start', justifyContent: 'space-between', gap: '12px', boxShadow: '0 4px 18px rgba(0,0,0,0.1)', overflow: isTicker ? 'hidden' : 'visible' }}>
+            <div style={{ display: 'flex', alignItems: isTicker ? 'center' : 'flex-start', gap: '8px', flex: 1, minWidth: 0, overflow: isTicker ? 'hidden' : 'visible' }}>
+              <span style={{ display: 'inline-flex', flexShrink: 0, marginTop: isTicker ? 0 : '2px' }}>{currentThemeObj.icon}</span>
               {isTicker ? (
-                <div style={{ overflow: 'hidden', whiteSpace: 'nowrap', width: '100%' }}>
-                  <div style={{ display: 'inline-block', whiteSpace: 'nowrap', animation: `${(announcementMeta.tickerDirection === 'ltr') ? 'marqueeLTR' : 'marqueeRTL'} ${announcementMeta.tickerSpeed === 'slow' ? '28s' : announcementMeta.tickerSpeed === 'fast' ? '10s' : '18s'} linear infinite` }} dangerouslySetInnerHTML={{ __html: announcementText[activeLangTab] || 'Duyuru metni...' }} />
+                <div className="ann-ticker-wrap">
+                  <div
+                    className="ann-ticker-track"
+                    style={{
+                      animation: `${announcementMeta.tickerDirection === 'ltr' ? 'marqueeLTR' : 'marqueeRTL'} ${announcementMeta.tickerSpeed === 'slow' ? '28s' : announcementMeta.tickerSpeed === 'fast' ? '10s' : '18s'} linear infinite`,
+                    }}
+                    dangerouslySetInnerHTML={{ __html: announcementText[activeLangTab] || 'Duyuru metni...' }}
+                  />
                 </div>
               ) : (
-                <div style={{ flex: 1, maxHeight: '80px', overflow: 'hidden' }} dangerouslySetInnerHTML={{ __html: announcementText[activeLangTab] || 'Duyuru içeriği...' }} />
+                <div className="ann-rich-content" style={{ flex: 1 }} dangerouslySetInnerHTML={{ __html: announcementText[activeLangTab] || 'Duyuru içeriği...' }} />
               )}
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0, marginTop: isTicker ? 0 : '2px' }}>
               {activeItem.ctaText && <span style={{ display: 'inline-flex', alignItems: 'center', gap: '3px', padding: '3px 9px', fontSize: '10px', fontWeight: 700, borderRadius: '12px', background: isDark ? 'rgba(255,255,255,0.18)' : 'rgba(0,0,0,0.08)', color: 'inherit' }}>{activeItem.ctaText} <ExternalLink size={9} /></span>}
               {activeItem.isDismissable && <button type="button" style={{ background: 'transparent', border: 'none', color: 'inherit', opacity: 0.7, padding: '2px', cursor: 'pointer' }}><X size={13} /></button>}
             </div>
@@ -190,7 +196,7 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
                 <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '10px', fontWeight: 800 }}>{currentThemeObj.icon} <span>{activeItem.title}</span></div>
                 {activeItem.isDismissable && <button type="button" style={{ background: 'transparent', border: 'none', color: 'inherit', opacity: 0.7, padding: '2px' }}><X size={12} /></button>}
               </div>
-              <div style={{ maxHeight: '90px', overflowY: 'auto', marginBottom: '6px' }} dangerouslySetInnerHTML={{ __html: announcementText[activeLangTab] || 'Zengin içerik...' }} />
+              <div style={{ overflowY: 'auto', marginBottom: '6px', whiteSpace: 'pre-wrap', wordBreak: 'break-word' }} dangerouslySetInnerHTML={{ __html: announcementText[activeLangTab] || 'Zengin içerik...' }} />
               {activeItem.ctaText && <div style={{ display: 'flex', justifyContent: 'flex-end' }}><span style={{ fontSize: '10px', fontWeight: 700 }}>{activeItem.ctaText} ➔</span></div>}
             </div>
           </div>

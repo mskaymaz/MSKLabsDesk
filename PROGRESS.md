@@ -1,7 +1,24 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
-## 🟢 Son Güncelleme [23.10.2026 - 14:45] — DUYURU HAVUZU DERLİ TOPLU AÇILIR LİSTE, SINIRSIZ DUYURU VE ÖZEL RENK MİMARİSİ [*]
+## 🟢 Son Güncelleme [23.10.2026 - 15:05] — CANLI DUYURU ÖNİZLEMESİ, HAREKETLİ TICKER, ÇOKLU BOŞLUK (PRE-WRAP) VE ÇOK SATIR İYİLEŞTİRMESİ [*]
+* **Yapılan İşlem:**
+  1. **Kayan Yazı (Ticker / Marquee) Akış Animasyonu:**
+     - `index.css` ve vitrin `global.css` / `announcement-loader.js` içerisine `padding-left: 100%` ve donanımsal ivmeli `translate3d(-100%, 0, 0)` pürüzsüz marquee keyframe'leri bağlandı; kayan yazının önizlemede sabit kalması kesin olarak giderildi.
+  2. **Çoklu Boşluk ve Kelime Aralığı Koruması (`white-space: pre-wrap`):**
+     - Hem TipTap editörüne (`editor.css`), hem önizleme alanına (`ann-rich-content`, `ann-ticker-track`), hem de vitrin loader'ına (`.msk-ann-content`) `white-space: pre-wrap` ve `white-space: pre` kuralları işlendi; kullanıcının 5-10 karakter ardışık boşluk bırakması durumunda HTML'in boşlukları tek boşluğa indirgemesi (whitespace collapse) engellendi.
+  3. **Çok Satırlı Metin Desteği:**
+     - Statik duyuru modundaki taşma kısıtları (`overflow: hidden`, `align-items: center`) esnetildi; iki ve çok satırlı metinlerin tek satıra sıkışmadan gerçek mizanpajıyla alt alta akması sağlandı.
+  4. **Sil Butonu ve Seçici İyileştirmeleri:**
+     - Duyuru sil butonu genişliği 28px'den 38px'e çıkarılarak ergonomik hale getirildi.
+  5. **Doğrulama ve Kural Uyumu:**
+     - Frontend Typecheck: PASS (0 hata).
+     - Backend Testleri: PASS (82/82 test %100 başarılı).
+     - Satır Sınırı: `AnnouncementBarSection.tsx` 336 satır ($\le 450$).
+     - Tüm işlemler yalnızca `DevAdmin` dalında yürütüldü; `main` korundu.
+* **Durum:** DevAdmin dalında tamamlandı, doğrulamalar başarılı.
+
+## [23.10.2026 - 14:45] — DUYURU HAVUZU DERLİ TOPLU AÇILIR LİSTE, SINIRSIZ DUYURU VE ÖZEL RENK MİMARİSİ [*]
 * **Yapılan İşlem:**
   1. **Yönetim Paneli Duyuru Ayarları Refaktörü (AnnouncementBarSection.tsx & announcementConfig.ts):**
      - **Havuz Yayında / Aktiflik:** "Havuz Yayında" ifadesi net `Aktif / Pasif` toggle anahtarına dönüştürüldü; pasif yapıldığında tüm duyurular pasifleşir.
