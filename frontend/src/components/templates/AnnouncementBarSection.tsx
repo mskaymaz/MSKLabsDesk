@@ -32,12 +32,20 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
         content_en: announcementText.en || '', content_ar: announcementText.ar || '',
         bannerType: announcementMeta.bannerType || 'info', placement: announcementMeta.placement || 'top_hanging',
         sizePreset: announcementMeta.sizePreset || 'standard', customHeight: announcementMeta.customHeight,
-        cardWidth: announcementMeta.cardWidth, opacity: announcementMeta.opacity ?? 95,
-        isDismissable: announcementMeta.isDismissable !== false, ctaText: announcementMeta.ctaText,
-        ctaUrl: announcementMeta.ctaUrl, targetUrl: announcementMeta.targetUrl, isActive: true,
+        cardWidth: announcementMeta.cardWidth, cardHeight: announcementMeta.cardHeight, topOffset: announcementMeta.topOffset ?? 110,
+        opacity: announcementMeta.opacity ?? 95, isDismissable: announcementMeta.isDismissable !== false,
+        ctaText: announcementMeta.ctaText, ctaUrl: announcementMeta.ctaUrl, targetUrl: announcementMeta.targetUrl, isActive: true,
+        displayMode: announcementMeta.displayMode || 'static', tickerDirection: announcementMeta.tickerDirection || 'rtl', tickerSpeed: announcementMeta.tickerSpeed || 'normal',
       }];
 
   const [selectedId, setSelectedId] = useState<string>(announcementMeta.activeItemId || items[0].id);
+
+  useEffect(() => {
+    if (announcementMeta.activeItemId && items.some((x) => x.id === announcementMeta.activeItemId)) {
+      setSelectedId(announcementMeta.activeItemId);
+    }
+  }, [announcementMeta.activeItemId, announcementMeta.items]);
+
   const activeItem = items.find((x) => x.id === selectedId) || items[0];
 
   useEffect(() => {
@@ -48,7 +56,12 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
 
   const updateCurrentItem = (updates: Partial<AnnouncementItem>) => {
     const updatedItems = items.map((it) => (it.id === activeItem.id ? { ...it, ...updates } : it));
-    setAnnouncementMeta({ ...announcementMeta, items: updatedItems });
+    setAnnouncementMeta({ ...announcementMeta, items: updatedItems, activeItemId: activeItem.id });
+  };
+
+  const handleSelectId = (id: string) => {
+    setSelectedId(id);
+    setAnnouncementMeta((prev) => ({ ...prev, activeItemId: id }));
   };
 
   const handleAddNewItem = () => {
@@ -69,12 +82,35 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
     setSelectedId(nextList[0].id);
   };
 
+  const handleSaveClick = (e: React.FormEvent) => {
+    const syncedItems = items.map((it) => (it.id === activeItem.id ? {
+      ...it,
+      content_tr: announcementText.tr,
+      content_en: announcementText.en,
+      content_ar: announcementText.ar,
+    } : it));
+    const nextMeta: AnnouncementMeta = {
+      ...announcementMeta,
+      items: syncedItems,
+      activeItemId: activeItem.id,
+      displayMode: activeItem.displayMode,
+      placement: activeItem.placement,
+      bannerType: activeItem.bannerType,
+      topOffset: activeItem.topOffset,
+      cardWidth: activeItem.cardWidth,
+      cardHeight: activeItem.cardHeight,
+    };
+    setAnnouncementMeta(nextMeta);
+    (onSave as any)(e, nextMeta);
+  };
+
   const currentThemeObj = BANNER_THEMES.find((b) => b.id === (activeItem.bannerType || 'info')) || BANNER_THEMES[0];
   const currentPlacement = activeItem.placement || 'top_hanging';
   const isDark = previewTheme === 'dark';
   const currentOpacity = activeItem.opacity ?? 95;
   const sizeMetrics = getSizeMetrics(activeItem, currentPlacement);
   const isTicker = (activeItem.displayMode || 'static') === 'ticker';
+  const isRotator = (activeItem.displayMode || 'static') === 'rotator';
 
   const isCustomTheme = activeItem.bannerType === 'custom';
   const previewBg = isCustomTheme
@@ -103,7 +139,7 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
             </span>
             <Switch checked={announcementActive} onChange={(e: any) => setAnnouncementActive(e.target.checked)} aria-label="Duyuru aktiflik durumu" />
           </div>
-          <button type="button" onClick={onSave} disabled={saving} className="admin-btn admin-btn-primary admin-btn-sm" style={{ display: 'inline-flex', alignItems: 'center', gap: '5px' }}>
+          <button type="button" onClick={handleSaveClick} disabled={saving} className="admin-btn admin-btn-primary admin-btn-sm" style={{ display: 'inline-flex', alignItems: 'center', gap: '5px' }}>
             <Save size={13} /><span>{saving ? 'Kaydediliyor...' : 'Kaydet'}</span>
           </button>
         </div>
@@ -113,7 +149,7 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '10px', marginBottom: '12px', flexWrap: 'wrap', background: 'var(--bg-secondary, rgba(15,23,42,0.3))', padding: '8px 10px', borderRadius: '8px', border: '1px solid var(--border-subtle)' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--text-secondary)' }}>Duyuru:</span>
-          <select className="form-select" value={activeItem.id} onChange={(e) => setSelectedId(e.target.value)} style={{ fontSize: '11px', height: '28px', minWidth: '150px', fontWeight: 600, padding: '2px 6px' }}>
+          <select className="form-select" value={activeItem.id} onChange={(e) => handleSelectId(e.target.value)} style={{ fontSize: '11px', height: '28px', minWidth: '150px', fontWeight: 600, padding: '2px 6px' }}>
             {items.map((it, idx) => {
               const sym = it.placement === 'left_floating' ? '←' : it.placement === 'right_floating' ? '→' : '↑';
               return (
@@ -147,6 +183,7 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
             <select className="form-select" value={activeItem.displayMode || 'static'} onChange={(e) => updateCurrentItem({ displayMode: e.target.value as any })} style={{ fontSize: '11px', height: '28px', padding: '2px 6px' }}>
               <option value="static">Sabit / Çok Satırlı</option>
               <option value="ticker">Kayan Yazı (Ticker)</option>
+              <option value="rotator">Dönüşümlü (Satır Satır Dikey)</option>
             </select>
           </div>
         </div>
@@ -167,7 +204,8 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 600 }}>
             <Sparkles size={12} style={{ color: 'var(--accent-primary)' }} />
             <span>Önizleme: {activeItem.title} ({currentPlacement === 'top_hanging' ? 'Üst' : currentPlacement === 'left_floating' ? 'Sol' : 'Sağ'})</span>
-            {isTicker && <span className="admin-badge admin-badge-sm" style={{ background: 'rgba(16,185,129,0.15)', color: '#10b981' }}>Kayan Yazı (Hover Durdurur)</span>}
+            {isTicker && <span className="admin-badge admin-badge-sm" style={{ background: 'rgba(16,185,129,0.15)', color: '#10b981' }}>Kayan Yazı</span>}
+            {isRotator && <span className="admin-badge admin-badge-sm" style={{ background: 'rgba(99,102,241,0.15)', color: '#6366f1' }}>Dönüşümlü (Dikey/Fade)</span>}
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             {/* Cihaz Seçici (Masaüstü vs Mobil) */}
@@ -222,6 +260,10 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
                     }}
                     dangerouslySetInnerHTML={{ __html: announcementText[activeLangTab] || 'Duyuru metni...' }}
                   />
+                </div>
+              ) : isRotator ? (
+                <div style={{ flex: 1, overflow: 'hidden', height: '22px', display: 'flex', alignItems: 'center' }}>
+                  <div className="ann-rotator-line" style={{ animation: 'annFadeRotate 4.5s ease-in-out infinite' }} dangerouslySetInnerHTML={{ __html: announcementText[activeLangTab] || 'Duyuru içeriği...' }} />
                 </div>
               ) : (
                 <div className="ann-rich-content" style={{ flex: 1 }} dangerouslySetInnerHTML={{ __html: announcementText[activeLangTab] || 'Duyuru içeriği...' }} />
@@ -279,7 +321,7 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
                 <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '10px', fontWeight: 800 }}>{currentThemeObj.icon} <span>{activeItem.title}</span></div>
                 {activeItem.isDismissable && <button type="button" style={{ background: 'transparent', border: 'none', color: 'inherit', opacity: 0.7, padding: '2px' }}><X size={12} /></button>}
               </div>
-              <div style={{ flex: 1, overflowY: 'auto', marginBottom: '6px', whiteSpace: 'pre-wrap', wordBreak: 'break-word' }} dangerouslySetInnerHTML={{ __html: announcementText[activeLangTab] || 'Zengin içerik...' }} />
+              <div className="ann-card-preview-content" style={{ flex: 1, overflowY: 'auto', overflowX: 'hidden', maxWidth: '100%', boxSizing: 'border-box', marginBottom: '6px', whiteSpace: 'pre-wrap', wordBreak: 'break-word' }} dangerouslySetInnerHTML={{ __html: announcementText[activeLangTab] || 'Zengin içerik...' }} />
               {activeItem.ctaText && <div style={{ display: 'flex', justifyContent: 'flex-end' }}><span style={{ fontSize: '10px', fontWeight: 700 }}>{activeItem.ctaText} ➔</span></div>}
             </div>
           </div>

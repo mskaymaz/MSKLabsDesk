@@ -22,7 +22,7 @@ export interface AnnouncementItem {
   ctaUrl?: string;
   targetUrl?: string;
   isActive: boolean;
-  displayMode?: 'static' | 'ticker';
+  displayMode?: 'static' | 'ticker' | 'rotator';
   tickerDirection?: 'rtl' | 'ltr';
   tickerSpeed?: 'slow' | 'normal' | 'fast';
 }
@@ -42,7 +42,7 @@ export interface AnnouncementMeta {
   ctaText?: string;
   ctaUrl?: string;
   targetUrl?: string;
-  displayMode?: 'static' | 'ticker';
+  displayMode?: 'static' | 'ticker' | 'rotator';
   tickerDirection?: 'rtl' | 'ltr';
   tickerSpeed?: 'slow' | 'normal' | 'fast';
   items?: AnnouncementItem[];

@@ -434,3 +434,26 @@ body.theme-light {
   margin-bottom: 0;
 }
 
+.ann-card-preview-content {
+  overflow-x: hidden !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+}
+.ann-card-preview-content img {
+  max-width: 100% !important;
+  height: auto !important;
+  display: block !important;
+  box-sizing: border-box !important;
+}
+@keyframes annFadeRotate {
+  0%, 12% { opacity: 0; transform: translateY(5px); }
+  22%, 82% { opacity: 1; transform: translateY(0); }
+  92%, 100% { opacity: 0; transform: translateY(-5px); }
+}
+.ann-rotator-line {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  max-width: 100%;
+}
+

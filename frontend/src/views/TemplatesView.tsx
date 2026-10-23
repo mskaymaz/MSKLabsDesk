@@ -100,15 +100,16 @@ export const TemplatesView: React.FC = () => {
 
   const currentAd = ads.find((a) => a.slot_key === selectedSlotKey) || ads[0];
 
-  const handleSaveAnnouncement = async (e: React.FormEvent) => {
+  const handleSaveAnnouncement = async (e: React.FormEvent, customMeta?: AnnouncementMeta) => {
     e.preventDefault();
+    const metaToSave = customMeta || announcementMeta;
     try {
       await api.updateTemplate({
         key_name: 'announcement_bar',
         content_tr: announcementText.tr,
         content_en: announcementText.en,
         content_ar: announcementText.ar,
-        meta_json: announcementMeta,
+        meta_json: metaToSave,
         is_active: announcementActive,
       });
       setMessage('Duyurular başarıyla kaydedildi.');

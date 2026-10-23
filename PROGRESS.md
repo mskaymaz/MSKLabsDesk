@@ -1,7 +1,31 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
-## 🟢 Son Güncelleme [23.10.2026 - 16:10] — SAĞ/SOL DUYURULARDA DİKEY KONUM (TOPOFFSET) VE SOL KAYMA KÖK DÜZELTMESİ [*]
+## 🟢 Son Güncelleme [23.10.2026 - 16:38] — DİKEY NÖBETLEŞE AKIŞ (ROTATOR), RESİM MENÜSÜ VIEWPORT KORUMASI, PERSISTENCE VE ÇİFT KANAL DAĞILIMI [*]
+* **Yapılan İşlem:**
+  1. **Duyuru Ayarlarının Kalıcılığı (D1 & State Persistence):**
+     - `AnnouncementBarSection` içindeki duyuruların akış modu (`displayMode`), boyut, yön ve konum parametreleri kaydetme butonunda doğrudan `meta_json.items` içerisine tam senkronize edilerek Cloudflare D1'e aktarıldı.
+     - `activeItemId` veritabanına ve yerel state'e bağlanarak sayfa yenilendiğinde en son düzenlenen duyurunun ve akış modunun bozulmadan geri yüklenmesi sağlandı.
+  2. **Editör Resim Ekleme Menüsü (Akıllı Viewport Kontrolü):**
+     - `ImageDropdown.tsx` bileşenine dinamik ekran altı mesafe kontrolü (Viewport-Aware) kazandırıldı. Sayfanın alt sınırına 380px'ten yakın durumlarda menü otomatik olarak yukarıya doğru (`bottom: calc(100% + 4px)`) açılır kılındı.
+     - `maxHeight` ve `overflowY: 'auto'` ile hiçbir ekranda butonların taşmasına veya kaybolmasına izin verilmedi.
+  3. **%100 Genişlikte Resim Scrollbar Çözümü:**
+     - Vitrinde `.msk-ann-content` ve panelde `.ann-card-preview-content` için `overflow-x: hidden`, `max-width: 100%` ve `img { max-width: 100% !important; height: auto !important; box-sizing: border-box !important; }` kuralı uygulanarak kart altında oluşan yatay scrollbar tamamen ortadan kaldırıldı.
+  4. **Üst ve Sağ/Sol Nöbetleşe (Round-Robin) Çift Kanal Mimarisi (`announcement-loader.js`):**
+     - **Kanal A (Üst Şerit):** Yalnızca `top_hanging` duyuruları toplanır; sayfa yenilendikçe kendi aralarında sırayla nöbet değişimi yapar.
+     - **Kanal B (Sağ/Sol Kart):** `left_floating` ve `right_floating` duyuruları tek bir ortak havuzda birleştirildi. Asla iki kart aynı anda açılmaz; her yenilemede sıradaki kart gösterilir.
+     - Üst şerit ile o anki nöbetteki kart (sağ veya sol) aynı anda sayfada uyumla görüntülenebilir.
+  5. **Dikey Satır Satır Nöbetleşe Akış (Rotator Modu):**
+     - Akış seçeneklerine 3. mod olarak **Dönüşümlü (Satır Satır Dikey)** eklendi.
+     - Çok satırlı içeriklerde satırlar tek tek ekrana gelir, 4.5 saniye okunur, ardından yumuşak dikey kayma/fade geçişiyle sıradaki satıra geçer ve bittiğinde 1. satırdan döngüye devam eder. Hover ile döngü durur.
+     - Kayan yazı (ticker) modunda da paragraflar arasına 35px boşluk ve `•` konularak satırların birbirine yapışması önlendi.
+  6. **Doğrulama ve Kural Uyumu:**
+     - Frontend Build: PASS (0 hata).
+     - Backend Testleri: PASS (82/82 test %100 başarılı).
+     - Yalnızca `DevAdmin` dalı üzerinde çalışıldı; `main` korundu.
+* **Durum:** DevAdmin dalında tamamlandı, doğrulamalar başarılı.
+
+## [23.10.2026 - 16:10] — SAĞ/SOL DUYURULARDA DİKEY KONUM (TOPOFFSET) VE SOL KAYMA KÖK DÜZELTMESİ [*]
 * **Yapılan İşlem:**
   1. **Vitrin CSS Kısıtının Çözümü (`announcement-loader.js`):**
      - Sitedeki `.msk-announcement-floating` sınıfında yer alan katı `top: 110px !important;` ve `right: 20px !important;` stilleri ayrıştırıldı.

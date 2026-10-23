@@ -32,6 +32,7 @@ export const ImageDropdown: React.FC<ImageDropdownProps> = ({ editor }) => {
 
   const dropdownRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [openUpward, setOpenUpward] = useState(false);
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -41,6 +42,12 @@ export const ImageDropdown: React.FC<ImageDropdownProps> = ({ editor }) => {
     };
     if (isOpen) {
       document.addEventListener('mousedown', handleClickOutside);
+      if (dropdownRef.current) {
+        const rect = dropdownRef.current.getBoundingClientRect();
+        const spaceBelow = window.innerHeight - rect.bottom;
+        const spaceAbove = rect.top;
+        setOpenUpward(spaceBelow < 380 && spaceAbove > spaceBelow);
+      }
     }
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
@@ -164,9 +171,12 @@ export const ImageDropdown: React.FC<ImageDropdownProps> = ({ editor }) => {
           onSubmit={handleInsertImage}
           style={{
             position: 'absolute',
-            top: 'calc(100% + 4px)',
+            top: openUpward ? 'auto' : 'calc(100% + 4px)',
+            bottom: openUpward ? 'calc(100% + 4px)' : 'auto',
             left: 0,
             width: '290px',
+            maxHeight: 'min(420px, calc(100vh - 80px))',
+            overflowY: 'auto',
             background: 'var(--bg-card, #1F2937)',
             border: '1px solid var(--border-card-hover, rgba(99, 102, 241, 0.4))',
             borderRadius: '6px',
