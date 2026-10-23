@@ -1,7 +1,22 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
-## 🟢 Son Güncelleme [23.10.2026 - 15:54] — BAĞIMSIZ AKIŞ MODU (HER DUYURUYA ÖZEL TICKER), CANLI CİHAZ VE DİKEY KONUM SİMÜLASYONU, WORD AÇILIR RENK PALETİ [*]
+## 🟢 Son Güncelleme [23.10.2026 - 16:10] — SAĞ/SOL DUYURULARDA DİKEY KONUM (TOPOFFSET) VE SOL KAYMA KÖK DÜZELTMESİ [*]
+* **Yapılan İşlem:**
+  1. **Vitrin CSS Kısıtının Çözümü (`announcement-loader.js`):**
+     - Sitedeki `.msk-announcement-floating` sınıfında yer alan katı `top: 110px !important;` ve `right: 20px !important;` stilleri ayrıştırıldı.
+     - `.msk-floating-left` (soldan açılan) ve `.msk-floating-right` (sağdan açılan) sınıfları tanımlanarak sol kartlar için `left: 20px !important; right: auto !important;` ve `mskFlyoutLeft` animasyonu sağlandı.
+     - `container.style.top = topOff + 'px'` inline değeri artık CSS tarafından ezilmeden gerçek `topOffset` değerine (örn. 250px) tam riayet eder hale getirildi.
+  2. **Yönetim Paneli Giriş Esnekliği ve Canlı Simülasyon (`AnnouncementBarSection.tsx`):**
+     - Önizlemedeki yapay `Math.min(..., 240)` tavan sınırı kaldırıldı; kart girilen gerçek `topOffset` değeri kadar Header çizgisinin altından aşağı konumlanıyor.
+     - `topOffset`, `cardWidth`, `cardHeight` ve `customHeight` inputlarındaki `|| 110` fallback zorlaması kaldırıldı; kullanıcı alanı temizleyip istediği pikseli rahatça yazabilir kılındı.
+  3. **Doğrulama ve Kural Uyumu:**
+     - Frontend Build: PASS (0 hata, 443 satır bileşen boyutu).
+     - Backend Testleri: PASS (82/82 test %100 başarılı).
+     - Yalnızca `DevAdmin` dalı üzerinde çalışıldı.
+* **Durum:** DevAdmin dalında tamamlandı, doğrulamalar başarılı.
+
+## [23.10.2026 - 15:54] — BAĞIMSIZ AKIŞ MODU (HER DUYURUYA ÖZEL TICKER), CANLI CİHAZ VE DİKEY KONUM SİMÜLASYONU, WORD AÇILIR RENK PALETİ [*]
 * **Yapılan İşlem:**
   1. **Her Duyuruya Bağımsız Akış Modu (DisplayMode İzolasyonu):**
      - Bir duyuruda Kayan Yazı (Ticker) seçildiğinde diğer tüm duyuruların da kayan yazıya dönüşmesi sorunu giderildi; `displayMode`, `tickerDirection` ve `tickerSpeed` parametreleri doğrudan her bir `AnnouncementItem` nesnesi seviyesine indirilerek tamamen izole edildi.

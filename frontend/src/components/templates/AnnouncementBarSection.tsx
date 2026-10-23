@@ -235,18 +235,29 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
         ) : (
           <div style={{
             position: 'relative',
-            minHeight: `${Math.max(180, Math.min(380, (activeItem.topOffset ?? 110) + 120))}px`,
+            minHeight: `${Math.max(200, (activeItem.topOffset ?? 110) + 160)}px`,
             background: isDark ? 'rgba(0,0,0,0.25)' : 'rgba(255,255,255,0.4)',
             borderRadius: '6px',
             padding: '8px',
-            overflow: 'hidden',
             border: '1px dashed var(--border-subtle)',
+            transition: 'min-height 0.2s ease',
           }}>
+            {/* Temsili Header Çizgisi */}
+            <div style={{
+              height: '24px', borderBottom: '1px solid var(--border-subtle)', marginBottom: '6px',
+              display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 8px',
+              fontSize: '9px', fontWeight: 600, color: 'var(--text-muted)',
+              background: isDark ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.02)', borderRadius: '4px',
+            }}>
+              <span>🌐 Web Sayfası Başlığı (Header)</span>
+              <span>Üstten Mesafe: {activeItem.topOffset ?? 110}px</span>
+            </div>
+
             <div
               dir={activeLangTab === 'ar' ? 'rtl' : 'ltr'}
               style={{
                 position: 'relative',
-                marginTop: `${Math.min(activeItem.topOffset ?? 110, 240)}px`,
+                marginTop: `${activeItem.topOffset ?? 110}px`,
                 marginLeft: currentPlacement === 'left_floating' ? 0 : 'auto',
                 marginRight: currentPlacement === 'right_floating' ? 0 : 'auto',
                 width: previewDevice === 'mobile' ? '100%' : sizeMetrics.width,
@@ -331,7 +342,7 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
                 <option value="large">Geniş (Büyük)</option>
               </select>
               <div style={{ display: 'flex', alignItems: 'center', gap: '3px' }}>
-                <input type="number" className="form-input" style={{ fontSize: '11px', height: '28px', width: '56px', textAlign: 'center', padding: '2px' }} value={activeItem.customHeight || 34} onChange={(e) => updateCurrentItem({ customHeight: parseInt(e.target.value, 10) || 34 })} />
+                <input type="number" className="form-input" style={{ fontSize: '11px', height: '28px', width: '56px', textAlign: 'center', padding: '2px' }} value={activeItem.customHeight ?? ''} placeholder="34" onChange={(e) => updateCurrentItem({ customHeight: e.target.value === '' ? undefined : parseInt(e.target.value, 10) })} />
                 <span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>px</span>
               </div>
             </div>
@@ -346,15 +357,15 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '4px', marginBottom: '6px' }}>
               <div>
                 <span style={{ display: 'block', fontSize: '9px', color: 'var(--text-muted)' }}>Genişlik:</span>
-                <input type="number" className="form-input" placeholder="310" style={{ fontSize: '11px', height: '26px', padding: '2px', textAlign: 'center' }} value={activeItem.cardWidth || 310} onChange={(e) => updateCurrentItem({ cardWidth: parseInt(e.target.value, 10) || 310 })} />
+                <input type="number" className="form-input" placeholder="310" style={{ fontSize: '11px', height: '26px', padding: '2px', textAlign: 'center' }} value={activeItem.cardWidth ?? ''} onChange={(e) => updateCurrentItem({ cardWidth: e.target.value === '' ? undefined : parseInt(e.target.value, 10) })} />
               </div>
               <div>
                 <span style={{ display: 'block', fontSize: '9px', color: 'var(--text-muted)' }}>Yükseklik:</span>
-                <input type="number" className="form-input" placeholder="Oto" style={{ fontSize: '11px', height: '26px', padding: '2px', textAlign: 'center' }} value={activeItem.cardHeight || ''} onChange={(e) => updateCurrentItem({ cardHeight: e.target.value ? parseInt(e.target.value, 10) : undefined })} />
+                <input type="number" className="form-input" placeholder="Oto" style={{ fontSize: '11px', height: '26px', padding: '2px', textAlign: 'center' }} value={activeItem.cardHeight ?? ''} onChange={(e) => updateCurrentItem({ cardHeight: e.target.value === '' ? undefined : parseInt(e.target.value, 10) })} />
               </div>
               <div>
                 <span style={{ display: 'block', fontSize: '9px', color: 'var(--text-muted)' }}>Üstten:</span>
-                <input type="number" className="form-input" placeholder="110" style={{ fontSize: '11px', height: '26px', padding: '2px', textAlign: 'center' }} value={activeItem.topOffset ?? 110} onChange={(e) => updateCurrentItem({ topOffset: parseInt(e.target.value, 10) || 110 })} />
+                <input type="number" className="form-input" placeholder="110" style={{ fontSize: '11px', height: '26px', padding: '2px', textAlign: 'center' }} value={activeItem.topOffset ?? ''} onChange={(e) => updateCurrentItem({ topOffset: e.target.value === '' ? undefined : parseInt(e.target.value, 10) })} />
               </div>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
