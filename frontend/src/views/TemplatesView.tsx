@@ -10,6 +10,7 @@ import { NewAdSlotModal } from '../components/modals/NewAdSlotModal';
 import { AdSizeCatalogModal } from '../components/ads/AdSizeCatalogModal';
 import { Switch } from '../components/ui/Input';
 import { ADSENSE_MASTER_CATALOG, getEnabledPresets } from '../utils/adDimensions';
+import { AnnouncementBarSection, type AnnouncementMeta } from '../components/templates/AnnouncementBarSection';
 
 export const TemplatesView: React.FC = () => {
   const { t } = useTranslation();
@@ -20,6 +21,10 @@ export const TemplatesView: React.FC = () => {
   // 1. Duyuru Bandı State
   const [announcementText, setAnnouncementText] = useState({ tr: '', en: '', ar: '' });
   const [announcementActive, setAnnouncementActive] = useState<boolean>(true);
+  const [announcementMeta, setAnnouncementMeta] = useState<AnnouncementMeta>({
+    bannerType: 'info',
+    isDismissable: true,
+  });
 
   // 2. AdSense Reklam State
   const [ads, setAds] = useState<AdPlacementSetting[]>([]);
@@ -59,6 +64,14 @@ export const TemplatesView: React.FC = () => {
           ar: ann.content_ar || '',
         });
         setAnnouncementActive(ann.is_active !== undefined ? Boolean(ann.is_active) : true);
+        if (ann.meta_json) {
+          try {
+            const parsed = typeof ann.meta_json === 'string' ? JSON.parse(ann.meta_json) : ann.meta_json;
+            setAnnouncementMeta((prev) => ({ ...prev, ...parsed }));
+          } catch (err) {
+            console.error('Announcement meta_json parse error:', err);
+          }
+        }
       }
 
       const adsList: AdPlacementSetting[] = (adsRes as any)?.ads || (adsRes as any)?.data?.ads || [];
@@ -94,6 +107,7 @@ export const TemplatesView: React.FC = () => {
         content_tr: announcementText.tr,
         content_en: announcementText.en,
         content_ar: announcementText.ar,
+        meta_json: announcementMeta,
         is_active: announcementActive,
       });
       setMessage('Duyuru bandı başarıyla kaydedildi.');
@@ -488,77 +502,16 @@ export const TemplatesView: React.FC = () => {
           )}
         </div>
       ) : (
-        /* ================= 4. DUYURU BANDI ================= */
-        <div className="admin-list-card" style={{ padding: '18px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px', borderBottom: '1px solid var(--border-subtle, #334155)', paddingBottom: '10px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <Megaphone size={18} color="var(--accent-amber, #f59e0b)" />
-              <div>
-                <h2 className="admin-card-title" style={{ margin: 0 }}>
-                  Çok Dilli Site Üst Duyuru Bandı
-                </h2>
-                <p style={{ margin: '1px 0 0', fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
-                  Web sitesinin en üstünde kullanıcılara gösterilecek duyuru metinleri
-                </p>
-              </div>
-            </div>
-
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-primary)' }}>
-                {announcementActive ? 'Yayında' : 'Pasif'}
-              </span>
-              <Switch
-                checked={announcementActive}
-                onChange={(e) => setAnnouncementActive(e.target.checked)}
-                aria-label="Duyuru aktiflik anahtarı"
-              />
-            </div>
-          </div>
-
-          <form onSubmit={handleSaveAnnouncement} style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '12px' }}>
-              <div>
-                <label className="form-label" style={{ fontWeight: 600, color: 'var(--text-primary)' }}>TR (Türkçe Duyuru)</label>
-                <input
-                  type="text"
-                  className="form-input"
-                  placeholder="Örn: Yeni DeskPilot 2.0 sürümü yayınlandı!"
-                  value={announcementText.tr}
-                  onChange={(e) => setAnnouncementText({ ...announcementText, tr: e.target.value })}
-                />
-              </div>
-
-              <div>
-                <label className="form-label" style={{ fontWeight: 600, color: 'var(--text-primary)' }}>EN (English Announcement)</label>
-                <input
-                  type="text"
-                  className="form-input"
-                  placeholder="e.g. New DeskPilot 2.0 has been released!"
-                  value={announcementText.en}
-                  onChange={(e) => setAnnouncementText({ ...announcementText, en: e.target.value })}
-                />
-              </div>
-
-              <div>
-                <label className="form-label" style={{ fontWeight: 600, color: 'var(--text-primary)' }}>AR (العربية - إعلان الموقع)</label>
-                <input
-                  type="text"
-                  dir="rtl"
-                  className="form-input"
-                  placeholder="تم إطلاق الإصدار الجديد من ديسك بايلوت 2.0!"
-                  value={announcementText.ar}
-                  onChange={(e) => setAnnouncementText({ ...announcementText, ar: e.target.value })}
-                />
-              </div>
-            </div>
-
-            <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '6px' }}>
-              <button type="submit" className="admin-btn admin-btn-primary admin-btn-md">
-                <Save size={14} /> {t('common.save')}
-              </button>
-            </div>
-          </form>
-        </div>
+        /* ================= 4. ÇOK DİLLİ ZENGİN DUYURU BANDI ================= */
+        <AnnouncementBarSection
+          announcementText={announcementText}
+          setAnnouncementText={setAnnouncementText}
+          announcementActive={announcementActive}
+          setAnnouncementActive={setAnnouncementActive}
+          announcementMeta={announcementMeta}
+          setAnnouncementMeta={setAnnouncementMeta}
+          onSave={handleSaveAnnouncement}
+        />
       )}
 
       {/* 5. Modallar */}

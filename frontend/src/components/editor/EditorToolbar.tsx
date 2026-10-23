@@ -29,11 +29,13 @@ import { ComponentDropdown } from './ComponentDropdown';
 interface EditorToolbarProps {
   editor: Editor | null;
   onOpenFloatingTable?: () => void;
+  preset?: 'full' | 'inline' | 'compact' | 'email';
 }
 
 export const EditorToolbar: React.FC<EditorToolbarProps> = ({
   editor,
   onOpenFloatingTable = () => {},
+  preset = 'full',
 }) => {
   const [isLinkModalOpen, setIsLinkModalOpen] = useState(false);
   const [fontSize, setFontSize] = useState<string>('16');
@@ -175,25 +177,25 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
 
         {divider}
 
-        {/* Word Tipi "Stil" Açılır Menüsü (Normal Metin, Başlık 1-4) */}
-        <HeadingStyleDropdown editor={editor} />
-
-        {divider}
-
-        {/* Tipografi Kontrolleri (Font Ailesi, Punto, Satır Aralığı, Paragraf Boşluğu, Girinti) */}
-        <EditorTypographyControls
-          editor={editor}
-          fontSize={fontSize}
-          setFontSize={setFontSize}
-          fontFamily={fontFamily}
-          setFontFamily={setFontFamily}
-          lineHeight={lineHeight}
-          setLineHeight={setLineHeight}
-          paragraphSpacing={paragraphSpacing}
-          setParagraphSpacing={setParagraphSpacing}
-        />
-
-        {divider}
+        {/* Word Tipi "Stil" Açılır Menüsü (Normal Metin, Başlık 1-4) & Tipografi — Yalnızca Full/Standart Modda */}
+        {preset !== 'inline' && (
+          <>
+            <HeadingStyleDropdown editor={editor} />
+            {divider}
+            <EditorTypographyControls
+              editor={editor}
+              fontSize={fontSize}
+              setFontSize={setFontSize}
+              fontFamily={fontFamily}
+              setFontFamily={setFontFamily}
+              lineHeight={lineHeight}
+              setLineHeight={setLineHeight}
+              paragraphSpacing={paragraphSpacing}
+              setParagraphSpacing={setParagraphSpacing}
+            />
+            {divider}
+          </>
+        )}
 
         {/* Karakter Biçimlendirme & Tipografi Araçları (B, I, U, Gelişmiş Stiller, Biçim Boyacısı, Simge) */}
         <div style={{ display: 'inline-flex', alignItems: 'center', gap: '1px', flexShrink: 0 }}>
@@ -221,7 +223,7 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
           >
             <UnderlineIcon size={13} />
           </button>
-          <AdvancedCharStyleDropdown editor={editor} />
+          {preset !== 'inline' && <AdvancedCharStyleDropdown editor={editor} />}
           <CaseAndFormatControls editor={editor} />
           <SymbolDropdown editor={editor} />
         </div>
@@ -255,90 +257,109 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
           </label>
         </div>
 
-        {divider}
+        {/* Inline Modda Yalnızca Bağlantı Ekle */}
+        {preset === 'inline' ? (
+          <>
+            {divider}
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '1px', flexShrink: 0 }}>
+              <button
+                type="button"
+                onClick={() => setIsLinkModalOpen(true)}
+                style={btnStyle(activeMarks.link)}
+                title="Bağlantı Ekle / Düzenle"
+              >
+                <LinkIcon size={13} />
+              </button>
+            </div>
+          </>
+        ) : (
+          <>
+            {divider}
 
-        {/* Hizalama Dörtlüsü (Sola Yasla, Ortala, Sağa Yasla, İki Yana Yasla / Blokla) — Ayrılmaz Tek Bütün */}
-        <div
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '1px',
-            flexShrink: 0,
-            whiteSpace: 'nowrap',
-          }}
-        >
-          <button
-            type="button"
-            onClick={() => editor.chain().focus().setTextAlign('left').run()}
-            style={btnStyle(activeMarks.alignLeft)}
-            title="Sola Yasla"
-          >
-            <AlignLeft size={13} />
-          </button>
-          <button
-            type="button"
-            onClick={() => editor.chain().focus().setTextAlign('center').run()}
-            style={btnStyle(activeMarks.alignCenter)}
-            title="Ortala"
-          >
-            <AlignCenter size={13} />
-          </button>
-          <button
-            type="button"
-            onClick={() => editor.chain().focus().setTextAlign('right').run()}
-            style={btnStyle(activeMarks.alignRight)}
-            title="Sağa Yasla"
-          >
-            <AlignRight size={13} />
-          </button>
-          <button
-            type="button"
-            onClick={() => editor.chain().focus().setTextAlign('justify').run()}
-            style={btnStyle(activeMarks.alignJustify)}
-            title="İki Yana Yasla (Blokla)"
-          >
-            <AlignJustify size={13} />
-          </button>
-        </div>
+            {/* Hizalama Dörtlüsü (Sola Yasla, Ortala, Sağa Yasla, İki Yana Yasla / Blokla) — Ayrılmaz Tek Bütün */}
+            <div
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '1px',
+                flexShrink: 0,
+                whiteSpace: 'nowrap',
+              }}
+            >
+              <button
+                type="button"
+                onClick={() => editor.chain().focus().setTextAlign('left').run()}
+                style={btnStyle(activeMarks.alignLeft)}
+                title="Sola Yasla"
+              >
+                <AlignLeft size={13} />
+              </button>
+              <button
+                type="button"
+                onClick={() => editor.chain().focus().setTextAlign('center').run()}
+                style={btnStyle(activeMarks.alignCenter)}
+                title="Ortala"
+              >
+                <AlignCenter size={13} />
+              </button>
+              <button
+                type="button"
+                onClick={() => editor.chain().focus().setTextAlign('right').run()}
+                style={btnStyle(activeMarks.alignRight)}
+                title="Sağa Yasla"
+              >
+                <AlignRight size={13} />
+              </button>
+              <button
+                type="button"
+                onClick={() => editor.chain().focus().setTextAlign('justify').run()}
+                style={btnStyle(activeMarks.alignJustify)}
+                title="İki Yana Yasla (Blokla)"
+              >
+                <AlignJustify size={13} />
+              </button>
+            </div>
 
-        {divider}
+            {divider}
 
-        {/* Listeler (Madde İşaretli & Numaralı) */}
-        <div style={{ display: 'inline-flex', alignItems: 'center', gap: '1px', flexShrink: 0 }}>
-          <button
-            type="button"
-            onClick={() => editor.chain().focus().toggleBulletList().run()}
-            style={btnStyle(activeMarks.bulletList)}
-            title="Madde İşaretli Liste"
-          >
-            <List size={13} />
-          </button>
-          <button
-            type="button"
-            onClick={() => editor.chain().focus().toggleOrderedList().run()}
-            style={btnStyle(activeMarks.orderedList)}
-            title="Numaralı Liste"
-          >
-            <ListOrdered size={13} />
-          </button>
-        </div>
+            {/* Listeler (Madde İşaretli & Numaralı) */}
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '1px', flexShrink: 0 }}>
+              <button
+                type="button"
+                onClick={() => editor.chain().focus().toggleBulletList().run()}
+                style={btnStyle(activeMarks.bulletList)}
+                title="Madde İşaretli Liste"
+              >
+                <List size={13} />
+              </button>
+              <button
+                type="button"
+                onClick={() => editor.chain().focus().toggleOrderedList().run()}
+                style={btnStyle(activeMarks.orderedList)}
+                title="Numaralı Liste"
+              >
+                <ListOrdered size={13} />
+              </button>
+            </div>
 
-        {divider}
+            {divider}
 
-        {/* Ekler & Blok Bileşenler (Akordeon/Kartlar, Bağlantı, Tablo, Görsel) */}
-        <div style={{ display: 'inline-flex', alignItems: 'center', gap: '2px', flexShrink: 0 }}>
-          <ComponentDropdown editor={editor} />
-          <button
-            type="button"
-            onClick={() => setIsLinkModalOpen(true)}
-            style={btnStyle(activeMarks.link)}
-            title="Bağlantı Ekle / Düzenle"
-          >
-            <LinkIcon size={13} />
-          </button>
-          <TableDropdown editor={editor} onOpenFloating={onOpenFloatingTable} />
-          <ImageDropdown editor={editor} />
-        </div>
+            {/* Ekler & Blok Bileşenler (Akordeon/Kartlar, Bağlantı, Tablo, Görsel) */}
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '2px', flexShrink: 0 }}>
+              <ComponentDropdown editor={editor} />
+              <button
+                type="button"
+                onClick={() => setIsLinkModalOpen(true)}
+                style={btnStyle(activeMarks.link)}
+                title="Bağlantı Ekle / Düzenle"
+              >
+                <LinkIcon size={13} />
+              </button>
+              <TableDropdown editor={editor} onOpenFloating={onOpenFloatingTable} />
+              <ImageDropdown editor={editor} />
+            </div>
+          </>
+        )}
       </div>
 
       <LinkModal

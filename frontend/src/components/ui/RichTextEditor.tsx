@@ -43,6 +43,9 @@ export interface RichTextEditorProps {
   editorRef?: React.MutableRefObject<any>;
   hideToolbar?: boolean;
   hideHeader?: boolean;
+  hideFooter?: boolean;
+  preset?: 'full' | 'inline' | 'compact' | 'email';
+  minHeight?: string;
 }
 
 export const RichTextEditor: React.FC<RichTextEditorProps> = ({
@@ -55,6 +58,9 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
   editorRef,
   hideToolbar = false,
   hideHeader = false,
+  hideFooter = false,
+  preset = 'full',
+  minHeight,
 }) => {
   const [isPreview, setIsPreview] = useState(false);
   const [isFloatingTableOpen, setIsFloatingTableOpen] = useState(false);
@@ -170,13 +176,14 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
           <EditorToolbar
             editor={editor}
             onOpenFloatingTable={() => setIsFloatingTableOpen(true)}
+            preset={preset}
           />
         )}
 
         {isPreview ? (
           <div
             className="rich-editor-content-area tiptap-content"
-            style={{ minHeight: '340px' }}
+            style={{ minHeight: minHeight || (preset === 'inline' ? '56px' : '340px') }}
             dangerouslySetInnerHTML={{
               __html: sanitizeHTML(
                 value || '<p style="color:var(--text-muted); font-style:italic;">(İçerik henüz girilmedi...)</p>'
@@ -187,46 +194,50 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({
           <div
             className="rich-editor-content-area"
             onClick={() => editor?.commands.focus()}
-            style={{ minHeight: '340px' }}
+            style={{ minHeight: minHeight || (preset === 'inline' ? '56px' : '340px') }}
           >
             <EditorContent editor={editor} placeholder={placeholder} />
           </div>
         )}
 
-        {/* Seçili Görsel Boyutlandırma & Hizalama Yüzen Araç Çubuğu */}
-        {!isPreview && <FloatingImageToolbar editor={editor} />}
+        {/* Seçili Görsel Boyutlandırma & Hizalama Yüzen Araç Çubuğu (Yalnızca Tam Modda) */}
+        {!isPreview && preset !== 'inline' && <FloatingImageToolbar editor={editor} />}
 
-        {/* Alt Bilgi / İstatistik Çubuğu */}
-        <div className="rich-editor-footer">
-          <div className="rich-editor-stats">
-            <span className="rich-editor-stat-item">
-              <Type size={12} />
-              <span>Kelime:</span>
-              <strong className="rich-editor-stat-value">{wordCount}</strong>
-            </span>
-            <span className="rich-editor-stat-item">
-              <AlignLeft size={12} />
-              <span>Karakter:</span>
-              <strong className="rich-editor-stat-value">{charCount}</strong>
-            </span>
-            <span className="rich-editor-stat-item">
-              <Clock size={12} />
-              <span>Tahmini Okuma:</span>
-              <strong className="rich-editor-stat-value">{readingTimeMinutes} dk</strong>
+        {/* Alt Bilgi / İstatistik Çubuğu (Inline modda varsayılan gizli) */}
+        {!hideFooter && preset !== 'inline' && (
+          <div className="rich-editor-footer">
+            <div className="rich-editor-stats">
+              <span className="rich-editor-stat-item">
+                <Type size={12} />
+                <span>Kelime:</span>
+                <strong className="rich-editor-stat-value">{wordCount}</strong>
+              </span>
+              <span className="rich-editor-stat-item">
+                <AlignLeft size={12} />
+                <span>Karakter:</span>
+                <strong className="rich-editor-stat-value">{charCount}</strong>
+              </span>
+              <span className="rich-editor-stat-item">
+                <Clock size={12} />
+                <span>Tahmini Okuma:</span>
+                <strong className="rich-editor-stat-value">{readingTimeMinutes} dk</strong>
+              </span>
+            </div>
+            <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
+              {isPreview ? 'Önizleme Modu Aktif' : 'WYSIWYG Word Editörü'}
             </span>
           </div>
-          <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
-            {isPreview ? 'Önizleme Modu Aktif' : 'WYSIWYG Word Editörü'}
-          </span>
-        </div>
+        )}
       </div>
 
-      {/* Sürüklenebilir Canlı Tablo Paleti */}
-      <FloatingTableInspector
-        editor={editor}
-        isOpen={isFloatingTableOpen}
-        onClose={() => setIsFloatingTableOpen(false)}
-      />
+      {/* Sürüklenebilir Canlı Tablo Paleti (Yalnızca Tam Modda) */}
+      {preset !== 'inline' && (
+        <FloatingTableInspector
+          editor={editor}
+          isOpen={isFloatingTableOpen}
+          onClose={() => setIsFloatingTableOpen(false)}
+        />
+      )}
 
       {error && (
         <span style={{ display: 'block', color: 'var(--danger, #EF4444)', fontSize: '12px', marginTop: '4px' }}>

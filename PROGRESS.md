@@ -1,7 +1,27 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
-## 🟢 Son Güncelleme [23.10.2026 - 09:32] — İNTERAKTİF AKORDEON BLOĞU, SABİT KONUMLU SİMGE KATALOĞU, BÖLÜNMEZ HİZALAMA GRUBU VE SERBEST RESİM GENİŞLİĞİ [*]
+## 🟢 Son Güncelleme [23.10.2026 - 10:15] — DUYURU BANDI İÇİN INLINE EDİTÖR PRESETİ, CANLI ŞERİT ÖNİZLEMESİ VE GELİŞMİŞ BANT YÖNETİMİ [*]
+* **Yapılan İşlem:**
+  1. **Çekirdek Editöre Modüler Preset Mimarisi (RichTextEditor.tsx & EditorToolbar.tsx):**
+     - Editöre `preset="full" | "inline" | "compact" | "email"` desteği kazandırıldı.
+     - `preset="inline"` modunda tavanı bozan bloklar (başlıklar, tablolar, akordeon, resimler, listeler) gizlendi; yalnızca Kalın, İtalik, Altı Çizili, Renk, Vurgu, Link ve Simge (Ω) içeren 52px'lik kompakt Word ribbon şeridi devreye alındı.
+  2. **Modüler Duyuru Bandı Bileşeni (AnnouncementBarSection.tsx & TemplatesView.tsx):**
+     - TemplatesView içerisindeki ilkel `<input>` tabanlı duyuru bandı kaldırılarak yerine modüler `AnnouncementBarSection.tsx` bileşeni entegre edildi.
+     - TemplatesView satır sayısı 580'den 533'e indirilerek temizlendi; `AnnouncementBarSection.tsx` 349 satırda tamamlandı.
+  3. **Canlı Şerit Önizlemesi (Web Sitesi Header Simülasyonu):**
+     - Admin paneli üzerinden yazılan zengin duyurunun sitede nasıl duracağını anlık yansıtan canlı simülasyon geliştirildi.
+     - Dil geçişleri (TR, EN, AR) ve açık/koyu mod önizleme düğmeleri entegre edildi.
+  4. **Bant Temaları ve Kullanıcı Etkileşimi (meta_json):**
+     - 4 bant rengi tanımlandı (Bilgi/Mavi, Kampanya/Yeşil, Uyarı/Sarı, Lansman/Mor).
+     - Ziyaretçi '✕' butonu ile bandı kapatabilme seçeneği ve isteğe bağlı CTA butonu (URL ve Buton Metni) meta_json üzerinden D1 veritabanına bağlandı.
+  5. **Doğrulama ve Kural Uyumu:**
+     - Frontend Build: PASS (tsc -b && vite build, 871ms, 0 hata).
+     - Backend Testleri: PASS (82/82 test %100 başarılı).
+     - Satır sınırları: AnnouncementBarSection.tsx 349, TemplatesView.tsx 533, RichTextEditor.tsx 249, EditorToolbar.tsx 372 (Tümü kural sınırları dahilinde).
+* **Durum:** DevAdmin dalında tamamlandı, main kesinlikle korundu.
+
+## [23.10.2026 - 09:32] — İNTERAKTİF AKORDEON BLOĞU, SABİT KONUMLU SİMGE KATALOĞU, BÖLÜNMEZ HİZALAMA GRUBU VE SERBEST RESİM GENİŞLİĞİ [*]
 * **Yapılan İşlem:**
   1. **İnteraktif Akordeon Bloğu (componentExtensions.ts, ComponentDropdown.tsx, editor.css):**
      - "SSS" ibaresi menü ve başlık yapısından tamamen kaldırıldı; "Akordeon Bloğu" olarak standartlaştırıldı.
