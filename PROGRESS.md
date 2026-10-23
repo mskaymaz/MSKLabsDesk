@@ -1,7 +1,23 @@
 ﻿# MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
-## 🟢 Son Güncelleme [23.10.2026 - 08:52] — WORD STANDARDI AÇILIR ARAÇ ÇUBUĞU, TİPOGRAFİ COMBOBOX, SİMGE (Ω), BİÇİM BOYACISI VE ÇOKLU KART/AKORDEON BİLEŞENLERİ [*]
+## 🟢 Son Güncelleme [23.10.2026 - 08:58] — TEK BİRLEŞİK TİPOGRAFİ COMBOBOX VE DİKEY SPİNBOX DÜZENLEMESİ (WordCombobox.tsx) [*]
+* **Yapılan İşlem:**
+  1. **Tek Birleşik Combobox Bileşeni (WordCombobox.tsx):**
+     - Yan yana duran ayrı <input> ve ayrı <select> ikiliği tamamen kaldırıldı.
+     - Hem doğrudan klavyeden değer yazılabilen (örn: 15 pt veya 1.35x) hem de sağındaki açılır oktan (▾) hazır liste seçilebilen tek birleşik Word combobox yapısı geliştirildi.
+  2. **Sağ/Sol -/+ Butonlarının Kaldırılması ve Dikey Spinbox Standardı:**
+     - Kontrollerin iki yanındaki dağınık - ve + butonları kaldırıldı.
+     - Sayısal artırma/azaltma ihtiyacı için yerel masaüstü standardında, tek bir tarafta üst üste konumlandırılmış dikey spinbox okları (▲ / ▼) entegre edildi.
+  3. **Punto, Satır Aralığı ve Paragraf Boşluğuna Uygulanması (EditorTypographyControls.tsx):**
+     - Her üç tipografi kontrolü de yeni WordCombobox mimarisine geçirildi; bileşen satır sayısı 302'den 156'ya indirilerek aşırı sadeleştirildi.
+  4. **Doğrulama ve Kural Uyumu:**
+     - Frontend Build: PASS (tsc -b && vite build, 2.65s, 0 hata).
+     - Backend Testleri: PASS (82/82 test %100 başarılı).
+     - Satır sınırları: WordCombobox.tsx 202 (<= 450), EditorTypographyControls.tsx 156 (<= 450).
+* **Durum:** DevAdmin dalında tamamlandı, main kesinlikle korundu.
+
+## [23.10.2026 - 08:52] — WORD STANDARDI AÇILIR ARAÇ ÇUBUĞU, TİPOGRAFİ COMBOBOX, SİMGE (Ω), BİÇİM BOYACISI VE ÇOKLU KART/AKORDEON BİLEŞENLERİ [*]
 * **Yapılan İşlem:**
   1. **Word Tipi "Stil" Açılır Menüsü (HeadingStyleDropdown.tsx & EditorToolbar.tsx):**
      - Araç çubuğunu kalabalıklaştıran ayrı Pilcrow, H1, H2, H3, H4 butonları kaldırılarak yerine tek bir açılır "Stil" menüsü bağlandı.
