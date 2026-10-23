@@ -18,7 +18,7 @@ export const TemplatesView: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [message, setMessage] = useState<string>('');
 
-  // 1. Duyuru Bandı State
+  // 1. Duyurular State
   const [announcementText, setAnnouncementText] = useState({ tr: '', en: '', ar: '' });
   const [announcementActive, setAnnouncementActive] = useState<boolean>(true);
   const [announcementMeta, setAnnouncementMeta] = useState<AnnouncementMeta>({
@@ -111,7 +111,7 @@ export const TemplatesView: React.FC = () => {
         meta_json: announcementMeta,
         is_active: announcementActive,
       });
-      setMessage('Duyuru bandı başarıyla kaydedildi.');
+      setMessage('Duyurular başarıyla kaydedildi.');
       setTimeout(() => setMessage(''), 3000);
     } catch (err: any) {
       alert(err.message || t('common.error'));
@@ -219,7 +219,7 @@ export const TemplatesView: React.FC = () => {
               Reklam & Duyuru Stüdyosu
             </h1>
             <p className="admin-page-desc" style={{ margin: '2px 0 0', fontSize: '0.76rem' }}>
-              Reklam yerleşimleri (Açılır liste & canlı sahne) ve çok dilli duyuru bandı
+              Reklam yerleşimleri (Açılır liste & canlı sahne) ve çok dilli duyurular
             </p>
           </div>
 
@@ -272,7 +272,7 @@ export const TemplatesView: React.FC = () => {
             }}
           >
             <Megaphone size={14} />
-            <span>Duyuru Bandı (Header Banner)</span>
+            <span>Duyurular</span>
           </button>
         </div>
 
@@ -503,7 +503,7 @@ export const TemplatesView: React.FC = () => {
           )}
         </div>
       ) : (
-        /* ================= 4. ÇOK DİLLİ ZENGİN DUYURU BANDI ================= */
+        /* ================= 4. ÇOK DİLLİ ZENGİN DUYURULAR ================= */
         <AnnouncementBarSection
           announcementText={announcementText}
           setAnnouncementText={setAnnouncementText}

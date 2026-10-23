@@ -209,7 +209,7 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
         </div>
 
         <div>
-          <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: '4px' }}>Bant Teması & Renkler</label>
+          <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: '4px' }}>Tema & Renkler</label>
           <select className="form-input" value={activeItem.bannerType || 'info'} onChange={(e) => updateCurrentItem({ bannerType: e.target.value as any })} style={{ fontSize: '11px', height: '28px', marginBottom: '6px' }}>
             {BANNER_THEMES.map((theme) => (
               <option key={theme.id} value={theme.id}>{theme.name}</option>
