@@ -1,6 +1,49 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 📌 BİR SONRAKİ OTURUM YOL HARİTASI & YARINKİ BAŞLANGIÇ NOKTASI [27.10.2026 - 00:15]
+1. **Canlı Ortam Tamamen Ayakta ve Erişilebilir (HTTP 200 OK):**
+   - **Web Vitrini:** https://dev.msklabs.org (En güncel DevAdmin sürümü: duyuru yükleyicisi, HTML5 ses oynatıcı, blog şablonları).
+   - **Admin Yönetim Paneli:** https://panel.msklabs.org (Giriş: mskaymaz / Msk.571).
+   - **Backend Worker API:** https://msklabsdesk-backend.msklabs-org.workers.dev (D1 ve R2 bağlı, JWT auth aktif).
+   - **R2 Medya CDN:** https://media.msklabs.org (CORS ayarları tanımlı).
+2. **Yarın İlk Yapılacak İşlem (Geliştirme / Test):**
+   - Panel üzerinden (https://panel.msklabs.org) yeni bir duyuru ve blog yazısı girilerek dev.msklabs.org üzerinde gerçek zamanlı entegrasyon doğrulaması (Task 1.7) yapılabilir.
+   - Ardından admin_ui_audit_report.md içindeki öncelikli UI/UX ve TipTap editör iyileştirmelerine canlı ortam konforunda başlanabilir.
+3. **Uzak Dağıtım Komutları (Kota Harcamayan Yöntem):**
+   - Admin Paneli Güncelleme: cd frontend && npm run build && npx wrangler pages deploy dist --project-name=msklabs-panel
+   - Web Sitesi Güncelleme: cd ../webMSKLabs && npm run build && npx wrangler pages deploy dist --project-name=msklabs-web
+   - Backend Worker Güncelleme: cd backend && npx wrangler deploy
+
+---
+
+## 🟢 Son Güncelleme [27.10.2026 - 00:15] — CLOUDFLARE UZAK STAGING ALTYAPISI TAM KURULUMU: D1, R2, WORKER API, PANEL VE DEV CANLI YAYINI [*]
+* **Yapılan İşlem:**
+  1. **Cloudflare D1 Veritabanı ve Şema Kurulumu (msklabsdesk_db):**
+     - Uzak D1 veritabanı oluşturuldu (ID: 579478d7-68db-4f5a-92e6-c8127ba3b5ba).
+     - 19 adet SQL migration dosyasının tamamı (0001_initial_schema.sql - 0019_site_pages.sql) uzak D1'e eksiksiz uygulandı.
+     - super_admin kullanıcısı oluşturuldu (mskaymaz / Msk.571 / mustafasalihkaymaz@gmail.com).
+     - backend/src/routes/adminAuth.ts sorgusu hem kullanıcı adı hem e-posta ile oturum açmayı destekleyecek şekilde genişletildi.
+  2. **Cloudflare R2 Medya Depolama Havuzu (msklabs-media):**
+     - Standart sınıf ve Doğu Avrupa (EEUR) bölgesinde msklabs-media kovası oluşturuldu.
+     - https://media.msklabs.org özel alan adı bağlandı.
+     - Tüm projelere (localhost, msklabs.org, dev.msklabs.org, panel.msklabs.org) açık CORS politikası tanımlandı.
+  3. **Backend Worker API Dağıtımı (msklabsdesk-backend):**
+     - D1 ve R2 binding'leri bağlandı, ADMIN_JWT_SECRET Cloudflare Secret olarak yüklendi.
+     - Worker API canlıya alındı (https://msklabsdesk-backend.msklabs-org.workers.dev).
+     - Canlı login testi (POST /api/admin/login) çalıştırılarak HTTP 200 ve geçerli JWT oturum token'ı teyit edildi.
+  4. **Admin Yönetim Portalı Canlı Dağıtımı (panel.msklabs.org):**
+     - MSKLabsDesk/frontend derlendi; Cloudflare Pages kotası harcanmadan doğrudan CDN varlık dağıtımı yapıldı.
+     - msklabs-panel projesine panel.msklabs.org alt alan adı bağlandı; SSL sertifikası ve DNS aktif edildi (HTTP 200 OK).
+  5. **Web Vitrini Canlı Dağıtımı (dev.msklabs.org):**
+     - webMSKLabs/dist en güncel DevAdmin kodlarıyla (duyuru yükleyicisi, HTML5 ses oynatıcı, güncel şablonlar) derlendi.
+     - msklabs-web Pages projesine yüklendi.
+     - Eski uygulamalar Worker'ının çakışan rota kaydı kaldırılarak trafik yeni web sayfalarına aktarıldı.
+     - https://dev.msklabs.org ve https://dev.msklabs.org/blog/blog.html canlı HTTP 200 yanıtı ile doğrulandı.
+  6. **Güvenlik ve Gizlilik (CREDENTIALS.local.md):**
+     - Tüm hesap ID'leri, D1/R2 UUID'leri, API Key'ler ve yönetici şifreleri .gitignore korumalı yerel CREDENTIALS.local.md dosyasına kaydedildi (GitHub'a asla sızmaz).
+* **Durum:** DevAdmin dalında commit edilip pushlandı. Her iki proje de uzakta canlı ve çalışır durumda.
+
 ## 📌 BİR SONRAKİ OTURUM YOL HARİTASI & YAPILACAKLAR (NEXT SESSION AGENDA) [26.10.2026 - 17:05]
 1. **Tüm Sistemin (Web Vitrini + Admin Portalı + API) Tamamen Cloudflare Üzerine Taşınması:**
    - **Web Vitrini (`webMSKLabs`):** `DevAdmin` sürümünün `dev.msklabs.org` (veya doğrudan `main` kabulü ile `msklabs.org`) üzerinde aktif canlı trafiğe verilmesi.

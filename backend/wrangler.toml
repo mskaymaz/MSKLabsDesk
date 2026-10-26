@@ -2,14 +2,21 @@ name = "msklabsdesk-backend"
 main = "src/index.ts"
 compatibility_date = "2024-10-01"
 compatibility_flags = ["nodejs_compat"]
+account_id = "ded2c59ad818860dc2b159c930663fba"
 
-# Cloudflare D1 Database Binding (Faz 2'de ID eklenecek)
+# Cloudflare D1 Database Binding
 [[d1_databases]]
 binding = "DB"
 database_name = "msklabsdesk_db"
-database_id = "dummy-id-pending-creation"
+database_id = "579478d7-68db-4f5a-92e6-c8127ba3b5ba"
+migrations_dir = "migrations"
 
 # Cloudflare R2 Object Storage Binding (API-010)
 [[r2_buckets]]
 binding = "MEDIA"
-bucket_name = "msklabsdesk-media"
+bucket_name = "msklabs-media"
+
+[vars]
+CDN_BASE_URL = "https://media.msklabs.org"
+ENVIRONMENT = "production"
+ALLOWED_ORIGINS = "http://localhost:3000,http://localhost:5173,https://mskaymaz.com,https://msklabs.org,https://dev.msklabs.org,https://panel.msklabs.org"

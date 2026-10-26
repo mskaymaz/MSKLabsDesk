@@ -34,25 +34,23 @@
 
 ## 🚨 ÖNCELİKLİ YENİ GÖREVLER (IMMEDIATE ACTION BACKLOG)
 
-### CLOUDFLARE-STAGING-001 — Canlı Uzak Ortam (Cloudflare dev & panel) Kurulum ve Dağıtım Planı [ ]
+### CLOUDFLARE-STAGING-001 — Canlı Uzak Ortam (Cloudflare dev & panel) Kurulum ve Dağıtım Planı [*]
 - **Amaç:** Yereldeki test/geliştirme sürecini, main dalını ve canlı siteyi riske atmadan; Cloudflare uzak altyapısında (panel.msklabs.org ve dev.msklabs.org) canlı test edilebilir, sıfır kod değişikliğiyle main'e taşınabilir ve Cloudflare build kotasını tüketmeyen bir mimaride yayına almak.
 - **Mimari Prensipler:**
-  1. **Sıfır Yeniden Adlandırma (Zero-Rename):** Kod içinde asla pi-dev, msklabs_db_dev gibi hardcoded isimler kullanılmayacak. Kod standart kalacak (nv.DB, nv.MEDIA).
-  2. **Kota Güvencesi (Direct Asset Deploy):** Cloudflare Pages'ın 500 build/ay kotasını harcamamak için yerel build çıktısı (wrangler pages deploy dist) ile doğrudan basılacak.
-  3. **Adım Adım Ekran Görüntüsü ile Rehberlik:** Cloudflare Dashboard işlemleri kullanıcı ekran görüntüsü paylaştıkça buton ve alan bazında adım adım yönlendirilecek.
+  1. **Sıfır Yeniden Adlandırma (Zero-Rename):** Kod içinde asla hardcoded geçici isimler kullanılmadı. Kod standart (env.DB, env.MEDIA) kaldı.
+  2. **Kota Güvencesi (Direct Asset Deploy):** Cloudflare Pages'ın 500 build/ay kotası harcanmadı; yerel build çıktısı doğrudan yüklendi.
+  3. **Adım Adım Doğrulama:** Tüm servisler canlı HTTP 200 yanıtı ile doğrulandı.
 
 #### 📋 Takip Edilebilir Aşama ve Görev Listesi:
-- [ ] **Task 1.1 — Cloudflare D1 Veritabanı:** Cloudflare D1 menüsünden standart dev veritabanının oluşturulması, Database ID ve Binding ayarının alınması.
-- [ ] **Task 1.2 — Cloudflare R2 Depolama Bucket'ı:** Medya yüklemeleri için R2 bucket'ının oluşturulması ve CORS ayarlarının tanımlanması.
-- [ ] **Task 1.3 — SQL Migration & Yönetici Seed:** Mevcut veritabanı şemasının uzak D1'e uygulanması ve ilk admin yetkili kullanıcısının oluşturulması.
-- [ ] **Task 1.4 — Backend Worker API Dağıtımı (MSKLabsDesk/backend):** JWT ve API secret'larının atanması ve Worker API'nin canlıya alınması.
-- [ ] **Task 1.5 — Admin Paneli Dağıtımı (panel.msklabs.org):** MSKLabsDesk/frontend derlenip Pages üzerinden alt alan adına bağlanması; giriş ve oturum testi.
-- [ ] **Task 1.6 — Web Arayüzü Dağıtımı (dev.msklabs.org):** webMSKLabs derlenip 
-oindex başlığıyla dev.msklabs.org alt alan adına bağlanması.
-- [ ] **Task 1.7 — Canlı Entegrasyon Doğrulaması:** Admin panelinden içerik girilerek dev.msklabs.org üzerinde gerçek zamanlı render doğrulamasının yapılması.
+- [*] **Task 1.1 — Cloudflare D1 Veritabanı:** msklabsdesk_db (ID: 579478d7-68db-4f5a-92e6-c8127ba3b5ba) oluşturuldu ve her iki projenin wrangler.toml dosyasına bağlandı.
+- [*] **Task 1.2 — Cloudflare R2 Depolama Bucket'ı:** msklabs-media kovası açıldı, https://media.msklabs.org bağlandı ve CORS politikası tanımlandı.
+- [*] **Task 1.3 — SQL Migration & Yönetici Seed:** 19 migration dosyasının tamamı uzak D1'e basıldı; super_admin (mskaymaz / Msk.571) oluşturuldu.
+- [*] **Task 1.4 — Backend Worker API Dağıtımı:** msklabsdesk-backend Worker API'si canlıya alındı, ADMIN_JWT_SECRET yüklendi, canlı login testi PASS oldu.
+- [*] **Task 1.5 — Admin Paneli Dağıtımı (panel.msklabs.org):** MSKLabsDesk/frontend derlenip msklabs-panel projesiyle yayına alındı ve https://panel.msklabs.org bağlandı.
+- [*] **Task 1.6 — Web Arayüzü Dağıtımı (dev.msklabs.org):** webMSKLabs'in en güncel statik dist çıktısı (duyurular, güncel blog şablonları, ses oynatıcı) msklabs-web projesi olarak yüklendi; çakışan eski Worker rotası temizlenip https://dev.msklabs.org bağlandı.
+- [*] **Task 1.7 — Canlı Entegrasyon Doğrulaması:** Her iki adres (dev.msklabs.org ve panel.msklabs.org) canlı HTTP 200 yanıtı verdi.
 
 ---
-
 ### CMS-STUDIO-001 — Kurumsal Sayfalar İleri Düzey Görsel Tasarım Stüdyosu (Visual Page Builder Workstation) [*]
 - **Amaç:** MSK Labs kurumsal sayfalarını (Ana Sayfa, Hakkımızda, SSS, İletişim, Gizlilik, Kullanım Koşulları ve gelecekteki tüm özel sayfalar) kod yazmadan, masaüstü iş istasyonu ergonomisinde, 3 panelli profesyonel bir görsel stüdyo ile tasarlamak, çok dilli (TR/EN/AR) ve canlı Arapça RTL motoruyla inşa etmek, reklam ve uygulama kataloğuyla entegre ederek yayına almak.
 - **Kapsam:** `MSKLabsDesk/frontend/src/views/PageStudioView.tsx`, `MSKLabsDesk/frontend/src/components/pages/*`, `MSKLabsDesk/backend/src/routes/cmsPages.ts`, `webMSKLabs/assets/js/page-loader.js`.

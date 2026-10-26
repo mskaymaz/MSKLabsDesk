@@ -1,4 +1,4 @@
-/**
+﻿/**
  * MSKLabsDesk — Admin Giriş API Endpoint (POST /api/admin/login)
  * Güvenli PBKDF2 / Salt + Rate Limiting Korumalı
  */
@@ -39,7 +39,7 @@ export async function handleAdminLogin(request: Request, env: { DB: D1Database }
     // 2. Hesabı Kullanıcı Adı/E-Posta İle Sorgula
     const admin = await env.DB.prepare(`
       SELECT id, email, password_hash, name, role FROM admins
-      WHERE (email = ? OR (id = 'admin_primary' AND ? IN ('admin', 'msklabs.org@gmail.com')))
+      WHERE (email = ? OR (id = 'admin_primary' AND ? IN ('admin', 'mskaymaz', 'msklabs.org@gmail.com', 'mustafasalihkaymaz@gmail.com')))
     `).bind(identifier, identifier).first<{ id: string; email: string; password_hash: string; name: string; role: string }>();
 
     const isPasswordValid = admin ? await verifyPassword(passwordInput, admin.password_hash) : false;
