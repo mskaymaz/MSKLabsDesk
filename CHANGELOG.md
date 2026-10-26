@@ -1,6 +1,15 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [26.10.2026 - 17:05] - Cloudflare Build Düzeltmeleri, Domain Bağlantısı ve Dağıtım Yol Haritası
+- **Cloudflare Workers Build Onarımı (`wrangler.toml`, `vite.config.ts`, `cors.ts`):**
+  - `wrangler.toml` dosyasına `main = "src/index.ts"`, `[build] command = "npm run build"` ve `nodejs_compat` tanımlandı; geçersiz sahte sıfırlı KV ID'si kaldırıldı.
+  - `vite.config.ts` içine multi-page blog çıktısı bağlandı; Cloudflare derlemesi `Ready 55s` ile %100 başarılı oldu.
+- **dev.msklabs.org Bağlantısı ve DNS Eşlemesi:**
+  - Cloudflare Workers arayüzünde `dev.msklabs.org` alt alan adı Preview custom domain olarak tanımlandı.
+- **Yol Haritası Kararı:**
+  - Yarın ilk olarak hem web vitrininin hem de `MSKLabsDesk` admin panelinin tamamen Cloudflare üzerinde (`dev.msklabs.org` & `panel.msklabs.org` veya `main`) canlıya taşınması kararlaştırıldı.
+
 ## [26.10.2026 - 15:42] - Blog Kart Tıklama Hatasının Giderilmesi ve Navigasyon Derin Denetimi
 - **openPost Runtime Hatasının Giderilmesi (`blog.js`):**
   - `updateReaderViewLanguage()` içindeki unutulmuş `checkAndDetectDeviceVoices()` (`ReferenceError`) çağrısı ve atıl `voiceGender` kontrolleri silindi.

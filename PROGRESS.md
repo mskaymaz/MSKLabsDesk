@@ -1,18 +1,31 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
-## 📌 BİR SONRAKİ OTURUM YOL HARİTASI & YAPILACAKLAR (NEXT SESSION AGENDA) [23.10.2026 - 16:50]
-1. **Duyuru Sistemi Canlı Kabul & Son Denetim:**
-   - Panelde ve vitrinde yapılan duyuru geliştirmeleri (rotator dikey akış, kayan yazı, boyut/şeffaflık, çift kanal nöbetleşe havuz, görsel menüsü) kullanıcıyla birlikte son kez kontrol edilecek, varsa ufak pürüzler giderilecek.
-2. **E-Posta Bülteni (Broadcast) ve Bülten Aboneleri (Subscribers) Modülü:**
-   - E-posta bülten oluşturma, şablonlar, toplu gönderim mekanizması ve bülten abone listesi/yönetimi baştan uca denetlenerek tamamlanacak.
-3. **Sistem Ayarları (SettingsView) Yetki & Kapsam Yapılandırması:**
-   - Menüden "Sistem Ayarları"na tıklandığında çıkan `Erişim Engellendi (settings.manage / Super Admin)` yetki kontrolü incelenecek.
-   - Bu ekranda nelerin yer aldığı (Site Başlığı, Gönderen E-Posta / Resend API, Web Push Bildirimleri, Sistem Parametreleri) netleştirilerek yönetici erişimine uygun hale getirilecek.
+## 📌 BİR SONRAKİ OTURUM YOL HARİTASI & YAPILACAKLAR (NEXT SESSION AGENDA) [26.10.2026 - 17:05]
+1. **Tüm Sistemin (Web Vitrini + Admin Portalı + API) Tamamen Cloudflare Üzerine Taşınması:**
+   - **Web Vitrini (`webMSKLabs`):** `DevAdmin` sürümünün `dev.msklabs.org` (veya doğrudan `main` kabulü ile `msklabs.org`) üzerinde aktif canlı trafiğe verilmesi.
+   - **Admin Portalı (`MSKLabsDesk/frontend`):** Cloudflare Pages'a yeni proje olarak bağlanarak `panel.msklabs.org` adresiyle bağımsız ve 7/24 canlı yayına alınması.
+   - **Backend API (`MSKLabsDesk/backend`):** Cloudflare Worker olarak canlı uç noktaya (`api.msklabs.org`) bağlanıp vitrin ve panelle entegre edilmesi.
+2. **Yerel Bağımlılığın Tamamen Kaldırılması:**
+   - Sistemin hem evden hem işyerinden hem mobilden yerel sunuculara ihtiyaç kalmaksızın uzaktan test edilebilir hale getirilmesi.
 
 ---
 
-## 🟢 Son Güncelleme [26.10.2026 - 15:42] — BLOG KARTLARI TIKLAMA HATASININ GİDERİLMESİ VE NAVİGASYON DERİN DENETİMİ [*]
+## 🟢 Son Güncelleme [26.10.2026 - 17:05] — CLOUDFLARE BUILD DÜZELTMELERİ, ALAN ADI BAĞLANTISI VE DAĞITIM PLANI [*]
+* **Yapılan İşlem:**
+  1. **Cloudflare Worker Build & Config Düzeltmeleri (`wrangler.toml`, `vite.config.ts`, `cors.ts`):**
+     - Cloudflare Workers Builds sisteminde derleme hatasına yol açan eksik `main = "src/index.ts"` ve geçersiz sahte sıfırlı KV ID'si temizlendi; `nodejs_compat` ve `[build] command = "npm run build"` eklendi.
+     - `vite.config.ts` içine blog derleme girdisi (`blog: path.resolve(__dirname, 'blog/blog.html')`) bağlandı.
+     - Cloudflare derlemesi `Ready 55s` ile %100 başarılı oldu (commit `7309399`).
+  2. **dev.msklabs.org Alan Adı ve DNS Eşlemesi:**
+     - Cloudflare Workers arayüzünde `dev.msklabs.org` Preview custom domain olarak tanımlandı; DNS kaydı bağlandı.
+  3. **Oturum Sonu Durumu ve Yol Haritası:**
+     - Kullanıcı talimatı doğrultusunda, yarın ilk olarak hem web vitrini hem de admin panelinin yerelden çıkarılıp Cloudflare üzerinde (`dev.msklabs.org` ve `panel.msklabs.org` veya `main`) canlıya taşınması kararlaştırıldı.
+* **Durum:** DevAdmin dalında commit edilip pushlandı.
+
+---
+
+## [26.10.2026 - 15:42] — BLOG KARTLARI TIKLAMA HATASININ GİDERİLMESİ VE NAVİGASYON DERİN DENETİMİ [*]
 * **Yapılan İşlem:**
   1. **openPost Çalışma Hatasının Giderilmesi (`blog.js`):**
      - `updateReaderViewLanguage()` içindeki silinmiş Web Speech API fonksiyon çağrısı `checkAndDetectDeviceVoices()` (`ReferenceError`) ve ölü `voiceGender` kodları cerrahi olarak temizlendi.
