@@ -12,7 +12,26 @@
 
 ---
 
-## 🟢 Son Güncelleme [26.10.2026 - 15:20] — ESKİ TTS TEMİZLİĞİ, SES ALANININ GİZLENMESİ VE KALİTELİ MP3 YOL HARİTASI [*]
+## 🟢 Son Güncelleme [26.10.2026 - 15:42] — BLOG KARTLARI TIKLAMA HATASININ GİDERİLMESİ VE NAVİGASYON DERİN DENETİMİ [*]
+* **Yapılan İşlem:**
+  1. **openPost Çalışma Hatasının Giderilmesi (`blog.js`):**
+     - `updateReaderViewLanguage()` içindeki silinmiş Web Speech API fonksiyon çağrısı `checkAndDetectDeviceVoices()` (`ReferenceError`) ve ölü `voiceGender` kodları cerrahi olarak temizlendi.
+     - Kart tıklamalarında (`openPost`), liste görünümünün (`listView`) gizlenmesi ve okuyucu görünümünün (`readerView`) açılması sağlandı.
+  2. **Temiz URL ve Geçiş Yönetimi Standardı (`blog.js`):**
+     - `switchSection` ve `showList` fonksiyonlarında tarayıcı geçmişi güncellemeleri (`pushState`) kök tabanlı `/blog/:section` formatına eşitlendi; göreceli dosya yolu karışıklığı önlendi.
+  3. **Entegrasyon Testi Güncellemesi (`int_com001.test.ts`):**
+     - Mutlak script yolu standardı (`/blog/comments.js`) için test regex'i esnetildi ve 61 test dosyasının tamamı (604/604 test) %100 PASS durumuna getirildi.
+  4. **Doğrulama ve Kural Uyumu:**
+     - Simülasyon testi (`test-openpost.js`): Bizce, Anıltılar, Güncel makaleleri ve sayısal ID açılışları %100 PASS.
+     - `webMSKLabs` Derlemesi (`tsc --noEmit && vite build`): PASS (0 hata, 14.22s).
+     - `MSKLabsDesk` Frontend Derlemesi (`tsc -b && vite build`): PASS (0 hata, 1.81s).
+     - Backend Testleri (82/82): %100 PASS.
+     - Yalnızca `DevAdmin` dalında çalışıldı; `main` korundu.
+* **Durum:** DevAdmin dalında tamamlandı, doğrulamalar başarılı.
+
+---
+
+## [26.10.2026 - 15:20] — ESKİ TTS TEMİZLİĞİ, SES ALANININ GİZLENMESİ VE KALİTELİ MP3 YOL HARİTASI [*]
 * **Yapılan İşlem:**
   1. **Eski Web Speech API Kalıntılarının Temizlenmesi (`blog.js`):**
      - Canlı tarayıcı sentezinden kalan `window.speechSynthesis`, `synth`, `currentUtterance`, `ttsChunks` ve aygıt seslerini tarayan atıl kodlar repo genelinden tamamen temizlendi.

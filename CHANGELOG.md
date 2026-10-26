@@ -1,6 +1,17 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [26.10.2026 - 15:42] - Blog Kart Tıklama Hatasının Giderilmesi ve Navigasyon Derin Denetimi
+- **openPost Runtime Hatasının Giderilmesi (`blog.js`):**
+  - `updateReaderViewLanguage()` içindeki unutulmuş `checkAndDetectDeviceVoices()` (`ReferenceError`) çağrısı ve atıl `voiceGender` kontrolleri silindi.
+  - Kart tıklamalarında (`openPost`) `listView` gizlenmesi ve `readerView` açılışı eksiksiz hale getirildi.
+- **Navigasyon ve Temiz URL Standardizasyonu (`blog.js`):**
+  - Kategori geçişlerinde (`switchSection`) ve listeye dönüşte (`showList`) URL `pushState` formatı `/blog/:section` olarak normalize edildi.
+- **Yorum Entegrasyon Testi Uyumu (`int_com001.test.ts`):**
+  - Mutlak script yolu `/blog/comments.js` kontrolü regex ile desteklendi; tüm testler (604/604) başarıyla tamamlandı.
+- **Doğrulama ve Kural Uyumu:**
+  - `webMSKLabs` ve `MSKLabsDesk` derlemeleri PASS (0 hata), backend testleri (82/82) %100 PASS. Yalnızca `DevAdmin` dalı kullanıldı.
+
 ## [26.10.2026 - 15:20] - Eski TTS Kalıntılarının Temizlenmesi, Vitrinde Ses Çubuğunun Gizlenmesi ve Kaliteli MP3 Yol Haritası
 - **Web Speech API Temizliği (`blog.js`):**
   - Eski tarayıcı içi sentezleme kalıntıları (`window.speechSynthesis`, `synth`, `currentUtterance`, `ttsChunks`) ve cihaz seslerini denetleyen atıl fonksiyonlar repo genelinden silindi.
