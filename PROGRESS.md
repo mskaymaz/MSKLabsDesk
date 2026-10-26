@@ -12,7 +12,113 @@
 
 ---
 
-## 🟢 Son Güncelleme [26.10.2026 - 10:33] — DİKEY KART AKIŞ KORUMASI & DİZİN TABANLI NÖBETLEŞE (ROUND-ROBIN) DÜZELTMESİ [*]
+## 🟢 Son Güncelleme [26.10.2026 - 12:18] — ÇİFT OPAKLIK BİRLEŞTİRMESİ, ARALIK ÖZEL SAYISAL GİRİŞ VE FERAH AYIRAÇ DÜZENİ [*]
+* **Yapılan İşlem:**
+  1. **Zemin ve Yazı Opaklığının 3. Sütunda Toplanması (`AnnouncementBarSection.tsx`):**
+     - Zemin Opaklığı (`bgOpacity`) ve Yazı Opaklığı (`textOpacity`) kaydırıcılarının her ikisi de "Boyut, Kenar & Opaklık" sütunu altında alt alta konumlandırıldı.
+     - 4. sütun ("Etkileşim & Buton") yalnızca Buton Metni, Buton URL ve Kapatma `✕` onay kutusuna tahsis edilerek sadeleştirildi.
+  2. **Satır & Paragraf Popover'ında Ara Değer Giriş Kutuları (`EditorTypographyControls.tsx`):**
+     - "Aralık" açılır penceresindeki 3 bölüme (Satır Aralığı: `step="0.05"`, Paragraf Üstü: `px`, Paragraf Altı: `px`) sabit hap butonların yanında doğrudan elle değer yazılabilen mini sayısal giriş alanları entegre edildi.
+  3. **Ferah Ayırıcılar (Divider) ve Ribbon Ergonomisi (`EditorToolbar.tsx`, `CaseAndFormatControls.tsx`, `EditorTypographyControls.tsx`):**
+     - Standart ayırıcı marjini `margin: 0 8px` genişliğe çekildi.
+     - **Üst Satır:** Geri/İleri ↔ Normal Metin ↔ Pt ↔ Aralık ↔ Girinti ↔ Kalın/İtalik ↔ Biçim Boyacısı ↔ Büyük/Küçük Harf ↔ Sembol ↔ Renkler arasına yerleştirildi.
+     - **Alt Satır:** Bileşenler ↔ Link ↔ Tablo ↔ Görsel ↔ Hizalama Dörtlüsü ↔ Listeler arasına dikey ayırıcılar eklenerek buton yığılması ortadan kaldırıldı.
+  4. **Doğrulama ve Kural Uyumu:**
+     - Frontend Derlemesi (`tsc -b && vite build`): PASS (0 hata, 1.53s).
+     - Backend Testleri (82/82): %100 PASS.
+     - Satır sayıları: `AnnouncementBarSection.tsx` 402 satır, `EditorToolbar.tsx` 417 satır, `EditorTypographyControls.tsx` 386 satır, `CaseAndFormatControls.tsx` 250 satır (tüm bileşenler azami sınırların altındadır).
+     - Yalnızca `DevAdmin` dalında çalışıldı; `main` korundu.
+* **Durum:** DevAdmin dalında tamamlandı, doğrulamalar başarılı.
+
+---
+
+## [26.10.2026 - 11:58] — WORD-STİLİ TİPOGRAFİ POPOVER'I, DUYURU AKTİF & KAPATMA DÜZENİ VE TEMA TEMİZLİĞİ [*]
+* **Yapılan İşlem:**
+  1. **Zengin Metin Editörü Tipografi Menüsü (Word-Stili Popover - `EditorTypographyControls.tsx`, `EditorToolbar.tsx`, `customExtensions.ts`):**
+     - Araç çubuğundaki punto seçicisine açık `Pt:` etiketi eklendi.
+     - Yan yana karmaşık duran satır ve paragraf aralığı mini butonları yerine, Word standardında tek bir **"Satır & Paragraf Aralığı"** butonu (`MoveVertical`) ve açılır popover menüsü yerleştirildi.
+     - Popover içerisinde:
+       * **Satır Yüksekliği (Line Height):** 1.0, 1.15, 1.5, 1.75, 2.0, 2.5
+       * **Paragraf Üst Boşluğu (`marginTop`):** 0px, 4px, 8px, 12px, 16px
+       * **Paragraf Alt Boşluğu (`marginBottom`):** 0px, 4px, 8px, 12px, 16px, 24px
+     - TipTap `ParagraphSpacing` eklentisine `setParagraphMarginTop` ve `setParagraphMarginBottom` komutları eklenerek hem üst hem alt boşluk bağımsız yönetilebilir kılındı.
+  2. **Duyuru Başlığı ve Aktif Checkbox Düzeni (`AnnouncementBarSection.tsx`):**
+     - "Bu duyuru havuzda aktif" uzun kutusu kaldırıldı; "Duyuru Başlığı" etiketinin hemen sağına 20px aralıkla minimalist `[✓] Aktif` checkbox'ı taşındı.
+  3. **Tema Açılır Kutusundaki Mükerrer Bilgi Metninin Temizlenmesi (`AnnouncementBarSection.tsx`):**
+     - "Tema & Renkler" açılır kutusunun altında aynı metni tekrarlayan info ikonu ve alt yazı kaldırıldı.
+  4. **Kapatma Butonu Onay Kutusunun Konumu (`AnnouncementBarSection.tsx`):**
+     - "Kapatma (✕) butonu görünsün" onay kutusu en sağ sütunda Yazı Opaklığı ayarının hemen altına alındı.
+  5. **Doğrulama ve Kural Uyumu:**
+     - Frontend Derlemesi (`tsc -b && vite build`): PASS (0 hata).
+     - Backend Testleri (82/82): %100 PASS.
+     - Satır sayıları: `AnnouncementBarSection.tsx` 396 satır, `AnnouncementPreviewMockup.tsx` 407 satır, `EditorTypographyControls.tsx` 287 satır (tümü azami sınırların altında).
+     - Yalnızca `DevAdmin` dalı üzerinde çalışıldı; `main` dalı korundu.
+* **Durum:** DevAdmin dalında tamamlandı, doğrulamalar başarılı.
+
+---
+
+## [26.10.2026 - 11:35] — KULAKÇIK İLK AÇILIŞ DÜZELTMESİ, DÜZ ŞEFFAFLIK / BUZLU CAM SEÇİMİ VE PANEL DÜZENİ [*]
+* **Yapılan İşlem:**
+  1. **İlk Açılış ve Yenilemede (Refresh) Kulakçığın Üstte Görünmesi Hatasının Çözümü:**
+     - CSS sınıfındaki `display: flex !important` baskısı kaldırıldı; varsayılan `display: none` yapıldı.
+     - JS tarafında DOM'a eklenmeden önce `autoDelay > 0` iken kulakçık `display: none !important` ve `opacity: 0` olarak başlatılarak ilk 4-5 saniye kart açıkken kulakçığın üst üste binmesi kesin olarak engellendi.
+  2. **Kulakçık İkonunun Kaldırılması ve Genişliğin Daraltılması:**
+     - Kulakçıktan `✨` ikonu kaldırıldı, `padding: 10px 4px` seviyesine çekilerek yalnızca okunur dikey metne göre zarif ve dar bir profile kavuşturuldu.
+  3. **Zemin Efekti (Düz Şeffaflık vs. Buzlu Cam) Seçeneği:**
+     - `backdrop-filter: blur(10px)` zorunluluğu kaldırıldı. "Tema & Renkler" altına "Zemin Efekti" açılır menüsü eklendi (`glassEffect`: "Düz Şeffaf (Altı Net Okunur)" veya "Buzlu Cam (Bulanık)").
+     - Varsayılan olarak düz şeffaf çalışır; opaklık düşürüldüğünde arkadaki içerik buzlanmadan net olarak okunabilir.
+  4. **Admin Ayar Paneli Ergonomisi:**
+     - **Kulakçık Metni & Açık Kalma Süresi:** Doğrudan "Duyuru Başlığı" sütununun altına taşındı.
+     - **Zemin Opaklığı:** "Boyut, Kenar & Konum" sütununun altında korundu.
+     - **Yazı Opaklığı:** "Etkileşim & Buton" sütununun altına taşındı.
+  5. **Doğrulama ve Kural Uyumu:**
+     - Frontend Derlemesi (`tsc -b && vite build`): PASS (0 hata).
+     - Backend Testleri (82/82): %100 PASS.
+     - Satır sayıları: `AnnouncementBarSection.tsx` 397 satır, `AnnouncementPreviewMockup.tsx` 407 satır.
+     - Yalnızca `DevAdmin` dalı üzerinde çalışıldı; `main` dalı korundu.
+* **Durum:** DevAdmin dalında tamamlandı, doğrulamalar başarılı.
+
+---
+
+## [26.10.2026 - 11:18] — DİKEY DUYURU KULAKÇIK (TAB/ROZET) MİMARİSİ, KENAR BOŞLUĞU VE ZAMAN AYARI [*]
+* **Yapılan İşlem:**
+  1. **Dikey Kulakçık (Askı Rozet / Tab) Mimarisi (`announcement-loader.js`):**
+     - Dikey duyurular (`left_floating`, `right_floating`) için `writing-mode: vertical-rl` dikey metinli zarif bir kenar kulakçığı geliştirildi.
+     - Kulakçık tıklandığında duyuru kartı animasyonla genişler; karttaki `✕` kapatma butonuna basıldığında kart yok olmak yerine tekrar kulakçığa küçülür.
+     - Kart üzerindeki link tıklandığında yeni sekmede (`_blank`) açılır.
+  2. **Kenar Boşluğu ve Zamanlama Ayarları (`announcementConfig.ts`, `AnnouncementBarSection.tsx`):**
+     - **Kenar Boşluğu (`sideOffset`):** Sabit 20px yerine varsayılan **5px** olarak panelden yönetilebilir kılındı.
+     - **Kulakçık Metni (`tabText`):** Rozet üzerindeki metin özelleştirilebilir yapıldı (varsayılan: "SİZİN İÇİN").
+     - **İlk Açık Kalma Süresi (`autoCollapseDelay`):** Varsayılan **4 saniye** olarak ayarlandı (0 ise doğrudan kulakçık başlar). Kullanıcı faresiyle kartın üzerindeyse (`mouseenter`) süre otomatik durur (`hover pause`).
+  3. **Canlı Önizleme Vitrini Senkronizasyonu (`AnnouncementPreviewMockup.tsx`):**
+     - Vitrinde `[Kart / Kulakçık]` geçiş butonları eklendi. Admin hem genişletilmiş kartı hem de dikey rozeti canlı vitrinde önizleyebilir ve test edebilir hale getirildi.
+  4. **Doğrulama ve Kural Uyumu:**
+     - Frontend Derlemesi (`tsc -b && vite build`): PASS (0 hata).
+     - Backend Testleri (82/82): %100 PASS.
+     - Satır sayıları: `AnnouncementBarSection.tsx` 388 satır, `AnnouncementPreviewMockup.tsx` 402 satır.
+     - Yalnızca `DevAdmin` dalı üzerinde çalışıldı; `main` dalı korundu.
+* **Durum:** DevAdmin dalında tamamlandı, doğrulamalar başarılı.
+
+---
+
+## [26.10.2026 - 10:55] — CANLI ÖNİZLEME VİTRİNİNİN EN ÜSTE BAĞIMSIZ MOCKUP PENCERESİ OLARAK ALINMASI & MODÜLERLEŞTİRME [*]
+* **Yapılan İşlem:**
+  1. **Bağımsız Canlı Önizleme Vitrini (`AnnouncementPreviewMockup.tsx`):**
+     - Canlı önizleme yapısı, ayar kontrollerinin karmaşası arasından çıkarılıp en üstte, Başlık & Kaydet barının hemen altına konumlandırıldı.
+     - Modern tarayıcı/cihaz çerçevesi (`🔴 🟡 🟢` mockup noktaları, aktif duyuru başlığı ve yerleşim rozeti, Web/Mobil geçiş butonları, TR/EN/AR dil sekmeleri ve Açık/Koyu tema butonu) ile dikkat çekici, bağımsız bir dikdörtgen vitrin penceresine dönüştürüldü.
+  2. **Modüler Bileşen Mimarisi & Satır Sınırı Uyumu:**
+     - `AnnouncementBarSection.tsx` bileşeni 654 satırdan 368 satıra indirildi.
+     - Yeni `AnnouncementPreviewMockup.tsx` bileşeni 324 satır olarak ayrıştırıldı.
+     - Her iki bileşen de `AGENTS.md` içerisindeki azami sınırların (<= 450 ve stüdyolar için <= 600 satır) altına çekildi.
+  3. **Doğrulama ve Kural Uyumu:**
+     - Frontend Derlemesi (`tsc -b && vite build`): PASS (0 hata).
+     - Backend Testleri (82/82): %100 PASS.
+     - Yalnızca `DevAdmin` dalı üzerinde çalışıldı; `main` dalı korundu.
+* **Durum:** DevAdmin dalında tamamlandı, doğrulamalar başarılı.
+
+---
+
+## [26.10.2026 - 10:33] — DİKEY KART AKIŞ KORUMASI & DİZİN TABANLI NÖBETLEŞE (ROUND-ROBIN) DÜZELTMESİ [*]
 * **Yapılan İşlem:**
   1. **Dikey Kartların Üst Bant Gibi Davranması Hatasının Çözümü:**
      - `announcement-loader.js` dosyasında link dinleyicisi eklenirken `else` bloğunun yanlış if şartına bağlanması nedeniyle dikey kartların üst bant koduna düşme riski giderildi. `isFloating` ve `top_hanging` mantıksal dallanmaları kesin olarak ayrıldı.

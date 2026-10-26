@@ -1,5 +1,62 @@
-﻿# MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
+# MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
+
+## [26.10.2026 - 12:18] - Çift Opaklık Birleştirmesi, Tipografi Ara Değer Girişleri ve Ferah Ayıraç Düzeni
+- **Zemin & Yazı Opaklığının 3. Sütunda Toplanması (`AnnouncementBarSection.tsx`):**
+  - Zemin ve Yazı opaklıkları Boyut & Kenar sütunu altına alt alta alındı; Etkileşim & Buton sütunu yalnızca buton ayarları ve kapatma butonuna tahsis edildi.
+- **Tipografi Aralık Popover'ı Ara Değer Giriş Kutuları (`EditorTypographyControls.tsx`):**
+  - Satır Aralığı (0.05 adımlı), Paragraf Üstü (px) ve Paragraf Altı (px) için doğrudan sayısal giriş kutuları eklenerek ara değer belirleme olanağı getirildi.
+- **Ferah Ayraç (Divider) & Ribbon Düzeni (`EditorToolbar.tsx`, `CaseAndFormatControls.tsx`, `EditorTypographyControls.tsx`):**
+  - Tüm ayraçların kenar boşlukları `margin: 0 8px` olarak genişletildi. Üst satırda (Pt-Aralık-Girinti-Stiller-Boyacı-Harf-Sembol-Renk) ve alt satırda (Bileşen-Link-Tablo-Görsel-Hizalama) gruplar arasına yerleştirilerek araç çubuğundaki düğme sıkışması çözüldü.
+- **Doğrulama ve Kural Uyumu:**
+  - Frontend derlemesi PASS (0 hata), backend testleri (82/82) %100 PASS. `DevAdmin` dalı korundu.
+
+## [26.10.2026 - 11:58] - Word-Stili Tipografi Popover'ı, Duyuru Aktif & Kapatma Düzeni ve Mükerrer Tema Temizliği
+- **Zengin Metin Editörü Tipografi Menüsü (Word-Stili Popover - `EditorTypographyControls.tsx`, `EditorToolbar.tsx`, `customExtensions.ts`):**
+  - Punto alanına açık `Pt:` etiketi eklendi.
+  - Karmaşık satır ve paragraf aralığı kontrolleri, Word standardında açılır bir `Satır & Paragraf Aralığı` menüsünde (`MoveVertical`) birleştirildi.
+  - Satır yüksekliği (1.0-2.5) ile paragraf üst (`marginTop`: 0-16px) ve alt (`marginBottom`: 0-24px) boşlukları hap butonlarla pratikleştirildi; TipTap eklentisine çift yönlü margin komutları eklendi.
+- **Duyuru Başlığı ve Aktif Checkbox Yerleşimi (`AnnouncementBarSection.tsx`):**
+  - "Bu duyuru havuzda aktif" alanı sadeleştirilip Duyuru Başlığı etiketinin sağına 20px mesafeyle `[✓] Aktif` checkbox'ı olarak yerleştirildi.
+- **Tema & Renkler ve Kapatma Butonu Düzeni (`AnnouncementBarSection.tsx`):**
+  - Tema açılır kutusu altındaki mükerrer info açıklaması kaldırıldı.
+  - Kapatma `✕` butonu onay kutusu, Yazı Opaklığı kontrolünün hemen altına taşındı.
+- **Doğrulama ve Kural Uyumu:**
+  - Frontend derlemesi (`tsc -b && vite build`) PASS (0 hata), backend testleri (82/82) %100 PASS. `DevAdmin` dalı korundu.
+
+## [26.10.2026 - 11:35] - Kulakçık İlk Açılış Çakışma Düzeltmesi, Düz Şeffaflık / Buzlu Cam Tercihi ve Panel Ergonomisi
+- **İlk Açılış / Yenilemede Kulakçık Çakışmasının Çözümü (`announcement-loader.js`):**
+  - CSS `.msk-ann-tab` sınıfından zorlayıcı `display: flex !important` kaldırılıp varsayılan `display: none` yapıldı; DOM'a eklenmeden önce inline `display: none !important` atanarak ilk açık kalma süresi boyunca kulakçığın açık kartın üzerine binmesi engellendi.
+- **Yalın Dikey Metin & Dar Kulakçık:**
+  - Kulakçıktan `✨` ikonu kaldırıldı, dolgu `padding: 10px 4px` seviyesine çekilerek fazlalık boşluklar temizlendi ve salt dikey metne göre daraltıldı.
+- **Düz Şeffaflık vs. Buzlu Cam (Zemin Efekti) Seçeneği:**
+  - `glassEffect` parametresi eklendi ("Düz Şeffaf (Altı Net Okunur)" / "Buzlu Cam (Bulanık)"). Varsayılan olarak düz şeffaf çalıştırılarak opaklık düşürüldüğünde arka planın buzlanmadan okunması sağlandı.
+- **Admin Ayar Düzeni:**
+  - Kulakçık Metni ve Açık Süre -> Duyuru Başlığı sütunu altına; Zemin Opaklığı -> Boyut & Kenar altına; Yazı Opaklığı -> Etkileşim & Buton sütunu altına gruplandı.
+- **Doğrulama ve Kural Uyumu:**
+  - Frontend derlemesi PASS (0 hata), backend testleri (82/82) %100 PASS. `DevAdmin` dalı korundu.
+
+## [26.10.2026 - 11:18] - Dikey Duyuru Kulakçık (Askı Rozet) Mimarisi, Dinamik Kenar Boşluğu ve Zamanlama Ayarları
+- **Dikey Kulakçık (Askı Rozet / Tab) Mimarisi (`announcement-loader.js`):**
+  - Dikey (sağ/sol) duyurular için `writing-mode: vertical-rl` formatında modern askı rozet geliştirildi.
+  - İlk açılışta kart açık başlar ve belirlenen süre sonunda otomatik kulakçığa küçülür; kulakçığa tıklandığında kart genişler; `✕` butonuna basıldığında kart kulakçığa geri büzülür.
+  - Kullanıcı fareyle kartın üzerindeyken (`mouseenter`) süre otomatik durdurularak okuma esnasında kapanma riski önlendi (`hover pause`).
+- **Kenar Boşluğu, Kulakçık Metni ve Zamanlama Kontrolleri (`AnnouncementBarSection.tsx`, `announcementConfig.ts`):**
+  - Sabit 20px yerine varsayılan 5px `Kenar` (`sideOffset`) ayarı eklendi.
+  - Özelleştirilebilir `Kulakçık Metni` (`tabText`, varsayılan "SİZİN İÇİN") ve `Açık Süre (sn)` (`autoCollapseDelay`, varsayılan 4 sn) eklendi.
+- **Canlı Önizleme Vitrini Entegrasyonu (`AnnouncementPreviewMockup.tsx`):**
+  - Mockup başlığına `[Kart / Kulakçık]` geçiş butonları eklendi. Tıklama ile kart ve rozet anlık olarak önizlenebilir hale getirildi.
+- **Doğrulama ve Kural Uyumu:**
+  - Frontend derlemesi (`tsc -b && vite build`) PASS (0 hata), backend testleri (82/82) %100 PASS. `DevAdmin` dalı korundu.
+
+## [26.10.2026 - 10:55] - Duyuru Canlı Önizleme Vitrininin Bağımsız Mockup Penceresi Olarak En Üste Taşınması ve Modülerleşme
+- **Bağımsız Canlı Önizleme Vitrini (`AnnouncementPreviewMockup.tsx`):**
+  - Önizleme alanı ayarların karmaşasından kurtarılarak en tepeye, Başlık & Kaydet barının hemen altına belirgin bir dikdörtgen pencere olarak taşındı.
+  - Pencere başlığında pencere kontrol noktaları (`🔴 🟡 🟢`), aktif duyuru başlığı ve yerleşim rozeti, Web/Mobil görünüm butonları, TR/EN/AR dil sekmeleri ve Açık/Koyu tema anahtarı bir araya getirildi.
+- **Modüler Bileşen Ayrımı & Satır Sayısı Uyumu (`AnnouncementBarSection.tsx`):**
+  - Stüdyo bileşeni 654 satırdan 368 satıra indirildi; önizleme mockup bileşeni 324 satır olarak modüler hale getirildi. Her iki bileşen de kurallardaki satır hedeflerine tam uyumlu kılındı.
+- **Doğrulama ve Kural Uyumu:**
+  - Frontend derlemesi (`tsc -b && vite build`) PASS (0 hata), backend testleri (82/82) %100 PASS. `DevAdmin` dalı korundu.
 
 ## [26.10.2026 - 10:40] - Duyuru Sistemi İnce Bant Kalınlık Eşitlemesi, Dikey Boşluk (Padding Y), Ayrılmış Opaklık ve Round-Robin Nöbetleşe Onarımı
 - **Vitrin Üst Bant Kalınlık Eşitlemesi (announcement-loader.js):**

@@ -17,24 +17,13 @@ interface StoredStyles {
   highlight?: string;
 }
 
-export const CaseAndFormatControls: React.FC<CaseAndFormatControlsProps> = ({ editor }) => {
-  const [isCaseOpen, setIsCaseOpen] = useState(false);
+/**
+ * Biçim Boyacısı / Stil Boyama Butonu (Tek kullanımlık Word standardı)
+ */
+export const FormatPainterButton: React.FC<{ editor: Editor }> = ({ editor }) => {
   const [isPainterActive, setIsPainterActive] = useState(false);
   const [copiedStyles, setCopiedStyles] = useState<StoredStyles | null>(null);
 
-  const dropdownRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
-        setIsCaseOpen(false);
-      }
-    };
-    if (isCaseOpen) document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [isCaseOpen]);
-
-  // Format Painter Dinleyicisi (Metin seçildiğinde kopyalanan stilleri uygular)
   useEffect(() => {
     if (!editor || !isPainterActive || !copiedStyles) return;
 
@@ -89,6 +78,50 @@ export const CaseAndFormatControls: React.FC<CaseAndFormatControlsProps> = ({ ed
       setIsPainterActive(true);
     }
   };
+
+  const btnStyle = (active: boolean): React.CSSProperties => ({
+    padding: '3px 5px',
+    border: 'none',
+    borderRadius: '4px',
+    background: active ? 'var(--accent-primary)' : 'transparent',
+    color: active ? '#FFFFFF' : 'var(--text-primary)',
+    cursor: 'pointer',
+    display: 'inline-flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    minWidth: '24px',
+    height: '24px',
+    transition: 'background 0.15s ease',
+  });
+
+  return (
+    <button
+      type="button"
+      onClick={toggleFormatPainter}
+      style={btnStyle(isPainterActive)}
+      title="Biçim Boyacısı (Stil Boyama): Bir metnin biçimini kopyalayıp başka bir metne uygular"
+    >
+      <Paintbrush size={13} />
+    </button>
+  );
+};
+
+/**
+ * Büyük / Küçük Harf Değiştirici Açılır Menü
+ */
+export const CaseTransformDropdown: React.FC<{ editor: Editor }> = ({ editor }) => {
+  const [isCaseOpen, setIsCaseOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setIsCaseOpen(false);
+      }
+    };
+    if (isCaseOpen) document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isCaseOpen]);
 
   const applyCaseConversion = (type: 'upper' | 'lower' | 'title' | 'sentence') => {
     const { from, to, empty } = editor.state.selection;
@@ -153,87 +186,87 @@ export const CaseAndFormatControls: React.FC<CaseAndFormatControlsProps> = ({ ed
   };
 
   return (
-    <div style={{ display: 'inline-flex', alignItems: 'center', gap: '2px' }}>
-      {/* Biçim Boyacısı / Stil Boyama (Format Painter) */}
+    <div ref={dropdownRef} style={{ position: 'relative', display: 'inline-block' }}>
       <button
         type="button"
-        onClick={toggleFormatPainter}
-        style={btnStyle(isPainterActive)}
-        title="Biçim Boyacısı (Stil Boyama): Bir metnin biçimini kopyalayıp başka bir metne uygular"
+        onClick={() => setIsCaseOpen(!isCaseOpen)}
+        style={{
+          ...btnStyle(isCaseOpen),
+          gap: '1px',
+          padding: '0 4px',
+          minWidth: '32px',
+        }}
+        title="Büyük / Küçük Harf Değiştir (TÜMÜ BÜYÜK, tümü küçük, Başlık Düzeni)"
       >
-        <Paintbrush size={13} />
+        <CaseSensitive size={14} />
+        <ChevronDown size={10} style={{ opacity: 0.7 }} />
       </button>
 
-      {/* Büyük / Küçük Harf Değiştirici Açılır Menü */}
-      <div ref={dropdownRef} style={{ position: 'relative', display: 'inline-block' }}>
-        <button
-          type="button"
-          onClick={() => setIsCaseOpen(!isCaseOpen)}
+      {isCaseOpen && (
+        <div
           style={{
-            ...btnStyle(isCaseOpen),
-            gap: '1px',
-            padding: '0 4px',
-            minWidth: '32px',
+            position: 'absolute',
+            top: 'calc(100% + 4px)',
+            left: 0,
+            zIndex: 110,
+            background: 'var(--bg-card)',
+            border: '1px solid var(--border-card)',
+            borderRadius: '6px',
+            boxShadow: '0 10px 25px rgba(0,0,0,0.3)',
+            padding: '4px',
+            width: '170px',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '2px',
           }}
-          title="Büyük / Küçük Harf Değiştir (TÜMÜ BÜYÜK, tümü küçük, Başlık Düzeni)"
         >
-          <CaseSensitive size={14} />
-          <ChevronDown size={10} style={{ opacity: 0.7 }} />
-        </button>
-
-        {isCaseOpen && (
-          <div
-            style={{
-              position: 'absolute',
-              top: 'calc(100% + 4px)',
-              left: 0,
-              zIndex: 110,
-              background: 'var(--bg-card)',
-              border: '1px solid var(--border-card)',
-              borderRadius: '6px',
-              boxShadow: '0 10px 25px rgba(0,0,0,0.3)',
-              padding: '4px',
-              width: '170px',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '2px',
-            }}
+          <button
+            type="button"
+            onClick={() => applyCaseConversion('upper')}
+            style={menuItemStyle}
           >
-            <button
-              type="button"
-              onClick={() => applyCaseConversion('upper')}
-              style={menuItemStyle}
-            >
-              <span>TÜMÜ BÜYÜK</span>
-              <span style={{ fontSize: '9px', opacity: 0.6 }}>ABC</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => applyCaseConversion('lower')}
-              style={menuItemStyle}
-            >
-              <span>tümü küçük</span>
-              <span style={{ fontSize: '9px', opacity: 0.6 }}>abc</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => applyCaseConversion('title')}
-              style={menuItemStyle}
-            >
-              <span>Başlık Düzeni</span>
-              <span style={{ fontSize: '9px', opacity: 0.6 }}>Abc Def</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => applyCaseConversion('sentence')}
-              style={menuItemStyle}
-            >
-              <span>Tümce düzeni</span>
-              <span style={{ fontSize: '9px', opacity: 0.6 }}>Abc def</span>
-            </button>
-          </div>
-        )}
-      </div>
+            <span>TÜMÜ BÜYÜK</span>
+            <span style={{ fontSize: '9px', opacity: 0.6 }}>ABC</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => applyCaseConversion('lower')}
+            style={menuItemStyle}
+          >
+            <span>tümü küçük</span>
+            <span style={{ fontSize: '9px', opacity: 0.6 }}>abc</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => applyCaseConversion('title')}
+            style={menuItemStyle}
+          >
+            <span>Başlık Düzeni</span>
+            <span style={{ fontSize: '9px', opacity: 0.6 }}>Abc Def</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => applyCaseConversion('sentence')}
+            style={menuItemStyle}
+          >
+            <span>Tümce düzeni</span>
+            <span style={{ fontSize: '9px', opacity: 0.6 }}>Abc def</span>
+          </button>
+        </div>
+      )}
+    </div>
+  );
+};
+
+/**
+ * Birleşik Bileşen (Geriye Dönük Uyumluluk)
+ */
+export const CaseAndFormatControls: React.FC<CaseAndFormatControlsProps> = ({ editor }) => {
+  return (
+    <div style={{ display: 'inline-flex', alignItems: 'center', gap: '2px' }}>
+      <FormatPainterButton editor={editor} />
+      <div style={{ width: '1px', height: '18px', background: 'var(--border-subtle)', margin: '0 8px', flexShrink: 0 }} />
+      <CaseTransformDropdown editor={editor} />
     </div>
   );
 };

@@ -20,7 +20,7 @@ import { LinkModal } from './LinkModal';
 import { EditorTypographyControls } from './EditorTypographyControls';
 import { HeadingStyleDropdown } from './HeadingStyleDropdown';
 import { AdvancedCharStyleDropdown } from './AdvancedCharStyleDropdown';
-import { CaseAndFormatControls } from './CaseAndFormatControls';
+import { FormatPainterButton, CaseTransformDropdown } from './CaseAndFormatControls';
 import { SymbolDropdown } from './SymbolDropdown';
 import { ComponentDropdown } from './ComponentDropdown';
 import { ColorMenuDropdown } from './ColorMenuDropdown';
@@ -41,6 +41,7 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
   const [fontFamily, setFontFamily] = useState<string>('');
   const [lineHeight, setLineHeight] = useState<string>('1.5');
   const [paragraphSpacing, setParagraphSpacing] = useState<string>('14');
+  const [paragraphSpacingTop, setParagraphSpacingTop] = useState<string>('0');
   const [activeTextColor, setActiveTextColor] = useState<string>('');
   const [activeHighlightColor, setActiveHighlightColor] = useState<string>('');
 
@@ -85,6 +86,9 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
 
       const curMb = editor.getAttributes('paragraph').marginBottom || editor.getAttributes('heading').marginBottom;
       setParagraphSpacing(curMb ? curMb.replace('px', '') : '14');
+
+      const curMt = editor.getAttributes('paragraph').marginTop || editor.getAttributes('heading').marginTop;
+      setParagraphSpacingTop(curMt ? curMt.replace('px', '') : '0');
 
       // 2. Renkler
       const curColor = editor.getAttributes('textStyle').color;
@@ -137,7 +141,7 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
   });
 
   const divider = (
-    <div style={{ width: '1px', height: '18px', background: 'var(--border-subtle)', margin: '0 2px', flexShrink: 0 }} />
+    <div style={{ width: '1px', height: '18px', background: 'var(--border-subtle)', margin: '0 8px', flexShrink: 0 }} />
   );
 
   return (
@@ -203,12 +207,14 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
                 setLineHeight={setLineHeight}
                 paragraphSpacing={paragraphSpacing}
                 setParagraphSpacing={setParagraphSpacing}
+                paragraphSpacingTop={paragraphSpacingTop}
+                setParagraphSpacingTop={setParagraphSpacingTop}
               />
               {divider}
             </>
           )}
 
-          {/* Karakter Biçimlendirme & Tipografi Araçları (B, I, U, Gelişmiş Stiller, Biçim Boyacısı, Simge) */}
+          {/* Karakter Biçimlendirme Araçları (B, I, U, Gelişmiş Stiller) */}
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: '1px', flexShrink: 0 }}>
             <button
               type="button"
@@ -235,9 +241,22 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
               <UnderlineIcon size={13} />
             </button>
             {preset !== 'inline' && <AdvancedCharStyleDropdown editor={editor} />}
-            <CaseAndFormatControls editor={editor} />
-            <SymbolDropdown editor={editor} />
           </div>
+
+          {divider}
+
+          {/* Biçim Boyacısı / Stil Boyama (Format Painter) */}
+          <FormatPainterButton editor={editor} />
+
+          {divider}
+
+          {/* Büyük / Küçük Harf Değiştirici */}
+          <CaseTransformDropdown editor={editor} />
+
+          {divider}
+
+          {/* Sembol / Özel Karakter Ekle */}
+          <SymbolDropdown editor={editor} />
 
           {divider}
 
@@ -289,26 +308,35 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
           )}
         </div>
 
-        {/* 2. ALT SATIR: Ekler & Blok Bileşenler + (10px Boşluk) + Hizalama Dörtlüsü + Listeler */}
+        {/* 2. ALT SATIR: Ekler & Blok Bileşenler + Hizalama Dörtlüsü + Listeler */}
         {preset !== 'inline' && (
           <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '3px', paddingTop: '2px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
-            {/* Ekler & Blok Bileşenler (Akordeon/Kartlar, Bağlantı, Tablo, Görsel) */}
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '2px', flexShrink: 0 }}>
-              <ComponentDropdown editor={editor} />
-              <button
-                type="button"
-                onClick={() => setIsLinkModalOpen(true)}
-                style={btnStyle(activeMarks.link)}
-                title="Bağlantı Ekle / Düzenle"
-              >
-                <LinkIcon size={13} />
-              </button>
-              <TableDropdown editor={editor} onOpenFloating={onOpenFloatingTable} />
-              <ImageDropdown editor={editor} />
-            </div>
+            {/* Bileşenler (Akordeon, Kartlar vb.) */}
+            <ComponentDropdown editor={editor} />
 
-            {/* Görsel ekleme yapısının 10px sağına dikey ayırıcı */}
-            <div style={{ width: '1px', height: '18px', background: 'var(--border-subtle)', margin: '0 10px', flexShrink: 0 }} />
+            {divider}
+
+            {/* Bağlantı Ekle / Düzenle */}
+            <button
+              type="button"
+              onClick={() => setIsLinkModalOpen(true)}
+              style={btnStyle(activeMarks.link)}
+              title="Bağlantı Ekle / Düzenle"
+            >
+              <LinkIcon size={13} />
+            </button>
+
+            {divider}
+
+            {/* Tablo Menüsü */}
+            <TableDropdown editor={editor} onOpenFloating={onOpenFloatingTable} />
+
+            {divider}
+
+            {/* Görsel Ekleme */}
+            <ImageDropdown editor={editor} />
+
+            {divider}
 
             {/* Hizalama Dörtlüsü (Sola Yasla, Ortala, Sağa Yasla, İki Yana Yasla / Blokla) */}
             <div

@@ -16,7 +16,9 @@ declare module '@tiptap/core' {
       unsetLineHeight: () => ReturnType;
     };
     paragraphSpacing: {
-      setParagraphSpacing: (bottomSpacing: string) => ReturnType;
+      setParagraphSpacing: (bottomSpacing: string, topSpacing?: string) => ReturnType;
+      setParagraphMarginTop: (topSpacing: string) => ReturnType;
+      setParagraphMarginBottom: (bottomSpacing: string) => ReturnType;
       setIndent: (delta: number) => ReturnType;
     };
     duplicateSelection: {
@@ -142,6 +144,16 @@ export const ParagraphSpacing = Extension.create({
       {
         types: this.options.types,
         attributes: {
+          marginTop: {
+            default: null,
+            parseHTML: (element) => element.style.marginTop || null,
+            renderHTML: (attributes) => {
+              if (!attributes.marginTop) return {};
+              return {
+                style: `margin-top: ${attributes.marginTop}`,
+              };
+            },
+          },
           marginBottom: {
             default: null,
             parseHTML: (element) => element.style.marginBottom || null,
@@ -169,6 +181,22 @@ export const ParagraphSpacing = Extension.create({
   addCommands() {
     return {
       setParagraphSpacing:
+        (bottomSpacing: string, topSpacing?: string) =>
+        ({ commands }) => {
+          const attrs: Record<string, string> = { marginBottom: bottomSpacing };
+          if (topSpacing !== undefined) attrs.marginTop = topSpacing;
+          return this.options.types.every((type: string) =>
+            commands.updateAttributes(type, attrs)
+          );
+        },
+      setParagraphMarginTop:
+        (topSpacing: string) =>
+        ({ commands }) => {
+          return this.options.types.every((type: string) =>
+            commands.updateAttributes(type, { marginTop: topSpacing })
+          );
+        },
+      setParagraphMarginBottom:
         (bottomSpacing: string) =>
         ({ commands }) => {
           return this.options.types.every((type: string) =>
