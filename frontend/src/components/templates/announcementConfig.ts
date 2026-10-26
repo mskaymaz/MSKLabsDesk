@@ -13,10 +13,13 @@ export interface AnnouncementItem {
   placement?: 'top_hanging' | 'right_floating' | 'left_floating';
   sizePreset?: 'compact' | 'standard' | 'large';
   customHeight?: number;
+  paddingY?: number;
   cardWidth?: number;
   cardHeight?: number;
   topOffset?: number;
   opacity?: number;
+  bgOpacity?: number;
+  textOpacity?: number;
   isDismissable: boolean;
   ctaText?: string;
   ctaUrl?: string;
@@ -34,10 +37,13 @@ export interface AnnouncementMeta {
   placement?: 'top_hanging' | 'right_floating' | 'left_floating';
   sizePreset?: 'compact' | 'standard' | 'large';
   customHeight?: number;
+  paddingY?: number;
   cardWidth?: number;
   cardHeight?: number;
   topOffset?: number;
   opacity?: number;
+  bgOpacity?: number;
+  textOpacity?: number;
   isDismissable: boolean;
   ctaText?: string;
   ctaUrl?: string;
@@ -71,16 +77,20 @@ export const BANNER_THEMES: BannerThemeItem[] = [
 
 export const getSizeMetrics = (meta: Partial<AnnouncementMeta & AnnouncementItem>, placement: string = 'top_hanging') => {
   const p = meta.sizePreset || 'standard';
+  const defaultY = p === 'compact' ? 1 : p === 'large' ? 3 : 2;
+  const padY = meta.paddingY !== undefined ? meta.paddingY : defaultY;
+
   if (placement === 'top_hanging') {
     const minHeight = meta.customHeight || (p === 'compact' ? 26 : p === 'large' ? 48 : 34);
-    const padding = p === 'compact' ? '1px 10px' : p === 'large' ? '3px 16px' : '2px 12px';
+    const padX = p === 'compact' ? 10 : p === 'large' ? 16 : 12;
     const fontSize = p === 'compact' ? '11px' : p === 'large' ? '14px' : '12px';
-    return { minHeight: `${minHeight}px`, padding, fontSize, width: '100%' };
+    return { minHeight: `${minHeight}px`, padding: `${padY}px ${padX}px`, fontSize, width: '100%', padY };
   }
   const width = meta.cardWidth || (p === 'compact' ? 260 : p === 'large' ? 380 : 310);
   const height = meta.cardHeight ? `${meta.cardHeight}px` : 'auto';
   const topOffset = meta.topOffset ?? 110;
-  const padding = p === 'compact' ? '8px 10px' : p === 'large' ? '14px 16px' : '10px 12px';
+  const padX = p === 'compact' ? 10 : p === 'large' ? 16 : 12;
+  const cardPadY = meta.paddingY !== undefined ? meta.paddingY : (p === 'compact' ? 8 : p === 'large' ? 14 : 10);
   const fontSize = p === 'compact' ? '11px' : p === 'large' ? '14px' : '12px';
-  return { width: `${width}px`, height, topOffset, padding, fontSize, minHeight: 'auto' };
+  return { width: `${width}px`, height, topOffset, padding: `${cardPadY}px ${padX}px`, fontSize, minHeight: 'auto', padY: cardPadY };
 };

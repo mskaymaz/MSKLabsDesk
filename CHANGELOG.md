@@ -1,5 +1,20 @@
-# MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
+﻿# MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
+
+## [26.10.2026 - 10:40] - Duyuru Sistemi İnce Bant Kalınlık Eşitlemesi, Dikey Boşluk (Padding Y), Ayrılmış Opaklık ve Round-Robin Nöbetleşe Onarımı
+- **Vitrin Üst Bant Kalınlık Eşitlemesi (announcement-loader.js):**
+  - Ticker şablonundaki white-space: pre girintileri temizlendi; iç kapsayıcı line-height: 1.15 ve kapatma butonu 18px boyutuna çekilerek vitrin yüksekliği 74px seviyesinden tam 20px'e indirildi (admin önizlemesiyle birebir eşitlendi).
+- **Dikey İç Boşluk (Padding Y) Ayarı (AnnouncementBarSection.tsx, announcementConfig.ts):**
+  - Panel boyut ayarlarına pad (iç boşluk) alanı eklendi; tek satırlı metinler align-items: center ile dikeyde ortalanarak tavana yapışma sorunu çözüldü.
+- **İkiye Ayrılmış Opaklık Mimarisi (Zemin vs. Yazı Opaklığı):**
+  - Zemin opaklığı (bgOpacity) ve yazı opaklığı (textOpacity) bağımsız katmanlara ayrılarak zemin açıldığında yazı ve butonların solması engellendi.
+- **Yeni Sekme Standardı & Tüm Banta Tıklanabilirlik:**
+  - CTA butonu ve bant tıklamaları target="_blank" ile yeni sekmede açılacak şekilde yapılandırıldı; kapatma butonu hariç tüm banta cursor: pointer ve tıklanabilirlik kazandırıldı.
+- **Dizin Tabanlı Kusursuz Nöbetleşe (Round-Robin) Mimarisi:**
+  - Karışan dizi tabanlı yapı yerine (lastIndex + 1) % pool.length matematiksel sayacı uygulandı. Üst şerit ve dikey kartlar her sayfa yenilemede sıradaki duyuruyu ekrana getirecek şekilde ayrıştırıldı.
+  - Kapatma eylemi sessionStorage'a alınarak test esnasında duyuruların kalıcı silinmesi/kilitlenmesi önlendi.
+- **Doğrulama ve Kural Uyumu:**
+  - Frontend derlemesi (tsc -b && vite build) PASS (0 hata), backend testleri (82/82) %100 PASS. DevAdmin dalı korundu.
 
 ## [21.10.2026 - 15:15] - Bölümler Arası Reklamlarda Çift Kart Sınırı ve Sabit Üst Bölüm Mimarisi
 - **Bölümler Arası Reklamlar İçin Çift Kart Sınırları (`AdLiveCanvas.tsx`):**

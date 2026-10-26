@@ -107,7 +107,9 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
   const currentThemeObj = BANNER_THEMES.find((b) => b.id === (activeItem.bannerType || 'info')) || BANNER_THEMES[0];
   const currentPlacement = activeItem.placement || 'top_hanging';
   const isDark = previewTheme === 'dark';
-  const currentOpacity = activeItem.opacity ?? 95;
+  const currentBgOpacity = activeItem.bgOpacity ?? activeItem.opacity ?? 95;
+  const currentTextOpacity = activeItem.textOpacity ?? 100;
+  const previewLink = activeItem.targetUrl || activeItem.ctaUrl;
   const sizeMetrics = getSizeMetrics(activeItem, currentPlacement);
   const isTicker = (activeItem.displayMode || 'static') === 'ticker';
   const isRotator = (activeItem.displayMode || 'static') === 'rotator';
@@ -248,30 +250,87 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
         </div>
 
         {currentPlacement === 'top_hanging' ? (
-          <div dir={activeLangTab === 'ar' ? 'rtl' : 'ltr'} style={{ background: previewBg, color: previewText, borderBottom: isDark ? currentThemeObj.borderDark : currentThemeObj.borderLight, borderRadius: '6px', padding: sizeMetrics.padding, fontSize: sizeMetrics.fontSize, minHeight: sizeMetrics.minHeight, opacity: announcementActive ? currentOpacity / 100 : 0.45, display: 'flex', alignItems: isTicker ? 'center' : 'flex-start', justifyContent: 'space-between', gap: '12px', boxShadow: '0 4px 18px rgba(0,0,0,0.1)', overflow: isTicker ? 'hidden' : 'visible' }}>
-            <div style={{ display: 'flex', alignItems: isTicker ? 'center' : 'flex-start', gap: '8px', flex: 1, minWidth: 0, overflow: isTicker ? 'hidden' : 'visible' }}>
-              <span style={{ display: 'inline-flex', flexShrink: 0, marginTop: isTicker ? 0 : '2px' }}>{currentThemeObj.icon}</span>
-              {isTicker ? (
-                <div className="ann-ticker-wrap">
-                  <div
-                    className="ann-ticker-track"
-                    style={{
-                      animation: `${(activeItem.tickerDirection || 'rtl') === 'ltr' ? 'marqueeLTR' : 'marqueeRTL'} ${(activeItem.tickerSpeed || 'normal') === 'slow' ? '28s' : (activeItem.tickerSpeed || 'normal') === 'fast' ? '10s' : '18s'} linear infinite`,
-                    }}
-                    dangerouslySetInnerHTML={{ __html: announcementText[activeLangTab] || 'Duyuru metni...' }}
-                  />
-                </div>
-              ) : isRotator ? (
-                <div style={{ flex: 1, overflow: 'hidden', height: '22px', display: 'flex', alignItems: 'center' }}>
-                  <div className="ann-rotator-line" style={{ animation: 'annFadeRotate 4.5s ease-in-out infinite' }} dangerouslySetInnerHTML={{ __html: announcementText[activeLangTab] || 'Duyuru içeriği...' }} />
-                </div>
-              ) : (
-                <div className="ann-rich-content" style={{ flex: 1 }} dangerouslySetInnerHTML={{ __html: announcementText[activeLangTab] || 'Duyuru içeriği...' }} />
-              )}
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0, marginTop: isTicker ? 0 : '2px' }}>
-              {activeItem.ctaText && <span style={{ display: 'inline-flex', alignItems: 'center', gap: '3px', padding: '3px 9px', fontSize: '10px', fontWeight: 700, borderRadius: '12px', background: isDark ? 'rgba(255,255,255,0.18)' : 'rgba(0,0,0,0.08)', color: 'inherit' }}>{activeItem.ctaText} <ExternalLink size={9} /></span>}
-              {activeItem.isDismissable && <button type="button" style={{ background: 'transparent', border: 'none', color: 'inherit', opacity: 0.7, padding: '2px', cursor: 'pointer' }}><X size={13} /></button>}
+          <div
+            dir={activeLangTab === 'ar' ? 'rtl' : 'ltr'}
+            onClick={(e: React.MouseEvent) => {
+              if ((e.target as HTMLElement).closest('button')) return;
+              if (previewLink) window.open(previewLink, '_blank', 'noopener,noreferrer');
+            }}
+            style={{
+              position: 'relative',
+              borderRadius: '6px',
+              borderBottom: isDark ? currentThemeObj.borderDark : currentThemeObj.borderLight,
+              minHeight: sizeMetrics.minHeight,
+              height: isTicker ? sizeMetrics.minHeight : 'auto',
+              boxShadow: '0 4px 18px rgba(0,0,0,0.1)',
+              overflow: 'hidden',
+              display: 'flex',
+              alignItems: 'center',
+              cursor: previewLink ? 'pointer' : 'default',
+            }}
+          >
+            {/* Bağımsız Zemin Opaklık Katmanı */}
+            <div
+              style={{
+                position: 'absolute',
+                inset: 0,
+                background: previewBg,
+                opacity: announcementActive ? currentBgOpacity / 100 : 0.3,
+                zIndex: 0,
+                pointerEvents: 'none',
+              }}
+            />
+            {/* İçerik & Yazı Opaklık Katmanı */}
+            <div
+              style={{
+                position: 'relative',
+                zIndex: 1,
+                width: '100%',
+                padding: sizeMetrics.padding,
+                fontSize: sizeMetrics.fontSize,
+                color: previewText,
+                opacity: announcementActive ? currentTextOpacity / 100 : 0.45,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                gap: '12px',
+                boxSizing: 'border-box',
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flex: 1, minWidth: 0, overflow: isTicker ? 'hidden' : 'visible' }}>
+                <span style={{ display: 'inline-flex', flexShrink: 0, marginTop: '1px' }}>{currentThemeObj.icon}</span>
+                {isTicker ? (
+                  <div className="ann-ticker-wrap">
+                    <div
+                      className="ann-ticker-track"
+                      style={{
+                        animation: `${(activeItem.tickerDirection || 'rtl') === 'ltr' ? 'marqueeLTR' : 'marqueeRTL'} ${(activeItem.tickerSpeed || 'normal') === 'slow' ? '28s' : (activeItem.tickerSpeed || 'normal') === 'fast' ? '10s' : '18s'} linear infinite`,
+                      }}
+                      dangerouslySetInnerHTML={{ __html: announcementText[activeLangTab] || 'Duyuru metni...' }}
+                    />
+                  </div>
+                ) : isRotator ? (
+                  <div style={{ flex: 1, overflow: 'hidden', height: '22px', display: 'flex', alignItems: 'center' }}>
+                    <div className="ann-rotator-line" style={{ animation: 'annFadeRotate 4.5s ease-in-out infinite' }} dangerouslySetInnerHTML={{ __html: announcementText[activeLangTab] || 'Duyuru içeriği...' }} />
+                  </div>
+                ) : (
+                  <div className="ann-rich-content" style={{ flex: 1, display: 'flex', alignItems: 'center', margin: 0, lineHeight: 1.25 }} dangerouslySetInnerHTML={{ __html: announcementText[activeLangTab] || 'Duyuru içeriği...' }} />
+                )}
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
+                {activeItem.ctaText && (
+                  <a
+                    href={previewLink || '#'}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={(e) => { e.stopPropagation(); }}
+                    style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '3px', padding: '3px 9px', fontSize: '10px', fontWeight: 700, borderRadius: '12px', background: isDark ? 'rgba(255,255,255,0.18)' : 'rgba(0,0,0,0.08)', color: 'inherit' }}
+                  >
+                    {activeItem.ctaText} <ExternalLink size={9} />
+                  </a>
+                )}
+                {activeItem.isDismissable && <button type="button" style={{ background: 'transparent', border: 'none', color: 'inherit', opacity: 0.7, padding: '2px', cursor: 'pointer' }}><X size={13} /></button>}
+              </div>
             </div>
           </div>
         ) : (
@@ -297,6 +356,10 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
 
             <div
               dir={activeLangTab === 'ar' ? 'rtl' : 'ltr'}
+              onClick={(e: React.MouseEvent) => {
+                if ((e.target as HTMLElement).closest('button')) return;
+                if (previewLink) window.open(previewLink, '_blank', 'noopener,noreferrer');
+              }}
               style={{
                 position: 'relative',
                 marginTop: `${activeItem.topOffset ?? 110}px`,
@@ -304,25 +367,59 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
                 marginRight: currentPlacement === 'right_floating' ? 0 : 'auto',
                 width: previewDevice === 'mobile' ? '100%' : sizeMetrics.width,
                 height: sizeMetrics.height,
-                padding: sizeMetrics.padding,
-                fontSize: sizeMetrics.fontSize,
-                background: previewBg,
-                color: previewText,
                 border: isDark ? currentThemeObj.borderDark : currentThemeObj.borderLight,
                 borderRadius: '8px',
-                opacity: announcementActive ? currentOpacity / 100 : 0.45,
                 boxShadow: '0 8px 24px rgba(0,0,0,0.18)',
-                display: 'flex',
-                flexDirection: 'column',
+                overflow: 'hidden',
+                cursor: previewLink ? 'pointer' : 'default',
                 transition: 'margin-top 0.2s ease, width 0.2s ease',
               }}
             >
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '10px', fontWeight: 800 }}>{currentThemeObj.icon} <span>{activeItem.title}</span></div>
-                {activeItem.isDismissable && <button type="button" style={{ background: 'transparent', border: 'none', color: 'inherit', opacity: 0.7, padding: '2px' }}><X size={12} /></button>}
+              {/* Bağımsız Zemin Opaklık Katmanı */}
+              <div
+                style={{
+                  position: 'absolute',
+                  inset: 0,
+                  background: previewBg,
+                  opacity: announcementActive ? currentBgOpacity / 100 : 0.3,
+                  zIndex: 0,
+                  pointerEvents: 'none',
+                }}
+              />
+              {/* İçerik & Yazı Opaklık Katmanı */}
+              <div
+                style={{
+                  position: 'relative',
+                  zIndex: 1,
+                  padding: sizeMetrics.padding,
+                  fontSize: sizeMetrics.fontSize,
+                  color: previewText,
+                  opacity: announcementActive ? currentTextOpacity / 100 : 0.45,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  height: '100%',
+                  boxSizing: 'border-box',
+                }}
+              >
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '10px', fontWeight: 800 }}>{currentThemeObj.icon} <span>{activeItem.title}</span></div>
+                  {activeItem.isDismissable && <button type="button" style={{ background: 'transparent', border: 'none', color: 'inherit', opacity: 0.7, padding: '2px' }}><X size={12} /></button>}
+                </div>
+                <div className="ann-card-preview-content" style={{ flex: 1, overflowY: 'auto', overflowX: 'hidden', maxWidth: '100%', boxSizing: 'border-box', marginBottom: '6px', whiteSpace: 'pre-wrap', wordBreak: 'break-word' }} dangerouslySetInnerHTML={{ __html: announcementText[activeLangTab] || 'Zengin içerik...' }} />
+                {activeItem.ctaText && (
+                  <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                    <a
+                      href={previewLink || '#'}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={(e) => e.stopPropagation()}
+                      style={{ textDecoration: 'none', color: 'inherit', fontSize: '10px', fontWeight: 700 }}
+                    >
+                      {activeItem.ctaText} ➔
+                    </a>
+                  </div>
+                )}
               </div>
-              <div className="ann-card-preview-content" style={{ flex: 1, overflowY: 'auto', overflowX: 'hidden', maxWidth: '100%', boxSizing: 'border-box', marginBottom: '6px', whiteSpace: 'pre-wrap', wordBreak: 'break-word' }} dangerouslySetInnerHTML={{ __html: announcementText[activeLangTab] || 'Zengin içerik...' }} />
-              {activeItem.ctaText && <div style={{ display: 'flex', justifyContent: 'flex-end' }}><span style={{ fontSize: '10px', fontWeight: 700 }}>{activeItem.ctaText} ➔</span></div>}
             </div>
           </div>
         )}
@@ -366,8 +463,8 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
 
         {currentPlacement === 'top_hanging' ? (
           <div>
-            <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: '4px' }}>Boyut & Şeffaflık</label>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px', marginBottom: '6px' }}>
+            <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: '4px' }}>Boyut, Boşluk & Opaklık</label>
+            <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr 1fr', gap: '4px', marginBottom: '6px' }}>
               <select
                 className="form-select" value={activeItem.sizePreset || 'standard'}
                 onChange={(e) => {
@@ -375,44 +472,67 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
                   updateCurrentItem({
                     sizePreset: preset,
                     customHeight: preset === 'compact' ? 26 : preset === 'large' ? 48 : 34,
+                    paddingY: preset === 'compact' ? 1 : preset === 'large' ? 3 : 2,
                   });
                 }}
-                style={{ fontSize: '11px', height: '28px', padding: '2px 6px' }}
+                style={{ fontSize: '11px', height: '28px', padding: '2px 4px' }}
               >
-                <option value="compact">Kompakt (İnce)</option>
-                <option value="standard">Standart (Orta)</option>
-                <option value="large">Geniş (Büyük)</option>
+                <option value="compact">Kompakt</option>
+                <option value="standard">Standart</option>
+                <option value="large">Geniş</option>
               </select>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '3px' }}>
-                <input type="number" className="form-input" style={{ fontSize: '11px', height: '28px', width: '56px', textAlign: 'center', padding: '2px' }} value={activeItem.customHeight ?? ''} placeholder="34" onChange={(e) => updateCurrentItem({ customHeight: e.target.value === '' ? undefined : parseInt(e.target.value, 10) })} />
-                <span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>px</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '2px' }} title="Bant Toplam Yüksekliği (px)">
+                <input type="number" className="form-input" style={{ fontSize: '11px', height: '28px', width: '48px', textAlign: 'center', padding: '2px' }} value={activeItem.customHeight ?? ''} placeholder="34" onChange={(e) => updateCurrentItem({ customHeight: e.target.value === '' ? undefined : parseInt(e.target.value, 10) })} />
+                <span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>h</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '2px' }} title="Dikey Üst/Alt İç Boşluk (px)">
+                <input type="number" className="form-input" style={{ fontSize: '11px', height: '28px', width: '48px', textAlign: 'center', padding: '2px' }} value={activeItem.paddingY ?? ''} placeholder="2" onChange={(e) => updateCurrentItem({ paddingY: e.target.value === '' ? undefined : parseInt(e.target.value, 10) })} />
+                <span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>pad</span>
               </div>
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <span style={{ fontSize: '10px', color: 'var(--text-muted)', minWidth: '55px' }}>Opaklık: %{currentOpacity}</span>
-              <input type="range" min="40" max="100" step="5" value={currentOpacity} onChange={(e) => updateCurrentItem({ opacity: parseInt(e.target.value, 10) })} style={{ flex: 1, cursor: 'pointer' }} />
+            {/* İkiye Ayrılmış Opaklık Kontrolleri */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <span style={{ fontSize: '10px', color: 'var(--text-muted)', minWidth: '65px' }}>Zemin Opk: %{currentBgOpacity}</span>
+                <input type="range" min="10" max="100" step="5" value={currentBgOpacity} onChange={(e) => updateCurrentItem({ bgOpacity: parseInt(e.target.value, 10), opacity: parseInt(e.target.value, 10) })} style={{ flex: 1, cursor: 'pointer' }} />
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <span style={{ fontSize: '10px', color: 'var(--text-muted)', minWidth: '65px' }}>Yazı Opk: %{currentTextOpacity}</span>
+                <input type="range" min="30" max="100" step="5" value={currentTextOpacity} onChange={(e) => updateCurrentItem({ textOpacity: parseInt(e.target.value, 10) })} style={{ flex: 1, cursor: 'pointer' }} />
+              </div>
             </div>
           </div>
         ) : (
           <div>
-            <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: '4px' }}>Boyut & Konum (px)</label>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '4px', marginBottom: '6px' }}>
+            <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: '4px' }}>Boyut, Boşluk & Konum (px)</label>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: '4px', marginBottom: '6px' }}>
               <div>
-                <span style={{ display: 'block', fontSize: '9px', color: 'var(--text-muted)' }}>Genişlik:</span>
+                <span style={{ display: 'block', fontSize: '9px', color: 'var(--text-muted)' }}>Gen:</span>
                 <input type="number" className="form-input" placeholder="310" style={{ fontSize: '11px', height: '26px', padding: '2px', textAlign: 'center' }} value={activeItem.cardWidth ?? ''} onChange={(e) => updateCurrentItem({ cardWidth: e.target.value === '' ? undefined : parseInt(e.target.value, 10) })} />
               </div>
               <div>
-                <span style={{ display: 'block', fontSize: '9px', color: 'var(--text-muted)' }}>Yükseklik:</span>
+                <span style={{ display: 'block', fontSize: '9px', color: 'var(--text-muted)' }}>Yük:</span>
                 <input type="number" className="form-input" placeholder="Oto" style={{ fontSize: '11px', height: '26px', padding: '2px', textAlign: 'center' }} value={activeItem.cardHeight ?? ''} onChange={(e) => updateCurrentItem({ cardHeight: e.target.value === '' ? undefined : parseInt(e.target.value, 10) })} />
               </div>
               <div>
-                <span style={{ display: 'block', fontSize: '9px', color: 'var(--text-muted)' }}>Üstten:</span>
+                <span style={{ display: 'block', fontSize: '9px', color: 'var(--text-muted)' }}>Pad:</span>
+                <input type="number" className="form-input" placeholder="10" style={{ fontSize: '11px', height: '26px', padding: '2px', textAlign: 'center' }} value={activeItem.paddingY ?? ''} onChange={(e) => updateCurrentItem({ paddingY: e.target.value === '' ? undefined : parseInt(e.target.value, 10) })} />
+              </div>
+              <div>
+                <span style={{ display: 'block', fontSize: '9px', color: 'var(--text-muted)' }}>Üst:</span>
                 <input type="number" className="form-input" placeholder="110" style={{ fontSize: '11px', height: '26px', padding: '2px', textAlign: 'center' }} value={activeItem.topOffset ?? ''} onChange={(e) => updateCurrentItem({ topOffset: e.target.value === '' ? undefined : parseInt(e.target.value, 10) })} />
               </div>
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <span style={{ fontSize: '10px', color: 'var(--text-muted)', minWidth: '55px' }}>Opaklık: %{currentOpacity}</span>
-              <input type="range" min="40" max="100" step="5" value={currentOpacity} onChange={(e) => updateCurrentItem({ opacity: parseInt(e.target.value, 10) })} style={{ flex: 1, cursor: 'pointer' }} />
+            {/* İkiye Ayrılmış Opaklık Kontrolleri */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <span style={{ fontSize: '10px', color: 'var(--text-muted)', minWidth: '65px' }}>Zemin Opk: %{currentBgOpacity}</span>
+                <input type="range" min="10" max="100" step="5" value={currentBgOpacity} onChange={(e) => updateCurrentItem({ bgOpacity: parseInt(e.target.value, 10), opacity: parseInt(e.target.value, 10) })} style={{ flex: 1, cursor: 'pointer' }} />
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <span style={{ fontSize: '10px', color: 'var(--text-muted)', minWidth: '65px' }}>Yazı Opk: %{currentTextOpacity}</span>
+                <input type="range" min="30" max="100" step="5" value={currentTextOpacity} onChange={(e) => updateCurrentItem({ textOpacity: parseInt(e.target.value, 10) })} style={{ flex: 1, cursor: 'pointer' }} />
+              </div>
             </div>
           </div>
         )}

@@ -12,7 +12,76 @@
 
 ---
 
-## 🟢 Son Güncelleme [23.10.2026 - 16:44] — GÖRSEL EKLEME MENÜSÜ FIXED/VIEWPORT YÜZEN POPOVER DÜZELTMESİ [*]
+## 🟢 Son Güncelleme [26.10.2026 - 10:33] — DİKEY KART AKIŞ KORUMASI & DİZİN TABANLI NÖBETLEŞE (ROUND-ROBIN) DÜZELTMESİ [*]
+* **Yapılan İşlem:**
+  1. **Dikey Kartların Üst Bant Gibi Davranması Hatasının Çözümü:**
+     - `announcement-loader.js` dosyasında link dinleyicisi eklenirken `else` bloğunun yanlış if şartına bağlanması nedeniyle dikey kartların üst bant koduna düşme riski giderildi. `isFloating` ve `top_hanging` mantıksal dallanmaları kesin olarak ayrıldı.
+  2. **Dizin Tabanlı Matematiksel Nöbetleşe (Round-Robin) Mimarisi:**
+     - Karışan dizi tabanlı `seenTop` kontrolü yerine kesin sayaç mantığı getirildi: `(lastIndex + 1) % pool.length`.
+     - **Üst Şerit Kanalı:** Her sayfa yenilemede ve gezintide garantili olarak sıradaki üst bant duyurusu gelir.
+     - **Dikey Kart Kanalı:** Bağımsız sayaç ile her yenilemede sıradaki sağ veya sol kart gösterilir.
+  3. **Geçici Kapatma (Session Dismiss):**
+     - Kapatma butonu (`✕`) tıklandığında duyurunun ID'si `localStorage` yerine `sessionStorage`'a yazılarak testlerde veya oturumlarda duyurunun sonsuza dek kaybolması ve havuzun kilitlenmesi engellendi.
+  4. **Doğrulama ve Kural Uyumu:**
+     - Frontend Build: PASS (0 hata).
+     - Backend Testleri: PASS (82/82 test %100 başarılı).
+     - Yalnızca `DevAdmin` dalı üzerinde çalışıldı; `main` korundu.
+* **Durum:** DevAdmin dalında tamamlandı, doğrulamalar başarılı.
+
+---
+
+## [26.10.2026 - 10:24] — DUYURU VE ETKİLEŞİM LİNKLERİ YENİ SEKME (_BLANK) & TÜM BAR TIKLANABİLİRLİĞİ [*]
+* **Yapılan İşlem:**
+  1. **Yeni Sekme Standardı (`target="_blank"` & `noopener,noreferrer`):**
+     - CTA butonları (`ctaUrl`) ve genel bağlantılar (`targetUrl`) mevcut sekmeyi terk etmek yerine zorunlu olarak yeni sekmede (`_blank`) açılır hale getirildi.
+  2. **Tüm Banta Tıklanabilirlik:**
+     - Duyuruda herhangi bir link (`ctaUrl` veya `targetUrl`) tanımlandığında, kapatma butonu (`✕`) haricinde banta veya karta nereye tıklanırsa tıklansın linkin yeni sekmede açılması sağlandı. Kapsayıcıya `cursor: pointer` kazandırıldı.
+  3. **Önizleme & Vitrin Eşitlemesi:**
+     - Davranış hem admin önizlemesinde hem vitrinde (`announcement-loader.js`) birebir uygulandı.
+  4. **Doğrulama ve Kural Uyumu:**
+     - Frontend Build: PASS (0 hata).
+     - Backend Testleri: PASS (82/82 test %100 başarılı).
+     - Yalnızca `DevAdmin` dalı üzerinde çalışıldı; `main` korundu.
+* **Durum:** DevAdmin dalında tamamlandı, doğrulamalar başarılı.
+
+---
+
+## [26.10.2026 - 10:18] — DİKEY BOŞLUK (PADDING Y) AYARI & AYRI ZEMİN/YAZI OPAKLIK MİMARİSİ [*]
+* **Yapılan İşlem:**
+  1. **Dikey İç Boşluk (Padding Y / Üst-Alt Boşluk) Parametresi:**
+     - `announcementConfig.ts` ve `AnnouncementBarSection.tsx` bileşenine `paddingY` alanı eklendi (varsayılan: kompakt 1px, standart 2px, geniş 3px; özel girilebilir).
+     - Hem önizlemede hem vitrinde (`announcement-loader.js`) tek satırlı statik veya akışlı metinler dikeyde tam ortalandı (`display: flex; align-items: center; line-height: 1.25`); tavana yapışma sorunu çözüldü.
+  2. **İkiye Ayrılmış Opaklık Kontrolü (Zemin Opaklığı vs. Yazı Opaklığı):**
+     - Tekil `opacity` yerine bağımsız **Zemin Opaklığı (`bgOpacity`)** ve **Yazı Opaklığı (`textOpacity`)** mimarisine geçildi.
+     - Zemin katmanı mutlak konumlu arka plan katmanına (`.msk-ann-bg-layer`) ayrılarak zemin şeffaflaştırıldığında metin ve butonların solması engellendi.
+  3. **Önizleme & Vitrin %100 Birebir Eşitlemesi:**
+     - Admin önizlemesi ile vitrin arayüzü aynı katmanlı yapı (`.msk-ann-bg-layer` + `.msk-ann-inner`) ve CSS hesaplamalarıyla tam senkronize edildi.
+  4. **Doğrulama ve Kural Uyumu:**
+     - Frontend Build: PASS (0 hata).
+     - Backend Testleri: PASS (82/82 test %100 başarılı).
+     - Yalnızca `DevAdmin` dalı üzerinde çalışıldı; `main` korundu.
+* **Durum:** DevAdmin dalında tamamlandı, doğrulamalar başarılı.
+
+---
+
+## [26.10.2026 - 10:00] — VİTRİN ÜST ASILI BANT (TOP_HANGING TICKER) KALINLIK & BOYUT EŞİTLEMESİ [*]
+* **Yapılan İşlem:**
+  1. **Vitrinde Şişme & 2 Kat Kalınlık Kök Çözümü (`announcement-loader.js`):**
+     - `.msk-announcement-hanging .msk-ann-inner` için geçerli olan `line-height: 1.5;` kuralı `1.15` seviyesine çekilerek dikey gereksiz boşluk sıfırlandı.
+     - `.msk-ticker-track` `display: inline-block` yerine `display: inline-flex; align-items: center;` mimarisine geçirildi.
+     - JS şablon dizgisindeki (template literal) `white-space: pre` kaynaklı girinti ve satır sonu boşlukları temizlendi (`.trim()`).
+     - Ticker modunda `customHeight` (örn. 20px) ve boyut preset'leri doğrudan `height` ve `overflow: hidden` ile sabitlendi; ölçü 74px'ten tam 20px'e indirildi.
+     - Kapatma butonunun (`.msk-ann-close-btn`) boyutu ve iç boşluğu üst şerit zarafetine uygun olarak 18px'e optimize edildi.
+  2. **Doğrulama ve Kural Uyumu:**
+     - Vitrin DOM/Stil Ölçümü (Chrome): `outerHeight: 20px`, `innerLineHeight: 1.15`, hedef kalınlık tam oturdu.
+     - Frontend Build: PASS (0 hata).
+     - Backend Testleri: PASS (82/82 test %100 başarılı).
+     - Yalnızca `DevAdmin` dalı üzerinde çalışıldı; `main` korundu.
+* **Durum:** DevAdmin dalında tamamlandı, vitrin ve admin önizlemesi birebir eşitlendi.
+
+---
+
+## [23.10.2026 - 16:44] — GÖRSEL EKLEME MENÜSÜ FIXED/VIEWPORT YÜZEN POPOVER DÜZELTMESİ [*]
 * **Yapılan İşlem:**
   1. **Kesilme (Clipping) Sorununun Kök Çözümü:**
      - Editör kapsayıcısında (`.rich-editor-wrapper`) bulunan `overflow: hidden;` kuralı `overflow: visible;` yapılarak yukarı açılan menülerin üst sınırda kesilmesi engellendi.
