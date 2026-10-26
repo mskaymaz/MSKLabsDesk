@@ -65,7 +65,12 @@ export async function handleCmsPublic(request: Request, env: any): Promise<Respo
 
     const { results } = await env.DB.prepare(query).bind(...params).all();
 
-    return new Response(JSON.stringify({ posts: results || [] }), { headers });
+    const posts = (results || []).map((p: any) => ({
+      ...p,
+      cover_image: p.cover_image && p.cover_image.startsWith('../') ? p.cover_image.replace(/^\.\.\//, '/') : p.cover_image
+    }));
+
+    return new Response(JSON.stringify({ posts }), { headers });
   }
 
   // 3. GET /api/v1/posts/:slug — Tekil Blog Detayı & Okunma Sayacı
@@ -86,7 +91,14 @@ export async function handleCmsPublic(request: Request, env: any): Promise<Respo
       return new Response(JSON.stringify({ error: 'Post not found' }), { status: 404, headers });
     }
 
-    return new Response(JSON.stringify({ post }), { headers });
+    const normalizedPost: any = {
+      ...post,
+      cover_image: (post as any).cover_image && (post as any).cover_image.startsWith('../')
+        ? (post as any).cover_image.replace(/^\.\.\//, '/')
+        : (post as any).cover_image
+    };
+
+    return new Response(JSON.stringify({ post: normalizedPost }), { headers });
   }
 
   // 4. GET /api/v1/apps — Aktif Uygulama Kataloğu (`app_catalog.json` Canlı Karşılığı)
@@ -313,7 +325,10 @@ export async function handleCmsPublic(request: Request, env: any): Promise<Respo
   // 9. GET /api/v1/sitemap.xml — Otomatik XML Sitemap (Blog Yazıları + Kurumsal Sayfalar)
   if (path === '/api/v1/sitemap.xml') {
     const { results: posts } = await env.DB.prepare(
-      `SELECT slug, published_at FROM blog_posts WHERE status = 'published'`
+      `SELECT p.slug, p.published_at, c.slug as channel_slug 
+       FROM blog_posts p
+       LEFT JOIN blog_channels c ON p.channel_id = c.id
+       WHERE p.status = 'published'`
     ).all();
 
     const { results: pages } = await env.DB.prepare(
@@ -331,7 +346,8 @@ export async function handleCmsPublic(request: Request, env: any): Promise<Respo
     });
 
     (posts || []).forEach((p: any) => {
-      xml += `  <url><loc>https://msklabs.org/blog/${p.slug}</loc><lastmod>${p.published_at ? p.published_at.split('T')[0] : new Date().toISOString().split('T')[0]}</lastmod><priority>0.8</priority></url>\n`;
+      const channelSlug = p.channel_slug || 'bizce';
+      xml += `  <url><loc>https://msklabs.org/blog/${channelSlug}/${p.slug}</loc><lastmod>${p.published_at ? p.published_at.split('T')[0] : new Date().toISOString().split('T')[0]}</lastmod><priority>0.8</priority></url>\n`;
     });
 
     xml += `</urlset>`;

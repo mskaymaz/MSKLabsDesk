@@ -12,7 +12,46 @@
 
 ---
 
-## 🟢 Son Güncelleme [26.10.2026 - 12:18] — ÇİFT OPAKLIK BİRLEŞTİRMESİ, ARALIK ÖZEL SAYISAL GİRİŞ VE FERAH AYIRAÇ DÜZENİ [*]
+## 🟢 Son Güncelleme [26.10.2026 - 15:20] — ESKİ TTS TEMİZLİĞİ, SES ALANININ GİZLENMESİ VE KALİTELİ MP3 YOL HARİTASI [*]
+* **Yapılan İşlem:**
+  1. **Eski Web Speech API Kalıntılarının Temizlenmesi (`blog.js`):**
+     - Canlı tarayıcı sentezinden kalan `window.speechSynthesis`, `synth`, `currentUtterance`, `ttsChunks` ve aygıt seslerini tarayan atıl kodlar repo genelinden tamamen temizlendi.
+     - Çift ön ek (`post_post_1`), göreceli dosya yolu ve `audio.load()` kaynaklı yükleme kesintisi (`AbortError`) cerrahi olarak giderildi; saf HTML5 Audio akış yapısı korundu.
+  2. **Vitrinde Ses Çubuğunun ve Rozetlerinin Pasife Alınması (`blog.html`, `blog.css`):**
+     - Kaliteli, doğal ve tam metin ses kayıtları tamamlanana kadar vitrindeki `#ttsPlayerBar` ve makale kartlarındaki `.card-tts-badge` alanları `display: none !important;` ile gizlendi.
+     - Sayfa başlığındaki tüm göreceli JS/CSS bağlantıları `/` mutlak yollara ve `<base href="/">` standardına bağlandı.
+  3. **Tasks Dokümantasyonu ve MP3 Üretim Yol Haritası (`tasks.md`):**
+     - `CMS-TTS-002` görevi tanımlandı: ElevenLabs / Google Neural2 doğal insan tonlaması, TR/AR/EN fonetik kuralları, İslami kavram hassasiyeti, uzun metin segmentasyonu (audio stitching) ve insan onayı (HITL) şartları belgelendi.
+  4. **Doğrulama ve Kural Uyumu:**
+     - `webMSKLabs` Derlemesi (`tsc --noEmit && vite build`): PASS (0 hata, 13.67s).
+     - `MSKLabsDesk` Frontend Derlemesi (`tsc -b && vite build`): PASS (0 hata, 1.25s).
+     - Backend Testleri (82/82): %100 PASS.
+     - Yalnızca `DevAdmin` dalında çalışıldı; `main` korundu.
+* **Durum:** DevAdmin dalında tamamlandı, doğrulamalar başarılı.
+
+---
+
+## [26.10.2026 - 14:20] — CLOUDFLARE EDGE SSR, TEMİZ BLOG SLUG MİMARİSİ VE DİNAMİK SİTEMAP ENTEGRASYONU [*]
+* **Yapılan İşlem:**
+  1. **Cloudflare Pages Edge SSR / Pre-rendering (`functions/blog/[[slug]].js`):**
+     - Arama motorları (Googlebot), sosyal medya botları (WhatsApp, X) ve AdSense tarayıcısı için `/blog/:channel/:slug` rotasını Edge'de karşılayan `HTMLRewriter` mimarisi kuruldu.
+     - D1 veritabanından makale çekilerek `<title>`, `<meta description>`, Canonical, OpenGraph, Twitter Card, Schema.org Article JSON-LD ve `#readTitle`, `#readDate`, `#readCategory`, `#readContent` alanları sayfa tarayıcıya gitmeden önce tam HTML olarak gömüldü (AdSense "yetersiz içerik" riski sıfırlandı).
+  2. **Temiz URL ve İstemci Hidrasyonu (`blog.js`, `vite.config.ts`):**
+     - Eski parametreli `blog.html?type=...&id=...` yerine `/blog/:channel/:slug` adres yapısı entegre edildi.
+     - `openPost()`, `showList()`, `getPostShareUrl()` ve `handleUrlParams()` fonksiyonları temiz slug standartlarına uyarlandı; önceden render edilen içerik istemcide ezilmeden TTS ve yorumlar anında hidrate edildi.
+     - Vite geliştirme sunucusuna `blogRewritePlugin` eklenerek yerel geliştirme uyumu sağlandı.
+  3. **Dinamik ve Canlı Site Haritası (`functions/sitemap.xml.js`, `cmsPublic.ts`):**
+     - D1 veritabanındaki tüm aktif blog makalelerini (`/blog/${channel_slug}/${slug}`) güncel `lastmod` tarihleri ve çok dilli hreflang etiketleriyle sunan dinamik `/sitemap.xml` motoru geliştirildi.
+  4. **Doğrulama ve Kural Uyumu:**
+     - `webMSKLabs` Derlemesi (`tsc --noEmit && vite build`): PASS (0 hata, 14.79s).
+     - `MSKLabsDesk` Frontend Derlemesi (`tsc -b && vite build`): PASS (0 hata, 1.16s).
+     - Backend Testleri (82/82): %100 PASS.
+     - Yalnızca `DevAdmin` dalında çalışıldı; `main` korundu.
+* **Durum:** DevAdmin dalında tamamlandı, doğrulamalar başarılı.
+
+---
+
+## [26.10.2026 - 12:18] — ÇİFT OPAKLIK BİRLEŞTİRMESİ, ARALIK ÖZEL SAYISAL GİRİŞ VE FERAH AYIRAÇ DÜZENİ [*]
 * **Yapılan İşlem:**
   1. **Zemin ve Yazı Opaklığının 3. Sütunda Toplanması (`AnnouncementBarSection.tsx`):**
      - Zemin Opaklığı (`bgOpacity`) ve Yazı Opaklığı (`textOpacity`) kaydırıcılarının her ikisi de "Boyut, Kenar & Opaklık" sütunu altında alt alta konumlandırıldı.

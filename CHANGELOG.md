@@ -1,6 +1,28 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [26.10.2026 - 15:20] - Eski TTS Kalıntılarının Temizlenmesi, Vitrinde Ses Çubuğunun Gizlenmesi ve Kaliteli MP3 Yol Haritası
+- **Web Speech API Temizliği (`blog.js`):**
+  - Eski tarayıcı içi sentezleme kalıntıları (`window.speechSynthesis`, `synth`, `currentUtterance`, `ttsChunks`) ve cihaz seslerini denetleyen atıl fonksiyonlar repo genelinden silindi.
+  - Oynatıcıdaki `post_post_` çift ön eki ve `audio.load()` yükleme kesintisi giderildi; saf HTML5 Audio MP3 akış yapısı korundu.
+- **Vitrinde Ses Çubuğu ve Rozetlerinin Gizlenmesi (`blog.html`, `blog.css`):**
+  - Profesyonel kalitede ve tam metin ses kayıtları tamamlanana kadar `#ttsPlayerBar` ve makale kartlarındaki `.card-tts-badge` alanları `display: none !important;` ile gizlendi.
+  - `blog.html` içindeki tüm bağıl dosya yolları mutlak kök yollara (`/assets/...`, `/blog/...`) dönüştürüldü ve `<base href="/">` standardı eklendi.
+- **Tasks Dokümantasyonu ve Kaliteli MP3 Yol Haritası (`tasks.md`):**
+  - `CMS-TTS-002` görevi eklenerek ElevenLabs / Google Neural2 modelleri, Türkçe/Arapça/İngilizce fonetik kuralları, uzun metin segmentasyonu ve yönetici ön dinleme (HITL) şartları bağlandı.
+- **Doğrulama ve Kural Uyumu:**
+  - `webMSKLabs` ve `MSKLabsDesk` derlemeleri PASS (0 hata), backend testleri (82/82) %100 PASS. `DevAdmin` dalı korundu.
+
+## [26.10.2026 - 14:20] - Cloudflare Edge SSR Pre-rendering, Temiz Blog Slug Mimarisi ve Dinamik Sitemap Motoru
+- **Cloudflare Edge SSR & Pre-rendering (`functions/blog/[[slug]].js`):**
+  - Botlar ve AdSense tarayıcısı için `/blog/:channel/:slug` isteklerini karşılayıp HTML şablonuna D1 veritabanından başlık, meta, OpenGraph, JSON-LD ve gövde içeriğini (`#readContent`) doğrudan gömen `HTMLRewriter` fonksiyonu eklendi.
+- **Temiz Slug ve İstemci Hidrasyonu (`blog.js`, `vite.config.ts`):**
+  - Blog adresi `/blog/:channel/:slug` formatına taşındı; `getPostShareUrl`, `openPost`, `showList` güncellendi, Vite için `blogRewritePlugin` eklendi.
+- **Dinamik Canlı Sitemap (`functions/sitemap.xml.js`, `cmsPublic.ts`):**
+  - D1'deki tüm yayınlanmış makaleleri temiz slug'larıyla ve çok dilli hreflang bağlantılarıyla otomatik derleyen sitemap motoru oluşturuldu.
+- **Doğrulama ve Kural Uyumu:**
+  - `webMSKLabs` ve `MSKLabsDesk` derlemeleri PASS (0 hata), backend testleri (82/82) %100 PASS. `DevAdmin` dalı korundu.
+
 ## [26.10.2026 - 12:18] - Çift Opaklık Birleştirmesi, Tipografi Ara Değer Girişleri ve Ferah Ayıraç Düzeni
 - **Zemin & Yazı Opaklığının 3. Sütunda Toplanması (`AnnouncementBarSection.tsx`):**
   - Zemin ve Yazı opaklıkları Boyut & Kenar sütunu altına alt alta alındı; Etkileşim & Buton sütunu yalnızca buton ayarları ve kapatma butonuna tahsis edildi.
