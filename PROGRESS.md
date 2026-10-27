@@ -17,6 +17,23 @@
 
 ---
 
+## 🟢 Son Güncelleme [27.10.2026 - 10:25] — CANLI WEB (dev.msklabs.org) VE PANEL (panel.msklabs.org) EKSİKLİKLERİNİN DERİN ONARIMI VE YAYINI [*]
+* **Yapılan İşlem:**
+  1. **Çoklu Sayfa Rollup Girdi Motoru (`webMSKLabs/vite.config.ts`):**
+     - Vite derleyicisinin sadece 3 dosyayı derleyip geri kalan 25+ sayfayı (`about`, `apps`, `destek`, `contact`, `faq` vb.) dışarıda bırakma sorunu `getHtmlInputs()` dinamik tarayıcısı ile çözüldü.
+  2. **Statik Varlık Aktarımı (`copyStaticAssetsPlugin`):**
+     - `assets/js` (`layout.js`, `hub-engine.js`), `assets/css`, `img/`, `media/` ve `blog/*.js` dizinlerinin `dist/` altına eksiksiz kopyalanması sağlandı. Antetin ve menülerin yok olmasına neden olan 404 JS hatası giderildi.
+  3. **Cloudflare Functions Statik Varlık Çakışma Onarımı (`functions/blog/[[slug]].js`):**
+     - Edge SSR fonksiyonunun `.js`, `.css` gibi statik dosyaları da makale slug'ı gibi yakalayıp `blog.html` dönmesi engellendi; statik isteklerin doğrudan Pages ASSETS servisine devredilmesi sağlandı.
+  4. **Canlı API Uç Noktası Standardı (`config.js`, `api.ts`):**
+     - Web vitrini ve admin panelindeki API istekleri doğrudan canlı backend Worker (`https://msklabsdesk-backend.msklabs-org.workers.dev/api`) adresine bağlandı.
+  5. **Canlı Dağıtım ve Doğrulama:**
+     - `webMSKLabs` ve `MSKLabsDesk/frontend` derlenerek Cloudflare Pages (`msklabs-web` ve `msklabs-panel`) projelerine yüklendi.
+     - `dev.msklabs.org` (antet, menüler, sayfalar, logo) ve `panel.msklabs.org` canlı HTTP 200 yanıtlarıyla doğrulandı.
+* **Durum:** DevAdmin dalında tamamlandı ve canlıda doğrulandı.
+
+---
+
 ## 🟢 Son Güncelleme [27.10.2026 - 00:15] — CLOUDFLARE UZAK STAGING ALTYAPISI TAM KURULUMU: D1, R2, WORKER API, PANEL VE DEV CANLI YAYINI [*]
 * **Yapılan İşlem:**
   1. **Cloudflare D1 Veritabanı ve Şema Kurulumu (msklabsdesk_db):**

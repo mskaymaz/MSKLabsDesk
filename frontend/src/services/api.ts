@@ -1,6 +1,6 @@
 import type { Ticket, TicketDetailResponse, CommentItem, Subscriber, StudioBlock } from '../types';
 
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8787/api';
+const API_BASE = import.meta.env.VITE_API_URL || (typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1' ? 'https://msklabsdesk-backend.msklabs-org.workers.dev/api' : 'http://localhost:8787/api');
 
 const getHeaders = (): HeadersInit => {
   const token = localStorage.getItem('msk_admin_token');
