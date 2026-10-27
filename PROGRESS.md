@@ -17,6 +17,24 @@
 
 ---
 
+## 🟢 Son Güncelleme [27.10.2026 - 10:50] — CANLI ALAN ADI UYUMLULUĞU, SLUG STANDARDİZASYONU VE MUTLAK KÖK YÖNLENDİRMELERİ [*]
+* **Yapılan İşlem:**
+  1. **C: Sürücüsü ve Tarayıcı İzin Uyarısının Temizlenmesi:**
+     - Ajanın yerel sistemde harici tarayıcı (`msedge.exe`) çalıştırma girişimi tamamen engellendi; denetimler salt uzak HTTP/cURL sorguları ile sınırlandırıldı.
+     - Kullanıcı arayüzünde beliren *"Bu cihazdaki diğer uygulamalara ve hizmetlere erişin"* güvenlik uyarısının asıl sebebi olan `localhost:8787` yedek adresleri canlı etki alanından temizlendi (Chromium PNA protokolü).
+  2. **Blog Başlıkları ve Slug Standardizasyonu:**
+     - Blog yazılarının URL'lerinde ID (`/blog/guncel/5`) yerine başlık temelli metin slug'larının (`/blog/guncel/macin-ertelenme-dudugu-calar`, `/blog/bizce/neden-ucretsiz`) kullanılması garanti altına alındı.
+     - `blog.js` ve `hub-engine.js` üzerindeki eksik slug alanları tamamlandı ve dinamik temizleme (slugify) filtresi devreye alındı.
+  3. **Antet ve Menü Linklerinin Onarımı (Mutlak Kök Dizini):**
+     - `layout.js` içindeki göreli yol mekanizması (`basePath = '../'`) mutlak kök dizine (`basePath = '/'`) dönüştürüldü.
+     - Blog alt dizinlerindeki (örn. `/blog/guncel/...`) sayfalardan Ana Sayfa, Hakkımızda, Uygulamalar ve Destek sayfalarına kesintisiz geçiş sağlandı.
+  4. **Canlı Dağıtım & Git Senkronizasyonu:**
+     - Değişiklikler derlenerek Cloudflare Pages (`msklabs-web`) üzerine dağıtıldı.
+     - `webMSKLabs` ve `MSKLabsDesk` repoları `DevAdmin` dalında commit ve push yapılarak güncellendi.
+* **Durum:** DevAdmin dalında tamamlandı ve canlıda doğrulandı.
+
+---
+
 ## 🟢 Son Güncelleme [27.10.2026 - 10:25] — CANLI WEB (dev.msklabs.org) VE PANEL (panel.msklabs.org) EKSİKLİKLERİNİN DERİN ONARIMI VE YAYINI [*]
 * **Yapılan İşlem:**
   1. **Çoklu Sayfa Rollup Girdi Motoru (`webMSKLabs/vite.config.ts`):**
