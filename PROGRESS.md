@@ -1,19 +1,16 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
-## 📌 BİR SONRAKİ OTURUM YOL HARİTASI & YARINKİ BAŞLANGIÇ NOKTASI [27.10.2026 - 00:15]
-1. **Canlı Ortam Tamamen Ayakta ve Erişilebilir (HTTP 200 OK):**
-   - **Web Vitrini:** https://dev.msklabs.org (En güncel DevAdmin sürümü: duyuru yükleyicisi, HTML5 ses oynatıcı, blog şablonları).
-   - **Admin Yönetim Paneli:** https://panel.msklabs.org (Giriş: mskaymaz / Msk.571).
-   - **Backend Worker API:** https://msklabsdesk-backend.msklabs-org.workers.dev (D1 ve R2 bağlı, JWT auth aktif).
-   - **R2 Medya CDN:** https://media.msklabs.org (CORS ayarları tanımlı).
-2. **Yarın İlk Yapılacak İşlem (Geliştirme / Test):**
-   - Panel üzerinden (https://panel.msklabs.org) yeni bir duyuru ve blog yazısı girilerek dev.msklabs.org üzerinde gerçek zamanlı entegrasyon doğrulaması (Task 1.7) yapılabilir.
-   - Ardından admin_ui_audit_report.md içindeki öncelikli UI/UX ve TipTap editör iyileştirmelerine canlı ortam konforunda başlanabilir.
-3. **Uzak Dağıtım Komutları (Kota Harcamayan Yöntem):**
-   - Admin Paneli Güncelleme: cd frontend && npm run build && npx wrangler pages deploy dist --project-name=msklabs-panel
-   - Web Sitesi Güncelleme: cd ../webMSKLabs && npm run build && npx wrangler pages deploy dist --project-name=msklabs-web
-   - Backend Worker Güncelleme: cd backend && npx wrangler deploy
+## 📌 BİR SONRAKİ OTURUM YOL HARİTASI & YARINKİ BAŞLANGIÇ NOKTASI [27.10.2026 - 17:05]
+1. **Yarın İlk Ele Alınacak İnce Ayarlar (apps.html Mobil Görünüm):**
+   - **Yatay Kenar Boşlukları (Padding):** Kart yapısının ekran kenarlarından mesafesi ve filtreleme butonlarının (Tümü, Mobil, Masaüstü, Web) kenar boşluklarının yerelle birebir eşitlenmesi.
+   - **Main Birleştirme Güvencesi:** Tüm ekran boyutlarındaki kurallar DevAdmin dalında yerel ve uzak tam senkron olana kadar main korunacak, hiçbir regresyona izin verilmeyecek.
+2. **Paket 1 Yeni Vitrin Sayfası:**
+   - Genel apps.html sayfasına dokunulmadan, mobil uygulamaların yönleneceği 2 sütunlu flip kart mimarisi bağımsız bir dosyada (Örn: showcase.html / vitrin.html) inşa edilecek.
+3. **Canlı Durum:**
+   - Web Sitesi: https://dev.msklabs.org (DevAdmin son derleme yayında).
+   - Admin Paneli: https://panel.msklabs.org (Aktif).
+   - Her iki repoda da çalışma ağacı temiz, DevAdmin commit ve push tamamlandı.
 
 ---
 
