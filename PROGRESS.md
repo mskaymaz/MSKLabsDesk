@@ -17,6 +17,20 @@
 
 ---
 
+## 🟢 Son Güncelleme [27.10.2026 - 15:46] — MOBİL HEADER DUYURU İKONU YATAY HİZALAMA VE APPS.HTML GERİ ALMA [*]
+* **Yapılan İşlem:**
+  1. **Mobil Header Duyuru ve Hamburger Hizalaması (`layout.js` & `global.css`):**
+     - Mobilde duyuru megafon ikonu (`#mskAnnTriggerBtn`) ile hamburger menü butonu (`#hamburgerToggleBtn`) ortak bir yatay kapsayıcı (`.header-action-toggles`) içerisine alındı.
+     - Megafon ikonunun dikeyde hamburgerin üstüne binmesi engellendi; hamburgerin hemen soluna, aynı yatay hizada yan yana sabitlendi (`gap: 6px`).
+     - Masaüstünde hamburger gizli kalırken, megafon ikonu dil çubuğunun hemen yanında tek satırda hizalandı.
+  2. **Mevcut `apps.html` Sayfasının Korunması:**
+     - Kullanıcı talimatı doğrultusunda mevcut `apps.html` üzerindeki tüm deneysel değişiklikler derhal geri alındı (revert). Mevcut genel web portföy sayfası orijinal haliyle korundu.
+  3. **Canlı Dağıtım & Git Senkronizasyonu:**
+     - `webMSKLabs` derlendi (`npm run build`), Cloudflare Pages (`msklabs-web`, `DevAdmin`) üzerine dağıtıldı ve GitHub `origin/DevAdmin` dalına push edildi.
+* **Durum:** DevAdmin dalında tamamlandı ve canlıda yayına alındı.
+
+---
+
 ## 🟢 Son Güncelleme [27.10.2026 - 12:32] — YEREL-UZAK FARKLARININ SIFIRLANMASI, MOBİL KOMPAKT KART VE FİLTRE MOTORU [*]
 * **Yapılan İşlem:**
   1. **Merkezi API Uç Noktası Eşitlemesi (`config.js` & `apps.html`):**
