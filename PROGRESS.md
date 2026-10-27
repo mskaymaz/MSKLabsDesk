@@ -17,6 +17,19 @@
 
 ---
 
+## 🟢 Son Güncelleme [27.10.2026 - 11:20] — UYGULAMA LOGOLARININ KÖK DİZİN ONARIMI VE PWA ANLIK AKTİVASYONU [*]
+* **Yapılan İşlem:**
+  1. **Uygulama İkon Yollarının Düzeltilmesi (`apps.html` & `app.html`):**
+     - Dinamik API'den gelen verilerin üzerine `https://msklabs.org/` etki alanının yapıştırılması ve 404 sebebiyle logoların kırılması sorunu giderildi; görsel yolları mutlak kök dizine (`/media/...`) bağlandı.
+     - Sayfa açılışında statik olarak görünen logoların JS render sonrası kaybolma ("üzerine bir şey basma") sorunu tamamen çözüldü.
+  2. **PWA Anlık Sürüm Aktivasyonu (`vite.config.ts`):**
+     - Workbox yapılandırmasına `skipWaiting: true` ve `clientsClaim: true` parametreleri eklendi. Yeni dağıtımlar tarayıcıda beklemeden anında devreye alınacak şekilde ayarlandı.
+  3. **Canlı Dağıtım:**
+     - `webMSKLabs` derlendi, Cloudflare Pages (`msklabs-web`) üzerine dağıtıldı ve `origin/DevAdmin` dalına push edildi.
+* **Durum:** DevAdmin dalında tamamlandı ve canlıda yayına alındı.
+
+---
+
 ## 🟢 Son Güncelleme [27.10.2026 - 10:50] — CANLI ALAN ADI UYUMLULUĞU, SLUG STANDARDİZASYONU VE MUTLAK KÖK YÖNLENDİRMELERİ [*]
 * **Yapılan İşlem:**
   1. **C: Sürücüsü ve Tarayıcı İzin Uyarısının Temizlenmesi:**
