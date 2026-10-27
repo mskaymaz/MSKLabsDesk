@@ -17,6 +17,21 @@
 
 ---
 
+## 🟢 Son Güncelleme [27.10.2026 - 16:00] — UZAK VE YEREL VİTRİN VE HEADER DÜZENİNİN 1-E-1 EŞİTLENMESİ [*]
+* **Yapılan İşlem:**
+  1. **Header Antet Boyutu ve Hizalaması (`global.css`):**
+     - Mobilde küçültülen logo yüksekliği (38px'ten 65px'e) ve header satır yüksekliği (`min-height: 76px`, `margin-top: 96px`) yereldeki ferah antet standardına geri döndürüldü.
+     - Megafon ve hamburger butonları `.header-action-toggles` içinde yatay yan yana (`[📣] [☰]`) hizasında korundu.
+  2. **Tek Sütunlu Mağaza Kart Düzeni (`global.css`):**
+     - Uzakta 2 sütuna bölünüp metinleri sıkıştıran kural iptal edildi; yereldeki ferah tek sütunlu (`1fr !important; gap: 12px !important;`) Google Play mağaza kartı mimarisine geri dönüldü.
+  3. **Duyuru İkonu Görünürlüğü (`announcement-loader.js`):**
+     - D1'de henüz aktif duyuru bulunmadığı durumlarda dahi megafon ikonunun gizlenmeyip (`display: inline-flex`) yereldeki gibi görünür kalması sağlandı.
+  4. **Canlı Dağıtım & Git:**
+     - `webMSKLabs` derlendi, Cloudflare Pages (`msklabs-web`, `DevAdmin`) üzerine dağıtıldı ve GitHub `origin/DevAdmin` dalına push edildi.
+* **Durum:** DevAdmin dalında tamamlandı ve canlıda yayına alındı.
+
+---
+
 ## 🟢 Son Güncelleme [27.10.2026 - 15:46] — MOBİL HEADER DUYURU İKONU YATAY HİZALAMA VE APPS.HTML GERİ ALMA [*]
 * **Yapılan İşlem:**
   1. **Mobil Header Duyuru ve Hamburger Hizalaması (`layout.js` & `global.css`):**
