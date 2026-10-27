@@ -17,7 +17,7 @@
 
 ---
 
-## 🟢 Son Güncelleme [27.10.2026 - 16:15] — UZAK VE YEREL VİTRİN VE HEADER DÜZENİNİN 1-E-1 EŞİTLENMESİ [*]
+## 🟢 Son Güncelleme [27.10.2026 - 16:45] — MOBİL UYGULAMA KARTLARI STANDART KOMPAKT BOŞLUK DÜZENİ [*]
 * **Yapılan İşlem:**
   1. **Header Antet Boyutu ve Hizalaması (`global.css`):**
      - Mobilde küçültülen logo yüksekliği (38px'ten 65px'e) ve header satır yüksekliği (`min-height: 76px`, `margin-top: 96px`) yereldeki ferah antet standardına geri döndürüldü.
