@@ -17,6 +17,21 @@
 
 ---
 
+## 🟢 Son Güncelleme [27.10.2026 - 12:32] — YEREL-UZAK FARKLARININ SIFIRLANMASI, MOBİL KOMPAKT KART VE FİLTRE MOTORU [*]
+* **Yapılan İşlem:**
+  1. **Merkezi API Uç Noktası Eşitlemesi (`config.js` & `apps.html`):**
+     - Yerelde `localhost:8787` sunucusu aranıp bağlantı düşmesi sebebiyle yaşanan yerel-uzak veri ayrışması giderildi; yerel vitrin de doğrudan canlı Worker API'ye bağlandı.
+  2. **Mobil Kart Yüksekliği ve Rozet İzolasyonu (`global.css`):**
+     - `@media (max-width: 540px)` içinde `.app-card` için `min-height: auto !important; height: auto !important;` tanımlandı; masaüstü 360px sınırının mobilde kartı dikeyde germesi engellendi.
+     - `.app-card-footer` ve `.app-status-badge` doğrudan `grid-area: badges !important;` alanına bağlanarak kompakt mağaza dizilimi sağlandı.
+  3. **Filtreleme Motoru Güçlendirmesi (`apps.html`):**
+     - Tümü, Mobil, Masaüstü ve Web filtreleme butonlarının hem dinamik API verisinde hem de ilk DOM yüklemesinde anında çalışması sağlandı.
+  4. **Canlı Dağıtım:**
+     - `webMSKLabs` derlendi, Cloudflare Pages (`msklabs-web`) üzerine yüklendi ve `origin/DevAdmin` dalına push edildi.
+* **Durum:** DevAdmin dalında tamamlandı ve canlıda yayına alındı.
+
+---
+
 ## 🟢 Son Güncelleme [27.10.2026 - 11:20] — UYGULAMA LOGOLARININ KÖK DİZİN ONARIMI VE PWA ANLIK AKTİVASYONU [*]
 * **Yapılan İşlem:**
   1. **Uygulama İkon Yollarının Düzeltilmesi (`apps.html` & `app.html`):**
