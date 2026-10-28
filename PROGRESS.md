@@ -1,6 +1,22 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 📌 Son Güncelleme [28.10.2026 - 22:10] — KURUMSAL METİN DENETİMLERİ, BLOG SEO-SEKME DÜZENLEMELERİ VE CLOUDFLARE CANLI DAĞITIMI [✓]
+* **Yapılan İşlem:**
+  1. **Kurumsal Metin & İçerik Denetimleri (17 Dosya):**
+     - GÇ Pil Uyarı açıklamaları "il bazlı afet/acil durum" yanıltmasından arındırılarak "görev çubuğu pil seviye ve şarj uyarı sistemi" olarak düzeltildi.
+     - RekatSay için ön kamera beyanı kaldırılarak ortam ışığı ve yakınlık sensörleri ile sıfır kamera beyanı eklendi.
+     - Kiril kelime kalıntısı temizlendi, Türkçe ve İngilizce ile tutarlı Arapça çeviri tamamlandı.
+     - Kaynaşmış kelimeler ve pleonazmlar düzeltildi; ist.html dinamik layout.js yapısına bağlandı.
+  2. **Blog Sekme Geçişi ve SEO Optimizasyonu (blog.html, blog.js, layout.js):**
+     - Blog alt sekmelerine geçişteki anlık parlamalar URL tabanlı DOM ilk render sınıflarıyla sıfır gecikmeye indirildi.
+     - Dinamik updateSectionSeoMeta() ile kategori bazlı title, canonical, description ve OpenGraph etiketleri SEO uyumlu eşitlendi.
+  3. **Cloudflare Canlı Dağıtımı & Alan Adı Entegrasyonu:**
+     - webMSKLabs: 61 test 604 pass, Cloudflare Pages msklabs-web (DevAdmin) projesine canlıya alındı (https://dev.msklabs.org).
+     - MSKLabsDesk/frontend: msklabs-panel Worker servisiyle eşitlenerek derlendi ve canlıya alındı (https://panel.msklabs.org).
+
+---
+
 ## 📌 Son Güncelleme [28.10.2026 - 13:20] — TÜM SAYFALARDA DUYURU VE ALT ANTET (FOOTER) STANDARTLAŞTIRILMASI [✓]
 * **Yapılan İşlem:**
   1. **Otonom & Kendi Kendini Onaran Alt Antet (`layout.js`):**
