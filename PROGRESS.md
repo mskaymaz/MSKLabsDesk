@@ -1,6 +1,27 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 📌 Son Güncelleme [28.10.2026 - 12:25] — DUYURU İKONU YATAY HİZALAMASI, VİTRİN ANTET VE FİLTRE DÜZENLEMELERİ [✓]
+* **Yapılan İşlem:**
+  1. **Masaüstü Duyuru İkonu Eksen Hizalaması (`layout.js`, `global.css`):**
+     - Masaüstü görünümünde üst satırdaki duyuru ikonu gizlendi, menü linklerinin bulunduğu 2. satıra `#mskAnnTriggerBtnDesk` yerleştirildi.
+     - `syncAnnouncementPosition()` fonksiyonu ile üst satırdaki `#themeToggleBtn` (🌙) butonunun anlık koordinatları (`themeRect`) ve genişliği hesaplanarak, duyuru ikonu tema butonunun genişlik sınırları içerisinde yatayda tam ortalandı (`centerX = 1050px == 1050px`).
+     - Duyuru ikonu `position: absolute` ile konumlandırıldığından, ortalanmış ana menü linklerini itelemez.
+     - Çok dilli (RTL/Arapça) görünümde de sol eksene göre simetrik matematiksel hizalama sağlandı (`centerX = 191px == 191px`).
+  2. **Mobil Düzen ve Aktiflik Yönetimi (`announcement-loader.js`):**
+     - Mobilde (`<=768px`) duyuru butonu 1. satırda hamburger menü yanında korundu (`#mskAnnTriggerBtnMob`).
+     - Yayında aktif duyuru bulunmadığı durumlarda her iki arayüzde de duyuru tetikleyici butonlar tamamen gizlendi (`hideAllAnnouncementButtons()`).
+  3. **Vitrin Antet Dengesi (`vitrin.html`, `vitrin.css`):**
+     - `vitrin.html` masaüstü antetine sol başlık alanı (`header-page-title`) eklenerek, logo merkezde ve aksiyonlar sağda olacak şekilde kurumsal 3 sütunlu antet dengesi sağlandı (mobildeki düzen aynen korundu).
+  4. **Uygulama Filtre Butonları & Yeni Sayfalar (`apps.html`, `apps/*`):**
+     - `apps.html` filtre hapları (Tümü, Mobil, Masaüstü, Web) hem masaüstünde hem mobilde ortalandı.
+     - Boru hattındaki 3 uygulama için detay sayfaları oluşturuldu: `apps/notes.html`, `apps/docuedit.html`, `apps/pdflayout.html`.
+  5. **Canlı Dağıtım & Git:**
+     - `webMSKLabs` ve `MSKLabsDesk` repoları `DevAdmin` dalında commit ve push edildi (`4aab2de`).
+     - Cloudflare Pages `msklabs-web` ve `msklabs-panel` projelerine canlı dağıtım sağlandı.
+
+---
+
 ## 🟢 Son Güncelleme [28.10.2026 - 10:20] — PAKET 1: MOBİL WEBVIEW VİTRİN SAYFASI (vitrin.html) [*]
 * **Yapılan İşlem:**
   1. **İzole Vitrin Sayfası (vitrin.html & vitrin.css):**
