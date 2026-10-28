@@ -1,6 +1,19 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 📌 Son Güncelleme [28.10.2026 - 22:38] — RESEND E-POSTA CANLI ENTEGRASYONU VE GÜVENLİ KİMLİK KASASI (VAULT) [✓]
+* **Yapılan İşlem:**
+  1. **Resend E-Posta & Cloudflare Worker Secret Kurulumu:**
+     - Resend hesabı ve `msklabs.org` alan adı Cloudflare DNS entegrasyonuyla (DKIM, SPF, CNAME) yetkilendirildi.
+     - `msklabsdesk-backend` Cloudflare Worker servisine canlı çalışma zamanı için `RESEND_API_KEY` ve `EMAIL_FROM` (`bildirim@msklabs.org`) secret değerleri REST API üzerinden başarıyla yüklendi.
+     - Yerel geliştirme için `backend/.dev.vars` dosyası oluşturuldu.
+  2. **Güvenli Kimlik Kasası (AES-256-GCM Vault):**
+     - Ekip üyeleri ve farklı cihazlar (ev/iş) arasında şifrelerin güvenle paylaşılabilmesi için harici bağımlılık gerektirmeyen `scripts/vault.js` motoru geliştirildi.
+     - `CREDENTIALS.local.md` dosyası AES-256-GCM ile şifrelenerek `CREDENTIALS.enc` olarak repoya eklendi; açık metin dosya `.gitignore` korumasında tutuldu.
+     - Kasa kilitleme (`node scripts/vault.js lock`) ve çözme (`node scripts/vault.js unlock`) testleri %100 doğrulandı.
+
+---
+
 ## 📌 Son Güncelleme [28.10.2026 - 22:10] — KURUMSAL METİN DENETİMLERİ, BLOG SEO-SEKME DÜZENLEMELERİ VE CLOUDFLARE CANLI DAĞITIMI [✓]
 * **Yapılan İşlem:**
   1. **Kurumsal Metin & İçerik Denetimleri (17 Dosya):**
