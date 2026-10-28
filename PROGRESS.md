@@ -1,6 +1,24 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 📌 Son Güncelleme [28.10.2026 - 23:55] — 1. AŞAMA: GOOGLE ADSENSE & TEKNİK SEO EKSİKSİZLEŞTİRME [✓]
+* **Yapılan İşlem:**
+  1. **Google AdSense Altyapısı:**
+     - `ads.txt` ve `public/ads.txt` kök dizin dosyaları oluşturuldu.
+     - AB / GDPR ve AdSense kullanıcı rızası politikasıyla uyumlu, $0 maliyetli ve çok dilli (TR/EN/AR) hafif Çerez Rıza Bandı (`assets/js/cookie-consent.js`) geliştirildi; `layout.js` üzerinden tüm sayfalarda dinamik olarak devreye alındı.
+     - Kurumsal antet ve alt anteti taşıyan, şık ve responsive `404.html` sayfası üretildi.
+  2. **Teknik SEO & Arama Motoru Optimizasyonu:**
+     - `robots.txt`: Mediapartners-Google ve Googlebot-Image izinleri eklendi.
+     - `sitemap.xml`: 28 sayfalık güncel harita oluşturuldu; `vitrin`, `promo`, yeni uygulamalar (`notes`, `docuedit`, `pdflayout`) ve blog alt kategorileri eklendi.
+     - JSON-LD Yapısal Verileri: `about` ve `bizkimiz` (Organization), `contact` (ContactPage), `faq` (FAQPage), uygulama sayfaları (SoftwareApplication) şemaları entegre edildi.
+     - `vitrin.html` ve `apps.html` için OpenGraph ve Twitter Cards etiketleri tamamlandı; yönlendirme dosyalarına (`who-we-are`, `pages`, `dl`) thin content uyarısını önleyen `noindex, follow` eklendi.
+     - `promo.html` ve `roadmap.html` anlamsal `<h1>` hiyerarşisi görsel düzen bozulmadan sağlandı.
+  3. **Test ve Dağıtım:**
+     - Vitest: 61 test dosyası 604 test %100 PASS.
+     - `npm run build` hatasız tamamlandı; Cloudflare Pages `msklabs-web` (DevAdmin) canlı ortamına yüklendi (`https://dev.msklabs.org`).
+
+---
+
 ## 📌 Son Güncelleme [28.10.2026 - 22:38] — RESEND E-POSTA CANLI ENTEGRASYONU VE GÜVENLİ KİMLİK KASASI (VAULT) [✓]
 * **Yapılan İşlem:**
   1. **Resend E-Posta & Cloudflare Worker Secret Kurulumu:**
