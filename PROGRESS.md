@@ -1,6 +1,22 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 🟢 Son Güncelleme [28.10.2026 - 10:20] — PAKET 1: MOBİL WEBVIEW VİTRİN SAYFASI (vitrin.html) [*]
+* **Yapılan İşlem:**
+  1. **İzole Vitrin Sayfası (vitrin.html & vitrin.css):**
+     - apps.html sayfasına dokunulmadan, mobil uygulamaların WebView içinden çağıracağı bağımsız ve hafif vitrin sayfası oluşturuldu.
+     - Minimalist antet: MSKLabs marka logosu, hızlı tema anahtarı (Açık/Koyu) ve bayrak emojisi içermeyen TR, EN, AR dil düğmeleri entegre edildi.
+  2. **İki Sütunlu 3D Flip Kart Mimarisi:**
+     - Mobilde yan yana 2 sütun düzeninde, kart veya 'Detaylar ↻' butonuna tıklandığında CSS 3D (perspective, rotateY) ile akıcı şekilde arkası dönen kartlar inşa edildi.
+     - Ön Yüz: Durum rozeti (Yayında / Yapım Aşamasında), 64px kare uygulama ikonu, uygulama başlığı, özet vizyon ve çevirme butonu.
+     - Arka Yüz: Platform etiketi (Mobil/Masaüstü), detaylı özellik açıklaması, 'İncele' ve doğrudan 'APK İndir' aksiyon butonları ile '↺ Karta Dön' butonu.
+  3. **Kapsanan Uygulamalar:**
+     - HaydiNamaza (Mobil, Aktif), RekatSay (Mobil, Aktif), Date Counter (Masaüstü, Aktif), En Yakın (Mobil, Dev), DeskPilot (Masaüstü, Dev), GÇ Pil Uyarı (Masaüstü, Dev).
+  4. **Canlı Dağıtım & Git:**
+     - webMSKLabs derlendi, Cloudflare Pages DevAdmin ortamına dağıtıldı ve GitHub origin/DevAdmin dalına push edildi (51747f6).
+
+---
+
 ## 🟢 Son Güncelleme [28.10.2026 - 10:05] — MOBİL LOGO KARE DOLULUK STANDARDI VE EN YAKIN İKON EŞİTLEMESİ [*]
 * **Yapılan İşlem:**
   1. **Yerel & Uzak Logo Boyut Eşitlemesi (global.css):**
