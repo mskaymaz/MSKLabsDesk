@@ -1,7 +1,18 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
-## 📌 BİR SONRAKİ OTURUM YOL HARİTASI & YARINKİ BAŞLANGIÇ NOKTASI [27.10.2026 - 17:05]
+## 🟢 Son Güncelleme [28.10.2026 - 09:40] — MOBİL PORTFÖY KONTEYNER VE FİLTRELEME BUTONLARI KENAR BOŞLUKLARI [*]
+* **Yapılan İşlem:**
+  1. **Konteyner Yatay Padding Eşitlemesi (global.css):**
+     - @media (max-width: 850px) altına .portfolio-container { padding: 20px 16px 60px 16px !important; } eklendi; header antetindeki 16px (1rem) hizalaması ile kartların ve filtreleme çubuğunun ekran kenarlarına olan mesafesi 1-e-1 eşitlendi.
+  2. **Filtre Çubuğu Hizalaması (global.css):**
+     - .app-filter-bar genişliği ve kenar boşlukları kapsayıcıya kilitlendi, butonların (Tümü, Mobil, Masaüstü, Web) soldan hizası antet logosuyla aynı dikey çizgiye getirildi.
+  3. **Canlı Dağıtım & Git:**
+     - webMSKLabs derlendi, Cloudflare Pages DevAdmin ortamına yüklendi ve GitHub'a push edildi (17c881a).
+
+---
+
+## 📌 BİR SONRAKİ OTURUM YOL HARİTASI & YARINKİ BAŞLANGIÇ NOKTASI [28.10.2026 - 09:40]
 1. **Yarın İlk Ele Alınacak İnce Ayarlar (apps.html Mobil Görünüm):**
    - **Yatay Kenar Boşlukları (Padding):** Kart yapısının ekran kenarlarından mesafesi ve filtreleme butonlarının (Tümü, Mobil, Masaüstü, Web) kenar boşluklarının yerelle birebir eşitlenmesi.
    - **Main Birleştirme Güvencesi:** Tüm ekran boyutlarındaki kurallar DevAdmin dalında yerel ve uzak tam senkron olana kadar main korunacak, hiçbir regresyona izin verilmeyecek.
