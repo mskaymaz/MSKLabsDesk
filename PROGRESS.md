@@ -1,6 +1,16 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 🟢 Son Güncelleme [28.10.2026 - 09:46] — MOBİL BAŞLIK HİYERARŞİSİ VE KATEGORİ BAŞLIK BOYUTLARI [*]
+* **Yapılan İşlem:**
+  1. **Başlık Hiyerarşisi Eşitlemesi (apps.html, global.css):**
+     - apps.html içindeki kuralda ana başlık (.page-title) mobilde 1.35rem seviyesine düşürülmüşken, kategori başlıkları (.category-title: "Yayındaki Uygulamalarımız") masaüstü 1.5rem seviyesinde kalmıştı.
+     - Ana sayfa başlığı mobilde 1.55rem, kategori başlıkları ise 1.15rem seviyesine bağlanarak hiyerarşi (Ana Başlık > Kategori Başlığı > Kart Başlığı) sağlandı.
+  2. **Canlı Dağıtım & Git:**
+     - webMSKLabs derlendi, Cloudflare Pages DevAdmin ortamına yüklendi ve GitHub DevAdmin dalına push edildi (36d789a).
+
+---
+
 ## 🟢 Son Güncelleme [28.10.2026 - 09:40] — MOBİL PORTFÖY KONTEYNER VE FİLTRELEME BUTONLARI KENAR BOŞLUKLARI [*]
 * **Yapılan İşlem:**
   1. **Konteyner Yatay Padding Eşitlemesi (global.css):**
