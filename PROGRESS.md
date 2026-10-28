@@ -1,6 +1,26 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 📌 Son Güncelleme [29.10.2026 - 00:15] — 2. AŞAMA: İLETİŞİM, KULLANIM ŞARTLARI VE GİZLİLİK SAYFALARININ YENİLENMESİ [✓]
+* **Yapılan İşlem:**
+  1. **Ortak Hukuk ve Form Stilleri (`assets/css/legal.css` - 186 satır):**
+     - Tüm yasal ve iletişim sayfaları için responsive kart ızgarası, hero başlığı, sürüm rozeti ve dark/light tema uyumlu stil katmanı ayrıştırıldı.
+     - PDF/baskı için temiz print stilleri (`@media print`) tanımlandı.
+  2. **İletişim Sayfası (`contact.html` - 350 satır):**
+     - Zayıf tek form yerine 4 farklı kurumsal kanal kartı entegre edildi: Teknik Destek (GitHub Issues), Doğrudan E-Posta (`destek@msklabs.org`), İş Birlikleri ve Gizlilik Hakları.
+     - 24-48 saat yanıt taahhüdü ve SSS sayfasına hızlı geçiş köprüsü kuruldu; TR/EN/AR 3 dilde eksiksiz içerik sağlandı.
+  3. **Kullanım Şartları (`terms.html` - 279 satır):**
+     - 6 kurumsal madde (Hizmet Tanımı, Fikri Mülkiyet, Sorumluluk Sınırı, Bağlantılar, Değişiklikler ve Yetkili Mahkeme) şık kart mimarisine dönüştürüldü.
+     - Dinamik sürüm/yürürlük tarihi alanı ve tek tıkla yazdırma özelliği eklendi.
+  4. **Gizlilik Politikası (`privacy.html` - 376 satır):**
+     - Local-First mimari beyanı, cihaz izinleri matrisi (Kamera yok, sadece yerel sensörler), Google AdSense / AdMob çerez rızası ve KVKK / GDPR hakları TR/EN/AR dillerinde eşit hukuki derinlikle yazıldı.
+  5. **Kalite Doğrulaması:**
+     - Vitest `TEST-003` dosya satır sınırı kapısı (maks 450 satır) geçildi.
+     - `npm run build` hatasız tamamlandı.
+     - Kullanıcı talimatı doğrultusunda uzaktaki dev ortamına yükleme yapılmadı; yerelde tutuldu. Yarın sayfalar teker teker incelenerek sadeleştirilecek ve geliştirilecek.
+
+---
+
 ## 📌 Son Güncelleme [28.10.2026 - 23:55] — 1. AŞAMA: GOOGLE ADSENSE & TEKNİK SEO EKSİKSİZLEŞTİRME [✓]
 * **Yapılan İşlem:**
   1. **Google AdSense Altyapısı:**
