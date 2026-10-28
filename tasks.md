@@ -51,6 +51,25 @@
 - [*] **Task 1.7 — Canlı Entegrasyon Doğrulaması:** Her iki adres (dev.msklabs.org ve panel.msklabs.org) canlı HTTP 200 yanıtı verdi.
 
 ---
+### SEC-VAULT-001 — Çoklu Cihaz (Ev/İş) Şifreli Kimlik Kasası (AES-256 Vault) & E-Posta Entegrasyonu [*]
+- **Amaç:** Ev, işyeri ve yetkili ekip üyeleri arasında API anahtarları, servis kimlikleri ve şifrelerin sıfır maliyetle, harici bağımlılık olmadan (git-crypt/gpg gerektirmeden) güvenle paylaşılması, canlı Cloudflare Worker e-posta (Resend) entegrasyonunun sağlanması ve kod asistanlarının kasayı kolayca yönetebilmesi.
+- **Mimari Karar:** 
+  1. Çift Yönlü Güvenlik: Canlı çalışma zamanı için Cloudflare Worker Secrets (msklabsdesk-backend), ekip içi paylaşım ve AI danışması için AES-256-GCM kasa (CREDENTIALS.enc).
+  2. Dosya İzolasyonu: CREDENTIALS.local.md dosyası .gitignore korumasında tutulur, uzak depoya asla açık metin gönderilmez.
+  3. Kasa Motoru: Yerleşik Node.js crypto modülüyle çalışan scripts/vault.js (varsayılan parola: Msk.571).
+
+#### 📋 Takip Edilebilir Aşama ve Görev Listesi:
+- [*] **Task 1.1 — Resend & Cloudflare Worker E-Posta Entegrasyonu:** Resend hesabı açıldı, msklabs.org alan adı DKIM/SPF/CNAME ile Cloudflare DNS üzerinde doğrulandı, RESEND_API_KEY ve EMAIL_FROM (bildirim@msklabs.org) secret değerleri Cloudflare Worker çalışma zamanına yüklendi.
+- [*] **Task 1.2 — AES-256 Kasa Motoru ve İlk Kilitleme:** scripts/vault.js yazıldı; tüm Cloudflare, DB, R2, Admin ve Resend bilgileri CREDENTIALS.local.md içine işlenip CREDENTIALS.enc olarak şifrelendi.
+- [ ] **Task 1.3 — İşyeri / Diğer Cihazlar İçin Asistan Senkronizasyon Prosedürü:**
+  - **Adım 1 (Çekme):** git pull origin DevAdmin
+  - **Adım 2 (Kasa Açma):** node scripts/vault.js unlock (Varsayılan parola Msk.571 kullanılır; CREDENTIALS.local.md oluşturulur).
+  - **Adım 3 (Yedek Ekleme):** İşyerindeki yedek API anahtarları ve şifreler CREDENTIALS.local.md dosyasında ilgili başlık altına eklenir (veya asistana "Şu anahtarları kasaya ekle" talimatı verilir).
+  - **Adım 4 (Kilitleme):** node scripts/vault.js lock komutu çalıştırılarak CREDENTIALS.enc güncellenir.
+  - **Adım 5 (Uzağa Gönderme):** git add CREDENTIALS.enc PROGRESS.md tasks.md && git commit -m "feat(vault): isyeri yedek anahtarlari kasaya eklendi [tarih-saat]" && git push origin DevAdmin
+  - ⚠️ **Kritik Güvenlik Kuralı:** CREDENTIALS.local.md asla git staging alanına eklenmez (.gitignore korumasındadır), repoya yalnızca CREDENTIALS.enc gönderilir.
+
+---
 ### CMS-STUDIO-001 — Kurumsal Sayfalar İleri Düzey Görsel Tasarım Stüdyosu (Visual Page Builder Workstation) [*]
 - **Amaç:** MSK Labs kurumsal sayfalarını (Ana Sayfa, Hakkımızda, SSS, İletişim, Gizlilik, Kullanım Koşulları ve gelecekteki tüm özel sayfalar) kod yazmadan, masaüstü iş istasyonu ergonomisinde, 3 panelli profesyonel bir görsel stüdyo ile tasarlamak, çok dilli (TR/EN/AR) ve canlı Arapça RTL motoruyla inşa etmek, reklam ve uygulama kataloğuyla entegre ederek yayına almak.
 - **Kapsam:** `MSKLabsDesk/frontend/src/views/PageStudioView.tsx`, `MSKLabsDesk/frontend/src/components/pages/*`, `MSKLabsDesk/backend/src/routes/cmsPages.ts`, `webMSKLabs/assets/js/page-loader.js`.
