@@ -1,6 +1,17 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 🟢 Son Güncelleme [28.10.2026 - 10:05] — MOBİL LOGO KARE DOLULUK STANDARDI VE EN YAKIN İKON EŞİTLEMESİ [*]
+* **Yapılan İşlem:**
+  1. **Yerel & Uzak Logo Boyut Eşitlemesi (global.css):**
+     - Masaüstü kapsamındaki .app-icon img (object-fit: contain; width: auto;) kuralı @media (min-width: 851px) bloğuna taşındı. Mobildeki width: 100% !important; height: 100% !important; object-fit: cover !important; kuralı aktif hale getirilerek yereldeki logoların kare kutu içinde ufalarak yüzmesi engellendi; 1. referans görseldeki gibi 64px alanı dolduran görünüm sağlandı.
+  2. **En Yakın İkon Standardizasyonu (apps.html, apps/enyakin.html):**
+     - Dikey konum iğnesi SVG yerine resmi 1254x1254 kare uygulama ikonu (media/enyakin/icon.png) bağlandı. Diğer uygulamalarla (Haydi Namaza, RekatSay vb.) birebir aynı kare doluluk ve köşe yuvarlatma standardına kavuşturuldu.
+  3. **Canlı Dağıtım & Git:**
+     - webMSKLabs derlendi, Cloudflare Pages DevAdmin ortamına dağıtıldı ve GitHub origin/DevAdmin dalına push edildi (2129b63).
+
+---
+
 ## 🟢 Son Güncelleme [28.10.2026 - 09:46] — MOBİL BAŞLIK HİYERARŞİSİ VE KATEGORİ BAŞLIK BOYUTLARI [*]
 * **Yapılan İşlem:**
   1. **Başlık Hiyerarşisi Eşitlemesi (apps.html, global.css):**
