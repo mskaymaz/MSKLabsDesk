@@ -1,6 +1,26 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 📌 Son Güncelleme [28.10.2026 - 13:20] — TÜM SAYFALARDA DUYURU VE ALT ANTET (FOOTER) STANDARTLAŞTIRILMASI [✓]
+* **Yapılan İşlem:**
+  1. **Otonom & Kendi Kendini Onaran Alt Antet (`layout.js`):**
+     - `renderFooter()` fonksiyonuna `renderHeader()` mantığı kazandırıldı. Sayfada `<footer class="site-footer">` etiketi bulunmasa dahi `.layout-wrapper` veya `body` sonuna dinamik footer ekleme yeteneği sağlandı.
+     - `getPageTitleHTML()` fonksiyonuna Vitrin sayfası (`vitrin.html`) için `📱 VİTRİN` başlığı entegre edildi.
+  2. **Eksik Sayfalara Statik Footer & Layout Enjeksiyonu:**
+     - `destek.html`, `privacy.html`, `changelog.html`, `roadmap.html`, `promo.html`, `vitrin.html` sayfalarına standart `<footer class="site-footer"></footer>` ve `layout.js` eklendi.
+     - `promo.html` sonundaki hatalı etiket kalıntıları temizlendi.
+  3. **Merkezi Konfigürasyon Ezilme Düzeltmesi (`SITE_CONFIG`):**
+     - `about.html`, `contact.html`, `apps/deskpilot.html`, `apps/enyakin.html` ve `apps/gcpiluyari.html` dosyalarında `var SITE_CONFIG = { contactEmail: ... }` ile global nesnenin ezilmesi engellendi; `apiUrl` korunarak duyuruların API üzerinden kesintisiz yüklenmesi sağlandı.
+     - `announcement-loader.js` varsayılan API fallback adresi Cloudflare Worker (`https://msklabsdesk-backend.msklabs-org.workers.dev/api`) olarak güvenceye alındı.
+  4. **Vitrin Sayfası Antet ve Navigasyon Bütünlüğü (`vitrin.html`, `vitrin.css`):**
+     - `vitrin.html` üzerindeki özel sabit başlık kaldırılarak küresel kurumsal antet yapısına (`site-header-sticky`) dahil edildi; duyuru megafonu, hızlı menü ve 2. satır navigasyonu aktif hale getirildi.
+     - `vitrin.css` içerisindeki antet çakışma stilleri temizlendi, sayfa tepe boşluğu standartlaştırıldı.
+  5. **Çalışma Zamanı ve Derleme Doğrulaması:**
+     - Headless Edge CDP ile 14 kritik sayfa (`index`, `about`, `contact`, `destek`, `privacy`, `terms`, `faq`, `bizkimiz`, `apps`, `vitrin`, `changelog`, `roadmap`, `promo`, `download`) taranarak duyuru bandı, duyuru ikonu ve 2 satırlı alt antetin yüzde yüz çalıştığı doğrulandı.
+     - `npm run build` hatasız tamamlandı (20.61s).
+
+---
+
 ## 📌 Son Güncelleme [28.10.2026 - 12:25] — DUYURU İKONU YATAY HİZALAMASI, VİTRİN ANTET VE FİLTRE DÜZENLEMELERİ [✓]
 * **Yapılan İşlem:**
   1. **Masaüstü Duyuru İkonu Eksen Hizalaması (`layout.js`, `global.css`):**
