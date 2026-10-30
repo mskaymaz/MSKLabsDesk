@@ -20,10 +20,10 @@
 * **Türkçe & Tarih-Saat Formatı:** Tüm commit mesajları ve dokümantasyon notları anlaşılır **Türkçe açıklamalarla ve tam tarih-saat damgasıyla** (Örn: `01.10.2026 - 16:30`) yazılır.
 * Kullanıcı süreçle ilgili genel/özel bir kural ifade ettiğinde fark edilir ve `AGENTS.md` dosyasına eklenerek kayıt altına alınır.
 
-## 4. DevAdmin Geliştirme ve Ana Dal Koruma Protokolü
-* **Yalnızca DevAdmin:** Tüm geliştirmeler, entegrasyonlar ve testler yalnızca `DevAdmin` dalında yürütülür. İşlem öncesinde her iki repository'de dal doğrulanır.
-* **Ana Dal Koruması (Main Protection):** `main` dalına geçiş yapılmaz, merge/PR/rebase veya otomatik entegrasyon tetiklenmez. `main` entegrasyonu ancak tüm sistem `DevAdmin` üzerinde hazırlandıktan, kabul raporu sunulduktan ve kullanıcıdan açık onay alındıktan sonra yapılır.
-* **Yerel Öncelikli Doğrulama (Local-First Verification):** Tüm geliştirmeler ve tasarım ince ayarları önce yerel sunucuda (localhost) doğrulanır ve kullanıcı onayına sunulur. Kullanıcıdan yerel görünüm için açık onay alınmadan uzaktaki dev (Cloudflare Pages) ortamına dağıtım (deploy) veya push yapılmaz.
+## 4. Ana Dal (Main) ve Canlı Yayın Protokolü
+* **Ana Dal Çalışma Standardı:** Hem panel yapısı (`MSKLabsDesk`) hem de web arayüzü (`webMSKLabs`) tamamen normal yayına geçmiş olup, tüm geliştirmeler ve güncellemeler doğrudan ana dal (`main`) üzerinde yürütülür.
+* **Yedek Dal Güvencesi:** Canlıya geçiş öncesindeki kararlı durumlar (`OldMain`, `OldMaster` ve `DevAdmin`) yedek ve arşiv amaçlı olarak hem yerelde hem uzak repoda korunur; silinmez.
+* **Yerel Öncelikli Doğrulama (Local-First Verification):** Değişiklikler doğrudan ana dalda geliştirilse dahi önce yerel sunucuda (`localhost`) derlenip test edilir; kullanıcıdan yerel görünüm ve işlevsellik için açık onay alınmadan uzak sunucuya (Cloudflare Pages / GitHub) push/dağıtım yapılmaz.
 * **Kabul Kriteri:** Görevler ancak kod uygulandığında, arayüz-API-veritabanı entegrasyonu gerçek veriyle doğrulandığında ve regresyon testleri geçtiğinde `DoD` kriterini sağlar. Mock veri veya yüzeysel PASS yeterli kabul edilmez.
 
 ## 5. Dil ve Arayüz Kuralı (Admin UI vs. Web İçeriği)
