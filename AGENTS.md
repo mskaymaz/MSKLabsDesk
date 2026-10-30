@@ -12,6 +12,7 @@
 * **Özet ve Maddeli Yanıt Standardı:** İstişare ve açıklamalarda yanıtlar 10-15 satır bandında tutulur; durum bildirimi sonrasında maddelerin altında 1-2 satırlık öz ve net açıklamalar sunulur. Ne aşırı boğucu kısalıkta ne de gereksiz uzunlukta tutulur; detay gerektiren konular adım adım istişare edilir.
 * **Minimalist & Cerrahi Müdahale:** Yazılan veya güncellenen kodlar son derece minimal, odaklı ve etrafa yayılmadan yazılır.
 * **Satır Sınırı:** Yardımcı bileşenler, modallar, eklentiler ve araç çubuklarında **400-450 satır** hedefi korunur. Form alanlarını, durum makinelerini ve tuval düzenini bir arada yöneten ana stüdyo ekranları (`BlogStudioView` vb.) için tavan sınır **azami 600 satır** olarak uygulanabilir; 600 satırı aşan durumlar modüler parçalara bölünür.
+* **Hukuki ve Yasal Tanım Sayfaları İstisnası:** Kullanım Şartları, Gizlilik Politikası ve İletişim sayfaları (`terms.html`, `privacy.html`, `contact.html`) yasal ve kurumsal gereksinimler nedeniyle satır ve kelime sınırı kısıtlamalarından tamamen muaftır. Bu sayfalar yerli emsal firmaların (Logo, Akınsoft, Paraşüt) derinliği ve eksiksiz madde kapsamı birebir esas alınarak tam metin halinde hazırlanır.
 * **Kapsam İzni:** Onay/talimat olmadan tüm repo genelinde arama veya izinsiz büyük değişiklik yapılmaz.
 
 ## 3. Dokümantasyon ve İlerleme Takibi

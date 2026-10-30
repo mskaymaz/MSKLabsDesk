@@ -70,3 +70,36 @@ Web uygulaması, iOS ve Android mobil uygulamaları ve masaüstü e-belge/fatura
    - Masaüstü, mobil ve web araçlarında sıfır veri toplama ve yerel saklama ilkesi en başta netleştirilmelidir.
    - RekatSay vb. uygulamalarda kamera kullanılmadığı, sadece yerel sensörlerin donanımda işlendiği şeffafça belirtilmelidir.
    - 6698 sayılı Türk KVKK mevzuatı ve GDPR hakları standart maddelerle sunulmalıdır.
+
+
+---
+
+## 📌 İncelenecek Yeni Emsal Yapılar (30.10.2026 - Kullanıcı Kaynakları)
+
+### 1. Kullanım Koşulları (Terms)
+* **Kaktüs Yazılım:** [https://www.kaktusyazilim.com/kullanim-kosullari](https://www.kaktusyazilim.com/kullanim-kosullari)
+* **Esnek Yazılım:** [https://www.esnekyazilim.com.tr/web-sitesi-kullanim-kosullari/](https://www.esnekyazilim.com.tr/web-sitesi-kullanim-kosullari/)
+
+### 2. Gizlilik Politikası (Privacy)
+* **Kaktüs Yazılım:** [https://www.kaktusyazilim.com/gizlilik-politikasi](https://www.kaktusyazilim.com/gizlilik-politikasi)
+* **Esnek Yazılım:** [https://www.esnekyazilim.com.tr/gizlilik-ve-guvenlik/](https://www.esnekyazilim.com.tr/gizlilik-ve-guvenlik/)
+* **Ehli Yazılım:** [https://ehliyazilim.com/gizlilik-politikasi](https://ehliyazilim.com/gizlilik-politikasi)
+
+### 3. Çerez Politikası (Cookie Policy)
+* **Kaktüs Yazılım:** [https://www.kaktusyazilim.com/cerez-politikasi](https://www.kaktusyazilim.com/cerez-politikasi)
+* **İletişim Yazılım:** [https://www.iletisimyazilim.com/hakkimizda/politikalar/gizlilik-ve-cerez-politikasi](https://www.iletisimyazilim.com/hakkimizda/politikalar/gizlilik-ve-cerez-politikasi)
+* **Ehli Yazılım:** [https://ehliyazilim.com/cerez-politikasi](https://ehliyazilim.com/cerez-politikasi)
+
+### 4. KVKK Aydınlatma Metni (KVKK Disclosure)
+* **İletişim Yazılım:** [https://www.iletisimyazilim.com/hakkimizda/politikalar/kvkk-aydinlatma-metni](https://www.iletisimyazilim.com/hakkimizda/politikalar/kvkk-aydinlatma-metni)
+* **Paraşüt / Mikrogrup:** [https://www.parasut.com/yeni-donem-kisisel-verilerin-islenmesi-hakkinda-aydinlatma-metni](https://www.parasut.com/yeni-donem-kisisel-verilerin-islenmesi-hakkinda-aydinlatma-metni)
+* **Ehli Yazılım:** [https://ehliyazilim.com/kvkk](https://ehliyazilim.com/kvkk)
+
+### 5. Çerez Bildirimi & Tercih Merkezi Buton Mimarisi Notu
+* **Görsel Emsal İncelemesi:**
+  - **Başlık & Metin:** "Gizliliğinize önem veriyoruz!" + Gizlilik Tercihi Merkezi açıklaması.
+  - **Aksiyon Düğmesi Hiyerarşisi:**
+    - `[✔ Hepsini kabul et]` (Vurgulu aksiyon butonu)
+    - `[✖ Hepsini reddet]` (Alternatif doğrudan ret butonu)
+    - `[⚙ Ayarlar]` (Detaylı kategori/çerez yönetim açılır paneli)
+  - **Not:** Metin uzun olsa bile sağ taraftaki 3'lü buton mantığı (Kabul / Ret / Ayarlar) kullanıcı deneyimi ve GDPR/KVKK netliği açısından oldukça temiz bir modeldir.
