@@ -1,6 +1,23 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 📌 Son Güncelleme [30.10.2026 - 23:05] — YASAL VE KURUMSAL SAYFALARIN METİN DÜZENLEMELERİ VE TEK KAYNAK EŞİTLEMESİ [✓]
+* **Yapılan İşlem:**
+  1. **00 Taslak Markdown Dosyalarının Sadeleştirilmesi ve Nihai Hali (`MSKLabsDesk`):**
+     - `00 KULLANIM_KOSULLARI_TASLAK.md`, `00 GIZLILIK_POLITIKASI_TASLAK.md`, `00 CEREZ_POLITIKASI_TASLAK.md`, `00 KVKK_AYDINLATMA_METNI_TASLAK.md` ve `ILETISIM_KURUMSAL_TASLAK.md` dosyaları incelendi.
+     - Tekil uygulama adları ve mikro sensör tabloları genel şemsiye Local-First ve kullanıcı veri egemenliği ifadelerine dönüştürüldü.
+     - Kamera ve mikrofon istisnası (arka planda erişim yasağı, ses/optik işlevli özel araçlarda kullanıcı rızasıyla yerel işleme) eklendi.
+     - Çerez politikasındaki gereksiz tablo ve başlık (eski Madde 4) kaldırılarak maddeler 7 maddeli sade yapıya kavuşturuldu.
+     - Gizlilik politikasındaki Madde 1 veri sorumlusu irtibat kanalları sadeleştirildi.
+  2. **Web Sayfalarının Sıfırlanması ve Birebir Eşitlenmesi (`webMSKLabs`):**
+     - `terms.html`, `privacy.html`, `cookies.html`, `kvkk.html` ve `contact.html` sayfalarındaki eski metin kalıntıları tamamen temizlendi.
+     - Düzenlenen taslak markdown metinleri hiçbir kelimesi eksiltilmeden, harfi harfine birebir anlamsal HTML formatına dönüştürülerek sayfalara yerleştirildi.
+  3. **Kalite ve Derleme Doğrulaması:**
+     - `tsc --noEmit && vite build` 0 hata ile çalıştırıldı ve `dist/` çıktıları güncellendi.
+     - Yerel dev sunucusu üzerinde tüm uç noktaların HTTP 200 yanıtı ve görsel uyumu doğrulandı.
+
+---
+
 ## 📌 Son Güncelleme [29.10.2026 - 22:10] — EMSAL FİRMA ANALİZİ VE YEREL DÜZENLEMELERİN İPTALİ [✓]
 * **Yapılan İşlem:**
   1. **Yerel Sayfa Düzenlemelerinin İptali (`webMSKLabs`):**

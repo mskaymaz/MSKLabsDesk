@@ -7,7 +7,7 @@
 
 ## 📌 Kurumsal İletişim Felsefemiz
 
-MSK Labs; masaüstü (Windows, macOS, Linux), mobil (Android, iOS) ve web platformlarında bağımsız, reklamsız ve kullanıcı odaklı yazılım çözümleri üreten bir teknoloji inisiyatifidir.
+MSK Labs; masaüstü, mobil ve web platformlarında bağımsız, reklamsız ve kullanıcı odaklı yazılım çözümleri üreten bir teknoloji inisiyatifidir.
 
 Kullanıcılarımızla kurduğumuz iletişimin omurgasını; şeffaf, kayıt altına alınabilir ve bilet takip numaralı **Destek & Talep Masamız** oluşturmaktadır. Kullanıcı taleplerinin kaybolmaması, sistematik olarak önceliklendirilmesi ve en hızlı şekilde çözümlenmesi için teknik destek süreçleri öncelikli olarak bu merkez üzerinden yürütülür.
 
@@ -20,25 +20,23 @@ Kullanıcılarımızla kurduğumuz iletişimin omurgasını; şeffaf, kayıt alt
 | **🎫 Canlı Destek & Talep Masası** *(Birincil Kanal)* | Uygulama desteği, hata bildirimleri, özellik talepleri ve takip numaralı bilet sorgulama. | [msklabs.org/destek.html](https://msklabs.org/destek.html) |
 | **📩 Genel Destek E-Postası** | Bilet dışındaki teknik konular, masaüstü/mobil kurulum danışmanlığı. | [destek@msklabs.org](mailto:destek@msklabs.org) |
 | **📮 Kurumsal & İş Birliği** | Resmi yazışmalar, kurumsal iletişim, lisanslama ve akademik/teknik iş birliği. | [iletisim@msklabs.org](mailto:iletisim@msklabs.org) |
-| **🔒 KVKK & Veri Koruma Masası** | 6698 sayılı KVKK ve GDPR kapsamındaki veri sahibi hakları ve başvuruları. | [kvkk@msklabs.org](mailto:kvkk@msklabs.org) |
-| **🐙 Açık Kaynak & GitHub** | Hata takibi (Issue Tracker), açık kaynak depolar ve sürüm paketleri. | [github.com/mskaymaz](https://github.com/mskaymaz) |
+| **🐙 Açık Kaynak & GitHub** | Hata takibi (Issue Tracker), açık kaynak depolar ve sürüm paketleri. | [GitHub](https://github.com/mskaymaz) |
 | **❓ Bilgi Bankası & SSS** | Kurulum, çevrimdışı çalışma, yerel veri saklama ve hızlı yanıt rehberi. | [msklabs.org/faq.html](https://msklabs.org/faq.html) |
 
 ---
 
-## 2. Çalışma Saatleri ve Yanıt Politikası
+## 2. Çalışma Esasları ve Yanıt Süreci
 
-* **Çalışma Günleri ve Saatleri:** Hafta içi Pazartesi – Cuma: 09:00 – 18:00 (Türkiye Saati / UTC+3).
-* **Hafta Sonu ve Resmi Tatiller:** Destek masası üzerinden 7/24 bilet oluşturulabilir; iletilen talepler takip sırasına alınır ve takip eden ilk iş gününde incelenerek işleme konur.
-* **Nesnel Yanıt İlkesi:** MSK Labs; yanıltıcı veya gerçek dışı süre garantileri ("24 saatte kesin çözüm" vb.) vermez. Her bilet karmaşıklığına, yazılım sürümüne ve hata türüne göre teknik ekibimizce titizlikle test edilerek en kısa sürede sonuçlandırılır.
+* **Değerlendirme ve İletişim İlkesi:** İletilen tüm destek talepleri ve bildirimler titizlikle incelenir; çözüm ve bilgilendirme en kısa sürede kullanıcının belirttiği e-posta adresi üzerinden doğrudan ulaştırılır.
+* **Nesnel ve Şeffaf Süreç:** MSK Labs; yanıltıcı veya gerçek dışı süre garantileri ("24 saatte kesin çözüm" vb.) vermez. Her talep teknik karmaşıklığına, yazılım sürümüne ve hata türüne göre titizlikle test edilerek sonuçlandırılır.
 
 ---
 
 ## 3. Güvenlik ve İletişim Doğrulama Taahhüdü
 
-* **Resmi Alan Adı Güvencesi:** MSK Labs adına yapılacak tüm resmi yazışmalar yalnızca `@msklabs.org` uzantılı kurumsal e-posta adresleri üzerinden yürütülür.
-* **Şifre ve Ödeme Güvenliği:** MSK Labs yöneticileri veya teknik personeli; kullanıcılardan hiçbir zaman telefonla, SMS ile veya e-posta yoluyla şifre, kredi kartı numarası, banka bilgisi veya özel nitelikli kişisel veri talep etmez.
-* **Şüpheli Durum Bildirimi:** MSK Labs adını kullanarak şüpheli talepte bulunan e-posta veya mesajlarla karşılaşmanız halinde lütfen durumu derhal [guvenlik@msklabs.org](mailto:guvenlik@msklabs.org) veya [destek@msklabs.org](mailto:destek@msklabs.org) adresine bildiriniz.
+* **Resmi Yazışma Güvencesi:** MSK Labs adına tüm resmi yazışmalar yalnızca `iletisim@msklabs.org` adresi üzerinden yürütülür.
+* **Şifre ve Kart Güvenliği:** MSK Labs yöneticileri veya teknik personeli; kullanıcılardan hiçbir zaman telefonla veya e-posta yoluyla şifre, kredi kartı numarası ya da banka bilgisi talep etmez.
+* **Şüpheli Durum Bildirimi:** MSK Labs adını kullanarak şüpheli talepte bulunan mesajlarla karşılaşmanız halinde durumu derhal [iletisim@msklabs.org](mailto:iletisim@msklabs.org) veya [destek@msklabs.org](mailto:destek@msklabs.org) adresine bildiriniz.
 
 ---
 
