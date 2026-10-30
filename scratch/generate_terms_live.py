@@ -1,0 +1,480 @@
+import os
+
+path = r'd:\Code\mskaymaz\webMSKLabs\terms.html'
+
+terms_html = '''<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kullanım Şartları ve Hizmet Sözleşmesi | MSK Labs</title>
+  <meta name="description" content="MSK Labs web sitesi, masaüstü yazılımları ve mobil uygulamaları için Genel Kullanım Şartları, Lisans İlkeleri ve Hizmet Sözleşmesi.">
+  <script>!function(){var t=localStorage.getItem("user_theme")||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");"dark"===t&&document.documentElement.setAttribute("data-theme","dark")}()</script>
+  <link rel="canonical" href="https://msklabs.org/terms.html">
+  <meta property="og:title" content="Kullanım Şartları ve Hizmet Sözleşmesi | MSK Labs">
+  <meta property="og:description" content="MSK Labs web sitesi, masaüstü yazılımları ve mobil uygulamaları için Genel Kullanım Şartları, Lisans İlkeleri ve Hizmet Sözleşmesi.">
+  <meta property="og:url" content="https://msklabs.org/terms.html">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://msklabs.org/img/MSKLabsLogo.svg">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/global.css?v=31">
+
+  <link rel="icon" type="image/png" href="img/MSKLabs_favicon.png">
+  <link rel="shortcut icon" href="img/MSKLabs_favicon.png" type="image/x-icon">
+  <link rel="apple-touch-icon" href="img/MSKLabs_favicon.png">
+
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/analytics.js"></script>
+
+  <style>
+    .legal-top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 24px;
+      padding: 12px 18px;
+      background: var(--bg-card, #ffffff);
+      border: 1px solid var(--border-color, #cbd5e1);
+      border-radius: 12px;
+      font-size: 0.88rem;
+      color: var(--text-muted, #64748b);
+    }
+    .print-btn {
+      background: transparent;
+      border: 1px solid var(--border-color, #cbd5e1);
+      color: var(--text-main, #0f172a);
+      padding: 7px 16px;
+      border-radius: 8px;
+      font-size: 0.84rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+    }
+    .print-btn:hover {
+      border-color: var(--primary-color, #0284c7);
+      color: var(--primary-color, #0284c7);
+    }
+    .legal-content h2 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text-main, #0f172a);
+      margin: 36px 0 14px 0;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border-color, #f1f5f9);
+    }
+    .legal-content h2:first-of-type {
+      margin-top: 0;
+    }
+    .legal-content h3 {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--text-main, #1e293b);
+      margin: 20px 0 8px 0;
+    }
+    .legal-content p, .legal-content li {
+      font-size: 0.95rem;
+      line-height: 1.75;
+      color: var(--text-main, #334155);
+    }
+    .legal-content ul, .legal-content ol {
+      padding-left: 24px;
+      margin: 12px 0 20px 0;
+    }
+    .legal-content li {
+      margin-bottom: 10px;
+    }
+    .legal-highlight-box {
+      background: rgba(2, 132, 199, 0.06);
+      border-left: 4px solid var(--primary-color, #0284c7);
+      padding: 18px 22px;
+      border-radius: 10px;
+      margin: 20px 0 32px 0;
+    }
+    .legal-footer-meta {
+      margin-top: 40px;
+      padding: 18px 22px;
+      background: var(--bg-hover, #f8fafc);
+      border: 1px solid var(--border-color, #e2e8f0);
+      border-radius: 12px;
+      font-size: 0.88rem;
+      color: var(--text-muted, #64748b);
+      line-height: 1.6;
+    }
+    .legal-footer-meta strong {
+      color: var(--text-main, #0f172a);
+    }
+    @media print {
+      .site-header-sticky, .site-footer, .desktop-ad, .print-btn, .infeed-ad-container, .legal-top-bar {
+        display: none !important;
+      }
+      .layout-wrapper, .portfolio-container {
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+      }
+      .static-page-card {
+        border: none !important;
+        box-shadow: none !important;
+        padding: 0 !important;
+      }
+    }
+  </style>
+</head>
+<body class="lang-tr">
+
+<header class="site-header-sticky"></header>
+
+<div class="layout-wrapper">
+
+  <aside class="desktop-ad desktop-ad-left">
+    <div class="ad-placeholder">Masaüstü Sol Reklam<br>(120x300)</div>
+  </aside>
+
+  <main class="portfolio-container">
+
+    <h1 class="page-title">
+      <span class="lang-tr">Kullanım Şartları ve Hizmet Sözleşmesi</span>
+      <span class="lang-en">Terms of Service &amp; User Agreement</span>
+      <span class="lang-ar">شروط الخدمة واتفاقية الاستخدام</span>
+    </h1>
+
+    <div class="legal-top-bar">
+      <div>
+        <span>⚖️ </span>
+        <strong class="lang-tr">Genel Çatı Sözleşme</strong>
+        <strong class="lang-en">General Framework Agreement</strong>
+        <strong class="lang-ar">اتفاقية الإطار العام</strong>
+      </div>
+      <button type="button" onclick="window.print()" class="print-btn" aria-label="Yazdır">
+        🖨️ <span class="lang-tr">PDF / Yazdır</span><span class="lang-en">Print / PDF</span><span class="lang-ar">طباعة / PDF</span>
+      </button>
+    </div>
+
+    <div class="static-page-card legal-content">
+
+      <!-- ==========================================
+           TÜRKÇE TAM KURUMSAL SÖZLEŞME METNİ
+           ========================================== -->
+      <div class="lang-tr">
+        <div class="legal-highlight-box">
+          <strong style="color:var(--primary-color, #0284c7); font-size:1.02rem;">Önemli Başlangıç Bildirimi ve İlkemiz:</strong>
+          <p style="margin:8px 0 0 0; font-size:0.93rem; line-height:1.7;">Bu sözleşme; MSK Labs tarafından sunulan <code>msklabs.org</code> web sitesi, masaüstü araçları ve mobil uygulamalar için geçerli genel çerçeve sözleşmedir. MSK Labs yazılımları <strong>merkezi kullanıcı hesabı açmayı zorunlu kılmaz</strong>; tüm araçlarımız <em>"Veriniz tamamen sizindir"</em> ilkesiyle <strong>yerel öncelikli (local-first)</strong> olarak kendi donanımınızda çalışır ve kişisel verilerinizi merkezi sunucularda toplamaz.</p>
+        </div>
+
+        <h2>Başlangıç ve Kabul Beyanı</h2>
+        <p>Bu web sitesine (<code>msklabs.org</code>) erişen, sitenin sunduğu herhangi bir servisten faydalanan veya MSK Labs tarafından geliştirilen herhangi bir masaüstü yazılımını veya mobil uygulamasını cihazına indiren, kuran, web arayüzünde çalışan uygulamalarımızı kullanan ya da çalıştıran tüm kullanıcılar ve ziyaretçiler; aşağıdaki sözleşme şartlarını <strong>peşinen, kesin ve geri dönülemez biçimde kabul etmiş sayılırlar.</strong></p>
+        <p>Kullanıcı; sitede veya uygulamalarda sunulan hizmetleri kullanmakla ve kullanmaya devam etmekle:</p>
+        <ol>
+          <li>Bağlı olduğu yasalara göre sözleşme yapma hakkına, yetkisine ve tam hukuki ehliyete sahip olduğunu,</li>
+          <li>18 yaşın üzerinde olduğunu (veya 18 yaşından küçük ise veli ya da yasal vasisinin izni ve gözetimi altında işlem yaptığını),</li>
+          <li>Bu sözleşmeyi bütünüyle okuduğunu, anladığını, hak ve sorumluluklarının bilincinde olduğunu ve burada yazılı tüm şartlarla hukuken bağlı olduğunu kabul, beyan ve taahhüt eder.</li>
+        </ol>
+        <p>Bu sözleşme, taraflara site ve yazılımlarla ilgili karşılıklı hak ve yükümlülükler getirmektedir. Taraflar bu sözleşmeyi kabul ettiklerinde, belirtilen tüm hak ve sorumlulukları eksiksiz, doğru, zamanında ve sözleşmede yer alan kurallara uygun olarak yerine getireceklerini kabul ve taahhüt ederler.</p>
+
+        <h2>Madde 1 — Tanımlar</h2>
+        <p>Bu sözleşme metninde geçen temel terimler aşağıdaki şekilde tanımlanmıştır:</p>
+        <ul>
+          <li><strong>MSK Labs ("Geliştirici", "Kuruluş" veya "Biz"):</strong> <code>msklabs.org</code> alan adını, bağlı tüm alt alan adlarını, web servislerini ve yayınlanan bağımsız masaüstü ile mobil yazılımları geliştiren ve yöneten bağımsız teknoloji inisiyatifi.</li>
+          <li><strong>Site ("Web Sitesi"):</strong> <code>msklabs.org</code> alan adına ve buna bağlı alt alan adlarına (blog, vitrin, destek masası, dokümantasyon vb.) sahip internet sitesi.</li>
+          <li><strong>Masaüstü Yazılımları:</strong> MSK Labs tarafından Windows, macOS veya Linux işletim sistemleri için derlenmiş ve kullanıma sunulmuş olan DeskPilot Pro, Date Counter, DocuEdit, GC Pil Uyarı, Notes, PDFLayout ve ileride geliştirilecek tüm masaüstü yardımcı araçları.</li>
+          <li><strong>Mobil Uygulamalar:</strong> Google Play Store, Apple App Store veya doğrudan kurulum paketleri (APK/IPA) üzerinden dağıtılan HaydiNamaza, RekatSay, En Yakın ve bağlı mobil çözümleri.</li>
+          <li><strong>Hizmetler:</strong> Web sitesi, masaüstü yazılımları, mobil uygulamalar, e-bülten, teknik destek masası ve vitrin servisleri dahil olmak üzere MSK Labs tarafından sunulan tüm dijital ürün ve servislerin bütünü.</li>
+          <li><strong>Kullanıcı ("Ziyaretçi"):</strong> Web sitesini ziyaret eden, servislerinden yararlanan veya herhangi bir MSK Labs uygulamasını cihazına indiren, kuran veya kullanan tüm gerçek ve tüzel kişilerin genel tanımı.</li>
+          <li><strong>Yerel Veri (Local Data):</strong> Kullanıcının kendi fiziksel cihazında üretilen, işlenen ve saklanan; MSK Labs sunucularına aktarılmayan ayar dosyaları, SQLite/JSON veri tabanları, sayaç değerleri ve kullanıcı tercihleri.</li>
+          <li><strong>Gizlilik Politikası:</strong> Bu Kullanım Koşulları'nın ayrılmaz bir parçası olan, kişisel verilerin korunmasını ve çerez kullanım kurallarını düzenleyen metin.</li>
+        </ul>
+
+        <h2>Madde 2 — Hizmetlerin Niteliği ve Yerel Öncelikli (Local-First) Mimari</h2>
+        <p>MSK Labs; kullanıcıların günlük yaşamlarını kolaylaştıran, ibadet, zaman yönetimi, sayaç, doküman işleme, donanım izleme ve masaüstü verimlilik alanlarında minimalist, odaklı ve bağımsız yazılım çözümleri üretir ve yayınlar.</p>
+        <p>MSK Labs, sunulan hizmetlerin kapsamını, özelliklerini, arayüzlerini ve sürümlerini önceden bildirmeksizin değiştirme, güncelleme veya yayından kaldırma hakkını saklı tutar.</p>
+        <ul>
+          <li><strong>Yerel Öncelikli Mimari ve Sıfır Bilgi İlkesi:</strong> MSK Labs yazılımları prensip olarak merkezi kullanıcı hesabı açma, oturum oluşturma veya kişisel profil çıkarma zorunluluğu getirmez. <em>"Veriniz tamamen sizindir"</em> ilkesi uyarınca; kullanıcı kayıtları, notlar, geri sayım hedefleri, ayarlar ve sayaç verileri merkezi bulut sunucularımızda depolanmaz; doğrudan kullanıcının kendi yerel cihazında işlenir ve saklanır.</li>
+          <li><strong>Yedekleme ve Veri Taşıma Sorumluluğu:</strong> Yerel verilerin cihazlar arasında taşınması, harici sürücülere yedeklenmesi veya cihaz formatlama/sıfırlama süreçlerinde korunması tamamen kullanıcının kendi sorumluluğundadır. Donanım arızası, işletim sistemi çökmesi veya uygulamanın kullanıcı tarafından silinmesi sonucunda meydana gelebilecek veri kayıplarından MSK Labs hiçbir şekilde sorumlu tutulamaz.</li>
+        </ul>
+
+        <h2>Madde 3 — Kullanım Lisansının Kapsamı ve Şartları</h2>
+        <p>Bu sözleşmedeki kurallara uyulması kaydıyla, MSK Labs tarafından kullanıcıya; yazılımları ve web servislerini kişisel, ticari olmayan veya kurum içi meşru ihtiyaçlar için çalıştırması amacıyla <strong>başkasına devredilemez, alt lisans verilemez, tek taraflı geri alınabilir ve kişiye özel</strong> sınırlı bir kullanım lisansı tanınmaktadır.</p>
+        <p>Bu lisans, kullanıcıya yazılımların mülkiyetini veya kaynak kod haklarını devretmez. Kullanıcı bu lisans kapsamında aşağıdaki işlemleri yapamaz:</p>
+        <ul>
+          <li>Yazılımları, kodları veya derlenmiş dosyaları değiştirmek, kopyalamak, izinsiz olarak kamuya açık yerlerde sergilemek veya ticari amaçla satmak,</li>
+          <li>MSK Labs yazılımlarını ticari bir ürün paketinin parçası haline getirmek (paketleme / bundling) veya üçüncü kişilere ücret karşılığı kiralamak,</li>
+          <li>Yazılımları veya belgeleri başka herhangi bir sunucuda izinsiz olarak "aynalamak" (mirroring) veya onaylanmamış dağıtım kanallarında farklı paketlerle dağıtmak,</li>
+          <li>Telif hakkı, marka, patent veya diğer mülkiyet bildirimlerini materyallerden silmek, gizlemek veya değiştirmek.</li>
+        </ul>
+        <p>Bu kısıtlamalardan herhangi birinin ihlal edilmesi durumunda kullanım lisansı kendiliğinden ve derhal geçersiz sayılır. MSK Labs, gerekli gördüğü durumlarda kullanım lisansını herhangi bir zamanda ve önceden bildirimde bulunmaksızın iptal edebilir. Lisansın sona ermesi halinde kullanıcı, elinde bulunan ilgili yazılım ve materyalleri elektronik veya basılı tüm ortamlardan kalıcı olarak silmekle yükümlüdür.</p>
+
+        <h2>Madde 4 — Kullanıcı Yükümlülükleri ve Yasaklanan Eylemler</h2>
+        <p>Kullanıcı, web sitesini ve uygulamaları kullanırken yürürlükteki tüm yasalara, kamu düzenine ve dürüstlük kurallarına uygun hareket etmeyi taahhüt eder. Aşağıdaki eylemlerin gerçekleştirilmesi kesinlikle yasaktır:</p>
+        <ol>
+          <li><strong>Tersine Mühendislik Yasağı:</strong> Yazılımların kaynak kodunu bulmaya, elde etmeye, kodlarını çözmeye (decompilation), tersine mühendislik uygulamaya (reverse engineering) veya kod mimarisini ayrıştırmaya (disassembly) yönelik herhangi bir girişimde bulunmak kesinlikle yasaktır. Aksi durumda doğabilecek tüm hukuki ve cezai sorumluluk kullanıcıya aittir.</li>
+          <li><strong>Güvenlik ve Altyapı İhlalleri:</strong> Web sitesine, sunuculara veya API servislerine zarar verecek, aşırı yük getirecek (servis dışı bırakma / DoS / DDoS), sistemlerin normal çalışmasını engelleyecek yöntemler, kötü amaçlı yazılımlar, virüsler, truva atları veya yetkisiz erişim araçları kullanmak yasaktır.</li>
+          <li><strong>Otomasyon ve Veri Kazıma (Scraping) Yasağı:</strong> Site içeriğini, API servislerini veya veri tabanı çıktılarını botlar, örümcekler (spiders), web tarayıcıları (crawlers) veya otomatik veri kazıyıcılar (scrapers) kullanarak çekmek, kopyalamak veya izinsiz dizine eklemek yasaktır.</li>
+          <li><strong>Hukuka ve Ahlaka Aykırı İçerik:</strong> Sitenin destek masası, iletişim formları, blog yorumları veya herhangi bir etkileşimli alanında; suç oluşturan, tehdit içeren, hakaret niteliğinde, müstehcen, kişilik haklarına saldıran, telif haklarını çiğneyen veya ayrımcılık barındıran hiçbir mesaj veya içerik paylaşılamaz.</li>
+          <li><strong>Yanıltıcı Bilgi Verme Yasağı:</strong> İletişim formları, teknik destek talepleri veya bülten aboneliklerinde bilerek yanlış, yanıltıcı veya başkalarına ait kimlik ve iletişim bilgilerini izinsiz olarak kullanmak yasaktır.</li>
+          <li><strong>Üçüncü Kişilerle İlişkiler:</strong> Kullanıcıların site veya yazılımlar üzerinden diğer kullanıcılarla ya da üçüncü kişilerle kurdukları tüm iletişim ve hukuki ilişkiler tamamen kendi sorumluluklarındadır.</li>
+        </ol>
+
+        <h2>Madde 5 — Fikri ve Sınai Mülkiyet Hakları</h2>
+        <p>Web sitesinde ve MSK Labs uygulamalarında yer alan unvan, logo, marka, arayüz tasarımı, kaynak kodları, derlenmiş dosyalar, algoritmalar, grafikler, metinler, simgeler ve yöntemler gibi tescilli veya tescilsiz tüm fikri ve sınai mülkiyet hakları <strong>tamamen ve yalnızca MSK Labs'e aittir.</strong></p>
+        <p>Belirtilen tüm unsurlar 5846 sayılı Fikir ve Sanat Eserleri Kanunu, 6769 sayılı Sınai Mülkiyet Kanunu, Türk Ceza Kanunu ve uluslararası telif hakkı mevzuatı ile korunmaktadır. Web sitesinin ziyaret edilmesi veya yazılımların indirilmesi, kullanıcıya bu fikri mülkiyet hakları üzerinde hiçbir mülkiyet devri veya ortaklık hakkı tanımaz.</p>
+        <p>Sitede ve uygulamalarda yer alan hiçbir içerik ya da yazılım parçası; MSK Labs'in önceden verilmiş yazılı açık izni olmaksızın kısmen veya tamamen kopyalanamaz, çoğaltılamaz, dağıtılamaz, türev çalışmalarda kullanılamaz veya başka bir sitede çerçevelenemez (framing). Yazılımlarımızda yararlanılan açık kaynak kodlu üçüncü taraf kütüphaneler (MIT, Apache 2.0, BSD vb.) kendi özgün lisans koşullarına tabidir.</p>
+
+        <h2>Madde 6 — Gizlilik ve Kişisel Bilgilerin Korunması</h2>
+        <p>Kullanıcıların iletişim formları veya destek masası üzerinden kendi istekleriyle paylaştıkları ad, soyad ve e-posta adresi gibi bilgiler "Gizli Bilgi" kapsamındadır. MSK Labs, kullanıcıların ilettiği kişisel bilgileri hiçbir şekilde üçüncü kişilere satmaz, kiralamaz ve ticari amaçlı pazarlama şirketleriyle paylaşmaz.</p>
+        <p>Gizli bilgiler, yalnızca adli veya idari resmi makamların yasalara uygun resmi talepleri doğrultusunda ve yürürlükteki mevzuatın zorunlu kıldığı durumlarda yetkili mercilere açıklanabilir. Kişisel verilerin işlenme amaçları, yasal dayanakları ve çerez kullanımı [Gizlilik Politikası ve KVKK Aydınlatma Metni](privacy.html) sayfamızda ayrıntılı olarak açıklanmıştır ve bu sözleşmenin ayrılmaz bir parçasıdır.</p>
+
+        <h2>Madde 7 — Garanti Vermeme ve Olduğu Gibi (As-Is) Esası</h2>
+        <p>Bu madde, yürürlükteki yasaların izin verdiği en geniş çerçevede geçerlidir. MSK Labs tarafından sunulan tüm web servisleri, masaüstü araçları ve mobil uygulamalar <strong>"OLDUĞU GİBİ" (AS-IS)</strong> ve <strong>"MEVCUT DURUMUYLA" (AS-AVAILABLE)</strong> kullanıma sunulmaktadır.</p>
+        <p>Geliştirici; yazılımların ticari olarak pazarlanabilirliği, belirli bir amaca uygunluğu, kesintisiz veya hatasız çalışması, virüs barındırmaması gibi konularda <strong>açıkça veya dolaylı olarak</strong> hiçbir hukuki ya da ticari taahhütte bulunmamaktadır. İçerikler teknik veya yazım hataları içerebilir; MSK Labs dilediği zaman düzeltme yapabilir ancak güncelleme taahhüdü altına girmez.</p>
+
+        <h2>Madde 8 — Sorumluluk Sınırları ve Dolaylı Zararlar</h2>
+        <p>MSK Labs, kurucuları veya teknik çalışanları; web sitesinin veya uygulamaların kullanılmasından ya da kullanılamamasından kaynaklanabilecek doğrudan, dolaylı, beklenmedik, özel veya sonuç olarak ortaya çıkan hiçbir zarardan sorumlu tutulamaz.</p>
+        <p>Bu sorumsuzluk kuralı; kâr kaybı, veri kaybı, itibar kaybı, iş kesintisi, donanım veya cihaz arızaları ile üçüncü kişilerin tazminat taleplerini de kapsar. Kullanıcı, uygulamaları çalıştırdığı cihazın işletim sistemi güncellemelerinden, antivirüs korumasından ve donanım sağlığından bizzat sorumludur.</p>
+
+        <h2>Madde 9 — Donanımsal ve Sensör Bağımlılığı Muafiyeti</h2>
+        <p>RekatSay, HaydiNamaza ve GC Pil Uyarı gibi bazı uygulamalarımız; cihazın fiziksel sensörlerinden (yakınlık sensörü, GPS alıcısı, manyetik pusula ve pil denetleyicisi) gelen anlık verileri yerel matematiksel yöntemlerle işler. <strong>Bu uygulamaların hiçbirinde kamera veya mikrofon izni istenmez, optik görüntü veya ses kaydı kesinlikle alınmaz.</strong></p>
+        <p>Manyetik alan bozulmaları, donanım kalibrasyon eksiklikleri, metal kılıflar veya zayıf sinyallerden kaynaklanabilecek sapmalardan dolayı MSK Labs'e hiçbir maddi ya da manevi sorumluluk yüklenemez. Yazılımlarımız hayati sağlık, acil durum müdahalesi, nükleer veya yüksek riskli finansal altyapılarda <strong>tek ve birincil karar verici</strong> olarak kullanılamaz.</p>
+
+        <h2>Madde 10 — Üçüncü Taraf Bağlantıları ve Reklam Ağları</h2>
+        <p>Sitemiz veya uygulamalarımız, içeriği MSK Labs tarafından yönetilmeyen üçüncü taraf web sitelerine bağlantılar (linkler) içerebilir. Bağlantı verilen sitelerin kullanımından doğan tüm riskler kullanıcıya aittir.</p>
+        <p>Bağımsız yazılım geliştirme faaliyetlerimizin ücretsiz olarak sürdürülebilmesi için sitemizde ve uygulamalarımızda onaylı reklam ağları (Google AdSense ve Google AdMob) kullanılabilir. Reklam içerikleri ve yönlendirilen sayfalar ilgili sağlayıcıların kendi sözleşmelerine tabidir.</p>
+
+        <h2>Madde 11 — Kamuya Açık Olmayan Alanlar ve Güvenlik</h2>
+        <p>Web sitesi veya API servisleri üzerinde genel erişime açık olmayan, özel yetki veya yönetim şifresi gerektiren alanlar bulunmaktadır. Bu alanlara yetkisiz olarak girmeye çalışmak, güvenlik duvarlarını veya şifre kontrollerini aşmaya çalışmak Türk Ceza Kanunu uyarınca bilişim suçu sayılır. Bu tür yetkisiz eylemlerde bulunan kişiler hakkında derhal yasal başvuru yapılır.</p>
+
+        <h2>Madde 12 — Çocukların Güvenliği</h2>
+        <p>MSK Labs, 18 yaşın altındaki bireylerden velilerinin veya yasal vasilerinin açık izni olmaksızın kişisel bilgi toplamaz. Sitemizin ve uygulamalarımızın içeriği, çocukların güvenliğini tehlikeye atacak unsurlardan tamamen arındırılmıştır.</p>
+
+        <h2>Madde 13 — Zorlayıcı Nedenler (Mücbir Sebepler)</h2>
+        <p>Tarafların kontrolü dışında gelişen; doğal afetler, deprem, yangın, sel, savaşlar, iç karışıklıklar, siber saldırılar, ülke genelindeki internet ve iletişim altyapı kesintileri, elektrik kesintileri, sunucu arızaları ve salgın hastalıklar gibi nedenlerle sözleşmeden doğan sorumluluklar zamanında veya gereği gibi yerine getirilemezse, MSK Labs bundan sorumlu tutulamaz. Bu süre boyunca yükümlülükler askıya alınır.</p>
+
+        <h2>Madde 14 — Maddelerin Bağımsızlığı (Bölünebilirlik)</h2>
+        <p>Bu sözleşme maddelerinden herhangi birinin yetkili bir mahkeme tarafından kısmen veya tamamen geçersiz sayılması durumunda; bu geçersizlik yalnızca ilgili maddeyle sınırlı kalır, sözleşmenin diğer tüm maddeleri aynı şekilde geçerliliğini ve bağlayıcılığını korur.</p>
+
+        <h2>Madde 15 — Sözleşme Değişiklikleri ve Yürürlük</h2>
+        <p>MSK Labs; yasal düzenlemeler, yeni ürün sürümleri veya teknik gereksinimler doğrultusunda bu sözleşme kurallarını önceden bildirmeksizin dilediği zaman güncelleme hakkını saklı tutar. Güncellenmiş kurallar <code>msklabs.org/terms.html</code> adresinde yayınlandığı andan itibaren derhal geçerlilik kazanır. Kullanıcı, siteyi veya uygulamaları kullanmayı sürdürmekle değişiklikleri kabul etmiş sayılır.</p>
+
+        <h2>Madde 16 — Bildirim ve Tebligat</h2>
+        <p>Bu sözleşmeyle ilgili taraflar arasında yapılacak her türlü resmi bildirim; MSK Labs'in kurumsal e-posta adresleri ile kullanıcının destek formlarında bildirdiği e-posta adresi üzerinden elektronik olarak yapılır. Bu adrese iletilen mesajlar resmi bildirim niteliği taşır.</p>
+
+        <h2>Madde 17 — Delil Sözleşmesi (HMK m. 193)</h2>
+        <p>Taraflar arasında bu sözleşmeden veya MSK Labs servislerinin kullanımından doğabilecek her türlü anlaşmazlıkta; MSK Labs'e ait sunucu erişim logları, sistem güvenlik kayıtları, veri tabanı dökümleri, e-posta yazışmaları ve dijital işlem kayıtları 6100 sayılı Hukuk Muhakemeleri Kanunu'nun 193. maddesi gereğince <strong>bağlayıcı ve kesin delil niteliğindedir.</strong></p>
+
+        <h2>Madde 18 — Uyuşmazlıkların Çözümü ve Yetkili Mahkemeler</h2>
+        <p>Bu sözleşmenin uygulanmasından veya yorumlanmasından doğabilecek tüm hukuki anlaşmazlıklarda <strong>Türkiye Cumhuriyeti Yasaları</strong> geçerlidir. Anlaşmazlıkların çözümünde <strong>İstanbul Mahkemeleri ve İcra Daireleri</strong> kesin yetkilidir.</p>
+
+        <h2>Madde 19 — Kurumsal İletişim Kanalları</h2>
+        <p>Bu Kullanım Koşulları ve Hizmet Sözleşmesi'ne ilişkin her türlü soru, lisanslama talebi, telif hakkı bildirimi veya resmi yazışma için aşağıdaki kurumsal kanallarımız üzerinden bizimle iletişime geçebilirsiniz:</p>
+        <p>
+          🌐 <strong>Resmi Web Sitesi:</strong> <a href="https://msklabs.org" target="_blank" rel="noopener noreferrer" style="color:var(--primary-color, #0284c7); font-weight:600;">https://msklabs.org</a><br>
+          ✉️ <strong>Genel Destek Masası:</strong> <a href="mailto:destek@msklabs.org" style="color:var(--primary-color, #0284c7); font-weight:600;">destek@msklabs.org</a><br>
+          📮 <strong>Kurumsal İletişim:</strong> <a href="mailto:iletisim@msklabs.org" style="color:var(--primary-color, #0284c7); font-weight:600;">iletisim@msklabs.org</a><br>
+          🔒 <strong>Veri Koruma &amp; KVKK:</strong> <a href="mailto:kvkk@msklabs.org" style="color:var(--primary-color, #0284c7); font-weight:600;">kvkk@msklabs.org</a><br>
+          🎫 <strong>Canlı Destek Bileti:</strong> <a href="destek.html" style="color:var(--primary-color, #0284c7); font-weight:600;">https://msklabs.org/destek.html</a>
+        </p>
+
+        <!-- KULLANICI TALEBİ: GÜNCELLEME VE KAPSAM BİLGİSİ EN ALTTA -->
+        <div class="legal-footer-meta">
+          <div>📅 <strong>Yürürlük Tarihi ve Son Güncelleme:</strong> 30 Ekim 2026</div>
+          <div style="margin-top:4px;">🌐 <strong>Uygulama Kapsamı:</strong> <code>msklabs.org</code> Web Platformu, Tüm Alt Alan Adları, Windows / macOS / Linux Masaüstü Yazılımları ve Android / iOS Mobil Uygulama Ekosistemi.</div>
+        </div>
+      </div>
+
+      <!-- ==========================================
+           İNGİLİZCE TAM KURUMSAL SÖZLEŞME METNİ
+           ========================================== -->
+      <div class="lang-en">
+        <div class="legal-highlight-box">
+          <strong style="color:var(--primary-color, #0284c7); font-size:1.02rem;">Important Notice &amp; Core Architecture Statement:</strong>
+          <p style="margin:8px 0 0 0; font-size:0.93rem; line-height:1.7;">This Terms of Service and User Agreement governs your access to <code>msklabs.org</code>, our desktop software utilities, and mobile applications. MSK Labs operates under an uncompromising <strong>local-first architecture</strong>: we <strong>do not enforce mandatory user account creation</strong>, and your personal data and configuration files are processed directly on your hardware without being uploaded to centralized servers.</p>
+        </div>
+
+        <h2>Preamble &amp; Acceptance of Terms</h2>
+        <p>By accessing <code>msklabs.org</code>, utilizing any online feature, or downloading, installing, or executing any desktop software or mobile app developed by MSK Labs, you unconditionally agree to be bound by these terms in a <strong>definitive and irrevocable manner</strong>.</p>
+        <p>You represent and warrant that you possess the legal capacity to enter into binding agreements, that you are at least 18 years old (or act under parental/guardian supervision), and that you have read, understood, and agreed to all provisions herein.</p>
+
+        <h2>Section 1 — Definitions</h2>
+        <ul>
+          <li><strong>MSK Labs ("Developer", "We", "Us"):</strong> The independent technology initiative managing <code>msklabs.org</code>, subdomains, desktop utilities, and mobile software.</li>
+          <li><strong>Desktop Applications:</strong> Binary distributions for Windows, macOS, and Linux including DeskPilot Pro, Date Counter, DocuEdit, GC Battery Alert, Notes, and PDFLayout.</li>
+          <li><strong>Mobile Applications:</strong> Standalone mobile tools distributed via app stores or APKs including HaydiNamaza, RekatSay, and En Yakın.</li>
+          <li><strong>Local Data:</strong> Configuration files, SQLite/JSON stores, and counter metrics maintained exclusively on the user's physical hardware.</li>
+          <li><strong>Privacy Policy:</strong> The accompanying disclosure governing data protection and cookie management.</li>
+        </ul>
+
+        <h2>Section 2 — Nature of Services &amp; Local-First Architecture</h2>
+        <p>MSK Labs engineers focused, privacy-respecting utility tools. We do not require account logins or central cloud syncing. Data sovereignty remains with the user, and maintaining local off-site backups is your sole responsibility. MSK Labs assumes no liability for local storage loss resulting from hardware failure or operating system resets.</p>
+
+        <h2>Section 3 — Scope of License &amp; Conditions</h2>
+        <p>Subject to compliance with this Agreement, MSK Labs grants you a personal, non-exclusive, non-transferable, revocable limited license to execute the software for personal or legitimate internal operational purposes. You may not reverse-engineer, decompile, resell, bundle, mirror, or repackage our binaries.</p>
+
+        <h2>Section 4 — Prohibited Conduct</h2>
+        <p>You agree not to decompile our software, launch denial-of-service (DoS/DDoS) attacks, scrape content using automated crawlers, submit deceptive information via contact forms, or distribute malware.</p>
+
+        <h2>Section 5 — Intellectual Property Rights</h2>
+        <p>All source code, algorithms, interface layouts, graphics, branding, and documentation remain the exclusive intellectual property of MSK Labs, protected under Turkish Copyright Law No. 5846, Industrial Property Law No. 6769, and international treaties. Third-party open-source libraries remain subject to their respective licenses.</p>
+
+        <h2>Section 6 — Confidential Information &amp; Privacy</h2>
+        <p>Information submitted voluntarily through support forms is handled confidentially and never sold or leased to third-party commercial vendors. Disclosures occur solely upon formal lawful orders from competent governmental authorities.</p>
+
+        <h2>Section 7 — Disclaimer of Warranties (As-Is Basis)</h2>
+        <p>All software tools and services are provided strictly on an <strong>"as-is"</strong> and <strong>"as-available"</strong> basis without express or implied warranties of merchantability, fitness for a particular purpose, or uninterrupted error-free operation.</p>
+
+        <h2>Section 8 — Limitation of Liability</h2>
+        <p>In no event shall MSK Labs or its contributors be liable for direct, indirect, incidental, or consequential damages, including loss of profits, data corruption, or hardware malfunctions.</p>
+
+        <h2>Section 9 — Hardware &amp; Sensor Calibration Disclaimers</h2>
+        <p>Features such as prayer times, Qibla compass alignment, and proximity count detection process physical device sensor feeds locally. <strong>No camera or microphone permissions are ever requested or utilized.</strong> MSK Labs bears no liability for sensor drift or hardware inaccuracies. Tools may not be used as primary decision-makers in life-critical operations.</p>
+
+        <h2>Section 10 — External Links &amp; Advertising Networks</h2>
+        <p>To sustain free software development, verified advertising networks (Google AdSense/AdMob) may be utilized. Third-party landing pages and cookies are governed by their respective operator agreements.</p>
+
+        <h2>Section 11 — Restricted Areas &amp; System Security</h2>
+        <p>Unauthorized attempts to access non-public administrative endpoints constitute cybercrime under applicable penal codes and will be subject to immediate legal prosecution.</p>
+
+        <h2>Section 12 — Child Safety</h2>
+        <p>MSK Labs does not collect personal data from individuals under 18 years of age without parental consent.</p>
+
+        <h2>Section 13 — Force Majeure</h2>
+        <p>Neither party shall be held liable for failure to perform obligations due to events beyond reasonable control, including natural disasters, warfare, cyberattacks, or nationwide infrastructure outages.</p>
+
+        <h2>Section 14 — Severability</h2>
+        <p>If any provision is deemed unenforceable by a competent court, that provision will be limited to the minimum extent necessary, and remaining clauses will remain in full force.</p>
+
+        <h2>Section 15 — Amendments &amp; Validity</h2>
+        <p>MSK Labs reserves the right to amend this Agreement at any time. Revisions become effective immediately upon publication at <code>msklabs.org/terms.html</code>.</p>
+
+        <h2>Section 16 — Formal Notices</h2>
+        <p>Notices shall be communicated electronically via MSK Labs corporate email addresses and the email provided by the user in support correspondences.</p>
+
+        <h2>Section 17 — Evidentiary Agreement (HMK Art. 193)</h2>
+        <p>Server access logs, system telemetry, and digital communication records of MSK Labs constitute conclusive and exclusive evidence in all legal proceedings.</p>
+
+        <h2>Section 18 — Governing Law &amp; Jurisdiction</h2>
+        <p>This Agreement is governed by the laws of the Republic of Turkey. The Central Courts and Enforcement Offices of Istanbul, Turkey, have exclusive jurisdiction.</p>
+
+        <h2>Section 19 — Corporate Inquiries</h2>
+        <p>For inquiries, contact our team at <a href="mailto:destek@msklabs.org" style="color:var(--primary-color, #0284c7); font-weight:600;">destek@msklabs.org</a> or <a href="mailto:iletisim@msklabs.org" style="color:var(--primary-color, #0284c7); font-weight:600;">iletisim@msklabs.org</a>.</p>
+
+        <!-- KULLANICI TALEBİ: GÜNCELLEME VE KAPSAM BİLGİSİ EN ALTTA -->
+        <div class="legal-footer-meta">
+          <div>📅 <strong>Effective Date &amp; Last Updated:</strong> October 30, 2026</div>
+          <div style="margin-top:4px;">🌐 <strong>Scope:</strong> <code>msklabs.org</code> Web Platform, Subdomains, Desktop (Windows/macOS/Linux) and Mobile (Android/iOS) Software Ecosystem.</div>
+        </div>
+      </div>
+
+      <!-- ==========================================
+           ARAPÇA TAM KURUMSAL SÖZLEŞME METNİ
+           ========================================== -->
+      <div class="lang-ar">
+        <div class="legal-highlight-box">
+          <strong style="color:var(--primary-color, #0284c7); font-size:1.02rem;">إشعار تمهيدي وتعهد معماري هام:</strong>
+          <p style="margin:8px 0 0 0; font-size:0.93rem; line-height:1.7;">تحكم هذه الشروط واتفاقية الخدمة استخدام موقع <code>msklabs.org</code> وجميع البرمجيات المكتبية وتطبيقات الهاتف المحمول المقدمة من MSK Labs. تعمل حلولنا بموجب <strong>مبدأ الأولوية المحلية (Local-First)</strong>: <strong>لا نلزم المستخدمين بإنشاء حسابات مركزية</strong>، وتتم معالجة بياناتكم وإعداداتكم محلياً بالكامل على أجهزتكم الخاصة دون رفعها إلى خوادم مركزية.</p>
+        </div>
+
+        <h2>المقدمة والموافقة على الشروط</h2>
+        <p>بمجرد دخولك إلى موقع <code>msklabs.org</code> أو تثبيت وتشغيل أي من تطبيقاتنا المكتبية أو المحمولة، فإنك توافق دون قيد أو شرط وبشكل <strong>نهائي وغير قابل للرجوع</strong> على الالتزام ببنود هذه الاتفاقية وسياسة الخصوصية المرتبطة بها.</p>
+
+        <h2>المادة 1 — التعريفات</h2>
+        <ul>
+          <li><strong>MSK Labs ("المؤسسة"، "المطور"):</strong> المبادرة البرمجية المستقلة التي تدير موقع <code>msklabs.org</code> والبرمجيات التابعة لها.</li>
+          <li><strong>البرامج المكتبية:</strong> البرمجيات المخصصة لأنظمة Windows وmacOS وLinux مثل DeskPilot Pro وDate Counter وDocuEdit وتنبيه البطارية وNotes.</li>
+          <li><strong>تطبيقات الجوال:</strong> تطبيقات HaydiNamaza وRekatSay وEn Yakın الموزعة عبر المتاجر الرسمية.</li>
+          <li><strong>البيانات المحلية:</strong> ملفات الإعدادات وقواعد البيانات المحفوظة محلياً فقط على جهاز المستخدم المادي.</li>
+        </ul>
+
+        <h2>المادة 2 — طبيعة الخدمات وبنية الأولوية المحلية</h2>
+        <p>تلتزم MSK Labs بسيادة المستخدم التامة على بياناته دون تسجيل دخول إلزامي. تقع مسؤولية النسخ الاحتياطي وحماية البيانات على عاتق المستخدم وحده، ولا تتحمل المؤسسة أي مسؤولية عن فقدان البيانات الناتج عن أعطال الأجهزة.</p>
+
+        <h2>المادة 3 — نطاق ترخيص الاستخدام</h2>
+        <p>تمنح MSK Labs المستخدم ترخيصاً محدوداً، غير حصري، غير قابل للتحويل، وقابلاً للإلغاء، لتشغيل البرمجيات للأغراض المشروعة. يحظر فك التجميع، إعادة البيع التجاري، أو استنساخ البرمجيات.</p>
+
+        <h2>المادة 4 — التصرفات المحظورة</h2>
+        <p>يحظر على المستخدم تماماً: الهندسة العكسية للشيفرات، الهجمات الإلكترونية وحجب الخدمة، جمع البيانات التلقائي (Scraping)، أو تقديم معلومات مضللة عبر نماذج الدعم.</p>
+
+        <h2>المادة 5 — حقوق الملكية الفكرية</h2>
+        <p>تظل جميع الشيفرات المصدرية، التصاميم، العلامات التجارية، والخوارزميات ملكية حصرية لـ MSK Labs بموجب قوانين حماية الملكية الفكرية التركية والدولية.</p>
+
+        <h2>المادة 6 — سرية المعلومات وحماية البيانات</h2>
+        <p>لا يتم بيع أو تأجير أي بيانات شخصية مقدمة اختيارياً عبر الدعم الفني لأي أطراف ثالثة، وتخضع البيانات للسرية التامة وفقاً لسياسة الخصوصية.</p>
+
+        <h2>المادة 7 — إخلاء المسؤولية (كما هي)</h2>
+        <p>يتم تقديم البرمجيات وخدمات الويب <strong>"كما هي"</strong> دون أي ضمانات صريحة أو ضمنية للملاءمة التجارية أو استمرارية التشغيل الخالي من الأخطاء.</p>
+
+        <h2>المادة 8 — تحديد المسؤولية والأضرار</h2>
+        <p>لا تتحمل MSK Labs أي مسؤولية عن أي أضرار مباشرة أو غير مباشرة أو فقدان في الأرباح أو البيانات ناتجة عن استخدام البرمجيات.</p>
+
+        <h2>المادة 9 — إخلاء مسؤولية المستشعرات والأجهزة</h2>
+        <p>تعتمد حسابات أوقات الصلاة والقبلة وعد السجدات على مستشعرات جهاز المستخدم محلياً. <strong>لا يُطلب إذن الكاميرا أو الميكروفون ولا يُستخدم إطلاقاً.</strong> لا تتحمل المؤسسة مسؤولية انحراف المعايرة، ولا تُستخدم البرمجيات كصانع قرار وحيد في العمليات الحيوية.</p>
+
+        <h2>المادة 10 — الروابط الخارجية وشبكات الإعلانات</h2>
+        <p>قد تُعرض إعلانات Google AdSense وAdMob المعتمدة لدعم استمرارية التطبيقات المجانية، وتخضع الروابط الخارجية لسياسات مشغليها.</p>
+
+        <h2>المادة 11 — المناطق المقيدة والأمن الرقمي</h2>
+        <p>تعد محاولات الدخول غير المصرح به للمناطق الإدارية والأنظمة جرائم معلوماتية يعاقب عليها القانون ويتم إبلاغ السلطات القضائية عنها فوراً.</p>
+
+        <h2>المادة 12 — حماية الأطفال</h2>
+        <p>لا تجمع MSK Labs أي بيانات للأطفال دون 18 عاماً بدون موافقة أولياء الأمور.</p>
+
+        <h2>المادة 13 — القوة القاهرة</h2>
+        <p>لا تتحمل المؤسسة مسؤولية التأخر أو التعذر في تقديم الخدمات الناتج عن الكوارث الطبيعية أو الحروب أو انقطاع شبكات الإنترنت العامة.</p>
+
+        <h2>المادة 14 — قابلية الفصل بين البنود</h2>
+        <p>إذا اعتُبر أي بند غير صالح قانوناً، فإن ذلك لا يؤثر على بقاء سائر البنود سارية المفعول.</p>
+
+        <h2>المادة 15 — التعديلات والسريان</h2>
+        <p>تحتفظ MSK Labs بحق تعديل هذه الشروط في أي وقت، وتسري التعديلات فور نشرها على الموقع.</p>
+
+        <h2>المادة 16 — الإخطارات الرسمية</h2>
+        <p>تتم المراسلات الرسمية عبر البريد الإلكتروني المعتمد لكلا الطرفين وتعد منتجة لآثارها القانونية.</p>
+
+        <h2>المادة 17 — اتفاقية الإثبات (HMK م. 193)</h2>
+        <p>تعد سجلات الخوادم والبيانات الرقمية والمراسلات الإلكترونية لـ MSK Labs دليلاً قاطعاً وحصرياً أمام المحاكم.</p>
+
+        <h2>المادة 18 — القانون الواجب التطبيق والاختصاص القضائي</h2>
+        <p>تخضع هذه الاتفاقية <strong>لقوانين الجمهورية التركية</strong>، وتختص <strong>محاكم ودوائر التنفيذ في إسطنبول</strong> حصرياً بالفصل في أي نزاع.</p>
+
+        <h2>المادة 19 — قنوات التواصل الرسمية</h2>
+        <p>للاستفسارات الرسمية والتراخيص، يرجى التواصل عبر: <a href="mailto:destek@msklabs.org" style="color:var(--primary-color, #0284c7); font-weight:600;">destek@msklabs.org</a> أو <a href="mailto:iletisim@msklabs.org" style="color:var(--primary-color, #0284c7); font-weight:600;">iletisim@msklabs.org</a>.</p>
+
+        <!-- KULLANICI TALEBİ: GÜNCELLEME VE KAPSAM BİLGİSİ EN ALTTA -->
+        <div class="legal-footer-meta">
+          <div>📅 <strong>تاريخ السريان وآخر تحديث:</strong> 30 أكتوبر 2026</div>
+          <div style="margin-top:4px;">🌐 <strong>النطاق:</strong> موقع <code>msklabs.org</code> والنطاقات الفرعية ومنظومة برمجيات سطح المكتب والجوال.</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- SAYFA ALTI REKLAM ALANI -->
+    <div class="infeed-ad-container">
+      <div class="ad-placeholder">Sayfa Sonu Reklamı (Bottom Banner)</div>
+    </div>
+
+  </main>
+
+  <aside class="desktop-ad desktop-ad-right">
+    <div class="ad-placeholder">Masaüstü Sağ Reklam<br>(120x300)</div>
+  </aside>
+
+</div>
+
+<footer class="site-footer"></footer>
+<script src="assets/js/layout.js"></script>
+</body>
+</html>
+'''
+
+with open(path, 'w', encoding='utf-8') as f:
+    f.write(terms_html.strip())
+
+print(f'Successfully wrote live terms.html ({len(terms_html)} chars, {len(terms_html.splitlines())} lines)')

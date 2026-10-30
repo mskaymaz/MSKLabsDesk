@@ -1,0 +1,437 @@
+Kişisel Verilerin Korunmasına İlişkin Aydınlatma Metni - Paraşüt
+Mali Müşavirlere Özel Hakkımızda Destek
+0212 963 00 20
+Özellikler
+e-Fatura
+Fiyatlar
+Destek
+Mutlu Patronlar
+Sektörel Çözümler
+Blog
+Giriş Yapın Ücretsiz Deneyin
+Kişisel Verilerin Korunmasına İlişkin Aydınlatma Metni
+Anasayfa /
+Kişisel Verilerin Korunması Ve Islenmesine İlişkin Aydınlatma Metni
+İstanbul Ticaret Sicil Müdürlüğünde 886915-0 ticaret sicil numarası ile kayıtlı Paraşüt Yazılım Teknolojileri A.Ş. (“ Şirket ”) olarak 6698 sayılı Kişisel Verilerin Korunması Kanunu (&quot; Kanun &quot;) kapsamında Veri Sorumlusu sıfatıyla işlediğimiz kişisel verilerinize ilişkin sizleri bilgilendirmek istiyoruz.
+1- İşlenen Kişisel Veriler
+İşbu Aydınlatma Metni’nde belirtilen kişisel veri işleme amaçlarımızı gerçekleştirebilmek amacıyla, sizlerin aşağıdaki kişisel verilerini işleyebilmekteyiz:
+Kimlik Bilgileri: Ad, soyad, şirket unvanı, eski kimlik belgesinin ön yüzünün fotokopisi, yeni kimlik belgesi fotokopisi, uyruk, cinsiyet, anne-baba adı, VKN, T.C. Kimlik numarası, T.C. Kimlik seri no, vergi kimlik numarası, medeni durum, imza, doğum tarihi, doğum yeri dahil kimlik bilgileriniz;
+İletişim Bilgileri: İşletme adresi, E-posta, telefon numarası, cep telefonu numaranız, faks numaranız, adres, il, ilçe, posta kodu, vergi dairesi, firma internet siteniz dahil iletişim bilgileriniz;
+Müşteri İşlem Bilgileri: Kullanılan evrak tipi, kullandığınız Mikrogrup ürünleri ve lisansları, kullandığınız muhasebe programları, talep ettiğiniz ancak kullanmadığınız ürünleri kullanmama nedeniniz, talep ve şikayet bilgileriniz, ürün değerlendirmeleriniz, Şirket tarafından size atanan müşteri numarası, faaliyet alanınız, sektör bilgileri, çalıştığınız firma, pozisyon mali mühür bilgisi, kullandığınız uygulama özelindeki ürün veri adedi, kategori veri adedi, etiket veri adedi, müşteri/tedarikçi veri adedi dahil müşteri işlem bilgileriniz;
+Finans Bilgileri: vergi levhası, ödeme ve fatura bilgileri, borç ve cari hesap bilgileri, fatura ve ödeme bilgileri, işveren maliyeti bilgisi, IBAN, hesap bilgileri, banka hesap hareketleri, dahil finansal bilgileriniz;
+Mesleki Deneyim Bilgileriniz: Çalıştığı şirket, işletme adı, sektör ve firma bilgisi, unvan, pozisyonunuz ve departmanınız, eğitim bilgileri, mezun olunan okul bilgisi, geçmiş iş deneyimleri, meslek içi ödül ve sertifikalar, özgeçmişteki bilgiler, dahil mesleki deneyim bilgileriniz;
+Hukuki İşlem Bilgileri: Dava ve icra takiplerinde yer alan bilgileriniz, ticaret sicil gazetesi ilanları, vekaletname, imza sirküleri, YK ve GK toplantı tutanakları, iç yönerge, dahil hukuki işlem bilgileriniz;
+İşlem Güvenliği Bilgileriniz: IP adresi, log kayıtları, oturum açma şifresi, uygulama giriş, ziyaret, geçirilen süre, hareket bilgileriniz ve kullanıcı bilgileriniz dahil işlem güvenliği bilgileriniz;
+Pazarlama Bilgileri: Çerez kayıtları dahil alışveriş geçmişi bilgileri, anket, kampanya çalışmasıyla elde edilen bilgiler gibi pazarlama bilgileriniz;
+Görsel ve İşitsel Kayıtlar: Dilediğiniz takdirde uygulamaya yüklemiş olduğunuz profil fotoğrafınız, video kayıtlarınız, görüşme ve ses kayıtlarınız, fotoğraflar dahil görsel ve işitsel kayıtlarınız.
+Risk Bilgisi: Risk bilgisi
+2- Kişisel Verilerin İşlenme Amaçları, Aktarılan Taraflar ve Aktarılma Amaçları
+Kişisel verilerinizi, aşağıdaki süreçlerde yer verilen belirtilen işleme amaçları kapsamında, Kanunun 4. maddesindeki genel ilkeler ışığında işlemekte ve belirtilen alıcılara aktarmaktayız. Şirketimiz tarafından kişisel verilerinizin güvenliğinin sağlanması için gerekli idari ve teknik tedbirler alınmaktadır.
+Müşteriler ve potansiyel müşterilere, tedarikçilerimize ve iş ortaklarımıza ilişkin kişisel veri işleme faaliyetleri aşağıda detaylı olarak açıklanmıştır.
+Müşteriler ve Potansiyel Müşteriler:
+Kişisel Veri İşleme Amacı Hukuki Sebep Aktarılan Taraf Aktarım Amacı Kimlik Bilgileri, İletişim Bilgileri, Müşteri İşlem Bilgileri, Finans Bilgileri, Görsel ve İşitsel Kayıtlar Ürün ve/veya hizmetlerimizin sunulabilmesi ve ürünlerimizin satış süreçlerinin yürütülmesi.
+Bir sözleşmenin kurulması veya ifasıyla doğrudan doğruya ilgili olması kaydıyla, sözleşmenin taraflarına ait kişisel verilerin işlenmesinin gerekli olması
+İlgili kişinin temel hak ve özgürlüklerine zarar vermemek kaydıyla, veri sorumlusunun meşru menfaatleri için veri işlenmesinin zorunlu olması
+Topluluk şirketleri, iş ortakları, yurt içi veya yurt dışında bulunabilen tedarikçiler.
+Şirket&#x27;in mevcut müşterilerinin taleplerinin topluluk şirketi aracılığı ile karşılanacağını saptaması durumunda müşterinin talebine cevap verebilmesi.
+Tedarikçilerden saklama hizmeti alınması ve iş süreçlerinin kolaylaştırılması.
+İş ortağı aracılığıyla müşteriye teklif gönderilebilmesi.
+Teknik alt yapı desteği alınması
+Kimlik Bilgileri, Müşteri İşlem Bilgileri, İletişim Bilgileri Kullandığınız ürüne ilişkin veri limitlerinin kontrolünün sağlanması, limit aşımı olması halinde tarafınıza bilgilendirme yapılması
+Bir sözleşmenin ifasıyla doğrudan doğruya ilgili olması kaydıyla, sözleşmenin taraflarına ait kişisel verilerin işlenmesinin gerekli olması.
+İlgili kişinin temel hak ve özgürlüklerine zarar vermemek kaydıyla, veri sorumlusunun meşru menfaatleri için veri işlenmesinin zorunlu olması.
+Yurt içi veya yurt dışında bulunabilen tedarikçiler. Teknik alt yapı hizmetinin alınması Kimlik Bilgileri, İletişim Bilgileri, Mesleki Deneyim Bilgileri, Müşteri İşlem Bilgileri Grup şirketlerimizin ürünlerini/hizmetlerini kullanmayı talep etmeniz ve iletişim formunu doldurmanız halinde, ilgili ürün/hizmetler için tarafınız ile iletişim kurulması ve yönlendirme süreçlerinin yürütülmesi
+Bir sözleşmenin ifasıyla doğrudan doğruya ilgili olması kaydıyla, sözleşmenin taraflarına ait kişisel verilerin işlenmesinin gerekli olması.
+İlgili kişinin temel hak ve özgürlüklerine zarar vermemek kaydıyla, veri sorumlusunun meşru menfaatleri için veri işlenmesinin zorunlu olması.
+Yurt içi veya yurt dışında bulunan tedarikçiler, süreç ile ilgili olan Mikrogrup şirketlerimiz
+Teknik alt yapı hizmetinin alınması
+Saklama ve arşiv faaliyetlerinin yürütülmesi
+Grup şirketlerimizin ürün/hizmetlerinden faydalanabilmeniz için gerekli yönlendirme süreçlerinin yürütülmesi
+Kimlik Bilgileri, İletişim Bilgileri, Müşteri İşlem Bilgileri, Mesleki Deneyim Bilgileri Grup şirketlerimizin ürün/hizmetlerini kullanırken Paraşüt ürünü ile entegrasyon sağlanması süreçleri Sözleşmenin ifası Yurt içi veya yurt dışında bulunan tedarikçiler, süreç ile ilgili olan Mikrogrup şirketlerimiz
+Teknik alt yapı hizmetinin sağlanması
+Entegrasyon süreçlerinin yürütülmesi
+Kimlik Bilgileri, İletişim Bilgileri, Finans Bilgileri, Risk bilgisi, Görsel ve İşitsel Kayıtlar
+Faaliyetlerin mevzuata uygun yürütülmesi
+Finans ve muhasebe işlerinin yürütülmesi
+Müşteri ilişkileri yönetimi süreçlerinin yürütülmesi
+Sözleşmenin ifası
+Bir hakkın tesisi
+Meşru menfaat
+Yurt dışındaki hakim hissedarımız
+Yurt içindeki tedarikçilerimiz
+Saklama ve arşiv faaliyetlerinin yürütülmesi
+Teknik alt yapı desteği alınması
+Müşterilerin Müşterileri açısından;
+Kimlik Bilgileri, İletişim Bilgileri, Finans Bilgileri, Risk bilgisi,
+Faaliyetlerin mevzuata uygun yürütülmesi
+Finans ve muhasebe işlerinin yürütülmesi
+Müşteri ilişkileri yönetimi süreçlerinin yürütülmesi
+Sözleşmenin ifası
+Bir hakkın tesisi
+Meşru menfaat
+Yurt dışındaki hakim hissedarımız
+Saklama ve arşiv faaliyetlerinin yürütülmesi
+Teknik alt yapı desteği alınması
+Kimlik Bilgileri, İletişim Bilgileri Paraşüt ürünlerinin tavsiye ve referans süreçlerinin yürütülmesi
+Bir sözleşmenin kurulması veya ifasıyla doğrudan doğruya ilgili olması kaydıyla, sözleşmenin taraflarına ait kişisel verilerin işlenmesinin gerekli olması.
+İlgili kişinin temel hak ve özgürlüklerine zarar vermemek kaydıyla, veri sorumlusunun meşru menfaatleri için veri işlenmesinin zorunlu olması.
+Yurt dışındaki tedarikçilere aktarılması durumunda açık rıza sebebine dayanılacaktır.
+Tedarikçi, Topluluk şirketleri, iş ortakları, yurt içi veya yurt dışında bulunabilen tedarikçiler.
+Kişilerle iletişime geçebilmek ve verilerin güvenle saklanması.
+Kimlik Bilgileri, İletişim Bilgileri, Müşteri İşlem Bilgileri, Görsel ve İşitsel Kayıtlar
+İhtiyaçlarınız ve talepleriniz doğrultusunda ürün ve hizmetlerimizin güncellenmesi, özelleştirilmesi ve geliştirilmesi.
+Talebiniz üzerine, ürünlerin tanıtımının yapılması adına çağrı merkezi üzerinden tarafınızla iletişime geçilmesi ve satış süreçlerimizin iyileştirilmesi için tarafınızla yapılan iletişimin analizi
+Bir sözleşmenin kurulması veya ifasıyla doğrudan doğruya ilgili olması kaydıyla, sözleşmenin taraflarına ait kişisel verilerin işlenmesinin gerekli olması.
+İlgili kişinin temel hak ve özgürlüklerine zarar vermemek kaydıyla, veri sorumlusunun meşru menfaatleri için veri işlenmesinin zorunlu olması.
+Yurt dışındaki tedarikçilere aktarılması durumunda açık rıza sebebine dayanılacaktır.
+Yurt içi ve yurt dışında bulunan tedarikçiler, iş ortakları.
+Müşteri memnuniyetine yönelik aktivitelerin yürütülmesi.
+Tedarikçilerden saklama hizmeti alınması ve iş süreçlerinin kolaylaştırılması.
+Teknik alt yapı desteği alınması
+Kimlik Bilgileri, İletişim Bilgileri, Müşteri İşlem Bilgileri, Finans Bilgileri. Ürün ve hizmetlerimizdeki problemlerin çözülmesi, hata, sorun ve bulguların tespit edilmesi, bunların giderilmesi ve kullanıcılarımıza daha iyi bir deneyimin sunulması.
+Bir sözleşmenin kurulması veya ifasıyla doğrudan doğruya ilgili olması kaydıyla, sözleşmenin taraflarına ait kişisel verilerin işlenmesinin gerekli olması.
+Yurt dışındaki tedarikçilere aktarılması durumunda açık rıza sebebine dayanılacaktır.
+Yurt içi ve yurt dışında bulunan tedarikçiler, iş ortakları.
+Müşteri memnuniyetine yönelik aktivitelerin yürütülmesi.
+Satış sürecindeki problemlerin çözülebilmesi.
+Tedarikçilerden saklama hizmeti alınması ve iş süreçlerinin kolaylaştırılması.
+Kimlik Bilgileri, İletişim Bilgileri, Müşteri İşlem Bilgileri. Müşterilerimizin talebi üzerine ürün ve hizmetlerimiz hakkında size gerekli eğitimlerin ve bilgilendirmelerin verilebilmesi, programlarımızın nasıl kullanılacağının izah edilmesi.
+Bir sözleşmenin kurulması veya ifasıyla doğrudan doğruya ilgili olması kaydıyla, sözleşmenin taraflarına ait kişisel verilerin işlenmesinin gerekli olması.
+Paylaşılmıyor. Paylaşılmıyor. Kimlik Bilgileri, İletişim Bilgileri, Müşteri İşlem Bilgileri, Görsel ve İşitsel Kayıtlarınız. Çağrı merkezi, uzaktan destek hizmetlerinin sağlanması ve analizi, ürün kullanımına ve müşteri ihtiyaçlarına yönelik ziyaretlerin yapılması ve sosyal medya hesapları üzerinden ulaşan kişilere destek verilmesi.
+Bir sözleşmenin kurulması veya ifasıyla doğrudan doğruya ilgili olması kaydıyla, sözleşmenin taraflarına ait kişisel verilerin işlenmesinin gerekli olması.
+İlgili kişinin temel hak ve özgürlüklerine zarar vermemek kaydıyla, veri sorumlusunun meşru menfaatleri için veri işlenmesinin zorunlu olması
+Kişisel verilerinizin yurtdışındaki tedarikçilere aktarılması ve destek ziyaretlerimizde görsel ve işitsel kayıtlarınızın işlenmesi süreçlerinde açık rıza hukuki sebebine dayanılacaktır.
+İş ortakları, yurt içi ve yurt dışında bulunan tedarikçiler
+Teknik konular, bulgu ve hatalara ilişkin destek verilebilmesi
+Tedarikçilerden saklama hizmeti alınması ve iş süreçlerinin kolaylaştırılması.
+Teknik alt yapı desteği alınması
+Kimlik Bilgileri, İletişim Bilgileri, Müşteri İşlem Bilgileri. Ticari faaliyetlerimizi yürütmeye devam etmek amacıyla iletişim bilgilerinizin güncellenmesi ve bu güncel bilgilerinizin ilgili kurumlarımız, topluluk şirketlerimiz, yüklenicilerimiz ve/veya tedarikçilerimize bildirilmesi.
+Bir sözleşmenin kurulması veya ifasıyla doğrudan doğruya ilgili olması kaydıyla, sözleşmenin taraflarına ait kişisel verilerin işlenmesinin gerekli olması.
+Yurt dışındaki tedarikçilere aktarılması durumunda açık rıza sebebine dayanılacaktır.
+Topluluk şirketleri, yurt içi ve yurt dışında bulunan iş ortakları, tedarikçiler. İş faaliyetlerinin yürütülmesi ve devamlılığının sağlanması. Kimlik Bilgileri, İletişim Bilgileri, Finans Bilgileri. Yanlış ödeme yapanlara ödemenin iadesi işlemlerinin yürütülmesi.
+Bir sözleşmenin kurulması veya ifasıyla doğrudan doğruya ilgili olması kaydıyla, sözleşmenin taraflarına ait kişisel verilerin işlenmesinin gerekli olması.
+Bir hakkın tesisi, kullanılması veya korunması için veri işlemenin zorunlu olması.
+Paylaşılmıyor. Paylaşılmıyor. Kimlik Bilgileri, İletişim Bilgileri, Müşteri İşlem Bilgileri. Ticari elektronik iletinin gönderilmesi. Yeni ürün veya hizmetlerimiz, mevcut ürün veya hizmetlerimizdeki değişiklikler ile kampanyalarımız ve promosyonlarımız hakkında sizlerin bilgilendirilmesi. Açık rıza. Tedarikçiler. Kişilere mailing yapılabilmesi adına kişisel verilerin tedarikçiler ile paylaşılması. Kimlik Bilgileri, İletişim Bilgileri, Müşteri İşlem Bilgileri, Finans Bilgileri Müşterilerin uygulamada kaydının oluşturulabilmesi ve uygulamada yer alan hizmetlerden yararlanabilmesi.
+Bir sözleşmenin kurulması veya ifasıyla doğrudan doğruya ilgili olması kaydıyla, sözleşmenin taraflarına ait kişisel verilerin işlenmesinin gerekli olması.
+Kanunlarda açıkça öngörülmesi
+İlgili kişinin temel hak ve özgürlüklerine zarar vermemek kaydıyla, veri sorumlusunun meşru menfaatleri için veri işlenmesinin zorunlu olması.
+Yurt dışındaki tedarikçilere aktarılması durumunda açık rıza sebebine dayanılacaktır.
+Yetkili Kamu Kurum ve Kuruluşları, Topluluk Şirketleri, Tedarikçiler
+Gelir İdaresi Başkanlığı tarafından sunulan hizmetlerden kişilerin elektronik ortamda yararlanabilmesi.
+İş faaliyetlerinin yürütülmesi ve denetimi
+Tedarikçilerden saklama hizmeti alınması ve iş süreçlerinin kolaylaştırılması.
+Kimlik Bilgileri, İletişim Bilgileri, Müşteri İşlem Bilgileri. Ürün demolarının ve deneme hesabının sağlanması.
+İlgili kişinin temel hak ve özgürlüklerine zarar vermemek kaydıyla, veri sorumlusunun meşru menfaatleri için veri işlenmesinin zorunlu olması.
+Bir sözleşmenin kurulması veya ifasıyla doğrudan doğruya ilgili olması kaydıyla, sözleşmenin taraflarına ait kişisel verilerin işlenmesinin gerekli olması.
+Yurt dışındaki tedarikçilere aktarılması durumunda açık rıza sebebine dayanılacaktır.
+İş ortakları, Yurtdışında bulunan tedarikçiler
+Demo süreci sonrası satış süreçlerinin yürütülebilmesi.
+Verilerin güvenli bir şekilde saklanması ve iş süreçlerinin kolaylaştırılması.
+Kimlik Bilgileri, İletişim Bilgileri, Müşteri İşlem Bilgileri, Finans Bilgileri. Risk yönetimi süreçlerinin yürütülmesi ve aksiyon takibinin gerçekleştirilmesi.
+Bir sözleşmenin kurulması veya ifasıyla doğrudan doğruya ilgili olması kaydıyla, sözleşmenin taraflarına ait kişisel verilerin işlenmesinin gerekli olması.
+Veri sorumlusunun hukuki yükümlülüğünü yerine getirebilmesi için zorunlu olması.
+İlgili kişinin temel hak ve özgürlüklerine zarar vermemek kaydıyla, veri sorumlusunun meşru menfaatleri için veri işlenmesinin zorunlu olması.
+Yurt dışındaki tedarikçilere aktarılması durumunda açık rıza sebebine dayanılacaktır.
+Yurt içinde ve yurtdışında bulunan tedarikçiler
+Dış denetim ve danışmanlık firmalarından hizmet alınması.
+Verilerin güvenli bir şekilde saklanması ve iş süreçlerinin kolaylaştırılması.
+Kimlik Bilgileri, İletişim Bilgileri, Finans Bilgileri. Tahsilat takibinin yapılması dahil finans ve muhasebe işlerinin yürütülmesi. Bir sözleşmenin kurulması veya ifasıyla doğrudan doğruya ilgili olması kaydıyla, sözleşmenin taraflarına ait kişisel verilerin işlenmesinin gerekli olması. Tedarikçiler, topluluk şirketleri
+Ödemelerin alınabilmesi.
+Denetim sağlanması.
+Kimlik Bilgileri, Müşteri İşlem Bilgileri, İşlem Güvenliği Bilgileriniz, Pazarlama Bilgileri. İnternet sitesi faaliyetlerinin gerçekleştirilmesi ve kullanıcılarımızın deneyimlerinin iyileştirilmesi.
+İlgili kişinin temel hak ve özgürlüklerine zarar vermemek kaydıyla, veri sorumlusunun meşru menfaatleri için veri işlenmesinin zorunlu olması.
+Açık rıza.
+Yurt içi ve yurt dışında bulunan iş ortakları, tedarikçiler.
+Kişileştirilmiş deneyim sunulabilmesi.
+Analiz çalışmalarının yürütülmesi.
+Hedefleme reklamların gösterilebilmesi.
+Kimlik Bilgileri, Müşteri İşlem Bilgileri, İşlem Güvenliği Bilgileriniz, Pazarlama Bilgileri. Tanıtım, pazarlama ve reklam faaliyetlerinin yürütülmesi Açık rıza. Yurt içi ve yurt dışında bulunan iş ortakları, tedarikçiler.
+Pazarlama analiz çalışmalarının yürütülmesi.
+Hedefleme reklamların gösterilebilmesi.
+Kimlik Bilgileri, Müşteri İşlem Bilgileri Müşteriler tarafından sağlanan olumlu geri bildirimlerin internet sitemizde ve sosyal medya hesaplarımızda paylaşılması, Mikrogrup ürünlerinin tanıtımının yapılması ve pazarlama süreçlerinin yürütülmesi Açık rıza. Herkese açık Pazarlama analiz çalışmalarının yürütülmesi. Görsel ve İşitsel Kayıtlar Dilediğiniz takdirde uygulamaya profil fotoğrafı yükleyebilmeniz.
+Kişinin kendisi tarafından alenileştirme
+İlgili kişinin temel hak ve özgürlüklerine zarar vermemek kaydıyla, veri sorumlusunun meşru menfaatleri için veri işlenmesinin zorunlu olması.
+Yurt dışındaki tedarikçilere aktarılması durumunda açık rıza sebebine dayanılacaktır.
+Tedarikçiler Verilerin güvenli bir şekilde saklanması. Kimlik Bilgileri, İletişim Bilgileri, Müşteri İşlem Bilgileri, Görsel ve İşitsel Kayıtlar. Talep ve şikayet süreçlerinin yürütülmesi ve bilgi taleplerinin karşılanması
+Bir sözleşmenin kurulması veya ifasıyla doğrudan doğruya ilgili olması kaydıyla, sözleşmenin taraflarına ait kişisel verilerin işlenmesinin gerekli olması.
+Yurt dışındaki tedarikçilere aktarılması durumunda açık rıza sebebine dayanılacaktır.
+İlgili kişinin temel hak ve özgürlüklerine zarar vermemek kaydıyla, veri sorumlusunun meşru menfaatleri için veri işlenmesinin zorunlu olması.
+Topluluk şirketleri, İş ortakları, Yurt içi ve yurt dışında bulunan tedarikçiler
+Talep ve şikayet süreçlerinin yürütülmesi ve bilgi taleplerinin karşılanması
+Tedarikçilerden saklama hizmeti alınması ve iş süreçlerinin kolaylaştırılması.
+Teknik alt yapı desteği alınması
+Kimlik Bilgileri, İletişim Bilgileri, Müşteri İşlem Bilgileri, Finans Bilgileri. e-Dönüşüm başvurularının alınması.
+Bir sözleşmenin kurulması veya ifasıyla doğrudan doğruya ilgili olması kaydıyla, sözleşmenin taraflarına ait kişisel verilerin işlenmesinin gerekli olması.
+Kanunlarda açıkça öngörülmesi.
+Yurt dışındaki tedarikçilere aktarılması durumunda açık rıza sebebine dayanılacaktır.
+Yetkili kamu kurum ve kuruluşları, Yurt içi ve yurt dışında bulunan tedarikçiler, topluluk şirketleri
+Vergi Usul Kanunu Genel Tebliğ ve yetkili otoritelerin resmi sitelerindeki kılavuzlarda belirttiği üzere e-dönüşüm başvurusunun yapılabilmesi.
+Tedarikçilerden saklama hizmeti alınması ve iş süreçlerinin kolaylaştırılması.
+E-dönüşüm konusunda özel entegratör topluluk şirketleriyle iş birliği sağlanması.
+Kimlik Bilgileri, İletişim Bilgileri, Müşteri İşlem Bilgileri, Finans Bilgileri. e-Dönüşüm e-Fatura Hızlı Başvurusu, e-Dönüşüm Aktivasyon ve Firma İşlemleri
+Bir sözleşmenin kurulması veya ifasıyla doğrudan doğruya ilgili olması kaydıyla, sözleşmenin taraflarına ait kişisel verilerin işlenmesinin gerekli olması.
+Kanunlarda açıkça öngörülmesi.
+Yetkili kamu kurum ve kuruluşları, Yurt içi ve yurt dışında bulunan tedarikçiler, topluluk şirketleri.
+Kanunlarda açıkça öngörülmesi sebebiyle Gelir İdaresi Başkanlığı’na aktarım yapılması.
+Tedarikçilerden saklama hizmeti alınması ve iş süreçlerinin kolaylaştırılması.
+Özel entegratör topluluk şirketleriyle iş birliği sağlanması.
+Kimlik Bilgileri, İletişim Bilgileri, Finans Bilgileri. E-postalarının müşterilere gönderiminin sağlanması.
+Bir sözleşmenin kurulması veya ifasıyla doğrudan doğruya ilgili olması kaydıyla, sözleşmenin taraflarına ait kişisel verilerin işlenmesinin gerekli olması.
+İlgili kişinin temel hak ve özgürlüklerine zarar vermemek kaydıyla, veri sorumlusunun meşru menfaatleri için veri işlenmesinin zorunlu olması.
+Tedarikçiler. Sürecin hızlanması ve efektif yürütülmesi amacıyla üçüncü taraf hizmet sağlayıcının kullanılması. Kimlik Bilgileri, İletişim Bilgileri, Finans Bilgileri. Müşterilerimizin cari kart açabilmesi, hesabını oluşturabilmesi ve mevcut kaydını güncellenebilmesi.
+Bir sözleşmenin kurulması veya ifasıyla doğrudan doğruya ilgili olması kaydıyla, sözleşmenin taraflarına ait kişisel verilerin işlenmesinin gerekli olması.
+Kanunlarda açıkça öngörülmesi.
+İlgili kişinin temel hak ve özgürlüklerine zarar vermemek kaydıyla, veri sorumlusunun meşru menfaatleri için veri işlenmesinin zorunlu olması.
+Yetkili kamu kurum ve kuruluşları, tedarikçiler, topluluk şirketler
+Kanunlarda açıkça öngörülmesi sebebiyle Gelir İdaresi Başkanlığı’na aktarım yapılması.
+Tedarikçilerden saklama hizmetinin alınması.
+İş faaliyetlerinin yürütülmesi.
+Kimlik Bilgileri, İletişim Bilgileri, Müşteri İşlem Bilgileri, Finans Bilgileri. Fatura belgesi oluşturulması, e-Fatura/e-arşiv/e-serbest-meslek-makbuzu gibi e-belgeleri kesebilmek ve müşterilere gönderebilmek
+Bir sözleşmenin kurulması veya ifasıyla doğrudan doğruya ilgili olması kaydıyla, sözleşmenin taraflarına ait kişisel verilerin işlenmesinin gerekli olması.
+İlgili kişinin temel hak ve özgürlüklerine zarar vermemek kaydıyla, veri sorumlusunun meşru menfaatleri için veri işlenmesinin zorunlu olması.
+Yurt dışındaki tedarikçilere aktarılması durumunda açık rıza sebebine dayanılacaktır.
+Yetkili kamu kurum ve kuruluşları, iş ortakları, tedarikçiler, topluluk şirketleri.
+Kanunlarda açıkça öngörülmesi sebebiyle Gelir İdaresi Başkanlığı’na aktarım yapılması.
+Özel entegratör firmalar ve topluluk şirketleri ile iş birliği sağlanması.
+Tedarikçilerden saklama hizmetinin alınması.
+Kimlik Bilgileri (VKN/ TCKN)
+Veri sorumlusu operasyonlarının güvenliğinin temini
+Bilgi güvenliği süreçlerinin yürütülmesi
+Kimlik doğrulama sürecinin yürütülmesi
+Sözleşmenin ifası
+Bir hakkın tesisi
+Teknik altyapı hizmet sağlayıcımız
+Gelen E-Arşiv Fatura Bilgi Aktarım Hizmetinin sunulması esnasında iş birliği içerisinde olduğumuz grup şirketimiz
+Gerekmesi halinde yetkili kuruluşlar
+Saklama ve arşiv faaliyetlerinin yürütülmesi
+Teknik altyapı desteğinin alınması
+Veri sorumlusu operasyonlarının güvenliğinin temini
+Kimlik Bilgileri, Müşteri İşlem Bilgileri, Finans Bilgileri. Kullanılan e-Arşiv, e-SMM gibi dönüşüm hizmetlerinin raporlarının Gelir İdaresi Başkanlığı üzerinden sorgulanması ve Gelir İdaresi Başkanlığı’na günlük raporlama yapılması
+Kanunlarda açıkça öngörülmesi.
+İlgili kişinin temel hak ve özgürlüklerine zarar vermemek kaydıyla, veri sorumlusunun meşru menfaatleri için veri işlenmesinin zorunlu olması.
+Yetkili kamu kurum ve kuruluşları, tedarikçiler.
+Faturaların resmileşmesi için Gelir İdaresi Başkanlığı’na iletilmesi.
+Tedarikçilerden saklama hizmetinin alınması.
+Kimlik Bilgileri, Müşteri İşlem Bilgileri, Finans Bilgileri. Müşteri etiketlerinin sorgulanması ve entegratörlük süreçlerinin takip edilmesi.
+Bir sözleşmenin kurulması veya ifasıyla doğrudan doğruya ilgili olması kaydıyla, sözleşmenin taraflarına ait kişisel verilerin işlenmesinin gerekli olması.
+İlgili kişinin temel hak ve özgürlüklerine zarar vermemek kaydıyla, veri sorumlusunun meşru menfaatleri için veri işlenmesinin zorunlu olması.
+Tedarikçiler, topluluk şirketleri.
+Tedarikçilerden saklama hizmetinin alınması.
+Özel entegratör topluluk şirketleriyle iş birliği sağlanması.
+Kimlik Bilgileri, İletişim Bilgileri, Müşteri İşlem Bilgileri, Finans Bilgileri. Arşivleme işlemlerinin gerçekleşmesi ve müşterilerin e-dönüşüme dair belgelenin müşterinin talebine istinaden şifreli dosya olarak paylaşılması.
+Bir sözleşmenin kurulması veya ifasıyla doğrudan doğruya ilgili olması kaydıyla, sözleşmenin taraflarına ait kişisel verilerin işlenmesinin gerekli olması.
+İlgili kişinin temel hak ve özgürlüklerine zarar vermemek kaydıyla, veri sorumlusunun meşru menfaatleri için veri işlenmesinin zorunlu olması.
+Tedarikçiler. Tedarikçilerden saklama hizmetinin alınması. Kimlik Bilgileri, İletişim Bilgileri, Finans Bilgileri, Hukuki İşlem Bilgileri. Müşterilerin nevi, unvan ve tür değişikliğinin yapılması.
+Bir sözleşmenin kurulması veya ifasıyla doğrudan doğruya ilgili olması kaydıyla, sözleşmenin taraflarına ait kişisel verilerin işlenmesinin gerekli olması.
+Yurt dışındaki tedarikçilere aktarılması durumunda açık rıza sebebine dayanılacaktır.
+Tedarikçiler Tedarikçilerden saklama hizmeti alınması ve iş süreçlerinin kolaylaştırılması Kimlik Bilgileri, İletişim Bilgileri, Hukuki İşlem Bilgileri Vekaletname ve imza sirküleri süreçlerinin yürütülmesi.
+Bir sözleşmenin kurulması veya ifasıyla doğrudan doğruya ilgili olması kaydıyla, sözleşmenin taraflarına ait kişisel verilerin işlenmesinin gerekli olması.
+Bir hakkın tesisi, kullanılması veya korunması için veri işlemenin zorunlu olması.
+Hukuken yetkili kişiler, tedarikçiler. Sözleşme süreçlerinin yürütülebilmesi, avukat danışmanlık hizmetlerinin alınabilmesi. Kimlik Bilgileri, İletişim Bilgileri, Müşteri İşlem Bilgileri, Görsel ve İşitsel Kayıtlarınız. Etkinlik ve organizasyonların düzenlenmesi.
+İlgili kişinin temel hak ve özgürlüklerine zarar vermemek kaydıyla, veri sorumlusunun meşru menfaatleri için veri işlenmesinin zorunlu olması.
+Etkinlik süreçlerinde görsel ve işitsel kayıtlarınızın işlenmesi durumunda açık rıza hukuki sebebine dayanılacaktır.
+Herkese açık, Tedarikçiler
+Şirket etkinlik ve organizasyon- larını herkese açık olarak paylaşılması ve şirketin tanınırlığının artırılması.
+Müşteri ilişkileri yönetimi ve müşteri memnuniyetine yönelik faaliyetlerin yürütülmesi
+Kimlik Bilgileri, İletişim Bilgileri, Müşteri İşlem Bilgileri, Finans Bilgileri, Hukuki İşlem Bilgileri Yasal mevzuatlara uyum sağlanması ve hukuki yükümlülüklerin yerine getirilmesi. Veri sorumlusunun hukuki yükümlülüğünü yerine getirebilmesi için zorunlu olması. Yetkili kurum ve kuruluşlar, hukuken yetkili özel kişiler Yasal mevzuatlara uyum sağlanması ve hukuki yükümlülüklerimizin yerine getirilmesi. Kimlik Bilgileri, İletişim Bilgileri, Müşteri İşlem Bilgileri, Finans Bilgileri, Hukuki İşlem Bilgileri Dava, icra ve uyuşmazlık takibi süreçlerinin yürütülmesi.
+Bir hakkın tesisi, kullanılması veya korunması.
+İlgili kişinin temel hak ve özgürlüklerine zarar vermemek kaydıyla, veri sorumlusunun meşru menfaatleri için veri işlenmesinin zorunlu olması.
+Topluluk Şirketleri, Yetkili Kamu Kurum ve Kuruluşları, Hukuken Yetkili Kişiler Denetimin gerçekleştirilmesi, hukuki ve uyuşmazlık süreçlerinin yürütülmesi ve finans ve mali süreçlerin yürütülmesi Kimlik Bilgileri, İletişim Bilgileri, Müşteri İşlem Bilgileri, Finans Bilgileri, Hukuki İşlem Bilgileri, İşlem Güvenliği Bilgileriniz Şirket içi denetim faaliyetlerinin ve etik incelemelerinin gerçekleştirilmesi
+Şirketin hukuki yükümlülüğünü yerine getirmesi.
+İlgili kişinin temel hak ve özgürlüklerine zarar vermemek kaydıyla, veri sorumlusunun meşru menfaatleri için veri işlenmesinin zorunlu olması.
+Açık rıza.
+Yurt içinde ve yurtdışında bulunan tedarikçiler
+Dış denetim ve danışmanlık firmalarından hizmet alınması.
+Verilerin güvenli bir şekilde saklanması ve iş süreçlerinin kolaylaştırılması.
+Kimlik Bilgileri, İletişim Bilgileri, Müşteri İşlem Bilgileri, Finans Bilgileri, Hukuki İşlem Bilgileri, İşlem Güvenliği Bilgileriniz Yazılımlarımızın ve sistemlerimizin güvenliğinin sağlanması ve bilgi güvenliği süreçlerinin yürütülmesi
+İlgili kişinin temel hak ve özgürlüklerine zarar vermemek kaydıyla, veri sorumlusunun meşru menfaatleri için veri işlenmesinin zorunlu olması.
+Açık rıza.
+Yurt içinde ve yurtdışında bulunan tedarikçiler Bilgi güvenliği firmalarından hizmet alınması. Kimlik Bilgileri, Finans Bilgileri, Müşteri İşlem Bilgileri. Müşterilere kontör tanımlanması yapılması.
+Bir sözleşmenin kurulması veya ifasıyla doğrudan doğruya ilgili olması kaydıyla, sözleşmenin taraflarına ait kişisel verilerin işlenmesinin gerekli olması.
+İlgili kişinin temel hak ve özgürlüklerine zarar vermemek kaydıyla, veri sorumlusunun meşru menfaatleri için veri işlenmesinin zorunlu olması.
+Tedarikçiler, Topluluk şirketleri,
+Tedarikçilerden saklama hizmetinin alınması,
+İş süreçlerinin yürütülmesi, iş sürekliliğinin sağlanması.
+Kimlik Bilgileri, İletişim Bilgileri, Finans Bilgileri, Müşteri İşlem Bilgileri, İşlem Güvenliği Bilgileri Akıllı Raporlama ve Destek Botunu kullanmanız halinde taleplerinizin yerine getirilmesi
+Bir sözleşmenin kurulması veya ifasıyla doğrudan doğruya ilgili olması kaydıyla, sözleşmenin taraflarına ait kişisel verilerin işlenmesinin gerekli olması.
+İlgili kişinin temel hak ve özgürlüklerine zarar vermemek kaydıyla, veri sorumlusunun meşru menfaatleri için veri işlenmesinin zorunlu olması
+Tedarikçiler
+Teknik altyapı desteği alınması
+Kimlik, İletişim, İşlem Güvenliği Bilgileri
+API kullanımı için başvuru süreçlerini yürütebilmesi ve kayıtların alınması
+Bir sözleşmenin kurulması veya ifasıyla doğrudan doğruya ilgili olması kaydıyla, sözleşmenin taraflarına ait kişisel verilerin işlenmesinin gerekli olması
+Yurt içi ve yurt dışında bulunan iş ortakları, tedarikçiler. Tedarikçilerden saklama hizmeti alınması
+Tedarikçiler:
+Kişisel Veri İşleme Amacı Hukuki Sebep Aktarılan Taraf Aktarım Amacı Kimlik Bilgileri, İletişim Bilgileri, Hukuki İşlem Bilgileri, Finans Bilgileri, Mesleki Deneyim Bilgileri Şirketimizin tedarikçilerle sözleşme ve hizmet alım süreçlerinin yürütülmesi ve tedarikçi kayıtlarının açılması
+Bir sözleşmenin kurulması veya ifasıyla doğrudan doğruya ilgili olması kaydıyla, sözleşmenin taraflarına ait kişisel verilerin işlenmesinin gerekli olması.
+İlgili kişinin temel hak ve özgürlüklerine zarar vermemek kaydıyla, veri sorumlusunun meşru menfaatleri için veri işlenmesinin zorunlu olması.
+Topluluk şirketleri
+İş süreçlerinin yürütülmesi, iş sürekliliğinin sağlanması, denetim, soruşturma ve istihbarat faaliyetlerinin yürütülmesi.
+Kimlik Bilgileri, İletişim Bilgileri, Finans Bilgileri Finans ve muhasebe faaliyetlerinin yürütülmesi, faturaların kesilmesi, ödenmesi ve cari işlem hesaplarının açılması
+Bir sözleşmenin kurulması veya ifasıyla doğrudan doğruya ilgili olması kaydıyla, sözleşmenin taraflarına ait kişisel verilerin işlenmesinin gerekli olması.
+İlgili kişinin temel hak ve özgürlüklerine zarar vermemek kaydıyla, veri sorumlusunun meşru menfaatleri için veri işlenmesinin zorunlu olması.
+Topluluk şirketleri
+İş süreçlerinin yürütülmesi, iş sürekliliğinin sağlanması ve denetim gerçekleştirilmesi
+Kimlik Bilgileri, İletişim Bilgileri, Mesleki Deneyim Bilgileri Tedarikçilerle iletişim süreçlerinin yürütülmesi ve gelen soru ve taleplerin cevaplandırılması
+Bir sözleşmenin kurulması veya ifasıyla doğrudan doğruya ilgili olması kaydıyla, sözleşmenin taraflarına ait kişisel verilerin işlenmesinin gerekli olması.
+İlgili kişinin temel hak ve özgürlüklerine zarar vermemek kaydıyla, veri sorumlusunun meşru menfaatleri için veri işlenmesinin zorunlu olması.
+Topluluk şirketleri
+İletişim süreçlerinin yürütülmesi, iş sürekliliğinin sağlanması ve denetim gerçekleştirilmesi
+Kimlik Bilgileri, Finans Bilgileri, Mesleki Deneyim Bilgileri Satın alım süreçlerinin planlanması, iş faaliyetlerimizdeki verimliliğe ilişkin analizlerin yürütebilmesi, strateji planlamalarının yapılabilmesi İlgili kişinin temel hak ve özgürlüklerine zarar vermemek kaydıyla, veri sorumlusunun meşru menfaatleri için veri işlenmesinin zorunlu olması. Topluluk şirketleri
+Topluluk şirketleri içerisinde planlama süreçlerinin yürütülmesi ve iş sürekliliğinin sağlanması
+Kimlik Bilgileri, İletişim Bilgileri, Mesleki Deneyim Bilgileri Müşterilerden gelen talep, şikâyet ve sorulara cevap verilmesi
+Bir hakkın tesisi, kullanılması veya korunması için veri işlemenin zorunlu olması
+İlgili kişinin temel hak ve özgürlüklerine zarar vermemek kaydıyla, veri sorumlusunun meşru menfaatleri için veri işlenmesinin zorunlu olması
+Topluluk şirketleri
+İş süreçlerinin yürütülmesi, talep ve şikayetlerin takibi, iş sürekliliğinin sağlanması ve denetim gerçekleştirilmesi
+Kimlik Bilgileri, İletişim Bilgileri, Hukuki İşlem Bilgileri, Finans Bilgileri, Mesleki Deneyim Bilgileri Şirketimizin tabi olacağı hukuki mevzuatlara uygun faaliyet göstermek, kamu kurum ve kuruluşlarından ve mahkemelerden gelen taleplerin cevaplandırılması ve yetkililere bilgi verilmesi
+Kanunlarda açıkça öngörülmesi
+Hukuki yükümlülüğün yerine getirilmesi
+Bir hakkın tesisi, kullanılması veya korunması için veri işlemenin zorunlu olması
+Topluluk şirketleri, yetkili kamu kurum ve kuruluşları
+İş süreçlerinin yürütülmesi, iş sürekliliğinin sağlanması, denetim, soruşturma ve istihbarat faaliyetlerinin yürütülmesi.
+Yetkili kamu kurum ve kuruluşların taleplerini karşılamak
+Kanunlara uyum sağlamak
+Kimlik Bilgileri, İletişim Bilgileri, Hukuki İşlem Bilgileri, Finans Bilgileri, Mesleki Deneyim Bilgileri Şirketimizin taraf olduğu uyuşmazlık, arabuluculuk, dava süreçlerinin yürütülmesi
+Bir hakkın tesisi, kullanılması veya korunması için veri işlemenin zorunlu olması
+Topluluk şirketleri, yetkili kamu kurum ve kuruluşları
+İş süreçlerinin yürütülmesi, iş sürekliliğinin sağlanması, denetim, soruşturma ve istihbarat faaliyetlerinin yürütülmesi.
+Şirketin kendisini savunabilmesi
+İş Ortakları:
+Kişisel Veri İşleme Amacı Hukuki Sebep Aktarılan Taraf Aktarım Amacı Kimlik Bilgileri, İletişim Bilgileri, Hukuki İşlem Bilgileri, Finans Bilgileri, Mesleki Deneyim Bilgileri Şirketimizin iş ortaklarıyla sözleşme süreçlerinin yürütülmesi, iş ortağı kayıtlarının açılması
+Bir sözleşmenin kurulması veya ifasıyla doğrudan doğruya ilgili olması kaydıyla, sözleşmenin taraflarına ait kişisel verilerin işlenmesinin gerekli olması.
+İlgili kişinin temel hak ve özgürlüklerine zarar vermemek kaydıyla, veri sorumlusunun meşru menfaatleri için veri işlenmesinin zorunlu olması.
+Topluluk şirketleri, iş ortakları
+İş süreçlerinin yürütülmesi, iş sürekliliğinin sağlanması, denetim, soruşturma ve istihbarat faaliyetlerinin yürütülmesi
+Kimlik Bilgileri, İletişim Bilgileri, Finans Bilgileri, Mesleki Deneyim Bilgileri, Görsel ve İşitsel Kayıtlar İş ortaklarından çalışan desteği alınması ve görevlendirme süreçlerinin yürütülmesi
+Bir sözleşmenin kurulması veya ifasıyla doğrudan doğruya ilgili olması kaydıyla, sözleşmenin taraflarına ait kişisel verilerin işlenmesinin gerekli olması.
+İlgili kişinin temel hak ve özgürlüklerine zarar vermemek kaydıyla, veri sorumlusunun meşru menfaatleri için veri işlenmesinin zorunlu olması.
+İş ortakları Fiziki güvenliğin sağlanması amacıyla bina yönetimine bilgi verilmesi Kimlik Bilgileri, İletişim Bilgileri, Finans Bilgileri Finans ve muhasebe faaliyetlerinin yürütülmesi
+Bir sözleşmenin kurulması veya ifasıyla doğrudan doğruya ilgili olması kaydıyla, sözleşmenin taraflarına ait kişisel verilerin işlenmesinin gerekli olması.
+İlgili kişinin temel hak ve özgürlüklerine zarar vermemek kaydıyla, veri sorumlusunun meşru menfaatleri için veri işlenmesinin zorunlu olması.
+Topluluk şirketleri
+İş süreçlerinin yürütülmesi, iş sürekliliğinin sağlanması ve denetim gerçekleştirilmesi
+Kimlik Bilgileri, İletişim Bilgileri, Mesleki Deneyim Bilgileri İş ortaklarıyla iletişim süreçlerinin yürütülmesi
+Bir sözleşmenin kurulması veya ifasıyla doğrudan doğruya ilgili olması kaydıyla, sözleşmenin taraflarına ait kişisel verilerin işlenmesinin gerekli olması.
+İlgili kişinin temel hak ve özgürlüklerine zarar vermemek kaydıyla, veri sorumlusunun meşru menfaatleri için veri işlenmesinin zorunlu olması.
+Topluluk şirketleri
+İletişim süreçlerinin yürütülmesi, iş sürekliliğinin sağlanması ve denetim gerçekleştirilmesi
+Kimlik Bilgileri, Finans Bilgileri, Mesleki Deneyim Bilgileri İş faaliyetlerimizdeki verimliliğe ilişkin analizlerin yürütebilmesi, strateji planlamalarının yapılabilmesi İlgili kişinin temel hak ve özgürlüklerine zarar vermemek kaydıyla, veri sorumlusunun meşru menfaatleri için veri işlenmesinin zorunlu olması. Topluluk şirketleri
+Topluluk şirketleri içerisinde planlama süreçlerinin yürütülmesi ve iş sürekliliğinin sağlanması
+Kimlik Bilgileri, İletişim Bilgileri, Mesleki Deneyim Bilgileri Müşterilerden gelen talep, şikâyet ve sorulara cevap verilmesi
+Bir hakkın tesisi, kullanılması veya korunması için veri işlemenin zorunlu olması
+İlgili kişinin temel hak ve özgürlüklerine zarar vermemek kaydıyla, veri sorumlusunun meşru menfaatleri için veri işlenmesinin zorunlu olması
+Topluluk şirketleri
+İş süreçlerinin yürütülmesi, talep ve şikayetlerin takibi, iş sürekliliğinin sağlanması ve denetim gerçekleştirilmesi
+Kimlik Bilgileri, İletişim Bilgileri, Hukuki İşlem Bilgileri, Finans Bilgileri, İşlem Güvenliği Bilgileri, Mesleki Deneyim Bilgileri, Görsel ve İşitsel Kayıtlar Şirketimizin tabi olacağı hukuki mevzuatlara uygun faaliyet göstermek, kamu kurum ve kuruluşlarından ve mahkemelerden gelen taleplerin cevaplandırılması ve yetkililere bilgi verilmesi
+Kanunlarda açıkça öngörülmesi
+Hukuki yükümlülüğün yerine getirilmesi
+Bir hakkın tesisi, kullanılması veya korunması için veri işlemenin zorunlu olması
+Topluluk şirketleri, yetkili kamu kurum ve kuruluşları
+İş süreçlerinin yürütülmesi, iş sürekliliğinin sağlanması, denetim, soruşturma ve istihbarat faaliyetlerinin yürütülmesi.
+Yetkili kamu kurum ve kuruluşların taleplerini karşılamak
+Kanunlara uyum sağlamak
+Kimlik Bilgileri, İletişim Bilgileri, Hukuki İşlem Bilgileri, Finans Bilgileri, İşlem Güvenliği Bilgileri, Mesleki Deneyim Bilgileri, Görsel ve İşitsel Kayıtlar Şirketimizin taraf olduğu uyuşmazlık, arabuluculuk, dava süreçlerinin yürütülmesi
+Bir hakkın tesisi, kullanılması veya korunması için veri işlemenin zorunlu olması
+Topluluk şirketleri, yetkili kamu kurum ve kuruluşları
+İş süreçlerinin yürütülmesi, iş sürekliliğinin sağlanması, denetim, soruşturma ve istihbarat faaliyetlerinin yürütülmesi.
+Şirketin kendisini savunabilmesi
+Şirket Temsilcisi veya vekili, Şirket Hissedarları:
+Kişisel Veri İşleme Amacı Hukuki Sebep Aktarılan Taraf Aktarım Amacı
+​​ ​
+Kimlik Bilgisi, İletişim Bilgisi, Mesleki Deneyim
+Genel Kurul ve Yönetim Kurulu süreçlerinin yürütülmesi
+Yönetim Kurulu ve Genel Kurul karaları dahil yönetim süreçlerinin yürütülmesi
+İmza yetkililerin belirlenmesi, imza sirkülerinin çıkarılması, şirket satın almaları, çalışanlara vekaletname verilmesi dahil sözleşme süreçlerinin yürütülmesi
+Yönetim faaliyetlerinin yürütülmesi
+Veri sorumlusunun hukuki yükümlülüğünü yerine getirebilmesi için zorunlu olması.
+Kanunlarda açıkça öngörülmesi.
+Yetkili kamu kurum ve kuruluşları, hukuken yetkili kişiler.
+Yurt dışındaki hakim hissedarımız
+Genel Kurul ve Yönetim Kurulu kararlarının Ticaret Sicil Müdürlüğü’ne bildirilmesi.
+Danışman avukatlardan destek alınması.
+Yönetim Kurulu ve Genel Kurul karaları dahil yönetim süreçlerinin yürütülmesi
+İmza yetkililerin belirlenmesi, imza sirkülerinin çıkarılması, şirket satın almaları, çalışanlara vekaletname verilmesi dahil sözleşme süreçlerinin yürütülmesi
+Saklama ve arşiv faaliyetlerinin yürütülmesi
+Teknik alt yapı desteği alınması
+Şirket temsilcisi veya vekili;
+Kimlik, İletişim, İşlem Güvenliği, Mesleki Deneyim, Hukuki İşlem, Görsel Kayıt
+Genel Kurul ve Yönetim Kurulu süreçlerinin yürütülmesi
+Yönetim Kurulu ve Genel Kurul karaları dahil yönetim süreçlerinin yürütülmesi
+İmza yetkililerin belirlenmesi, imza sirkülerinin çıkarılması, şirket satın almaları, çalışanlara vekaletname verilmesi dahil sözleşme süreçlerinin yürütülmesi
+Yönetim faaliyetlerinin yürütülmesi
+Veri sorumlusunun hukuki yükümlülüğünü yerine getirebilmesi için zorunlu olması.
+Kanunlarda açıkça öngörülmesi.
+Yurt dışındaki hakim hissedarımız
+Saklama ve arşiv faaliyetlerinin yürütülmesi
+Teknik alt yapı desteği alınması
+Şirket Hissedarları;
+Kimlik, İletişim, Mesleki Deneyim, Hukuki İşlem, Görsel kayıt
+Genel Kurul ve Yönetim Kurulu süreçlerinin yürütülmesi
+Yönetim Kurulu ve Genel Kurul karaları dahil yönetim süreçlerinin yürütülmesi
+İmza yetkililerin belirlenmesi, imza sirkülerinin çıkarılması, şirket satın almaları, çalışanlara vekaletname verilmesi dahil sözleşme süreçlerinin yürütülmesi
+Yönetim faaliyetlerinin yürütülmesi
+Veri sorumlusunun hukuki yükümlülüğünü yerine getirebilmesi için zorunlu olması.
+Kanunlarda açıkça öngörülmesi.
+Yurt dışındaki hakim hissedarımız
+Saklama ve arşiv faaliyetlerinin yürütülmesi
+Teknik alt yapı desteği alınması
+Paraşüt ürünlerini kullanırken kendi müşterilerinize ve sair kişilere ait kişisel verileri, Paraşüt ürünlerine kaydetmeniz, işlemeniz durumunda, Şirketimizin veri işleyen pozisyonunda olduğunu, bu nedenle ilgili kişisel verilere ilişkin 6698 sayılı Kişisel Verilerin Korunması Kanunu ve ikincil mevzuat kapsamında veri sorumlusu olmaktan kaynaklanan yükümlülüklerin tarafınızca yerine getirilmesi gerektiğini, söz konusu üçüncü kişilere karşı getirilmesi gereken yükümlülükler bakımından Şirketimizin herhangi bir sorumluluğu bulunmadığını paylaşmak isteriz. Bu kapsamda, Paraşüt ürünleri nezdinde işlediğiniz kendi müşterilerinize, varsa Paraşüt ürünleri içerisinde yetkilendirdiğiniz alt kullanıcılarınıza ve sair kişilere ait kişisel verilere ilişkin ilgili kişileri aydınlatmak ve gerekmesi halinde kendilerinden açık rıza almak sizin sorumluğunuzdadır.
+3- Kişisel Veri Toplamanın Yöntemi
+Kişisel verileriniz; e-posta, SMS, kartvizitler, telefon, faks, elektronik form, fiziki form, sosyal medya hesaplarımız, internet sitelerimiz, uzaktan erişim sağlayan platformlarımız, iş ortaklarımız, dijital partner ortamımız vasıtasıyla, posta, kargo ya da kurye hizmetleri ile, yüz yüze görüşmeler, diğer fiziki ve elektronik ortamlar aracılığıyla toplanmaktadır.
+4- İlgili Kişinin Hakları
+Tarafımızca işlenen kişisel verilerinize ilişkin olarak Kanun’un 11. maddesi kapsamındaki taleplerinizi; Veri Sorumlusuna Başvuru Usul ve Esasları Hakkında Tebliğ’e uygun şekilde yazılı olarak ya da güvenli elektronik imza, mobil imza ya da bize daha önce bildirdiğiniz ve sistemimizde kayıtlı bulunan elektronik posta adresinizi kullanarak aşağıdaki adreslere her zaman iletebilirsiniz.
+Veri Sorumlusu: Paraşüt Yazılım Teknolojileri A.Ş.
+E-posta: [email&#160;protected]
+Adres: Maslak Mahallesi AOS 55. Sokak 42 Maslak A Blok Sit. No: 2/11Sarıyer İstanbul
+Özellikler
+Ticari İşletme Programı
+Ön Muhasebe Yönetimi
+Cari Hesap Takibi Teklif Yönetimi Nakit Yönetimi Stok ve Depo Takibi Ön Muhasebe Raporları Yapay Zekâ Özellikleri
+e-Belge Çözümleri
+e-Fatura e-Arşiv e-İhracat Faturası e-İrsaliye e-SMM
+Entegrasyonlar
+e-Ticaret Entegrasyonu Banka Entegrasyonu Online Tahsilat Entegrasyonu CRM Entegrasyonu Saha Ekip Yönetim Entegrasyonu Stok Yönetim Entegrasyonu
+Destek
+Kullanım Kılavuzu Sıkça Sorulan Sorular
+Paraşüt
+Hakkımızda İletişim Çevre Politikası Sosyal Politika Pazaryeri
+Blog
+Blog
+Kariyer
+Kariyer İş Fırsatları
+İletişim
+Telefon
+0212 963 00 20
+E-Posta
+Özellikler
+Ticari İşletme Programı
+Ön Muhasebe Yönetimi
+Cari Hesap Takibi Teklif Yönetimi Nakit Yönetimi Stok ve Depo Takibi Ön Muhasebe Raporları Yapay Zekâ Özellikleri
+e-Belge Çözümleri
+e-Fatura e-Arşiv e-İhracat Faturası e-İrsaliye e-SMM
+Entegrasyonlar
+e-Ticaret Entegrasyonu Banka Entegrasyonu Online Tahsilat Entegrasyonu CRM Entegrasyonu Saha Ekip Yönetim Entegrasyonu Stok Yönetim Entegrasyonu
+Destek
+Kullanım Kılavuzu Sıkça Sorulan Sorular
+Paraşüt
+Hakkımızda İletişim Çevre Politikası Sosyal Politika Pazaryeri
+Blog
+Blog
+Kariyer
+Kariyer İş Fırsatları
+İletişim
+Telefon
+0212 963 00 20
+E-Posta
+e-Ticaret yapanlar için
+e-Ticaret operasyonunuzun tüm ihtiyaçlarını tek pakette karşıla
+Mali Müşavirler için
+Ücretsiz veri aktarım ve mükellef yönetim programları ile mükelleflerinizin faturalarını tek tıkla kendi muhasebe programınıza aktarın.
+Hesaplama araçları
+Hesaplama araçları ile işlerinizi kolaylaştırın
+Geliştiriciler için
+Paraşüt API ile finansal operasyonları dijitalleştiren çözümler geliştirin.
+Ön muhasebeni mobil uygulamadan yönet
+Takipte Kalın
+Kullanıcı Sözleşmesi Kullanım Koşulları KVKK ve İşlenmesine İlşkin Aydınlatma Metni Açık Rıza Metni Çerez Politikası API e-Ticaret Modülü Kullanım Koşulları e-Ticaret Modülü Aydınlatma Metni İlgili Kişi Başvuru Formu Yasal Uyarılar Yapay Zeka Destekli Modül Kullanım Koşulları Yapay Zekâ Destekli Modül Kullanımına İlişkin Kişisel Verilerin İşlenmesi Hakkında Aydınlatma Metni
