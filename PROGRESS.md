@@ -1,6 +1,47 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 📌 Son Güncelleme [30.10.2026 - 23:45] — ANA DAL (MAIN) ÇALIŞMA PROTOKOLÜNE GEÇİŞ VE 5 KURUMSAL SAYFA ENTEGRASYONU [✓]
+* **Yapılan İşlemler:**
+  1. **Ana Dal (Main) Çalışma Protokolü Kilitlendi:**
+     - Kullanıcı talimatı doğrultusunda ara/dal (DevAdmin vb.) kullanımı durduruldu; tüm geliştirmelerin doğrudan `main` üzerinde yürütülmesi kararı `AGENTS.md` ve `PROGRESS.md` dosyalarına işlendi.
+  2. **Yasal Sayfaların ve Taslak Metinlerin Birleştirilmesi:**
+     - Akşam oturumunda tamamlanan 5 kurumsal sayfa (`terms`, `privacy`, `cookies`, `kvkk`, `contact`) ve sadeleştirilmiş markdown taslakları `DevAdmin` üzerinden doğrudan `main` dalına entegre edildi.
+  3. **Canlı ve Çapraz Senkronizasyon:**
+     - `webMSKLabs` ve `MSKLabsDesk` repoları `main` dalında eşitlenerek GitHub'a push edildi.
+
+---
+
+## 📌 Son Güncelleme [30.10.2026 - 23:25] — 5 KURUMSAL SAYFANIN METİNLERİ VE TASLAK EŞİTLEMESİ TAMAMLANDI [✓]
+* **Yapılan İşlem:**
+  1. **5 Kurumsal Sayfanın Tamamlanması:**
+     - Kullanıcı incelemesi ve kabulü sonrasında `terms.html`, `privacy.html`, `cookies.html`, `kvkk.html` ve `contact.html` sayfalarının metinleri nihai olarak kilitlendi.
+  2. **Kullanım Koşulları Giriş Sadeleştirmesi:**
+     - `00 KULLANIM_KOSULLARI_TASLAK.md` ve `terms.html` giriş başlığı ve kapsam alanı minimalist bir yapıya kavuşturuldu.
+  3. **Yasal Metinler Tarih Standardı (Dipnot Modeli):**
+     - `terms`, `privacy`, `cookies` ve `kvkk` belgelerinin başındaki göz yoran tarihler kaldırılarak, emsal kurumsal standartlara uygun olarak tüm maddelerin sonuna tek satırlık zarif dipnot (`Son Güncelleme: 30 Ekim 2026`) olarak taşındı.
+  4. **Derleme & Yerel Doğrulama:**
+     - `tsc --noEmit && vite build` 0 hata ile çalıştırıldı, üretim paketi (`dist/`) güncellendi ve tüm yerel uç noktalar HTTP 200 ile doğrulandı.
+
+---
+
+## 📌 Son Güncelleme [30.10.2026 - 23:05] — YASAL VE KURUMSAL SAYFALARIN METİN DÜZENLEMELERİ VE TEK KAYNAK EŞİTLEMESİ [✓]
+* **Yapılan İşlem:**
+  1. **00 Taslak Markdown Dosyalarının Sadeleştirilmesi ve Nihai Hali (`MSKLabsDesk`):**
+     - `00 KULLANIM_KOSULLARI_TASLAK.md`, `00 GIZLILIK_POLITIKASI_TASLAK.md`, `00 CEREZ_POLITIKASI_TASLAK.md`, `00 KVKK_AYDINLATMA_METNI_TASLAK.md` ve `ILETISIM_KURUMSAL_TASLAK.md` dosyaları incelendi.
+     - Tekil uygulama adları ve mikro sensör tabloları genel şemsiye Local-First ve kullanıcı veri egemenliği ifadelerine dönüştürüldü.
+     - Kamera ve mikrofon istisnası (arka planda erişim yasağı, ses/optik işlevli özel araçlarda kullanıcı rızasıyla yerel işleme) eklendi.
+     - Çerez politikasındaki gereksiz tablo ve başlık (eski Madde 4) kaldırılarak maddeler 7 maddeli sade yapıya kavuşturuldu.
+     - Gizlilik politikasındaki Madde 1 veri sorumlusu irtibat kanalları sadeleştirildi.
+  2. **Web Sayfalarının Sıfırlanması ve Birebir Eşitlenmesi (`webMSKLabs`):**
+     - `terms.html`, `privacy.html`, `cookies.html`, `kvkk.html` ve `contact.html` sayfalarındaki eski metin kalıntıları tamamen temizlendi.
+     - Düzenlenen taslak markdown metinleri hiçbir kelimesi eksiltilmeden, harfi harfine birebir anlamsal HTML formatına dönüştürülerek sayfalara yerleştirildi.
+  3. **Kalite ve Derleme Doğrulaması:**
+     - `tsc --noEmit && vite build` 0 hata ile çalıştırıldı ve `dist/` çıktıları güncellendi.
+     - Yerel dev sunucusu üzerinde tüm uç noktaların HTTP 200 yanıtı ve görsel uyumu doğrulandı.
+
+---
+
 ## 📌 Son Güncelleme [30.10.2026 - 17:00] — 2. AŞAMA TAMAMLANDI: MAIN GEÇİŞİ, WORKER ASSETS ONARIMI VE CANLI YAYIN [✓]
 * **Yapılan İşlemler:**
   1. **Yedek Dal Güvencesi & Main Birleştirme:**

@@ -21,7 +21,7 @@
 * Kullanıcı süreçle ilgili genel/özel bir kural ifade ettiğinde fark edilir ve `AGENTS.md` dosyasına eklenerek kayıt altına alınır.
 
 ## 4. Ana Dal (Main) ve Canlı Yayın Protokolü
-* **Ana Dal Çalışma Standardı:** Hem panel yapısı (`MSKLabsDesk`) hem de web arayüzü (`webMSKLabs`) tamamen normal yayına geçmiş olup, tüm geliştirmeler ve güncellemeler doğrudan ana dal (`main`) üzerinde yürütülür.
+* **Ana Dal Çalışma Standardı:** Hem panel yapısı (`MSKLabsDesk`) hem de web arayüzü (`webMSKLabs`) tamamen normal yayına geçmiş olup, tüm geliştirmeler ve güncellemeler doğrudan ana dal (`main`) üzerinde yürütülür. Şimdilik doğrudan `main` dalında çalışıyoruz; kullanıcı açıkça yeni bir dala geçilmesini belirtmediği sürece doğrudan ana dalda kalınır, commit ve push işlemleri doğrudan `main` dalına yapılır.
 * **Yedek Dal Güvencesi:** Canlıya geçiş öncesindeki kararlı durumlar (`OldMain`, `OldMaster` ve `DevAdmin`) yedek ve arşiv amaçlı olarak hem yerelde hem uzak repoda korunur; silinmez.
 * **Yerel Öncelikli Doğrulama (Local-First Verification):** Değişiklikler doğrudan ana dalda geliştirilse dahi önce yerel sunucuda (`localhost`) derlenip test edilir; kullanıcıdan yerel görünüm ve işlevsellik için açık onay alınmadan uzak sunucuya (Cloudflare Pages / GitHub) push/dağıtım yapılmaz.
 * **Kabul Kriteri:** Görevler ancak kod uygulandığında, arayüz-API-veritabanı entegrasyonu gerçek veriyle doğrulandığında ve regresyon testleri geçtiğinde `DoD` kriterini sağlar. Mock veri veya yüzeysel PASS yeterli kabul edilmez.

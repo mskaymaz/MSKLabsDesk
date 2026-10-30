@@ -1,166 +1,115 @@
-# MSK Labs — Gizlilik Politikası ve KVKK Aydınlatma Metni (Taslak)
+# MSK Labs — Genel Gizlilik Politikası (Taslak)
 
-> **Belge Niteliği:** Kurumsal Çatı Gizlilik İlkeleri, Çerez Yönetimi ve 6698 Sayılı Kanun Kapsamında Aydınlatma Metni  
-> **Kapsam:** `msklabs.org` İnternet Sitesi, Alt Alan Adları, Windows/macOS/Linux Masaüstü Yazılımları ve Android/iOS Mobil Uygulamaları
+> **Belge Niteliği:** Kurumsal Çatı Gizlilik İlkeleri, Yerel Öncelikli Mimari ve Veri Güvenliği Esasları  
+> **Kapsam:** `msklabs.org` Web Platformu, Tüm Alt Alan Adları, Masaüstü Yazılımları ve Mobil Uygulamalar
 
 ---
 
 ## 🛡️ Temel Mahremiyet İlkemiz — Sıfır Bilgi (Zero-Knowledge) ve Yerel Öncelikli (Local-First) Mimari
 
-MSK Labs; kullanıcı mahremiyetini ve kişisel verilerin dokunulmazlığını tüm ticari hedeflerin, reklam gelirlerinin ve veri madenciliği faaliyetlerinin üzerinde tutar. 
+MSK Labs; kullanıcı mahremiyetini ve kişisel verilerin dokunulmazlığını tüm ticari hedeflerin, reklam modellerinin ve veri madenciliği faaliyetlerinin üzerinde tutar. 
 
-Masaüstü yazılımlarımızda ve mobil uygulamalarımızda **merkezi kullanıcı hesabı açma, zorunlu üyelik, profil çıkarma veya kişisel veri toplama kesinlikle bulunmamaktadır.** Tüm yapılandırma dosyalarınız, notlarınız, sayaç değerleriniz ve kullanıcı tercihleriniz *"Veriniz tamamen sizindir"* ilkesi uyarınca **tamamen kendi fiziksel cihazınızda yerel olarak** işlenir ve saklanır; merkezi sunucularımıza aktarılmaz.
+Tüm uygulamalarımızda **merkezi kullanıcı hesabı açma, zorunlu üyelik, profil çıkarma veya kişisel veri toplama kesinlikle bulunmamaktadır.** Tüm çalışma dosyalarınız, notlarınız, hedefleriniz ve kullanıcı tercihleriniz *"Veriniz tamamen sizindir"* ilkesi uyarınca **tamamen kendi fiziksel cihazınızda yerel olarak** işlenir ve saklanır; merkezi sunucularımıza aktarılmaz. Kullanıcılar bu verileri kontrol etme, yedekleme ve diledikleri an silme konusunda tam yetkiye sahiptir.
 
 ---
 
 ## Madde 1 — Veri Sorumlusunun Kimliği
 
-6698 sayılı Kişisel Verilerin Korunması Kanunu ("KVKK"), Aydınlatma Yükümlülüğünün Yerine Getirilmesinde Uyulacak Usul ve Esaslar Hakkında Tebliğ ve Avrupa Birliği Genel Veri Koruma Tüzüğü ("GDPR") hükümleri uyarınca; `msklabs.org` internet sitesi ile masaüstü (Windows, macOS, Linux) ve mobil (Android, iOS) platformlarda yayınlanan bağımsız yazılım ürünlerinin geliştiricisi ve yöneticisi olan **MSK Labs** ("Kuruluş", "Biz" veya "Veri Sorumlusu"), kişisel verilerinizin korunmasına en üst düzeyde özen göstermektedir.
+`msklabs.org` internet sitesi ile masaüstü ve mobil platformlarda yayınlanan bağımsız yazılım ürünlerinin geliştiricisi ve yöneticisi olan **MSK Labs** ("Kuruluş", "Biz" veya "Veri Sorumlusu"), kişisel verilerinizin korunmasına en üst düzeyde özen göstermektedir.
 
 * **Resmi İnternet Sitesi:** https://msklabs.org
-* **Veri Koruma & KVKK İrtibat E-Postası:** kvkk@msklabs.org
-* **Genel Destek E-Postası:** destek@msklabs.org
+* **Çevrim İçi Destek Masası:** https://msklabs.org/destek.html
 
 ---
 
 ## Madde 2 — Kişisel Verilerin İşlenmesindeki Temel İlkeler
 
-MSK Labs bünyesinde yürütülen tüm veri işleme süreçleri, KVKK'nın 4. maddesinde düzenlenen temel ilkelere sıkı sıkıya bağlıdır:
+MSK Labs ekosisteminde yürütülen tüm süreçler evrensel veri koruma prensiplerine sıkı sıkıya bağlıdır:
 
 1. **Hukuka ve Dürüstlük Kurallarına Uygunluk:** Kullanıcı aleyhine gizli veya öngörülemez hiçbir veri işleme faaliyeti yürütülmez.
-2. **Doğruluk ve Gerektiğinde Güncellik:** Yerel veriler kullanıcının kendi denetiminde olduğundan, verilerin doğruluğu ve güncelliği doğrudan kullanıcının tasarrufundadır.
-3. **Belirli, Açık ve Meşru Amaçlar İçin İşlenme:** Arka planda habersiz veri toplayan, kullanıcı davranışını gözetleyen veya izinsiz veri sızdıran hiçbir kod parçası sistemlerimizde yer almaz.
-4. **İşlendikleri Amaçla Bağlantılı, Sınırlı ve Ölçülü Olma (Veri Minimizasyonu):** Yalnızca hizmetin teknik olarak sunulabilmesi için kaçınılmaz olan asgari düzeydeki veriler işlenir.
-5. **Gerekli Süre Kadar Muhafaza Edilme:** Yerel veriler kullanıcının cihazında saklanır; merkezi sunucularımızda gereksiz veri arşivi tutulmaz.
+2. **Kullanıcı Veri Egemenliği:** Yerel veriler kullanıcının kendi denetiminde olduğundan; verilerin üretimi, saklanması ve silinmesi doğrudan kullanıcının tasarrufundadır.
+3. **Belirli, Açık ve Meşru Amaçlar İçin İşlenme:** Arka planda habersiz veri toplayan veya kullanıcı davranışını gözetleyen hiçbir telemetri kodu sistemlerimizde yer almaz.
+4. **Veri Minimizasyonu (Ölçülülük):** Yalnızca ilgili hizmetin veya uygulamanın teknik olarak sunulabilmesi için kaçınılmaz olan asgari düzeydeki yerel veriler işlenir.
+5. **Sınırlı Muhafaza:** Sunucularımızda gereksiz veri arşivi tutulmaz; yerel veriler kullanıcının cihazında saklanır.
 
 ---
 
-## Madde 3 — İşlenen Kişisel Veri Kategorileri
+## Madde 3 — İşlenen Veriler ve Genel Kapsamı
 
-MSK Labs ekosisteminde işlenen kişisel veriler nitelikleri itibarıyla aşağıdaki kategorilerden oluşmaktadır:
+MSK Labs ekosisteminde işlenen veriler nitelikleri itibarıyla asgari düzeydedir:
 
-* **Kimlik Bilgisi:** Yalnızca web sitemizdeki destek masası veya doğrudan e-posta yazışmalarında kullanıcının kendi isteğiyle paylaştığı ad ve soyad bilgisi. *(Masaüstü ve mobil uygulamalarımızın kullanımında kimlik bilgisi talep edilmez.)*
-* **İletişim Bilgisi:** Kullanıcının destek talebi oluştururken veya e-bültene kaydolurken kendi isteğiyle paylaştığı e-posta adresi.
-* **Müşteri İşlem ve Talep/Şikayet Bilgisi:** Destek masası veya e-posta üzerinden iletilen hata bildirimleri, teknik destek biletleri, öneri ve yazışma içerikleri.
-* **İşlem ve Ağ Güvenliği Bilgisi:** Web sitesine erişim sırasında sunucu altyapısını siber saldırılardan korumak ve 5651 sayılı Kanun yükümlülüklerini yerine getirmek amacıyla geçici olarak kaydedilen internet protokolü (IP) adresi, tarayıcı türü, işletim sistemi bilgisi ve istek zaman damgaları.
-* **Kullanıcı İşlem ve Tercih Verileri (Yerel Depolama):** Kullanıcının tarayıcısında veya cihazında yerel olarak saklanan gece/gündüz tema tercihi, seçili dil ve çerez onay tercihleri.
-* **Pazarlama Bilgisi (Yalnızca Açık Rıza ile):** E-bülten listemize kendi rızasıyla kaydolan kullanıcılara yeni sürüm duyuruları iletmek için kullanılan e-posta adresi.
+* **İletişim ve Destek Bilgileri:** Yalnızca web sitemizdeki destek masası veya doğrudan e-posta yazışmalarında kullanıcının kendi isteğiyle paylaştığı ad-soyad, e-posta adresi ve talep içerikleri. *(Uygulamalarımızın kullanımında kimlik veya iletişim bilgisi talep edilmez.)*
+* **Ağ ve İşlem Güvenliği Verileri:** Web sitesine erişim sırasında sunucu altyapısını siber saldırılardan korumak amacıyla geçici olarak kaydedilen internet protokolü (IP) adresi, tarayıcı türü ve zaman damgaları.
+* **Kullanıcı Tercih Verileri (Yerel Depolama):** Kullanıcının tarayıcısında veya cihazında yerel olarak saklanan gece/gündüz tema tercihi, seçili dil ve çerez onay tercihleri.
 
-> **Özel Nitelikli Kişisel Veriler Hakkında Kesin Taahhüt:** MSK Labs; kullanıcılardan ırk, etnik köken, siyasi düşünce, felsefi inanç, din, mezhep, kılık-kıyafet, dernek/vakıf/sendika üyeliği, sağlık, cinsel hayat, ceza mahkûmiyeti veya biyometrik/genetik veriler gibi hiçbir özel nitelikli kişisel veri talep etmez ve işlemez.
+> **Özel Nitelikli Kişisel Veriler:** MSK Labs; kullanıcılardan hiçbir koşulda sağlık, biyometrik, inanç veya benzeri hiçbir özel nitelikli kişisel veri talep etmez ve işlemez.
 
 ---
 
-## Madde 4 — Cihaz Donanımı, Sensörler ve İzin Şeffaflığı Matrisi
+## Madde 4 — Yerel Öncelikli Mimari, Cihaz İzinleri ve Sensör Şeffaflığı
 
 > ⚠️ **TAVİZSİZ GÜVENLİK TAAHHÜDÜ:**  
-> **HİÇBİR MSK LABS UYGULAMASINDA KAMERA VE MİKROFON İZNİ İSTENMEZ, KULLANILMAZ VE ÇALIŞTIRILMAZ. UYGULAMALARIMIZ ASLA SES VEYA OPTİK GÖRÜNTÜ KAYDI ALMAZ.**
+> **KAMERA VE MİKROFON MAHREMİYETİ TAAHHÜDÜ:** MSK Labs uygulamalarında habersiz kamera veya mikrofon erişimi kesinlikle yapılmaz; optik görüntü veya ses kaydı gizlice alınmaz. Yalnızca doğası gereği ses kaydı (sesli not alma, ses işleme vb.) veya optik görüntü işleme (belge tarama, görsel düzenleme vb.) fonksiyonuna sahip özel araçlarımızda bu tür izinler; yalnızca ilgili işlevin icrası amacıyla, kullanıcının açık rızası ve anlık işletim sistemi onayıyla talep edilir. Üretilen tüm ses ve görüntü kayıtları münhasıran kullanıcının kendi yerel cihazında saklanır ve kullanıcının tam tasarrufundadır.
 
-Uygulamalarımızın düzgün çalışabilmesi için işletim sistemi düzeyinde ihtiyaç duyulan teknik donanım izinleri ve depolama ilkeleri aşağıdaki tabloda şeffafça açıklanmıştır:
+Masaüstü ve mobil uygulamalarımız aşağıdaki şeffaf ilkelerle çalışır:
 
-| Uygulama Adı | Talep Edilen Donanım / İzin | Teknik İşleme Amacı & Güvenlik Taahhüdü | Depolama Konumu |
-| :--- | :--- | :--- | :--- |
-| **RekatSay** *(Mobil)* | Yakınlık / Mesafe Sensörü *(Proximity)* | Namaz esnasında secde hareketini fiziksel mesafeden algılayarak rekat ve secde sayısını hesaplar. **Kamera kesinlikle kullanılmaz.** | Cihaz Geçici Belleği (RAM) — Uygulama kapandığında anında sıfırlanır. |
-| **HaydiNamaza & En Yakın** *(Mobil/Web)* | Konum Servisleri *(GPS / Ağ Tabanlı)* | Güneşin coğrafi açısına göre namaz vakitlerini, pusula ile kıble yönünü hesaplamak ve en yakın ibadet noktalarını listelemek için anlık kullanılır. **Koordinatlar sunuculara gönderilmez ve kaydedilmez.** | Kullanıcı Donanımı (Cihaz içi anlık matematiksel hesaplama) |
-| **Date Counter & DeskPilot Pro** *(Masaüstü)* | Yerel Disk Erişim İzni | Kullanıcının tanımladığı geri sayım hedeflerini, emeklilik tarihlerini, görev çubuğu kısayollarını ve arayüz yapılandırmasını saklar. | Kullanıcının Yerel Sabit Diski (`settings.json` / `AppData`) |
-| **GC Pil Uyarı** *(Masaüstü)* | İşletim Sistemi Pil Durumu API'si | Dizüstü bilgisayarın pil sağlığını korumak amacıyla kritik şarj seviyelerinde masaüstü bildirimiyle uyarı vermek için pil yüzdesini dinler. | Yerel İşletim Sistemi Oturumu (Kalıcı kayıt tutulmaz) |
-| **DocuEdit, Notes & PDFLayout** *(Masaüstü/Web)* | Kullanıcı Dosyası Seçimi *(File Picker)* | Kullanıcının kendi seçtiği metin veya PDF belgelerini yerel olarak işler, dönüştürür ve kaydeder. Belgeler hiçbir uzak sunucuya yüklenmez. | Kullanıcının Belirlediği Yerel Dizin |
+1. **İşlev Odaklı Asgari İzin:** Uygulamalarımız yalnızca ilgili aracın vaat ettiği temel işlevi yerine getirebilmesi için teknik olarak zorunlu olan donanım bileşenlerini (yakınlık sensörü, GPS sinyali, dosya seçici veya pil durumu API'si) anlık ve yerel olarak kullanır.
+2. **Cihaz İçi İşleme:** Sensör verileri veya kullanıcının seçtiği çalışma dosyaları hiçbir uzak sunucuya aktarılmaz; doğrudan kullanıcının işlemcisinde ve geçici belleğinde (RAM) işlenir.
+3. **Kullanıcı Kontrolü ve Silme Yetkisi:** Uygulamalarımız tarafından üretilen tüm yapılandırma dosyaları kullanıcının kendi fiziksel cihazında depolanır. Kullanıcı bu dosyaları dilediği an açma, düzenleme, yedekleme veya kalıcı olarak silme konusunda tam ve müstakil yetkiye sahiptir.
 
 ---
 
-## Madde 5 — Kişisel Verilerin Toplanma Yöntemi ve Hukuki Sebepleri
+## Madde 5 — Çerezler ve Web Sitesi Tercihleri
 
-Kişisel verileriniz; web sitemiz, iletişim formları, e-posta yazışmaları ve çerezler aracılığıyla tamamen elektronik ortamda toplanmaktadır. Bu veriler, 6698 sayılı KVKK’nın 5. maddesinde belirtilen aşağıdaki hukuki sebepler doğrultusunda işlenir:
+Web sitemizde (`msklabs.org`), kullanıcı deneyimini sağlamak, dil/tema tercihlerini hatırlamak ve sitemizin güvenliğini temin etmek amacıyla sınırlı kapsamda birinci taraf teknik çerezler ve yerel tarayıcı depolama alanları (`localStorage`) kullanılmaktadır. 
 
-1. **Bir Sözleşmenin Kurulması veya İfasıyla Doğrudan Doğruya İlgili Olması (KVKK m. 5/2-c):** Destek masası veya e-posta aracılığıyla iletilen teknik yardım biletlerinin sonuçlandırılması.
-2. **Veri Sorumlusunun Hukuki Yükümlülüğünü Yerine Getirebilmesi (KVKK m. 5/2-ç):** 5651 sayılı İnternet Ortamında Yapılan Yayınların Düzenlenmesi Hakkında Kanun uyarınca web sunucu erişim loglarının yasal süre boyunca tutulması.
-3. **Veri Sorumlusunun Meşru Menfaatleri (KVKK m. 5/2-f):** Web sitemizin ve API servislerimizin siber güvenliğinin sağlanması, sistem performansının optimize edilmesi, kötü niyetli saldırıların (DDoS, sızma girişimleri) önlenmesi.
-4. **Açık Rıza (KVKK m. 5/1):** İsteğe bağlı olarak e-bülten kayıt formunu dolduran kullanıcılara yeni sürüm ve güncelleme duyurularının gönderilmesi. *(Kullanıcı dilediği zaman bu onayını tek tıklamayla geri alabilir.)*
+Ayrıca bağımsız geliştirme faaliyetlerimizi sürdürmek amacıyla açık rızanıza bağlı olarak onaylı reklam servisleri (Google AdSense) kullanılabilir. Sitemizde kullanılan tüm çerezlerin ayrıntılı dökümü, kullanım süreleri ve çerez tercihlerinizi yönetme yolları için lütfen [Çerez Politikası](cookies.html) sayfamızı inceleyiniz.
 
 ---
 
-## Madde 6 — Çerez (Cookie) Politikası ve Tercih Yönetimi
+## Madde 6 — Veri Paylaşımı ve Üçüncü Taraflara Aktarım
 
-Web sitemizde (`msklabs.org`), kullanıcı deneyimini iyileştirmek ve güvenliği sağlamak amacıyla sınırlı kapsamda çerezler ve yerel tarayıcı depolama alanları kullanılmaktadır:
+MSK Labs, kullanıcılarına ait kişisel verileri hiçbir koşulda **üçüncü şahıslara satmaz, kiralamaz ve ticari amaçlı pazarlama şirketleriyle paylaşmaz.**
 
-* **Zorunlu ve İşlevsel Çerezler:** Sitemizin düzgün çalışabilmesi için teknik olarak zorunlu olan ve tarayıcınızın yerel depolama alanında (`localStorage`) tutulan tercihlerdir (gece/gündüz teması: `user_theme`, arayüz dili: `user_lang`, çerez onay durumu: `cookie_consent_msk`). Bu veriler kişisel profil oluşturmaz ve üçüncü taraflarla paylaşılmaz.
-* **Analitik Çerezler (İsteğe Bağlı):** Sitemizin ziyaretçi trafiğini, sayfa görüntüleme sayılarını ve kullanıcı akışını anlamak amacıyla kullanılan anonimleştirilmiş ölçüm çerezleridir. Yalnızca çerez tercih merkezinden onay vermeniz durumunda etkinleştirilir.
-* **Reklam ve Pazarlama Çerezleri (Google AdSense / AdMob):** Bağımsız yazılım geliştirme ve ücretsiz yayın faaliyetlerimizi sürdürebilmek amacıyla sitemizde onaylı Google reklamları yayınlanabilir. Google, web sitemizi ve internetteki diğer siteleri geçmiş ziyaretlerinize dayanarak size uygun reklamlar sunmak amacıyla çerezlerden (DoubleClick vb.) faydalanabilir.
-* **Çerez Tercihlerini Yönetme ve Reddetme:** Sayfamızın sol alt kısmında yer alan Çerez Bildirimi veya tarayıcı ayarlarınız üzerinden çerez tercihlerinizi dilediğiniz an güncelleyebilir, analitik veya reklam çerezlerini tamamen reddedebilirsiniz. Ayrıca kişiselleştirilmiş reklam tercihlerini [Google Reklam Ayarları](https://www.google.com/settings/ads) veya [aboutads.info](https://www.aboutads.info/choices/) üzerinden yönetebilirsiniz.
+Veriler yalnızca yasal zorunluluklar gereği yetkili kamu kurum ve kuruluşlarının mevzuata uygun resmi talepleri doğrultusunda veya web sitemizin kesintisiz sunulabilmesi için teknik altyapı sağlayıcılarımız üzerinden teknik zorunlulukla sınırlı olarak aktarılabilir.
 
 ---
 
-## Madde 7 — Verilerin Kimlerle Paylaşıldığı ve Aktarım Esasları
+## Madde 7 — Veri Güvenliği Tedbirleri
 
-MSK Labs, kullanıcılarına ait kişisel verileri hiçbir koşulda **üçüncü şahıslara satmaz, kiralamaz ve ticari amaçlı pazarlama şirketleriyle paylaşmaz.** 
+Kişisel verilerin ve yerel çalışma ortamının güvenliği için aşağıdaki standartlar uygulanmaktadır:
 
-Kişisel verileriniz yalnızca aşağıdaki zorunlu hallerde ve KVKK'nın 8. ve 9. maddelerine uygun olarak aktarılabilir:
-
-1. **Kanunen Yetkili Kamu Kurum ve Kuruluşları:** Mahkemeler, savcılıklar, kolluk kuvvetleri ve yasal olarak bilgi talep etmeye yetkili resmi mercilerin mevzuata uygun yazılı talepleri doğrultusunda.
-2. **Teknik Altyapı ve Barındırma Sağlayıcıları:** Web sitemizin kesintisiz, hızlı ve siber saldırılara karşı korumalı biçimde sunulabilmesi için küresel içerik dağıtım ağı (CDN) ve barındırma sağlayıcımız (Cloudflare) ile kurumsal e-posta iletim sağlayıcılarımız üzerinden teknik gereksinimlerle sınırlı olarak.
-
----
-
-## Madde 8 — Veri Güvenliği ve Alınan Teknik / İdari Tedbirler
-
-Kişisel verilerin hukuka aykırı olarak işlenmesini, yetkisiz erişimini ve kaybolmasını engellemek amacıyla aşağıdaki güvenlik tedbirleri uygulanmaktadır:
-
-* **Modern TLS 1.3 ve HTTPS Şifreleme:** Web sitemiz ve tüm API iletişimlerimiz güncel şifreleme sertifikalarıyla güvence altındadır; veriler ağ üzerinde açık metin olarak iletilmez.
-* **Ödeme Bilgisi Güvenliği:** Web sitemiz üzerinde kredi kartı veya banka kartı bilgisi toplanmaz veya saklanmaz. İleride sunulabilecek herhangi bir bağış veya lisanslama sürecinde ödemeler doğrudan BDDK lisanslı güvenli ödeme kuruluşları ve 256-bit SSL şifrelemeli banka ağ geçitleri üzerinden gerçekleştirilir.
-* **Ağ ve Sistem Savunması:** API uç noktalarımızda CORS kuralları, CSRF korumaları ve otomatik istek sınırlandırma (rate limiting) mekanizmaları etkindir.
-* **Yerel Öncelikli Mimari Güvencesi:** Uygulamalarımız yerel öncelikli olarak çalıştığından, sunucularımızda merkezi kullanıcı veritabanı bulunmaz. Bu sayede toplu veri sızıntısı veya veritabanı çalınması riski teknik olarak ortadan kaldırılmıştır.
+* Web ve API trafiğimiz güncel **TLS 1.3 ve zorunlu HTTPS** şifrelemesiyle korunmaktadır.
+* Web sitemiz üzerinde hiçbir şekilde kredi kartı veya finansal ödeme bilgisi toplanmaz ve saklanmaz.
+* Sunucularımızda merkezi kullanıcı veritabanı tutulmadığından, toplu veri sızıntısı veya veritabanı çalınması riski teknik olarak ortadan kaldırılmıştır.
 
 ---
 
-## Madde 9 — Veri Saklama Süreleri ve İmha Politikası
+## Madde 8 — Veri Saklama ve Kalıcı İmha
 
-* **Masaüstü ve Mobil Uygulama Verileri:** Tamamen kullanıcının kendi yerel cihazında tutulduğundan; kullanıcının uygulamayı cihazından kaldırması, uygulama verilerini temizlemesi veya ayar dosyasını silmesiyle birlikte **anında ve geri döndürülemez biçimde silinir.**
-* **Destek Masası ve E-Posta Yazışmaları:** Kullanıcının destek talebi çözüme kavuşturulduktan sonra, Türk Borçlar Kanunu ve Türk Ticaret Kanunu'ndaki yasal zamanaşımı sürelerinin dolmasıyla birlikte güvenli yöntemlerle kalıcı olarak imha edilir veya anonim hale getirilir.
-* **Sunucu Güvenlik Logları:** 5651 sayılı Kanun ve ilgili mevzuat gereğince yasal zorunlu süre boyunca saklanır ve sürenin bitiminde otomatik olarak silinir.
-
----
-
-## Madde 10 — Üçüncü Taraf Web Siteleri ve Dış Bağlantılar
-
-Web sitemiz veya uygulamalarımız, MSK Labs tarafından işletilmeyen üçüncü taraf web sitelerine bağlantılar (linkler) içerebilir. MSK Labs, bağlantı verilen harici sitelerin gizlilik uygulamalarından, çerez politikalarından ve içeriklerinden sorumlu değildir. Dış siteleri ziyaret ettiğinizde ilgili sitenin kendi gizlilik politikasını incelemeniz tavsiye edilir.
+* **Uygulama Verileri:** Tamamen kullanıcının kendi yerel cihazında tutulduğundan; kullanıcının uygulamayı cihazından kaldırması veya yerel dosyaları silmesiyle birlikte **anında ve geri döndürülemez biçimde silinir.**
+* **Destek Yazışmaları:** Kullanıcının destek talebi çözüme kavuşturulduktan sonra yasal zamanaşımı sürelerinin dolmasıyla birlikte güvenli yöntemlerle imha edilir veya anonimleştirilir.
 
 ---
 
-## Madde 11 — 6698 Sayılı KVKK Kapsamındaki Haklarınız (Madde 11)
+## Madde 9 — Üçüncü Taraf Web Siteleri ve Dış Bağlantılar
 
-Kişisel veri sahibi ("İlgili Kişi") olarak, KVKK’nın 11. maddesi uyarınca MSK Labs'e başvurarak aşağıdaki haklarınızı kullanabilirsiniz:
-
-1. Kişisel verilerinizin işlenip işlenmediğini öğrenme,
-2. Kişisel verileriniz işlenmişse buna ilişkin bilgi talep etme,
-3. Kişisel verilerin işlenme amacını ve bunların amacına uygun kullanılıp kullanılmadığını öğrenme,
-4. Yurt içinde veya yurt dışında kişisel verilerin aktarıldığı üçüncü kişileri bilme,
-5. Kişisel verilerin eksik veya yanlış işlenmiş olması hâlinde bunların düzeltilmesini isteme,
-6. KVKK'nın 7. maddesinde öngörülen şartlar çerçevesinde kişisel verilerin silinmesini veya yok edilmesini isteme *(Unutulma Hakkı)*,
-7. Düzeltme, silme ve yok edilme işlemlerinin, kişisel verilerin aktarıldığı üçüncü kişilere bildirilmesini isteme,
-8. İşlenen verilerin tamamen otomatik sistemler vasıtasıyla analiz edilmesi suretiyle aleyhinize bir sonucun ortaya çıkmasına itiraz etme,
-9. Kişisel verilerin kanuna aykırı olarak işlenmesi sebebiyle zarara uğramanız hâlinde zararın giderilmesini talep etme.
-
-Avrupa Birliği Genel Veri Koruma Tüzüğü (GDPR) kapsamındaki kullanıcılarımız da yukarıdaki haklara ek olarak verilerinin yapılandırılmış bir formatta kendilerine iletilmesini isteme *(Veri Taşınabilirliği)* ve işlemeyi kısıtlama haklarına sahiptir.
+Web sitemiz veya uygulamalarımız harici web sitelerine bağlantılar içerebilir. MSK Labs, bağlantı verilen harici platformların gizlilik uygulamalarından ve içeriklerinden sorumlu değildir.
 
 ---
 
-## Madde 12 — Başvuru Usulü ve İrtibat Kanalları
+## Madde 10 — Yasal Haklarınız ve İrtibat Kanalları
 
-Yukarıda belirtilen haklarınızı kullanmak için, *Veri Sorumlusuna Başvuru Usul ve Esasları Hakkında Tebliğ* hükümlerine uygun olarak kimliğinizi doğrulayıcı bilgilerle birlikte talebinizi aşağıdaki kurumsal başvuru kanalımıza iletebilirsiniz:
+6698 sayılı KVKK’nın 11. maddesi ve Avrupa Birliği Genel Veri Koruma Tüzüğü (GDPR) kapsamında kişisel veri sahipleri; verilerinin işlenip işlenmediğini öğrenme, bilgi talep etme, düzeltilmesini veya silinmesini isteme haklarına sahiptir.
 
-* 🔒 **KVKK & Veri Koruma İrtibat Masası:** [kvkk@msklabs.org](mailto:kvkk@msklabs.org)
-* ✉️ **Genel Destek E-Postası:** [destek@msklabs.org](mailto:destek@msklabs.org)
-* 🎫 **Canlı Destek Bileti:** [https://msklabs.org/destek.html](https://msklabs.org/destek.html)
-
-Başvurularınız, talebin niteliğine göre en kısa sürede ve **en geç 30 (otuz) gün içinde** kural olarak ücretsiz şekilde sonuçlandırılacaktır.
+Yasal haklarınızın tam listesi, kanuni başvuru usulü ve detaylı rehber için lütfen [KVKK Aydınlatma Metni](kvkk.html) sayfamızı inceleyiniz. 
 
 ---
 
-## Madde 13 — Değişiklikler ve Yürürlük
+## Madde 11 — Değişiklikler ve Yürürlük
 
-MSK Labs, mevzuat değişiklikleri, yeni yasal düzenlemeler veya ürün güncellemeleri doğrultusunda bu Gizlilik Politikası ve KVKK Aydınlatma Metni'ni dilediği zaman güncelleme hakkını saklı tutar. Güncellenmiş metin `msklabs.org/privacy.html` adresinde yayımlandığı tarihte derhal yürürlük kazanır.
+MSK Labs, mevzuat güncellemeleri veya ürün iyileştirmeleri doğrultusunda bu Gizlilik Politikası'nı güncelleme hakkını saklı tutar. Güncel metin `msklabs.org/privacy.html` adresinde yayımlandığı anda geçerlilik kazanır.
 
 ---
 
-### 📅 Yürürlük Tarihi ve Sürüm Bilgileri
-* **Son Güncelleme Tarihi:** 30 Ekim 2026
-* **Uygulama Kapsamı:** `msklabs.org` Web Platformu, Tüm Alt Alan Adları, Windows / macOS / Linux Masaüstü Yazılımları ve Android / iOS Mobil Uygulama Ekosistemi.
+> 📅 **Son Güncelleme:** 30 Ekim 2026
