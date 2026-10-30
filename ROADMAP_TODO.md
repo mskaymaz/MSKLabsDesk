@@ -27,13 +27,23 @@
 
 ---
 
-### 📋 2. AŞAMA: CANLI ANA DAL GÜVENCESİ VE GEÇİŞİ (MAIN & OLDMAIN)
-* [ ] **2.1 Yedek Dal Oluşturma (`OldMain`):**
-  - [ ] `webMSKLabs` uzak `main` dalı çekilerek `OldMain` dalı oluşturulacak ve GitHub'a kilitli/kalıcı yedek olarak push edilecek.
-* [ ] **2.2 DevAdmin -> Main Birleştirme (Production Release):**
-  - [ ] `DevAdmin` üzerindeki tüm onaylı geliştirmeler `main` dalına merge edilecek.
-  - [ ] `msklabs.org` canlı yayını HTTP 200 ve DOM testleriyle doğrulanacak.
-  - [ ] `DevAdmin` pasif dal veya sürüm havuzu olarak korunacak.
+### 📋 2. AŞAMA: CANLI ANA DAL GÜVENCESİ VE GEÇİŞİ (MAIN & OLDMAIN) (TAMAMLANDI — 30.10.2026 - 17:00)
+* [x] **2.1 Yedek Dal Oluşturma (`OldMain`):**
+  - [x] Canlıya geçiş öncesindeki kararlı durumlar (`OldMain`) hem yerelde hem GitHub uzak sunucusunda kalıcı yedek olarak güvenceye alındı.
+* [x] **2.2 DevAdmin -> Main Birleştirme (Production Release):**
+  - [x] `DevAdmin` üzerindeki tüm geliştirmeler doğrudan `main` dalına merge edildi.
+* [x] **2.3 Cloudflare Worker Statik Varlık Köprüsü Onarımı & Canlı Yayın:**
+  - [x] Worker `src/index.ts` ve `src/types/env.ts` dosyalarına Cloudflare `env.ASSETS` köprüsü kuruldu; SPA yönlendirmeleri (`/admin`, `/blog`) ve HTML fallback mantığı uygulandı.
+  - [x] `wrangler.toml` varlık bağlayıcısı (`[assets]`) aktifleştirildi; derlenip `npx wrangler deploy` ile Cloudflare'a yüklendi.
+  - [x] Canlı yayın HTTP 200 OK yanıtları ve başlık doğrulamasıyla (`https://msklabs.org/`, `/admin/`, `/blog/`, `/apps.html`, `/api/v1/health`) tam doğrulandı.
+
+---
+
+### 📍 GÜNCEL DURUM VE KALINAN YER (EVDEN DEVAM EDİLECEK)
+* **Aktif Çalışma Standartları:** Hem `webMSKLabs` hem `MSKLabsDesk` repolarında doğrudan `main` dalındayız. Canlı site `msklabs.org` Cloudflare Worker & Assets üzerinde stabil ve %100 çalışır durumdadır.
+* **Sıradaki Adım (3. veya 4. Aşama):**
+  - Öncelikli: **3. AŞAMA: Kurumsal E-Posta Altyapısına Tam Geçiş** (`CREDENTIALS.enc` kasası çözümü ve `@msklabs.org` e-posta hizalaması) veya
+  - Alternatif: **4. AŞAMA: Yönetim Paneli (Admin) Eksikliklerinin Bitirilmesi** (Duyuru modülü, e-bülten ve sistem ayarları).
 
 ---
 

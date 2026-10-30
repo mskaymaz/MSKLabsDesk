@@ -1,6 +1,22 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 📌 Son Güncelleme [30.10.2026 - 17:00] — 2. AŞAMA TAMAMLANDI: MAIN GEÇİŞİ, WORKER ASSETS ONARIMI VE CANLI YAYIN [✓]
+* **Yapılan İşlemler:**
+  1. **Yedek Dal Güvencesi & Main Birleştirme:**
+     - Canlıya geçiş öncesi kararlı durumlar (OldMain) kilitli yedek olarak muhafaza edildi; DevAdmin doğrudan main dalına merge edildi.
+  2. **Cloudflare Worker Static Assets Köprüsü Onarımı (webMSKLabs):**
+     - Sorun: msklabs.org adresi Worker (uygulamalar) scriptine bağlı olduğundan ve src/index.ts sadece /api/... rotalarını dinlediğinden web arayüzü 404 Resource Not Found hatasına düşmüştü.
+     - Çözüm: src/index.ts ve src/types/env.ts içine Cloudflare env.ASSETS köprüsü kuruldu. SPA rotaları (/admin, /blog) ve uzantısız HTML istekleri (/about, /apps) otomatik dosya çözümlemesine bağlandı.
+     - wrangler.toml varlık ayarları tamamlanarak npx wrangler deploy ile Cloudflare a yüklendi.
+  3. **Canlı Doğrulama & Senkronizasyon:**
+     - https://msklabs.org/ ana sayfa, /admin/, /blog/, /apps.html ve /api/v1/health uç noktalarının HTTP 200 OK verdiği doğrulandı.
+     - webMSKLabs ve MSKLabsDesk repolarında main dalı güncellenip GitHub a pushlandı.
+* **Kaldığımız Yer / Evden Devam Edilecek Adım:**
+  - 1. ve 2. Aşamalar eksiksiz tamamlandı. Evdeki oturumda doğrudan **3. AŞAMA: Kurumsal E-Posta Altyapısına Tam Geçiş** (CREDENTIALS.enc kasası) veya **4. AŞAMA: Yönetim Paneli (Admin) Eksiklerinin Bitirilmesi** ele alınacaktır.
+
+---
+
 ## 📌 Son Güncelleme [29.10.2026 - 22:10] — EMSAL FİRMA ANALİZİ VE YEREL DÜZENLEMELERİN İPTALİ [✓]
 * **Yapılan İşlem:**
   1. **Yerel Sayfa Düzenlemelerinin İptali (`webMSKLabs`):**
