@@ -1,6 +1,17 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 📌 Son Güncelleme [30.10.2026 - 23:20] — KULLANIM KOŞULLARI GİRİŞ SADELEŞTİRMESİ VE DİPNOT TARİH STANDARDI [✓]
+* **Yapılan İşlem:**
+  1. **Kullanım Koşulları Giriş Sadeleştirmesi:**
+     - `00 KULLANIM_KOSULLARI_TASLAK.md` ve `terms.html` giriş başlığı ve kapsam alanı minimalist bir yapıya kavuşturuldu.
+  2. **Yasal Metinler Tarih Standardı (Dipnot Modeli):**
+     - `terms`, `privacy`, `cookies` ve `kvkk` belgelerinin başındaki göz yoran tarihler kaldırılarak, emsal kurumsal standartlara uygun olarak tüm maddelerin sonuna tek satırlık zarif dipnot (`Son Güncelleme: 30 Ekim 2026`) olarak taşındı.
+  3. **Derleme & Yerel Doğrulama:**
+     - `tsc --noEmit && vite build` 0 hata ile çalıştırıldı, üretim paketi (`dist/`) güncellendi ve tüm yerel uç noktalar HTTP 200 ile doğrulandı.
+
+---
+
 ## 📌 Son Güncelleme [30.10.2026 - 23:05] — YASAL VE KURUMSAL SAYFALARIN METİN DÜZENLEMELERİ VE TEK KAYNAK EŞİTLEMESİ [✓]
 * **Yapılan İşlem:**
   1. **00 Taslak Markdown Dosyalarının Sadeleştirilmesi ve Nihai Hali (`MSKLabsDesk`):**

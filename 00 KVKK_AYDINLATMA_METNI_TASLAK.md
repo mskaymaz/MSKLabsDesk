@@ -113,3 +113,7 @@ KVKK'nın 12. maddesi doğrultusunda aşağıdaki teknik ve idari tedbirler uygu
 ## Madde 10 — Yürürlük ve Değişiklikler
 
 Bu Aydınlatma Metni, yayımlandığı tarihte yürürlüğe girer. MSK Labs, yasal düzenlemeler doğrultusunda bu metni güncelleme hakkını saklı tutar. Güncel metin `msklabs.org/kvkk.html` adresinde yayımlandığı anda geçerlilik kazanır.
+
+---
+
+> 📅 **Son Güncelleme:** 30 Ekim 2026

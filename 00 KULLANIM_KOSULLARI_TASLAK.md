@@ -1,7 +1,5 @@
 # WEB SİTESİ VE UYGULAMALARI GENEL KULLANIM KOŞULLARI VE HİZMET SÖZLEŞMESİ
 
-> **Yürürlük Tarihi:** 30 Ekim 2026  
-> **Son Güncelleme:** 30 Ekim 2026  
 > **Kapsam:** `msklabs.org` Web Platformu, Tüm Alt Alan Adları ve Geliştirilen Uygulamalar
 
 Lütfen sitemizi ziyaret etmeden, servislerimizi kullanmadan veya herhangi bir uygulamamızı indirmeden önce bu Kullanım Koşulları ve Hizmet Sözleşmesi’ni dikkatlice okuyunuz.
@@ -149,3 +147,7 @@ Kullanım Koşulları ve Hizmet Sözleşmesi'ne ilişkin her türlü soru ve bil
 
 * 🌐 **Resmi Web Sitesi:** [https://msklabs.org](https://msklabs.org)
 * 🎫 **Çevrim İçi Destek Masası:** [https://msklabs.org/destek.html](https://msklabs.org/destek.html)
+
+---
+
+> 📅 **Son Güncelleme:** 30 Ekim 2026

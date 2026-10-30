@@ -109,3 +109,7 @@ Yasal haklarınızın tam listesi, kanuni başvuru usulü ve detaylı rehber iç
 ## Madde 11 — Değişiklikler ve Yürürlük
 
 MSK Labs, mevzuat güncellemeleri veya ürün iyileştirmeleri doğrultusunda bu Gizlilik Politikası'nı güncelleme hakkını saklı tutar. Güncel metin `msklabs.org/privacy.html` adresinde yayımlandığı anda geçerlilik kazanır.
+
+---
+
+> 📅 **Son Güncelleme:** 30 Ekim 2026

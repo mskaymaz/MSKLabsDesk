@@ -97,3 +97,7 @@ Google'ın reklam çerezlerini yönetmek için [Google Reklam Ayarları](https:/
 ## Madde 7 — Değişiklikler ve Yürürlük
 
 MSK Labs, sitemizde kullanılan çerez teknolojilerindeki yenilikler veya mevzuat güncellemeleri doğrultusunda bu Çerez Politikası'nı güncelleme hakkını saklı tutar. Güncel metin `msklabs.org/cookies.html` adresinde yayımlandığı anda geçerlilik kazanır.
+
+---
+
+> 📅 **Son Güncelleme:** 30 Ekim 2026
