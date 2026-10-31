@@ -41,19 +41,21 @@
 
 ### 📍 GÜNCEL DURUM VE KALINAN YER (EVDEN DEVAM EDİLECEK)
 * **Aktif Çalışma Standartları:** Hem `webMSKLabs` hem `MSKLabsDesk` repolarında doğrudan `main` dalındayız. Canlı site `msklabs.org` Cloudflare Worker & Assets üzerinde stabil ve %100 çalışır durumdadır.
-* **Sıradaki Adım (3. veya 4. Aşama):**
-  - Öncelikli: **3. AŞAMA: Kurumsal E-Posta Altyapısına Tam Geçiş** (`CREDENTIALS.enc` kasası çözümü ve `@msklabs.org` e-posta hizalaması) veya
-  - Alternatif: **4. AŞAMA: Yönetim Paneli (Admin) Eksikliklerinin Bitirilmesi** (Duyuru modülü, e-bülten ve sistem ayarları).
+* **Sıradaki Adım:**
+  - **4. AŞAMA: Yönetim Paneli (Admin) Eksikliklerinin Bitirilmesi** (Duyuru modülü, e-bülten ve sistem ayarları).
 
 ---
 
-### 📋 3. AŞAMA: KURUMSAL E-POSTA ALTYAPISINA TAM GEÇİŞ
-* [ ] **3.1 Kimlik ve Yapılandırma Kasası (`CREDENTIALS.enc`):**
-  - [ ] `node scripts/vault.js unlock` ile şifreli kasanın çözülüp e-posta/sunucu kimliklerinin okunması.
-* [ ] **3.2 Web Arayüzü E-Posta Güncellemesi (`webMSKLabs`):**
-  - [ ] `config.js`, `about.html`, `bizkimiz.html`, `contact.html`, `apps/*` sayfalarındaki `msklabs.org@gmail.com` adreslerinin `@msklabs.org` ile değiştirilmesi.
-* [ ] **3.3 Admin & Bildirim E-Postaları (`MSKLabsDesk`):**
-  - [ ] Cloudflare Email Routing / Resend API gönderici kimliğinin kurumsal e-posta ile doğrulanması.
+### 📋 3. AŞAMA: KURUMSAL E-POSTA ALTYAPISINA TAM GEÇİŞ (TAMAMLANDI — 31.10.2026 - 13:40)
+* [x] **3.1 Kimlik ve Yapılandırma Kasası (`CREDENTIALS.enc`):**
+  - [x] `node scripts/vault.js unlock` ile şifreli kasa çözüldü, kimlikler başarıyla doğrulandı.
+* [x] **3.2 Web Arayüzü E-Posta Güncellemesi (`webMSKLabs`):**
+  - [x] `config.js`, `about.html`, `contact.html`, `apps/*` sayfalarındaki adresler `iletisim@msklabs.org` ve `contact@msklabs.org` ile güncellendi.
+  - [x] `contact.html` JSON-LD şemasındaki `kvkk@` tekilleştirilerek `iletisim@` yapıldı; `.com` kalıntıları temizlendi.
+* [x] **3.3 Cloudflare Email Routing & Resend Altyapısı (`MSKLabsDesk`):**
+  - [x] `msklabs.org@gmail.com` hedef kutusu Cloudflare üzerinde onaylandı.
+  - [x] Tüm TR/EN kurumsal adresler (`iletisim@`, `contact@`, `destek@`, `support@`, `admin@`, `bildirim@`, `noreply@`, `bilgi@`, `info@`) ve Catch-All kuralı bağlandı.
+  - [x] `backend/src/utils/email.ts` içine `EMAIL_FROM` ve modül bazlı kurumsal gönderici rotasyonu eklendi.
 
 ---
 

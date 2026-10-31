@@ -147,6 +147,24 @@
 
 ---
 
+### COM-OUTBOUND-002 — Çift Kademeli Giden E-Posta Mimarisi (Resend Birincil & Brevo Hacim Yedeği) [ ]
+- **Amaç:** $0/ay sıfır maliyet ilkesi korunarak, kurumsal yanıtlar için temiz (reklamsız) Resend API altyapısının sürdürülmesi; blog yorum onayı veya destek biletlerinde günlük 100 limitinin zorlanması durumunda yoğunlaşan modülün kontrollü olarak Brevo API altyapısına taşınması.
+- **Kapsam:** `backend/src/utils/email.ts`, `backend/src/routes/comments.ts`, `backend/src/routes/support.ts`, `backend/src/routes/subscribe.ts`.
+- **Mimari Karar:**
+  1. **Birincil Sağlayıcı (Resend - White-Label):** Ayda 3.000 mail, günde 100 mail kotası; kredi kartsız; e-postalarda üçüncü taraf reklamı/logosu bulunmaz. Kurumsal yazışmalar, admin yanıtları ve normal hacimli doğrulamalar için kullanılır.
+  2. **Yüksek Hacim Yedeği (Brevo - Fallback):** Blog onayları veya bilet talepleri günde 100 eşiğini aşarsa, yoğunlaşan modül Brevo REST API'ye devredilir.
+  3. **Brevo Teknik Parametreleri:** Günde 300 mail (ayda ~9.000 mail), kredi kartı gerekmez, 100.000 kontak hafızası, REST API ve SMTP tam erişilebilir. Tek teknik kısıt: Gövde altında zorunlu "Sent with Brevo" filigranı yer alır.
+  4. **Piyasa Analizi ve Elenen Servisler (2026 Durumu):**
+     - *Twilio SendGrid:* Kalıcı ücretsiz katmanı kaldırıldı (sadece 60 günlük deneme, sonrası $19.95/ay).
+     - *MailerSend:* Ücretsiz planda dahi kredi kartı zorunlu, aylık kota 500 ile çok sınırlı.
+     - *Mailjet:* Ayda 6.000, günde 200 mail; ancak Mailjet logosu içerir ve 1.000 kontak sınırında hesabı durdurur.
+     - *Postmark:* Kalıcı ücretsiz plan yok (yalnızca 100 test maili).
+     - *Amazon SES:* $0.10/1000 mail maliyet ve AWS kredi kartı zorunluluğu nedeniyle Kural 0 (Sıfır Maliyet) dışı.
+- **Definition of Done (DoD):**
+  - [ ] Resend kotası aşımında (`resend error 429 / quota exceeded`) loglama ve Brevo fallback adaptörünün `backend/src/utils/email.ts` içine şablonlanması.
+
+---
+
 ### 1. ARCHITECTURE & ENGINEERING FOUNDATION
 
 ### ARCH-001 — Serverless Edge Backend Kurulumu

@@ -175,7 +175,7 @@ export const LoginView: React.FC = () => {
                     type="text"
                     className="form-input"
                     style={{ paddingLeft: '38px', minHeight: '44px', width: '100%', background: 'var(--bg-input)', border: '1px solid var(--border-subtle)', borderRadius: 'var(--radius-md)', color: 'var(--text-primary)' }}
-                    placeholder="admin@msklabs.com"
+                    placeholder="admin@msklabs.org"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                     required

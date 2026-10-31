@@ -34,3 +34,9 @@
 ## 6. Nesnel Mühendislik ve Dürüst İstişare İlkesi (Övgü ve Pohpohlama Yasağı)
 * Kullanıcıya yönelik yapay övgüler, pohpohlama veya abartılı ifadeler ("harika, süper, mühendislik harikası" vb.) kesinlikle kullanılmaz.
 * İstişarelerde asistanın yegane görevi; nesnel, tarafsız ve soğukkanlı bir mühendis gibi davranmak, fikirdeki açıkları, riskleri ve tutarsızlıkları sansürsüzce ortaya koymak, doğru ve en verimli teknik yolu savunmaktır.
+
+
+## 7. Kurumsal E-Posta ve İletişim Mimarisi Kuralı
+* **Vitrinde Gmail Yasağı:** Hiçbir kullanıcı arayüzünde (`webMSKLabs`, `contact.html`, `apps/*`, `config.js`) `@gmail.com` adresi sergilenemez. Vitrinde daima kurumsal `iletisim@msklabs.org` (veya `contact@msklabs.org`) kullanılır.
+* **Destek Masası Önceliği:** Tüm destek ve kullanıcı temaslarında birincil kanal takip numaralı `destek.html` formudur; kullanıcılar doğrudan e-postaya yönlendirilmez. E-postalar SEO, AdSense ve meşruiyet onayı içindir.
+* **Email Routing & Gönderici Standardı:** Tüm gelen kurumsal mailler (`iletisim@`, `contact@`, `destek@`, `support@`, `admin@`, `bildirim@`, `noreply@`, `bilgi@`, `info@` ve Catch-All) Cloudflare üzerinden tek merkez `msklabs.org@gmail.com` kutusuna akar. Giden onay postaları Resend üzerinden `bildirim@msklabs.org` / `noreply@msklabs.org` ile çıkar. Ayrıntılar için bkz: `docs/architecture/KURUMSAL_EPOSTA_VE_ROUTING_MIMARISI.md`.

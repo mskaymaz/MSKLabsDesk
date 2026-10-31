@@ -12,6 +12,7 @@ export interface EmailOptions {
 }
 
 export interface EmailEnv {
+  EMAIL_FROM?: string;
   GMAIL_USER?: string; // msklabs.org@gmail.com
   GMAIL_APP_PASSWORD?: string; // App Password
   RESEND_API_KEY?: string; // Fallback API key
@@ -36,10 +37,14 @@ export function escapeHtml(str?: string | null): string {
  */
 export async function sendEmail(options: EmailOptions, env: EmailEnv): Promise<{ success: boolean; messageId?: string; error?: string }> {
   try {
-    const fromAddress = (env.GMAIL_USER && env.GMAIL_USER.includes('@msklabs.org')) 
-      ? env.GMAIL_USER 
-      : 'destek@msklabs.org';
-    const fromName = 'MSK Labs Destek';
+    let fromAddress = 'destek@msklabs.org';
+    let fromName = 'MSK Labs Destek';
+    if (options.emailType === 'verification' || options.emailType === 'newsletter' || options.emailType === 'coupon') {
+      fromAddress = env.EMAIL_FROM || 'bildirim@msklabs.org';
+      fromName = 'MSK Labs Bildirim';
+    } else if (env.EMAIL_FROM && env.EMAIL_FROM.includes('@msklabs.org')) {
+      fromAddress = env.EMAIL_FROM;
+    }
 
     // 1. Resend API Entegrasyonu (Cloudflare Workers için en kararlı HTTP REST yöntemi)
     if (env.RESEND_API_KEY) {

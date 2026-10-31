@@ -7,10 +7,12 @@
 * **Karar:** Cloudflare Workers (Backend) + Cloudflare D1 (Database) + Cloudflare Pages (PWA Frontend).
 * **Gerekçe:** Serverless, %100 ücretsiz tier desteği ve yüksek performans.
 
-### 2. E-Posta Gönderici Yapısı
-* **Karar:** Google SMTP (msklabs.org@gmail.com) + Resend Fallback.
-* **Gönderici Adı:** MSK Labs <msklabs.org@gmail.com>
-* **Gerekçe:** Günlük 2.000 e-posta kotası ve yüksek teslimat başarısı.
+### 2. Kurumsal E-Posta ve Routing Altyapısı (Güncellendi — 31.10.2026 - 13:45)
+* **Karar:** Vitrinde ve kullanıcı temasında `@gmail.com` kullanımı tamamen kaldırıldı; Cloudflare Email Routing (Inbound - 10 kural + Catch-All) ve Resend API (Outbound - 3.000 mail/ay white-label) $0/ay sıfır maliyet mimarisine geçildi.
+* **Gelen Yönlendirme:** `iletisim@`, `contact@`, `destek@`, `support@`, `admin@`, `bildirim@`, `noreply@`, `bilgi@`, `info@` -> `msklabs.org@gmail.com`.
+* **Giden Gönderici:** Bildirimler için `bildirim@msklabs.org` / `noreply@msklabs.org`, destek yanıtları için `destek@msklabs.org`.
+* **Yedekleme Stratejisi (COM-OUTBOUND-002):** Yoğunlaşan modüllerde (günlük >100 mail) Brevo API (günlük 300 mail) devreye alınacaktır.
+* **Detaylı Kılavuz:** [KURUMSAL_EPOSTA_VE_ROUTING_MIMARISI.md](file:///d:/Code/mskaymaz/MSKLabsDesk/docs/architecture/KURUMSAL_EPOSTA_VE_ROUTING_MIMARISI.md)
 
 ### 3. Kodlama ve Dosya Kuralları
 * **Karar:** Maksimum 400-450 satır/dosya sınırı, cerrahi ve odaklı müdahale.
@@ -30,7 +32,7 @@
   1. **Yüzsüz (Faceless) Video/Vlog Modeli:** Memuriyet ve gizlilik kısıtlarına uygun, şahıs yerine MSK Labs marka kimliğiyle, dijital tahta ve minimalist tipografi ile "Kodsuz Mimarlık & Dijital Akıl" içerikleri üretilecek. YouTube embed ile sıfır sunucu maliyetli huni kurulacak.
   2. **White-Label / Anahtar Teslim Web & Yönetim Çekirdeği (Boilerplate):** Şahsi verilerden arındırılmış demo içerikli (`seed_demo.sql`), tek dosyadan konfigüre edilen (`site.config.json`) ve modül aç/kapa (Feature Flags) yapısına sahip ürünleştirilmiş bir şablon oluşturulacak.
   3. **Sadık Müşteri Yapılı E-Ticaret Platformu:** Sistem oturduktan sonra topluluk ve sadakat odaklı özel bir e-ticaret mimarisi geliştirilecek.
-* **Detaylı Doküman:** Tüm istişare ve uygulama detayları [GELECEK_VIZYONU_VE_STRATEJI.md](file:///d:/Code/mskaymaz/MSKLabsDesk/GELECEK_VIZYONU_VE_STRATEJI.md) dosyasında kayıt altına alınmıştır.
+* **Detaylı Doküman:** Tüm istişare ve uygulama detayları [GELECEK_VIZYONU_VE_STRATEJI.md](file:///d:/Code/mskaymaz/MSKLabsDesk/docs/architecture/GELECEK_VIZYONU_VE_STRATEJI.md) dosyasında kayıt altına alınmıştır.
 
 
 ### 6. Reklam ve Gelir Modeli Alternatifleri (30.10.2026 - 11:38)
