@@ -102,6 +102,8 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
       topOffset: activeItem.topOffset,
       cardWidth: activeItem.cardWidth,
       cardHeight: activeItem.cardHeight,
+      mobileCardWidth: activeItem.mobileCardWidth,
+      mobileCardHeight: activeItem.mobileCardHeight,
       sideOffset: activeItem.sideOffset,
       horizontalOffset: activeItem.horizontalOffset ?? activeItem.sideOffset,
       bottomOffset: activeItem.bottomOffset,
@@ -312,15 +314,37 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
           </div>
         ) : (
           <div>
-            <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: '4px' }}>Kart Boyutu & Opaklık</label>
+            <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: '4px' }}>
+              {previewDevice === 'mobile' ? 'Mobil Kart Boyutu & Opaklık' : 'Web Kart Boyutu & Opaklık'}
+            </label>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '4px', marginBottom: '8px' }}>
               <div title="Kart Genişliği (px)">
                 <span style={{ display: 'block', fontSize: '9px', color: 'var(--text-muted)' }}>Genişlik:</span>
-                <input type="number" className="form-input" placeholder="310" style={{ fontSize: '11px', height: '26px', padding: '2px', textAlign: 'center' }} value={activeItem.cardWidth ?? ''} onChange={(e) => updateCurrentItem({ cardWidth: e.target.value === '' ? undefined : parseInt(e.target.value, 10) })} />
+                <input
+                  type="number" className="form-input"
+                  placeholder={previewDevice === 'mobile' ? (activeItem.cardWidth ? String(activeItem.cardWidth) : '220') : '310'}
+                  style={{ fontSize: '11px', height: '26px', padding: '2px', textAlign: 'center' }}
+                  value={(previewDevice === 'mobile' ? activeItem.mobileCardWidth : activeItem.cardWidth) ?? ''}
+                  onChange={(e) => {
+                    const val = e.target.value === '' ? undefined : parseInt(e.target.value, 10);
+                    if (previewDevice === 'mobile') updateCurrentItem({ mobileCardWidth: val });
+                    else updateCurrentItem({ cardWidth: val });
+                  }}
+                />
               </div>
               <div title="Kart Yüksekliği (px, boş=otomatik)">
                 <span style={{ display: 'block', fontSize: '9px', color: 'var(--text-muted)' }}>Yükseklik:</span>
-                <input type="number" className="form-input" placeholder="Oto" style={{ fontSize: '11px', height: '26px', padding: '2px', textAlign: 'center' }} value={activeItem.cardHeight ?? ''} onChange={(e) => updateCurrentItem({ cardHeight: e.target.value === '' ? undefined : parseInt(e.target.value, 10) })} />
+                <input
+                  type="number" className="form-input"
+                  placeholder={previewDevice === 'mobile' ? (activeItem.cardHeight ? String(activeItem.cardHeight) : 'Oto') : 'Oto'}
+                  style={{ fontSize: '11px', height: '26px', padding: '2px', textAlign: 'center' }}
+                  value={(previewDevice === 'mobile' ? activeItem.mobileCardHeight : activeItem.cardHeight) ?? ''}
+                  onChange={(e) => {
+                    const val = e.target.value === '' ? undefined : parseInt(e.target.value, 10);
+                    if (previewDevice === 'mobile') updateCurrentItem({ mobileCardHeight: val });
+                    else updateCurrentItem({ cardHeight: val });
+                  }}
+                />
               </div>
               <div title="İç Boşluk (pad)">
                 <span style={{ display: 'block', fontSize: '9px', color: 'var(--text-muted)' }}>İç Boşluk:</span>

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Monitor, Smartphone, Sliders, Clock } from 'lucide-react';
 import { type AnnouncementItem, type AnnouncementPlacement } from './announcementConfig';
+import { AnnouncementSlotMapSelector } from './AnnouncementSlotMapSelector';
 
 export interface AnnouncementPlacementSettingsProps {
   activeItem: AnnouncementItem;
@@ -109,49 +110,60 @@ export const AnnouncementPlacementSettings: React.FC<AnnouncementPlacementSettin
         </div>
       </div>
 
-      {/* Yerleşim Seçici */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-        <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--text-secondary)' }}>
-          {isWebTab ? 'Web Yuvası:' : 'Mobil Yuvası:'}
+      {/* Görsel Silüet Haritası (Yuva Seçici) */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
+        <span style={{ fontSize: '10px', fontWeight: 600, color: 'var(--text-secondary)' }}>
+          {isWebTab ? 'Masaüstü Yuva Haritası (Tıklayarak Seçin):' : 'Mobil Yuva Haritası (Tıklayarak Seçin):'}
         </span>
-        <select
-          className="form-select"
-          value={currentPlacement}
-          onChange={(e) => handlePlacementChange(e.target.value as any)}
-          style={{ fontSize: '11px', height: '26px', flex: 1, padding: '2px 6px' }}
-        >
-          {isWebTab ? (
-            <>
-              <optgroup label="Masaüstü Sabit Yuvalar">
-                <option value="top_left">↖ Sol Üst</option>
-                <option value="top_right">↗ Sağ Üst</option>
-                <option value="bottom_left">↙ Sol Alt</option>
-                <option value="bottom_center">↓ Orta Alt</option>
-                <option value="bottom_right">↘ Sağ Alt</option>
-              </optgroup>
-              <optgroup label="Klasik Bant">
-                <option value="top_hanging">↑ Üst Tam Bant</option>
-              </optgroup>
-            </>
-          ) : (
-            <>
-              <optgroup label="Mobil Yuvalar & Kulakçıklar">
-                <option value="right_floating">→ Sağ Kenar Kulakçık</option>
-                <option value="left_floating">← Sol Kenar Kulakçık</option>
-                <option value="bottom_center">↓ Orta Alt</option>
-                <option value="bottom_left">↙ Sol Alt</option>
-                <option value="bottom_right">↘ Sağ Alt</option>
-                <option value="top_left">↖ Sol Üst</option>
-                <option value="top_right">↗ Sağ Üst</option>
-                <option value="top_hanging">↑ Üst Tam Bant</option>
-              </optgroup>
-            </>
-          )}
-        </select>
+        <AnnouncementSlotMapSelector
+          device={activeDeviceTab}
+          currentPlacement={currentPlacement}
+          onSelectPlacement={handlePlacementChange}
+        />
       </div>
 
       {!isTopHanging && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', background: 'rgba(0,0,0,0.12)', padding: '6px 8px', borderRadius: '6px', border: '1px solid var(--border-subtle)' }}>
+          {/* Cihaza Özel Kart Boyutları (Genişlik & Yükseklik) */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '6px' }}>
+            <div>
+              <span style={{ display: 'block', fontSize: '9px', color: 'var(--text-muted)' }}>
+                {isWebTab ? 'Web Genişlik (px):' : 'Mobil Genişlik (px):'}
+              </span>
+              <input
+                type="number"
+                className="form-input"
+                placeholder={isWebTab ? '310' : (activeItem.cardWidth ? String(activeItem.cardWidth) : '220')}
+                value={(isWebTab ? activeItem.cardWidth : activeItem.mobileCardWidth) ?? ''}
+                onChange={(e) => {
+                  const val = e.target.value === '' ? undefined : parseInt(e.target.value, 10);
+                  if (isWebTab) updateCurrentItem({ cardWidth: val });
+                  else updateCurrentItem({ mobileCardWidth: val });
+                }}
+                style={{ fontSize: '10px', height: '24px', padding: '2px 5px' }}
+                title="Duyuru kartı genişliği"
+              />
+            </div>
+            <div>
+              <span style={{ display: 'block', fontSize: '9px', color: 'var(--text-muted)' }}>
+                {isWebTab ? 'Web Yükseklik (px):' : 'Mobil Yükseklik (px):'}
+              </span>
+              <input
+                type="number"
+                className="form-input"
+                placeholder={isWebTab ? 'Oto' : (activeItem.cardHeight ? String(activeItem.cardHeight) : 'Oto')}
+                value={(isWebTab ? activeItem.cardHeight : activeItem.mobileCardHeight) ?? ''}
+                onChange={(e) => {
+                  const val = e.target.value === '' ? undefined : parseInt(e.target.value, 10);
+                  if (isWebTab) updateCurrentItem({ cardHeight: val });
+                  else updateCurrentItem({ mobileCardHeight: val });
+                }}
+                style={{ fontSize: '10px', height: '24px', padding: '2px 5px' }}
+                title="Duyuru kartı yüksekliği (boş bırakılırsa içeriğe göre otomatik)"
+              />
+            </div>
+          </div>
+
           {/* Yatay ve Dikey Slider Kontrolleri */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
             <Sliders size={12} style={{ color: 'var(--accent-primary)', flexShrink: 0 }} />
