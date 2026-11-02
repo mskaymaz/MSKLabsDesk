@@ -1,6 +1,23 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 📌 Son Güncelleme [02.11.2026 - 17:05] — 4.2 DUYURU MODÜLÜ MOBİL-WEB AYRIK BOYUTLANDIRMA VE SİLÜET HARİTASI [✓]
+* **Yapılan İşlemler:**
+  1. **Web ve Mobil Bağımsız Boyutlandırma:**
+     - `mobileCardWidth` ve `mobileCardHeight` alanları veri modeline (`announcementConfig.ts`) bağlandı.
+     - Yönetim panelinde Web ve Mobil sekmelerinde boyut girişleri ayrıştırıldı; mobildeki %100 genişlik dayatması kaldırılarak verilen özel piksel ebatları (örn: 100x200) hem önizlemede hem istemcide korundu.
+  2. **Yatay ve Dikey Ofset Kaydırma:**
+     - Dikey eksen slider'ı (0-250px) ve serbest sayısal kutusu eklendi.
+     - Mobilde yatay kenar mesafesi (`alignSelf` ve dinamik marjinler) düzeltildi; cihaz sekmesi ile önizleme vitrini çift yönlü senkronize edildi.
+  3. **Serbest Süre Girişi:**
+     - `autoCollapseDelay` için hem serbest saniye girişi hem hazır butonlar sağlandı.
+  4. **Görsel Silüet Haritası:**
+     - Açılır liste yerine minyatür web ve mobil silüet şeması üzerinden yuva seçimi (`AnnouncementSlotMapSelector.tsx`) prototip olarak bağlandı.
+* **⚠️ Yarın Sabah İçin Hatırlatma Notu:**
+  - Son eklenen web ve mobil arayüz işaretleme silüet yapıları görsel olarak istenen başarıya ulaşamadı. Yarın sabah ilk iş olarak bu görsel silüet haritası yeniden tasarlanıp düzeltilecektir.
+
+---
+
 ## 📌 Son Güncelleme [02.11.2026 - 11:45] — 4.1 DUYURU MODÜLÜ 5 YUVALI YERLEŞİM VE YATAY OFSET MİMARİSİ [✓]
 * **Yapılan İşlemler:**
   1. **Konfigürasyon & Veri Modeli (`announcementConfig.ts`):**
