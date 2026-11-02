@@ -28,6 +28,8 @@ export interface AnnouncementItem {
   paddingY?: number;
   cardWidth?: number;
   cardHeight?: number;
+  mobileCardWidth?: number;
+  mobileCardHeight?: number;
   topOffset?: number;
   bottomOffset?: number;
   sideOffset?: number;
@@ -64,6 +66,8 @@ export interface AnnouncementMeta {
   paddingY?: number;
   cardWidth?: number;
   cardHeight?: number;
+  mobileCardWidth?: number;
+  mobileCardHeight?: number;
   topOffset?: number;
   bottomOffset?: number;
   sideOffset?: number;
@@ -129,8 +133,12 @@ export const getSizeMetrics = (
   const isTopSlot = effPlacement === 'top_left' || effPlacement === 'top_right';
   const isBottomSlot = effPlacement === 'bottom_left' || effPlacement === 'bottom_center' || effPlacement === 'bottom_right';
 
-  const width = meta.cardWidth || (p === 'compact' ? 260 : p === 'large' ? 380 : 310);
-  const height = meta.cardHeight ? `${meta.cardHeight}px` : 'auto';
+  const width = (isMobile && typeof meta.mobileCardWidth === 'number')
+    ? meta.mobileCardWidth
+    : (meta.cardWidth || (p === 'compact' ? 260 : p === 'large' ? 380 : 310));
+  const height = (isMobile && typeof meta.mobileCardHeight === 'number')
+    ? `${meta.mobileCardHeight}px`
+    : (meta.cardHeight ? `${meta.cardHeight}px` : 'auto');
   const topOffset = (isMobile && typeof meta.mobileTopOffset === 'number')
     ? meta.mobileTopOffset
     : (meta.topOffset ?? (isTopSlot ? 20 : 110));

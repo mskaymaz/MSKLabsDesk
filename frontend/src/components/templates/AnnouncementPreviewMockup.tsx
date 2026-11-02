@@ -8,6 +8,8 @@ export interface AnnouncementPreviewMockupProps {
   announcementText: { tr: string; en: string; ar: string };
   activeLangTab: 'tr' | 'en' | 'ar';
   setActiveLangTab: (lang: 'tr' | 'en' | 'ar') => void;
+  previewDevice?: 'desktop' | 'mobile';
+  setPreviewDevice?: (device: 'desktop' | 'mobile') => void;
 }
 
 export const AnnouncementPreviewMockup: React.FC<AnnouncementPreviewMockupProps> = ({
@@ -16,10 +18,15 @@ export const AnnouncementPreviewMockup: React.FC<AnnouncementPreviewMockupProps>
   announcementText,
   activeLangTab,
   setActiveLangTab,
+  previewDevice: controlledDevice,
+  setPreviewDevice: setControlledDevice,
 }) => {
   const [previewTheme, setPreviewTheme] = useState<'dark' | 'light'>('light');
-  const [previewDevice, setPreviewDevice] = useState<'desktop' | 'mobile'>('desktop');
+  const [internalDevice, setInternalDevice] = useState<'desktop' | 'mobile'>('desktop');
   const [isFloatingCollapsed, setIsFloatingCollapsed] = useState<boolean>(false);
+
+  const previewDevice = controlledDevice ?? internalDevice;
+  const setPreviewDevice = setControlledDevice ?? setInternalDevice;
 
   const currentThemeObj = BANNER_THEMES.find((b) => b.id === (activeItem.bannerType || 'info')) || BANNER_THEMES[0];
   const isMobile = previewDevice === 'mobile';
@@ -31,6 +38,10 @@ export const AnnouncementPreviewMockup: React.FC<AnnouncementPreviewMockupProps>
   const sizeMetrics = getSizeMetrics(activeItem, currentPlacement, isMobile);
   const isTicker = (activeItem.displayMode || 'static') === 'ticker';
   const isRotator = (activeItem.displayMode || 'static') === 'rotator';
+
+  const isLeftSlot = currentPlacement === 'left_floating' || currentPlacement === 'top_left' || currentPlacement === 'bottom_left';
+  const isRightSlot = currentPlacement === 'right_floating' || currentPlacement === 'top_right' || currentPlacement === 'bottom_right';
+  const isCenterSlot = currentPlacement === 'bottom_center';
 
   const isCustomTheme = activeItem.bannerType === 'custom';
   const previewBg = isCustomTheme
@@ -298,11 +309,12 @@ export const AnnouncementPreviewMockup: React.FC<AnnouncementPreviewMockupProps>
                 onClick={() => setIsFloatingCollapsed(false)}
                 style={{
                   position: 'relative',
+                  alignSelf: isLeftSlot ? 'flex-start' : isRightSlot ? 'flex-end' : 'center',
                   marginTop: currentPlacement.startsWith('bottom_') ? 'auto' : `${sizeMetrics.topOffset}px`,
                   marginBottom: currentPlacement.startsWith('bottom_') ? `${sizeMetrics.bottomOffset}px` : '0',
-                  marginLeft: (currentPlacement === 'left_floating' || currentPlacement === 'top_left' || currentPlacement === 'bottom_left') ? `${sizeMetrics.horizontalOffset ?? 20}px` : 'auto',
-                  marginRight: (currentPlacement === 'right_floating' || currentPlacement === 'top_right' || currentPlacement === 'bottom_right') ? `${sizeMetrics.horizontalOffset ?? 20}px` : 'auto',
-                  transform: currentPlacement === 'bottom_center' ? `translateX(${(sizeMetrics.horizontalOffset ?? 20) - 20}px)` : 'none',
+                  marginLeft: isLeftSlot ? `${sizeMetrics.horizontalOffset ?? 20}px` : 'auto',
+                  marginRight: isRightSlot ? `${sizeMetrics.horizontalOffset ?? 20}px` : 'auto',
+                  transform: isCenterSlot ? `translateX(${(sizeMetrics.horizontalOffset ?? 20) - 20}px)` : 'none',
                   width: 'fit-content',
                   minWidth: '24px',
                   padding: currentPlacement.startsWith('bottom_') ? '4px 12px' : '10px 4px',
@@ -338,13 +350,16 @@ export const AnnouncementPreviewMockup: React.FC<AnnouncementPreviewMockupProps>
                 }}
                 style={{
                   position: 'relative',
+                  alignSelf: isLeftSlot ? 'flex-start' : isRightSlot ? 'flex-end' : 'center',
                   marginTop: currentPlacement.startsWith('bottom_') ? 'auto' : `${sizeMetrics.topOffset}px`,
                   marginBottom: currentPlacement.startsWith('bottom_') ? `${sizeMetrics.bottomOffset}px` : '0',
-                  marginLeft: (currentPlacement === 'left_floating' || currentPlacement === 'top_left' || currentPlacement === 'bottom_left') ? `${sizeMetrics.horizontalOffset ?? 20}px` : 'auto',
-                  marginRight: (currentPlacement === 'right_floating' || currentPlacement === 'top_right' || currentPlacement === 'bottom_right') ? `${sizeMetrics.horizontalOffset ?? 20}px` : 'auto',
-                  transform: currentPlacement === 'bottom_center' ? `translateX(${(sizeMetrics.horizontalOffset ?? 20) - 20}px)` : 'none',
-                  width: previewDevice === 'mobile' ? '100%' : sizeMetrics.width,
+                  marginLeft: isLeftSlot ? `${sizeMetrics.horizontalOffset ?? 20}px` : 'auto',
+                  marginRight: isRightSlot ? `${sizeMetrics.horizontalOffset ?? 20}px` : 'auto',
+                  transform: isCenterSlot ? `translateX(${(sizeMetrics.horizontalOffset ?? 20) - 20}px)` : 'none',
+                  width: sizeMetrics.width,
+                  maxWidth: `calc(100% - ${(sizeMetrics.horizontalOffset ?? 20) * 2}px)`,
                   height: sizeMetrics.height,
+                  boxSizing: 'border-box',
                   border: isDark ? currentThemeObj.borderDark : currentThemeObj.borderLight,
                   borderRadius: '8px',
                   boxShadow: '0 8px 24px rgba(0,0,0,0.18)',

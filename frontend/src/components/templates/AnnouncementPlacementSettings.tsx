@@ -5,15 +5,20 @@ import { type AnnouncementItem, type AnnouncementPlacement } from './announcemen
 export interface AnnouncementPlacementSettingsProps {
   activeItem: AnnouncementItem;
   updateCurrentItem: (updates: Partial<AnnouncementItem>) => void;
+  deviceTab?: 'desktop' | 'mobile';
+  setDeviceTab?: (device: 'desktop' | 'mobile') => void;
 }
 
 export const AnnouncementPlacementSettings: React.FC<AnnouncementPlacementSettingsProps> = ({
   activeItem,
   updateCurrentItem,
+  deviceTab,
+  setDeviceTab,
 }) => {
-  const [deviceTab, setDeviceTab] = useState<'desktop' | 'mobile'>('desktop');
-
-  const isWebTab = deviceTab === 'desktop';
+  const [internalDeviceTab, setInternalDeviceTab] = useState<'desktop' | 'mobile'>('desktop');
+  const activeDeviceTab = deviceTab ?? internalDeviceTab;
+  const setActiveDeviceTab = setDeviceTab ?? setInternalDeviceTab;
+  const isWebTab = activeDeviceTab === 'desktop';
   const currentPlacement: AnnouncementPlacement = isWebTab
     ? (activeItem.placement || 'top_hanging')
     : (activeItem.mobilePlacement || activeItem.placement || 'right_floating');
@@ -67,7 +72,7 @@ export const AnnouncementPlacementSettings: React.FC<AnnouncementPlacementSettin
         <div style={{ display: 'inline-flex', borderRadius: '4px', overflow: 'hidden', border: '1px solid var(--border-subtle)' }}>
           <button
             type="button"
-            onClick={() => setDeviceTab('desktop')}
+            onClick={() => setActiveDeviceTab('desktop')}
             style={{
               display: 'inline-flex', alignItems: 'center', gap: '4px', padding: '3px 8px', fontSize: '10px',
               border: 'none', background: isWebTab ? 'var(--accent-primary)' : 'transparent',
@@ -78,7 +83,7 @@ export const AnnouncementPlacementSettings: React.FC<AnnouncementPlacementSettin
           </button>
           <button
             type="button"
-            onClick={() => setDeviceTab('mobile')}
+            onClick={() => setActiveDeviceTab('mobile')}
             style={{
               display: 'inline-flex', alignItems: 'center', gap: '4px', padding: '3px 8px', fontSize: '10px',
               border: 'none', background: !isWebTab ? 'var(--accent-primary)' : 'transparent',
@@ -130,10 +135,14 @@ export const AnnouncementPlacementSettings: React.FC<AnnouncementPlacementSettin
             </>
           ) : (
             <>
-              <optgroup label="Mobil Kulakçıklar & Yuvalar">
+              <optgroup label="Mobil Yuvalar & Kulakçıklar">
                 <option value="right_floating">→ Sağ Kenar Kulakçık</option>
                 <option value="left_floating">← Sol Kenar Kulakçık</option>
-                <option value="bottom_center">↓ Orta Alt Kart</option>
+                <option value="bottom_center">↓ Orta Alt</option>
+                <option value="bottom_left">↙ Sol Alt</option>
+                <option value="bottom_right">↘ Sağ Alt</option>
+                <option value="top_left">↖ Sol Üst</option>
+                <option value="top_right">↗ Sağ Üst</option>
                 <option value="top_hanging">↑ Üst Tam Bant</option>
               </optgroup>
             </>

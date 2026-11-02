@@ -24,6 +24,7 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
   announcementMeta, setAnnouncementMeta, onSave, saving = false,
 }) => {
   const [activeLangTab, setActiveLangTab] = useState<'tr' | 'en' | 'ar'>('tr');
+  const [previewDevice, setPreviewDevice] = useState<'desktop' | 'mobile'>('desktop');
 
   const items: AnnouncementItem[] = (announcementMeta.items && announcementMeta.items.length > 0)
     ? announcementMeta.items
@@ -154,6 +155,8 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
         announcementText={announcementText}
         activeLangTab={activeLangTab}
         setActiveLangTab={setActiveLangTab}
+        previewDevice={previewDevice}
+        setPreviewDevice={setPreviewDevice}
       />
 
       {/* 3. Kompakt Araç Çubuğu: Duyuru Seçici + Yerleşim & Akış Açılır Listeleri */}
@@ -224,7 +227,12 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
           <input type="text" className="form-input" value={activeItem.title || ''} onChange={(e) => updateCurrentItem({ title: e.target.value })} placeholder="Duyuru Başlığı" style={{ fontSize: '11px', height: '28px', marginBottom: '8px' }} />
 
           {/* Web & Mobil Yerleşim, Süre ve Kaydırma Kontrolleri */}
-          <AnnouncementPlacementSettings activeItem={activeItem} updateCurrentItem={updateCurrentItem} />
+          <AnnouncementPlacementSettings
+            activeItem={activeItem}
+            updateCurrentItem={updateCurrentItem}
+            deviceTab={previewDevice}
+            setDeviceTab={setPreviewDevice}
+          />
         </div>
 
         <div>
