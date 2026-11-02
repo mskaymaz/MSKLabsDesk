@@ -21,6 +21,8 @@ export interface AnnouncementItem {
   customBg?: string;
   customText?: string;
   placement?: AnnouncementPlacement;
+  mobilePlacement?: AnnouncementPlacement;
+  deviceTarget?: 'all' | 'desktop' | 'mobile';
   sizePreset?: 'compact' | 'standard' | 'large';
   customHeight?: number;
   paddingY?: number;
@@ -30,6 +32,9 @@ export interface AnnouncementItem {
   bottomOffset?: number;
   sideOffset?: number;
   horizontalOffset?: number;
+  mobileTopOffset?: number;
+  mobileBottomOffset?: number;
+  mobileHorizontalOffset?: number;
   tabText?: string;
   autoCollapseDelay?: number;
   autoCollapseOnScroll?: boolean;
@@ -52,6 +57,8 @@ export interface AnnouncementMeta {
   customBg?: string;
   customText?: string;
   placement?: AnnouncementPlacement;
+  mobilePlacement?: AnnouncementPlacement;
+  deviceTarget?: 'all' | 'desktop' | 'mobile';
   sizePreset?: 'compact' | 'standard' | 'large';
   customHeight?: number;
   paddingY?: number;
@@ -61,6 +68,9 @@ export interface AnnouncementMeta {
   bottomOffset?: number;
   sideOffset?: number;
   horizontalOffset?: number;
+  mobileTopOffset?: number;
+  mobileBottomOffset?: number;
+  mobileHorizontalOffset?: number;
   tabText?: string;
   autoCollapseDelay?: number;
   autoCollapseOnScroll?: boolean;
@@ -99,26 +109,37 @@ export const BANNER_THEMES: BannerThemeItem[] = [
   { id: 'custom', name: 'Özel Renk', bgDark: '#1e293b', bgLight: '#f8fafc', textColorDark: '#f8fafc', textColorLight: '#0f172a', borderDark: '1px solid #475569', borderLight: '1px solid #cbd5e1', icon: React.createElement(Palette, { size: 14 }) },
 ];
 
-export const getSizeMetrics = (meta: Partial<AnnouncementMeta & AnnouncementItem>, placement: AnnouncementPlacement = 'top_hanging') => {
+export const getSizeMetrics = (
+  meta: Partial<AnnouncementMeta & AnnouncementItem>,
+  placement: AnnouncementPlacement = 'top_hanging',
+  isMobile: boolean = false
+) => {
   const p = meta.sizePreset || 'standard';
   const defaultY = p === 'compact' ? 1 : p === 'large' ? 3 : 2;
   const padY = meta.paddingY !== undefined ? meta.paddingY : defaultY;
+  const effPlacement = (isMobile && meta.mobilePlacement) ? meta.mobilePlacement : placement;
 
-  if (placement === 'top_hanging') {
+  if (effPlacement === 'top_hanging') {
     const minHeight = meta.customHeight || (p === 'compact' ? 26 : p === 'large' ? 48 : 34);
     const padX = p === 'compact' ? 10 : p === 'large' ? 16 : 12;
     const fontSize = p === 'compact' ? '11px' : p === 'large' ? '14px' : '12px';
     return { minHeight: `${minHeight}px`, padding: `${padY}px ${padX}px`, fontSize, width: '100%', padY };
   }
 
-  const isTopSlot = placement === 'top_left' || placement === 'top_right';
-  const isBottomSlot = placement === 'bottom_left' || placement === 'bottom_center' || placement === 'bottom_right';
+  const isTopSlot = effPlacement === 'top_left' || effPlacement === 'top_right';
+  const isBottomSlot = effPlacement === 'bottom_left' || effPlacement === 'bottom_center' || effPlacement === 'bottom_right';
 
   const width = meta.cardWidth || (p === 'compact' ? 260 : p === 'large' ? 380 : 310);
   const height = meta.cardHeight ? `${meta.cardHeight}px` : 'auto';
-  const topOffset = meta.topOffset ?? (isTopSlot ? 20 : 110);
-  const bottomOffset = meta.bottomOffset ?? 20;
-  const sideOffset = meta.horizontalOffset ?? meta.sideOffset ?? (isBottomSlot || isTopSlot ? 20 : 5);
+  const topOffset = (isMobile && typeof meta.mobileTopOffset === 'number')
+    ? meta.mobileTopOffset
+    : (meta.topOffset ?? (isTopSlot ? 20 : 110));
+  const bottomOffset = (isMobile && typeof meta.mobileBottomOffset === 'number')
+    ? meta.mobileBottomOffset
+    : (meta.bottomOffset ?? 20);
+  const sideOffset = (isMobile && typeof meta.mobileHorizontalOffset === 'number')
+    ? meta.mobileHorizontalOffset
+    : (meta.horizontalOffset ?? meta.sideOffset ?? (isBottomSlot || isTopSlot ? 20 : 5));
   const horizontalOffset = sideOffset;
   const tabText = meta.tabText || 'SİZİN İÇİN';
   const autoCollapseDelay = meta.autoCollapseDelay ?? 10;

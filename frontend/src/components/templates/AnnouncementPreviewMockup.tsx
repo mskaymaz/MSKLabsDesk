@@ -22,12 +22,13 @@ export const AnnouncementPreviewMockup: React.FC<AnnouncementPreviewMockupProps>
   const [isFloatingCollapsed, setIsFloatingCollapsed] = useState<boolean>(false);
 
   const currentThemeObj = BANNER_THEMES.find((b) => b.id === (activeItem.bannerType || 'info')) || BANNER_THEMES[0];
-  const currentPlacement = activeItem.placement || 'top_hanging';
+  const isMobile = previewDevice === 'mobile';
+  const currentPlacement = (isMobile && activeItem.mobilePlacement) ? activeItem.mobilePlacement : (activeItem.placement || 'top_hanging');
   const isDark = previewTheme === 'dark';
   const currentBgOpacity = activeItem.bgOpacity ?? activeItem.opacity ?? 95;
   const currentTextOpacity = activeItem.textOpacity ?? 100;
   const previewLink = activeItem.targetUrl || activeItem.ctaUrl;
-  const sizeMetrics = getSizeMetrics(activeItem, currentPlacement);
+  const sizeMetrics = getSizeMetrics(activeItem, currentPlacement, isMobile);
   const isTicker = (activeItem.displayMode || 'static') === 'ticker';
   const isRotator = (activeItem.displayMode || 'static') === 'rotator';
 
@@ -297,7 +298,7 @@ export const AnnouncementPreviewMockup: React.FC<AnnouncementPreviewMockupProps>
                 onClick={() => setIsFloatingCollapsed(false)}
                 style={{
                   position: 'relative',
-                  marginTop: currentPlacement.startsWith('bottom_') ? 'auto' : `${activeItem.topOffset ?? (currentPlacement.startsWith('top_') ? 20 : 110)}px`,
+                  marginTop: currentPlacement.startsWith('bottom_') ? 'auto' : `${sizeMetrics.topOffset}px`,
                   marginBottom: currentPlacement.startsWith('bottom_') ? `${sizeMetrics.bottomOffset}px` : '0',
                   marginLeft: (currentPlacement === 'left_floating' || currentPlacement === 'top_left' || currentPlacement === 'bottom_left') ? `${sizeMetrics.horizontalOffset ?? 20}px` : 'auto',
                   marginRight: (currentPlacement === 'right_floating' || currentPlacement === 'top_right' || currentPlacement === 'bottom_right') ? `${sizeMetrics.horizontalOffset ?? 20}px` : 'auto',
@@ -337,7 +338,7 @@ export const AnnouncementPreviewMockup: React.FC<AnnouncementPreviewMockupProps>
                 }}
                 style={{
                   position: 'relative',
-                  marginTop: currentPlacement.startsWith('bottom_') ? 'auto' : `${activeItem.topOffset ?? (currentPlacement.startsWith('top_') ? 20 : 110)}px`,
+                  marginTop: currentPlacement.startsWith('bottom_') ? 'auto' : `${sizeMetrics.topOffset}px`,
                   marginBottom: currentPlacement.startsWith('bottom_') ? `${sizeMetrics.bottomOffset}px` : '0',
                   marginLeft: (currentPlacement === 'left_floating' || currentPlacement === 'top_left' || currentPlacement === 'bottom_left') ? `${sizeMetrics.horizontalOffset ?? 20}px` : 'auto',
                   marginRight: (currentPlacement === 'right_floating' || currentPlacement === 'top_right' || currentPlacement === 'bottom_right') ? `${sizeMetrics.horizontalOffset ?? 20}px` : 'auto',

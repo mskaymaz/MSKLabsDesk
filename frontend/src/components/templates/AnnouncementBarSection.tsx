@@ -4,6 +4,7 @@ import { Switch } from '../ui/Input';
 import { RichTextEditor } from '../ui/RichTextEditor';
 import { type AnnouncementMeta, type AnnouncementItem, BANNER_THEMES } from './announcementConfig';
 import { AnnouncementPreviewMockup } from './AnnouncementPreviewMockup';
+import { AnnouncementPlacementSettings } from './AnnouncementPlacementSettings';
 
 export type { AnnouncementMeta };
 
@@ -94,6 +95,8 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
       activeItemId: activeItem.id,
       displayMode: activeItem.displayMode,
       placement: activeItem.placement,
+      mobilePlacement: activeItem.mobilePlacement,
+      deviceTarget: activeItem.deviceTarget,
       bannerType: activeItem.bannerType,
       topOffset: activeItem.topOffset,
       cardWidth: activeItem.cardWidth,
@@ -101,6 +104,9 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
       sideOffset: activeItem.sideOffset,
       horizontalOffset: activeItem.horizontalOffset ?? activeItem.sideOffset,
       bottomOffset: activeItem.bottomOffset,
+      mobileTopOffset: activeItem.mobileTopOffset,
+      mobileBottomOffset: activeItem.mobileBottomOffset,
+      mobileHorizontalOffset: activeItem.mobileHorizontalOffset,
       autoCollapseOnScroll: activeItem.autoCollapseOnScroll,
       tabText: activeItem.tabText,
       autoCollapseDelay: activeItem.autoCollapseDelay,
@@ -215,31 +221,10 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
               <span style={{ fontWeight: 600 }}>Aktif</span>
             </label>
           </div>
-          <input type="text" className="form-input" value={activeItem.title || ''} onChange={(e) => updateCurrentItem({ title: e.target.value })} placeholder="Duyuru Başlığı" style={{ fontSize: '11px', height: '28px', marginBottom: currentPlacement !== 'top_hanging' ? '8px' : '0' }} />
+          <input type="text" className="form-input" value={activeItem.title || ''} onChange={(e) => updateCurrentItem({ title: e.target.value })} placeholder="Duyuru Başlığı" style={{ fontSize: '11px', height: '28px', marginBottom: '8px' }} />
 
-          {currentPlacement !== 'top_hanging' && (
-            <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr 1fr', gap: '6px', paddingTop: '6px', borderTop: '1px dashed var(--border-subtle)', alignItems: 'flex-end' }}>
-              <div title="Dikey Kulakçık Üzerinde Yazacak Metin">
-                <span style={{ display: 'block', fontSize: '9px', color: 'var(--text-muted)' }}>Kulakçık:</span>
-                <input type="text" className="form-input" placeholder="SİZİN İÇİN" style={{ fontSize: '10px', height: '24px', padding: '2px 6px' }} value={activeItem.tabText ?? ''} onChange={(e) => updateCurrentItem({ tabText: e.target.value })} />
-              </div>
-              <div title="İlk Açık Kalma Süresi (5-15 sn önerilir, 0=yalnızca etkileşimle küçül)">
-                <span style={{ display: 'block', fontSize: '9px', color: 'var(--text-muted)' }}>Süre:</span>
-                <select className="form-select" style={{ fontSize: '10px', height: '24px', padding: '1px 3px' }} value={activeItem.autoCollapseDelay ?? 10} onChange={(e) => updateCurrentItem({ autoCollapseDelay: parseInt(e.target.value, 10) })}>
-                  <option value={5}>5 sn (Kısa)</option>
-                  <option value={10}>10 sn (Standart)</option>
-                  <option value={15}>15 sn (Detaylı)</option>
-                  <option value={0}>0 (Manuel)</option>
-                </select>
-              </div>
-              <div title="Sayfa kaydırılınca veya dışına tıklanınca otomatik küçülsün">
-                <label style={{ display: 'inline-flex', alignItems: 'center', gap: '3px', fontSize: '9px', cursor: 'pointer', color: 'var(--text-secondary)', height: '24px' }}>
-                  <input type="checkbox" checked={activeItem.autoCollapseOnScroll !== false} onChange={(e) => updateCurrentItem({ autoCollapseOnScroll: e.target.checked })} />
-                  <span>Kaydırınca Küçül</span>
-                </label>
-              </div>
-            </div>
-          )}
+          {/* Web & Mobil Yerleşim, Süre ve Kaydırma Kontrolleri */}
+          <AnnouncementPlacementSettings activeItem={activeItem} updateCurrentItem={updateCurrentItem} />
         </div>
 
         <div>
@@ -319,46 +304,20 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
           </div>
         ) : (
           <div>
-            <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: '4px' }}>Boyut, Kenar & Opaklık</label>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '4px', marginBottom: '8px' }}>
+            <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: '4px' }}>Kart Boyutu & Opaklık</label>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '4px', marginBottom: '8px' }}>
               <div title="Kart Genişliği (px)">
-                <span style={{ display: 'block', fontSize: '9px', color: 'var(--text-muted)' }}>Gen:</span>
+                <span style={{ display: 'block', fontSize: '9px', color: 'var(--text-muted)' }}>Genişlik:</span>
                 <input type="number" className="form-input" placeholder="310" style={{ fontSize: '11px', height: '26px', padding: '2px', textAlign: 'center' }} value={activeItem.cardWidth ?? ''} onChange={(e) => updateCurrentItem({ cardWidth: e.target.value === '' ? undefined : parseInt(e.target.value, 10) })} />
               </div>
               <div title="Kart Yüksekliği (px, boş=otomatik)">
-                <span style={{ display: 'block', fontSize: '9px', color: 'var(--text-muted)' }}>Yük:</span>
+                <span style={{ display: 'block', fontSize: '9px', color: 'var(--text-muted)' }}>Yükseklik:</span>
                 <input type="number" className="form-input" placeholder="Oto" style={{ fontSize: '11px', height: '26px', padding: '2px', textAlign: 'center' }} value={activeItem.cardHeight ?? ''} onChange={(e) => updateCurrentItem({ cardHeight: e.target.value === '' ? undefined : parseInt(e.target.value, 10) })} />
               </div>
               <div title="İç Boşluk (pad)">
-                <span style={{ display: 'block', fontSize: '9px', color: 'var(--text-muted)' }}>Pad:</span>
+                <span style={{ display: 'block', fontSize: '9px', color: 'var(--text-muted)' }}>İç Boşluk:</span>
                 <input type="number" className="form-input" placeholder="10" style={{ fontSize: '11px', height: '26px', padding: '2px', textAlign: 'center' }} value={activeItem.paddingY ?? ''} onChange={(e) => updateCurrentItem({ paddingY: e.target.value === '' ? undefined : parseInt(e.target.value, 10) })} />
               </div>
-              <div title={currentPlacement.startsWith('bottom_') ? 'Alttan Mesafe (px)' : 'Üstten Mesafe (px)'}>
-                <span style={{ display: 'block', fontSize: '9px', color: 'var(--text-muted)' }}>{currentPlacement.startsWith('bottom_') ? 'Alt:' : 'Üst:'}</span>
-                <input type="number" className="form-input" placeholder={currentPlacement.startsWith('bottom_') ? '20' : '110'} style={{ fontSize: '11px', height: '26px', padding: '2px', textAlign: 'center' }} value={(currentPlacement.startsWith('bottom_') ? activeItem.bottomOffset : activeItem.topOffset) ?? ''} onChange={(e) => {
-                  const val = e.target.value === '' ? undefined : parseInt(e.target.value, 10);
-                  if (currentPlacement.startsWith('bottom_')) updateCurrentItem({ bottomOffset: val });
-                  else updateCurrentItem({ topOffset: val });
-                }} />
-              </div>
-              <div title="Sağa/Sola Kaydırma (Yatay Ofset px - Dışarı veya Merkeze Yaklaştırma)">
-                <span style={{ display: 'block', fontSize: '9px', color: 'var(--text-muted)' }}>Yatay:</span>
-                <input type="number" min="0" max="250" className="form-input" placeholder="20" style={{ fontSize: '11px', height: '26px', padding: '2px', textAlign: 'center' }} value={activeItem.horizontalOffset ?? activeItem.sideOffset ?? ''} onChange={(e) => {
-                  const val = e.target.value === '' ? undefined : Math.min(250, Math.max(0, parseInt(e.target.value, 10)));
-                  updateCurrentItem({ horizontalOffset: val, sideOffset: val });
-                }} />
-              </div>
-            </div>
-
-            {/* Sağa / Sola Kaydırma Slider */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px', background: 'rgba(0,0,0,0.1)', padding: '3px 8px', borderRadius: '4px' }}>
-              <span style={{ fontSize: '9px', color: 'var(--text-secondary)', minWidth: '75px' }}>
-                Yatay Kaydır: {activeItem.horizontalOffset ?? activeItem.sideOffset ?? 20}px
-              </span>
-              <input type="range" min="0" max="250" step="5" value={activeItem.horizontalOffset ?? activeItem.sideOffset ?? 20} onChange={(e) => {
-                const val = parseInt(e.target.value, 10);
-                updateCurrentItem({ horizontalOffset: val, sideOffset: val });
-              }} style={{ flex: 1, cursor: 'pointer' }} title="Paneli sayfanın dışına veya ortasına doğru yaklaştırınız" />
             </div>
 
             {/* Zemin ve Yazı Opaklığı */}
