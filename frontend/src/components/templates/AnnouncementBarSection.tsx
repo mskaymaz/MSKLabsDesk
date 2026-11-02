@@ -99,6 +99,9 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
       cardWidth: activeItem.cardWidth,
       cardHeight: activeItem.cardHeight,
       sideOffset: activeItem.sideOffset,
+      horizontalOffset: activeItem.horizontalOffset ?? activeItem.sideOffset,
+      bottomOffset: activeItem.bottomOffset,
+      autoCollapseOnScroll: activeItem.autoCollapseOnScroll,
       tabText: activeItem.tabText,
       autoCollapseDelay: activeItem.autoCollapseDelay,
       glassEffect: activeItem.glassEffect,
@@ -153,7 +156,7 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
           <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--text-secondary)' }}>Duyuru:</span>
           <select className="form-select" value={activeItem.id} onChange={(e) => handleSelectId(e.target.value)} style={{ fontSize: '11px', height: '28px', minWidth: '150px', fontWeight: 600, padding: '2px 6px' }}>
             {items.map((it, idx) => {
-              const sym = it.placement === 'left_floating' ? '←' : it.placement === 'right_floating' ? '→' : '↑';
+              const sym = it.placement?.startsWith('bottom_') ? '↓' : (it.placement === 'left_floating' || it.placement === 'top_left' || it.placement === 'bottom_left') ? '←' : (it.placement === 'right_floating' || it.placement === 'top_right' || it.placement === 'bottom_right') ? '→' : '↑';
               return (
                 <option key={it.id} value={it.id}>
                   {sym} {it.title || `Duyuru #${idx + 1}`} {!it.isActive ? '(Pasif)' : ''}
@@ -175,9 +178,20 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
           <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
             <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--text-secondary)' }}>Yerleşim:</span>
             <select className="form-select" value={currentPlacement} onChange={(e) => updateCurrentItem({ placement: e.target.value as any })} style={{ fontSize: '11px', height: '28px', padding: '2px 6px' }}>
-              <option value="top_hanging">Üst</option>
-              <option value="right_floating">Sağ</option>
-              <option value="left_floating">Sol</option>
+              <optgroup label="Web (Masaüstü) Yuvaları">
+                <option value="top_left">↖ Sol Üst</option>
+                <option value="top_right">↗ Sağ Üst</option>
+                <option value="bottom_left">↙ Sol Alt</option>
+                <option value="bottom_center">↓ Orta Alt</option>
+                <option value="bottom_right">↘ Sağ Alt</option>
+              </optgroup>
+              <optgroup label="Mobil Yuvalar">
+                <option value="left_floating">← Sol Kenar (Kulakçık)</option>
+                <option value="right_floating">→ Sağ Kenar (Kulakçık)</option>
+              </optgroup>
+              <optgroup label="Klasik">
+                <option value="top_hanging">↑ Üst Tam Bant</option>
+              </optgroup>
             </select>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
@@ -204,14 +218,25 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
           <input type="text" className="form-input" value={activeItem.title || ''} onChange={(e) => updateCurrentItem({ title: e.target.value })} placeholder="Duyuru Başlığı" style={{ fontSize: '11px', height: '28px', marginBottom: currentPlacement !== 'top_hanging' ? '8px' : '0' }} />
 
           {currentPlacement !== 'top_hanging' && (
-            <div style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr', gap: '6px', paddingTop: '6px', borderTop: '1px dashed var(--border-subtle)' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr 1fr', gap: '6px', paddingTop: '6px', borderTop: '1px dashed var(--border-subtle)', alignItems: 'flex-end' }}>
               <div title="Dikey Kulakçık Üzerinde Yazacak Metin">
-                <span style={{ display: 'block', fontSize: '9px', color: 'var(--text-muted)' }}>Kulakçık Metni:</span>
+                <span style={{ display: 'block', fontSize: '9px', color: 'var(--text-muted)' }}>Kulakçık:</span>
                 <input type="text" className="form-input" placeholder="SİZİN İÇİN" style={{ fontSize: '10px', height: '24px', padding: '2px 6px' }} value={activeItem.tabText ?? ''} onChange={(e) => updateCurrentItem({ tabText: e.target.value })} />
               </div>
-              <div title="İlk Açık Kalma Süresi (0 ise doğrudan kulakçık başlar)">
-                <span style={{ display: 'block', fontSize: '9px', color: 'var(--text-muted)' }}>Açık Süre (sn):</span>
-                <input type="number" min="0" max="30" className="form-input" placeholder="4" style={{ fontSize: '10px', height: '24px', textAlign: 'center', padding: '2px' }} value={activeItem.autoCollapseDelay ?? ''} onChange={(e) => updateCurrentItem({ autoCollapseDelay: e.target.value === '' ? undefined : parseInt(e.target.value, 10) })} />
+              <div title="İlk Açık Kalma Süresi (5-15 sn önerilir, 0=yalnızca etkileşimle küçül)">
+                <span style={{ display: 'block', fontSize: '9px', color: 'var(--text-muted)' }}>Süre:</span>
+                <select className="form-select" style={{ fontSize: '10px', height: '24px', padding: '1px 3px' }} value={activeItem.autoCollapseDelay ?? 10} onChange={(e) => updateCurrentItem({ autoCollapseDelay: parseInt(e.target.value, 10) })}>
+                  <option value={5}>5 sn (Kısa)</option>
+                  <option value={10}>10 sn (Standart)</option>
+                  <option value={15}>15 sn (Detaylı)</option>
+                  <option value={0}>0 (Manuel)</option>
+                </select>
+              </div>
+              <div title="Sayfa kaydırılınca veya dışına tıklanınca otomatik küçülsün">
+                <label style={{ display: 'inline-flex', alignItems: 'center', gap: '3px', fontSize: '9px', cursor: 'pointer', color: 'var(--text-secondary)', height: '24px' }}>
+                  <input type="checkbox" checked={activeItem.autoCollapseOnScroll !== false} onChange={(e) => updateCurrentItem({ autoCollapseOnScroll: e.target.checked })} />
+                  <span>Kaydırınca Küçül</span>
+                </label>
               </div>
             </div>
           )}
@@ -308,14 +333,32 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
                 <span style={{ display: 'block', fontSize: '9px', color: 'var(--text-muted)' }}>Pad:</span>
                 <input type="number" className="form-input" placeholder="10" style={{ fontSize: '11px', height: '26px', padding: '2px', textAlign: 'center' }} value={activeItem.paddingY ?? ''} onChange={(e) => updateCurrentItem({ paddingY: e.target.value === '' ? undefined : parseInt(e.target.value, 10) })} />
               </div>
-              <div title="Üstten Mesafe (px)">
-                <span style={{ display: 'block', fontSize: '9px', color: 'var(--text-muted)' }}>Üst:</span>
-                <input type="number" className="form-input" placeholder="110" style={{ fontSize: '11px', height: '26px', padding: '2px', textAlign: 'center' }} value={activeItem.topOffset ?? ''} onChange={(e) => updateCurrentItem({ topOffset: e.target.value === '' ? undefined : parseInt(e.target.value, 10) })} />
+              <div title={currentPlacement.startsWith('bottom_') ? 'Alttan Mesafe (px)' : 'Üstten Mesafe (px)'}>
+                <span style={{ display: 'block', fontSize: '9px', color: 'var(--text-muted)' }}>{currentPlacement.startsWith('bottom_') ? 'Alt:' : 'Üst:'}</span>
+                <input type="number" className="form-input" placeholder={currentPlacement.startsWith('bottom_') ? '20' : '110'} style={{ fontSize: '11px', height: '26px', padding: '2px', textAlign: 'center' }} value={(currentPlacement.startsWith('bottom_') ? activeItem.bottomOffset : activeItem.topOffset) ?? ''} onChange={(e) => {
+                  const val = e.target.value === '' ? undefined : parseInt(e.target.value, 10);
+                  if (currentPlacement.startsWith('bottom_')) updateCurrentItem({ bottomOffset: val });
+                  else updateCurrentItem({ topOffset: val });
+                }} />
               </div>
-              <div title="Sağ/Sol Kenar Boşluğu (px, varsayılan 5px)">
-                <span style={{ display: 'block', fontSize: '9px', color: 'var(--text-muted)' }}>Kenar:</span>
-                <input type="number" className="form-input" placeholder="5" style={{ fontSize: '11px', height: '26px', padding: '2px', textAlign: 'center' }} value={activeItem.sideOffset ?? ''} onChange={(e) => updateCurrentItem({ sideOffset: e.target.value === '' ? undefined : parseInt(e.target.value, 10) })} />
+              <div title="Sağa/Sola Kaydırma (Yatay Ofset px - Dışarı veya Merkeze Yaklaştırma)">
+                <span style={{ display: 'block', fontSize: '9px', color: 'var(--text-muted)' }}>Yatay:</span>
+                <input type="number" min="0" max="250" className="form-input" placeholder="20" style={{ fontSize: '11px', height: '26px', padding: '2px', textAlign: 'center' }} value={activeItem.horizontalOffset ?? activeItem.sideOffset ?? ''} onChange={(e) => {
+                  const val = e.target.value === '' ? undefined : Math.min(250, Math.max(0, parseInt(e.target.value, 10)));
+                  updateCurrentItem({ horizontalOffset: val, sideOffset: val });
+                }} />
               </div>
+            </div>
+
+            {/* Sağa / Sola Kaydırma Slider */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px', background: 'rgba(0,0,0,0.1)', padding: '3px 8px', borderRadius: '4px' }}>
+              <span style={{ fontSize: '9px', color: 'var(--text-secondary)', minWidth: '75px' }}>
+                Yatay Kaydır: {activeItem.horizontalOffset ?? activeItem.sideOffset ?? 20}px
+              </span>
+              <input type="range" min="0" max="250" step="5" value={activeItem.horizontalOffset ?? activeItem.sideOffset ?? 20} onChange={(e) => {
+                const val = parseInt(e.target.value, 10);
+                updateCurrentItem({ horizontalOffset: val, sideOffset: val });
+              }} style={{ flex: 1, cursor: 'pointer' }} title="Paneli sayfanın dışına veya ortasına doğru yaklaştırınız" />
             </div>
 
             {/* Zemin ve Yazı Opaklığı */}

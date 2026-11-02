@@ -1,6 +1,24 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 📌 Son Güncelleme [02.11.2026 - 11:45] — 4.1 DUYURU MODÜLÜ 5 YUVALI YERLEŞİM VE YATAY OFSET MİMARİSİ [✓]
+* **Yapılan İşlemler:**
+  1. **Konfigürasyon & Veri Modeli (`announcementConfig.ts`):**
+     - Web yuvaları (`top_left`, `top_right`, `bottom_left`, `bottom_center`, `bottom_right`) ve mobil yuvalar (`left_floating`, `right_floating`, `top_hanging`) tip tanımına bağlandı.
+     - `horizontalOffset` (0-250px), `bottomOffset`, `autoCollapseOnScroll` ve `autoCollapseDelay` (5, 10, 15, 0 sn) alanları eklendi.
+  2. **Yönetim Paneli & Önizleme Arayüzü (`AnnouncementBarSection.tsx` & `AnnouncementPreviewMockup.tsx`):**
+     - Yerleşim seçici menüsü gruplandırıldı; sağa/sola yatay kaydırma slider'ı ve girdi kutusu eklendi.
+     - Canlı mockup önizlemesinde 5 web yuvası, yatay ofset kaydırması ve küçültülmüş kulakçık/buton modları dinamik hale getirildi (446 ve 421 satır sınırı korundu).
+  3. **İstemci Motoru (`announcement-loader.js` - `webMSKLabs`):**
+     - Web ve Mobil cihaz algılaması eklenerek sayfa başına azami 1 duyuru gösteren tekil Round-Robin rotasyon mimarisi devreye alındı.
+     - Sayfa kaydırıldığında (`scroll > 30px`) veya dışına tıklandığında paneli otomatik kulakçığa/butona büzüştüren etkileşim tetikleyicisi yazıldı.
+     - `hover-to-pause` mekanizması ile kullanıcının okuma deneyimi güvenceye alındı.
+  4. **Doğrulama & Kalite Kapıları:**
+     - `MSKLabsDesk/frontend`: `npm run build` hatasız geçti.
+     - `webMSKLabs`: `npm run build` ve Vitest testleri (604 test) %100 PASS ile doğrulandı.
+
+---
+
 ## 📌 Son Güncelleme [31.10.2026 - 13:45] — 3. AŞAMA TAMAMLANDI: KURUMSAL E-POSTA VE CLOUDFLARE EMAIL ROUTING MİMARİSİ [✓]
 * **Yapılan İşlemler:**
   1. **Cloudflare Email Routing Devreye Alındı:**

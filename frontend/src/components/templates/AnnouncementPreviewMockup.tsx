@@ -76,7 +76,15 @@ export const AnnouncementPreviewMockup: React.FC<AnnouncementPreviewMockupProps>
             <span>Canlı Önizleme Vitrini:</span>
             <span style={{ color: 'var(--accent-amber, #f59e0b)' }}>{activeItem.title}</span>
             <span style={{ fontSize: '10px', color: 'var(--text-muted)', fontWeight: 500 }}>
-              ({currentPlacement === 'top_hanging' ? 'Üst Şerit' : currentPlacement === 'left_floating' ? 'Sol Kart' : 'Sağ Kart'})
+              ({
+              currentPlacement === 'top_hanging' ? 'Üst Şerit' :
+              currentPlacement === 'top_left' ? 'Sol Üst' :
+              currentPlacement === 'top_right' ? 'Sağ Üst' :
+              currentPlacement === 'bottom_left' ? 'Sol Alt' :
+              currentPlacement === 'bottom_center' ? 'Orta Alt' :
+              currentPlacement === 'bottom_right' ? 'Sağ Alt' :
+              currentPlacement === 'left_floating' ? 'Sol Kenar' : 'Sağ Kenar'
+            })
             </span>
             {isTicker && <span className="admin-badge admin-badge-sm" style={{ background: 'rgba(16,185,129,0.15)', color: '#10b981', padding: '1px 5px', fontSize: '10px' }}>Kayan Yazı</span>}
             {isRotator && <span className="admin-badge admin-badge-sm" style={{ background: 'rgba(99,102,241,0.15)', color: '#6366f1', padding: '1px 5px', fontSize: '10px' }}>Dönüşümlü</span>}
@@ -263,7 +271,9 @@ export const AnnouncementPreviewMockup: React.FC<AnnouncementPreviewMockupProps>
         ) : (
           <div style={{
             position: 'relative',
-            minHeight: `${Math.max(200, (activeItem.topOffset ?? 110) + 160)}px`,
+            display: 'flex',
+            flexDirection: 'column',
+            minHeight: `${Math.max(220, (activeItem.topOffset ?? 110) + 160)}px`,
             background: isDark ? 'rgba(0,0,0,0.25)' : 'rgba(255,255,255,0.4)',
             borderRadius: '6px',
             padding: '8px',
@@ -278,34 +288,36 @@ export const AnnouncementPreviewMockup: React.FC<AnnouncementPreviewMockupProps>
               background: isDark ? 'rgba(255,255,255,0.03)' : 'rgba(0,0,0,0.02)', borderRadius: '4px',
             }}>
               <span>🌐 Web Sayfası Başlığı (Header)</span>
-              <span>Üst: {activeItem.topOffset ?? 110}px | Kenar: {sizeMetrics.sideOffset}px | Süre: {sizeMetrics.autoCollapseDelay}s | Efekt: {sizeMetrics.glassEffect === 'blur' ? 'Buzlu' : 'Şeffaf'}</span>
+              <span>Konum: {currentPlacement} | Ofset: {sizeMetrics.horizontalOffset ?? 20}px | Süre: {sizeMetrics.autoCollapseDelay}s</span>
             </div>
 
             {isFloatingCollapsed ? (
-              /* Dikey Kulakçık Önizlemesi (İkonsuz, İnce ve Yalın) */
+              /* Kompakt Kulakçık / Buton Önizlemesi */
               <div
                 onClick={() => setIsFloatingCollapsed(false)}
                 style={{
                   position: 'relative',
-                  marginTop: `${activeItem.topOffset ?? 110}px`,
-                  marginLeft: currentPlacement === 'left_floating' ? `${sizeMetrics.sideOffset}px` : 'auto',
-                  marginRight: currentPlacement === 'right_floating' ? `${sizeMetrics.sideOffset}px` : 'auto',
+                  marginTop: currentPlacement.startsWith('bottom_') ? 'auto' : `${activeItem.topOffset ?? (currentPlacement.startsWith('top_') ? 20 : 110)}px`,
+                  marginBottom: currentPlacement.startsWith('bottom_') ? `${sizeMetrics.bottomOffset}px` : '0',
+                  marginLeft: (currentPlacement === 'left_floating' || currentPlacement === 'top_left' || currentPlacement === 'bottom_left') ? `${sizeMetrics.horizontalOffset ?? 20}px` : 'auto',
+                  marginRight: (currentPlacement === 'right_floating' || currentPlacement === 'top_right' || currentPlacement === 'bottom_right') ? `${sizeMetrics.horizontalOffset ?? 20}px` : 'auto',
+                  transform: currentPlacement === 'bottom_center' ? `translateX(${(sizeMetrics.horizontalOffset ?? 20) - 20}px)` : 'none',
                   width: 'fit-content',
-                  minWidth: '22px',
-                  padding: '10px 4px',
+                  minWidth: '24px',
+                  padding: currentPlacement.startsWith('bottom_') ? '4px 12px' : '10px 4px',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  writingMode: 'vertical-rl',
+                  writingMode: currentPlacement.startsWith('bottom_') ? 'horizontal-tb' : 'vertical-rl',
                   textOrientation: 'mixed',
-                  letterSpacing: '1px',
-                  fontSize: '11px',
+                  letterSpacing: '0.5px',
+                  fontSize: '10px',
                   fontWeight: 700,
                   cursor: 'pointer',
                   background: previewBg,
                   color: previewText,
                   border: isDark ? currentThemeObj.borderDark : currentThemeObj.borderLight,
-                  borderRadius: currentPlacement === 'left_floating' ? '0 8px 8px 0' : '8px 0 0 8px',
+                  borderRadius: currentPlacement.startsWith('bottom_') ? '16px' : (currentPlacement === 'left_floating' || currentPlacement === 'top_left' || currentPlacement === 'bottom_left') ? '0 8px 8px 0' : '8px 0 0 8px',
                   boxShadow: '0 4px 16px rgba(0,0,0,0.18)',
                   backdropFilter: sizeMetrics.glassEffect === 'blur' ? 'blur(10px)' : 'none',
                   WebkitBackdropFilter: sizeMetrics.glassEffect === 'blur' ? 'blur(10px)' : 'none',
@@ -325,9 +337,11 @@ export const AnnouncementPreviewMockup: React.FC<AnnouncementPreviewMockupProps>
                 }}
                 style={{
                   position: 'relative',
-                  marginTop: `${activeItem.topOffset ?? 110}px`,
-                  marginLeft: currentPlacement === 'left_floating' ? `${sizeMetrics.sideOffset}px` : 'auto',
-                  marginRight: currentPlacement === 'right_floating' ? `${sizeMetrics.sideOffset}px` : 'auto',
+                  marginTop: currentPlacement.startsWith('bottom_') ? 'auto' : `${activeItem.topOffset ?? (currentPlacement.startsWith('top_') ? 20 : 110)}px`,
+                  marginBottom: currentPlacement.startsWith('bottom_') ? `${sizeMetrics.bottomOffset}px` : '0',
+                  marginLeft: (currentPlacement === 'left_floating' || currentPlacement === 'top_left' || currentPlacement === 'bottom_left') ? `${sizeMetrics.horizontalOffset ?? 20}px` : 'auto',
+                  marginRight: (currentPlacement === 'right_floating' || currentPlacement === 'top_right' || currentPlacement === 'bottom_right') ? `${sizeMetrics.horizontalOffset ?? 20}px` : 'auto',
+                  transform: currentPlacement === 'bottom_center' ? `translateX(${(sizeMetrics.horizontalOffset ?? 20) - 20}px)` : 'none',
                   width: previewDevice === 'mobile' ? '100%' : sizeMetrics.width,
                   height: sizeMetrics.height,
                   border: isDark ? currentThemeObj.borderDark : currentThemeObj.borderLight,

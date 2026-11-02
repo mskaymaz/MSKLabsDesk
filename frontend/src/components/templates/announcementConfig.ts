@@ -1,6 +1,16 @@
 import React from 'react';
 import { Info, CheckCircle2, AlertTriangle, Flame, Palette } from 'lucide-react';
 
+export type AnnouncementPlacement =
+  | 'top_left'
+  | 'top_right'
+  | 'bottom_left'
+  | 'bottom_center'
+  | 'bottom_right'
+  | 'left_floating'
+  | 'right_floating'
+  | 'top_hanging';
+
 export interface AnnouncementItem {
   id: string;
   title: string;
@@ -10,16 +20,19 @@ export interface AnnouncementItem {
   bannerType: 'info' | 'success' | 'warning' | 'purple' | 'custom';
   customBg?: string;
   customText?: string;
-  placement?: 'top_hanging' | 'right_floating' | 'left_floating';
+  placement?: AnnouncementPlacement;
   sizePreset?: 'compact' | 'standard' | 'large';
   customHeight?: number;
   paddingY?: number;
   cardWidth?: number;
   cardHeight?: number;
   topOffset?: number;
+  bottomOffset?: number;
   sideOffset?: number;
+  horizontalOffset?: number;
   tabText?: string;
   autoCollapseDelay?: number;
+  autoCollapseOnScroll?: boolean;
   opacity?: number;
   bgOpacity?: number;
   textOpacity?: number;
@@ -38,16 +51,19 @@ export interface AnnouncementMeta {
   bannerType: 'info' | 'success' | 'warning' | 'purple' | 'custom';
   customBg?: string;
   customText?: string;
-  placement?: 'top_hanging' | 'right_floating' | 'left_floating';
+  placement?: AnnouncementPlacement;
   sizePreset?: 'compact' | 'standard' | 'large';
   customHeight?: number;
   paddingY?: number;
   cardWidth?: number;
   cardHeight?: number;
   topOffset?: number;
+  bottomOffset?: number;
   sideOffset?: number;
+  horizontalOffset?: number;
   tabText?: string;
   autoCollapseDelay?: number;
+  autoCollapseOnScroll?: boolean;
   opacity?: number;
   bgOpacity?: number;
   textOpacity?: number;
@@ -83,7 +99,7 @@ export const BANNER_THEMES: BannerThemeItem[] = [
   { id: 'custom', name: 'Özel Renk', bgDark: '#1e293b', bgLight: '#f8fafc', textColorDark: '#f8fafc', textColorLight: '#0f172a', borderDark: '1px solid #475569', borderLight: '1px solid #cbd5e1', icon: React.createElement(Palette, { size: 14 }) },
 ];
 
-export const getSizeMetrics = (meta: Partial<AnnouncementMeta & AnnouncementItem>, placement: string = 'top_hanging') => {
+export const getSizeMetrics = (meta: Partial<AnnouncementMeta & AnnouncementItem>, placement: AnnouncementPlacement = 'top_hanging') => {
   const p = meta.sizePreset || 'standard';
   const defaultY = p === 'compact' ? 1 : p === 'large' ? 3 : 2;
   const padY = meta.paddingY !== undefined ? meta.paddingY : defaultY;
@@ -94,15 +110,38 @@ export const getSizeMetrics = (meta: Partial<AnnouncementMeta & AnnouncementItem
     const fontSize = p === 'compact' ? '11px' : p === 'large' ? '14px' : '12px';
     return { minHeight: `${minHeight}px`, padding: `${padY}px ${padX}px`, fontSize, width: '100%', padY };
   }
+
+  const isTopSlot = placement === 'top_left' || placement === 'top_right';
+  const isBottomSlot = placement === 'bottom_left' || placement === 'bottom_center' || placement === 'bottom_right';
+
   const width = meta.cardWidth || (p === 'compact' ? 260 : p === 'large' ? 380 : 310);
   const height = meta.cardHeight ? `${meta.cardHeight}px` : 'auto';
-  const topOffset = meta.topOffset ?? 110;
-  const sideOffset = meta.sideOffset ?? 5;
+  const topOffset = meta.topOffset ?? (isTopSlot ? 20 : 110);
+  const bottomOffset = meta.bottomOffset ?? 20;
+  const sideOffset = meta.horizontalOffset ?? meta.sideOffset ?? (isBottomSlot || isTopSlot ? 20 : 5);
+  const horizontalOffset = sideOffset;
   const tabText = meta.tabText || 'SİZİN İÇİN';
-  const autoCollapseDelay = meta.autoCollapseDelay ?? 4;
+  const autoCollapseDelay = meta.autoCollapseDelay ?? 10;
+  const autoCollapseOnScroll = meta.autoCollapseOnScroll !== false;
   const padX = p === 'compact' ? 10 : p === 'large' ? 16 : 12;
   const cardPadY = meta.paddingY !== undefined ? meta.paddingY : (p === 'compact' ? 8 : p === 'large' ? 14 : 10);
   const fontSize = p === 'compact' ? '11px' : p === 'large' ? '14px' : '12px';
   const glassEffect = meta.glassEffect || 'none';
-  return { width: `${width}px`, height, topOffset, sideOffset, tabText, autoCollapseDelay, glassEffect, padding: `${cardPadY}px ${padX}px`, fontSize, minHeight: 'auto', padY: cardPadY };
+
+  return {
+    width: `${width}px`,
+    height,
+    topOffset,
+    bottomOffset,
+    sideOffset,
+    horizontalOffset,
+    tabText,
+    autoCollapseDelay,
+    autoCollapseOnScroll,
+    glassEffect,
+    padding: `${cardPadY}px ${padX}px`,
+    fontSize,
+    minHeight: 'auto',
+    padY: cardPadY,
+  };
 };
