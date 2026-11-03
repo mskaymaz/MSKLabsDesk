@@ -1,6 +1,17 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 📌 Son Güncelleme [03.11.2026 - 14:45] — BÜLTEN MODALI CANLI ÖNİZLEME DİKEY YERLEŞİM DÜZENLEMESİ [✓]
+* **Yapılan İşlemler:**
+  1. **Konu ve Canlı Önizleme Dikey (Alt Alta) Kurgusu (`BroadcastModal.tsx`):**
+     - Bülten gönderim modalında e-posta konusu, gövde girdisi ve canlı gelen kutusu önizleme vitrini dikey olarak alt alta yerleştirildi.
+     - Canlı önizleme kartına "Kimden: MSK Labs Bildirim <bildirim@msklabs.org>" ve gerçek zamanlı dinamik konu/gövde yansıtması eklendi.
+  2. **Doğrulama ve Derleme:**
+     - Frontend TypeScript ve PWA derlemesi (`tsc -b && vite build`) 0 hata ile başarıyla tamamlandı.
+     - Tüm backend entegrasyon testleri (113/113) %100 PASS.
+
+---
+
 ## 📌 Son Güncelleme [03.11.2026 - 14:20] — 4.3 GENEL SİSTEM AYARLARI (BAKIM MODU & ALTYAPI ENTEGRASYON KARTLARI) [✓]
 * **Yapılan İşlemler:**
   1. **Bakım Modu (Maintenance Mode) Geçiş Anahtarı (`SettingsView.tsx`):**
