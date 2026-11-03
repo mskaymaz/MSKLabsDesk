@@ -57,6 +57,14 @@ export const AnnouncementPreviewMockup: React.FC<AnnouncementPreviewMockupProps>
 
   const stageWidth = isMobile ? '380px' : (previewWebWidth > 0 ? `${previewWebWidth}px` : '100%');
 
+  // Kulakçık (Askı Rozet / Tab) Stilleri: Web'de yukarı/aşağı yatay kutulu, Mobilde sağ/sol dikey
+  const isWebTabHorizontal = !isMobile || currentPlacement === 'bottom_center';
+  const tabWritingMode = isWebTabHorizontal ? 'horizontal-tb' : 'vertical-rl';
+  const tabPadding = isWebTabHorizontal ? '5px 14px' : '12px 5px';
+  const tabBorderRadius = !isMobile
+    ? (isBottomSlot ? '8px 8px 0 0' : '0 0 8px 8px')
+    : (currentPlacement === 'bottom_center' ? '16px' : isLeftSlot ? '0 8px 8px 0' : '8px 0 0 8px');
+
   return (
     <div style={{ width: '100%', overflowX: 'auto', display: 'flex', justifyContent: 'center', marginBottom: '14px', padding: '2px 0 6px 0' }}>
       <div style={{
@@ -234,7 +242,7 @@ export const AnnouncementPreviewMockup: React.FC<AnnouncementPreviewMockupProps>
             {/* Kayan / Sabit Pozisyonlu Duyuru (Floating Card veya Askı Kulakçık) */}
             {currentPlacement !== 'top_hanging' && (
               isFloatingCollapsed ? (
-                /* Kompakt Kulakçık / Rozet Hali */
+                /* Kompakt Kulakçık / Rozet Hali (Web'de yatay kutulu, Mobilde sağ/sol dikey) */
                 <div
                   onClick={() => setIsFloatingCollapsed(false)}
                   style={{
@@ -245,17 +253,27 @@ export const AnnouncementPreviewMockup: React.FC<AnnouncementPreviewMockupProps>
                     right: isRightSlot ? `${sizeMetrics.horizontalOffset ?? 20}px` : 'auto',
                     transform: isCenterSlot ? 'translateX(-50%)' : 'none',
                     zIndex: 30,
-                    width: 'fit-content', minWidth: '24px',
-                    padding: isBottomSlot ? '5px 14px' : '12px 5px',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    writingMode: isBottomSlot ? 'horizontal-tb' : 'vertical-rl',
-                    textOrientation: 'mixed', letterSpacing: '0.6px', fontSize: '9.5px', fontWeight: 800, cursor: 'pointer',
-                    background: previewBg, color: previewText, border: isDark ? currentThemeObj.borderDark : currentThemeObj.borderLight,
-                    borderRadius: isBottomSlot ? '16px' : isLeftSlot ? '0 8px 8px 0' : '8px 0 0 8px',
+                    width: 'fit-content',
+                    minWidth: isWebTabHorizontal ? '70px' : '24px',
+                    padding: tabPadding,
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    writingMode: tabWritingMode,
+                    textOrientation: 'mixed',
+                    letterSpacing: isWebTabHorizontal ? '0.3px' : '0.6px',
+                    fontSize: '9.5px',
+                    fontWeight: 800,
+                    cursor: 'pointer',
+                    background: previewBg,
+                    color: previewText,
+                    border: isDark ? currentThemeObj.borderDark : currentThemeObj.borderLight,
+                    borderRadius: tabBorderRadius,
                     boxShadow: '0 4px 18px rgba(0,0,0,0.22)',
                     backdropFilter: sizeMetrics.glassEffect === 'blur' ? 'blur(10px)' : 'none',
                     WebkitBackdropFilter: sizeMetrics.glassEffect === 'blur' ? 'blur(10px)' : 'none',
-                    transition: 'all 0.2s ease', userSelect: 'none',
+                    transition: 'all 0.2s ease',
+                    userSelect: 'none',
                   }}
                   title="Tıklayarak açık kart halini görüntüleyin"
                 >
