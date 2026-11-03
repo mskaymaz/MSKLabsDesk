@@ -14,13 +14,25 @@ export async function handleAdminGetSubscribers(request: Request, env: { DB: D1D
     return new Response(JSON.stringify({ error: 'Yetkisiz erişim.' }), { status: 401, headers: { 'Content-Type': 'application/json' } });
   }
 
-  const { results: subscribers } = await env.DB.prepare('SELECT id, email, status, source, created_at FROM subscribers ORDER BY created_at DESC LIMIT 200').all();
+  const { results: subscribers } = await env.DB.prepare('SELECT id, email, status, source, created_at, verified_at FROM subscribers ORDER BY created_at DESC LIMIT 200').all();
   const totalSubscribers = await env.DB.prepare("SELECT COUNT(*) as count FROM subscribers WHERE status = 'active'").first<{ count: number }>();
+
+  const mappedSubscribers = (subscribers || []).map((s: any) => ({
+    id: s.id,
+    email: s.email,
+    status: s.status,
+    is_verified: s.status === 'active' || !!s.verified_at,
+    unsubscribed_at: s.status === 'unsubscribed' ? s.created_at : undefined,
+    kvkk_consent: true,
+    source: s.source,
+    created_at: s.created_at,
+    verified_at: s.verified_at,
+  }));
 
   return new Response(JSON.stringify({
     success: true,
     total_active: totalSubscribers?.count || 0,
-    subscribers: subscribers || [],
+    subscribers: mappedSubscribers,
   }), {
     status: 200,
     headers: { 'Content-Type': 'application/json; charset=utf-8' },

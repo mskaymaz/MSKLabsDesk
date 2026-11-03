@@ -17,13 +17,19 @@ export const SubscribersView: React.FC<SubscribersViewProps> = ({ subscribers })
   const filtered = subscribers.filter((s) => {
     const matchesSearch = s.email.toLowerCase().includes(search.toLowerCase());
     if (!matchesSearch) return false;
-    if (statusFilter === 'verified') return s.is_verified;
-    if (statusFilter === 'unverified') return !s.is_verified;
-    if (statusFilter === 'unsubscribed') return !!s.unsubscribed_at;
+    const isVerified = (s as any).status === 'active' || s.is_verified;
+    const isUnsubscribed = (s as any).status === 'unsubscribed' || !!s.unsubscribed_at;
+    if (statusFilter === 'verified') return isVerified && !isUnsubscribed;
+    if (statusFilter === 'unverified') return !isVerified;
+    if (statusFilter === 'unsubscribed') return isUnsubscribed;
     return true;
   });
 
-  const activeSubscribersCount = subscribers.filter((s) => s.is_verified && !s.unsubscribed_at).length;
+  const activeSubscribersCount = subscribers.filter((s) => {
+    const isVerified = (s as any).status === 'active' || s.is_verified;
+    const isUnsubscribed = (s as any).status === 'unsubscribed' || !!s.unsubscribed_at;
+    return isVerified && !isUnsubscribed;
+  }).length;
 
   const handleExportCsv = () => {
     if (filtered.length === 0) {
