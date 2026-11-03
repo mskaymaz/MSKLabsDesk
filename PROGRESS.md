@@ -1,6 +1,27 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 📌 Son Güncelleme [03.11.2026 - 11:30] — 4.3 DUYURU MODÜLÜ SAHNE YERLEŞİMİ, KULAKÇIK YÖNELİMİ VE TAVAN/TABAN YASLAMA [✓]
+* **Yapılan İşlemler:**
+  1. **Arayüz Yerleşimi & Düzen:**
+     - Masaüstü/Mobil Konum & Boyut ayarları doğrudan Canlı Önizleme vitrininin üzerine tek satır olarak taşındı.
+     - İçerik Düzenleme (3/4) ve Yerleşim/Harita Yuva Seçici (1/4) iki sütunlu mimariye dönüştürüldü; dikey kayma sonlandırıldı.
+  2. **Dinamik Sahne Genişliği:**
+     - Sahne açılır menüsü eklendi (1160px, 1024px, 900px, 768px, %100). Önizleme vitrinine doğrudan piksel genişliği verilerek dinamik geçiş sağlandı.
+  3. **Yatay Kutulu ve Dikey Kulakçık Standardı:**
+     - Web modunda kulakçıklar (	op_left, 	op_right, ottom_left, ottom_center, ottom_right) yatay yazılı ve kutulu hale getirildi.
+     - Mobil modda sağ/sol kenar yuvaları (left_floating, 
+ight_floating) dikey yönelim (ertical-rl) ile kenara yaslandı.
+  4. **Sıfır Boşluklu Tavan ve Taban Yaslama:**
+     - Önizleme sahnesine Header ([TAVAN]) ve Footer ([TABAN]) referans çizgileri eklendi.
+     - Üst kulakçıklar tam tavana (	op: 30px, orderTop: none), alt kulakçıklar tam tabana (ottom: 24px, orderBottom: none) yaslandı.
+     - Canlı yükleyici motorunda (nnouncement-loader.js) web kulakçıkları 	op: 0px ve ottom: 0px olarak sıfırlandı.
+  5. **Doğrulama & Test:**
+     - MSKLabsDesk/frontend: TypeScript ve PWA build hatasız tamamlandı.
+     - webMSKLabs: Vitest suite (604/604 test) %100 PASS ile doğrulandı.
+
+---
+
 ## 📌 Son Güncelleme [02.11.2026 - 17:05] — 4.2 DUYURU MODÜLÜ MOBİL-WEB AYRIK BOYUTLANDIRMA VE SİLÜET HARİTASI [✓]
 * **Yapılan İşlemler:**
   1. **Web ve Mobil Bağımsız Boyutlandırma:**
