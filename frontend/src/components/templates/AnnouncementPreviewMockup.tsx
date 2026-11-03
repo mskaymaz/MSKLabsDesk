@@ -57,13 +57,13 @@ export const AnnouncementPreviewMockup: React.FC<AnnouncementPreviewMockupProps>
 
   const stageWidth = isMobile ? '380px' : (previewWebWidth > 0 ? `${previewWebWidth}px` : '100%');
 
-  // Kulakçık (Askı Rozet / Tab) Stilleri: Web'de yukarı/aşağı yatay kutulu, Mobilde sağ/sol dikey
+  // Kulakçık (Askı Rozet / Tab) Stilleri: Web'de tam tavan/taban yatay kutulu, Mobilde sağ/sol dikey
   const isWebTabHorizontal = !isMobile || currentPlacement === 'bottom_center';
   const tabWritingMode = isWebTabHorizontal ? 'horizontal-tb' : 'vertical-rl';
-  const tabPadding = isWebTabHorizontal ? '5px 14px' : '12px 5px';
+  const tabPadding = isWebTabHorizontal ? '4px 14px' : '12px 5px';
   const tabBorderRadius = !isMobile
     ? (isBottomSlot ? '8px 8px 0 0' : '0 0 8px 8px')
-    : (currentPlacement === 'bottom_center' ? '16px' : isLeftSlot ? '0 8px 8px 0' : '8px 0 0 8px');
+    : (currentPlacement === 'bottom_center' ? '14px 14px 0 0' : isLeftSlot ? '0 8px 8px 0' : '8px 0 0 8px');
 
   return (
     <div style={{ width: '100%', overflowX: 'auto', display: 'flex', justifyContent: 'center', marginBottom: '14px', padding: '2px 0 6px 0' }}>
@@ -100,7 +100,7 @@ export const AnnouncementPreviewMockup: React.FC<AnnouncementPreviewMockupProps>
             </div>
           </div>
 
-          {/* Sağ: Açık/Kulakçık Önizleme Düğmeleri, Cihaz, Dil ve Tema */}
+          {/* Sağ Düğmeler: Açık/Kulakçık Önizleme, Cihaz, Dil ve Tema */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
             {currentPlacement !== 'top_hanging' && (
               <div style={{ display: 'inline-flex', borderRadius: '4px', overflow: 'hidden', border: '1px solid var(--accent-primary, #2563eb)', background: 'var(--bg-primary, #0f172a)' }}>
@@ -144,201 +144,226 @@ export const AnnouncementPreviewMockup: React.FC<AnnouncementPreviewMockupProps>
           </div>
         </div>
 
-        {/* 2. Web Sayfası İç Gövdesi (Sahne) */}
-        <div style={{ position: 'relative', background: isDark ? '#0b1120' : '#FFFFFF', minHeight: isMobile ? '320px' : '250px', display: 'flex', flexDirection: 'column' }}>
-          {/* Üst Şerit (Top Hanging Banner) */}
-          {currentPlacement === 'top_hanging' && (
-            <div
-              dir={activeLangTab === 'ar' ? 'rtl' : 'ltr'}
-              onClick={(e: React.MouseEvent) => {
-                if ((e.target as HTMLElement).closest('button')) return;
-                if (previewLink) window.open(previewLink, '_blank', 'noopener,noreferrer');
-              }}
-              style={{
-                position: 'relative', borderBottom: isDark ? currentThemeObj.borderDark : currentThemeObj.borderLight,
-                minHeight: sizeMetrics.minHeight, height: isTicker ? sizeMetrics.minHeight : 'auto',
-                boxShadow: '0 4px 18px rgba(0,0,0,0.1)',
-                backdropFilter: sizeMetrics.glassEffect === 'blur' ? 'blur(10px)' : 'none',
-                WebkitBackdropFilter: sizeMetrics.glassEffect === 'blur' ? 'blur(10px)' : 'none',
-                overflow: 'hidden', display: 'flex', alignItems: 'center', cursor: previewLink ? 'pointer' : 'default',
-                zIndex: 20,
-              }}
-            >
-              <div style={{ position: 'absolute', inset: 0, background: previewBg, opacity: announcementActive ? currentBgOpacity / 100 : 0.3, zIndex: 0, pointerEvents: 'none' }} />
-              <div style={{ position: 'relative', zIndex: 1, width: '100%', maxWidth: '1160px', margin: '0 auto', padding: sizeMetrics.padding, fontSize: sizeMetrics.fontSize, color: previewText, opacity: announcementActive ? currentTextOpacity / 100 : 0.45, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px', boxSizing: 'border-box' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flex: 1, minWidth: 0, overflow: isTicker ? 'hidden' : 'visible' }}>
-                  <span style={{ display: 'inline-flex', flexShrink: 0, marginTop: '1px' }}>{currentThemeObj.icon}</span>
-                  {isTicker ? (
-                    <div className="ann-ticker-wrap">
-                      <div className="ann-ticker-track" style={{ animation: `${(activeItem.tickerDirection || 'rtl') === 'ltr' ? 'marqueeLTR' : 'marqueeRTL'} ${(activeItem.tickerSpeed || 'normal') === 'slow' ? '28s' : (activeItem.tickerSpeed || 'normal') === 'fast' ? '10s' : '18s'} linear infinite` }} dangerouslySetInnerHTML={{ __html: announcementText[activeLangTab] || 'Duyuru metni...' }} />
-                    </div>
-                  ) : isRotator ? (
-                    <div style={{ flex: 1, overflow: 'hidden', height: '22px', display: 'flex', alignItems: 'center' }}>
-                      <div className="ann-rotator-line" style={{ animation: 'annFadeRotate 4.5s ease-in-out infinite' }} dangerouslySetInnerHTML={{ __html: announcementText[activeLangTab] || 'Duyuru içeriği...' }} />
-                    </div>
-                  ) : (
-                    <div className="ann-rich-content" style={{ flex: 1, display: 'flex', alignItems: 'center', margin: 0, lineHeight: 1.25 }} dangerouslySetInnerHTML={{ __html: announcementText[activeLangTab] || 'Duyuru içeriği...' }} />
-                  )}
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
-                  {activeItem.ctaText && (
-                    <a href={previewLink || '#'} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()} style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '3px', padding: '3px 9px', fontSize: '10px', fontWeight: 700, borderRadius: '12px', background: isDark ? 'rgba(255,255,255,0.18)' : 'rgba(0,0,0,0.08)', color: 'inherit' }}>
-                      {activeItem.ctaText} <ExternalLink size={9} />
-                    </a>
-                  )}
-                  {activeItem.isDismissable && <button type="button" style={{ background: 'transparent', border: 'none', color: 'inherit', opacity: 0.7, padding: '2px', cursor: 'pointer' }}><X size={13} /></button>}
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Gerçekçi Web Başlığı (Header) */}
-          <div style={{
-            height: '32px', borderBottom: isDark ? '1px solid rgba(255,255,255,0.08)' : '1px solid #E2E8F0',
-            display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 16px',
-            background: isDark ? '#0f172a' : '#FFFFFF', zIndex: 10,
-          }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 800, fontSize: '11px', color: isDark ? '#F8FAFC' : '#0F172A' }}>
-              <span style={{ color: 'var(--accent-primary, #3b82f6)' }}>❖</span>
-              <span>MSK Labs</span>
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '9.5px', color: isDark ? '#94A3B8' : '#64748B' }}>
-              <span>Blog</span>
-              <span>Yazılımlar</span>
-              <span>Hakkında</span>
-              <span>Destek</span>
-            </div>
-          </div>
-
-          {/* Gerçekçi Sayfa İçeriği & Grid (Standart 1160px / 900px Temsili) */}
-          <div style={{ flex: 1, padding: '16px', display: 'flex', flexDirection: 'column', alignItems: 'center', position: 'relative' }}>
-            <div style={{ width: '100%', maxWidth: '900px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-              {/* Hero Tanıtım Kartı */}
-              <div style={{
-                background: isDark ? 'rgba(30, 41, 59, 0.5)' : '#F8FAFC',
-                border: isDark ? '1px solid rgba(255,255,255,0.06)' : '1px solid #E2E8F0',
-                borderRadius: '8px', padding: '14px 18px', textAlign: 'center',
-              }}>
-                <div style={{ fontSize: '12px', fontWeight: 700, color: isDark ? '#F1F5F9' : '#1E293B', marginBottom: '4px' }}>
-                  MSK Labs — Özgün, Kullanıcı Odaklı ve Güvenli Çözümler
-                </div>
-                <div style={{ height: '6px', width: '60%', background: isDark ? 'rgba(255,255,255,0.08)' : '#E2E8F0', borderRadius: '3px', margin: '0 auto 6px auto' }} />
-                <div style={{ height: '6px', width: '40%', background: isDark ? 'rgba(255,255,255,0.05)' : '#EDF2F7', borderRadius: '3px', margin: '0 auto' }} />
-              </div>
-
-              {/* 2 Sütunlu Kart Silüeti */}
-              <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: '10px' }}>
-                <div style={{ background: isDark ? 'rgba(30, 41, 59, 0.3)' : '#FAFAFA', border: isDark ? '1px solid rgba(255,255,255,0.04)' : '1px solid #F1F5F9', borderRadius: '6px', padding: '12px' }}>
-                  <div style={{ height: '8px', width: '50%', background: isDark ? 'rgba(255,255,255,0.1)' : '#E2E8F0', borderRadius: '4px', marginBottom: '6px' }} />
-                  <div style={{ height: '6px', width: '80%', background: isDark ? 'rgba(255,255,255,0.05)' : '#EDF2F7', borderRadius: '3px' }} />
-                </div>
-                <div style={{ background: isDark ? 'rgba(30, 41, 59, 0.3)' : '#FAFAFA', border: isDark ? '1px solid rgba(255,255,255,0.04)' : '1px solid #F1F5F9', borderRadius: '6px', padding: '12px' }}>
-                  <div style={{ height: '8px', width: '50%', background: isDark ? 'rgba(255,255,255,0.1)' : '#E2E8F0', borderRadius: '4px', marginBottom: '6px' }} />
-                  <div style={{ height: '6px', width: '80%', background: isDark ? 'rgba(255,255,255,0.05)' : '#EDF2F7', borderRadius: '3px' }} />
-                </div>
-              </div>
-            </div>
-
-            {/* Kayan / Sabit Pozisyonlu Duyuru (Floating Card veya Askı Kulakçık) */}
-            {currentPlacement !== 'top_hanging' && (
-              isFloatingCollapsed ? (
-                /* Kompakt Kulakçık / Rozet Hali (Web'de yatay kutulu, Mobilde sağ/sol dikey) */
-                <div
-                  onClick={() => setIsFloatingCollapsed(false)}
-                  style={{
-                    position: 'absolute',
-                    top: isBottomSlot ? 'auto' : `${sizeMetrics.topOffset}px`,
-                    bottom: isBottomSlot ? `${sizeMetrics.bottomOffset}px` : 'auto',
-                    left: isLeftSlot ? `${sizeMetrics.horizontalOffset ?? 20}px` : isCenterSlot ? '50%' : 'auto',
-                    right: isRightSlot ? `${sizeMetrics.horizontalOffset ?? 20}px` : 'auto',
-                    transform: isCenterSlot ? 'translateX(-50%)' : 'none',
-                    zIndex: 30,
-                    width: 'fit-content',
-                    minWidth: isWebTabHorizontal ? '70px' : '24px',
-                    padding: tabPadding,
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    writingMode: tabWritingMode,
-                    textOrientation: 'mixed',
-                    letterSpacing: isWebTabHorizontal ? '0.3px' : '0.6px',
-                    fontSize: '9.5px',
-                    fontWeight: 800,
-                    cursor: 'pointer',
-                    background: previewBg,
-                    color: previewText,
-                    border: isDark ? currentThemeObj.borderDark : currentThemeObj.borderLight,
-                    borderRadius: tabBorderRadius,
-                    boxShadow: '0 4px 18px rgba(0,0,0,0.22)',
-                    backdropFilter: sizeMetrics.glassEffect === 'blur' ? 'blur(10px)' : 'none',
-                    WebkitBackdropFilter: sizeMetrics.glassEffect === 'blur' ? 'blur(10px)' : 'none',
-                    transition: 'all 0.2s ease',
-                    userSelect: 'none',
-                  }}
-                  title="Tıklayarak açık kart halini görüntüleyin"
-                >
-                  <span>{activeItem.tabText || 'SİZİN İÇİN'}</span>
-                </div>
-              ) : (
-                /* Tam Açık Kart Hali */
-                <div
-                  dir={activeLangTab === 'ar' ? 'rtl' : 'ltr'}
-                  onClick={(e: React.MouseEvent) => {
-                    if ((e.target as HTMLElement).closest('button')) return;
-                    if (previewLink) window.open(previewLink, '_blank', 'noopener,noreferrer');
-                  }}
-                  style={{
-                    position: 'absolute',
-                    top: isBottomSlot ? 'auto' : `${sizeMetrics.topOffset}px`,
-                    bottom: isBottomSlot ? `${sizeMetrics.bottomOffset}px` : 'auto',
-                    left: isLeftSlot ? `${sizeMetrics.horizontalOffset ?? 20}px` : isCenterSlot ? '50%' : 'auto',
-                    right: isRightSlot ? `${sizeMetrics.horizontalOffset ?? 20}px` : 'auto',
-                    transform: isCenterSlot ? 'translateX(-50%)' : 'none',
-                    zIndex: 30,
-                    width: sizeMetrics.width,
-                    maxWidth: `calc(100% - ${(sizeMetrics.horizontalOffset ?? 20) * 2}px)`,
-                    height: sizeMetrics.height,
-                    boxSizing: 'border-box',
-                    border: isDark ? currentThemeObj.borderDark : currentThemeObj.borderLight,
-                    borderRadius: '8px',
-                    boxShadow: '0 8px 24px rgba(0,0,0,0.18)',
-                    backdropFilter: sizeMetrics.glassEffect === 'blur' ? 'blur(10px)' : 'none',
-                    WebkitBackdropFilter: sizeMetrics.glassEffect === 'blur' ? 'blur(10px)' : 'none',
-                    overflow: 'hidden',
-                    cursor: previewLink ? 'pointer' : 'default',
-                    transition: 'all 0.2s ease',
-                  }}
-                >
-                  <div style={{ position: 'absolute', inset: 0, background: previewBg, opacity: announcementActive ? currentBgOpacity / 100 : 0.3, zIndex: 0, pointerEvents: 'none' }} />
-                  <div style={{ position: 'relative', zIndex: 1, padding: sizeMetrics.padding, fontSize: sizeMetrics.fontSize, color: previewText, opacity: announcementActive ? currentTextOpacity / 100 : 0.45, display: 'flex', flexDirection: 'column', height: '100%', boxSizing: 'border-box' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '10px', fontWeight: 800 }}>
-                        {currentThemeObj.icon} <span>{activeItem.title}</span>
+        {/* 2. Web Sayfası İç Gövdesi (Net Tavan ve Taban Sahnesi) */}
+        <div style={{
+          position: 'relative',
+          background: isDark ? '#0b1120' : '#FFFFFF',
+          minHeight: isMobile ? '340px' : '260px',
+          height: isMobile ? '340px' : '260px',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'space-between',
+          overflow: 'hidden',
+        }}>
+          {/* TAVAN BÖLGESİ (Üst Şerit Varsa + Header) */}
+          <div style={{ width: '100%', zIndex: 10, flexShrink: 0 }}>
+            {/* Üst Tam Bant (Top Hanging Banner) */}
+            {currentPlacement === 'top_hanging' && (
+              <div
+                dir={activeLangTab === 'ar' ? 'rtl' : 'ltr'}
+                onClick={(e: React.MouseEvent) => {
+                  if ((e.target as HTMLElement).closest('button')) return;
+                  if (previewLink) window.open(previewLink, '_blank', 'noopener,noreferrer');
+                }}
+                style={{
+                  position: 'relative', borderBottom: isDark ? currentThemeObj.borderDark : currentThemeObj.borderLight,
+                  minHeight: sizeMetrics.minHeight, height: isTicker ? sizeMetrics.minHeight : 'auto',
+                  boxShadow: '0 4px 18px rgba(0,0,0,0.1)',
+                  backdropFilter: sizeMetrics.glassEffect === 'blur' ? 'blur(10px)' : 'none',
+                  WebkitBackdropFilter: sizeMetrics.glassEffect === 'blur' ? 'blur(10px)' : 'none',
+                  overflow: 'hidden', display: 'flex', alignItems: 'center', cursor: previewLink ? 'pointer' : 'default',
+                }}
+              >
+                <div style={{ position: 'absolute', inset: 0, background: previewBg, opacity: announcementActive ? currentBgOpacity / 100 : 0.3, zIndex: 0, pointerEvents: 'none' }} />
+                <div style={{ position: 'relative', zIndex: 1, width: '100%', maxWidth: '1160px', margin: '0 auto', padding: sizeMetrics.padding, fontSize: sizeMetrics.fontSize, color: previewText, opacity: announcementActive ? currentTextOpacity / 100 : 0.45, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px', boxSizing: 'border-box' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flex: 1, minWidth: 0, overflow: isTicker ? 'hidden' : 'visible' }}>
+                    <span style={{ display: 'inline-flex', flexShrink: 0, marginTop: '1px' }}>{currentThemeObj.icon}</span>
+                    {isTicker ? (
+                      <div className="ann-ticker-wrap">
+                        <div className="ann-ticker-track" style={{ animation: `${(activeItem.tickerDirection || 'rtl') === 'ltr' ? 'marqueeLTR' : 'marqueeRTL'} ${(activeItem.tickerSpeed || 'normal') === 'slow' ? '28s' : (activeItem.tickerSpeed || 'normal') === 'fast' ? '10s' : '18s'} linear infinite` }} dangerouslySetInnerHTML={{ __html: announcementText[activeLangTab] || 'Duyuru metni...' }} />
                       </div>
-                      {activeItem.isDismissable && (
-                        <button type="button" onClick={(e) => { e.stopPropagation(); setIsFloatingCollapsed(true); }} style={{ background: 'transparent', border: 'none', color: 'inherit', opacity: 0.7, padding: '2px', cursor: 'pointer' }} title="Kulakçığa küçült">
-                          <X size={12} />
-                        </button>
-                      )}
-                    </div>
-                    {/* Kaydırma Çubuğu Gizlenmiş (Touch Scroll Aktif) İçerik Alanı */}
-                    <div
-                      className="ann-card-preview-content"
-                      style={{ flex: 1, overflowY: 'auto', overflowX: 'hidden', scrollbarWidth: 'none', msOverflowStyle: 'none', maxWidth: '100%', boxSizing: 'border-box', marginBottom: '4px', whiteSpace: 'pre-wrap', wordBreak: 'break-word', WebkitOverflowScrolling: 'touch' }}
-                      dangerouslySetInnerHTML={{ __html: announcementText[activeLangTab] || 'Zengin içerik...' }}
-                    />
-                    {activeItem.ctaText && (
-                      <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                        <a href={previewLink || '#'} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()} style={{ textDecoration: 'none', color: 'inherit', fontSize: '9.5px', fontWeight: 700 }}>
-                          {activeItem.ctaText} ➔
-                        </a>
+                    ) : isRotator ? (
+                      <div style={{ flex: 1, overflow: 'hidden', height: '22px', display: 'flex', alignItems: 'center' }}>
+                        <div className="ann-rotator-line" style={{ animation: 'annFadeRotate 4.5s ease-in-out infinite' }} dangerouslySetInnerHTML={{ __html: announcementText[activeLangTab] || 'Duyuru içeriği...' }} />
                       </div>
+                    ) : (
+                      <div className="ann-rich-content" style={{ flex: 1, display: 'flex', alignItems: 'center', margin: 0, lineHeight: 1.25 }} dangerouslySetInnerHTML={{ __html: announcementText[activeLangTab] || 'Duyuru içeriği...' }} />
                     )}
                   </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
+                    {activeItem.ctaText && (
+                      <a href={previewLink || '#'} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()} style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '3px', padding: '3px 9px', fontSize: '10px', fontWeight: 700, borderRadius: '12px', background: isDark ? 'rgba(255,255,255,0.18)' : 'rgba(0,0,0,0.08)', color: 'inherit' }}>
+                        {activeItem.ctaText} <ExternalLink size={9} />
+                      </a>
+                    )}
+                    {activeItem.isDismissable && <button type="button" style={{ background: 'transparent', border: 'none', color: 'inherit', opacity: 0.7, padding: '2px', cursor: 'pointer' }}><X size={13} /></button>}
+                  </div>
                 </div>
-              )
+              </div>
             )}
+
+            {/* Gerçekçi Web Başlığı (TAVAN Çizgisi) */}
+            <div style={{
+              height: '30px', borderBottom: isDark ? '2px solid rgba(255,255,255,0.12)' : '2px solid #E2E8F0',
+              display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 14px',
+              background: isDark ? '#0f172a' : '#FFFFFF',
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 800, fontSize: '11px', color: isDark ? '#F8FAFC' : '#0F172A' }}>
+                <span style={{ color: 'var(--accent-primary, #3b82f6)' }}>❖</span>
+                <span>MSK Labs</span>
+                <span style={{ fontSize: '9px', fontWeight: 600, color: 'var(--accent-primary)', opacity: 0.8 }}>[TAVAN]</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '9px', color: isDark ? '#94A3B8' : '#64748B' }}>
+                <span>Blog</span>
+                <span>Yazılımlar</span>
+                <span>Destek</span>
+              </div>
+            </div>
           </div>
+
+          {/* ORTA BÖLGE: Sayfa İçerik Tuvali (Sade, Dikkat Dağıtmayan Silüet) */}
+          <div style={{ flex: 1, padding: '12px 16px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+            <div style={{ width: '100%', maxWidth: '800px', display: 'flex', flexDirection: 'column', gap: '8px', opacity: 0.85 }}>
+              <div style={{
+                background: isDark ? 'rgba(30, 41, 59, 0.45)' : '#F8FAFC',
+                border: isDark ? '1px solid rgba(255,255,255,0.06)' : '1px solid #E2E8F0',
+                borderRadius: '6px', padding: '10px 14px', textAlign: 'center',
+              }}>
+                <div style={{ fontSize: '11px', fontWeight: 700, color: isDark ? '#F1F5F9' : '#1E293B', marginBottom: '2px' }}>
+                  MSK Labs Web Sayfası İçerik Alanı
+                </div>
+                <div style={{ height: '4px', width: '50%', background: isDark ? 'rgba(255,255,255,0.08)' : '#E2E8F0', borderRadius: '2px', margin: '0 auto' }} />
+              </div>
+            </div>
+          </div>
+
+          {/* TABAN BÖLGESİ (Footer / Sayfa Taban Çizgisi) */}
+          <div style={{
+            height: '24px', borderTop: isDark ? '2px solid rgba(255,255,255,0.12)' : '2px solid #E2E8F0',
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 14px',
+            background: isDark ? '#080d1a' : '#F8FAFC',
+            fontSize: '9px', color: isDark ? '#64748B' : '#94A3B8',
+            flexShrink: 0, zIndex: 10,
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <span>🔒 msklabs.org</span>
+              <span style={{ fontSize: '9px', fontWeight: 600, color: 'var(--accent-primary)', opacity: 0.8 }}>[TABAN]</span>
+            </div>
+            <span>© 2026 MSK Labs</span>
+          </div>
+
+          {/* 3. Sabit / Kayan Pozisyonlu Duyuru (Tam Sahne Üzerinde Absolute) */}
+          {currentPlacement !== 'top_hanging' && (
+            isFloatingCollapsed ? (
+              /* Tam Tavana veya Tabana Yaslı Kompakt Kulakçık Hali */
+              <div
+                onClick={() => setIsFloatingCollapsed(false)}
+                style={{
+                  position: 'absolute',
+                  // Tavan / Taban Hizalaması:
+                  top: !isMobile
+                    ? (isBottomSlot ? 'auto' : '30px') // Web'de tam Tavan Header çizgisine yaslı
+                    : (isBottomSlot ? 'auto' : `${sizeMetrics.topOffset ?? 90}px`),
+                  bottom: !isMobile
+                    ? (isBottomSlot ? '24px' : 'auto') // Web'de tam Taban Footer çizgisine yaslı
+                    : (isBottomSlot ? '24px' : 'auto'),
+                  left: !isMobile
+                    ? (isLeftSlot ? `${sizeMetrics.horizontalOffset ?? 20}px` : isCenterSlot ? '50%' : 'auto')
+                    : (isLeftSlot ? '0px' : isCenterSlot ? '50%' : 'auto'), // Mobilde tam sola yaslı
+                  right: !isMobile
+                    ? (isRightSlot ? `${sizeMetrics.horizontalOffset ?? 20}px` : 'auto')
+                    : (isRightSlot ? '0px' : 'auto'), // Mobilde tam sağa yaslı
+                  transform: isCenterSlot ? 'translateX(-50%)' : 'none',
+                  zIndex: 30,
+                  width: 'fit-content',
+                  minWidth: isWebTabHorizontal ? '75px' : '22px',
+                  padding: tabPadding,
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  writingMode: tabWritingMode,
+                  textOrientation: 'mixed',
+                  letterSpacing: isWebTabHorizontal ? '0.3px' : '0.6px',
+                  fontSize: '9.5px',
+                  fontWeight: 800,
+                  cursor: 'pointer',
+                  background: previewBg,
+                  color: previewText,
+                  border: isDark ? currentThemeObj.borderDark : currentThemeObj.borderLight,
+                  borderTop: (!isMobile && !isBottomSlot) ? 'none' : undefined,
+                  borderBottom: (!isMobile && isBottomSlot) ? 'none' : undefined,
+                  borderLeft: (isMobile && isLeftSlot) ? 'none' : undefined,
+                  borderRight: (isMobile && isRightSlot) ? 'none' : undefined,
+                  borderRadius: tabBorderRadius,
+                  boxShadow: isBottomSlot ? '0 -4px 16px rgba(0,0,0,0.22)' : '0 4px 16px rgba(0,0,0,0.22)',
+                  backdropFilter: sizeMetrics.glassEffect === 'blur' ? 'blur(10px)' : 'none',
+                  WebkitBackdropFilter: sizeMetrics.glassEffect === 'blur' ? 'blur(10px)' : 'none',
+                  transition: 'all 0.2s ease',
+                  userSelect: 'none',
+                }}
+                title="Tıklayarak açık kart halini görüntüleyin"
+              >
+                <span>{activeItem.tabText || 'SİZİN İÇİN'}</span>
+              </div>
+            ) : (
+              /* Tam Açık Kart Hali */
+              <div
+                dir={activeLangTab === 'ar' ? 'rtl' : 'ltr'}
+                onClick={(e: React.MouseEvent) => {
+                  if ((e.target as HTMLElement).closest('button')) return;
+                  if (previewLink) window.open(previewLink, '_blank', 'noopener,noreferrer');
+                }}
+                style={{
+                  position: 'absolute',
+                  top: isBottomSlot ? 'auto' : '38px',
+                  bottom: isBottomSlot ? '32px' : 'auto',
+                  left: isLeftSlot ? `${sizeMetrics.horizontalOffset ?? 20}px` : isCenterSlot ? '50%' : 'auto',
+                  right: isRightSlot ? `${sizeMetrics.horizontalOffset ?? 20}px` : 'auto',
+                  transform: isCenterSlot ? 'translateX(-50%)' : 'none',
+                  zIndex: 30,
+                  width: sizeMetrics.width,
+                  maxWidth: `calc(100% - ${(sizeMetrics.horizontalOffset ?? 20) * 2}px)`,
+                  height: sizeMetrics.height,
+                  boxSizing: 'border-box',
+                  border: isDark ? currentThemeObj.borderDark : currentThemeObj.borderLight,
+                  borderRadius: '8px',
+                  boxShadow: '0 8px 24px rgba(0,0,0,0.2)',
+                  backdropFilter: sizeMetrics.glassEffect === 'blur' ? 'blur(10px)' : 'none',
+                  WebkitBackdropFilter: sizeMetrics.glassEffect === 'blur' ? 'blur(10px)' : 'none',
+                  overflow: 'hidden',
+                  cursor: previewLink ? 'pointer' : 'default',
+                  transition: 'all 0.2s ease',
+                }}
+              >
+                <div style={{ position: 'absolute', inset: 0, background: previewBg, opacity: announcementActive ? currentBgOpacity / 100 : 0.3, zIndex: 0, pointerEvents: 'none' }} />
+                <div style={{ position: 'relative', zIndex: 1, padding: sizeMetrics.padding, fontSize: sizeMetrics.fontSize, color: previewText, opacity: announcementActive ? currentTextOpacity / 100 : 0.45, display: 'flex', flexDirection: 'column', height: '100%', boxSizing: 'border-box' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '10px', fontWeight: 800 }}>
+                      {currentThemeObj.icon} <span>{activeItem.title}</span>
+                    </div>
+                    {activeItem.isDismissable && (
+                      <button type="button" onClick={(e) => { e.stopPropagation(); setIsFloatingCollapsed(true); }} style={{ background: 'transparent', border: 'none', color: 'inherit', opacity: 0.7, padding: '2px', cursor: 'pointer' }} title="Kulakçığa küçült">
+                        <X size={12} />
+                      </button>
+                    )}
+                  </div>
+                  {/* Kaydırma Çubuğu Gizlenmiş (Touch Scroll Aktif) İçerik Alanı */}
+                  <div
+                    className="ann-card-preview-content"
+                    style={{ flex: 1, overflowY: 'auto', overflowX: 'hidden', scrollbarWidth: 'none', msOverflowStyle: 'none', maxWidth: '100%', boxSizing: 'border-box', marginBottom: '4px', whiteSpace: 'pre-wrap', wordBreak: 'break-word', WebkitOverflowScrolling: 'touch' }}
+                    dangerouslySetInnerHTML={{ __html: announcementText[activeLangTab] || 'Zengin içerik...' }}
+                  />
+                  {activeItem.ctaText && (
+                    <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                      <a href={previewLink || '#'} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()} style={{ textDecoration: 'none', color: 'inherit', fontSize: '9.5px', fontWeight: 700 }}>
+                        {activeItem.ctaText} ➔
+                      </a>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )
+          )}
         </div>
       </div>
     </div>
