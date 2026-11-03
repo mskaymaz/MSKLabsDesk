@@ -1,6 +1,19 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 📌 Son Güncelleme [03.11.2026 - 14:15] — 4.2 E-POSTA BÜLTENİ VE ABONELER EKRANI (CSV DIŞA AKTARMA & BROADCAST) [✓]
+* **Yapılan İşlemler:**
+  1. **Excel & CSV Dışa Aktarma Motoru (`SubscribersView.tsx`):**
+     - Aktif filtrelenmiş aboneleri UTF-8 BOM (`\uFEFF`) standardıyla Türkçe karakter bozulması olmadan `msklabs_aboneler_YYYY-MM-DD.csv` olarak indiren istemci fonksiyonu kodlandı.
+  2. **Toplu E-Bülten Gönderim Modalı (`BroadcastModal.tsx`):**
+     - Hazır şablonlar (Yeni Makale, Haftalık Özet, Sistem Duyurusu) tek tıkla yükleme butonları.
+     - Kategori/Segment seçimi, konu ve HTML gövde girdisi.
+     - D1 + Cloudflare Workers `email_queue` hattı ile entegre gönderim tetikleyicisi.
+  3. **Doğrulama ve Derleme:**
+     - Frontend TypeScript ve PWA derlemesi hatasız geçti. `ROADMAP_TODO.md` üzerinde 4.2 maddesi tamamlandı olarak güncellendi.
+
+---
+
 ## 📌 Son Güncelleme [03.11.2026 - 14:05] — CMS-TTS-002 YÜKSEK KALİTELİ MP3 ÜRETİMİ, TELAFFUZ NORMALİZASYONU VE STÜDYO ONAY PANELİ [✓]
 * **Yapılan İşlemler:**
   1. **Metin Temizleme, Telaffuz ve Segmentasyon Motoru (`ttsSanitizer.ts`):**

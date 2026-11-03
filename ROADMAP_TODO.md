@@ -65,8 +65,8 @@
   - [x] Sağa/Sola yatay kaydırma (Horizontal Offset: 0-250px) slider ve hassas sayısal girdi kontrolleri eklendi.
   - [x] Zaman aşımı gecikmesi (5s, 10s, 15s, 0s), hover-to-pause ve sayfa kaydırılınca/dışına tıklanınca otomatik küçülme entegre edildi.
   - [x] Client-side engine (`announcement-loader.js`) tekil round-robin rotasyonu ile donatıldı; vitrin önizleme mockup'ı güncellendi.
-* [ ] **4.2 E-Posta Bülteni ve Aboneler Ekranı:**
-  - [ ] Abone listesi, filtreleme, CSV dışa aktarma ve bülten şablonu oluşturma arayüzü.
+* [x] **4.2 E-Posta Bülteni ve Aboneler Ekranı (TAMAMLANDI — 03.11.2026 - 14:15):**
+  - [x] Abone listesi, filtreleme, CSV dışa aktarma ve bülten şablonu oluşturma arayüzü.
 * [ ] **4.3 Genel Sistem Ayarları:**
   - [ ] Site genel ayarları, API anahtarları yönetimi ve bakım modu geçişlerinin tamamlanması.
 
