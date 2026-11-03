@@ -70,9 +70,9 @@ export const AnnouncementPlacementSettings: React.FC<AnnouncementPlacementSettin
     <div style={{
       display: 'flex',
       flexDirection: 'column',
-      gap: '10px',
-      background: 'var(--bg-secondary, rgba(15, 23, 42, 0.4))',
-      padding: '12px',
+      gap: '8px',
+      background: 'var(--bg-secondary, rgba(15, 23, 42, 0.45))',
+      padding: '10px 12px',
       borderRadius: '8px',
       border: '1px solid var(--border-subtle)',
     }}>
@@ -82,27 +82,27 @@ export const AnnouncementPlacementSettings: React.FC<AnnouncementPlacementSettin
         justifyContent: 'space-between',
         alignItems: 'center',
         flexWrap: 'wrap',
-        gap: '8px',
-        paddingBottom: '8px',
+        gap: '6px',
+        paddingBottom: '6px',
         borderBottom: '1px solid var(--border-subtle)',
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-          <Compass size={15} color="var(--accent-primary, #3b82f6)" />
-          <span style={{ fontSize: '12px', fontWeight: 700, color: 'var(--text-primary)' }}>
+          <Compass size={14} color="var(--accent-primary, #3b82f6)" />
+          <span style={{ fontSize: '11.5px', fontWeight: 700, color: 'var(--text-primary)' }}>
             Yerleşim, Harita & Konumlandırma Stüdyosu
           </span>
         </div>
 
         {/* Hedef Cihaz Seçici (En üstte) */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-          <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--text-secondary)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+          <span style={{ fontSize: '10.5px', fontWeight: 600, color: 'var(--text-secondary)' }}>
             Hedef Cihaz:
           </span>
           <select
             className="form-select"
             value={activeItem.deviceTarget || 'all'}
             onChange={(e) => updateCurrentItem({ deviceTarget: e.target.value as any })}
-            style={{ fontSize: '11px', height: '26px', padding: '1px 6px', fontWeight: 600 }}
+            style={{ fontSize: '10.5px', height: '24px', padding: '1px 5px', fontWeight: 600 }}
           >
             <option value="all">Tüm Cihazlar (Masaüstü & Mobil)</option>
             <option value="desktop">Yalnızca Masaüstü</option>
@@ -114,28 +114,28 @@ export const AnnouncementPlacementSettings: React.FC<AnnouncementPlacementSettin
       {/* 2. Ana Çalışma Alanı: Yan Yana İki Panel (Harita ve Sürgüler/Ayarlar) */}
       <div style={{
         display: 'grid',
-        gridTemplateColumns: 'minmax(280px, 1.2fr) minmax(280px, 1.3fr)',
-        gap: '14px',
+        gridTemplateColumns: 'minmax(270px, 1.15fr) minmax(280px, 1.25fr)',
+        gap: '12px',
         alignItems: 'start',
       }}>
         {/* Sol Panel: Harita Görseli ve Hemen Üstündeki Web / Mobil Sekmeleri */}
         <div style={{
           display: 'flex',
           flexDirection: 'column',
-          gap: '8px',
-          background: 'rgba(0,0,0,0.1)',
-          padding: '10px',
-          borderRadius: '8px',
+          gap: '6px',
+          background: 'rgba(0,0,0,0.12)',
+          padding: '8px',
+          borderRadius: '6px',
           border: '1px solid var(--border-subtle)',
         }}>
           {/* Web (Masaüstü) / Mobil Seçim Düğmeleri - Haritanın Tam Üstünde */}
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <span style={{ fontSize: '10.5px', fontWeight: 600, color: 'var(--text-secondary)' }}>
+            <span style={{ fontSize: '10px', fontWeight: 600, color: 'var(--text-secondary)' }}>
               Harita Görünümü:
             </span>
             <div style={{
               display: 'inline-flex',
-              borderRadius: '5px',
+              borderRadius: '4px',
               overflow: 'hidden',
               border: '1px solid var(--border-subtle)',
               background: 'var(--bg-primary, #0f172a)',
@@ -144,25 +144,25 @@ export const AnnouncementPlacementSettings: React.FC<AnnouncementPlacementSettin
                 type="button"
                 onClick={() => setActiveDeviceTab('desktop')}
                 style={{
-                  display: 'inline-flex', alignItems: 'center', gap: '4px', padding: '4px 9px', fontSize: '10px',
+                  display: 'inline-flex', alignItems: 'center', gap: '3px', padding: '3px 8px', fontSize: '9.5px',
                   border: 'none', background: isWebTab ? 'var(--accent-primary, #2563eb)' : 'transparent',
                   color: isWebTab ? '#FFFFFF' : 'var(--text-secondary)', cursor: 'pointer', fontWeight: isWebTab ? 700 : 500,
                   transition: 'all 0.15s ease',
                 }}
               >
-                <Monitor size={11} /><span>Web (Masaüstü)</span>
+                <Monitor size={10} /><span>Web (Masaüstü)</span>
               </button>
               <button
                 type="button"
                 onClick={() => setActiveDeviceTab('mobile')}
                 style={{
-                  display: 'inline-flex', alignItems: 'center', gap: '4px', padding: '4px 9px', fontSize: '10px',
+                  display: 'inline-flex', alignItems: 'center', gap: '3px', padding: '3px 8px', fontSize: '9.5px',
                   border: 'none', background: !isWebTab ? 'var(--accent-primary, #2563eb)' : 'transparent',
                   color: !isWebTab ? '#FFFFFF' : 'var(--text-secondary)', cursor: 'pointer', fontWeight: !isWebTab ? 700 : 500,
                   transition: 'all 0.15s ease',
                 }}
               >
-                <Smartphone size={11} /><span>Mobil</span>
+                <Smartphone size={10} /><span>Mobil</span>
               </button>
             </div>
           </div>
@@ -175,37 +175,37 @@ export const AnnouncementPlacementSettings: React.FC<AnnouncementPlacementSettin
           />
         </div>
 
-        {/* Sağ Panel: Boyut, Ofset Sürgüleri, Süre ve Kulakçık Ayarları */}
+        {/* Sağ Panel: Boyut, Kibar Ofset Sürgüleri, Süre ve Kulakçık Ayarları */}
         <div style={{
           display: 'flex',
           flexDirection: 'column',
           gap: '8px',
-          background: 'rgba(0,0,0,0.1)',
-          padding: '10px',
-          borderRadius: '8px',
+          background: 'rgba(0,0,0,0.12)',
+          padding: '8px 10px',
+          borderRadius: '6px',
           border: '1px solid var(--border-subtle)',
         }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--text-primary)' }}>
+            <span style={{ fontSize: '10.5px', fontWeight: 700, color: 'var(--text-primary)' }}>
               {isWebTab ? 'Masaüstü Konum & Boyut Ayarları' : 'Mobil Konum & Boyut Ayarları'}
             </span>
-            <span style={{ fontSize: '9.5px', color: 'var(--accent-primary)', fontWeight: 600 }}>
+            <span style={{ fontSize: '9px', color: 'var(--accent-primary)', fontWeight: 600 }}>
               Aktif: {currentPlacement}
             </span>
           </div>
 
           {isTopHanging ? (
             <div style={{
-              padding: '16px 12px',
+              padding: '12px 10px',
               textAlign: 'center',
               background: 'rgba(59,130,246,0.06)',
               borderRadius: '6px',
               border: '1px dashed rgba(59,130,246,0.3)',
               color: 'var(--text-secondary)',
-              fontSize: '11px',
+              fontSize: '10.5px',
             }}>
               <p style={{ margin: 0, fontWeight: 600 }}>Üst Tam Bant (Klasik Şerit) Seçili</p>
-              <p style={{ margin: '4px 0 0', fontSize: '9.5px', color: 'var(--text-muted)' }}>
+              <p style={{ margin: '3px 0 0', fontSize: '9px', color: 'var(--text-muted)' }}>
                 Bu modda duyuru web sayfasının veya mobil ekranın en üstünde tam genişlikte yer alır. Yatay ve dikey ofset gerekmez.
               </p>
             </div>
@@ -214,7 +214,7 @@ export const AnnouncementPlacementSettings: React.FC<AnnouncementPlacementSettin
               {/* Cihaza Özel Kart Boyutları (Genişlik & Yükseklik) */}
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
                 <div>
-                  <span style={{ display: 'block', fontSize: '9.5px', color: 'var(--text-muted)', marginBottom: '2px' }}>
+                  <span style={{ display: 'block', fontSize: '9px', color: 'var(--text-muted)', marginBottom: '2px' }}>
                     {isWebTab ? 'Web Genişlik (px):' : 'Mobil Genişlik (px):'}
                   </span>
                   <input
@@ -227,12 +227,12 @@ export const AnnouncementPlacementSettings: React.FC<AnnouncementPlacementSettin
                       if (isWebTab) updateCurrentItem({ cardWidth: val });
                       else updateCurrentItem({ mobileCardWidth: val });
                     }}
-                    style={{ fontSize: '11px', height: '26px', padding: '2px 6px' }}
+                    style={{ fontSize: '10.5px', height: '24px', padding: '1px 5px' }}
                     title="Duyuru kartı genişliği"
                   />
                 </div>
                 <div>
-                  <span style={{ display: 'block', fontSize: '9.5px', color: 'var(--text-muted)', marginBottom: '2px' }}>
+                  <span style={{ display: 'block', fontSize: '9px', color: 'var(--text-muted)', marginBottom: '2px' }}>
                     {isWebTab ? 'Web Yükseklik (px):' : 'Mobil Yükseklik (px):'}
                   </span>
                   <input
@@ -245,69 +245,77 @@ export const AnnouncementPlacementSettings: React.FC<AnnouncementPlacementSettin
                       if (isWebTab) updateCurrentItem({ cardHeight: val });
                       else updateCurrentItem({ mobileCardHeight: val });
                     }}
-                    style={{ fontSize: '11px', height: '26px', padding: '2px 6px' }}
+                    style={{ fontSize: '10.5px', height: '24px', padding: '1px 5px' }}
                     title="Duyuru kartı yüksekliği (boş bırakılırsa içeriğe göre otomatik)"
                   />
                 </div>
               </div>
 
-              {/* Yatay ve Dikey Slider Kontrolleri */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', background: 'rgba(0,0,0,0.15)', padding: '8px', borderRadius: '6px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <Sliders size={12} style={{ color: 'var(--accent-primary)', flexShrink: 0 }} />
-                  <span style={{ fontSize: '10px', color: 'var(--text-secondary)', minWidth: '72px' }}>
-                    Yatay: {currentHOffset}px
-                  </span>
+              {/* Kibar & Kompakt Yatay ve Dikey Slider Kontrolleri */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', background: 'rgba(0,0,0,0.15)', padding: '6px 8px', borderRadius: '5px' }}>
+                {/* Yatay Ofset */}
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '6px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '4px', minWidth: '75px' }}>
+                    <Sliders size={11} style={{ color: 'var(--accent-primary)', flexShrink: 0 }} />
+                    <span style={{ fontSize: '9.5px', color: 'var(--text-secondary)' }}>Yatay:</span>
+                  </div>
                   <input
                     type="range" min="0" max="250" step="5" value={currentHOffset}
                     onChange={(e) => handleHOffsetChange(parseInt(e.target.value, 10))}
-                    style={{ flex: 1, cursor: 'pointer' }}
+                    style={{ width: '130px', height: '4px', cursor: 'pointer', accentColor: 'var(--accent-primary)' }}
                     title="Kenardan içe doğru yatay ofset"
                   />
-                  <input
-                    type="number" min="0" max="250" value={currentHOffset}
-                    onChange={(e) => handleHOffsetChange(e.target.value === '' ? 0 : parseInt(e.target.value, 10))}
-                    style={{ width: '46px', height: '22px', fontSize: '10px', textAlign: 'center', padding: '1px' }}
-                    className="form-input"
-                  />
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '2px' }}>
+                    <input
+                      type="number" min="0" max="250" value={currentHOffset}
+                      onChange={(e) => handleHOffsetChange(e.target.value === '' ? 0 : parseInt(e.target.value, 10))}
+                      style={{ width: '40px', height: '20px', fontSize: '9.5px', textAlign: 'center', padding: '1px' }}
+                      className="form-input"
+                    />
+                    <span style={{ fontSize: '8.5px', color: 'var(--text-muted)' }}>px</span>
+                  </div>
                 </div>
 
-                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <Sliders size={12} style={{ color: '#10b981', flexShrink: 0 }} />
-                  <span style={{ fontSize: '10px', color: 'var(--text-secondary)', minWidth: '72px' }}>
-                    Dikey: {currentVOffset}px
-                  </span>
+                {/* Dikey Ofset */}
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '6px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '4px', minWidth: '75px' }}>
+                    <Sliders size={11} style={{ color: '#10b981', flexShrink: 0 }} />
+                    <span style={{ fontSize: '9.5px', color: 'var(--text-secondary)' }}>Dikey:</span>
+                  </div>
                   <input
                     type="range" min="0" max="250" step="5" value={currentVOffset}
                     onChange={(e) => handleVOffsetChange(parseInt(e.target.value, 10))}
-                    style={{ flex: 1, cursor: 'pointer' }}
+                    style={{ width: '130px', height: '4px', cursor: 'pointer', accentColor: '#10b981' }}
                     title="Üstten veya alttan dikey ofset"
                   />
-                  <input
-                    type="number" min="0" max="250" value={currentVOffset}
-                    onChange={(e) => handleVOffsetChange(e.target.value === '' ? 0 : parseInt(e.target.value, 10))}
-                    style={{ width: '46px', height: '22px', fontSize: '10px', textAlign: 'center', padding: '1px' }}
-                    className="form-input"
-                  />
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '2px' }}>
+                    <input
+                      type="number" min="0" max="250" value={currentVOffset}
+                      onChange={(e) => handleVOffsetChange(e.target.value === '' ? 0 : parseInt(e.target.value, 10))}
+                      style={{ width: '40px', height: '20px', fontSize: '9.5px', textAlign: 'center', padding: '1px' }}
+                      className="form-input"
+                    />
+                    <span style={{ fontSize: '8.5px', color: 'var(--text-muted)' }}>px</span>
+                  </div>
                 </div>
               </div>
 
               {/* Kulakçık Metni, Açık Süre & Kaydırınca Küçül */}
-              <div style={{ display: 'grid', gridTemplateColumns: '1.1fr 1.3fr', gap: '8px', alignItems: 'end' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1.1fr 1.3fr', gap: '6px', alignItems: 'end' }}>
                 <div>
-                  <span style={{ display: 'block', fontSize: '9.5px', color: 'var(--text-muted)', marginBottom: '2px' }}>
+                  <span style={{ display: 'block', fontSize: '9px', color: 'var(--text-muted)', marginBottom: '2px' }}>
                     Kulakçık Metni:
                   </span>
                   <input
                     type="text" className="form-input" placeholder="SİZİN İÇİN"
                     value={activeItem.tabText ?? ''}
                     onChange={(e) => updateCurrentItem({ tabText: e.target.value })}
-                    style={{ fontSize: '10.5px', height: '26px', padding: '2px 6px' }}
+                    style={{ fontSize: '10px', height: '24px', padding: '2px 5px' }}
                   />
                 </div>
 
                 <div>
-                  <span style={{ display: 'flex', alignItems: 'center', gap: '3px', fontSize: '9.5px', color: 'var(--text-muted)', marginBottom: '2px' }}>
+                  <span style={{ display: 'flex', alignItems: 'center', gap: '3px', fontSize: '9px', color: 'var(--text-muted)', marginBottom: '2px' }}>
                     <Clock size={10} /> Açık Süre (sn):
                   </span>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '3px' }}>
@@ -315,7 +323,7 @@ export const AnnouncementPlacementSettings: React.FC<AnnouncementPlacementSettin
                       type="number" min="0" max="300" placeholder="10"
                       value={currentDelay}
                       onChange={(e) => updateCurrentItem({ autoCollapseDelay: e.target.value === '' ? 0 : parseInt(e.target.value, 10) })}
-                      style={{ width: '42px', height: '26px', fontSize: '10px', textAlign: 'center', padding: '1px' }}
+                      style={{ width: '38px', height: '24px', fontSize: '10px', textAlign: 'center', padding: '1px' }}
                       className="form-input"
                       title="Saniye cinsinden açık kalma süresi (0=manuel)"
                     />
@@ -324,8 +332,8 @@ export const AnnouncementPlacementSettings: React.FC<AnnouncementPlacementSettin
                         <button
                           key={s} type="button" onClick={() => updateCurrentItem({ autoCollapseDelay: s })}
                           style={{
-                            border: '1px solid var(--border-subtle)', borderRadius: '3px', padding: '2px 5px',
-                            fontSize: '9.5px', background: currentDelay === s ? 'var(--accent-primary)' : 'transparent',
+                            border: '1px solid var(--border-subtle)', borderRadius: '3px', padding: '1px 4px',
+                            fontSize: '9px', background: currentDelay === s ? 'var(--accent-primary)' : 'transparent',
                             color: currentDelay === s ? '#fff' : 'var(--text-secondary)', cursor: 'pointer',
                           }}
                         >
@@ -338,7 +346,7 @@ export const AnnouncementPlacementSettings: React.FC<AnnouncementPlacementSettin
               </div>
 
               <div>
-                <label style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', fontSize: '10px', cursor: 'pointer', color: 'var(--text-secondary)' }} title="Sayfa kaydırıldığında otomatik küçül">
+                <label style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', fontSize: '9.5px', cursor: 'pointer', color: 'var(--text-secondary)' }} title="Sayfa kaydırıldığında otomatik küçül">
                   <input
                     type="checkbox"
                     checked={activeItem.autoCollapseOnScroll !== false}
@@ -354,4 +362,3 @@ export const AnnouncementPlacementSettings: React.FC<AnnouncementPlacementSettin
     </div>
   );
 };
-

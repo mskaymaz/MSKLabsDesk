@@ -128,7 +128,7 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
   return (
     <div className="admin-list-card" style={{ padding: '16px' }}>
       {/* 1. Üst Bar: Başlık, Durum ve Kaydet */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px', borderBottom: '1px solid var(--border-subtle, #334155)', paddingBottom: '10px' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px', borderBottom: '1px solid var(--border-subtle, #334155)', paddingBottom: '10px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <Megaphone size={18} color="var(--accent-amber, #f59e0b)" />
           <div>
@@ -150,7 +150,7 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
         </div>
       </div>
 
-      {/* 2. Bağımsız Canlı Önizleme Vitrini (Browser / Device Mockup Penceresi) */}
+      {/* 2. Canlı Önizleme Vitrini (Browser / Device Mockup Penceresi) */}
       <AnnouncementPreviewMockup
         activeItem={activeItem}
         announcementActive={announcementActive}
@@ -161,11 +161,21 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
         setPreviewDevice={setPreviewDevice}
       />
 
-      {/* 3. Kompakt Araç Çubuğu: Duyuru Seçici + Yerleşim & Akış Açılır Listeleri */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '10px', marginBottom: '14px', flexWrap: 'wrap', background: 'var(--bg-secondary, rgba(15,23,42,0.3))', padding: '8px 10px', borderRadius: '8px', border: '1px solid var(--border-subtle)' }}>
+      {/* 3. Bitişik Katman: Yerleşim, Harita & Konumlandırma Stüdyosu (Önizlemenin Hemen Altında) */}
+      <div style={{ margin: '10px 0 12px 0' }}>
+        <AnnouncementPlacementSettings
+          activeItem={activeItem}
+          updateCurrentItem={updateCurrentItem}
+          deviceTab={previewDevice}
+          setDeviceTab={setPreviewDevice}
+        />
+      </div>
+
+      {/* 4. Kompakt Araç Çubuğu: Duyuru Seçici + Yerleşim & Akış Açılır Listeleri */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '10px', marginBottom: '10px', flexWrap: 'wrap', background: 'var(--bg-secondary, rgba(15,23,42,0.3))', padding: '6px 10px', borderRadius: '6px', border: '1px solid var(--border-subtle)' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--text-secondary)' }}>Duyuru:</span>
-          <select className="form-select" value={activeItem.id} onChange={(e) => handleSelectId(e.target.value)} style={{ fontSize: '11px', height: '28px', minWidth: '150px', fontWeight: 600, padding: '2px 6px' }}>
+          <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--text-secondary)' }}>Duyuru Seçimi:</span>
+          <select className="form-select" value={activeItem.id} onChange={(e) => handleSelectId(e.target.value)} style={{ fontSize: '11px', height: '26px', minWidth: '150px', fontWeight: 600, padding: '1px 6px' }}>
             {items.map((it, idx) => {
               const sym = it.placement?.startsWith('bottom_') ? '↓' : (it.placement === 'left_floating' || it.placement === 'top_left' || it.placement === 'bottom_left') ? '←' : (it.placement === 'right_floating' || it.placement === 'top_right' || it.placement === 'bottom_right') ? '→' : '↑';
               return (
@@ -175,20 +185,20 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
               );
             })}
           </select>
-          <button type="button" onClick={handleAddNewItem} className="admin-btn admin-btn-secondary admin-btn-sm" style={{ height: '28px', padding: '0 10px', fontSize: '11px', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-            <Plus size={13} /><span>Ekle</span>
+          <button type="button" onClick={handleAddNewItem} className="admin-btn admin-btn-secondary admin-btn-sm" style={{ height: '26px', padding: '0 8px', fontSize: '11px', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+            <Plus size={12} /><span>Yeni Ekle</span>
           </button>
           {items.length > 1 && (
-            <button type="button" onClick={() => handleDeleteItem(activeItem.id)} className="admin-btn admin-btn-sm" style={{ marginLeft: '15px', color: '#ef4444', borderColor: 'rgba(239,68,68,0.3)', height: '28px', width: '38px', padding: 0, display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }} title="Duyuruyu sil">
-              <Trash2 size={13} />
+            <button type="button" onClick={() => handleDeleteItem(activeItem.id)} className="admin-btn admin-btn-sm" style={{ marginLeft: '10px', color: '#ef4444', borderColor: 'rgba(239,68,68,0.3)', height: '26px', width: '32px', padding: 0, display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }} title="Duyuruyu sil">
+              <Trash2 size={12} />
             </button>
           )}
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-            <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--text-secondary)' }}>Yerleşim:</span>
-            <select className="form-select" value={currentPlacement} onChange={(e) => updateCurrentItem({ placement: e.target.value as any })} style={{ fontSize: '11px', height: '28px', padding: '2px 6px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+            <span style={{ fontSize: '10.5px', fontWeight: 600, color: 'var(--text-secondary)' }}>Yerleşim:</span>
+            <select className="form-select" value={currentPlacement} onChange={(e) => updateCurrentItem({ placement: e.target.value as any })} style={{ fontSize: '10.5px', height: '26px', padding: '1px 6px' }}>
               <optgroup label="Web (Masaüstü) Yuvaları">
                 <option value="top_left">↖ Sol Üst</option>
                 <option value="top_right">↗ Sağ Üst</option>
@@ -205,19 +215,48 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
               </optgroup>
             </select>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-            <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--text-secondary)' }}>Akış:</span>
-            <select className="form-select" value={activeItem.displayMode || 'static'} onChange={(e) => updateCurrentItem({ displayMode: e.target.value as any })} style={{ fontSize: '11px', height: '28px', padding: '2px 6px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+            <span style={{ fontSize: '10.5px', fontWeight: 600, color: 'var(--text-secondary)' }}>Akış Modu:</span>
+            <select className="form-select" value={activeItem.displayMode || 'static'} onChange={(e) => updateCurrentItem({ displayMode: e.target.value as any })} style={{ fontSize: '10.5px', height: '26px', padding: '1px 6px' }}>
               <option value="static">Sabit / Çok Satırlı</option>
               <option value="ticker">Kayan Yazı (Ticker)</option>
-              <option value="rotator">Dönüşümlü (Satır Satır Dikey)</option>
+              <option value="rotator">Dönüşümlü (Dikey)</option>
             </select>
           </div>
         </div>
       </div>
 
-      {/* 4. Derli Toplu Ayar Paneli (3 Kolonlu Kompakt Kontroller) */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px', marginBottom: '12px', padding: '12px', background: 'var(--bg-secondary, rgba(15, 23, 42, 0.4))', borderRadius: '8px', border: '1px solid var(--border-subtle)' }}>
+      {/* 5. Zengin İçerik Editörü (Önizleme ve Konumun Hemen Altında) */}
+      <div style={{ marginBottom: '12px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '6px' }}>
+          <div>
+            <span style={{ fontSize: '12px', fontWeight: 700, color: 'var(--text-primary)' }}>{activeItem.title} — İçerik Düzenleme ({activeLangTab.toUpperCase()})</span>
+            <span style={{ fontSize: '10.5px', color: 'var(--text-muted)', marginLeft: '8px' }}>Görsel, link ve zengin format ekleyebilirsiniz</span>
+          </div>
+          <div style={{ display: 'inline-flex', gap: '3px' }}>
+            {(['tr', 'en', 'ar'] as const).map((lang) => (
+              <button key={lang} type="button" onClick={() => setActiveLangTab(lang)} className={`admin-btn admin-btn-sm ${activeLangTab === lang ? 'admin-btn-primary' : 'admin-btn-secondary'}`} style={{ fontSize: '10px', height: '22px', padding: '0 8px' }}>{lang.toUpperCase()}</button>
+            ))}
+          </div>
+        </div>
+
+        <RichTextEditor
+          key={`ann-${activeItem.id}-${activeLangTab}`}
+          preset="full"
+          minHeight="130px"
+          dir={activeLangTab === 'ar' ? 'rtl' : 'ltr'}
+          hideHeader={true}
+          value={announcementText[activeLangTab]}
+          onChange={(val) => {
+            setAnnouncementText((prev) => ({ ...prev, [activeLangTab]: val }));
+            updateCurrentItem({ [`content_${activeLangTab}`]: val } as any);
+          }}
+          placeholder={activeLangTab === 'tr' ? 'Duyuru başlığı, açıklaması, resim veya buton tasarımınızı oluşturunuz...' : activeLangTab === 'en' ? 'Create announcement heading, description, image or button design...' : 'أنشئ عنوان الإعلان والوصف والصور وتصميم الأزرار باللغة العربية...'}
+        />
+      </div>
+
+      {/* 6. Kompakt Detay & Tema Ayarları (3 Kolonlu Alt Panel) */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px', padding: '10px', background: 'var(--bg-secondary, rgba(15, 23, 42, 0.4))', borderRadius: '8px', border: '1px solid var(--border-subtle)' }}>
         {/* Kolon 1: Duyuru Başlığı, Aktiflik & Etkileşim/Buton */}
         <div>
           <div style={{ display: 'flex', alignItems: 'center', marginBottom: '4px' }}>
@@ -227,7 +266,7 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
               <span style={{ fontWeight: 600 }}>Aktif</span>
             </label>
           </div>
-          <input type="text" className="form-input" value={activeItem.title || ''} onChange={(e) => updateCurrentItem({ title: e.target.value })} placeholder="Duyuru Başlığı" style={{ fontSize: '11px', height: '26px', marginBottom: '8px' }} />
+          <input type="text" className="form-input" value={activeItem.title || ''} onChange={(e) => updateCurrentItem({ title: e.target.value })} placeholder="Duyuru Başlığı" style={{ fontSize: '11px', height: '26px', marginBottom: '6px' }} />
 
           <label style={{ display: 'block', fontSize: '10px', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: '3px' }}>Etkileşim & Buton</label>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4px', marginBottom: '6px' }}>
@@ -278,7 +317,7 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
         {/* Kolon 3: Boyut, İç Boşluk & Opaklık Kontrolleri */}
         <div>
           <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: '4px' }}>Boyut, Boşluk & Opaklık</label>
-          <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr 1fr', gap: '4px', marginBottom: '8px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr 1fr', gap: '4px', marginBottom: '6px' }}>
             <select
               className="form-select" value={activeItem.sizePreset || 'standard'}
               onChange={(e) => {
@@ -308,30 +347,20 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
           {/* Zemin ve Yazı Opaklığı */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <span style={{ fontSize: '9.5px', color: 'var(--text-muted)', minWidth: '65px' }}>Zemin: %{currentBgOpacity}</span>
+              <span style={{ fontSize: '9.5px', color: 'var(--text-muted)', minWidth: '60px' }}>Zemin: %{currentBgOpacity}</span>
               <input type="range" min="10" max="100" step="5" value={currentBgOpacity} onChange={(e) => updateCurrentItem({ bgOpacity: parseInt(e.target.value, 10), opacity: parseInt(e.target.value, 10) })} style={{ flex: 1, cursor: 'pointer' }} />
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <span style={{ fontSize: '9.5px', color: 'var(--text-muted)', minWidth: '65px' }}>Yazı: %{currentTextOpacity}</span>
+              <span style={{ fontSize: '9.5px', color: 'var(--text-muted)', minWidth: '60px' }}>Yazı: %{currentTextOpacity}</span>
               <input type="range" min="30" max="100" step="5" value={currentTextOpacity} onChange={(e) => updateCurrentItem({ textOpacity: parseInt(e.target.value, 10) })} style={{ flex: 1, cursor: 'pointer' }} />
             </div>
           </div>
         </div>
       </div>
 
-      {/* 5. Yerleşim, Yuva Haritası & Konumlandırma Stüdyosu (Geniş Yan Yana Blok) */}
-      <div style={{ marginBottom: '14px' }}>
-        <AnnouncementPlacementSettings
-          activeItem={activeItem}
-          updateCurrentItem={updateCurrentItem}
-          deviceTab={previewDevice}
-          setDeviceTab={setPreviewDevice}
-        />
-      </div>
-
-      {/* 5.1 Ticker (Kayan Yazı) Ayarları Özel Bloğu */}
+      {/* 6.1 Ticker (Kayan Yazı) Ayarları Özel Bloğu */}
       {isTicker && (
-        <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '14px', padding: '8px 12px', background: 'rgba(59,130,246,0.08)', borderRadius: '6px', border: '1px solid rgba(59,130,246,0.25)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginTop: '10px', padding: '8px 12px', background: 'rgba(59,130,246,0.08)', borderRadius: '6px', border: '1px solid rgba(59,130,246,0.25)' }}>
           <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--accent-primary)' }}>Kayan Yazı (Ticker) Ayarları:</span>
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
             <span style={{ fontSize: '10px', color: 'var(--text-secondary)' }}>Yön:</span>
@@ -350,35 +379,6 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
           </div>
         </div>
       )}
-
-      {/* 6. Zengin Metin Editörü */}
-      <div>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '6px' }}>
-          <div>
-            <span style={{ fontSize: '12px', fontWeight: 700, color: 'var(--text-primary)' }}>{activeItem.title} — İçerik Düzenleme ({activeLangTab.toUpperCase()})</span>
-            <span style={{ fontSize: '11px', color: 'var(--text-muted)', marginLeft: '8px' }}>Görsel, link ve zengin format ekleyebilirsiniz</span>
-          </div>
-          <div style={{ display: 'inline-flex', gap: '4px' }}>
-            {(['tr', 'en', 'ar'] as const).map((lang) => (
-              <button key={lang} type="button" onClick={() => setActiveLangTab(lang)} className={`admin-btn admin-btn-sm ${activeLangTab === lang ? 'admin-btn-primary' : 'admin-btn-secondary'}`} style={{ fontSize: '10px', height: '22px', padding: '0 8px' }}>{lang.toUpperCase()}</button>
-            ))}
-          </div>
-        </div>
-
-        <RichTextEditor
-          key={`ann-${activeItem.id}-${activeLangTab}`}
-          preset="full"
-          minHeight="140px"
-          dir={activeLangTab === 'ar' ? 'rtl' : 'ltr'}
-          hideHeader={true}
-          value={announcementText[activeLangTab]}
-          onChange={(val) => {
-            setAnnouncementText((prev) => ({ ...prev, [activeLangTab]: val }));
-            updateCurrentItem({ [`content_${activeLangTab}`]: val } as any);
-          }}
-          placeholder={activeLangTab === 'tr' ? 'Duyuru başlığı, açıklaması, resim veya buton tasarımınızı oluşturunuz...' : activeLangTab === 'en' ? 'Create announcement heading, description, image or button design...' : 'أنشئ عنوان الإعلان والوصف والصور وتصميم الأزرار باللغة العربية...'}
-        />
-      </div>
     </div>
   );
 };
