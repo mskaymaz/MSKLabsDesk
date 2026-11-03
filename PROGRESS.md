@@ -1,6 +1,22 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 📌 Son Güncelleme [03.11.2026 - 15:55] — ABONE İLGİ ALANI SAYIMLARI VE KATEGORİ SEÇİM VİTRİNİ [✓]
+* **Yapılan İşlemler:**
+  1. **D1 Tercih Birleştirme ve Kategori Sayım API'si (`adminBroadcast.ts`):**
+     - `GET /api/admin/subscribers` sorgusuna `subscriber_preferences` tablosu `GROUP_CONCAT` ile bağlanarak her abonenin aktif kategorileri (`categories`) çekildi.
+     - D1 üzerinde kategori bazlı abone dağılımı (`category_stats`: all, blog, apps, tech, announcements) hesaplanarak API yanıtına eklendi.
+  2. **Aboneler Ekranı Gelişmiş Arayüz ve Seçim Kartları (`SubscribersView.tsx`):**
+     - Ekranın üstüne tek tıkla filtrelenebilen **Kategori Dağılım Kartları** (Tüm Aboneler, Blog & Fikir, Uygulamalar, Yazılım & Teknoloji, Duyurular) yerleştirildi ve anlık abone sayıları rozetlendi.
+     - Arama çubuğuna hızlı **Kategori Seçim Açılır Menüsü (Dropdown)** entegre edildi.
+     - Tabloya **"İlgi Alanları / Tercihler"** sütunu eklendi; her abonenin yanına renkli kategori etiketleri bağlandı.
+     - CSV dışa aktarma motoruna "İlgi Alanları / Tercihler" verisi dahil edildi.
+  3. **Doğrulama ve Derleme:**
+     - Frontend TypeScript ve PWA derlemesi (`tsc -b && vite build`) 0 hata ile başarıyla tamamlandı.
+     - Backend entegrasyon testleri (114/114) %100 PASS.
+
+---
+
 ## 📌 Son Güncelleme [03.11.2026 - 15:40] — BÜLTEN GEÇMİŞİ VE İLETİM ORANI RAPORU ENTEGRASYONU [✓]
 * **Yapılan İşlemler:**
   1. **D1 Kampanya Veritabanı ve API Hattı (`0021_newsletter_campaigns.sql`, `adminBroadcast.ts`, `index.ts`):**

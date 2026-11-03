@@ -14,24 +14,72 @@ export async function handleAdminGetSubscribers(request: Request, env: { DB: D1D
     return new Response(JSON.stringify({ error: 'Yetkisiz erişim.' }), { status: 401, headers: { 'Content-Type': 'application/json' } });
   }
 
-  const { results: subscribers } = await env.DB.prepare('SELECT id, email, status, source, created_at, verified_at FROM subscribers ORDER BY created_at DESC LIMIT 200').all();
+  const { results: subscribers } = await env.DB.prepare(`
+    SELECT 
+      s.id, 
+      s.email, 
+      s.status, 
+      s.source, 
+      s.created_at, 
+      s.verified_at,
+      GROUP_CONCAT(p.category, ',') as raw_categories
+    FROM subscribers s
+    LEFT JOIN subscriber_preferences p ON s.id = p.subscriber_id AND p.is_subscribed = 1
+    GROUP BY s.id
+    ORDER BY s.created_at DESC 
+    LIMIT 250
+  `).all();
+
   const totalSubscribers = await env.DB.prepare("SELECT COUNT(*) as count FROM subscribers WHERE status = 'active'").first<{ count: number }>();
 
-  const mappedSubscribers = (subscribers || []).map((s: any) => ({
-    id: s.id,
-    email: s.email,
-    status: s.status,
-    is_verified: s.status === 'active' || !!s.verified_at,
-    unsubscribed_at: s.status === 'unsubscribed' ? s.created_at : undefined,
-    kvkk_consent: true,
-    source: s.source,
-    created_at: s.created_at,
-    verified_at: s.verified_at,
-  }));
+  // Kategori dağılım istatistikleri
+  let categoryStats: Record<string, number> = {
+    all: totalSubscribers?.count || 0,
+    blog: 0,
+    apps: 0,
+    tech: 0,
+    announcements: 0,
+  };
+
+  try {
+    const { results: catCounts } = await env.DB.prepare(`
+      SELECT p.category, COUNT(DISTINCT p.subscriber_id) as count
+      FROM subscriber_preferences p
+      JOIN subscribers s ON s.id = p.subscriber_id
+      WHERE s.status = 'active' AND p.is_subscribed = 1
+      GROUP BY p.category
+    `).all();
+
+    for (const c of (catCounts || [])) {
+      const catName = String((c as any).category).toLowerCase();
+      categoryStats[catName] = Number((c as any).count) || 0;
+    }
+  } catch (err) {
+    console.warn('category_stats sorgulanamadı:', err);
+  }
+
+  const mappedSubscribers = (subscribers || []).map((s: any) => {
+    const raw = s.raw_categories ? String(s.raw_categories).split(',').filter(Boolean) : [];
+    const cats = raw.length > 0 ? raw : ['all'];
+    return {
+      id: s.id,
+      email: s.email,
+      status: s.status,
+      is_verified: s.status === 'active' || !!s.verified_at,
+      unsubscribed_at: s.status === 'unsubscribed' ? s.created_at : undefined,
+      kvkk_consent: true,
+      source: s.source,
+      categories: cats,
+      preferences: cats.join(', '),
+      created_at: s.created_at,
+      verified_at: s.verified_at,
+    };
+  });
 
   return new Response(JSON.stringify({
     success: true,
     total_active: totalSubscribers?.count || 0,
+    category_stats: categoryStats,
     subscribers: mappedSubscribers,
   }), {
     status: 200,

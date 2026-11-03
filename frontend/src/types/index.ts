@@ -58,10 +58,12 @@ export interface CommentItem {
 export interface Subscriber {
   id: string;
   email: string;
+  status?: string;
   is_verified: boolean;
   kvkk_consent?: boolean;
   unsubscribed_at?: string;
   preferences?: string;
+  categories?: string[];
   created_at: string;
 }
 
