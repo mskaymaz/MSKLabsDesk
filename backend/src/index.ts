@@ -9,6 +9,7 @@ import { handleSubscribe, handleUnsubscribe } from './routes/subscribe';
 import { handleAdminLogin } from './routes/adminAuth';
 import { handleAdminGetTickets, handleAdminGetTicketDetail, handleAdminReplyTicket, handleAdminUpdateTicketStatus, handleAdminAnalyzeTicket, handleAdminAnalyzeAllTickets, handleAdminTranslateTicket } from './routes/adminTickets';
 import { handleAdminGetComments, handleAdminModerateComment } from './routes/adminComments';
+import { handleAdminGetEmailStats } from './routes/adminEmailStats';
 import { handleAdminGetSubscribers, handleAdminBroadcastNewsletter } from './routes/adminBroadcast';
 import { handleAdminMediaUpload, handleAdminMediaDelete } from './routes/adminMedia';
 import { handleAdminTTSGenerate, handleAdminTTSStatus, handleAdminTTSApprove, handleAdminTTSUnpublish, handleAdminTTSRegenerate, handlePublicAudioDelivery } from './routes/adminTts';
@@ -78,7 +79,7 @@ export default {
     ) {
       response = await handleCmsTemplates(request, env);
     }
-    // 3. Destek & Bülten Admin API Endpoint'leri
+    // 3. Destek & BÃ¼lten Admin API Endpoint'leri
     else if (path === '/api/admin/login' && request.method === 'POST') {
       response = await handleAdminLogin(request, env);
     } else if ((path === '/api/admin/tickets' || path === '/api/v1/admin/tickets') && request.method === 'GET') {
@@ -107,6 +108,8 @@ export default {
       response = await handleAdminModerateComment(commentId, request, env);
     } else if ((path === '/api/admin/subscribers' || path === '/api/v1/admin/subscribers') && request.method === 'GET') {
       response = await handleAdminGetSubscribers(request, env);
+    } else if ((path === '/api/admin/email-stats' || path === '/api/v1/admin/email-stats') && request.method === 'GET') {
+      response = await handleAdminGetEmailStats(request, env);
     } else if ((path === '/api/admin/broadcast' || path === '/api/v1/admin/broadcast') && request.method === 'POST') {
       response = await handleAdminBroadcastNewsletter(request, env, ctx);
     } else if ((path === '/api/v1/admin/media/upload' || path === '/api/admin/media/upload') && request.method === 'POST') {
@@ -138,14 +141,14 @@ export default {
         const audioId = parseInt(param1, 10);
         response = await handlePublicAudioDelivery(request, env, { audioId });
       } else {
-        response = new Response(JSON.stringify({ error: 'Geçersiz audio parametreleri.' }), { status: 400 });
+        response = new Response(JSON.stringify({ error: 'GeÃ§ersiz audio parametreleri.' }), { status: 400 });
       }
     } 
     // 4. Kamusal Headless CMS Public API V1 Fallback
     else if (path.startsWith('/api/v1/')) {
       response = await handleCmsPublic(request, env);
     } else {
-      response = new Response(JSON.stringify({ error: 'Endpoint bulunamadı.' }), { status: 404, headers: { 'Content-Type': 'application/json' } });
+      response = new Response(JSON.stringify({ error: 'Endpoint bulunamadÄ±.' }), { status: 404, headers: { 'Content-Type': 'application/json' } });
     }
 
     try {

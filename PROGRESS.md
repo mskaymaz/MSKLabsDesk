@@ -1,6 +1,24 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 📌 Son Güncelleme [03.11.2026 - 12:05] — COM-OUTBOUND-002 ÇİFT KADEMELİ GİDEN E-POSTA MİMARİSİ VE KOTA/FLOODING KORUMASI [✓]
+* **Yapılan İşlemler:**
+  1. **Çift Kademeli Gönderim Adaptörü (Resend & Brevo):**
+     - `backend/src/utils/email.ts` ve `webMSKLabs/backend/src/services/emailService.ts` üzerinde Resend (birincil) ve Brevo ($0 / 300 mail/gün hacim yedeği) akışı kuruldu.
+     - Resend HTTP 429 kota aşımı veya ağ hatası döndüğünde akış kesilmeden otomatik olarak Brevo API'ye devredildi (`provider: 'BREVO'`).
+  2. **Suistimal ve E-Posta Bombardımanı Koruması (Cooldown):**
+     - `backend/src/routes/comments.ts` içinde aynı e-posta veya IP adresinden son 3 dakikada onay bekleyen yorum varsa yeni onay postası tetiklenmeyerek HTTP 429 ile sınırlandırıldı.
+  3. **D1 Gönderim Günlüğü ve Günlük Kota Takibi:**
+     - `0020_email_outbound_and_stats.sql` ile `email_outbound_logs` ve `email_daily_stats` tabloları eklendi.
+     - Maskeli alıcı (`maskEmail`), e-posta türü, sağlayıcı ve durum kaydı sağlandı.
+     - Yönetici paneli için `GET /api/admin/email-stats` endpoint'i açıldı (`today`, `month` ve `recent_logs`).
+  4. **Doğrulama ve Testler:**
+     - `backend/tests/apiComOutbound002.test.ts` entegrasyon testi eklendi; tüm backend testleri (95/95 test) %100 yeşil tamamlandı.
+     - `webMSKLabs/tests/com002.test.ts` fallback senaryosu eklendi; web test süiti (605/605 test) %100 yeşil tamamlandı.
+     - Frontend TypeScript ve PWA derlemesi hatasız doğrulandı.
+
+---
+
 ## 📌 Son Güncelleme [03.11.2026 - 11:30] — 4.3 DUYURU MODÜLÜ SAHNE YERLEŞİMİ, KULAKÇIK YÖNELİMİ VE TAVAN/TABAN YASLAMA [✓]
 * **Yapılan İşlemler:**
   1. **Arayüz Yerleşimi & Düzen:**

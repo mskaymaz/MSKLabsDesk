@@ -1,5 +1,5 @@
 /**
- * MSKLabsDesk — Blog Yorum API Endpoints (POST & GET /api/comments, GET /api/comments/verify)
+ * MSKLabsDesk â€” Blog Yorum API Endpoints (POST & GET /api/comments, GET /api/comments/verify)
  */
 
 import { EmailEnv, sendEmail, escapeHtml } from '../utils/email';
@@ -15,30 +15,30 @@ export interface CommentPayload {
 
 
 /**
- * POST /api/comments — Yeni Yorum Gönderme (Double Opt-In E-Posta Onayı ile)
+ * POST /api/comments â€” Yeni Yorum GÃ¶nderme (Double Opt-In E-Posta OnayÄ± ile)
  */
 export async function handleCommentSubmission(request: Request, env: { DB: D1Database } & EmailEnv, ctx?: ExecutionContext): Promise<Response> {
   try {
     const raw = await request.json() as any;
 
-    // 1. Honeypot Bot Koruması (Gizli alan doldurulmuşsa sessizce geçiştir)
+    // 1. Honeypot Bot KorumasÄ± (Gizli alan doldurulmuÅŸsa sessizce geÃ§iÅŸtir)
     if (raw.website || raw.commentHoneypot || raw.hp_check) {
       return new Response(
         JSON.stringify({
           success: true,
-          message: 'Yorumunuz alındı. E-posta onay bağlantınız gönderildi.',
+          message: 'Yorumunuz alÄ±ndÄ±. E-posta onay baÄŸlantÄ±nÄ±z gÃ¶nderildi.',
         }),
         { status: 200, headers: { 'Content-Type': 'application/json; charset=utf-8' } }
       );
     }
 
-    // 2. Matematik / İnsan Doğrulaması Kontrolü (Formdan gönderilmişse)
+    // 2. Matematik / Ä°nsan DoÄŸrulamasÄ± KontrolÃ¼ (Formdan gÃ¶nderilmiÅŸse)
     if (raw.captcha_expected !== undefined && raw.captcha_answer !== undefined) {
       const expected = Number(raw.captcha_expected);
       const answer = Number(raw.captcha_answer);
       if (isNaN(answer) || answer !== expected) {
         return new Response(
-          JSON.stringify({ error: 'Güvenlik doğrulaması (robot testi) hatalı yanıtlandı. Lütfen tekrar deneyin.' }),
+          JSON.stringify({ error: 'GÃ¼venlik doÄŸrulamasÄ± (robot testi) hatalÄ± yanÄ±tlandÄ±. LÃ¼tfen tekrar deneyin.' }),
           { status: 400, headers: { 'Content-Type': 'application/json; charset=utf-8' } }
         );
       }
@@ -52,7 +52,7 @@ export async function handleCommentSubmission(request: Request, env: { DB: D1Dat
 
     if (!postSlug || !authorName || !authorEmail || !content) {
       return new Response(
-        JSON.stringify({ error: 'Lütfen tüm alanları (isim, e-posta, yorum) eksiksiz doldurun.' }),
+        JSON.stringify({ error: 'LÃ¼tfen tÃ¼m alanlarÄ± (isim, e-posta, yorum) eksiksiz doldurun.' }),
         { status: 400, headers: { 'Content-Type': 'application/json; charset=utf-8' } }
       );
     }
@@ -60,7 +60,7 @@ export async function handleCommentSubmission(request: Request, env: { DB: D1Dat
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(authorEmail)) {
       return new Response(
-        JSON.stringify({ error: 'Geçersiz e-posta adresi biçimi.' }),
+        JSON.stringify({ error: 'GeÃ§ersiz e-posta adresi biÃ§imi.' }),
         { status: 400, headers: { 'Content-Type': 'application/json; charset=utf-8' } }
       );
     }
@@ -70,7 +70,21 @@ export async function handleCommentSubmission(request: Request, env: { DB: D1Dat
     const ipAddress = request.headers.get('CF-Connecting-IP') || request.headers.get('x-forwarded-for') || '127.0.0.1';
     const userAgent = request.headers.get('User-Agent') || 'Unknown';
 
-    // Durum: 'unverified' (Kullanıcı e-postasındaki butona basana kadar yöneticiye düşmez)
+    // 2.1. Suistimal ve E-Posta Bombardımanı Koruması (3 Dakika Cooldown)
+    const recentPending = await env.DB.prepare(
+      "SELECT id FROM comments WHERE (author_email = ? OR ip_address = ?) AND status = 'unverified' AND created_at >= datetime('now', '-3 minutes') LIMIT 1"
+    ).bind(authorEmail, ipAddress).first();
+
+    if (recentPending) {
+      return new Response(
+        JSON.stringify({ 
+          error: 'Kısa süre önce bir yorum onay e-postası gönderildi. Lütfen gelen kutunuzu kontrol ediniz. Yeni bir onay bağlantısı istemek için lütfen birkaç dakika bekleyiniz.' 
+        }),
+        { status: 429, headers: { 'Content-Type': 'application/json; charset=utf-8' } }
+      );
+    }
+
+    // Durum: 'unverified' (KullanÄ±cÄ± e-postasÄ±ndaki butona basana kadar yÃ¶neticiye dÃ¼ÅŸmez)
     await env.DB.prepare(`
       INSERT INTO comments (id, post_type, post_slug, author_name, author_email, content, status, ip_address, user_agent, verification_token, created_at)
       VALUES (?, ?, ?, ?, ?, ?, 'unverified', ?, ?, ?, CURRENT_TIMESTAMP)
@@ -86,7 +100,7 @@ export async function handleCommentSubmission(request: Request, env: { DB: D1Dat
       verificationToken
     ).run();
 
-    // 3. E-Posta Onay Bağlantılarının Hazırlanması
+    // 3. E-Posta Onay BaÄŸlantÄ±larÄ±nÄ±n HazÄ±rlanmasÄ±
     const origin = new URL(request.url).origin;
     const confirmUrl = `${origin}/api/comments/verify?token=${verificationToken}&action=confirm`;
     const cancelUrl = `${origin}/api/comments/verify?token=${verificationToken}&action=cancel`;
@@ -99,24 +113,24 @@ export async function handleCommentSubmission(request: Request, env: { DB: D1Dat
         </div>
         <p style="font-size: 0.95rem; margin: 0 0 12px 0;">Merhaba <strong>${escapeHtml(authorName)}</strong>,</p>
         <p style="font-size: 0.92rem; color: #334155; line-height: 1.5; margin: 0 0 16px 0;">
-          MSK Labs blog makalesine göndermiş olduğunuz yorum başarıyla sisteme ulaştı. Yorumunuzun editörlerimiz tarafından incelenip sitede yayınlanabilmesi için lütfen e-posta adresinizi doğrulayınız:
+          MSK Labs blog makalesine gÃ¶ndermiÅŸ olduÄŸunuz yorum baÅŸarÄ±yla sisteme ulaÅŸtÄ±. Yorumunuzun editÃ¶rlerimiz tarafÄ±ndan incelenip sitede yayÄ±nlanabilmesi iÃ§in lÃ¼tfen e-posta adresinizi doÄŸrulayÄ±nÄ±z:
         </p>
         <div style="background: #f8fafc; border-left: 4px solid #0284c7; padding: 12px 16px; margin: 0 0 20px 0; border-radius: 6px; font-size: 0.88rem; color: #1e293b; font-style: italic;">
           "${escapeHtml(content)}"
         </div>
         <div style="text-align: center; margin: 24px 0 16px 0;">
           <a href="${confirmUrl}" style="background: #0284c7; color: #ffffff; text-decoration: none; padding: 12px 26px; font-size: 0.95rem; font-weight: 700; border-radius: 8px; display: inline-block;">
-            ✅ Yorumumu Onaylıyorum ve İlet
+            âœ… Yorumumu OnaylÄ±yorum ve Ä°let
           </a>
         </div>
         <div style="text-align: center; margin-bottom: 24px;">
           <a href="${cancelUrl}" style="color: #ef4444; font-size: 0.82rem; text-decoration: underline;">
-            ❌ Bu yorumu ben yazmadım / Yayınlamaktan vazgeçtim
+            âŒ Bu yorumu ben yazmadÄ±m / YayÄ±nlamaktan vazgeÃ§tim
           </a>
         </div>
         <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 20px 0;" />
         <p style="font-size: 0.76rem; color: #94a3b8; text-align: center; margin: 0; line-height: 1.4;">
-          Bu e-posta, web sitemiz üzerinden yapılan yorum bildirimi için otomatik gönderilmiştir. Onay vermediğiniz takdirde yorumunuz yayınlanmayacaktır.
+          Bu e-posta, web sitemiz Ã¼zerinden yapÄ±lan yorum bildirimi iÃ§in otomatik gÃ¶nderilmiÅŸtir. Onay vermediÄŸiniz takdirde yorumunuz yayÄ±nlanmayacaktÄ±r.
         </p>
       </div>
     `;
@@ -124,10 +138,10 @@ export async function handleCommentSubmission(request: Request, env: { DB: D1Dat
     const emailPromise = sendEmail({
       to: authorEmail,
       toName: authorName,
-      subject: '[MSK Labs] Blog Yorumunuz İçin E-Posta Onayı',
+      subject: '[MSK Labs] Blog Yorumunuz Ä°Ã§in E-Posta OnayÄ±',
       html: emailHtml,
       emailType: 'verification',
-    }, env).catch(err => console.error('Yorum onay e-posta hatası:', err));
+    }, env).catch(err => console.error('Yorum onay e-posta hatasÄ±:', err));
 
     if (ctx) {
       ctx.waitUntil(emailPromise);
@@ -141,21 +155,21 @@ export async function handleCommentSubmission(request: Request, env: { DB: D1Dat
       JSON.stringify({
         success: true,
         comment_id: commentId,
-        message: 'Yorumunuz alındı! E-posta adresinize bir doğrulama bağlantısı gönderildi. Lütfen gelen kutunuzu kontrol edip "Yorumumu Onayla" butonuna tıklayınız.',
+        message: 'Yorumunuz alÄ±ndÄ±! E-posta adresinize bir doÄŸrulama baÄŸlantÄ±sÄ± gÃ¶nderildi. LÃ¼tfen gelen kutunuzu kontrol edip "Yorumumu Onayla" butonuna tÄ±klayÄ±nÄ±z.',
       }),
       { status: 201, headers: { 'Content-Type': 'application/json; charset=utf-8' } }
     );
   } catch (err: any) {
     console.error('[COMMENT POST ERROR]', err);
     return new Response(
-      JSON.stringify({ error: 'Sunucu hatası oluştu.' }),
+      JSON.stringify({ error: 'Sunucu hatasÄ± oluÅŸtu.' }),
       { status: 500, headers: { 'Content-Type': 'application/json; charset=utf-8' } }
     );
   }
 }
 
 /**
- * GET /api/comments/verify?token=...&action=confirm|cancel — Kullanıcı E-Posta Onay / İptal Uç Noktası
+ * GET /api/comments/verify?token=...&action=confirm|cancel â€” KullanÄ±cÄ± E-Posta Onay / Ä°ptal UÃ§ NoktasÄ±
  */
 export async function handleVerifyComment(request: Request, env: { DB: D1Database }): Promise<Response> {
   const url = new URL(request.url);
@@ -168,7 +182,7 @@ export async function handleVerifyComment(request: Request, env: { DB: D1Databas
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>${title} — MSK Labs</title>
+  <title>${title} â€” MSK Labs</title>
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0f172a; color: #f8fafc; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; padding: 20px; box-sizing: border-box; }
     .card { max-width: 480px; width: 100%; background: #1e293b; border: 1px solid #334155; border-radius: 16px; padding: 36px 28px; text-align: center; box-shadow: 0 12px 30px rgba(0,0,0,0.4); }
@@ -183,7 +197,7 @@ export async function handleVerifyComment(request: Request, env: { DB: D1Databas
     <div class="icon">${icon}</div>
     <h1>${title}</h1>
     <p>${message}</p>
-    <a href="/" class="btn">Ana Sayfaya Dön</a>
+    <a href="/" class="btn">Ana Sayfaya DÃ¶n</a>
   </div>
 </body>
 </html>`;
@@ -194,15 +208,15 @@ export async function handleVerifyComment(request: Request, env: { DB: D1Databas
   };
 
   if (!token) {
-    return renderHtmlResponse('⚠️', 'Geçersiz Bağlantı', 'Doğrulama belirteci (token) bulunamadı. Lütfen e-postanızdaki bağlantıyı eksiksiz açtığınızdan emin olun.', false);
+    return renderHtmlResponse('âš ï¸', 'GeÃ§ersiz BaÄŸlantÄ±', 'DoÄŸrulama belirteci (token) bulunamadÄ±. LÃ¼tfen e-postanÄ±zdaki baÄŸlantÄ±yÄ± eksiksiz aÃ§tÄ±ÄŸÄ±nÄ±zdan emin olun.', false);
   }
 
   if (action === 'cancel') {
     await env.DB.prepare("UPDATE comments SET status = 'cancelled' WHERE verification_token = ?").bind(token).run();
-    return renderHtmlResponse('❌', 'Yorum Talebi İptal Edildi', 'Yorum gönderme talebiniz isteğiniz üzerine iptal edilmiştir. Bu yorum yayınlanmayacaktır.', false);
+    return renderHtmlResponse('âŒ', 'Yorum Talebi Ä°ptal Edildi', 'Yorum gÃ¶nderme talebiniz isteÄŸiniz Ã¼zerine iptal edilmiÅŸtir. Bu yorum yayÄ±nlanmayacaktÄ±r.', false);
   }
 
-  // Onaylama işlemi: unverified -> pending
+  // Onaylama iÅŸlemi: unverified -> pending
   const updateRes = await env.DB.prepare(`
     UPDATE comments 
     SET status = 'pending', verified_at = CURRENT_TIMESTAMP 
@@ -210,20 +224,20 @@ export async function handleVerifyComment(request: Request, env: { DB: D1Databas
   `).bind(token).run();
 
   if (updateRes.meta && updateRes.meta.changes > 0) {
-    return renderHtmlResponse('✅', 'E-Posta Adresiniz Doğrulandı!', 'Yorumunuz başarıyla onaylandı ve editörlerimizin inceleme kuyruğuna iletildi. İnceleme tamamlandıktan sonra makalenin altında yayınlanacaktır. Teşekkür ederiz.', true);
+    return renderHtmlResponse('âœ…', 'E-Posta Adresiniz DoÄŸrulandÄ±!', 'Yorumunuz baÅŸarÄ±yla onaylandÄ± ve editÃ¶rlerimizin inceleme kuyruÄŸuna iletildi. Ä°nceleme tamamlandÄ±ktan sonra makalenin altÄ±nda yayÄ±nlanacaktÄ±r. TeÅŸekkÃ¼r ederiz.', true);
   }
 
-  // Zaten doğrulanmış mı kontrol et
+  // Zaten doÄŸrulanmÄ±ÅŸ mÄ± kontrol et
   const existing = await env.DB.prepare('SELECT status FROM comments WHERE verification_token = ?').bind(token).first<{ status: string }>();
   if (existing && (existing.status === 'pending' || existing.status === 'approved')) {
-    return renderHtmlResponse('ℹ️', 'Zaten Doğrulanmış', 'Bu yorum için e-posta doğrulama işlemi daha önce zaten tamamlanmıştır. Yorumunuz incelenmekte veya yayınlanmaktadır.', true);
+    return renderHtmlResponse('â„¹ï¸', 'Zaten DoÄŸrulanmÄ±ÅŸ', 'Bu yorum iÃ§in e-posta doÄŸrulama iÅŸlemi daha Ã¶nce zaten tamamlanmÄ±ÅŸtÄ±r. Yorumunuz incelenmekte veya yayÄ±nlanmaktadÄ±r.', true);
   }
 
-  return renderHtmlResponse('⚠️', 'Bağlantı Geçersiz', 'Doğrulanacak bir yorum kaydı bulunamadı veya bağlantının süresi dolmuş olabilir.', false);
+  return renderHtmlResponse('âš ï¸', 'BaÄŸlantÄ± GeÃ§ersiz', 'DoÄŸrulanacak bir yorum kaydÄ± bulunamadÄ± veya baÄŸlantÄ±nÄ±n sÃ¼resi dolmuÅŸ olabilir.', false);
 }
 
 /**
- * GET /api/comments?post_slug=... — Onaylanmış Yorumları Listeleme
+ * GET /api/comments?post_slug=... â€” OnaylanmÄ±ÅŸ YorumlarÄ± Listeleme
  */
 export async function handleGetApprovedComments(request: Request, env: { DB: D1Database }): Promise<Response> {
   try {
@@ -251,7 +265,7 @@ export async function handleGetApprovedComments(request: Request, env: { DB: D1D
   } catch (err: any) {
     console.error('[COMMENT GET ERROR]', err);
     return new Response(
-      JSON.stringify({ error: 'Sunucu hatası oluştu.' }),
+      JSON.stringify({ error: 'Sunucu hatasÄ± oluÅŸtu.' }),
       { status: 500, headers: { 'Content-Type': 'application/json; charset=utf-8' } }
     );
   }
