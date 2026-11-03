@@ -98,14 +98,15 @@ export const AnnouncementPlacementSettings: React.FC<AnnouncementPlacementSettin
             className="form-select"
             value={previewWebWidth}
             onChange={(e) => setPreviewWebWidth?.(parseInt(e.target.value, 10))}
-            style={{ fontSize: '10px', height: '23px', padding: '1px 5px', minWidth: '95px' }}
+            style={{ fontSize: '10px', height: '23px', padding: '1px 5px', minWidth: '105px' }}
             title="Masaüstü Web Önizleme Sahne Genişliği"
           >
-            <option value={1160}>1160px (Standart)</option>
+            <option value={1160}>1160px (Standart MSK)</option>
             <option value={1024}>1024px (Laptop)</option>
+            <option value={900}>900px (Kompakt)</option>
+            <option value={768}>768px (Tablet)</option>
             <option value={1280}>1280px (HD)</option>
-            <option value={1440}>1440px (Geniş)</option>
-            <option value={1920}>1920px (Full HD)</option>
+            <option value={0}>Tam Ekran (%100)</option>
           </select>
         </div>
       )}
