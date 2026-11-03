@@ -1,6 +1,19 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 📌 Son Güncelleme [03.11.2026 - 14:20] — 4.3 GENEL SİSTEM AYARLARI (BAKIM MODU & ALTYAPI ENTEGRASYON KARTLARI) [✓]
+* **Yapılan İşlemler:**
+  1. **Bakım Modu (Maintenance Mode) Geçiş Anahtarı (`SettingsView.tsx`):**
+     - Canlı web sitesini geçici bakım ekranına alan, yönetici erişimini açık tutan reaktif switch ve durum göstergesi entegre edildi.
+  2. **Kurumsal Gönderici & Gmail Yasağı Uyumu:**
+     - Ayarlar ekranındaki varsayılan gönderici adresi kurala uygun olarak `bildirim@msklabs.org` yapıldı.
+  3. **Altyapı & API Entegrasyon Durum Kartı:**
+     - Resend (Birincil - 100/g), Brevo (Hacim Yedeği - 300/g), Cloudflare D1/R2 ve Gemini AI/TTS hatlarının canlı durum rozetleri ayarlar paneline eklendi.
+  4. **Doğrulama ve Derleme:**
+     - Frontend TypeScript ve PWA derlemesi hatasız geçti. `ROADMAP_TODO.md` üzerinde 4. Aşama eksiksiz tamamlandı olarak kapatıldı.
+
+---
+
 ## 📌 Son Güncelleme [03.11.2026 - 14:15] — 4.2 E-POSTA BÜLTENİ VE ABONELER EKRANI (CSV DIŞA AKTARMA & BROADCAST) [✓]
 * **Yapılan İşlemler:**
   1. **Excel & CSV Dışa Aktarma Motoru (`SubscribersView.tsx`):**

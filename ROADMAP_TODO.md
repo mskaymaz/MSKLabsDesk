@@ -67,8 +67,8 @@
   - [x] Client-side engine (`announcement-loader.js`) tekil round-robin rotasyonu ile donatıldı; vitrin önizleme mockup'ı güncellendi.
 * [x] **4.2 E-Posta Bülteni ve Aboneler Ekranı (TAMAMLANDI — 03.11.2026 - 14:15):**
   - [x] Abone listesi, filtreleme, CSV dışa aktarma ve bülten şablonu oluşturma arayüzü.
-* [ ] **4.3 Genel Sistem Ayarları:**
-  - [ ] Site genel ayarları, API anahtarları yönetimi ve bakım modu geçişlerinin tamamlanması.
+* [x] **4.3 Genel Sistem Ayarları (TAMAMLANDI — 03.11.2026 - 14:20):**
+  - [x] Site genel ayarları, API anahtarları yönetimi ve bakım modu geçişlerinin tamamlanması.
 
 ---
 

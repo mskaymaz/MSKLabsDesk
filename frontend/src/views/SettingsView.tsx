@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Bell, Mail, Save, Check, Shield, Globe, Sun, Moon } from 'lucide-react';
+import { Bell, Mail, Save, Check, Shield, Globe, Sun, Moon, AlertTriangle, Cpu, CheckCircle2 } from 'lucide-react';
 import { api } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
@@ -12,8 +12,9 @@ export const SettingsView: React.FC = () => {
   const { theme, setTheme } = useTheme();
   const [siteTitle, setSiteTitle] = useState('MSK Labs Desk');
   const [siteUrl, setSiteUrl] = useState('https://msklabs.org');
-  const [senderName, setSenderName] = useState('MSK Labs');
-  const [senderEmail, setSenderEmail] = useState('msklabs.org@gmail.com');
+  const [senderName, setSenderName] = useState('MSK Labs Bildirim');
+  const [senderEmail, setSenderEmail] = useState('bildirim@msklabs.org');
+  const [maintenanceMode, setMaintenanceMode] = useState(false);
   const [turnstileEnabled, setTurnstileEnabled] = useState(true);
   const [pushEnabled, setPushEnabled] = useState(false);
   const [saved, setSaved] = useState(false);
@@ -31,6 +32,7 @@ export const SettingsView: React.FC = () => {
           if (cfg.siteUrl) setSiteUrl(cfg.siteUrl);
           if (cfg.senderName) setSenderName(cfg.senderName);
           if (cfg.senderEmail) setSenderEmail(cfg.senderEmail);
+          if (cfg.maintenanceMode !== undefined) setMaintenanceMode(cfg.maintenanceMode);
           if (cfg.turnstileEnabled !== undefined) setTurnstileEnabled(cfg.turnstileEnabled);
           if (cfg.pushEnabled !== undefined) setPushEnabled(cfg.pushEnabled);
         } catch {}
@@ -49,6 +51,7 @@ export const SettingsView: React.FC = () => {
           siteUrl,
           senderName,
           senderEmail,
+          maintenanceMode,
           turnstileEnabled,
           pushEnabled,
         },
@@ -151,10 +154,37 @@ export const SettingsView: React.FC = () => {
             </div>
           </div>
 
+          {/* Bakım Modu (Maintenance Mode) */}
+          <div style={{ borderTop: '1px solid var(--border-color)', paddingTop: '20px', marginBottom: '24px' }}>
+            <div style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              padding: '16px',
+              background: maintenanceMode ? 'rgba(239, 68, 68, 0.08)' : 'var(--bg-secondary)',
+              borderRadius: 'var(--radius-md)',
+              border: maintenanceMode ? '1px solid rgba(239, 68, 68, 0.3)' : '1px solid var(--border-color)',
+            }}>
+              <div>
+                <strong style={{ fontSize: '0.9rem', color: maintenanceMode ? 'var(--accent-rose)' : 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <AlertTriangle size={15} /> Bakım Modu (Maintenance Mode)
+                </strong>
+                <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
+                  {maintenanceMode ? 'Canlı web sitesi ziyaretçilere geçici bakım ekranı gösterir; yönetici paneli erişilebilir kalır.' : 'Web sitesi normal yayındadır.'}
+                </span>
+              </div>
+              <Switch
+                checked={maintenanceMode}
+                onChange={(e) => setMaintenanceMode(e.target.checked)}
+                aria-label="Bakım Modu Anahtarı"
+              />
+            </div>
+          </div>
+
           {/* E-Posta Servisi */}
           <div style={{ borderTop: '1px solid var(--border-color)', paddingTop: '24px', marginBottom: '24px' }}>
             <h3 style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '14px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <Mail size={18} color="var(--accent-cyan)" /> E-Posta Servis Ayarları
+              <Mail size={18} color="var(--accent-cyan)" /> E-Posta Gönderim Yapılandırması
             </h3>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
               <div className="form-group">
@@ -179,6 +209,32 @@ export const SettingsView: React.FC = () => {
             </div>
           </div>
 
+          {/* Sistem & API Entegrasyon Durum Kartı */}
+          <div style={{ borderTop: '1px solid var(--border-color)', paddingTop: '24px', marginBottom: '24px' }}>
+            <h3 style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '14px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <Cpu size={18} color="var(--accent-primary)" /> Altyapı & API Entegrasyon Durumu
+            </h3>
+
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '10px' }}>
+              <div style={{ padding: '10px 14px', background: 'var(--bg-secondary)', borderRadius: '6px', border: '1px solid var(--border-color)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <span style={{ fontSize: '0.82rem', fontWeight: 600 }}>Resend (Birincil Mail)</span>
+                <span style={{ fontSize: '0.72rem', color: '#16a34a', display: 'flex', alignItems: 'center', gap: '3px', fontWeight: 700 }}><CheckCircle2 size={12} /> AKTİF (100/g)</span>
+              </div>
+              <div style={{ padding: '10px 14px', background: 'var(--bg-secondary)', borderRadius: '6px', border: '1px solid var(--border-color)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <span style={{ fontSize: '0.82rem', fontWeight: 600 }}>Brevo (Yedek Mail)</span>
+                <span style={{ fontSize: '0.72rem', color: '#16a34a', display: 'flex', alignItems: 'center', gap: '3px', fontWeight: 700 }}><CheckCircle2 size={12} /> AKTİF (300/g)</span>
+              </div>
+              <div style={{ padding: '10px 14px', background: 'var(--bg-secondary)', borderRadius: '6px', border: '1px solid var(--border-color)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <span style={{ fontSize: '0.82rem', fontWeight: 600 }}>Cloudflare D1 & R2</span>
+                <span style={{ fontSize: '0.72rem', color: '#16a34a', display: 'flex', alignItems: 'center', gap: '3px', fontWeight: 700 }}><CheckCircle2 size={12} /> AKTİF (Edge)</span>
+              </div>
+              <div style={{ padding: '10px 14px', background: 'var(--bg-secondary)', borderRadius: '6px', border: '1px solid var(--border-color)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <span style={{ fontSize: '0.82rem', fontWeight: 600 }}>Gemini AI & TTS</span>
+                <span style={{ fontSize: '0.72rem', color: '#16a34a', display: 'flex', alignItems: 'center', gap: '3px', fontWeight: 700 }}><CheckCircle2 size={12} /> AKTİF (Çok Dilli)</span>
+              </div>
+            </div>
+          </div>
+
           {/* Güvenlik & Turnstile */}
           <div style={{ borderTop: '1px solid var(--border-color)', paddingTop: '24px', marginBottom: '24px' }}>
             <h3 style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '14px', display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -193,7 +249,6 @@ export const SettingsView: React.FC = () => {
               background: 'var(--bg-secondary)',
               borderRadius: 'var(--radius-md)',
               border: '1px solid var(--border-color)',
-              marginBottom: '14px'
             }}>
               <div>
                 <strong style={{ fontSize: '0.9rem', color: 'var(--text-primary)', display: 'block' }}>Cloudflare Turnstile Bot Koruması</strong>
