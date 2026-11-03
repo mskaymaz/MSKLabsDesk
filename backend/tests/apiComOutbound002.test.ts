@@ -5,6 +5,7 @@
 
 import { sendEmail, maskEmail, escapeHtml, EmailEnv } from '../src/utils/email';
 import { handleAdminGetEmailStats } from '../src/routes/adminEmailStats';
+import { handleAdminGetBroadcastHistory } from '../src/routes/adminBroadcast';
 import { handleCommentSubmission } from '../src/routes/comments';
 import { createSessionToken } from '../src/utils/auth';
 
@@ -57,6 +58,10 @@ class MockD1PreparedStatement {
 
     if (s.includes('FROM email_outbound_logs')) {
       return { results: this.tables.email_outbound_logs };
+    }
+
+    if (s.includes('FROM newsletter_campaigns')) {
+      return { results: this.tables.newsletter_campaigns || [] };
     }
 
     return { results: [] };
@@ -113,6 +118,7 @@ class MockD1Database {
     comments: [] as any[],
     email_outbound_logs: [] as any[],
     email_daily_stats: [] as any[],
+    newsletter_campaigns: [] as any[],
   };
 
   prepare(sql: string) {
@@ -247,6 +253,35 @@ async function runTests() {
     assert(statsData.stats.today.resend_limit === 100, 'Resend günlük tavanı 100 olarak raporlandı');
     assert(statsData.stats.today.brevo_limit === 300, 'Brevo günlük tavanı 300 olarak raporlandı');
     assert(statsData.stats.recent_logs.length >= 2, 'Denetim günlüğünde geçmiş gönderimler listelendi');
+
+    // 7. Admin Broadcast History API Testi
+    db.tables.newsletter_campaigns.push({
+      id: 'cmp_123',
+      subject: '[MSK Labs] Örnek Bülten',
+      target_category: 'all',
+      total_recipients: 10,
+      sent_count: 10,
+      failed_count: 0,
+      status: 'completed',
+      created_at: new Date().toISOString(),
+      completed_at: new Date().toISOString(),
+    });
+
+    const historyReq = new Request('https://msklabs.org/api/admin/broadcast/history', {
+      method: 'GET',
+      headers: { 'Authorization': `Bearer ${token}` },
+    });
+
+    const historyRes = await handleAdminGetBroadcastHistory(historyReq, {
+      DB: db,
+      ADMIN_JWT_SECRET: 'secret_jwt_key_123',
+    } as any);
+
+    assert(historyRes.status === 200, 'Admin Broadcast History API 200 OK döndü');
+    const historyData = await historyRes.json() as any;
+    assert(historyData.success === true, 'History yanıtı başarılı');
+    assert(historyData.campaigns.length === 1, 'Geçmiş bülten kampanyası listelendi');
+    assert(historyData.campaigns[0].delivery_rate === 100, 'İletim oranı %100 olarak hesaplandı');
 
   } finally {
     globalThis.fetch = originalFetch;

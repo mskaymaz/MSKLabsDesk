@@ -10,6 +10,19 @@ const getHeaders = (): HeadersInit => {
   };
 };
 
+export interface BroadcastCampaign {
+  id: string;
+  subject: string;
+  target_category: string;
+  total_recipients: number;
+  sent_count: number;
+  failed_count: number;
+  delivery_rate: number;
+  status: 'pending' | 'sending' | 'completed' | 'failed';
+  created_at: string;
+  completed_at?: string;
+}
+
 export const api = {
   // Auth
   async login(username: string, password: string) {
@@ -149,6 +162,14 @@ export const api = {
       const err = await res.json().catch(() => ({}));
       throw new Error(err.error || 'Duyuru gÃ¶nderilemedi.');
     }
+    return res.json();
+  },
+
+  async getBroadcastHistory(): Promise<{ success: boolean; campaigns: BroadcastCampaign[] }> {
+    const res = await fetch(`${API_BASE}/admin/broadcast/history`, {
+      headers: getHeaders(),
+    });
+    if (!res.ok) throw new Error('Bülten geçmişi yüklenemedi.');
     return res.json();
   },
 

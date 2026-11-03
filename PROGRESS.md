@@ -1,6 +1,22 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 📌 Son Güncelleme [03.11.2026 - 15:40] — BÜLTEN GEÇMİŞİ VE İLETİM ORANI RAPORU ENTEGRASYONU [✓]
+* **Yapılan İşlemler:**
+  1. **D1 Kampanya Veritabanı ve API Hattı (`0021_newsletter_campaigns.sql`, `adminBroadcast.ts`, `index.ts`):**
+     - `newsletter_campaigns` tablosu oluşturuldu (kampanya kimliği, konu, hedef segment, toplam alıcı, başarılı iletim, başarısız iletim, durum ve tamamlama damgası).
+     - `POST /api/admin/broadcast` tetiklendiğinde kampanya kaydı oluşturma ve asenkron iletim sonrası sayaçları anlık güncelleme mekanizması bağlandı.
+     - `GET /api/admin/broadcast/history` endpoint'i yazıldı ve teslimat başarı yüzdesi (`delivery_rate`) hesaplaması eklendi.
+  2. **Bülten Ekranı Alt Panel Raporlama Vitrini (`BroadcastView.tsx`):**
+     - Mevcut formun altına "Geçmiş Bülten Gönderimleri & İletim Raporu" paneli konumlandırıldı.
+     - Toplam kampanya sayısı, toplam gönderilen alıcı ve ortalama teslimat başarı yüzdesi kümülatif rozetleri eklendi.
+     - Henüz gönderim yapılmadığı durumlarda açıklayıcı modern boş durum kartı (`Inbox`), gönderim yapıldığında ise tarih, konu, segment, alıcı sayısı, iletim yüzdesi ve durum göstergeli tablo bağlandı.
+  3. **Doğrulama ve Derleme:**
+     - Frontend TypeScript ve PWA derlemesi (`tsc -b && vite build`) 0 hata ile başarıyla tamamlandı.
+     - Backend entegrasyon testleri (114/114) %100 PASS (Geçmiş kampanya API testi eklendi).
+
+---
+
 ## 📌 Son Güncelleme [03.11.2026 - 15:05] — E-POSTA BÜLTENİ EKRANI DİKEY DÜZEN & E-POSTA EDITÖRÜ ENTEGRASYONU [✓]
 * **Yapılan İşlemler:**
   1. **E-Posta Uyumlu Editör Araç Çubuğu (`EditorToolbar.tsx`):**

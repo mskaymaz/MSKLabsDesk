@@ -10,7 +10,7 @@ import { handleAdminLogin } from './routes/adminAuth';
 import { handleAdminGetTickets, handleAdminGetTicketDetail, handleAdminReplyTicket, handleAdminUpdateTicketStatus, handleAdminAnalyzeTicket, handleAdminAnalyzeAllTickets, handleAdminTranslateTicket } from './routes/adminTickets';
 import { handleAdminGetComments, handleAdminModerateComment } from './routes/adminComments';
 import { handleAdminGetEmailStats } from './routes/adminEmailStats';
-import { handleAdminGetSubscribers, handleAdminBroadcastNewsletter } from './routes/adminBroadcast';
+import { handleAdminGetSubscribers, handleAdminBroadcastNewsletter, handleAdminGetBroadcastHistory } from './routes/adminBroadcast';
 import { handleAdminMediaUpload, handleAdminMediaDelete } from './routes/adminMedia';
 import { handleAdminTTSGenerate, handleAdminTTSStatus, handleAdminTTSApprove, handleAdminTTSUnpublish, handleAdminTTSRegenerate, handlePublicAudioDelivery } from './routes/adminTts';
 import { handleCmsChannels } from './routes/cmsChannels';
@@ -112,6 +112,8 @@ export default {
       response = await handleAdminGetEmailStats(request, env);
     } else if ((path === '/api/admin/broadcast' || path === '/api/v1/admin/broadcast') && request.method === 'POST') {
       response = await handleAdminBroadcastNewsletter(request, env, ctx);
+    } else if ((path === '/api/admin/broadcast/history' || path === '/api/v1/admin/broadcast/history') && request.method === 'GET') {
+      response = await handleAdminGetBroadcastHistory(request, env);
     } else if ((path === '/api/v1/admin/media/upload' || path === '/api/admin/media/upload') && request.method === 'POST') {
       response = await handleAdminMediaUpload(request, env);
     } else if ((path.startsWith('/api/v1/admin/media/') || path.startsWith('/api/admin/media/')) && request.method === 'DELETE') {

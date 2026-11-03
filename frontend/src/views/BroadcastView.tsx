@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { api } from '../services/api';
-import { Send, CheckCircle2, Eye, Sparkles, Mail, Users, Loader2 } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { api, type BroadcastCampaign } from '../services/api';
+import { Send, CheckCircle2, Eye, Sparkles, Mail, Users, Loader2, History, RotateCw, Inbox, CheckCircle, Clock } from 'lucide-react';
 import { ConfirmationDialog } from '../components/ui/Modal';
 import { useTranslation } from '../context/I18nContext';
 import { RichTextEditor } from '../components/ui/RichTextEditor';
@@ -13,6 +13,26 @@ export const BroadcastView: React.FC = () => {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [sending, setSending] = useState(false);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
+
+  // Geçmiş Bültenler ve İletim İstatistikleri
+  const [campaigns, setCampaigns] = useState<BroadcastCampaign[]>([]);
+  const [loadingHistory, setLoadingHistory] = useState(false);
+
+  const loadHistory = async () => {
+    setLoadingHistory(true);
+    try {
+      const res = await api.getBroadcastHistory();
+      setCampaigns(res.campaigns || []);
+    } catch {
+      // sessizce geç
+    } finally {
+      setLoadingHistory(false);
+    }
+  };
+
+  useEffect(() => {
+    loadHistory();
+  }, []);
 
   // Hızlı Hazır E-Posta Şablonları
   const applyTemplate = (type: 'article' | 'weekly' | 'announcement') => {
@@ -59,12 +79,19 @@ export const BroadcastView: React.FC = () => {
       setSuccessMsg(t('common.success'));
       setTitle('');
       setContentHtml('');
+      loadHistory();
     } catch {
       alert(t('broadcast.sendError'));
     } finally {
       setSending(false);
     }
   };
+
+  // Kümülatif Metrikler
+  const totalSentRecipients = campaigns.reduce((acc, c) => acc + (c.total_recipients || 0), 0);
+  const avgDeliveryRate = campaigns.length > 0
+    ? Math.round(campaigns.reduce((acc, c) => acc + (c.delivery_rate || 0), 0) / campaigns.length)
+    : 100;
 
   return (
     <div className="animate-fade-in" style={{ maxWidth: '960px', margin: '0 auto', paddingBottom: '40px' }}>
@@ -254,6 +281,130 @@ export const BroadcastView: React.FC = () => {
             {sending ? <Loader2 size={15} className="animate-spin" /> : <Send size={15} />}
             <span>Kuyruğa Al ve Gönder</span>
           </button>
+        </div>
+
+        {/* 5. GEÇMİŞ BÜLTEN GÖNDERİMLERİ & İLETİM PERFORMANSI (Mevcut Yapının Altında) */}
+        <div className="admin-list-card" style={{ padding: '22px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', flexWrap: 'wrap', gap: '10px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--accent-cyan)' }}>
+              <History size={18} />
+              <h3 className="admin-card-title" style={{ margin: 0 }}>Geçmiş Bülten Gönderimleri & İletim Raporu</h3>
+            </div>
+            <button
+              type="button"
+              onClick={loadHistory}
+              disabled={loadingHistory}
+              className="admin-btn admin-btn-secondary admin-btn-sm"
+              style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '0.76rem' }}
+              title="Listeyi Yenile"
+            >
+              <RotateCw size={13} className={loadingHistory ? 'animate-spin' : ''} />
+              <span>Yenile</span>
+            </button>
+          </div>
+
+          {/* İstatistik Metrik Rozetleri */}
+          {campaigns.length > 0 && (
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(170px, 1fr))', gap: '12px', marginBottom: '18px' }}>
+              <div style={{ background: 'rgba(255, 255, 255, 0.03)', border: '1px solid var(--border-subtle, #334155)', borderRadius: '8px', padding: '12px 14px' }}>
+                <span style={{ fontSize: '0.72rem', color: '#94a3b8' }}>Toplam Kampanya</span>
+                <div style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--text-primary, #f8fafc)', marginTop: '2px' }}>{campaigns.length}</div>
+              </div>
+              <div style={{ background: 'rgba(255, 255, 255, 0.03)', border: '1px solid var(--border-subtle, #334155)', borderRadius: '8px', padding: '12px 14px' }}>
+                <span style={{ fontSize: '0.72rem', color: '#94a3b8' }}>Toplam Gönderilen Alıcı</span>
+                <div style={{ fontSize: '1.25rem', fontWeight: 700, color: '#38bdf8', marginTop: '2px' }}>{totalSentRecipients}</div>
+              </div>
+              <div style={{ background: 'rgba(255, 255, 255, 0.03)', border: '1px solid var(--border-subtle, #334155)', borderRadius: '8px', padding: '12px 14px' }}>
+                <span style={{ fontSize: '0.72rem', color: '#94a3b8' }}>Ortalama Teslimat Başarısı</span>
+                <div style={{ fontSize: '1.25rem', fontWeight: 700, color: '#10b981', marginTop: '2px' }}>%{avgDeliveryRate}</div>
+              </div>
+            </div>
+          )}
+
+          {/* Gönderim Listesi / Tablo veya Boş Durum */}
+          {loadingHistory && campaigns.length === 0 ? (
+            <div style={{ textAlign: 'center', padding: '30px', color: '#94a3b8' }}>
+              <Loader2 size={24} className="animate-spin" style={{ margin: '0 auto 8px' }} />
+              <p style={{ fontSize: '0.85rem' }}>Bülten geçmişi sorgulanıyor...</p>
+            </div>
+          ) : campaigns.length === 0 ? (
+            <div style={{
+              background: 'rgba(255, 255, 255, 0.02)',
+              border: '1px dashed var(--border-subtle, #334155)',
+              borderRadius: '8px',
+              padding: '36px 20px',
+              textAlign: 'center',
+              color: '#94a3b8',
+            }}>
+              <Inbox size={32} style={{ color: '#64748b', margin: '0 auto 10px', display: 'block' }} />
+              <h4 style={{ color: 'var(--text-primary, #f8fafc)', fontSize: '0.92rem', fontWeight: 600, marginBottom: '6px' }}>
+                Henüz Kayıtlı Bülten Gönderimi Bulunmuyor
+              </h4>
+              <p style={{ fontSize: '0.80rem', maxWidth: '520px', margin: '0 auto', lineHeight: '1.5' }}>
+                Yukarıdaki formu kullanarak ilk bülteninizi oluşturup gönderdiğinizde; alıcı miktarı, anlık iletim durumu, başarı oranı ve gönderim zamanı burada canlı olarak listelenecektir.
+              </p>
+            </div>
+          ) : (
+            <div style={{ overflowX: 'auto' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.82rem' }}>
+                <thead>
+                  <tr style={{ borderBottom: '1px solid var(--border-subtle, #334155)', color: '#94a3b8', textAlign: 'left' }}>
+                    <th style={{ padding: '8px 10px', fontWeight: 600 }}>Tarih</th>
+                    <th style={{ padding: '8px 10px', fontWeight: 600 }}>Bülten Konusu</th>
+                    <th style={{ padding: '8px 10px', fontWeight: 600 }}>Hedef Kitle</th>
+                    <th style={{ padding: '8px 10px', fontWeight: 600 }}>Alıcı Sayısı</th>
+                    <th style={{ padding: '8px 10px', fontWeight: 600 }}>İletim Oranı</th>
+                    <th style={{ padding: '8px 10px', fontWeight: 600 }}>Durum</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {campaigns.map((c) => (
+                    <tr key={c.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                      <td style={{ padding: '10px', color: '#94a3b8', whiteSpace: 'nowrap' }}>
+                        {c.created_at ? new Date(c.created_at).toLocaleString('tr-TR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : '-'}
+                      </td>
+                      <td style={{ padding: '10px', fontWeight: 600, color: 'var(--text-primary, #f8fafc)' }}>
+                        {c.subject}
+                      </td>
+                      <td style={{ padding: '10px' }}>
+                        <span style={{ background: 'rgba(255,255,255,0.06)', padding: '2px 8px', borderRadius: '4px', fontSize: '0.74rem' }}>
+                          {c.target_category === 'all' ? 'Tüm Aboneler' : c.target_category}
+                        </span>
+                      </td>
+                      <td style={{ padding: '10px', fontWeight: 600, color: '#38bdf8' }}>
+                        {c.total_recipients} kişi
+                      </td>
+                      <td style={{ padding: '10px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                          <span style={{ fontWeight: 700, color: c.delivery_rate >= 90 ? '#10b981' : '#f59e0b' }}>
+                            %{c.delivery_rate}
+                          </span>
+                          <span style={{ fontSize: '0.72rem', color: '#94a3b8' }}>
+                            ({c.sent_count}/{c.total_recipients})
+                          </span>
+                        </div>
+                      </td>
+                      <td style={{ padding: '10px' }}>
+                        {c.status === 'completed' ? (
+                          <span style={{ color: '#10b981', display: 'inline-flex', alignItems: 'center', gap: '4px', fontSize: '0.76rem' }}>
+                            <CheckCircle size={13} /> Tamamlandı
+                          </span>
+                        ) : c.status === 'sending' ? (
+                          <span style={{ color: '#38bdf8', display: 'inline-flex', alignItems: 'center', gap: '4px', fontSize: '0.76rem' }}>
+                            <Loader2 size={13} className="animate-spin" /> İletiliyor
+                          </span>
+                        ) : (
+                          <span style={{ color: '#f59e0b', display: 'inline-flex', alignItems: 'center', gap: '4px', fontSize: '0.76rem' }}>
+                            <Clock size={13} /> Kuyrukta
+                          </span>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
         </div>
       </div>
 
