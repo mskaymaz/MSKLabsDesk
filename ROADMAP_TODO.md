@@ -39,10 +39,12 @@
 
 ---
 
-### 📍 GÜNCEL DURUM VE KALINAN YER (EVDEN DEVAM EDİLECEK)
-* **Aktif Çalışma Standartları:** Hem `webMSKLabs` hem `MSKLabsDesk` repolarında doğrudan `main` dalındayız. Canlı site `msklabs.org` Cloudflare Worker & Assets üzerinde stabil ve %100 çalışır durumdadır.
-* **Sıradaki Adım:**
-  - **4. AŞAMA: Yönetim Paneli (Admin) Eksikliklerinin Bitirilmesi** (Duyuru modülü, e-bülten ve sistem ayarları).
+### 📍 GÜNCEL DURUM VE KALINAN YER (SABAH DEVAM EDİLECEK — 03.11.2026 - 16:35)
+* **Aktif Çalışma Standartları:** Hem `webMSKLabs` hem `MSKLabsDesk` repolarında doğrudan `main` dalındayız. 4. Aşama (Duyuru Modülü, Aboneler & Kategori Sayım Vitrini, E-Bülten Dikey Editör & İletim Raporu, Sistem Ayarları & Bakım Modu) %100 tamamlandı ve pushlandı.
+* **Sırada Başlanacak Görev:**
+  - **5. AŞAMA: BİRLEŞİK BİLDİRİM & MESAJLAŞMA MERKEZİ (INBOX HUB)**
+    * 5.1 Ortak Veri Toplama Motoru (`/api/v1/inbox/unified`)
+    * 5.2 Minimalist Bildirim & Mesajlaşma Gösterge Paneli
 
 ---
 
