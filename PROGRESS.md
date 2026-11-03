@@ -1,6 +1,21 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 📌 Son Güncelleme [03.11.2026 - 15:05] — E-POSTA BÜLTENİ EKRANI DİKEY DÜZEN & E-POSTA EDITÖRÜ ENTEGRASYONU [✓]
+* **Yapılan İşlemler:**
+  1. **E-Posta Uyumlu Editör Araç Çubuğu (`EditorToolbar.tsx`):**
+     - `preset === 'email'` modu devreye alındı; e-posta istemcilerini (özellikle Outlook/Gmail) bozan akordeon (`ComponentDropdown`) ve kayan tablo bileşenleri (`TableDropdown`) gizlendi/pasife çekildi.
+     - Tipografi, başlık stilleri, font boyutları, renk/vurgu, hizalama, madde/numaralı listeler, link ve görsel ekleme araçları aktif tutuldu.
+  2. **E-Posta Bülteni Sayfası Dikey Yerleşim (`BroadcastView.tsx`):**
+     - Eski yan yana (`1fr 1fr`) ızgara kaldırıldı; Konu &rarr; `RichTextEditor (preset="email")` &rarr; Canlı E-Posta Önizleme Kartı dikey olarak **alt alta** konumlandırıldı.
+     - Hızlı hazır şablon butonları (Yeni Makale, Haftalık Özet, Sistem Duyurusu) entegre edildi.
+     - Gerçek zamanlı gelen kutusu simülasyonu (`bildirim@msklabs.org` göndericili) canlı render ile bağlandı.
+  3. **Doğrulama ve Derleme:**
+     - Frontend TypeScript ve PWA derlemesi (`tsc -b && vite build`) 0 hata ile başarıyla tamamlandı.
+     - Tüm backend entegrasyon testleri (113/113) %100 PASS.
+
+---
+
 ## 📌 Son Güncelleme [03.11.2026 - 14:45] — BÜLTEN MODALI CANLI ÖNİZLEME DİKEY YERLEŞİM DÜZENLEMESİ [✓]
 * **Yapılan İşlemler:**
   1. **Konu ve Canlı Önizleme Dikey (Alt Alta) Kurgusu (`BroadcastModal.tsx`):**

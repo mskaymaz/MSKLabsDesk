@@ -311,10 +311,13 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
         {/* 2. ALT SATIR: Ekler & Blok Bileşenler + Hizalama Dörtlüsü + Listeler */}
         {preset !== 'inline' && (
           <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '3px', paddingTop: '2px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
-            {/* Bileşenler (Akordeon, Kartlar vb.) */}
-            <ComponentDropdown editor={editor} />
-
-            {divider}
+            {/* Bileşenler (Akordeon, Kartlar vb.) — E-posta standartlarını bozduğu için email modunda devre dışı */}
+            {preset !== 'email' && (
+              <>
+                <ComponentDropdown editor={editor} />
+                {divider}
+              </>
+            )}
 
             {/* Bağlantı Ekle / Düzenle */}
             <button
@@ -328,10 +331,13 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
 
             {divider}
 
-            {/* Tablo Menüsü */}
-            <TableDropdown editor={editor} onOpenFloating={onOpenFloatingTable} />
-
-            {divider}
+            {/* Tablo Menüsü — E-posta istemcileri modern tablo motorunu desteklemediği için email modunda devre dışı */}
+            {preset !== 'email' && (
+              <>
+                <TableDropdown editor={editor} onOpenFloating={onOpenFloatingTable} />
+                {divider}
+              </>
+            )}
 
             {/* Görsel Ekleme */}
             <ImageDropdown editor={editor} />
