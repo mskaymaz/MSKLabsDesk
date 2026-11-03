@@ -197,8 +197,8 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
                 <option value="bottom_right">↘ Sağ Alt</option>
               </optgroup>
               <optgroup label="Mobil Yuvalar">
-                <option value="left_floating">← Sol Kenar (Kulakçık)</option>
-                <option value="right_floating">→ Sağ Kenar (Kulakçık)</option>
+                <option value="left_floating">← Sol Kenar</option>
+                <option value="right_floating">→ Sağ Kenar</option>
               </optgroup>
               <optgroup label="Klasik">
                 <option value="top_hanging">↑ Üst Tam Bant</option>
@@ -216,30 +216,35 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
         </div>
       </div>
 
-      {/* 4. Derli Toplu Ayar Paneli (Açılır Listeler ve Gruplanmış Kontroller) */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '10px', marginBottom: '14px', padding: '12px', background: 'var(--bg-secondary, rgba(15, 23, 42, 0.4))', borderRadius: '8px', border: '1px solid var(--border-subtle)' }}>
+      {/* 4. Derli Toplu Ayar Paneli (3 Kolonlu Kompakt Kontroller) */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px', marginBottom: '12px', padding: '12px', background: 'var(--bg-secondary, rgba(15, 23, 42, 0.4))', borderRadius: '8px', border: '1px solid var(--border-subtle)' }}>
+        {/* Kolon 1: Duyuru Başlığı, Aktiflik & Etkileşim/Buton */}
         <div>
           <div style={{ display: 'flex', alignItems: 'center', marginBottom: '4px' }}>
             <label style={{ fontSize: '11px', fontWeight: 700, color: 'var(--text-secondary)', margin: 0 }}>Duyuru Başlığı</label>
-            <label style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', fontSize: '11px', cursor: 'pointer', color: 'var(--text-secondary)', marginLeft: '20px' }}>
+            <label style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', fontSize: '11px', cursor: 'pointer', color: 'var(--text-secondary)', marginLeft: '16px' }}>
               <input type="checkbox" checked={activeItem.isActive !== false} onChange={(e) => updateCurrentItem({ isActive: e.target.checked })} />
               <span style={{ fontWeight: 600 }}>Aktif</span>
             </label>
           </div>
-          <input type="text" className="form-input" value={activeItem.title || ''} onChange={(e) => updateCurrentItem({ title: e.target.value })} placeholder="Duyuru Başlığı" style={{ fontSize: '11px', height: '28px', marginBottom: '8px' }} />
+          <input type="text" className="form-input" value={activeItem.title || ''} onChange={(e) => updateCurrentItem({ title: e.target.value })} placeholder="Duyuru Başlığı" style={{ fontSize: '11px', height: '26px', marginBottom: '8px' }} />
 
-          {/* Web & Mobil Yerleşim, Süre ve Kaydırma Kontrolleri */}
-          <AnnouncementPlacementSettings
-            activeItem={activeItem}
-            updateCurrentItem={updateCurrentItem}
-            deviceTab={previewDevice}
-            setDeviceTab={setPreviewDevice}
-          />
+          <label style={{ display: 'block', fontSize: '10px', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: '3px' }}>Etkileşim & Buton</label>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4px', marginBottom: '6px' }}>
+            <input type="text" className="form-input" placeholder="Buton Metni" value={activeItem.ctaText || ''} onChange={(e) => updateCurrentItem({ ctaText: e.target.value })} style={{ fontSize: '10px', height: '24px' }} />
+            <input type="text" className="form-input" placeholder="Buton URL (/apps)" value={activeItem.ctaUrl || ''} onChange={(e) => updateCurrentItem({ ctaUrl: e.target.value })} style={{ fontSize: '10px', height: '24px' }} />
+          </div>
+
+          <label style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '10px', cursor: 'pointer', color: 'var(--text-secondary)' }}>
+            <input type="checkbox" checked={activeItem.isDismissable} onChange={(e) => updateCurrentItem({ isDismissable: e.target.checked })} />
+            <span>Kapatma '✕' butonu görünsün</span>
+          </label>
         </div>
 
+        {/* Kolon 2: Tema, Renkler & Zemin Efekti */}
         <div>
           <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: '4px' }}>Tema & Renkler</label>
-          <select className="form-select" value={activeItem.bannerType || 'info'} onChange={(e) => updateCurrentItem({ bannerType: e.target.value as any })} style={{ fontSize: '11px', height: '28px', marginBottom: '6px', padding: '2px 6px' }}>
+          <select className="form-select" value={activeItem.bannerType || 'info'} onChange={(e) => updateCurrentItem({ bannerType: e.target.value as any })} style={{ fontSize: '11px', height: '26px', marginBottom: '6px', padding: '2px 6px' }}>
             {BANNER_THEMES.map((theme) => (
               <option key={theme.id} value={theme.id}>{theme.name}</option>
             ))}
@@ -256,14 +261,13 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
               </div>
             </div>
           )}
-          {/* Zemin Şeffaflık Efekti Açılır Menüsü */}
           <div>
-            <span style={{ display: 'block', fontSize: '9px', color: 'var(--text-muted)' }}>Zemin Efekti:</span>
+            <span style={{ display: 'block', fontSize: '9px', color: 'var(--text-muted)', marginBottom: '2px' }}>Zemin Efekti:</span>
             <select
               className="form-select"
               value={activeItem.glassEffect || 'none'}
               onChange={(e) => updateCurrentItem({ glassEffect: e.target.value as any })}
-              style={{ fontSize: '10px', height: '24px', padding: '1px 4px' }}
+              style={{ fontSize: '10.5px', height: '26px', padding: '1px 6px' }}
             >
               <option value="none">Düz Şeffaf (Altı Net Okunur)</option>
               <option value="blur">Buzlu Cam (Bulanık Arka Plan)</option>
@@ -271,117 +275,61 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
           </div>
         </div>
 
-        {currentPlacement === 'top_hanging' ? (
-          <div>
-            <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: '4px' }}>Boyut, Boşluk & Zemin Opaklığı</label>
-            <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr 1fr', gap: '4px', marginBottom: '8px' }}>
-              <select
-                className="form-select" value={activeItem.sizePreset || 'standard'}
-                onChange={(e) => {
-                  const preset = e.target.value as 'compact' | 'standard' | 'large';
-                  updateCurrentItem({
-                    sizePreset: preset,
-                    customHeight: preset === 'compact' ? 26 : preset === 'large' ? 48 : 34,
-                    paddingY: preset === 'compact' ? 1 : preset === 'large' ? 3 : 2,
-                  });
-                }}
-                style={{ fontSize: '11px', height: '28px', padding: '2px 4px' }}
-              >
-                <option value="compact">Kompakt</option>
-                <option value="standard">Standart</option>
-                <option value="large">Geniş</option>
-              </select>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '2px' }} title="Bant Toplam Yüksekliği (px)">
-                <input type="number" className="form-input" style={{ fontSize: '11px', height: '28px', width: '48px', textAlign: 'center', padding: '2px' }} value={activeItem.customHeight ?? ''} placeholder="34" onChange={(e) => updateCurrentItem({ customHeight: e.target.value === '' ? undefined : parseInt(e.target.value, 10) })} />
-                <span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>h</span>
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '2px' }} title="Dikey Üst/Alt İç Boşluk (px)">
-                <input type="number" className="form-input" style={{ fontSize: '11px', height: '28px', width: '48px', textAlign: 'center', padding: '2px' }} value={activeItem.paddingY ?? ''} placeholder="2" onChange={(e) => updateCurrentItem({ paddingY: e.target.value === '' ? undefined : parseInt(e.target.value, 10) })} />
-                <span style={{ fontSize: '10px', color: 'var(--text-muted)' }}>pad</span>
-              </div>
-            </div>
-            {/* Zemin ve Yazı Opaklığı */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <span style={{ fontSize: '10px', color: 'var(--text-muted)', minWidth: '65px' }}>Zemin Opk: %{currentBgOpacity}</span>
-                <input type="range" min="10" max="100" step="5" value={currentBgOpacity} onChange={(e) => updateCurrentItem({ bgOpacity: parseInt(e.target.value, 10), opacity: parseInt(e.target.value, 10) })} style={{ flex: 1, cursor: 'pointer' }} />
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <span style={{ fontSize: '10px', color: 'var(--text-muted)', minWidth: '65px' }}>Yazı Opk: %{currentTextOpacity}</span>
-                <input type="range" min="30" max="100" step="5" value={currentTextOpacity} onChange={(e) => updateCurrentItem({ textOpacity: parseInt(e.target.value, 10) })} style={{ flex: 1, cursor: 'pointer' }} />
-              </div>
-            </div>
-          </div>
-        ) : (
-          <div>
-            <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: '4px' }}>
-              {previewDevice === 'mobile' ? 'Mobil Kart Boyutu & Opaklık' : 'Web Kart Boyutu & Opaklık'}
-            </label>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '4px', marginBottom: '8px' }}>
-              <div title="Kart Genişliği (px)">
-                <span style={{ display: 'block', fontSize: '9px', color: 'var(--text-muted)' }}>Genişlik:</span>
-                <input
-                  type="number" className="form-input"
-                  placeholder={previewDevice === 'mobile' ? (activeItem.cardWidth ? String(activeItem.cardWidth) : '220') : '310'}
-                  style={{ fontSize: '11px', height: '26px', padding: '2px', textAlign: 'center' }}
-                  value={(previewDevice === 'mobile' ? activeItem.mobileCardWidth : activeItem.cardWidth) ?? ''}
-                  onChange={(e) => {
-                    const val = e.target.value === '' ? undefined : parseInt(e.target.value, 10);
-                    if (previewDevice === 'mobile') updateCurrentItem({ mobileCardWidth: val });
-                    else updateCurrentItem({ cardWidth: val });
-                  }}
-                />
-              </div>
-              <div title="Kart Yüksekliği (px, boş=otomatik)">
-                <span style={{ display: 'block', fontSize: '9px', color: 'var(--text-muted)' }}>Yükseklik:</span>
-                <input
-                  type="number" className="form-input"
-                  placeholder={previewDevice === 'mobile' ? (activeItem.cardHeight ? String(activeItem.cardHeight) : 'Oto') : 'Oto'}
-                  style={{ fontSize: '11px', height: '26px', padding: '2px', textAlign: 'center' }}
-                  value={(previewDevice === 'mobile' ? activeItem.mobileCardHeight : activeItem.cardHeight) ?? ''}
-                  onChange={(e) => {
-                    const val = e.target.value === '' ? undefined : parseInt(e.target.value, 10);
-                    if (previewDevice === 'mobile') updateCurrentItem({ mobileCardHeight: val });
-                    else updateCurrentItem({ cardHeight: val });
-                  }}
-                />
-              </div>
-              <div title="İç Boşluk (pad)">
-                <span style={{ display: 'block', fontSize: '9px', color: 'var(--text-muted)' }}>İç Boşluk:</span>
-                <input type="number" className="form-input" placeholder="10" style={{ fontSize: '11px', height: '26px', padding: '2px', textAlign: 'center' }} value={activeItem.paddingY ?? ''} onChange={(e) => updateCurrentItem({ paddingY: e.target.value === '' ? undefined : parseInt(e.target.value, 10) })} />
-              </div>
-            </div>
-
-            {/* Zemin ve Yazı Opaklığı */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <span style={{ fontSize: '10px', color: 'var(--text-muted)', minWidth: '65px' }}>Zemin Opk: %{currentBgOpacity}</span>
-                <input type="range" min="10" max="100" step="5" value={currentBgOpacity} onChange={(e) => updateCurrentItem({ bgOpacity: parseInt(e.target.value, 10), opacity: parseInt(e.target.value, 10) })} style={{ flex: 1, cursor: 'pointer' }} />
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <span style={{ fontSize: '10px', color: 'var(--text-muted)', minWidth: '65px' }}>Yazı Opk: %{currentTextOpacity}</span>
-                <input type="range" min="30" max="100" step="5" value={currentTextOpacity} onChange={(e) => updateCurrentItem({ textOpacity: parseInt(e.target.value, 10) })} style={{ flex: 1, cursor: 'pointer' }} />
-              </div>
-            </div>
-          </div>
-        )}
-
+        {/* Kolon 3: Boyut, İç Boşluk & Opaklık Kontrolleri */}
         <div>
-          <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: '4px' }}>Etkileşim & Buton</label>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4px', marginBottom: '8px' }}>
-            <input type="text" className="form-input" placeholder="Buton Metni" value={activeItem.ctaText || ''} onChange={(e) => updateCurrentItem({ ctaText: e.target.value })} style={{ fontSize: '10px', height: '24px' }} />
-            <input type="text" className="form-input" placeholder="Buton URL (/apps)" value={activeItem.ctaUrl || ''} onChange={(e) => updateCurrentItem({ ctaUrl: e.target.value })} style={{ fontSize: '10px', height: '24px' }} />
+          <label style={{ display: 'block', fontSize: '11px', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: '4px' }}>Boyut, Boşluk & Opaklık</label>
+          <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr 1fr', gap: '4px', marginBottom: '8px' }}>
+            <select
+              className="form-select" value={activeItem.sizePreset || 'standard'}
+              onChange={(e) => {
+                const preset = e.target.value as 'compact' | 'standard' | 'large';
+                updateCurrentItem({
+                  sizePreset: preset,
+                  customHeight: preset === 'compact' ? 26 : preset === 'large' ? 48 : 34,
+                  paddingY: preset === 'compact' ? 1 : preset === 'large' ? 3 : 2,
+                });
+              }}
+              style={{ fontSize: '10.5px', height: '26px', padding: '2px 4px' }}
+            >
+              <option value="compact">Kompakt</option>
+              <option value="standard">Standart</option>
+              <option value="large">Geniş</option>
+            </select>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '2px' }} title="Duyuru Toplam Yüksekliği (px)">
+              <input type="number" className="form-input" style={{ fontSize: '10px', height: '26px', width: '44px', textAlign: 'center', padding: '2px' }} value={activeItem.customHeight ?? ''} placeholder="34" onChange={(e) => updateCurrentItem({ customHeight: e.target.value === '' ? undefined : parseInt(e.target.value, 10) })} />
+              <span style={{ fontSize: '9.5px', color: 'var(--text-muted)' }}>h</span>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '2px' }} title="Dikey İç Boşluk (px)">
+              <input type="number" className="form-input" style={{ fontSize: '10px', height: '26px', width: '44px', textAlign: 'center', padding: '2px' }} value={activeItem.paddingY ?? ''} placeholder="2" onChange={(e) => updateCurrentItem({ paddingY: e.target.value === '' ? undefined : parseInt(e.target.value, 10) })} />
+              <span style={{ fontSize: '9.5px', color: 'var(--text-muted)' }}>pad</span>
+            </div>
           </div>
 
-          {/* Kapatma '✕' butonu görünsün */}
-          <label style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: '10px', cursor: 'pointer', color: 'var(--text-secondary)' }}>
-            <input type="checkbox" checked={activeItem.isDismissable} onChange={(e) => updateCurrentItem({ isDismissable: e.target.checked })} />
-            <span>Kapatma '✕' butonu görünsün</span>
-          </label>
+          {/* Zemin ve Yazı Opaklığı */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <span style={{ fontSize: '9.5px', color: 'var(--text-muted)', minWidth: '65px' }}>Zemin: %{currentBgOpacity}</span>
+              <input type="range" min="10" max="100" step="5" value={currentBgOpacity} onChange={(e) => updateCurrentItem({ bgOpacity: parseInt(e.target.value, 10), opacity: parseInt(e.target.value, 10) })} style={{ flex: 1, cursor: 'pointer' }} />
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <span style={{ fontSize: '9.5px', color: 'var(--text-muted)', minWidth: '65px' }}>Yazı: %{currentTextOpacity}</span>
+              <input type="range" min="30" max="100" step="5" value={currentTextOpacity} onChange={(e) => updateCurrentItem({ textOpacity: parseInt(e.target.value, 10) })} style={{ flex: 1, cursor: 'pointer' }} />
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* 4.1 Ticker (Kayan Yazı) Ayarları Özel Bloğu */}
+      {/* 5. Yerleşim, Yuva Haritası & Konumlandırma Stüdyosu (Geniş Yan Yana Blok) */}
+      <div style={{ marginBottom: '14px' }}>
+        <AnnouncementPlacementSettings
+          activeItem={activeItem}
+          updateCurrentItem={updateCurrentItem}
+          deviceTab={previewDevice}
+          setDeviceTab={setPreviewDevice}
+        />
+      </div>
+
+      {/* 5.1 Ticker (Kayan Yazı) Ayarları Özel Bloğu */}
       {isTicker && (
         <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '14px', padding: '8px 12px', background: 'rgba(59,130,246,0.08)', borderRadius: '6px', border: '1px solid rgba(59,130,246,0.25)' }}>
           <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--accent-primary)' }}>Kayan Yazı (Ticker) Ayarları:</span>
@@ -403,7 +351,7 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
         </div>
       )}
 
-      {/* 5. Zengin Metin Editörü */}
+      {/* 6. Zengin Metin Editörü */}
       <div>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '6px' }}>
           <div>
