@@ -26,6 +26,7 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
 }) => {
   const [activeLangTab, setActiveLangTab] = useState<'tr' | 'en' | 'ar'>('tr');
   const [previewDevice, setPreviewDevice] = useState<'desktop' | 'mobile'>('desktop');
+  const [previewWebWidth, setPreviewWebWidth] = useState<number>(1160);
 
   const items: AnnouncementItem[] = (announcementMeta.items && announcementMeta.items.length > 0)
     ? announcementMeta.items
@@ -160,6 +161,8 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
         updateCurrentItem={updateCurrentItem}
         deviceTab={previewDevice}
         setDeviceTab={setPreviewDevice}
+        previewWebWidth={previewWebWidth}
+        setPreviewWebWidth={setPreviewWebWidth}
       />
 
       {/* 3. Canlı Önizleme Vitrini (Browser / Device Mockup Penceresi) */}
@@ -171,6 +174,7 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
         setActiveLangTab={setActiveLangTab}
         previewDevice={previewDevice}
         setPreviewDevice={setPreviewDevice}
+        previewWebWidth={previewWebWidth}
       />
 
       {/* 4. İkili Bölüm: 1/4 Sol (Yerleşim & Harita) — 3/4 Sağ (İçerik Düzenleme) */}

@@ -10,11 +10,12 @@ export interface AnnouncementPreviewMockupProps {
   setActiveLangTab: (lang: 'tr' | 'en' | 'ar') => void;
   previewDevice?: 'desktop' | 'mobile';
   setPreviewDevice?: (device: 'desktop' | 'mobile') => void;
+  previewWebWidth?: number;
 }
 
 export const AnnouncementPreviewMockup: React.FC<AnnouncementPreviewMockupProps> = ({
   activeItem, announcementActive, announcementText, activeLangTab, setActiveLangTab,
-  previewDevice: controlledDevice, setPreviewDevice: setControlledDevice,
+  previewDevice: controlledDevice, setPreviewDevice: setControlledDevice, previewWebWidth = 1160,
 }) => {
   const [previewTheme, setPreviewTheme] = useState<'dark' | 'light'>('light');
   const [internalDevice, setInternalDevice] = useState<'desktop' | 'mobile'>('desktop');
@@ -50,8 +51,8 @@ export const AnnouncementPreviewMockup: React.FC<AnnouncementPreviewMockupProps>
   return (
     <div style={{
       background: isDark ? '#070a13' : '#F1F5F9', border: '2px solid var(--border-subtle, #334155)', borderRadius: '10px',
-      marginBottom: '14px', maxWidth: previewDevice === 'mobile' ? '380px' : '100%',
-      margin: previewDevice === 'mobile' ? '0 auto 14px auto' : '0 0 14px 0',
+      marginBottom: '14px', maxWidth: previewDevice === 'mobile' ? '380px' : `${previewWebWidth}px`,
+      margin: '0 auto 14px auto',
       boxShadow: isDark ? '0 8px 30px rgba(0,0,0,0.5)' : '0 8px 24px rgba(0,0,0,0.08)', transition: 'max-width 0.25s ease', overflow: 'hidden',
     }}>
       <style>{`.ann-card-preview-content::-webkit-scrollbar { display: none !important; width: 0 !important; height: 0 !important; }`}</style>

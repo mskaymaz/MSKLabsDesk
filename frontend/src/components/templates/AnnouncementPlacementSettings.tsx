@@ -7,12 +7,16 @@ export interface AnnouncementPlacementSettingsProps {
   updateCurrentItem: (updates: Partial<AnnouncementItem>) => void;
   deviceTab?: 'desktop' | 'mobile';
   setDeviceTab?: (device: 'desktop' | 'mobile') => void;
+  previewWebWidth?: number;
+  setPreviewWebWidth?: (width: number) => void;
 }
 
 export const AnnouncementPlacementSettings: React.FC<AnnouncementPlacementSettingsProps> = ({
   activeItem,
   updateCurrentItem,
   deviceTab = 'desktop',
+  previewWebWidth = 1160,
+  setPreviewWebWidth,
 }) => {
   const isWebTab = deviceTab === 'desktop';
   const currentPlacement: AnnouncementPlacement = isWebTab
@@ -86,7 +90,27 @@ export const AnnouncementPlacementSettings: React.FC<AnnouncementPlacementSettin
         </div>
       </div>
 
-      {/* 2. Orta Kısım: Boyutlar & Sürgüler (Tek Satır) */}
+      {/* 2. Web Sahne Genişliği Açılır Menüsü */}
+      {isWebTab && (
+        <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+          <span style={{ fontSize: '9.5px', color: 'var(--text-muted)' }}>Sahne:</span>
+          <select
+            className="form-select"
+            value={previewWebWidth}
+            onChange={(e) => setPreviewWebWidth?.(parseInt(e.target.value, 10))}
+            style={{ fontSize: '10px', height: '23px', padding: '1px 5px', minWidth: '95px' }}
+            title="Masaüstü Web Önizleme Sahne Genişliği"
+          >
+            <option value={1160}>1160px (Standart)</option>
+            <option value={1024}>1024px (Laptop)</option>
+            <option value={1280}>1280px (HD)</option>
+            <option value={1440}>1440px (Geniş)</option>
+            <option value={1920}>1920px (Full HD)</option>
+          </select>
+        </div>
+      )}
+
+      {/* 3. Orta Kısım: Boyutlar & Sürgüler */}
       {isTopHanging ? (
         <span style={{ fontSize: '9.5px', color: 'var(--text-muted)', fontStyle: 'italic' }}>
           ↑ Üst Tam Bant (Klasik Şerit) seçili — Boyut ve ofset otomatik uygulanır.
@@ -167,7 +191,7 @@ export const AnnouncementPlacementSettings: React.FC<AnnouncementPlacementSettin
         </div>
       )}
 
-      {/* 3. Sağ Kısım: Kulakçık Metni, Süre ve Küçülme */}
+      {/* 4. Sağ Kısım: Kulakçık Metni, Süre ve Küçülme */}
       {!isTopHanging && (
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '3px' }} title="Kulakçık Metni">
