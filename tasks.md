@@ -147,7 +147,7 @@
 
 ---
 
-### COM-OUTBOUND-002 — Çift Kademeli Giden E-Posta Mimarisi (Resend Birincil & Brevo Hacim Yedeği) [ ]
+### COM-OUTBOUND-002 — Çift Kademeli Giden E-Posta Mimarisi (Resend Birincil & Brevo Hacim Yedeği) [*]
 - **Amaç:** $0/ay sıfır maliyet ilkesi korunarak, kurumsal yanıtlar için temiz (reklamsız) Resend API altyapısının sürdürülmesi; blog yorum onayı veya destek biletlerinde günlük 100 limitinin zorlanması durumunda yoğunlaşan modülün kontrollü olarak Brevo API altyapısına taşınması.
 - **Kapsam:** `backend/src/utils/email.ts`, `backend/src/routes/comments.ts`, `backend/src/routes/support.ts`, `backend/src/routes/subscribe.ts`.
 - **Mimari Karar:**
@@ -161,7 +161,7 @@
      - *Postmark:* Kalıcı ücretsiz plan yok (yalnızca 100 test maili).
      - *Amazon SES:* $0.10/1000 mail maliyet ve AWS kredi kartı zorunluluğu nedeniyle Kural 0 (Sıfır Maliyet) dışı.
 - **Definition of Done (DoD):**
-  - [ ] Resend kotası aşımında (`resend error 429 / quota exceeded`) loglama ve Brevo fallback adaptörünün `backend/src/utils/email.ts` içine şablonlanması.
+  - [*] Resend kotası aşımında (`resend error 429 / quota exceeded`) loglama ve Brevo fallback adaptörünün `backend/src/utils/email.ts` içine şablonlanması.
 
 ---
 
@@ -2165,7 +2165,7 @@ sequenceDiagram
 - [*] **CMS-TTS-001 — TTS Audio CMS & Mobile Accessible Public Player**
   - **Amaç:** CMS yönetim panelinde makale ses üretimi durumunun (`generating`, `draft`, `approved`, `failed`, `stale`) ve STT kalite doğrulama skorunun takip edilmesi; ön dinleme, onay, yayından kaldırma ve yenileme aksiyonlarının sunulması. Public blog tarafında sadece `status = 'APPROVED'` ve **`article_version == audio_version`** (`post_revisions.revision_number`) olan güncel seslerin gösterilmesi. HTML5 Audio Player bileşeninde mobil uyumlu arayüz, autoplay olmaması, Play/Pause/Seek/Süre göstergeleri, klavye erişilebilirliği (`tabindex`, ARIA), ekran okuyucu uyumu ve ses bulunmadığında zarif metinsel fallback sunumu (Web Speech API artık ana çözüm olarak kullanılmaz).
   - **Öncelik:** P1 | **Bağımlılık:** API-TTS-001, AI-TTS-002.
-- [ ] **CMS-TTS-002 — Yüksek Kaliteli MP3 Üretimi, Doğal Ses Modelleri ve Çok Dilli Akış Yol Haritası**
+- [*] **CMS-TTS-002 — Yüksek Kaliteli MP3 Üretimi, Doğal Ses Modelleri ve Çok Dilli Akış Yol Haritası**
   - **Amaç:** Web Speech API canlı tarayıcı sentezinin tamamen kaldırılarak, makalelerin stüdyo kalitesinde sunucu taraflı MP3 ses dosyası olarak üretilmesi; vitrinin ise bu dosyalar tam onaylanana kadar gizli (`display: none !important`) tutulması.
   - **1. Ses Sağlayıcıları ve Model Çeşitliliği:** Robotik motorlar (Google Translate gtx) yerine ElevenLabs Multilingual v2 veya Google Cloud TTS Neural2/Studio modellerinin entegre edilmesi; kadın ve erkek ses alternatifleri, doğal nefes aralıkları ve edebi tonlama.
   - **2. Çok Dilli Fonetik ve Telaffuz Kısıtları:**

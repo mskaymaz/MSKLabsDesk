@@ -10,10 +10,12 @@ import {
   ChevronDown,
   ChevronUp,
   Copy,
+  Volume2,
 } from 'lucide-react';
 import type { BlogPost, BlogChannel, PostFormData } from '../types';
 import { LayoutBuilder } from '../components/posts/LayoutBuilder';
 import { PostPreviewModal } from '../components/posts/PostPreviewModal';
+import { PostTtsStudioModal } from '../components/posts/PostTtsStudioModal';
 import { RichTextEditor } from '../components/ui/RichTextEditor';
 import { EditorVerticalToolbar } from '../components/editor/EditorVerticalToolbar';
 import { FloatingTableInspector } from '../components/editor/FloatingTableInspector';
@@ -31,10 +33,10 @@ export interface BlogStudioViewProps {
 }
 
 const CANVAS_WIDTHS = [
-  { label: '780px', value: '780px', title: 'Standart Makale Okuma Genişliği' },
-  { label: '920px', value: '920px', title: 'Geniş Doküman Düzeni' },
-  { label: '1080px', value: '1080px', title: 'Geniş Masaüstü Düzeni' },
-  { label: '100%', value: '100%', title: 'Akışkan / Tam Genişlik' },
+  { label: '780px', value: '780px', title: 'Standart Makale Okuma GeniÅŸliÄŸi' },
+  { label: '920px', value: '920px', title: 'GeniÅŸ DokÃ¼man DÃ¼zeni' },
+  { label: '1080px', value: '1080px', title: 'GeniÅŸ MasaÃ¼stÃ¼ DÃ¼zeni' },
+  { label: '100%', value: '100%', title: 'AkÄ±ÅŸkan / Tam GeniÅŸlik' },
 ];
 
 export const BlogStudioView: React.FC<BlogStudioViewProps> = ({
@@ -51,6 +53,7 @@ export const BlogStudioView: React.FC<BlogStudioViewProps> = ({
   const [activeTab, setActiveTab] = useState<'tr' | 'en' | 'ar'>('tr');
   const [editorMode, setEditorMode] = useState<'rich' | 'layout'>('rich');
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+  const [isTtsOpen, setIsTtsOpen] = useState(false);
   const [canvasWidth, setCanvasWidth] = useState<string>('840px');
   const [isMetaOpen, setIsMetaOpen] = useState(false);
   const [isFloatingTableOpen, setIsFloatingTableOpen] = useState(false);
@@ -88,16 +91,16 @@ export const BlogStudioView: React.FC<BlogStudioViewProps> = ({
 
   return (
     <div className="studio-container animate-fade-in">
-      {/* 1. Üst Stüdyo Çubuğu */}
+      {/* 1. Ãœst StÃ¼dyo Ã‡ubuÄŸu */}
       <header className="studio-header">
-        {/* Sol Eylemler: Geri Dönüş ve Başlık */}
+        {/* Sol Eylemler: Geri DÃ¶nÃ¼ÅŸ ve BaÅŸlÄ±k */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           <button
             type="button"
             onClick={onClose}
             className="admin-btn admin-btn-secondary admin-btn-sm"
             style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}
-            title="Listeye Geri Dön"
+            title="Listeye Geri DÃ¶n"
           >
             <ArrowLeft size={14} />
             <span>Makaleler</span>
@@ -106,7 +109,7 @@ export const BlogStudioView: React.FC<BlogStudioViewProps> = ({
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <h2 style={{ fontSize: '14px', fontWeight: 700, margin: 0, color: 'var(--text-primary)' }}>
-                {editingPost ? 'Yazıyı Düzenle' : 'Yeni Blog Yazısı'}
+                {editingPost ? 'YazÄ±yÄ± DÃ¼zenle' : 'Yeni Blog YazÄ±sÄ±'}
               </h2>
               <span
                 className={`admin-badge ${
@@ -126,9 +129,9 @@ export const BlogStudioView: React.FC<BlogStudioViewProps> = ({
           </div>
         </div>
 
-        {/* Orta: Dil Sekmeleri ve Tuval Genişliği */}
+        {/* Orta: Dil Sekmeleri ve Tuval GeniÅŸliÄŸi */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          {/* Yalın TR / EN / AR Sekmeleri */}
+          {/* YalÄ±n TR / EN / AR Sekmeleri */}
           <div style={{ display: 'flex', gap: '2px', background: 'var(--bg-secondary)', padding: '2px', borderRadius: '6px', border: '1px solid var(--border-card)' }}>
             {(['tr', 'en', 'ar'] as const).map((lang) => (
               <button
@@ -151,9 +154,9 @@ export const BlogStudioView: React.FC<BlogStudioViewProps> = ({
             ))}
           </div>
 
-          {/* Tuval Genişlik Seçici */}
+          {/* Tuval GeniÅŸlik SeÃ§ici */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '11px', color: 'var(--text-secondary)' }}>
-            <span>Genişlik:</span>
+            <span>GeniÅŸlik:</span>
             <div style={{ display: 'flex', gap: '2px', background: 'var(--bg-secondary)', padding: '2px', borderRadius: '6px', border: '1px solid var(--border-card)' }}>
               {CANVAS_WIDTHS.map((cw) => (
                 <button
@@ -178,7 +181,7 @@ export const BlogStudioView: React.FC<BlogStudioViewProps> = ({
             </div>
           </div>
 
-          {/* Editör Modu (Zengin vs Blok) */}
+          {/* EditÃ¶r Modu (Zengin vs Blok) */}
           <div style={{ display: 'flex', gap: '2px', background: 'var(--bg-secondary)', padding: '2px', borderRadius: '6px', border: '1px solid var(--border-card)' }}>
             <button
               type="button"
@@ -221,14 +224,14 @@ export const BlogStudioView: React.FC<BlogStudioViewProps> = ({
           </div>
         </div>
 
-        {/* Sağ: Eylem Butonları */}
+        {/* SaÄŸ: Eylem ButonlarÄ± */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <button
             type="button"
             onClick={() => setIsMetaOpen(!isMetaOpen)}
             className="admin-btn admin-btn-secondary admin-btn-sm"
             style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}
-            title="Makale Ayarları (Kanal, Slug, Kapak vb.)"
+            title="Makale AyarlarÄ± (Kanal, Slug, Kapak vb.)"
           >
             <SlidersHorizontal size={13} />
             <span>Ayarlar</span>
@@ -247,13 +250,23 @@ export const BlogStudioView: React.FC<BlogStudioViewProps> = ({
           <button
             type="button"
             className="admin-btn admin-btn-secondary admin-btn-sm"
+            onClick={() => setIsTtsOpen(true)}
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}
+            title="Stüdyo Kalitesinde Ses & MP3 Yönetimi"
+          >
+            <Volume2 size={13} /> Ses
+          </button>
+
+          <button
+            type="button"
+            className="admin-btn admin-btn-secondary admin-btn-sm"
             onClick={() => {
               if (!formData.content_tr) {
-                alert('Klonlanacak Türkçe içerik bulunamadı.');
+                alert('Klonlanacak TÃ¼rkÃ§e iÃ§erik bulunamadÄ±.');
                 return;
               }
               if (activeTab === 'tr') {
-                if (confirm('Türkçe mizanpaj ve içeriği hem EN hem de AR sekmesine klonlamak istiyor musunuz?')) {
+                if (confirm('TÃ¼rkÃ§e mizanpaj ve iÃ§eriÄŸi hem EN hem de AR sekmesine klonlamak istiyor musunuz?')) {
                   setFormData((prev) => ({
                     ...prev,
                     title_en: prev.title_en || prev.title_tr,
@@ -261,23 +274,23 @@ export const BlogStudioView: React.FC<BlogStudioViewProps> = ({
                     content_en: prev.content_tr,
                     content_ar: prev.content_tr,
                   }));
-                  alert('Türkçe görsel düzen ve tablolar EN ve AR sekmelerine klonlandı.');
+                  alert('TÃ¼rkÃ§e gÃ¶rsel dÃ¼zen ve tablolar EN ve AR sekmelerine klonlandÄ±.');
                 }
               } else {
-                if (confirm(`Türkçe mizanpajı ${activeTab.toUpperCase()} sekmesine klonlamak istiyor musunuz?`)) {
+                if (confirm(`TÃ¼rkÃ§e mizanpajÄ± ${activeTab.toUpperCase()} sekmesine klonlamak istiyor musunuz?`)) {
                   setFormData((prev) => ({
                     ...prev,
                     [activeTab === 'en' ? 'content_en' : 'content_ar']: prev.content_tr,
                     [activeTab === 'en' ? 'title_en' : 'title_ar']: prev[activeTab === 'en' ? 'title_en' : 'title_ar'] || prev.title_tr,
                   }));
-                  alert(`Türkçe mizanpaj ${activeTab.toUpperCase()} sekmesine aktarıldı.`);
+                  alert(`TÃ¼rkÃ§e mizanpaj ${activeTab.toUpperCase()} sekmesine aktarÄ±ldÄ±.`);
                 }
               }
             }}
             style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}
-            title="Türkçe mizanpaj, görsel ve tabloları diğer dillere kopyalar"
+            title="TÃ¼rkÃ§e mizanpaj, gÃ¶rsel ve tablolarÄ± diÄŸer dillere kopyalar"
           >
-            <Copy size={13} /> Düzeni Klonla
+            <Copy size={13} /> DÃ¼zeni Klonla
           </button>
 
           <button
@@ -286,9 +299,9 @@ export const BlogStudioView: React.FC<BlogStudioViewProps> = ({
             onClick={onAiTranslate}
             disabled={aiTranslating}
             style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}
-            title="3 Aşamalı Doğrulamalı AI Çeviri Hattı"
+            title="3 AÅŸamalÄ± DoÄŸrulamalÄ± AI Ã‡eviri HattÄ±"
           >
-            <Sparkles size={13} /> {aiTranslating ? 'Doğrulanıyor...' : '✨ AI Doğrulamalı Çevir'}
+            <Sparkles size={13} /> {aiTranslating ? 'DoÄŸrulanÄ±yor...' : 'âœ¨ AI DoÄŸrulamalÄ± Ã‡evir'}
           </button>
 
           <button
@@ -302,10 +315,10 @@ export const BlogStudioView: React.FC<BlogStudioViewProps> = ({
         </div>
       </header>
 
-      {/* 2. Açılır Makale Üst Bilgileri (Metadata Drawer) */}
+      {/* 2. AÃ§Ä±lÄ±r Makale Ãœst Bilgileri (Metadata Drawer) */}
       {isMetaOpen && (
         <section
-          aria-label="Makale Meta Ayarları"
+          aria-label="Makale Meta AyarlarÄ±"
           style={{
             background: 'var(--bg-secondary)',
             borderBottom: '1px solid var(--border-subtle)',
@@ -318,7 +331,7 @@ export const BlogStudioView: React.FC<BlogStudioViewProps> = ({
         >
           <div>
             <label className="admin-meta-text" style={{ fontWeight: 600, display: 'block', marginBottom: '3px' }}>
-              Blog Kanalı
+              Blog KanalÄ±
             </label>
             <select
               value={formData.channel_id}
@@ -349,7 +362,7 @@ export const BlogStudioView: React.FC<BlogStudioViewProps> = ({
 
           <div>
             <label className="admin-meta-text" style={{ fontWeight: 600, display: 'block', marginBottom: '3px' }}>
-              Kapak Görseli URL
+              Kapak GÃ¶rseli URL
             </label>
             <input
               type="text"
@@ -377,7 +390,7 @@ export const BlogStudioView: React.FC<BlogStudioViewProps> = ({
 
           <div>
             <label className="admin-meta-text" style={{ fontWeight: 600, display: 'block', marginBottom: '3px' }}>
-              Yayın Durumu
+              YayÄ±n Durumu
             </label>
             <select
               value={formData.status}
@@ -385,15 +398,15 @@ export const BlogStudioView: React.FC<BlogStudioViewProps> = ({
               className="admin-filter-select"
               style={{ width: '100%', height: '30px' }}
             >
-              <option value="draft">📝 Taslak (Draft)</option>
-              <option value="published">✅ Yayında (Published)</option>
-              <option value="unpublished">⏸️ Yayından Kaldırıldı</option>
+              <option value="draft">ğŸ“ Taslak (Draft)</option>
+              <option value="published">âœ… YayÄ±nda (Published)</option>
+              <option value="unpublished">â¸ï¸ YayÄ±ndan KaldÄ±rÄ±ldÄ±</option>
             </select>
           </div>
         </section>
       )}
 
-      {/* 3. Ana Gövde: Sol Dikey Araç Çubuğu + Gri Masaüstü + Kağıt Tuval */}
+      {/* 3. Ana GÃ¶vde: Sol Dikey AraÃ§ Ã‡ubuÄŸu + Gri MasaÃ¼stÃ¼ + KaÄŸÄ±t Tuval */}
       <div className="studio-body">
         {editorMode === 'rich' && (
           <EditorVerticalToolbar
@@ -420,15 +433,15 @@ export const BlogStudioView: React.FC<BlogStudioViewProps> = ({
               />
             ) : (
               <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                {/* Büyük Belge Başlığı (Word Başlık Alanı) */}
+                {/* BÃ¼yÃ¼k Belge BaÅŸlÄ±ÄŸÄ± (Word BaÅŸlÄ±k AlanÄ±) */}
                 <input
                   type="text"
                   placeholder={
                     activeTab === 'tr'
-                      ? 'Makale Başlığı...'
+                      ? 'Makale BaÅŸlÄ±ÄŸÄ±...'
                       : activeTab === 'en'
                       ? 'Article Title...'
-                      : 'عنوان المقال...'
+                      : 'Ø¹Ù†ÙˆØ§Ù† Ø§Ù„Ù…Ù‚Ø§Ù„...'
                   }
                   value={currentTitle}
                   onChange={(e) => {
@@ -453,15 +466,15 @@ export const BlogStudioView: React.FC<BlogStudioViewProps> = ({
                   }}
                 />
 
-                {/* Kısa Özet / SEO Açıklaması */}
+                {/* KÄ±sa Ã–zet / SEO AÃ§Ä±klamasÄ± */}
                 <textarea
                   rows={2}
                   placeholder={
                     activeTab === 'tr'
-                      ? 'Kısa Özet / SEO Açıklaması...'
+                      ? 'KÄ±sa Ã–zet / SEO AÃ§Ä±klamasÄ±...'
                       : activeTab === 'en'
                       ? 'Short Summary / SEO Description...'
-                      : 'ملخص المقال / وصف SEO...'
+                      : 'Ù…Ù„Ø®Øµ Ø§Ù„Ù…Ù‚Ø§Ù„ / ÙˆØµÙ SEO...'
                   }
                   value={currentSummary || ''}
                   onChange={(e) => {
@@ -485,9 +498,9 @@ export const BlogStudioView: React.FC<BlogStudioViewProps> = ({
                   }}
                 />
 
-                {/* Zengin Metin Editörü */}
+                {/* Zengin Metin EditÃ¶rÃ¼ */}
                 <RichTextEditor
-                  label={activeTab === 'tr' ? 'Makale İçeriği' : activeTab === 'en' ? 'Article Content' : 'محتوى المقال'}
+                  label={activeTab === 'tr' ? 'Makale Ä°Ã§eriÄŸi' : activeTab === 'en' ? 'Article Content' : 'Ù…Ø­ØªÙˆÙ‰ Ø§Ù„Ù…Ù‚Ø§Ù„'}
                   value={currentContent}
                   onChange={(val) => handleContentChange(val, activeTab)}
                   dir={activeTab === 'ar' ? 'rtl' : 'ltr'}
@@ -499,7 +512,7 @@ export const BlogStudioView: React.FC<BlogStudioViewProps> = ({
         </div>
       </div>
 
-      {/* Yüzen Tablo Paleti (Canlı, Sürüklenebilir) */}
+      {/* YÃ¼zen Tablo Paleti (CanlÄ±, SÃ¼rÃ¼klenebilir) */}
       <FloatingTableInspector
         editor={editorRef.current}
         isOpen={isFloatingTableOpen}
@@ -511,6 +524,14 @@ export const BlogStudioView: React.FC<BlogStudioViewProps> = ({
         isOpen={isPreviewOpen}
         onClose={() => setIsPreviewOpen(false)}
         formData={formData}
+      />
+
+      {/* Stüdyo Kalitesinde Ses & TTS Modalı */}
+      <PostTtsStudioModal
+        isOpen={isTtsOpen}
+        onClose={() => setIsTtsOpen(false)}
+        postId={editingPost?.id || 1}
+        postTitle={formData.title_tr || 'Makale'}
       />
     </div>
   );

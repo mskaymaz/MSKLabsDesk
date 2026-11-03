@@ -19,8 +19,8 @@ export const api = {
       body: JSON.stringify({ username, password }),
     });
     if (!res.ok) {
-      const err = await res.json().catch(() => ({ error: 'Giriş başarısız.' }));
-      throw new Error(err.error || 'Giriş yapılamadı.');
+      const err = await res.json().catch(() => ({ error: 'GiriÅŸ baÅŸarÄ±sÄ±z.' }));
+      throw new Error(err.error || 'GiriÅŸ yapÄ±lamadÄ±.');
     }
     return res.json();
   },
@@ -31,7 +31,7 @@ export const api = {
     const res = await fetch(`${API_BASE}/admin/tickets${query}`, {
       headers: getHeaders(),
     });
-    if (!res.ok) throw new Error('Biletler yüklenemedi.');
+    if (!res.ok) throw new Error('Biletler yÃ¼klenemedi.');
     return res.json();
   },
 
@@ -39,7 +39,7 @@ export const api = {
     const res = await fetch(`${API_BASE}/admin/tickets/${id}`, {
       headers: getHeaders(),
     });
-    if (!res.ok) throw new Error('Bilet detayı yüklenemedi.');
+    if (!res.ok) throw new Error('Bilet detayÄ± yÃ¼klenemedi.');
     return res.json();
   },
 
@@ -49,7 +49,7 @@ export const api = {
       headers: getHeaders(),
       body: JSON.stringify({ reply_content }),
     });
-    if (!res.ok) throw new Error('Cevap gönderilemedi.');
+    if (!res.ok) throw new Error('Cevap gÃ¶nderilemedi.');
     return res.json();
   },
 
@@ -59,7 +59,7 @@ export const api = {
       headers: getHeaders(),
       body: JSON.stringify({ status }),
     });
-    if (!res.ok) throw new Error('Durum güncellenemedi.');
+    if (!res.ok) throw new Error('Durum gÃ¼ncellenemedi.');
     return res.json();
   },
 
@@ -68,7 +68,7 @@ export const api = {
       method: 'POST',
       headers: getHeaders(),
     });
-    if (!res.ok) throw new Error('Yapay zeka analizi çalıştırılamadı.');
+    if (!res.ok) throw new Error('Yapay zeka analizi Ã§alÄ±ÅŸtÄ±rÄ±lamadÄ±.');
     return res.json();
   },
 
@@ -77,7 +77,7 @@ export const api = {
       method: 'POST',
       headers: getHeaders(),
     });
-    if (!res.ok) throw new Error('Toplu analiz çalıştırılamadı.');
+    if (!res.ok) throw new Error('Toplu analiz Ã§alÄ±ÅŸtÄ±rÄ±lamadÄ±.');
     return res.json();
   },
 
@@ -86,7 +86,7 @@ export const api = {
       method: 'POST',
       headers: getHeaders(),
     });
-    if (!res.ok) throw new Error('Çeviri işlemi gerçekleştirilemedi.');
+    if (!res.ok) throw new Error('Ã‡eviri iÅŸlemi gerÃ§ekleÅŸtirilemedi.');
     return res.json() as Promise<{
       success: boolean;
       ticket_id: string;
@@ -104,7 +104,7 @@ export const api = {
     const res = await fetch(`${API_BASE}/admin/comments${query}`, {
       headers: getHeaders(),
     });
-    if (!res.ok) throw new Error('Yorumlar yüklenemedi.');
+    if (!res.ok) throw new Error('Yorumlar yÃ¼klenemedi.');
     return res.json();
   },
 
@@ -114,7 +114,7 @@ export const api = {
       headers: getHeaders(),
       body: JSON.stringify({ status }),
     });
-    if (!res.ok) throw new Error('Yorum durumu güncellenemedi.');
+    if (!res.ok) throw new Error('Yorum durumu gÃ¼ncellenemedi.');
     return res.json();
   },
 
@@ -123,7 +123,7 @@ export const api = {
     const res = await fetch(`${API_BASE}/admin/subscribers`, {
       headers: getHeaders(),
     });
-    if (!res.ok) throw new Error('Aboneler yüklenemedi.');
+    if (!res.ok) throw new Error('Aboneler yÃ¼klenemedi.');
     return res.json();
   },
 
@@ -147,15 +147,15 @@ export const api = {
     });
     if (!res.ok) {
       const err = await res.json().catch(() => ({}));
-      throw new Error(err.error || 'Duyuru gönderilemedi.');
+      throw new Error(err.error || 'Duyuru gÃ¶nderilemedi.');
     }
     return res.json();
   },
 
-  // Headless CMS — Channels
+  // Headless CMS â€” Channels
   async getChannels() {
     const res = await fetch(`${API_BASE}/admin/channels`, { headers: getHeaders() });
-    if (!res.ok) throw new Error('Kanallar yüklenemedi.');
+    if (!res.ok) throw new Error('Kanallar yÃ¼klenemedi.');
     return res.json();
   },
 
@@ -165,7 +165,7 @@ export const api = {
       headers: getHeaders(),
       body: JSON.stringify(data),
     });
-    if (!res.ok) throw new Error('Kanal oluşturulamadı.');
+    if (!res.ok) throw new Error('Kanal oluÅŸturulamadÄ±.');
     return res.json();
   },
 
@@ -175,7 +175,7 @@ export const api = {
       headers: getHeaders(),
       body: JSON.stringify(data),
     });
-    if (!res.ok) throw new Error('Kanal güncellenemedi.');
+    if (!res.ok) throw new Error('Kanal gÃ¼ncellenemedi.');
     return res.json();
   },
 
@@ -188,11 +188,11 @@ export const api = {
     return res.json();
   },
 
-  // Headless CMS — Posts & AI Translate
+  // Headless CMS â€” Posts & AI Translate
   async getPosts(channelId?: string) {
     const query = channelId ? `?channel_id=${channelId}` : '';
     const res = await fetch(`${API_BASE}/admin/posts${query}`, { headers: getHeaders() });
-    if (!res.ok) throw new Error('Yazılar yüklenemedi.');
+    if (!res.ok) throw new Error('YazÄ±lar yÃ¼klenemedi.');
     return res.json();
   },
 
@@ -202,7 +202,7 @@ export const api = {
       headers: getHeaders(),
       body: JSON.stringify(data),
     });
-    if (!res.ok) throw new Error('Yazı eklenemedi.');
+    if (!res.ok) throw new Error('YazÄ± eklenemedi.');
     return res.json();
   },
 
@@ -212,7 +212,7 @@ export const api = {
       headers: getHeaders(),
       body: JSON.stringify(data),
     });
-    if (!res.ok) throw new Error('Yazı güncellenemedi.');
+    if (!res.ok) throw new Error('YazÄ± gÃ¼ncellenemedi.');
     return res.json();
   },
 
@@ -224,7 +224,7 @@ export const api = {
     });
     if (!res.ok) {
       const err = await res.json().catch(() => ({}));
-      throw new Error(err.error || 'Makale durumu güncellenemedi.');
+      throw new Error(err.error || 'Makale durumu gÃ¼ncellenemedi.');
     }
     return res.json();
   },
@@ -237,7 +237,7 @@ export const api = {
     });
     if (!res.ok) {
       const err = await res.json().catch(() => ({}));
-      throw new Error(err.error || 'Yazı silinemedi.');
+      throw new Error(err.error || 'YazÄ± silinemedi.');
     }
     return res.json();
   },
@@ -248,14 +248,14 @@ export const api = {
       headers: getHeaders(),
       body: JSON.stringify(data),
     });
-    if (!res.ok) throw new Error('AI çevirisi yapılamadı.');
+    if (!res.ok) throw new Error('AI Ã§evirisi yapÄ±lamadÄ±.');
     return res.json();
   },
 
-  // Headless CMS — Apps
+  // Headless CMS â€” Apps
   async getApps() {
     const res = await fetch(`${API_BASE}/admin/apps`, { headers: getHeaders() });
-    if (!res.ok) throw new Error('Uygulamalar yüklenemedi.');
+    if (!res.ok) throw new Error('Uygulamalar yÃ¼klenemedi.');
     return res.json();
   },
 
@@ -267,7 +267,7 @@ export const api = {
     });
     if (!res.ok) {
       const err = await res.json().catch(() => ({}));
-      throw new Error(err.error || 'Uygulama oluşturulamadı.');
+      throw new Error(err.error || 'Uygulama oluÅŸturulamadÄ±.');
     }
     return res.json();
   },
@@ -280,7 +280,7 @@ export const api = {
     });
     if (!res.ok) {
       const err = await res.json().catch(() => ({}));
-      throw new Error(err.error || 'Uygulama güncellenemedi.');
+      throw new Error(err.error || 'Uygulama gÃ¼ncellenemedi.');
     }
     return res.json();
   },
@@ -305,7 +305,7 @@ export const api = {
     });
     if (!res.ok) {
       const err = await res.json().catch(() => ({}));
-      throw new Error(err.error || 'Sürüm eklenemedi.');
+      throw new Error(err.error || 'SÃ¼rÃ¼m eklenemedi.');
     }
     return res.json();
   },
@@ -317,15 +317,15 @@ export const api = {
     });
     if (!res.ok) {
       const err = await res.json().catch(() => ({}));
-      throw new Error(err.error || 'Sürüm silinemedi.');
+      throw new Error(err.error || 'SÃ¼rÃ¼m silinemedi.');
     }
     return res.json();
   },
 
-  // Headless CMS — Templates & Ads
+  // Headless CMS â€” Templates & Ads
   async getTemplates() {
     const res = await fetch(`${API_BASE}/admin/templates`, { headers: getHeaders() });
-    if (!res.ok) throw new Error('Şablonlar yüklenemedi.');
+    if (!res.ok) throw new Error('Åablonlar yÃ¼klenemedi.');
     return res.json();
   },
 
@@ -335,14 +335,14 @@ export const api = {
       headers: getHeaders(),
       body: JSON.stringify(data),
     });
-    if (!res.ok) throw new Error('Şablon güncellenemedi.');
+    if (!res.ok) throw new Error('Åablon gÃ¼ncellenemedi.');
     return res.json();
   },
 
-  // Headless CMS — Ads Management (ADS-001 & ADS-002)
+  // Headless CMS â€” Ads Management (ADS-001 & ADS-002)
   async getAds() {
     const res = await fetch(`${API_BASE}/admin/ads`, { headers: getHeaders() });
-    if (!res.ok) throw new Error('Reklam ayarları yüklenemedi.');
+    if (!res.ok) throw new Error('Reklam ayarlarÄ± yÃ¼klenemedi.');
     return res.json();
   },
 
@@ -352,7 +352,7 @@ export const api = {
       headers: getHeaders(),
       body: JSON.stringify({ ...data, slot_key: slotKey }),
     });
-    if (!res.ok) throw new Error('Reklam ayarları kaydedilemedi.');
+    if (!res.ok) throw new Error('Reklam ayarlarÄ± kaydedilemedi.');
     return res.json();
   },
 
@@ -377,7 +377,7 @@ export const api = {
     });
     if (!res.ok) {
       const err = await res.json().catch(() => ({}));
-      throw new Error(err.error || 'Reklam alanı silinemedi.');
+      throw new Error(err.error || 'Reklam alanÄ± silinemedi.');
     }
     return res.json();
   },
@@ -398,21 +398,21 @@ export const api = {
     });
     if (!res.ok) {
       const err = await res.json().catch(() => ({}));
-      throw new Error(err.error || 'Görsel yüklenemedi.');
+      throw new Error(err.error || 'GÃ¶rsel yÃ¼klenemedi.');
     }
     return res.json();
   },
 
-  // Headless CMS — Corporate Pages (CMS-PAGES)
+  // Headless CMS â€” Corporate Pages (CMS-PAGES)
   async getPages() {
     const res = await fetch(`${API_BASE}/admin/pages`, { headers: getHeaders() });
-    if (!res.ok) throw new Error('Kurumsal sayfalar yüklenemedi.');
+    if (!res.ok) throw new Error('Kurumsal sayfalar yÃ¼klenemedi.');
     return res.json();
   },
 
   async getPage(id: string) {
     const res = await fetch(`${API_BASE}/admin/pages/${encodeURIComponent(id)}`, { headers: getHeaders() });
-    if (!res.ok) throw new Error('Sayfa detayı yüklenemedi.');
+    if (!res.ok) throw new Error('Sayfa detayÄ± yÃ¼klenemedi.');
     return res.json();
   },
 
@@ -424,7 +424,7 @@ export const api = {
     });
     if (!res.ok) {
       const err = await res.json().catch(() => ({}));
-      throw new Error(err.error || 'Sayfa oluşturulamadı.');
+      throw new Error(err.error || 'Sayfa oluÅŸturulamadÄ±.');
     }
     return res.json();
   },
@@ -437,7 +437,7 @@ export const api = {
     });
     if (!res.ok) {
       const err = await res.json().catch(() => ({}));
-      throw new Error(err.error || 'Sayfa güncellenemedi.');
+      throw new Error(err.error || 'Sayfa gÃ¼ncellenemedi.');
     }
     return res.json();
   },
@@ -466,7 +466,81 @@ export const api = {
     });
     if (!res.ok) {
       const err = await res.json().catch(() => ({}));
-      throw new Error(err.error || 'AI çeviri başarısız oldu.');
+      throw new Error(err.error || 'AI Ã§eviri baÅŸarÄ±sÄ±z oldu.');
+    }
+    return res.json();
+  },
+
+  // TTS & Audio Management (CMS-TTS-002)
+  async getTtsStatus(postId: number | string) {
+    const res = await fetch(`${API_BASE}/admin/tts/status/${postId}`, {
+      headers: getHeaders(),
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.error || 'TTS durum bilgisi alınamadı.');
+    }
+    return res.json();
+  },
+
+  async generateTts(postId: number | string, language: string) {
+    const numericPostId = typeof postId === 'string' ? parseInt(postId, 10) || 1 : postId;
+    const res = await fetch(`${API_BASE}/admin/tts/generate`, {
+      method: 'POST',
+      headers: {
+        ...getHeaders(),
+        'X-Idempotency-Key': `tts_gen_${numericPostId}_${language}_${Date.now()}`,
+      },
+      body: JSON.stringify({ postId: numericPostId, language }),
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.error || 'TTS ses üretimi başlatılamadı.');
+    }
+    return res.json();
+  },
+
+  async regenerateTts(postId: number | string, language: string) {
+    const numericPostId = typeof postId === 'string' ? parseInt(postId, 10) || 1 : postId;
+    const res = await fetch(`${API_BASE}/admin/tts/regenerate`, {
+      method: 'POST',
+      headers: {
+        ...getHeaders(),
+        'X-Idempotency-Key': `tts_regen_${numericPostId}_${language}_${Date.now()}`,
+      },
+      body: JSON.stringify({ postId: numericPostId, language }),
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.error || 'TTS ses yeniden üretimi başlatılamadı.');
+    }
+    return res.json();
+  },
+
+  async approveTts(audioId: number, postId: number | string, language: string) {
+    const numericPostId = typeof postId === 'string' ? parseInt(postId, 10) || 1 : postId;
+    const res = await fetch(`${API_BASE}/admin/tts/approve`, {
+      method: 'POST',
+      headers: getHeaders(),
+      body: JSON.stringify({ audioId, postId: numericPostId, language }),
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.error || 'Ses onaylanamadı.');
+    }
+    return res.json();
+  },
+
+  async unpublishTts(audioId: number, postId: number | string, language: string) {
+    const numericPostId = typeof postId === 'string' ? parseInt(postId, 10) || 1 : postId;
+    const res = await fetch(`${API_BASE}/admin/tts/unpublish`, {
+      method: 'POST',
+      headers: getHeaders(),
+      body: JSON.stringify({ audioId, postId: numericPostId, language }),
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.error || 'Ses yayından kaldırılamadı.');
     }
     return res.json();
   },

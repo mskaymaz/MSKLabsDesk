@@ -1,6 +1,23 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 📌 Son Güncelleme [03.11.2026 - 14:05] — CMS-TTS-002 YÜKSEK KALİTELİ MP3 ÜRETİMİ, TELAFFUZ NORMALİZASYONU VE STÜDYO ONAY PANELİ [✓]
+* **Yapılan İşlemler:**
+  1. **Metin Temizleme, Telaffuz ve Segmentasyon Motoru (`ttsSanitizer.ts`):**
+     - HTML/Markdown etiketlerinden arındırma, kod bloklarını dönüştürme ve görsel/link URL'lerini kaldırma filtreleri kodlandı.
+     - TR ("MSK Labs", "TL", "km", "dk", "vb.", "bkz."), EN ("e.g.", "API", "URL", "etc.") ve Fasih AR (hareke koruma) telaffuz normalizasyonları eklendi.
+     - Cümle ve paragraf sınırlarında 800 karakterlik parça segmentasyonu ve tahmini okuma süresi hesaplaması entegre edildi.
+  2. **Sunucu Asenkron Üretim Entegrasyonu (`adminTtsGenerate.ts`):**
+     - `handleAdminTTSGenerate` ve `handleAdminTTSRegenerate` rotaları `prepareTtsPayload` ile bağlandı; makale içeriği telaffuz filtresinden geçirilerek ses kuyruğuna iletildi.
+  3. **Stüdyo Ses & MP3 Onay Paneli (`PostTtsStudioModal.tsx` & `BlogStudioView.tsx`):**
+     - Stüdyo araç çubuğuna "Ses" butonu eklendi.
+     - TR / EN / AR dil sekmeleri, durum rozeti (`DRAFT`, `APPROVED`, `STALE`, `GENERATING`), HTTP 206 stream oynatıcı ve "Stüdyo Sesi Üret", "Onayla ve Yayına Al", "Yayından Kaldır" butonları bağlandı.
+  4. **Doğrulama ve Testler:**
+     - `backend/tests/apiTtsSanitizer.test.ts` eklendi; tüm backend testleri (113/113 test) %100 yeşil tamamlandı.
+     - Frontend TypeScript ve PWA derlemesi hatasız geçti. `tasks.md` üzerinde `CMS-TTS-002` kapatıldı.
+
+---
+
 ## 📌 Son Güncelleme [03.11.2026 - 12:05] — COM-OUTBOUND-002 ÇİFT KADEMELİ GİDEN E-POSTA MİMARİSİ VE KOTA/FLOODING KORUMASI [✓]
 * **Yapılan İşlemler:**
   1. **Çift Kademeli Gönderim Adaptörü (Resend & Brevo):**
