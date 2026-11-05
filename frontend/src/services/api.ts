@@ -1,4 +1,4 @@
-import type { Ticket, TicketDetailResponse, CommentItem, Subscriber, StudioBlock } from '../types';
+import type { Ticket, TicketDetailResponse, CommentItem, Subscriber, StudioBlock, UnifiedInboxResponse } from '../types';
 
 const API_BASE = import.meta.env.VITE_API_URL || (typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1' ? 'https://msklabsdesk-backend.msklabs-org.workers.dev/api' : 'http://localhost:8787/api');
 
@@ -170,6 +170,13 @@ export const api = {
       headers: getHeaders(),
     });
     if (!res.ok) throw new Error('Bülten geçmişi yüklenemedi.');
+    return res.json();
+  },
+
+  async getUnifiedInbox(type?: string): Promise<UnifiedInboxResponse> {
+    const url = type && type !== 'all' ? `${API_BASE}/admin/inbox/unified?type=${type}` : `${API_BASE}/admin/inbox/unified`;
+    const res = await fetch(url, { headers: getHeaders() });
+    if (!res.ok) throw new Error('Bildirimler yüklenemedi.');
     return res.json();
   },
 

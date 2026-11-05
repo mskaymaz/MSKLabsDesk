@@ -39,12 +39,14 @@
 
 ---
 
-### 📍 GÜNCEL DURUM VE KALINAN YER (SABAH DEVAM EDİLECEK — 03.11.2026 - 16:35)
-* **Aktif Çalışma Standartları:** Hem `webMSKLabs` hem `MSKLabsDesk` repolarında doğrudan `main` dalındayız. 4. Aşama (Duyuru Modülü, Aboneler & Kategori Sayım Vitrini, E-Bülten Dikey Editör & İletim Raporu, Sistem Ayarları & Bakım Modu) %100 tamamlandı ve pushlandı.
-* **Sırada Başlanacak Görev:**
-  - **5. AŞAMA: BİRLEŞİK BİLDİRİM & MESAJLAŞMA MERKEZİ (INBOX HUB)**
-    * 5.1 Ortak Veri Toplama Motoru (`/api/v1/inbox/unified`)
-    * 5.2 Minimalist Bildirim & Mesajlaşma Gösterge Paneli
+### 📍 GÜNCEL DURUM VE KALINAN YER (05.11.2026 - 12:30)
+* **Aktif Çalışma Standartları:** Hem `webMSKLabs` hem `MSKLabsDesk` repolarında doğrudan `main` dalındayız. 5. Aşama (Birleşik Bildirim & Mesajlaşma Merkezi - Inbox Hub: API & Popover Arayüzü) %100 tamamlandı ve test edildi.
+* **Yol Haritası Durumu:**
+  - 1. Aşama (SEO & Yasal Sayfalar): [✓] Tamamlandı
+  - 2. Aşama (Canlı Ana Dal Geçişi): [✓] Tamamlandı
+  - 3. Aşama (Kurumsal E-Posta Altyapısı): [✓] Tamamlandı
+  - 4. Aşama (Admin Paneli Eksiklikleri): [✓] Tamamlandı
+  - 5. Aşama (Birleşik Bildirim & Inbox Hub): [✓] Tamamlandı
 
 ---
 
@@ -74,9 +76,9 @@
 
 ---
 
-### 📋 5. AŞAMA: BİRLEŞİK BİLDİRİM & MESAJLAŞMA UYGULAMASI (INBOX HUB)
-* [ ] **5.1 Ortak Veri Toplama Motoru:**
-  - [ ] Blog yorumları, destek talepleri ve gelen kurumsal e-postaları tek API uç noktasında (`/api/v1/inbox/unified`) toplayan Edge servis.
-* [ ] **5.2 Minimalist Arayüz (Masaüstü & Mobil Uyumlu):**
-  - [ ] Yeni gelen bildirimleri rozet ve anlık durumla gösteren hafif gösterge paneli.
-  - [ ] İlgili öğeye (Yorum, Destek Bileti, E-Posta) tıklandığında otomatik oturumla doğrudan işlem ekranına yönlendirme.
+### 📋 5. AŞAMA: BİRLEŞİK BİLDİRİM & MESAJLAŞMA UYGULAMASI (INBOX HUB) (TAMAMLANDI — 05.11.2026 - 12:30)
+* [x] **5.1 Ortak Veri Toplama Motoru:**
+  - [x] Blog yorumları, destek talepleri ve gelen kurumsal e-postaları tek API uç noktasında (`/api/v1/inbox/unified`) toplayan Edge servis.
+* [x] **5.2 Minimalist Arayüz (Masaüstü & Mobil Uyumlu):**
+  - [x] Yeni gelen bildirimleri rozet ve anlık durumla gösteren hafif gösterge paneli (`UnifiedInboxPopover`).
+  - [x] İlgili öğeye (Yorum, Destek Bileti, E-Posta) tıklandığında doğrudan işlem ekranına yönlendirme.

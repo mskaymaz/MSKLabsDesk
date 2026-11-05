@@ -379,4 +379,29 @@ export interface PageFormData {
   display_order: number;
 }
 
+export interface UnifiedInboxItem {
+  id: string;
+  type: 'ticket' | 'email' | 'comment';
+  title: string;
+  sender_name: string;
+  sender_email: string;
+  snippet: string;
+  status: string;
+  urgency?: string;
+  category?: string;
+  target_route: 'tickets' | 'comments';
+  created_at: string;
+}
+
+export interface UnifiedInboxResponse {
+  success: boolean;
+  counts: {
+    total_unread: number;
+    tickets: number;
+    emails: number;
+    comments: number;
+  };
+  items: UnifiedInboxItem[];
+}
+
 

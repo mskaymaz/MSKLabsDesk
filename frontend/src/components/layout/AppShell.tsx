@@ -60,6 +60,7 @@ export const AppShell: React.FC<AppShellProps> = ({
             onOpenSearch={() => setIsSearchOpen(true)}
             onToggleMobileMenu={() => setIsMobileMenuOpen((prev) => !prev)}
             pendingCount={pendingTicketCount + pendingCommentCount}
+            onNavigate={setActiveTab}
           />
           <div className="page-content">
             {children}

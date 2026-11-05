@@ -1,15 +1,17 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Search, Bell, User, Sun, Moon, Menu, Palette } from 'lucide-react';
 import type { TabType } from '../Sidebar';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
 import { useCustomizer } from '../../context/CustomizerContext';
+import { UnifiedInboxPopover } from '../inbox/UnifiedInboxPopover';
 
 export interface TopbarProps {
   activeTab: TabType;
   onOpenSearch: () => void;
   pendingCount?: number;
   onToggleMobileMenu?: () => void;
+  onNavigate?: (tab: TabType) => void;
 }
 
 const tabLabels: Record<TabType, string> = {
@@ -31,10 +33,17 @@ export const Topbar: React.FC<TopbarProps> = ({
   onOpenSearch,
   pendingCount = 0,
   onToggleMobileMenu,
+  onNavigate,
 }) => {
   const { user } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const { openCustomizer } = useCustomizer();
+  const [isInboxOpen, setIsInboxOpen] = useState(false);
+  const [inboxCount, setInboxCount] = useState(pendingCount);
+
+  useEffect(() => {
+    setInboxCount(pendingCount);
+  }, [pendingCount]);
 
   return (
     <header
@@ -109,11 +118,14 @@ export const Topbar: React.FC<TopbarProps> = ({
         <div style={{ position: 'relative' }}>
           <button
             type="button"
+            onClick={() => setIsInboxOpen((prev) => !prev)}
             aria-label="Bildirimler"
+            title="Birleşik Bildirim Merkezi"
             style={{
-              background: 'transparent',
-              border: 'none',
-              color: 'var(--text-secondary)',
+              background: isInboxOpen ? 'rgba(56, 189, 248, 0.15)' : 'transparent',
+              border: isInboxOpen ? '1px solid var(--accent-cyan)' : 'none',
+              borderRadius: 'var(--radius-sm)',
+              color: isInboxOpen ? 'var(--accent-cyan)' : 'var(--text-secondary)',
               cursor: 'pointer',
               padding: '4px',
               width: '28px',
@@ -121,23 +133,45 @@ export const Topbar: React.FC<TopbarProps> = ({
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
+              position: 'relative',
+              transition: 'all 0.15s ease',
             }}
           >
             <Bell size={16} />
-            {pendingCount > 0 && (
+            {inboxCount > 0 && (
               <span
                 style={{
                   position: 'absolute',
-                  top: '3px',
-                  right: '3px',
-                  width: '6px',
-                  height: '6px',
-                  borderRadius: '50%',
-                  background: 'var(--accent-amber)',
+                  top: '-2px',
+                  right: '-3px',
+                  minWidth: '15px',
+                  height: '15px',
+                  borderRadius: '10px',
+                  background: 'var(--accent-amber, #f59e0b)',
+                  color: '#0f172a',
+                  fontSize: '0.65rem',
+                  fontWeight: 800,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  padding: '0 3px',
+                  border: '1.5px solid var(--bg-topbar)',
+                  lineHeight: 1,
                 }}
-              />
+              >
+                {inboxCount > 99 ? '99+' : inboxCount}
+              </span>
             )}
           </button>
+
+          <UnifiedInboxPopover
+            isOpen={isInboxOpen}
+            onClose={() => setIsInboxOpen(false)}
+            onNavigate={(tab) => {
+              if (onNavigate) onNavigate(tab);
+            }}
+            onCountUpdate={(cnt) => setInboxCount(cnt)}
+          />
         </div>
 
         <button

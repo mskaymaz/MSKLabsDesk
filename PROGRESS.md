@@ -1,6 +1,21 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 📌 Son Güncelleme [05.11.2026 - 12:30] — 5. AŞAMA: BİRLEŞİK BİLDİRİM & MESAJLAŞMA MERKEZİ (INBOX HUB) [✓]
+* **Yapılan İşlemler:**
+  1. **Ortak Veri Toplama Motoru (`adminInboxUnified.ts` & `index.ts`):**
+     - Destek biletleri (`messages`), gelen kurumsal e-postalar (`category = 'email'`) ve onay bekleyen blog yorumlarını (`comments`) tek API sözleşmesinde toplayan `GET /api/v1/inbox/unified` endpoint'i yazıldı.
+     - Tür bazlı (`tickets`, `emails`, `comments`) ve kümülatif `total_unread` sayaçları, göreceli zaman ve aciliyet filtrelemesi sağlandı.
+     - `backend/tests/apiInboxUnified.test.ts` test paketi yazıldı; 7/7 senaryo ve tüm backend testleri (121/121 PASS) %100 doğrulandı.
+  2. **Minimalist Bildirim Merkezi Arayüzü (`UnifiedInboxPopover.tsx` & `Topbar.tsx`):**
+     - Üst çubuktaki (Topbar) bildirim zili canlı okunmamış sayacı ve açılır bildirim çekmecesi (`UnifiedInboxPopover`) ile entegre edildi.
+     - Tümü, Destek, E-Posta ve Yorumlar sekmeleriyle tek tık süzme, göreceli zaman dökümü ("X dk önce"), içerik özeti ve boş durum kartı bağlandı.
+     - Bir bildirime tıklandığında doğrudan ilgili modüle (`/tickets` veya `/comments`) akıllı yönlendirme ve çekmeceyi kapatma mantığı kuruldu.
+  3. **Doğrulama ve Derleme:**
+     - Frontend TypeScript ve PWA derlemesi (`tsc -b && vite build`) 0 hata ile başarıyla tamamlandı.
+
+---
+
 ## 📌 Son Güncelleme [03.11.2026 - 15:55] — ABONE İLGİ ALANI SAYIMLARI VE KATEGORİ SEÇİM VİTRİNİ [✓]
 * **Yapılan İşlemler:**
   1. **D1 Tercih Birleştirme ve Kategori Sayım API'si (`adminBroadcast.ts`):**
