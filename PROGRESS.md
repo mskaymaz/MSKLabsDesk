@@ -1,6 +1,18 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 📌 Son Güncelleme [06.11.2026 - 16:30] — SİSTEM AYARLARI VE ÇOK KATMANLI BAKIM MODU (UNDER CONSTRUCTION) YOL HARİTASI [✓]
+* **Yapılan İşlemler:**
+  1. **Yol Haritası & Mimari Tasarım (`tasks.md` & `ROADMAP_TODO.md`):**
+     - Sistem Ayarları ve çok katmanlı (Global & Granular/Rota bazlı) Bakım Modu mimarisi `tasks.md` içerisine `SYS-SETTINGS-001` başlığıyla 4 aşamalı ve 14 alt adımlı olarak işlendi.
+     - Arama motoru indekslerini korumak için `HTTP 503 Service Unavailable` ve `Retry-After: 3600` başlığı mimarinin temel ilkesi olarak kilitlendi.
+     - Yönetici muafiyeti (Admin Bypass), Cloudflare Edge in-memory cache ($0 maliyet ilkesi), web vitrininde tek parametrik `maintenance.html` şablonu ve sekmeli yönetim paneli arayüzü takvime bağlandı.
+  2. **Senkronizasyon & Dokümantasyon:**
+     - `ROADMAP_TODO.md` 6. Aşama olarak güncellendi.
+     - Değişiklikler commit ve push için hazırlandı.
+
+---
+
 ## 📌 Son Güncelleme [06.11.2026 - 10:42] — KAYDIRMA ÇUBUKLARI (SCROLLBAR) GENİŞLİĞİ VE TUTULABİLİRLİK İYİLEŞTİRMESİ [✓]
 * **Yapılan İşlemler:**
   1. **Scrollbar Ebat ve Tutuş Ergonomisi (`index.css`):**

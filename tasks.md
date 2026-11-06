@@ -34,6 +34,41 @@
 
 ## 🚨 ÖNCELİKLİ YENİ GÖREVLER (IMMEDIATE ACTION BACKLOG)
 
+### SYS-SETTINGS-001 — Çok Katmanlı Sistem Ayarları & Granular Bakım Modu (Under Construction Hub) [ ]
+- **Amaç:** MSK Labs yönetim panelinde Sistem Ayarları ekranını modern, sekmeli ve tasarım sistemine tam uyumlu bir mimariye kavuşturmak; tüm site için genel (global) ve sayfa/rota bazlı (granular) çalışan dinamik "Bakım / Yapım Aşamasında" (Under Construction) motorunu SEO uyumlu (`HTTP 503 Service Unavailable`), yönetici muafiyetli (admin bypass) ve sıfır maliyetli ($0 Edge Cache) olarak inşa etmek.
+- **Kapsam:** `MSKLabsDesk/frontend/src/views/SettingsView.tsx`, `MSKLabsDesk/frontend/src/components/settings/*`, `MSKLabsDesk/backend/src/routes/cmsTemplates.ts`, `MSKLabsDesk/backend/src/index.ts`, `webMSKLabs/maintenance.html`.
+- **Mimari Prensipler:**
+  1. **HTTP 503 & SEO Güvencesi:** Arama motorlarının sayfayı silmemesi için bakım yanıtları daima `503 Service Unavailable` ve `Retry-After: 3600` başlığı ile döner.
+  2. **Yönetici Muafiyeti (Admin Bypass):** Yetkili admin oturumları bakım kalkanına takılmaz, canlı sayfayı doğrudan test edebilir.
+  3. **Tek Parametrik Şablon:** Her sayfaya ayrı dosya açmak yerine rota adı, açıklama, ETA ve ana sayfaya dönüş butonu alan tek dinamik şablon kullanılır.
+  4. **Modülerlik & Satır Sınırı:** Yardımcı bileşenler <= 400-450 satır kuralına uygun geliştirilir; `alert()` çağrıları tamamen tasfiye edilir.
+
+#### 📋 Takip Edilebilir Aşama ve Görev Listesi:
+
+##### Faz 1: D1 Şema & Backend API Genişletmesi (Bakım Modu & Rota Matrisi) [ ]
+- [ ] **Task 1.1 — D1 `site_settings` Şema Genişletmesi:** `site_templates` tablosundaki `site_settings` JSON sözleşmesine `maintenance` nesnesinin (`global: boolean`, `message: string`, `eta: string`, `routes: [{ path: string, title: string, enabled: boolean }]`, `allowed_ips: string[]`) eklenmesi.
+- [ ] **Task 1.2 — Cloudflare Worker Bakım Middleware'i:** Worker yönlendirme katmanında rota yakalama filtresi: Global aktifse tüm genel rotalara, granular aktifse eşleşen rotalara (`/apps.html`, `/blog`, `/destek.html` vb.) `HTTP 503 Service Unavailable` ve `Retry-After: 3600` başlığı üretilmesi.
+- [ ] **Task 1.3 — Yönetici Muafiyeti (Admin Bypass Kontrolü):** Geçerli admin oturumu / `ADMIN_JWT` taşıyan yetkili yöneticilerin bakım kalkanından otomatik muaf tutulması.
+- [ ] **Task 1.4 — Edge Bellek Önbellekleme (D1 Kota Koruması):** Her ziyaretçi isteğinde D1 okuması yapılmasını engellemek için ayarların Cloudflare Worker üzerinde 30-60 saniye süreyle in-memory önbelleklenmesi ($0 maliyet ilkesi).
+
+##### Faz 2: Web Vitrini Parametrik Bakım Şablonu (webMSKLabs) [ ]
+- [ ] **Task 2.1 — Dinamik Bakım Sayfası (`maintenance.html`):** Tek parametrik, modern, mobil uyumlu, kurumsal kimliğe uygun ve çok dilli (TR/EN/AR) bakım şablonunun tasarlanması (Bakımdaki modül başlığı, bakım sebebi, tahmini bitiş saati rozeti ve "Ana Sayfaya Dön" butonu).
+- [ ] **Task 2.2 — Alt Rota Entegrasyonu & Yönlendirme Koruması:** Web vitrininde bakıma alınan alt rotaların (`/apps.html`, `/blog` vb.) bakım şablonuna yönlendirilmesi veya Worker tarafından doğrudan servis edilmesi.
+
+##### Faz 3: MSKLabsDesk Sistem Ayarları Arayüzü (Sekmeli Modüler Düzen) [ ]
+- [ ] **Task 3.1 — Sekmeli Navigasyon Çerçevesi (`SettingsView.tsx`):** Tek dikey sayfa yerine *Genel*, *E-Posta & İletişim*, *Güvenlik & Bot Koruması*, *Bakım & Rota Matrisi* ve *Altyapı & API* sekmeli mimarisi (her alt bileşen <= 450 satır).
+- [ ] **Task 3.2 — Tasarım Sistemi Standartlaştırması:** Ham `<input>` alanlarının `<Input>`, `<Switch>` bileşenlerine taşınması; `alert()` çağrılarının modern `toast` bildirimleriyle değiştirilmesi.
+- [ ] **Task 3.3 — Bakım Modu & Rota Seçim Matrisi Bileşeni (`MaintenanceSettingsSection.tsx`):** Genel site anahtarı (Global Switch), özel bakım mesajı, tahmini bitiş saati (ETA) girdisi ve sistemdeki temel rotaları (`/apps.html`, `/blog`, `/destek.html`, `/about.html`, `/cookies.html` vb.) listeleyen çoklu seçim matrisi.
+- [ ] **Task 3.4 — Canlı Altyapı & API Sağlık Testi (Health Ping):** Resend, Brevo, Gemini AI ve Cloudflare D1/R2 servis hatlarını test eden ve anlık gecikme (ms) gösteren "Bağlantıyı Sına" butonu ve canlı gösterge paneli.
+- [ ] **Task 3.5 — D1 Sistem Telemetrisi & Veritabanı Bilgi Kartı:** D1 veritabanı boyutu, migration durumu, aktif tablo satır sayıları ve admin yetki matrisi görünürlüğü.
+
+##### Faz 4: Uçtan Uca Doğrulama, Test ve Canlı Entegrasyon [ ]
+- [ ] **Task 4.1 — Backend Entegrasyon Testleri:** Bakım modu 503 yanıtı, admin bypass koruması ve API sağlık testi endpoint'leri için Vitest test senaryolarının yazılması.
+- [ ] **Task 4.2 — Frontend TypeScript & PWA Derlemesi:** `tsc -b && vite build` ile 0 hata doğrulaması.
+- [ ] **Task 4.3 — Canlı/Yerel Tarayıcı Doğrulaması:** Hem global hem de rota bazlı granular bakım modu akışının yerel sunucularda test edilerek onaylanması.
+
+---
+
 ### CLOUDFLARE-STAGING-001 — Canlı Uzak Ortam (Cloudflare dev & panel) Kurulum ve Dağıtım Planı [*]
 - **Amaç:** Yereldeki test/geliştirme sürecini, main dalını ve canlı siteyi riske atmadan; Cloudflare uzak altyapısında (panel.msklabs.org ve dev.msklabs.org) canlı test edilebilir, sıfır kod değişikliğiyle main'e taşınabilir ve Cloudflare build kotasını tüketmeyen bir mimaride yayına almak.
 - **Mimari Prensipler:**

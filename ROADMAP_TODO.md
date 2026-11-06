@@ -39,14 +39,15 @@
 
 ---
 
-### 📍 GÜNCEL DURUM VE KALINAN YER (05.11.2026 - 12:30)
-* **Aktif Çalışma Standartları:** Hem `webMSKLabs` hem `MSKLabsDesk` repolarında doğrudan `main` dalındayız. 5. Aşama (Birleşik Bildirim & Mesajlaşma Merkezi - Inbox Hub: API & Popover Arayüzü) %100 tamamlandı ve test edildi.
+### 📍 GÜNCEL DURUM VE KALINAN YER (06.11.2026 - 16:30)
+* **Aktif Çalışma Standartları:** Hem `webMSKLabs` hem `MSKLabsDesk` repolarında doğrudan `main` dalındayız. 5. Aşama (Birleşik Bildirim & Mesajlaşma Merkezi - Inbox Hub), 14px scrollbar ergonomisi ve responsive düzen kilitleri %100 tamamlandı ve pushlandı.
 * **Yol Haritası Durumu:**
   - 1. Aşama (SEO & Yasal Sayfalar): [✓] Tamamlandı
   - 2. Aşama (Canlı Ana Dal Geçişi): [✓] Tamamlandı
   - 3. Aşama (Kurumsal E-Posta Altyapısı): [✓] Tamamlandı
   - 4. Aşama (Admin Paneli Eksiklikleri): [✓] Tamamlandı
   - 5. Aşama (Birleşik Bildirim & Inbox Hub): [✓] Tamamlandı
+  - 6. Aşama (Sistem Ayarları & Çok Katmanlı Bakım Modu): [ ] Başlanıyor
 
 ---
 
@@ -82,3 +83,25 @@
 * [x] **5.2 Minimalist Arayüz (Masaüstü & Mobil Uyumlu):**
   - [x] Yeni gelen bildirimleri rozet ve anlık durumla gösteren hafif gösterge paneli (`UnifiedInboxPopover`).
   - [x] İlgili öğeye (Yorum, Destek Bileti, E-Posta) tıklandığında doğrudan işlem ekranına yönlendirme.
+
+---
+
+### 📋 6. AŞAMA: SİSTEM AYARLARI VE ÇOK KATMANLI BAKIM MODU (UNDER CONSTRUCTION HUB) [ ]
+* [ ] **6.1 D1 Şema & Backend API Genişletmesi:**
+  - [ ] `site_settings` JSON şemasına `maintenance` nesnesinin (`global`, `message`, `eta`, `routes`, `allowed_ips`) eklenmesi.
+  - [ ] Cloudflare Worker üzerinde eşleşen rotalara `HTTP 503 Service Unavailable` ve `Retry-After: 3600` başlığı üreten middleware.
+  - [ ] Geçerli yönetici oturumu taşıyan istekler için Admin Bypass muafiyeti.
+  - [ ] $0 kota ilkesi için Cloudflare Worker in-memory edge cache (30-60s TTL).
+* [ ] **6.2 Web Vitrini Parametrik Bakım Şablonu (`webMSKLabs`):**
+  - [ ] Dinamik, mobil uyumlu ve çok dilli (TR/EN/AR) `maintenance.html` şablonu (modül adı, açıklama, ETA rozeti, ana sayfaya dönüş).
+  - [ ] Alt rotalar (`/apps.html`, `/blog` vb.) için dinamik yönlendirme/sunum.
+* [ ] **6.3 MSKLabsDesk Yönetim Paneli Sistem Ayarları Arayüzü:**
+  - [ ] `SettingsView.tsx` sekmeli modüler mimari (*Genel*, *E-Posta*, *Güvenlik*, *Bakım & Rota Matrisi*, *Altyapı & API*).
+  - [ ] Ham input'ların UI bileşenlerine (`Input`, `Switch`) geçirilmesi ve `alert()` çağrılarının kaldırılıp toast'a bağlanması.
+  - [ ] `MaintenanceSettingsSection.tsx`: Global switch + sistemdeki rotaların (`/apps.html`, `/blog`, `/destek.html` vb.) çoklu seçim matrisi ve ETA girdisi.
+  - [ ] Canlı Altyapı & API Sağlık Testi (Health Ping): Resend, Brevo, Gemini AI ve D1/R2 gecikme ölçümü ve "Bağlantıyı Sına" aksiyonu.
+  - [ ] D1 Sistem Telemetrisi & Veritabanı Bilgi Kartı.
+* [ ] **6.4 Test, Doğrulama ve Canlı Yayın:**
+  - [ ] Backend 503 ve admin bypass Vitest entegrasyon testleri.
+  - [ ] Frontend `tsc -b && vite build` sıfır hata derlemesi.
+  - [ ] Yerel tarayıcıda global ve granular bakım testi doğrulaması.
