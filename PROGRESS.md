@@ -1,7 +1,18 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
-## 📌 Son Güncelleme [06.11.2026 - 10:40] — DUYURU YAPISI & ROOT SEVİYESİ YATAY SCROLL MOTORU KESİN ÇÖZÜMÜ [✓]
+## 📌 Son Güncelleme [06.11.2026 - 10:42] — KAYDIRMA ÇUBUKLARI (SCROLLBAR) GENİŞLİĞİ VE TUTULABİLİRLİK İYİLEŞTİRMESİ [✓]
+* **Yapılan İşlemler:**
+  1. **Scrollbar Ebat ve Tutuş Ergonomisi (`index.css`):**
+     - Eski 6px olan ince kaydırma çubuğu genişlik ve yüksekliği 14px'e çıkarıldı (2.5 katından fazla kalınlaştırılarak fare ile rahatça kavranabilir hale getirildi).
+     - Tutamaç (`thumb`) için `min-height: 36px`, `min-width: 36px` asgari sınırları, `border: 3px solid var(--bg-main)` boşluğu ve `background-clip: padding-box` efekti tanımlandı.
+     - Üzerine gelindiğinde (hover) belirgin `--accent-primary` rengi, tıklandığında (active) koyu mor vurgu eklendi.
+     - Açık tema (`[data-theme="light"]`) ve Firefox (`scrollbar-width: auto`) uyumluluğu sağlandı.
+  2. **Doğrulama ve Derleme:**
+     - Frontend derlemesi (`tsc -b && vite build`) 0 hata ile geçti (575ms).
+     - Yerel commit atıldı (`e1d7aef`).
+
+---
 * **Yapılan İşlemler:**
   1. **Kök HTML & Body & Root Yatay Kaydırma Motoru (`index.css`):**
      - Tarayıcı pencere daraltmalarında `body`'nin daralıp scrollbar üretimini engellemesi sorunu çözüldü; `html { overflow-x: auto; overflow-y: scroll; }`, `body { min-width: 1200px; overflow-x: visible; }` ve `#root { min-width: 1200px; width: 100%; }` olarak kilitlendi.
