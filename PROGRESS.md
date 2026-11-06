@@ -1,7 +1,30 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
-## 📌 Son Güncelleme [05.11.2026 - 12:30] — 5. AŞAMA: BİRLEŞİK BİLDİRİM & MESAJLAŞMA MERKEZİ (INBOX HUB) [✓]
+## 📌 Son Güncelleme [06.11.2026 - 10:05] — MASAÜSTÜ YATAY DARALMADA BÜZÜŞMEYİ ÖNLEME, YATAY SCROLL & TUVAL BOYUT İZOLASYONU [✓]
+* **Yapılan İşlemler:**
+  1. **Genel Arayüz Yatay Kaydırma & Taban Genişlik Standardı (`index.css` & `responsive.css`):**
+     - `body` üzerindeki `overflow-x: hidden;` kaldırılarak `overflow-x: auto;` getirildi; tarayıcı daraltıldığında yatay kaydırma çubuğu serbest bırakıldı.
+     - Masaüstü görünümünde `.app-container` için taban genişlik `min-width: 1200px;` ve `flex-shrink: 0;` tanımlandı.
+     - `.main-content` ve `.page-content` için `min-width: 940px;` belirlendi. Sidebar (260px) ile birlikte pencere daraldığında formların, tabloların ve butonların büzüşmesi engellendi.
+     - `@media (max-width: 767px)` mobil modunda `min-width: 100% !important;` tanımlanarak mobil ekran esnekliği korundu.
+  2. **Taşıyıcı ve Üst Bar İzolasyonu (`AppShell.tsx`, `Sidebar.tsx`, `Topbar.tsx`):**
+     - `Sidebar.tsx`: `minWidth: '260px'`, `flexShrink: 0` eklenerek daralmada ezilmesi engellendi.
+     - `Topbar.tsx`: `minWidth: '940px'`, `flexShrink: 0` eklenerek arama, rozetler ve eylem düğmelerinin nizamı korundu.
+     - `AppShell.tsx`: Main taşıyıcı üzerindeki ezici inline `minWidth: 0` kaldırıldı.
+  3. **Editör ve Araç Çubuğu Boyut İzolasyonu (`editor.css` & `EditorToolbar.tsx`):**
+     - `.rich-editor-wrapper` ve `.editor-ribbon-toolbar` için `min-width: 680px; flex-shrink: 0; overflow-x: auto;` uygulandı; araçların alt alta yığılması engellendi.
+  4. **Stüdyo ve Tuval/Mockup Boyutlarının Sabitlenmesi (`BlogStudioView.tsx`, `PageStudioView.tsx`, `AppStudioCanvas.tsx`, `AdLiveCanvas.tsx`):**
+     - Blog Stüdyosu (`BlogStudioView.tsx`): Kağıt Tuval (`word-paper-canvas`) için `width: canvasWidth; minWidth: canvasWidth !== '100%' ? canvasWidth : '780px'; flexShrink: 0;` uygulandı. Tuval boyutu tarayıcı genişliğine göre değil, yalnızca seçilen sayfa ebat ayarına (`canvasWidth`) göre sabitlendi; daralmada büzüşme kapatıldı.
+     - Sayfa Stüdyosu (`PageStudioView.tsx`, `StudioTopBar.tsx`, `PageCanvas.tsx`): Üst bar ve merkez sahne için `min-width: 1000px; flex-shrink: 0;` uygulandı.
+     - Uygulama Stüdyosu (`app-studio.css`): `.app-studio-container` vitrin kartı `width: 900px; min-width: 900px; flex-shrink: 0;` ile sabitlendi.
+     - Reklam Canlı Sahnesi (`AdLiveCanvas.tsx`): Simülatör kutusuna `minWidth: isMobile ? '375px' : '720px'; flex-shrink: 0;` eklendi.
+  5. **Doğrulama ve Derleme:**
+     - Frontend TypeScript ve PWA derlemesi (`tsc -b && vite build`) 0 hata ile tamamlandı.
+     - Tüm backend testleri (121/121 PASS) %100 başarılı.
+     - Yerel commit atıldı (`5d6edd7`).
+
+---
 * **Yapılan İşlemler:**
   1. **Ortak Veri Toplama Motoru (`adminInboxUnified.ts` & `index.ts`):**
      - Destek biletleri (`messages`), gelen kurumsal e-postalar (`category = 'email'`) ve onay bekleyen blog yorumlarını (`comments`) tek API sözleşmesinde toplayan `GET /api/v1/inbox/unified` endpoint'i yazıldı.
