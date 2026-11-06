@@ -99,7 +99,7 @@ export async function handleAdminGetUnifiedInbox(
         ticketsCount++;
       }
 
-      const snippet = m.ai_summary || String(m.content || '').replace(/\s+/g, ' ').trim().slice(0, 140);
+      const snippet = String(m.ai_summary || m.content || '').replace(/\s+/g, ' ').trim().slice(0, 140);
 
       items.push({
         id: String(m.id),

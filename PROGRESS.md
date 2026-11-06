@@ -3201,3 +3201,22 @@ ight_floating) dikey yönelim (ertical-rl) ile kenara yaslandı.
   - Dosya satır sınırları korundu: `PageStudioView.tsx` (585 satır <= 600), `PageCanvas.tsx` (382 satır <= 450).
   - Yalnızca `DevAdmin` dalında çalışıldı, `main` korundu.
 * **Durum:** Sabit Piksel Artboard ve Yüzen Flyout Paneller mimarisi başarıyla tamamlandı. Sırada Faz 3: Çok Dilli Canlı RTL Dönüşüm Motoru & AI Çeviri.
+
+
+---
+
+### [06.11.2026 - 16:00] MSKLabsDesk & webMSKLabs Sistem Temizleme ve Mimari Senkronizasyon (Bölüm 20)
+* **Kapsam:** İki repo eş zamanlı olarak kod hijyeni, kırık bağlantılar, ölü bileşenler ve mimari senkronizasyon yönünden denetlendi ve düzeltildi.
+* **Yapılan İşlemler:**
+  1. **MSKLabsDesk Backend Derleme:** `adminInboxUnified.ts:110` dosyasındaki TS2322 tip uyumsuzluğu (`unknown` snippet dönüşümü) giderildi; `tsc --noEmit` 0 hataya çekildi.
+  2. **MSKLabsDesk Frontend Hijyeni:** Kullanılmayan `AdPreviewModal.tsx` ve `langHelpers.ts` ölü bileşenleri silindi; `tsc -b` ve `npm run build` ile üretim derlemesi doğrulandı.
+  3. **webMSKLabs Kırık Medya:** `download.html` içindeki var olmayan `media/gcpiluyari/icon.png` kırık görseli, `gcpiluyari.html` ile uyumlu `🔋` ikonuyla düzeltildi.
+  4. **webMSKLabs Yorum API Standardizasyonu:** `blog/comments.js` içindeki göreceli `/api/comments` çağrıları ve fallback'ler `window.SITE_CONFIG.apiUrl` ile merkezi backend'e bağlandı.
+  5. **PWA Yapılandırması:** `webMSKLabs/vite.config.ts` içerisindeki PWA manifest'i `MSK Labs` kurumsal vitrini ve kök rotası (`/`) ile güncellendi.
+  6. **Sitemap & SEO:** `blog/guncel.html` ve `blog/anilts.html` fiziksel yönlendirme köprüleri oluşturuldu; `sitemap.xml` ve `public/sitemap.xml` dosyalarına `cookies.html`, `kvkk.html` ve `app.html` eklendi; kırık sitemap linki sayısı 0'a indirildi.
+  7. **Zombi Katman Tasfiyesi:** Atıl 16 dosyalık Pages Functions (`functions/`) ile eski vanilla admin dosyaları (`admin.js`, `admin/modules/`) `.archive/` altına alındı; `admin/index.html` ikon yolları onarıldı (tüm web sitesinde kırık bağlantı: 0).
+  8. **D1 Migration Senkronizasyonu:** `MSKLabsDesk/backend/migrations` 21 migration ile tek yetkili otorite yapıldı; `webMSKLabs/wrangler.toml` içerisindeki `migrations_dir` devre dışı bırakılarak üretimde çift migration çakışma riski önlendi.
+* **Test Sonuçları:**
+  - `MSKLabsDesk/backend`: 6 test paketi, tüm entegrasyon testleri PASS.
+  - `webMSKLabs`: 61 test dosyası, 605 testin tamamı PASS (%100).
+  - Her iki projede `build` hatasız tamamlandı.

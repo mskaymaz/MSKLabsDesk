@@ -1,4 +1,4 @@
-﻿# MSKLabsDesk — Destek, Talep, Yorum, Bülten ve Headless CMS Yönetim Sistemi
+# MSKLabsDesk — Destek, Talep, Yorum, Bülten ve Headless CMS Yönetim Sistemi
 ## Master Task Architecture & Proje Yönetim Planı (Aşama 1.1)
 
 ---
@@ -3367,3 +3367,19 @@ sequenceDiagram
 - [*] webMSKLabs Integration
 - [*] Production Readiness & Go-Live
 - [*] Post-Launch Operations & Maintenance
+
+
+---
+
+## 20. SİSTEM TEMİZLEME, HATA DÜZELTME VE MİMARİ SENKRONİZASYON (06.11.2026)
+
+- [*] **Görev 20.1 (MSKLabsDesk):** Backend TS derleme hatasını düzelt (`adminInboxUnified.ts:110` TS2322 tip uyumsuzluğu).
+- [*] **Görev 20.2 (MSKLabsDesk):** Frontend ölü bileşen ve yardımcıları temizle (`AdPreviewModal.tsx`, `langHelpers.ts`).
+- [*] **Görev 20.3 (MSKLabsDesk):** Proje şartname ve yasal referans dosyalarını doğrula (`AdminWorksPre/` mimari tasarım dokümanları ve `scratch/` emsal yasal metinleri AGENTS.md Madde 2 uyarınca korundu).
+- [*] **Görev 20.4 (webMSKLabs):** `download.html` içindeki kırık `media/gcpiluyari/icon.png` görsel referansını düzelt (`apps/gcpiluyari.html` ile uyumlu 🔋 emojisi ile güncellendi).
+- [*] **Görev 20.5 (webMSKLabs):** `blog/comments.js` içindeki göreceli `/api/comments` çağrılarını `window.SITE_CONFIG.apiUrl` ile merkezi backend'e bağla (fallback'ler dahil merkezi endpoint ile standardize edildi).
+- [*] **Görev 20.6 (webMSKLabs):** `vite.config.ts` içerisindeki PWA yapılandırmasını vitrin web sitesi standardına dönüştür (`name`, `short_name`, `start_url: '/'`, `scope: '/'` kurumsal yapıya uyarlandı, build başarıyla doğrulandı).
+- [*] **Görev 20.7 (webMSKLabs):** `sitemap.xml` ve yönlendirme sayfalarını revize et (`blog/guncel.html` ve `blog/anilts.html` köprüleri eklendi, `cookies.html`, `kvkk.html` ve `app.html` sitemap'e dahil edildi; ölü link sayısı 0'a indirildi).
+- [*] **Görev 20.8 (webMSKLabs):** Zombi Pages Functions (`functions/` - 16 dosya) güvenle `.archive/functions` altına taşındı; `backend/` altındaki servislerin `src/` tarafından aktif kullanıldığı doğrulanarak mimari bütünlük ve 605 vitest testi %100 korundu.
+- [*] **Görev 20.9 (webMSKLabs):** Eski admin katmanını izole et (`admin/index.html` ikon yolları `/admin/` olarak düzeltildi, kullanılmayan eski vanilla `admin.js` ve `modules/` `.archive` altına alındı; tüm kırık bağlantılar 0'a indirildi, 605 test %100 PASS).
+- [*] **Görev 20.10 (Ortak):** D1 Veritabanı migration yetkisini tekilleştir ve şema senkronizasyonunu sağla (`MSKLabsDesk/backend/migrations` 21 migration ile tek ana otorite yapıldı; `webMSKLabs/wrangler.toml` içerisindeki `migrations_dir` devre dışı bırakılarak üretimde çakışma riski sıfırlandı, yerel test ortamı 605 test ile doğrulandı).

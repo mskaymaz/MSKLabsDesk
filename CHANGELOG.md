@@ -1511,3 +1511,16 @@
 
 ## [02.10.2026 - 10:51] - Yapay Zeka Entegrasyonu (Gemini API - Bölüm 4)
 - `backend/src/utils/ai.ts` modülü oluşturuldu.
+
+## [06.11.2026 - 16:00] - Sistem Temizleme, Hata Düzeltme ve Mimari Senkronizasyon (Bölüm 20)
+- `backend/src/routes/adminInboxUnified.ts`: TS2322 derleme hatası açık string dönüşümü ile giderildi.
+- `frontend/src/components/modals/AdPreviewModal.tsx` ve `frontend/src/utils/langHelpers.ts`: Ölü frontend kodları silindi.
+- `webMSKLabs/download.html`: Kırık `media/gcpiluyari/icon.png` görseli pil emojisi (`🔋`) ile düzeltildi.
+- `webMSKLabs/blog/comments.js`: Yorum gönderme ve listeleme API çağrıları merkezi backend'e bağlandı.
+- `webMSKLabs/vite.config.ts`: PWA manifest'i vitrin web sitesi standardına uyarlandı.
+- `webMSKLabs/sitemap.xml` & `public/sitemap.xml`: Ölü sitemap bağlantıları temizlendi, `cookies.html`, `kvkk.html` ve `app.html` eklendi.
+- `webMSKLabs/blog/guncel.html` & `blog/anilts.html`: Fiziksel statik yönlendirme köprüleri oluşturuldu.
+- `webMSKLabs/admin/`: Eski vanilla `admin.js` ve `modules/` klasörü `.archive/` altına alındı, `index.html` ikon yolları onarıldı.
+- `webMSKLabs/functions/`: Eski Cloudflare Pages Functions `.archive/` altına taşındı.
+- `webMSKLabs/wrangler.toml`: `migrations_dir` devre dışı bırakılarak D1 migration otoritesi `MSKLabsDesk` altında tekilleştirildi.
+- Testler: `MSKLabsDesk` tüm entegrasyon testleri PASS; `webMSKLabs` 61 test dosyasında 605 testin tamamı (%100) PASS.
