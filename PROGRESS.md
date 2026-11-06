@@ -1,7 +1,24 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
-## 📌 Son Güncelleme [06.11.2026 - 10:05] — MASAÜSTÜ YATAY DARALMADA BÜZÜŞMEYİ ÖNLEME, YATAY SCROLL & TUVAL BOYUT İZOLASYONU [✓]
+## 📌 Son Güncelleme [06.11.2026 - 10:40] — DUYURU YAPISI & ROOT SEVİYESİ YATAY SCROLL MOTORU KESİN ÇÖZÜMÜ [✓]
+* **Yapılan İşlemler:**
+  1. **Kök HTML & Body & Root Yatay Kaydırma Motoru (`index.css`):**
+     - Tarayıcı pencere daraltmalarında `body`'nin daralıp scrollbar üretimini engellemesi sorunu çözüldü; `html { overflow-x: auto; overflow-y: scroll; }`, `body { min-width: 1200px; overflow-x: visible; }` ve `#root { min-width: 1200px; width: 100%; }` olarak kilitlendi.
+     - `.app-container` `width: 100%; min-width: 1200px;` ile kapsayıcı seviyesinde tam hizalandı.
+  2. **Masaüstü vs Dokunmatik Mobil İzolasyonu (`responsive.css`):**
+     - `@media (max-width: 767px)` medya sorgusu yalnızca dokunmatik cihazlara (`and (pointer: coarse)`) bağlandı. Masaüstü tarayıcısında pencereyi 767px altına daraltırken sidebar'ın kapanması ve tüm arayüzün mobil dikey moda ezilerek scrollbar'ı iptal etmesi sorunu tamamen ortadan kaldırıldı.
+  3. **Duyuru ve Şablon Stüdyosu Boyut İzolasyonu (`TemplatesView.tsx` & `AnnouncementBarSection.tsx` & `AnnouncementPlacementSettings.tsx`):**
+     - `TemplatesView.tsx`: Ana sarmalayıcı ve yapışkan üst başlık/sekme çubuğu `minWidth: '940px', flexShrink: 0` ile kilitlendi.
+     - `AnnouncementBarSection.tsx`: Kart `minWidth: '940px'`, İkili Bölüm `gridTemplateColumns: '260px 1fr'`, Yuva Haritası `width: '260px', minWidth: '260px'` ve Editör kolonu `minWidth: '650px'` olarak sabitlendi.
+     - `AnnouncementPlacementSettings.tsx`: Konum, ofset ve sahne genişliği butonlarının daralmada 3-4 satıra dökülüp bozulması (`flex-wrap: wrap`) engellendi; `flexWrap: 'nowrap', overflowX: 'auto', minWidth: '940px'` uygulandı.
+     - `BroadcastView.tsx`: E-Bülten/Duyuru sayfası `minWidth: '920px', flexShrink: 0` ile korundu.
+  4. **Doğrulama ve Derleme:**
+     - Frontend derlemesi (`tsc -b && vite build`) 0 hata ile tamamlandı (578ms).
+     - Tüm yerel servisler aktif: `backend` (8787), `MSKLabsDesk` (5173), `webMSKLabs` (5174).
+     - Yerel commit atıldı (`1807a9d`).
+
+---
 * **Yapılan İşlemler:**
   1. **Genel Arayüz Yatay Kaydırma & Taban Genişlik Standardı (`index.css` & `responsive.css`):**
      - `body` üzerindeki `overflow-x: hidden;` kaldırılarak `overflow-x: auto;` getirildi; tarayıcı daraltıldığında yatay kaydırma çubuğu serbest bırakıldı.
