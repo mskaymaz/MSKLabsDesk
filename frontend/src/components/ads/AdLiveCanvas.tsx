@@ -307,7 +307,9 @@ export const AdLiveCanvas: React.FC<AdLiveCanvasProps> = ({
         <div
           style={{
             width: isMobile ? '375px' : '100%',
+            minWidth: isMobile ? '375px' : '720px',
             maxWidth: '1040px',
+            flexShrink: 0,
             transition: 'all 0.2s ease',
             background: isLight ? '#f8fafc' : '#121826',
             borderRadius: '8px',

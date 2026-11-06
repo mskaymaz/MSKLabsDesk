@@ -70,6 +70,8 @@
 }
 
 @media (max-width: 767px) {
+  .app-container { min-width: 100% !important; }
+  .main-content { min-width: 100% !important; }
   .app-sidebar { display: none !important; }
   .mobile-bottom-nav { display: flex !important; }
   .mobile-hamburger-btn { display: inline-flex !important; }

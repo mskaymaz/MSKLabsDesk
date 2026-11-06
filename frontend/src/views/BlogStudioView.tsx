@@ -419,7 +419,10 @@ export const BlogStudioView: React.FC<BlogStudioViewProps> = ({
           <div
             className="word-paper-canvas"
             style={{
+              width: canvasWidth === '100%' ? '100%' : canvasWidth,
+              minWidth: canvasWidth === '100%' ? '780px' : canvasWidth,
               maxWidth: canvasWidth,
+              flexShrink: 0,
               direction: activeTab === 'ar' ? 'rtl' : 'ltr',
             }}
           >

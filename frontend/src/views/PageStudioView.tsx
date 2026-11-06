@@ -286,6 +286,7 @@ export const PageStudioView: React.FC<PageStudioViewProps> = ({
         inset: 0,
         width: '100vw',
         height: '100vh',
+        minWidth: '1000px',
         zIndex: 1200,
         display: 'flex',
         flexDirection: 'column',

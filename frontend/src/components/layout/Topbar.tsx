@@ -57,6 +57,8 @@ export const Topbar: React.FC<TopbarProps> = ({
         justifyContent: 'space-between',
         padding: '0 20px',
         height: '40px',
+        minWidth: '940px',
+        flexShrink: 0,
         borderBottom: '1px solid var(--border-subtle)',
         background: 'var(--bg-topbar)',
         backdropFilter: 'blur(12px)',

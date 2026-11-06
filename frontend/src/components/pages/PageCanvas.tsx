@@ -78,6 +78,7 @@ export const PageCanvas: React.FC<PageCanvasProps> = ({
             alignItems: 'flex-start',
             justifyContent: 'center',
             gap: '24px',
+            flexShrink: 0,
             ...scaleStyle,
           }}
         >

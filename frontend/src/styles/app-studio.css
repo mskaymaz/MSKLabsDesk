@@ -26,6 +26,7 @@
   flex-direction: column;
   height: 100vh;
   width: 100%;
+  min-width: 1000px;
   background: var(--studio-bg-page);
   color: var(--studio-text-main);
   overflow: hidden;
@@ -62,6 +63,7 @@
   background: var(--studio-bar-bg);
   border-bottom: 1px solid var(--studio-bar-border);
   color: var(--studio-bar-text);
+  min-width: 1000px;
   flex-shrink: 0;
   z-index: 20;
   transition: all 0.2s ease;
@@ -172,13 +174,17 @@
 .app-studio-canvas-area {
   flex: 1;
   overflow-y: auto;
+  overflow-x: auto;
   padding: 24px 20px 60px 20px;
   background: var(--studio-bg-page);
   transition: background-color 0.2s ease;
 }
 
 .app-studio-container {
+  width: 900px;
+  min-width: 900px;
   max-width: 900px;
+  flex-shrink: 0;
   margin: 0 auto;
 }
 

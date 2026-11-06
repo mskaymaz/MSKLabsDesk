@@ -54,7 +54,7 @@ export const AppShell: React.FC<AppShellProps> = ({
           pendingCommentCount={pendingCommentCount}
         />
 
-        <main className="main-content" style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 }}>
+        <main className="main-content">
           <Topbar
             activeTab={activeTab}
             onOpenSearch={() => setIsSearchOpen(true)}

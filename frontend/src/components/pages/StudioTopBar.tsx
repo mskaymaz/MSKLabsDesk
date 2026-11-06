@@ -100,9 +100,9 @@ export const StudioTopBar: React.FC<StudioTopBarProps> = ({
 
   return (
     <>
-      <header className="studio-header" style={{ padding: 0, background: 'var(--bg-sidebar)', borderBottom: '1px solid var(--border-color)', display: 'flex', flexDirection: 'column', zIndex: 50 }}>
+      <header className="studio-header" style={{ padding: 0, background: 'var(--bg-sidebar)', borderBottom: '1px solid var(--border-color)', display: 'flex', flexDirection: 'column', minWidth: '1000px', flexShrink: 0, zIndex: 50 }}>
         {/* 1. Üst Satır: Sayfa Kimliği ve Yayınlama Eylemleri */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '6px 14px', borderBottom: '1px solid var(--border-subtle, rgba(255,255,255,0.06))', gap: '10px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '6px 14px', borderBottom: '1px solid var(--border-subtle, rgba(255,255,255,0.06))', gap: '10px', minWidth: '1000px', flexShrink: 0 }}>
           {/* Sol: Geri Dönüş ve Başlık/Slug */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <button
@@ -235,7 +235,7 @@ export const StudioTopBar: React.FC<StudioTopBarProps> = ({
         </div>
 
         {/* 2. Alt Satır: Tuval Görünümü (Sol) & İçerik Düzenleme/Dil (Sağ) */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '4px 14px', background: 'var(--bg-secondary)', gap: '8px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '4px 14px', background: 'var(--bg-secondary)', gap: '8px', minWidth: '1000px', flexShrink: 0 }}>
           {/* Sol Araçlar: Cihaz, Genişlik, Kanatlar, Zoom, Açık/Koyu Tema */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
             <div style={{ display: 'flex', background: 'var(--bg-card)', borderRadius: '5px', padding: '1px', gap: '2px' }}>

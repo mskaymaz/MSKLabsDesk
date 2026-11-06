@@ -75,6 +75,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
   return (
     <aside className="app-sidebar" style={{
       width: '260px',
+      minWidth: '260px',
+      flexShrink: 0,
       background: 'var(--bg-sidebar)',
       borderRight: '1px solid var(--border-color)',
       borderLeft: language === 'ar' ? '1px solid var(--border-color)' : 'none',
