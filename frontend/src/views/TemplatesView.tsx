@@ -198,7 +198,7 @@ export const TemplatesView: React.FC = () => {
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', position: 'relative' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', position: 'relative', minWidth: '940px', flexShrink: 0 }}>
       {/* ================= SABİT ÜST BÖLÜM (KULLANICININ İŞARET ETTİĞİ TÜM ALAN) ================= */}
       <div
         style={{
@@ -211,10 +211,12 @@ export const TemplatesView: React.FC = () => {
           display: 'flex',
           flexDirection: 'column',
           gap: '10px',
+          minWidth: '940px',
+          flexShrink: 0,
         }}
       >
         {/* 1. Başlık ve AdSense Boyut Kataloğu Butonu */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px', minWidth: '940px', flexShrink: 0 }}>
           <div>
             <h1 className="admin-page-title" style={{ margin: 0, fontSize: '1.2rem' }}>
               Reklam & Duyuru Stüdyosu
@@ -242,7 +244,7 @@ export const TemplatesView: React.FC = () => {
         </div>
 
         {/* 2. Ana Sekmeler */}
-        <div style={{ display: 'flex', gap: '8px', borderBottom: '1px solid var(--border-subtle, #334155)', paddingBottom: '2px' }}>
+        <div style={{ display: 'flex', gap: '8px', borderBottom: '1px solid var(--border-subtle, #334155)', paddingBottom: '2px', minWidth: '940px', flexShrink: 0 }}>
           <button
             type="button"
             onClick={() => setActiveTab('ads')}

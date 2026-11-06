@@ -94,7 +94,7 @@ export const BroadcastView: React.FC = () => {
     : 100;
 
   return (
-    <div className="animate-fade-in" style={{ maxWidth: '960px', margin: '0 auto', paddingBottom: '40px' }}>
+    <div className="animate-fade-in" style={{ maxWidth: '960px', minWidth: '920px', flexShrink: 0, margin: '0 auto', paddingBottom: '40px' }}>
       {/* 1. Sayfa Başlığı ve Hızlı Şablonlar */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '14px', marginBottom: '18px' }}>
         <div>

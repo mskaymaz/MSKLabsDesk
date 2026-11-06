@@ -62,13 +62,16 @@ export const AnnouncementPlacementSettings: React.FC<AnnouncementPlacementSettin
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'space-between',
-      flexWrap: 'wrap',
+      flexWrap: 'nowrap',
       gap: '8px',
       background: 'var(--bg-secondary, rgba(15, 23, 42, 0.45))',
       padding: '6px 10px',
       borderRadius: '6px',
       border: '1px solid var(--border-subtle)',
       marginBottom: '8px',
+      minWidth: '940px',
+      flexShrink: 0,
+      overflowX: 'auto',
     }}>
       {/* 1. Sol Kısım: Başlık & Hedef Cihaz */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -117,7 +120,7 @@ export const AnnouncementPlacementSettings: React.FC<AnnouncementPlacementSettin
           ↑ Üst Tam Bant (Klasik Şerit) seçili — Boyut ve ofset otomatik uygulanır.
         </span>
       ) : (
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'nowrap', flexShrink: 0 }}>
           {/* Genişlik */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '3px' }} title="Kart Genişliği">
             <span style={{ fontSize: '9.5px', color: 'var(--text-muted)' }}>Genişlik:</span>
@@ -194,7 +197,7 @@ export const AnnouncementPlacementSettings: React.FC<AnnouncementPlacementSettin
 
       {/* 4. Sağ Kısım: Kulakçık Metni, Süre ve Küçülme */}
       {!isTopHanging && (
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'nowrap', flexShrink: 0 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '3px' }} title="Kulakçık Metni">
             <span style={{ fontSize: '9.5px', color: 'var(--text-muted)' }}>Kulakçık:</span>
             <input

@@ -55,16 +55,30 @@ button, input, select, textarea {
   font-family: inherit;
 }
 
+html {
+  overflow-x: auto;
+  overflow-y: scroll;
+}
+
 body {
   font-family: var(--font-sans);
   background-color: var(--bg-main);
   color: var(--text-primary);
   min-height: 100vh;
-  overflow-x: auto;
+  min-width: 1200px;
+  overflow-x: visible;
   background-image: 
     radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.12) 0px, transparent 50%),
     radial-gradient(at 100% 100%, rgba(139, 92, 246, 0.1) 0px, transparent 50%);
   background-attachment: fixed;
+}
+
+#root {
+  min-width: 1200px;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Custom Scrollbar */
@@ -88,6 +102,7 @@ body {
   display: flex;
   min-height: 100vh;
   min-width: 1200px;
+  width: 100%;
   flex-shrink: 0;
 }
 

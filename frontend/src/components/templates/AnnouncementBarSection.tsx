@@ -131,7 +131,7 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
   const isCustomTheme = activeItem.bannerType === 'custom';
 
   return (
-    <div className="admin-list-card" style={{ padding: '16px' }}>
+    <div className="admin-list-card" style={{ padding: '16px', minWidth: '940px', flexShrink: 0 }}>
       {/* 1. Üst Bar: Başlık, Durum ve Kaydet */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px', borderBottom: '1px solid var(--border-subtle, #334155)', paddingBottom: '8px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -180,13 +180,18 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
       {/* 4. İkili Bölüm: 1/4 Sol (Yerleşim & Harita) — 3/4 Sağ (İçerik Düzenleme) */}
       <div style={{
         display: 'grid',
-        gridTemplateColumns: 'minmax(200px, 1fr) minmax(320px, 3fr)',
+        gridTemplateColumns: '260px 1fr',
         gap: '12px',
         margin: '10px 0 12px 0',
         alignItems: 'start',
+        minWidth: '940px',
+        flexShrink: 0,
       }}>
         {/* Sol Taraf (1/4): Yerleşim, Harita & Yuva Seçici */}
         <div style={{
+          width: '260px',
+          minWidth: '260px',
+          flexShrink: 0,
           display: 'flex',
           flexDirection: 'column',
           gap: '6px',
@@ -237,6 +242,9 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
 
         {/* Sağ Taraf (3/4): Duyuru İçerik Düzenleme (RichTextEditor) */}
         <div style={{
+          minWidth: '650px',
+          flex: 1,
+          flexShrink: 0,
           display: 'flex',
           flexDirection: 'column',
           background: 'var(--bg-secondary, rgba(15, 23, 42, 0.45))',

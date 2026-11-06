@@ -69,7 +69,7 @@
   margin-left: auto;
 }
 
-@media (max-width: 767px) {
+@media (max-width: 767px) and (pointer: coarse) {
   .app-container { min-width: 100% !important; }
   .main-content { min-width: 100% !important; }
   .app-sidebar { display: none !important; }
