@@ -81,20 +81,47 @@ body {
   flex-direction: column;
 }
 
-/* Custom Scrollbar */
+/* Custom Scrollbar (Rahat Tutulabilir, Ergonomik Kalınlık: 14px - 3 Katı) */
+* {
+  scrollbar-width: auto;
+  scrollbar-color: rgba(255, 255, 255, 0.28) var(--bg-main);
+}
+
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 14px;
+  height: 14px;
 }
 ::-webkit-scrollbar-track {
   background: var(--bg-main);
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.15);
-  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.28);
+  border-radius: 8px;
+  border: 3px solid var(--bg-main);
+  background-clip: padding-box;
+  min-height: 36px;
+  min-width: 36px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.25);
+  background: var(--accent-primary, #6366F1);
+  border: 2px solid var(--bg-main);
+}
+::-webkit-scrollbar-thumb:active {
+  background: var(--accent-primary-hover, #4F46E5);
+}
+
+[data-theme="light"] {
+  scrollbar-color: rgba(0, 0, 0, 0.3) #F1F5F9;
+}
+[data-theme="light"] ::-webkit-scrollbar-track {
+  background: #F1F5F9;
+}
+[data-theme="light"] ::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.28);
+  border: 3px solid #F1F5F9;
+}
+[data-theme="light"] ::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-primary, #6366F1);
 }
 
 /* Layout */
