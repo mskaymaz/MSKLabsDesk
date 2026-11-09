@@ -1,4 +1,5 @@
 import { verifyAuthToken } from '../utils/auth';
+import { invalidateMaintenanceCache } from '../utils/maintenance';
 
 export const DEFAULT_AD_SLOTS = [
   {
@@ -525,6 +526,10 @@ export async function handleCmsTemplates(request: Request, env: any): Promise<Re
       meta_json ? (typeof meta_json === 'string' ? meta_json : JSON.stringify(meta_json)) : null,
       is_active !== undefined ? (is_active ? 1 : 0) : 1
     ).run();
+
+    if (key_name === 'site_settings') {
+      invalidateMaintenanceCache();
+    }
 
     return new Response(JSON.stringify({ success: true }));
   }

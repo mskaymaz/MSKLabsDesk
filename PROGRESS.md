@@ -1,6 +1,32 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 📌 Son Güncelleme [09.11.2026 - 11:25] — FAZ 1: D1 ŞEMA & BACKEND BAKIM KALKANI API'Sİ TAMAMLANDI [✓]
+* **Yapılan İşlemler:**
+  1. **Bakım Modu ve Rota Kalkanı Motoru (`backend/src/utils/maintenance.ts`):**
+     - `site_settings` D1 sözleşmesine `maintenance` nesnesi (`global`, `message`, `eta`, `routes`, `allowed_ips`) bağlandı.
+     - 30 saniye TTL'li In-Memory Edge Cache mekanizması kuruldu; ayar güncellendiğinde `invalidateMaintenanceCache()` ile D1 kotası ($0 maliyet) korundu.
+     - `checkAdminBypass`: Authorization Bearer ve Cookie (`admin_token`) üzerinden yöneticilerin canlı siteyi kesintisiz test edebilmesi sağlandı.
+     - `generateMaintenance503Response`: Arama motoru indekslerini korumak için `HTTP 503 Service Unavailable` ve `Retry-After: 3600` başlığı üreten hafif, bağımsız HTML şablonu oluşturuldu.
+  2. **Kamusal API ve Şablon Entegrasyonu (`cmsPublic.ts`, `cmsTemplates.ts`, `webMSKLabs/src/index.ts`):**
+     - `GET /api/v1/maintenance` public uç noktası eklendi.
+     - `webMSKLabs/src/index.ts` üzerinde statik varlık ve admin rotalarını muaf tutan, bakımdaki sayfalara doğrudan HTTP 503 dönen kalkan middleware'i devreye alındı.
+  3. **Test ve Doğrulama:**
+     - `tests/apiMaintenance.test.ts` yazılarak 17 yeni test senaryosu ve tüm backend testleri (139/139 PASS) %100 doğrulandı.
+     - `webMSKLabs` ve `MSKLabsDesk` frontend derlemeleri sıfır hata ile tamamlandı.
+
+---
+
+## 📌 Son Güncelleme [09.11.2026 - 11:05] — MÜSTAKİL INBOX İLETİŞİM UYGULAMASI (INBOX-APP-001) YOL HARİTASINA İŞLENDİ [✓]
+* **Yapılan İşlemler:**
+  1. **Yol Haritası & Görev Güncellemesi (`tasks.md` & `ROADMAP_TODO.md`):**
+     - Üst bardaki popover bileşeninden bağımsız olarak, blog yorumları, destek talepleri ve kurumsal mailleri tek ekranda yöneten tam ekran müstakil iş istasyonu `INBOX-APP-001` koduyla `tasks.md` ve `ROADMAP_TODO.md` (5.3) içerisine eklendi.
+     - Arayüz detayları ve aksiyon butonlarının geliştirme öncesinde kullanıcı ile istişare edilerek tasarlanması kararlaştırıldı.
+  2. **Aktif Geliştirme Odak Noktası:**
+     - Sıradaki görev olan `SYS-SETTINGS-001` (Sistem Ayarları & Çok Katmanlı Bakım Modu) Faz 1 geliştirmesine geçildi.
+
+---
+
 ## 📌 Son Güncelleme [06.11.2026 - 16:30] — SİSTEM AYARLARI VE ÇOK KATMANLI BAKIM MODU (UNDER CONSTRUCTION) YOL HARİTASI [✓]
 * **Yapılan İşlemler:**
   1. **Yol Haritası & Mimari Tasarım (`tasks.md` & `ROADMAP_TODO.md`):**

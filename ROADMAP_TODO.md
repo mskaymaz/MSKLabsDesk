@@ -77,21 +77,23 @@
 
 ---
 
-### 📋 5. AŞAMA: BİRLEŞİK BİLDİRİM & MESAJLAŞMA UYGULAMASI (INBOX HUB) (TAMAMLANDI — 05.11.2026 - 12:30)
+### 📋 5. AŞAMA: BİRLEŞİK BİLDİRİM & MESAJLAŞMA UYGULAMASI (INBOX HUB) (KISMEN TAMAMLANDI — 05.11.2026 - 12:30)
 * [x] **5.1 Ortak Veri Toplama Motoru:**
   - [x] Blog yorumları, destek talepleri ve gelen kurumsal e-postaları tek API uç noktasında (`/api/v1/inbox/unified`) toplayan Edge servis.
 * [x] **5.2 Minimalist Arayüz (Masaüstü & Mobil Uyumlu):**
   - [x] Yeni gelen bildirimleri rozet ve anlık durumla gösteren hafif gösterge paneli (`UnifiedInboxPopover`).
   - [x] İlgili öğeye (Yorum, Destek Bileti, E-Posta) tıklandığında doğrudan işlem ekranına yönlendirme.
+* [ ] **5.3 Müstakil Hızlı Yanıtlama ve İletişim Uygulaması (Inbox Workstation):**
+  - [ ] Arayüz özellikleri, yerleşim şeması ve aksiyon mimarisi istişare edilerek bağımsız tam ekran bir uygulama (`InboxView.tsx`) olarak geliştirilecek.
 
 ---
 
 ### 📋 6. AŞAMA: SİSTEM AYARLARI VE ÇOK KATMANLI BAKIM MODU (UNDER CONSTRUCTION HUB) [ ]
-* [ ] **6.1 D1 Şema & Backend API Genişletmesi:**
-  - [ ] `site_settings` JSON şemasına `maintenance` nesnesinin (`global`, `message`, `eta`, `routes`, `allowed_ips`) eklenmesi.
-  - [ ] Cloudflare Worker üzerinde eşleşen rotalara `HTTP 503 Service Unavailable` ve `Retry-After: 3600` başlığı üreten middleware.
-  - [ ] Geçerli yönetici oturumu taşıyan istekler için Admin Bypass muafiyeti.
-  - [ ] $0 kota ilkesi için Cloudflare Worker in-memory edge cache (30-60s TTL).
+* [x] **6.1 D1 Şema & Backend API Genişletmesi (TAMAMLANDI — 09.11.2026 - 11:25):**
+  - [x] `site_settings` JSON şemasına `maintenance` nesnesinin (`global`, `message`, `eta`, `routes`, `allowed_ips`) eklenmesi ve tiplerin tanımlanması.
+  - [x] Cloudflare Worker üzerinde eşleşen rotalara `HTTP 503 Service Unavailable` ve `Retry-After: 3600` başlığı üreten kalkan (`webMSKLabs` & `MSKLabsDesk`).
+  - [x] Geçerli yönetici oturumu taşıyan istekler için Admin Bypass muafiyeti (Authorization header & Cookie doğrulaması).
+  - [x] $0 kota ilkesi için Cloudflare Worker in-memory edge cache (30s TTL) ve ayar güncellendiğinde önbellek tahliyesi.
 * [ ] **6.2 Web Vitrini Parametrik Bakım Şablonu (`webMSKLabs`):**
   - [ ] Dinamik, mobil uyumlu ve çok dilli (TR/EN/AR) `maintenance.html` şablonu (modül adı, açıklama, ETA rozeti, ana sayfaya dönüş).
   - [ ] Alt rotalar (`/apps.html`, `/blog` vb.) için dinamik yönlendirme/sunum.

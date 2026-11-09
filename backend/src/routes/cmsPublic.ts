@@ -1,4 +1,5 @@
 import { DEFAULT_AD_SLOTS, DEFAULT_PAGE_MATRIX } from './cmsTemplates';
+import { getMaintenanceConfig } from '../utils/maintenance';
 
 export async function handleCmsPublic(request: Request, env: any): Promise<Response> {
   const url = new URL(request.url);
@@ -356,6 +357,25 @@ export async function handleCmsPublic(request: Request, env: any): Promise<Respo
       headers: {
         'Content-Type': 'application/xml',
         'Access-Control-Allow-Origin': '*',
+      },
+    });
+  }
+
+  // 10. GET /api/v1/maintenance — Kamusal Bakım Durumu Kontrolü
+  if (path === '/api/v1/maintenance') {
+    const config = await getMaintenanceConfig(env.DB);
+    return new Response(JSON.stringify({
+      success: true,
+      maintenance: {
+        global: config.global,
+        message: config.message,
+        eta: config.eta,
+        routes: config.routes.filter((r: any) => r.enabled).map((r: any) => ({ path: r.path, title: r.title })),
+      },
+    }), {
+      headers: {
+        ...headers,
+        'Cache-Control': 'public, max-age=15, s-maxage=30',
       },
     });
   }

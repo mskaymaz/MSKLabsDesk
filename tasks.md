@@ -34,6 +34,13 @@
 
 ## 🚨 ÖNCELİKLİ YENİ GÖREVLER (IMMEDIATE ACTION BACKLOG)
 
+### INBOX-APP-001 — Müstakil Birleşik İletişim & Hızlı Yanıtlama Uygulaması (Inbox Workstation) [ ]
+- **Amaç:** Üst bardaki açılır çekmece (popover) yapısını aşarak; blog yorumları, destek talepleri ve `@msklabs.org` gelen e-postalarını tek ekranda anlık izleme, filtreleme, hızlı yanıtlama ve durum güncelleme imkanı sunan bağımsız, tam ekran, masaüstü ve mobil uyumlu bir yönetim iş istasyonu (`InboxView.tsx` / `/inbox`) inşa etmek.
+- **Not & Yöntem:** Arayüz bileşenleri, yerleşim şeması, klavye kısayolları ve aksiyon butonları kodlama öncesinde kullanıcı ile detaylı istişare edilerek şekillendirilecektir.
+- **Durum:** [ ] İstişare ve arayüz tasarımı bekleniyor (Beklemede).
+
+---
+
 ### SYS-SETTINGS-001 — Çok Katmanlı Sistem Ayarları & Granular Bakım Modu (Under Construction Hub) [ ]
 - **Amaç:** MSK Labs yönetim panelinde Sistem Ayarları ekranını modern, sekmeli ve tasarım sistemine tam uyumlu bir mimariye kavuşturmak; tüm site için genel (global) ve sayfa/rota bazlı (granular) çalışan dinamik "Bakım / Yapım Aşamasında" (Under Construction) motorunu SEO uyumlu (`HTTP 503 Service Unavailable`), yönetici muafiyetli (admin bypass) ve sıfır maliyetli ($0 Edge Cache) olarak inşa etmek.
 - **Kapsam:** `MSKLabsDesk/frontend/src/views/SettingsView.tsx`, `MSKLabsDesk/frontend/src/components/settings/*`, `MSKLabsDesk/backend/src/routes/cmsTemplates.ts`, `MSKLabsDesk/backend/src/index.ts`, `webMSKLabs/maintenance.html`.
@@ -45,11 +52,11 @@
 
 #### 📋 Takip Edilebilir Aşama ve Görev Listesi:
 
-##### Faz 1: D1 Şema & Backend API Genişletmesi (Bakım Modu & Rota Matrisi) [ ]
-- [ ] **Task 1.1 — D1 `site_settings` Şema Genişletmesi:** `site_templates` tablosundaki `site_settings` JSON sözleşmesine `maintenance` nesnesinin (`global: boolean`, `message: string`, `eta: string`, `routes: [{ path: string, title: string, enabled: boolean }]`, `allowed_ips: string[]`) eklenmesi.
-- [ ] **Task 1.2 — Cloudflare Worker Bakım Middleware'i:** Worker yönlendirme katmanında rota yakalama filtresi: Global aktifse tüm genel rotalara, granular aktifse eşleşen rotalara (`/apps.html`, `/blog`, `/destek.html` vb.) `HTTP 503 Service Unavailable` ve `Retry-After: 3600` başlığı üretilmesi.
-- [ ] **Task 1.3 — Yönetici Muafiyeti (Admin Bypass Kontrolü):** Geçerli admin oturumu / `ADMIN_JWT` taşıyan yetkili yöneticilerin bakım kalkanından otomatik muaf tutulması.
-- [ ] **Task 1.4 — Edge Bellek Önbellekleme (D1 Kota Koruması):** Her ziyaretçi isteğinde D1 okuması yapılmasını engellemek için ayarların Cloudflare Worker üzerinde 30-60 saniye süreyle in-memory önbelleklenmesi ($0 maliyet ilkesi).
+##### Faz 1: D1 Şema & Backend API Genişletmesi (Bakım Modu & Rota Matrisi) [*]
+- [*] **Task 1.1 — D1 `site_settings` Şema Genişletmesi:** `site_templates` tablosundaki `site_settings` JSON sözleşmesine `maintenance` nesnesinin (`global: boolean`, `message: string`, `eta: string`, `routes: [{ path: string, title: string, enabled: boolean }]`, `allowed_ips: string[]`) eklenmesi ve tiplerin oluşturulması (`backend/src/utils/maintenance.ts`).
+- [*] **Task 1.2 — Cloudflare Worker Bakım Middleware'i:** Worker yönlendirme katmanında rota yakalama filtresi: Global aktifse tüm genel rotalara, granular aktifse eşleşen rotalara (`/apps.html`, `/blog`, `/destek.html` vb.) `HTTP 503 Service Unavailable` ve `Retry-After: 3600` başlığı üretilmesi (`webMSKLabs/src/index.ts` & `backend/src/routes/cmsPublic.ts`).
+- [*] **Task 1.3 — Yönetici Muafiyeti (Admin Bypass Kontrolü):** Geçerli admin oturumu / `ADMIN_JWT` taşıyan yetkili yöneticilerin Authorization header ve Cookie üzerinden doğrulanarak bakım kalkanından muaf tutulması (`checkAdminBypass`).
+- [*] **Task 1.4 — Edge Bellek Önbellekleme (D1 Kota Koruması):** Her ziyaretçi isteğinde D1 okuması yapılmasını engellemek için ayarların Cloudflare Worker üzerinde 30 saniye süreyle in-memory önbelleklenmesi ve ayar güncellendiğinde `invalidateMaintenanceCache()` ile temizlenmesi ($0 maliyet ilkesi).
 
 ##### Faz 2: Web Vitrini Parametrik Bakım Şablonu (webMSKLabs) [ ]
 - [ ] **Task 2.1 — Dinamik Bakım Sayfası (`maintenance.html`):** Tek parametrik, modern, mobil uyumlu, kurumsal kimliğe uygun ve çok dilli (TR/EN/AR) bakım şablonunun tasarlanması (Bakımdaki modül başlığı, bakım sebebi, tahmini bitiş saati rozeti ve "Ana Sayfaya Dön" butonu).
@@ -63,7 +70,7 @@
 - [ ] **Task 3.5 — D1 Sistem Telemetrisi & Veritabanı Bilgi Kartı:** D1 veritabanı boyutu, migration durumu, aktif tablo satır sayıları ve admin yetki matrisi görünürlüğü.
 
 ##### Faz 4: Uçtan Uca Doğrulama, Test ve Canlı Entegrasyon [ ]
-- [ ] **Task 4.1 — Backend Entegrasyon Testleri:** Bakım modu 503 yanıtı, admin bypass koruması ve API sağlık testi endpoint'leri için Vitest test senaryolarının yazılması.
+- [*] **Task 4.1 — Backend Entegrasyon Testleri:** `tests/apiMaintenance.test.ts` yazılarak 17/17 test (in-memory caching, 503 başlığı, admin bypass, granular rota eşleşmesi) ve genel backend testleri (139/139 PASS) %100 doğrulandı.
 - [ ] **Task 4.2 — Frontend TypeScript & PWA Derlemesi:** `tsc -b && vite build` ile 0 hata doğrulaması.
 - [ ] **Task 4.3 — Canlı/Yerel Tarayıcı Doğrulaması:** Hem global hem de rota bazlı granular bakım modu akışının yerel sunucularda test edilerek onaylanması.
 
