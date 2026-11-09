@@ -1,6 +1,21 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 📌 Son Güncelleme [09.11.2026 - 15:15] — GOOGLE ANALYTICS 4 & SEARCH CONSOLE CANLI DAĞITIMI VE EVRENSEL ETİKET ENTEGRASYONU [✓]
+* **Yapılan İşlemler:**
+  1. **Evrensel GA4 Etiketi Dağıtımı (`webMSKLabs`):**
+     - Sitenin tamamındaki 40 HTML sayfasına (`bizkimiz.html`, `apps.html`, `apps/*.html`, `blog/*.html` vb.) `<head>` bloğuna resmi `G-MQZ4CDTHWD` etiketi yerleştirildi.
+     - `assets/js/analytics.js` revize edilerek mükerrer sayfa sayımı önlendi, SPA geçişleri ve özel olaylar için `page_location` (tam URL) ve `page_title` bağlandı.
+     - `blog/blog.js` içine makale açılışı ve kategori geçişlerinde anlık `MSK_Analytics.trackPageView(true)` tetikleyicisi entegre edildi.
+  2. **SEO & Arama Motoru İndeksleme Güçlendirmesi:**
+     - Cloudflare Pages için `public/_redirects` kural dosyası oluşturuldu; `/aniltilar` -> `/blog/anilts.html` ve `/blog/blog.html` -> `/blog` 301 kalıcı yönlendirmeleri edge seviyesinde sabitlendi.
+     - `sitemap.xml` 28 sayfa keşfiyle Google Search Console'a doğrulandı ve öncelikli tarama sırasına alındı.
+  3. **Canlı Dağıtım & Doğrulama:**
+     - 605 birim testi %100 PASS.
+     - `webMSKLabs` ve `MSKLabsDesk` depoları GitHub `origin/main` dalına push edildi ve Cloudflare Pages üzerinde canlıya çıktı.
+
+---
+
 ## 📌 Son Güncelleme [09.11.2026 - 12:35] — 7. AŞAMA: GOOGLE ANALYTICS & LOOKER STUDIO BÖLGESEL İSTATİSTİK PANELİ [✓]
 * **Yapılan İşlemler:**
   1. **İstatistikler Görünümü (`AnalyticsView.tsx`):**
