@@ -112,13 +112,14 @@
 
 ---
 
-### 📋 7. AŞAMA: GOOGLE ANALYTICS & LOOKER STUDIO BÖLGESEL İSTATİSTİK PANELİ [ ]
-* [ ] **7.1 Google Looker Studio Resmi Entegrasyonu:**
-  - [ ] GA4 mülküne bağlı resmi Türkiye/Dünya ziyaretçi haritası ve il il döküm şablonunun hazırlanması.
-  - [ ] Güvenli gömme (Embed Iframe) bağlantısının oluşturulması ($0 maliyet, sıfır API kotası tüketimi).
-* [ ] **7.2 MSKLabsDesk "İstatistikler" Ekranı (`AnalyticsView.tsx` & `Sidebar.tsx`):**
-  - [ ] Sol menüye doğrudan "İstatistikler" bağlantısının açılması.
-  - [ ] Günde 1-2 kez bakış senaryosuna uygun lazy-load iframe yükleme ve tam ekran masaüstü/mobil tasarımı.
+### 📋 7. AŞAMA: GOOGLE ANALYTICS & LOOKER STUDIO BÖLGESEL İSTATİSTİK PANELİ [✓]
+* [x] **7.1 Google Looker Studio Resmi Entegrasyonu (TAMAMLANDI — 09.11.2026 - 12:35):**
+  - [x] GA4 mülküne bağlı Türkiye/Dünya ziyaretçi haritası ve bölgesel analitik için güvenli gömme (Embed Iframe) mimarisi kuruldu ($0 maliyet, sıfır API kotası tüketimi).
+  - [x] 3 adımlı interaktif rehber kartı ile Google Looker Studio'dan embed URL oluşturma akışı sağlandı.
+  - [x] Embed URL'nin Cloudflare D1 `site_settings` tablosuna ve yerel önbelleğe senkronize kaydı tamamlandı.
+* [x] **7.2 MSKLabsDesk "İstatistikler" Ekranı (`AnalyticsView.tsx` & `Sidebar.tsx`) (TAMAMLANDI — 09.11.2026 - 12:35):**
+  - [x] Sol menüye (`Sidebar.tsx`) ve üst bara (`Topbar.tsx`) `BarChart3` ikonuyla **"İstatistikler"** sekmesi eklendi; TR/EN/AR dil sözlükleri güncellendi.
+  - [x] Günde 1-2 kez kontrol senaryosuna uygun lazy-load yükleme, anlık yenileme, tam ekran modu ve GA4 konsolu köprüsü kodlandı.
 
 ---
 

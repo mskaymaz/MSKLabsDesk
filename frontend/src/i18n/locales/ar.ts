@@ -8,6 +8,7 @@ export const arDict: NamespaceTranslations = {
     broadcasts: 'النشرات البريدية',
     subscribers: 'المشتركون',
     settings: 'الإعدادات',
+    analytics: 'الإحصائيات',
     logout: 'تسجيل الخروج',
     search: 'بحث...',
     filter: 'تصفية',

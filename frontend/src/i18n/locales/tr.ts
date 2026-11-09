@@ -8,6 +8,7 @@ export const trDict: NamespaceTranslations = {
     broadcasts: 'E-Posta Bülteni',
     subscribers: 'Bülten Aboneleri',
     settings: 'Sistem Ayarları',
+    analytics: 'İstatistikler',
     logout: 'Güvenli Çıkış',
     search: 'Hızlı Arama (Cmd+K)...',
     filter: 'Filtrele',

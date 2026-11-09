@@ -8,6 +8,8 @@ interface GeneralSettingsSectionProps {
   setSiteTitle: (val: string) => void;
   siteUrl: string;
   setSiteUrl: (val: string) => void;
+  analyticsEmbedUrl?: string;
+  setAnalyticsEmbedUrl?: (val: string) => void;
 }
 
 export const GeneralSettingsSection: React.FC<GeneralSettingsSectionProps> = ({
@@ -15,6 +17,8 @@ export const GeneralSettingsSection: React.FC<GeneralSettingsSectionProps> = ({
   setSiteTitle,
   siteUrl,
   setSiteUrl,
+  analyticsEmbedUrl = "",
+  setAnalyticsEmbedUrl,
 }) => {
   const { theme, setTheme } = useTheme();
 
@@ -50,6 +54,16 @@ export const GeneralSettingsSection: React.FC<GeneralSettingsSectionProps> = ({
         />
       </div>
 
+      <div style={{ marginBottom: '16px' }}>
+        <Input
+          label="Google Looker Studio Embed URL (İstatistikler Paneli)"
+          type="url"
+          value={analyticsEmbedUrl}
+          onChange={(e) => setAnalyticsEmbedUrl && setAnalyticsEmbedUrl(e.target.value)}
+          placeholder="https://lookerstudio.google.com/embed/reporting/..."
+          helperText="Google Looker Studio üzerinden oluşturulan ziyaretçi ve harita raporunun gömme (embed) bağlantısı."
+        />
+      </div>
       <div className="form-group">
         <label className="form-label" style={{ display: 'block', fontSize: 'var(--font-sm)', color: 'var(--text-secondary)', marginBottom: '8px' }}>
           Yönetici Paneli Teması

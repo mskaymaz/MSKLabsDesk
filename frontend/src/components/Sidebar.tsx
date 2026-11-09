@@ -1,6 +1,7 @@
 import React from 'react';
 import { 
-  LayoutDashboard, 
+  LayoutDashboard,
+  BarChart3, 
   Inbox, 
   MessageSquare, 
   Send, 
@@ -22,7 +23,7 @@ import { useTheme } from '../context/ThemeContext';
 import { useTranslation } from '../context/I18nContext';
 import type { Language } from '../i18n/translations';
 
-export type TabType = 'dashboard' | 'tickets' | 'comments' | 'broadcast' | 'subscribers' | 'settings' | 'channels' | 'posts' | 'apps' | 'pages' | 'templates';
+export type TabType = 'dashboard' | 'analytics' | 'tickets' | 'comments' | 'broadcast' | 'subscribers' | 'settings' | 'channels' | 'posts' | 'apps' | 'pages' | 'templates';
 
 interface SidebarProps {
   activeTab: TabType;
@@ -43,6 +44,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
   const menuItems = [
     { id: 'dashboard' as TabType, label: t('dashboard'), icon: LayoutDashboard },
+    { id: 'analytics' as TabType, label: t('analytics'), icon: BarChart3 },
     { 
       id: 'tickets' as TabType, 
       label: t('tickets'), 

@@ -427,6 +427,8 @@ export interface SiteSettingsData {
   pushEnabled: boolean;
   maintenance: MaintenanceConfig;
   maintenanceMode?: boolean;
+  analyticsEmbedUrl?: string;
+  gaMeasurementId?: string;
 }
 
 

@@ -8,6 +8,7 @@ export type { Language, NamespaceTranslations };
 function createMergedDictionary(dict: NamespaceTranslations) {
   return {
     ...dict,
+    analytics: dict.common.analytics,
     logout: dict.common.logout,
     search: dict.common.search,
     filter: dict.common.filter,

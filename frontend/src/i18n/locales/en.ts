@@ -8,6 +8,7 @@ export const enDict: NamespaceTranslations = {
     broadcasts: 'Email Broadcasts',
     subscribers: 'Subscribers',
     settings: 'Settings',
+    analytics: 'Analytics',
     logout: 'Logout',
     search: 'Search...',
     filter: 'Filter',

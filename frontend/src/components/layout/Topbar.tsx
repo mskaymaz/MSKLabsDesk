@@ -25,6 +25,7 @@ const tabLabels: Record<TabType, string> = {
   templates: 'Şablon & Reklam',
   broadcast: 'Duyuru Gönder',
   subscribers: 'Aboneler',
+  analytics: 'İstatistikler',
   settings: 'Ayarlar',
 };
 

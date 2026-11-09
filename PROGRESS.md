@@ -1,6 +1,26 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 📌 Son Güncelleme [09.11.2026 - 12:35] — 7. AŞAMA: GOOGLE ANALYTICS & LOOKER STUDIO BÖLGESEL İSTATİSTİK PANELİ [✓]
+* **Yapılan İşlemler:**
+  1. **İstatistikler Görünümü (`AnalyticsView.tsx`):**
+     - Google Looker Studio resmi güvenli iframe entegrasyonu tamamlandı ($0 maliyet, sıfır API kotası tüketimi).
+     - Günde 1-2 kez kontrol ergonomisine uygun lazy-load çalışma prensibi, anlık "Yenile" aksiyonu ve "Tam Ekran" (Maximize) modu eklendi.
+     - Henüz bağlantı eklenmemiş durumlar için 3 adımlı interaktif Looker Studio kurulum kartı geliştirildi.
+     - Embed bağlantısını Cloudflare D1 veritabanındaki `site_settings` tablosuna ve `localStorage` önbelleğine yazan ayar modalı entegre edildi.
+     - GA4 konsoluna tek tıkla yeni sekmede geçiş sağlayan harici yönlendirme butonu eklendi.
+  2. **Menü, Üst Bar ve i18n Entegrasyonu:**
+     - Sol navigasyon menüsüne (`Sidebar.tsx`) `BarChart3` ikonuyla **"İstatistikler"** sekmesi dahil edildi.
+     - Üst bara (`Topbar.tsx`) `analytics` başlık etiketi bağlandı.
+     - TR, EN, AR dil sözlüklerine (`tr.ts`, `en.ts`, `ar.ts`) ve tip tanımlarına (`types.ts`) `analytics` anahtarları işlendi.
+     - Sistem Genel Ayarları ekranına (`GeneralSettingsSection.tsx`) Looker Studio Embed URL giriş alanı eklendi.
+  3. **Derleme ve Test Doğrulaması:**
+     - Frontend `tsc -b && vite build` başarıyla derlendi (621ms).
+     - Tüm 139/139 backend Vitest testleri %100 PASS.
+     - Yerel dev sunucusu üzerinden test edildi.
+
+---
+
 ## 📌 Son Güncelleme [09.11.2026 - 12:10] — FAZ 3 & 4: YÖNETİM PANELİ SİSTEM AYARLARI & DOĞRULAMA TAMAMLANDI [✓]
 * **Yapılan İşlemler:**
   1. **Sekmeli Modüler Ayarlar Paneli (`SettingsView.tsx` & `frontend/src/components/settings/*`):**

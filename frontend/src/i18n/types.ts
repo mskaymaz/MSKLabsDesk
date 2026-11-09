@@ -8,6 +8,7 @@ export interface NamespaceTranslations {
     broadcasts: string;
     subscribers: string;
     settings: string;
+    analytics: string;
     logout: string;
     search: string;
     filter: string;

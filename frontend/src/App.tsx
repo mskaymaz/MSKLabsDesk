@@ -7,6 +7,7 @@ import { type TabType } from './components/Sidebar';
 import { AppShell } from './components/layout/AppShell';
 import { LoginView } from './views/LoginView';
 import { DashboardView } from './views/DashboardView';
+import { AnalyticsView } from './views/AnalyticsView';
 import { TicketsView } from './views/TicketsView';
 import { CommentsView } from './views/CommentsView';
 import { BroadcastView } from './views/BroadcastView';
@@ -73,6 +74,8 @@ const AdminPanelContent: React.FC = () => {
           onNavigate={setActiveTab}
         />
       )}
+
+      {activeTab === 'analytics' && <AnalyticsView />}
 
       {activeTab === 'tickets' && (
         <TicketsView

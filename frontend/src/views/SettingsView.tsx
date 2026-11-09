@@ -45,6 +45,7 @@ export const SettingsView: React.FC = () => {
   // Form Durumları
   const [siteTitle, setSiteTitle] = useState('MSK Labs Desk');
   const [siteUrl, setSiteUrl] = useState('https://msklabs.org');
+  const [analyticsEmbedUrl, setAnalyticsEmbedUrl] = useState('');
   const [senderName, setSenderName] = useState('MSK Labs Bildirim');
   const [senderEmail, setSenderEmail] = useState('bildirim@msklabs.org');
   const [turnstileEnabled, setTurnstileEnabled] = useState(true);
@@ -74,6 +75,8 @@ export const SettingsView: React.FC = () => {
             const cfg = typeof item.meta_json === 'string' ? JSON.parse(item.meta_json) : item.meta_json;
             if (cfg.siteTitle) setSiteTitle(cfg.siteTitle);
             if (cfg.siteUrl) setSiteUrl(cfg.siteUrl);
+            if (cfg.analytics_embed_url) setAnalyticsEmbedUrl(cfg.analytics_embed_url);
+            else if (cfg.analyticsEmbedUrl) setAnalyticsEmbedUrl(cfg.analyticsEmbedUrl);
             if (cfg.senderName) setSenderName(cfg.senderName);
             if (cfg.senderEmail) setSenderEmail(cfg.senderEmail);
             if (cfg.turnstileEnabled !== undefined) setTurnstileEnabled(cfg.turnstileEnabled);
@@ -128,6 +131,8 @@ export const SettingsView: React.FC = () => {
         meta_json: {
           siteTitle,
           siteUrl,
+          analytics_embed_url: analyticsEmbedUrl,
+          analyticsEmbedUrl,
           senderName,
           senderEmail,
           turnstileEnabled,
@@ -249,6 +254,8 @@ export const SettingsView: React.FC = () => {
               setSiteTitle={setSiteTitle}
               siteUrl={siteUrl}
               setSiteUrl={setSiteUrl}
+              analyticsEmbedUrl={analyticsEmbedUrl}
+              setAnalyticsEmbedUrl={setAnalyticsEmbedUrl}
             />
           )}
 
