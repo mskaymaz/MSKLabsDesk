@@ -162,6 +162,17 @@ export const AnalyticsView: React.FC = () => {
               }}>
                 Canlı GA4 Verisi
               </span>
+              <span style={{
+                background: 'rgba(34, 197, 94, 0.15)',
+                color: '#4ade80',
+                fontSize: '0.72rem',
+                fontWeight: 600,
+                padding: '2px 8px',
+                borderRadius: '6px',
+                border: '1px solid rgba(34, 197, 94, 0.3)'
+              }}>
+                Mülk: G-MQZ4CDTHWD
+              </span>
             </div>
             <p style={{ margin: '3px 0 0 0', fontSize: '0.82rem', color: 'var(--text-muted, #94a3b8)' }}>
               Türkiye ve dünya geneli yöresel ziyaretçi haritası ve sayfa analitikleri ($0 maliyet).
