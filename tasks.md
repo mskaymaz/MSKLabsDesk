@@ -51,9 +51,9 @@
 - [*] **Task 1.3 — Yönetici Muafiyeti (Admin Bypass Kontrolü):** Geçerli admin oturumu / `ADMIN_JWT` taşıyan yetkili yöneticilerin Authorization header ve Cookie üzerinden doğrulanarak bakım kalkanından muaf tutulması (`checkAdminBypass`).
 - [*] **Task 1.4 — Edge Bellek Önbellekleme (D1 Kota Koruması):** Her ziyaretçi isteğinde D1 okuması yapılmasını engellemek için ayarların Cloudflare Worker üzerinde 30 saniye süreyle in-memory önbelleklenmesi ve ayar güncellendiğinde `invalidateMaintenanceCache()` ile temizlenmesi ($0 maliyet ilkesi).
 
-##### Faz 2: Web Vitrini Parametrik Bakım Şablonu (webMSKLabs) [ ]
-- [ ] **Task 2.1 — Dinamik Bakım Sayfası (`maintenance.html`):** Tek parametrik, modern, mobil uyumlu, kurumsal kimliğe uygun ve çok dilli (TR/EN/AR) bakım şablonunun tasarlanması (Bakımdaki modül başlığı, bakım sebebi, tahmini bitiş saati rozeti ve "Ana Sayfaya Dön" butonu).
-- [ ] **Task 2.2 — Alt Rota Entegrasyonu & Yönlendirme Koruması:** Web vitrininde bakıma alınan alt rotaların (`/apps.html`, `/blog` vb.) bakım şablonuna yönlendirilmesi veya Worker tarafından doğrudan servis edilmesi.
+##### Faz 2: Web Vitrini Parametrik Bakım Şablonu (webMSKLabs) [*]
+- [*] **Task 2.1 — Dinamik Bakım Sayfası (`maintenance.html`):** Tek parametrik, modern, mobil uyumlu, kurumsal kimliğe uygun ve çok dilli (TR/EN/AR) bakım şablonunun tasarlanması (Bakımdaki modül başlığı, bakım sebebi, tahmini bitiş saati rozeti ve "Ana Sayfaya Dön" butonu; `webMSKLabs/maintenance.html` olarak derlendi).
+- [*] **Task 2.2 — Alt Rota Entegrasyonu & Yönlendirme Koruması:** Web vitrininde bakıma alınan alt rotaların (`/apps.html`, `/blog` vb.) `webMSKLabs/src/index.ts` üzerindeki Worker kalkanı tarafından doğrudan HTTP 503 + Retry-After: 3600 başlığıyla ve parametrik şablonla servis edilmesi.
 
 ##### Faz 3: MSKLabsDesk Sistem Ayarları Arayüzü (Sekmeli Modüler Düzen) [ ]
 - [ ] **Task 3.1 — Sekmeli Navigasyon Çerçevesi (`SettingsView.tsx`):** Tek dikey sayfa yerine *Genel*, *E-Posta & İletişim*, *Güvenlik & Bot Koruması*, *Bakım & Rota Matrisi* ve *Altyapı & API* sekmeli mimarisi (her alt bileşen <= 450 satır).

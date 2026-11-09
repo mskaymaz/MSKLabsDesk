@@ -94,9 +94,9 @@
   - [x] Cloudflare Worker üzerinde eşleşen rotalara `HTTP 503 Service Unavailable` ve `Retry-After: 3600` başlığı üreten kalkan (`webMSKLabs` & `MSKLabsDesk`).
   - [x] Geçerli yönetici oturumu taşıyan istekler için Admin Bypass muafiyeti (Authorization header & Cookie doğrulaması).
   - [x] $0 kota ilkesi için Cloudflare Worker in-memory edge cache (30s TTL) ve ayar güncellendiğinde önbellek tahliyesi.
-* [ ] **6.2 Web Vitrini Parametrik Bakım Şablonu (`webMSKLabs`):**
-  - [ ] Dinamik, mobil uyumlu ve çok dilli (TR/EN/AR) `maintenance.html` şablonu (modül adı, açıklama, ETA rozeti, ana sayfaya dönüş).
-  - [ ] Alt rotalar (`/apps.html`, `/blog` vb.) için dinamik yönlendirme/sunum.
+* [x] **6.2 Web Vitrini Parametrik Bakım Şablonu (TAMAMLANDI — 09.11.2026 - 11:55):**
+  - [x] Dinamik, mobil uyumlu ve çok dilli (TR/EN/AR) `maintenance.html` şablonu (modül adı, açıklama, ETA rozeti, ana sayfaya dönüş).
+  - [x] Alt rotalar (`/apps.html`, `/blog` vb.) için Worker üzerinden HTTP 503 ve Retry-After: 3600 ile parametrik sunum.
 * [ ] **6.3 MSKLabsDesk Yönetim Paneli Sistem Ayarları Arayüzü:**
   - [ ] `SettingsView.tsx` sekmeli modüler mimari (*Genel*, *E-Posta*, *Güvenlik*, *Bakım & Rota Matrisi*, *Altyapı & API*).
   - [ ] Ham input'ların UI bileşenlerine (`Input`, `Switch`) geçirilmesi ve `alert()` çağrılarının kaldırılıp toast'a bağlanması.
