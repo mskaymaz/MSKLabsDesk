@@ -1,6 +1,14 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 📌 Son Güncelleme [09.11.2026 - 11:53] — YOL HARİTASI ÖNCELİK GÜNCELLEMESİ (İSTATİSTİKLER ÖNCELİKLENDİRİLDİ) [✓]
+* **Yapılan İşlemler:**
+  1. **Yol Haritası & Öncelik Sıralaması (`tasks.md` & `ROADMAP_TODO.md`):**
+     - Google Analytics 4 & Looker Studio Bölgesel/Yöresel İstatistik Paneli (`ANALYTICS-DASH-001`), kullanıcının talimatıyla müstakil Inbox uygulamasından (`INBOX-APP-001`) bir önceki aşamaya (7. Aşama) çekildi.
+     - Yeni sıralama: **Sistem Ayarları (6. Aşama - Aktif)** ➔ **Google İstatistikler Paneli (7. Aşama)** ➔ **Müstakil Inbox İş İstasyonu (8. Aşama)** olarak kilitlendi.
+
+---
+
 ## 📌 Son Güncelleme [09.11.2026 - 11:25] — FAZ 1: D1 ŞEMA & BACKEND BAKIM KALKANI API'Sİ TAMAMLANDI [✓]
 * **Yapılan İşlemler:**
   1. **Bakım Modu ve Rota Kalkanı Motoru (`backend/src/utils/maintenance.ts`):**

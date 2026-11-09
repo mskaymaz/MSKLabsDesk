@@ -34,14 +34,7 @@
 
 ## 🚨 ÖNCELİKLİ YENİ GÖREVLER (IMMEDIATE ACTION BACKLOG)
 
-### INBOX-APP-001 — Müstakil Birleşik İletişim & Hızlı Yanıtlama Uygulaması (Inbox Workstation) [ ]
-- **Amaç:** Üst bardaki açılır çekmece (popover) yapısını aşarak; blog yorumları, destek talepleri ve `@msklabs.org` gelen e-postalarını tek ekranda anlık izleme, filtreleme, hızlı yanıtlama ve durum güncelleme imkanı sunan bağımsız, tam ekran, masaüstü ve mobil uyumlu bir yönetim iş istasyonu (`InboxView.tsx` / `/inbox`) inşa etmek.
-- **Not & Yöntem:** Arayüz bileşenleri, yerleşim şeması, klavye kısayolları ve aksiyon butonları kodlama öncesinde kullanıcı ile detaylı istişare edilerek şekillendirilecektir.
-- **Durum:** [ ] İstişare ve arayüz tasarımı bekleniyor (Beklemede).
-
----
-
-### SYS-SETTINGS-001 — Çok Katmanlı Sistem Ayarları & Granular Bakım Modu (Under Construction Hub) [ ]
+### SYS-SETTINGS-001 — Çok Katmanlı Sistem Ayarları & Granular Bakım Modu (Under Construction Hub) [Aktif]
 - **Amaç:** MSK Labs yönetim panelinde Sistem Ayarları ekranını modern, sekmeli ve tasarım sistemine tam uyumlu bir mimariye kavuşturmak; tüm site için genel (global) ve sayfa/rota bazlı (granular) çalışan dinamik "Bakım / Yapım Aşamasında" (Under Construction) motorunu SEO uyumlu (`HTTP 503 Service Unavailable`), yönetici muafiyetli (admin bypass) ve sıfır maliyetli ($0 Edge Cache) olarak inşa etmek.
 - **Kapsam:** `MSKLabsDesk/frontend/src/views/SettingsView.tsx`, `MSKLabsDesk/frontend/src/components/settings/*`, `MSKLabsDesk/backend/src/routes/cmsTemplates.ts`, `MSKLabsDesk/backend/src/index.ts`, `webMSKLabs/maintenance.html`.
 - **Mimari Prensipler:**
@@ -73,6 +66,21 @@
 - [*] **Task 4.1 — Backend Entegrasyon Testleri:** `tests/apiMaintenance.test.ts` yazılarak 17/17 test (in-memory caching, 503 başlığı, admin bypass, granular rota eşleşmesi) ve genel backend testleri (139/139 PASS) %100 doğrulandı.
 - [ ] **Task 4.2 — Frontend TypeScript & PWA Derlemesi:** `tsc -b && vite build` ile 0 hata doğrulaması.
 - [ ] **Task 4.3 — Canlı/Yerel Tarayıcı Doğrulaması:** Hem global hem de rota bazlı granular bakım modu akışının yerel sunucularda test edilerek onaylanması.
+
+---
+
+### ANALYTICS-DASH-001 — Google Analytics & Looker Studio Bölgesel İstatistik Paneli [ ]
+- **Amaç:** Google Analytics 4 (GA4) verilerini harici sekmeye gitmeden; yönetim paneli içerisindeki bağımsız "İstatistikler" ekranında resmi Google arayüzü, Türkiye/Dünya haritası, il il ziyaretçi sayıları ve grafiklerle $0 maliyetle görüntülemek.
+- **Kapsam:** `MSKLabsDesk/frontend/src/views/AnalyticsView.tsx`, `Sidebar.tsx`, Google Looker Studio güvenli gömme (Embed Iframe) entegrasyonu.
+- **Mimari & Kota:** Google Looker Studio resmi servisinden doğrudan çalışır; backend/D1 kotası tüketmez ($0 / Ay). Günde 1-2 kez bakış ergonomisine uygun lazy-load mimarisiyle kurulur.
+- **Öncelik Sırası:** Sistem Ayarları (`SYS-SETTINGS-001`) tamamlandıktan hemen sonra, müstakil Inbox uygulamasından (`INBOX-APP-001`) ÖNCE hayata geçirilecektir.
+
+---
+
+### INBOX-APP-001 — Müstakil Birleşik İletişim & Hızlı Yanıtlama Uygulaması (Inbox Workstation) [ ]
+- **Amaç:** Üst bardaki açılır çekmece (popover) yapısını aşarak; blog yorumları, destek talepleri ve `@msklabs.org` gelen e-postalarını tek ekranda anlık izleme, filtreleme, hızlı yanıtlama ve durum güncelleme imkanı sunan bağımsız, tam ekran, masaüstü ve mobil uyumlu bir yönetim iş istasyonu (`InboxView.tsx` / `/inbox`) inşa etmek.
+- **Not & Yöntem:** Arayüz bileşenleri, yerleşim şeması, klavye kısayolları ve aksiyon butonları kodlama öncesinde kullanıcı ile detaylı istişare edilerek şekillendirilecektir.
+- **Durum:** [ ] İstişare ve arayüz tasarımı bekleniyor (Beklemede).
 
 ---
 

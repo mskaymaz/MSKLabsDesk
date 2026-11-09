@@ -107,3 +107,21 @@
   - [ ] Backend 503 ve admin bypass Vitest entegrasyon testleri.
   - [ ] Frontend `tsc -b && vite build` sıfır hata derlemesi.
   - [ ] Yerel tarayıcıda global ve granular bakım testi doğrulaması.
+
+---
+
+### 📋 7. AŞAMA: GOOGLE ANALYTICS & LOOKER STUDIO BÖLGESEL İSTATİSTİK PANELİ [ ]
+* [ ] **7.1 Google Looker Studio Resmi Entegrasyonu:**
+  - [ ] GA4 mülküne bağlı resmi Türkiye/Dünya ziyaretçi haritası ve il il döküm şablonunun hazırlanması.
+  - [ ] Güvenli gömme (Embed Iframe) bağlantısının oluşturulması ($0 maliyet, sıfır API kotası tüketimi).
+* [ ] **7.2 MSKLabsDesk "İstatistikler" Ekranı (`AnalyticsView.tsx` & `Sidebar.tsx`):**
+  - [ ] Sol menüye doğrudan "İstatistikler" bağlantısının açılması.
+  - [ ] Günde 1-2 kez bakış senaryosuna uygun lazy-load iframe yükleme ve tam ekran masaüstü/mobil tasarımı.
+
+---
+
+### 📋 8. AŞAMA: MÜSTAKİL BİRLEŞİK İLETİŞİM UYGULAMASI (INBOX WORKSTATION) [ ]
+* [ ] **8.1 Arayüz ve Fonksiyon İstişaresi:**
+  - [ ] Blog yorumları, destek biletleri ve gelen kurumsal e-postaları tek ekranda yöneten tam sayfa iş istasyonunun (`InboxView.tsx`) tasarımının kullanıcı ile istişare edilmesi.
+* [ ] **8.2 Geliştirme ve Entegrasyon:**
+  - [ ] Hızlı filtreleme, anlık yanıtlama ve çoklu işlem aksiyon butonlarının kodlanması.
