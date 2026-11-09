@@ -1,6 +1,24 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 📌 Son Güncelleme [09.11.2026 - 12:10] — FAZ 3 & 4: YÖNETİM PANELİ SİSTEM AYARLARI & DOĞRULAMA TAMAMLANDI [✓]
+* **Yapılan İşlemler:**
+  1. **Sekmeli Modüler Ayarlar Paneli (`SettingsView.tsx` & `frontend/src/components/settings/*`):**
+     - `SettingsView.tsx` 5 sekmeli profesyonel bir yapıya kavuşturuldu: Genel, E-Posta, Güvenlik, Bakım Modu, Altyapı & Sağlık.
+     - Ham HTML form girdileri `Input` ve `Switch` UI bileşenlerine dönüştürüldü; `alert()` çağrıları tamamen kaldırılarak satır içi bildirim banner'ı uygulandı.
+     - Modüler alt bileşenler (her biri <= 250 satır standardında) ayrıştırıldı:
+       - `GeneralSettingsSection.tsx`: Site adı, URL, Açık/Koyu tema yönetimi.
+       - `EmailSettingsSection.tsx`: Gönderici adı, kurumsal e-posta (`bildirim@msklabs.org`), Web Push bildirimleri anahtarı.
+       - `SecuritySettingsSection.tsx`: Turnstile koruması, IP kısıtlama ve oturum özet kartı.
+       - `MaintenanceSettingsSection.tsx`: Global bakım switch'i, genel mesaj, tahmini tamamlanma süresi (ETA) ve 11 rotalık modüler rota matrisi (seçici toggle'lar, rozetler ve önizleme linkleri).
+       - `InfrastructureHealthSection.tsx`: Canlı altyapı sağlık testi (Health Ping: `/api/health` gecikme süresi ms cinsinden), servis sağlayıcı durumları (Resend, Brevo, D1, R2, Gemini AI) ve D1 veritabanı telemetri kartı.
+  2. **Doğrulama ve Testler:**
+     - Frontend `tsc -b && vite build` sıfır hata ile tamamlandı (731ms).
+     - Backend 139/139 Vitest testi %100 PASS.
+     - Yerel dev sunucuları (`:8787`, `:5173`, `:5174`) üzerinde API uç noktaları (`/api/health`, `/api/v1/maintenance`) ve web sayfaları canlı HTTP 200 ile doğrulandı.
+
+---
+
 ## 📌 Son Güncelleme [09.11.2026 - 11:55] — FAZ 2: WEB VİTRİNİ PARAMETRİK BAKIM ŞABLONU (MAINTENANCE.HTML) [✓]
 * **Yapılan İşlemler:**
   1. **Parametrik Bakım Şablonu (`webMSKLabs/maintenance.html`):**

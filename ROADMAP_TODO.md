@@ -39,15 +39,17 @@
 
 ---
 
-### 📍 GÜNCEL DURUM VE KALINAN YER (06.11.2026 - 16:30)
-* **Aktif Çalışma Standartları:** Hem `webMSKLabs` hem `MSKLabsDesk` repolarında doğrudan `main` dalındayız. 5. Aşama (Birleşik Bildirim & Mesajlaşma Merkezi - Inbox Hub), 14px scrollbar ergonomisi ve responsive düzen kilitleri %100 tamamlandı ve pushlandı.
+### 📍 GÜNCEL DURUM VE KALINAN YER (09.11.2026 - 12:10)
+* **Aktif Çalışma Standartları:** Hem `webMSKLabs` hem `MSKLabsDesk` repolarında doğrudan `main` dalındayız. 6. Aşama (Sistem Ayarları & Çok Katmanlı Bakım Modu) geliştirme ve testleri %100 tamamlandı.
 * **Yol Haritası Durumu:**
   - 1. Aşama (SEO & Yasal Sayfalar): [✓] Tamamlandı
   - 2. Aşama (Canlı Ana Dal Geçişi): [✓] Tamamlandı
   - 3. Aşama (Kurumsal E-Posta Altyapısı): [✓] Tamamlandı
   - 4. Aşama (Admin Paneli Eksiklikleri): [✓] Tamamlandı
   - 5. Aşama (Birleşik Bildirim & Inbox Hub): [✓] Tamamlandı
-  - 6. Aşama (Sistem Ayarları & Çok Katmanlı Bakım Modu): [ ] Başlanıyor
+  - 6. Aşama (Sistem Ayarları & Çok Katmanlı Bakım Modu): [✓] Tamamlandı
+  - 7. Aşama (Google Analytics & Looker Studio Bölgesel İstatistik Paneli): [ ] Sırada (Başlanıyor)
+  - 8. Aşama (Müstakil Birleşik İletişim Uygulaması - Inbox Workstation): [ ] İstişare Sonrası Geliştirilecek
 
 ---
 
@@ -88,7 +90,7 @@
 
 ---
 
-### 📋 6. AŞAMA: SİSTEM AYARLARI VE ÇOK KATMANLI BAKIM MODU (UNDER CONSTRUCTION HUB) [ ]
+### 📋 6. AŞAMA: SİSTEM AYARLARI VE ÇOK KATMANLI BAKIM MODU (UNDER CONSTRUCTION HUB) [✓]
 * [x] **6.1 D1 Şema & Backend API Genişletmesi (TAMAMLANDI — 09.11.2026 - 11:25):**
   - [x] `site_settings` JSON şemasına `maintenance` nesnesinin (`global`, `message`, `eta`, `routes`, `allowed_ips`) eklenmesi ve tiplerin tanımlanması.
   - [x] Cloudflare Worker üzerinde eşleşen rotalara `HTTP 503 Service Unavailable` ve `Retry-After: 3600` başlığı üreten kalkan (`webMSKLabs` & `MSKLabsDesk`).
@@ -97,16 +99,16 @@
 * [x] **6.2 Web Vitrini Parametrik Bakım Şablonu (TAMAMLANDI — 09.11.2026 - 11:55):**
   - [x] Dinamik, mobil uyumlu ve çok dilli (TR/EN/AR) `maintenance.html` şablonu (modül adı, açıklama, ETA rozeti, ana sayfaya dönüş).
   - [x] Alt rotalar (`/apps.html`, `/blog` vb.) için Worker üzerinden HTTP 503 ve Retry-After: 3600 ile parametrik sunum.
-* [ ] **6.3 MSKLabsDesk Yönetim Paneli Sistem Ayarları Arayüzü:**
-  - [ ] `SettingsView.tsx` sekmeli modüler mimari (*Genel*, *E-Posta*, *Güvenlik*, *Bakım & Rota Matrisi*, *Altyapı & API*).
-  - [ ] Ham input'ların UI bileşenlerine (`Input`, `Switch`) geçirilmesi ve `alert()` çağrılarının kaldırılıp toast'a bağlanması.
-  - [ ] `MaintenanceSettingsSection.tsx`: Global switch + sistemdeki rotaların (`/apps.html`, `/blog`, `/destek.html` vb.) çoklu seçim matrisi ve ETA girdisi.
-  - [ ] Canlı Altyapı & API Sağlık Testi (Health Ping): Resend, Brevo, Gemini AI ve D1/R2 gecikme ölçümü ve "Bağlantıyı Sına" aksiyonu.
-  - [ ] D1 Sistem Telemetrisi & Veritabanı Bilgi Kartı.
-* [ ] **6.4 Test, Doğrulama ve Canlı Yayın:**
-  - [ ] Backend 503 ve admin bypass Vitest entegrasyon testleri.
-  - [ ] Frontend `tsc -b && vite build` sıfır hata derlemesi.
-  - [ ] Yerel tarayıcıda global ve granular bakım testi doğrulaması.
+* [x] **6.3 MSKLabsDesk Yönetim Paneli Sistem Ayarları Arayüzü (TAMAMLANDI — 09.11.2026 - 12:05):**
+  - [x] `SettingsView.tsx` sekmeli modüler mimari (*Genel*, *E-Posta*, *Güvenlik*, *Bakım Modu*, *Altyapı & Sağlık*).
+  - [x] Ham input'ların UI bileşenlerine (`Input`, `Switch`) geçirilmesi ve `alert()` çağrılarının kaldırılıp yerleşik durum bildirimine bağlanması.
+  - [x] `MaintenanceSettingsSection.tsx`: Global switch + sistemdeki rotaların (`/apps.html`, `/blog`, `/destek.html` vb.) çoklu seçim matrisi ve ETA girdisi.
+  - [x] Canlı Altyapı & API Sağlık Testi (Health Ping): Resend, Brevo, Gemini AI ve D1/R2 gecikme ölçümü ve "Bağlantıyı Sına" aksiyonu.
+  - [x] D1 Sistem Telemetrisi & Veritabanı Bilgi Kartı.
+* [x] **6.4 Test, Doğrulama ve Canlı Hazırlığı (TAMAMLANDI — 09.11.2026 - 12:08):**
+  - [x] Backend 503 ve admin bypass Vitest entegrasyon testleri (17/17 PASS, genel toplam 139/139 PASS).
+  - [x] Frontend `tsc -b && vite build` sıfır hata derlemesi.
+  - [x] Yerel dev sunucularında (`localhost:8787`, `localhost:5173`, `localhost:5174`) API yanıtları ve şablon sunumu doğrulandı.
 
 ---
 

@@ -404,4 +404,29 @@ export interface UnifiedInboxResponse {
   items: UnifiedInboxItem[];
 }
 
+export interface MaintenanceRoute {
+  path: string;
+  title: string;
+  enabled: boolean;
+}
+
+export interface MaintenanceConfig {
+  global: boolean;
+  message: string;
+  eta: string;
+  routes: MaintenanceRoute[];
+  allowed_ips: string[];
+}
+
+export interface SiteSettingsData {
+  siteTitle: string;
+  siteUrl: string;
+  senderName: string;
+  senderEmail: string;
+  turnstileEnabled: boolean;
+  pushEnabled: boolean;
+  maintenance: MaintenanceConfig;
+  maintenanceMode?: boolean;
+}
+
 
