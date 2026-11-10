@@ -84,6 +84,18 @@
 
 ---
 
+### APP-TELEMETRY-001 — Masaüstü ve Mobil Uygulamalar İçin Sessiz Telemetri & Analitik Standardı [ ]
+- **Amaç:** Masaüstü (`Avkat`, `DeskPilot`, `PDFLayout` vb.) ve mobil (`RekatSayar` vb.) uygulamalar dağıtıldığında; indirme kaynağından bağımsız olarak kullanıcıları rahatsız etmeden sessiz, anonim ve sıfır maliyetli kullanım istatistikleri toplamak.
+- **Toplanacak Metrikler:**
+  1. *Kullanım & Sadakat:* Günlük/aylık aktif kullanıcı (DAU/MAU), ortalama oturum süresi, ilk açılış tarihi.
+  2. *Hata ve Çökme (Crash Logs):* İstisna türü, çökme anındaki modül ve hata detayları.
+  3. *Özellik Kullanımı (Feature Adoption):* En çok ve en az tıklanan menü/fonksiyonlar.
+  4. *Sistem & Donanım Profili:* İşletim sistemi (Win 10/11, Android vb.), mimari (x64/ARM), uygulama sürümü.
+  5. *Performans & Başlatma Hızı:* Uygulamanın açılış süresi (boot time).
+- **Uygulama Kuralı:** Uygulama projeleri güncellendiğinde her uygulama için Google Analytics / Firebase üzerinden özel bir akış kimliği tanımlanıp hafif bir arka plan ping modülüyle bağlanacaktır.
+
+---
+
 ### CLOUDFLARE-STAGING-001 — Canlı Uzak Ortam (Cloudflare dev & panel) Kurulum ve Dağıtım Planı [*]
 - **Amaç:** Yereldeki test/geliştirme sürecini, main dalını ve canlı siteyi riske atmadan; Cloudflare uzak altyapısında (panel.msklabs.org ve dev.msklabs.org) canlı test edilebilir, sıfır kod değişikliğiyle main'e taşınabilir ve Cloudflare build kotasını tüketmeyen bir mimaride yayına almak.
 - **Mimari Prensipler:**
