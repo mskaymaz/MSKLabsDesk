@@ -1,6 +1,18 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 📌 Son Güncelleme [10.11.2026 - 10:48] — BLOG 301 YÖNLENDİRME DÖNGÜSÜ ONARIMI VE CI/CD KALİTE KAPISI İYİLEŞTİRMESİ [✓]
+* **Yapılan İşlemler:**
+  1. **Blog 301 Sonsuz Döngü Onarımı (`webMSKLabs`):**
+     - `public/_redirects` dosyasından `/blog/blog.html /blog 301` kuralı kaldırıldı; Cloudflare Pages varlık motorunun içsel dosya çözümlemesinde sonsuz döngüye girmesi engellendi.
+     - `https://msklabs.org/blog` rotası artık `blog.html` şablonunu doğrudan ve temiz bir şekilde sunabilecek duruma getirildi.
+  2. **CI/CD Dağıtım Güvencesi (`webMSKLabs/.github/workflows/ci.yml`):**
+     - `Automatic Production Deploy` adımına `secrets.CLOUDFLARE_API_TOKEN != ''` koşulu eklendi; token repo secret'larına eklenene kadar pipeline'ın gereksiz yere başarısız olması önlendi.
+  3. **Derleme ve Test Doğrulaması:**
+     - `webMSKLabs` test süiti 605/605 PASS, `npm run build` sıfır hatayla derlendi.
+
+---
+
 ## 📌 Son Güncelleme [09.11.2026 - 23:45] — CLOUDFLARE CANLI DAĞITIMI VE GITHUB ACTIONS OTOMATİK PUSH-TO-DEPLOY ENTEGRASYONU [✓]
 * **Yapılan İşlemler:**
   1. **Cloudflare Canlı Yayın Dağıtımı (Wrangler):**
