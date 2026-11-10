@@ -16,6 +16,7 @@ export interface TopbarProps {
 
 const tabLabels: Record<TabType, string> = {
   dashboard: 'Özet',
+  inbox: 'İletişim İstasyonu',
   tickets: 'Destek Biletleri',
   comments: 'Yorum Yönetimi',
   channels: 'Blog Türleri',

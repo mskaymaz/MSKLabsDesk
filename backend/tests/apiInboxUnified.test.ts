@@ -3,7 +3,7 @@
  * File: backend/tests/apiInboxUnified.test.ts
  */
 
-import { handleAdminGetUnifiedInbox } from '../src/routes/adminInboxUnified';
+import { handleAdminGetUnifiedInbox, handleAdminGetInboxSummary } from '../src/routes/adminInboxUnified';
 import { createSessionToken } from '../src/utils/auth';
 
 function assert(condition: boolean, msg: string) {
@@ -25,6 +25,52 @@ class MockD1PreparedStatement {
 
   async all<T = any>(): Promise<{ results: T[] }> {
     const s = this.sql.trim();
+
+    if (s.includes('FROM blog_channels')) {
+      return { results: this.tables.blog_channels || [] };
+    }
+
+    if (s.includes('FROM comments c')) {
+      // Grouping query for summary
+      const counts: any[] = [];
+      for (const c of this.tables.comments) {
+        if (['pending', 'unverified'].includes(c.status)) {
+          counts.push({
+            channel_key: c.post_type || 'bizce',
+            status: c.status,
+            cnt: 1
+          });
+        }
+      }
+      return { results: counts };
+    }
+
+    if (s.includes('category != \'email\'') || s.includes('category IS NULL')) {
+      const counts: any[] = [];
+      for (const m of this.tables.messages) {
+        if (m.category !== 'email' && ['new', 'open', 'in_progress'].includes(m.status)) {
+          counts.push({
+            category: m.category,
+            status: m.status,
+            urgency: m.urgency,
+            cnt: 1
+          });
+        }
+      }
+      return { results: counts };
+    }
+
+    if (s.includes('category = \'email\'')) {
+      const emails = this.tables.messages
+        .filter((m: any) => m.category === 'email' && ['new', 'open', 'in_progress'].includes(m.status))
+        .map((m: any) => ({
+          id: m.id,
+          status: m.status,
+          urgency: m.urgency,
+          recipient_to: 'iletisim@msklabs.org'
+        }));
+      return { results: emails };
+    }
 
     if (s.includes('FROM messages')) {
       const limit = this.params[0] || 50;
@@ -163,7 +209,21 @@ async function runTests() {
   assert(filterData.items.length === 1, 'Filtrelenmiş yanıtta sadece 1 yorum dönmeli');
   assert(filterData.items[0].type === 'comment', 'Dönen öğe yorum türünde olmalı');
 
-  console.log('--- 5.1 INBOX HUB TESTLERİ BAŞARIYLA TAMAMLANDI ---');
+  // 5. INBOX-APP-001: Özet Metrik Servisi Testi (/api/admin/inbox/summary)
+  const summaryReq = new Request('https://msklabs.org/api/admin/inbox/summary', {
+    method: 'GET',
+    headers: { 'Authorization': `Bearer ${token}` },
+  });
+  const summaryRes = await handleAdminGetInboxSummary(summaryReq, { DB: db, ADMIN_JWT_SECRET: secret } as any);
+  assert(summaryRes.status === 200, `Summary API HTTP 200 dönmeli (Status: ${summaryRes.status})`);
+  const summaryData = await summaryRes.json() as any;
+  assert(summaryData.success === true, 'Summary success true olmalı');
+  assert(Array.isArray(summaryData.blog_channels), 'blog_channels dizi olmalı');
+  assert(Array.isArray(summaryData.support_categories), 'support_categories dizi olmalı');
+  assert(Array.isArray(summaryData.email_boxes), 'email_boxes dizi olmalı');
+  assert(summaryData.totals.all_actionable >= 0, 'all_actionable sayı olmalı');
+
+  console.log('--- 5.1 & INBOX-APP-001 HUB TESTLERİ BAŞARIYLA TAMAMLANDI ---');
 }
 
 runTests().catch(err => {

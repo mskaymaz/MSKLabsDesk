@@ -7,6 +7,7 @@ import { type TabType } from './components/Sidebar';
 import { AppShell } from './components/layout/AppShell';
 import { LoginView } from './views/LoginView';
 import { DashboardView } from './views/DashboardView';
+import { InboxView, type InboxNavigationParams } from './views/InboxView';
 import { AnalyticsView } from './views/AnalyticsView';
 import { TicketsView } from './views/TicketsView';
 import { CommentsView } from './views/CommentsView';
@@ -24,6 +25,17 @@ import { api } from './services/api';
 const AdminPanelContent: React.FC = () => {
   const { isAuthenticated } = useAuth();
   const [activeTab, setActiveTab] = useState<TabType>('dashboard');
+  const [ticketFilter, setTicketFilter] = useState<{ category?: string; status?: string } | null>(null);
+  const [commentFilter, setCommentFilter] = useState<{ channel?: string; status?: string } | null>(null);
+
+  const handleNavigateWithParams = (tab: TabType, params?: InboxNavigationParams) => {
+    if (tab === 'tickets') {
+      setTicketFilter(params ? { category: params.category, status: params.status } : null);
+    } else if (tab === 'comments') {
+      setCommentFilter(params ? { channel: params.channel, status: params.status } : null);
+    }
+    setActiveTab(tab);
+  };
 
   const [tickets, setTickets] = useState<Ticket[]>([]);
   const [comments, setComments] = useState<CommentItem[]>([]);
@@ -75,12 +87,18 @@ const AdminPanelContent: React.FC = () => {
         />
       )}
 
+      {activeTab === 'inbox' && (
+        <InboxView onNavigate={handleNavigateWithParams} />
+      )}
+
       {activeTab === 'analytics' && <AnalyticsView />}
 
       {activeTab === 'tickets' && (
         <TicketsView
           tickets={tickets}
           onRefresh={loadData}
+          initialCategory={ticketFilter?.category}
+          initialStatus={ticketFilter?.status}
         />
       )}
 
@@ -88,6 +106,8 @@ const AdminPanelContent: React.FC = () => {
         <CommentsView
           comments={comments}
           onRefresh={loadData}
+          initialChannel={commentFilter?.channel}
+          initialFilter={commentFilter?.status}
         />
       )}
 

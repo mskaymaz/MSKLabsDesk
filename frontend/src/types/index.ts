@@ -8,6 +8,7 @@ export interface Ticket {
   subject: string;
   category: string;
   priority: TicketPriority;
+  urgency?: string;
   status: TicketStatus;
   email_status?: 'valid' | 'invalid' | 'bounced';
   message_content?: string;
@@ -402,6 +403,49 @@ export interface UnifiedInboxResponse {
     comments: number;
   };
   items: UnifiedInboxItem[];
+}
+
+export interface InboxSummaryBlogChannel {
+  id: string;
+  slug: string;
+  name: string;
+  icon: string;
+  pending: number;    // O: Onay Bekleyen
+  unverified: number; // D: Doğrulama Bekleyen
+}
+
+export interface InboxSummarySupportCategory {
+  key: 'hata' | 'istek' | 'tesekkur' | 'fikir' | 'muhtelif';
+  name: string;
+  icon: string;
+  new: number;        // Y: Yeni
+  in_progress: number;// İ: İşlemde
+  urgent: number;     // !: Acil
+}
+
+export interface InboxSummaryEmailBox {
+  key: 'iletisim' | 'destek' | 'sistem' | 'muhtelif';
+  name: string;
+  address: string;
+  icon: string;
+  new: number;        // Y: Yeni / Cevap Bekleyen
+}
+
+export interface InboxSummaryResponse {
+  success: boolean;
+  timestamp: string;
+  totals: {
+    blog_pending: number;
+    blog_unverified: number;
+    support_new: number;
+    support_in_progress: number;
+    support_urgent: number;
+    email_new: number;
+    all_actionable: number;
+  };
+  blog_channels: InboxSummaryBlogChannel[];
+  support_categories: InboxSummarySupportCategory[];
+  email_boxes: InboxSummaryEmailBox[];
 }
 
 export interface MaintenanceRoute {

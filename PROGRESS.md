@@ -1,6 +1,25 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 📌 Son Güncelleme [10.11.2026 - 15:47] — KOMPAKT HIZLI İLETİŞİM İSTASYONU (INBOX-APP-001) ENTEGRASYONU [✓]
+* **Yapılan İşlemler:**
+  1. **Destek Masası "Muhtelif" Kategorisi:**
+     - `support.ts` ve AI analiz tiplerine `muhtelif` / `other` desteği eklendi.
+     - `TicketsView.tsx` kategori normalizasyonu ve filtre açılır listesine `📦 Muhtelif` eklendi.
+  2. **Backend Özet Servisi (`GET /api/admin/inbox/summary`):**
+     - Blog kanalları (`O`: Onay Bekleyen, `D`: Doğrulama Bekleyen), Destek talepleri (`Y`: Yeni, `İ`: İşlemde, `!`: Acil) ve E-postalar (`Y`: Yeni) tek sorguda gruplanıp döndürüldü.
+     - `index.ts` rotası bağlandı ve birim testler (`apiInboxUnified.test.ts`) 100% PASS doğrulandı.
+  3. **Konfigürasyon Odaklı UI ve Kompakt İş İstasyonu (`InboxView.tsx`):**
+     - Yatayda taşmayan, maksimum 880px genişliğinde, dikey kaydırılabilir (scroll) hafif yönetim kartı geliştirildi.
+     - 0 olan sayaçlar soluk, pozitifler canlı renklerle vurgulandı.
+  4. **Derin Yönlendirme (Deep-Linking) & Menü Entegrasyonu:**
+     - Satır başlığına basıldığında ilgili kanal/kategoriye, durum rozetine basıldığında hem kategori hem durum filtresiyle doğrudan `CommentsView` veya `TicketsView` sayfalarına aktarım sağlandı.
+     - `Sidebar.tsx` ve `Topbar.tsx` içine "İletişim İstasyonu" sekmesi ve toplam bekleyen rozeti entegre edildi.
+  5. **Kalite ve Derleme Kontrolü:**
+     - Frontend `tsc -b && vite build` ve backend `tsc` sıfır hatayla derlendi.
+
+---
+
 ## 📌 Son Güncelleme [10.11.2026 - 10:48] — BLOG 301 YÖNLENDİRME DÖNGÜSÜ ONARIMI VE CI/CD KALİTE KAPISI İYİLEŞTİRMESİ [✓]
 * **Yapılan İşlemler:**
   1. **Blog 301 Sonsuz Döngü Onarımı (`webMSKLabs`):**

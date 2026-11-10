@@ -5,7 +5,7 @@
 
 export interface AIAnalysisResult {
   is_spam: boolean;
-  category: 'bug' | 'feature' | 'billing' | 'general';
+  category: 'bug' | 'feature' | 'billing' | 'general' | 'muhtelif';
   urgency: 'low' | 'medium' | 'high' | 'critical';
   summary: string;
   draft_response: string;

@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import type { CommentItem } from '../types';
-import { api } from '../services/api';
 import { Clock, RotateCw } from 'lucide-react';
+import { api } from '../services/api';
 import { useTranslation } from '../context/I18nContext';
 import { CommentDetailModal } from '../components/CommentDetailModal';
 import { getBlogTypeLabel, formatBlogSlug } from '../utils/blogMeta';
@@ -9,18 +9,38 @@ import { getBlogTypeLabel, formatBlogSlug } from '../utils/blogMeta';
 interface CommentsViewProps {
   comments: CommentItem[];
   onRefresh: () => void;
+  initialFilter?: string;
+  initialChannel?: string;
 }
 
-export const CommentsView: React.FC<CommentsViewProps> = ({ comments, onRefresh }) => {
+export const CommentsView: React.FC<CommentsViewProps> = ({
+  comments,
+  onRefresh,
+  initialFilter,
+  initialChannel,
+}) => {
   const { t, language } = useTranslation();
-  const [filter, setFilter] = useState<string>('pending');
+  const [filter, setFilter] = useState<string>(initialFilter || 'pending');
+  const [channelFilter, setChannelFilter] = useState<string>(initialChannel || 'all');
   const [loadingId, setLoadingId] = useState<string | null>(null);
   const [refreshing, setRefreshing] = useState(false);
   const [selectedComment, setSelectedComment] = useState<CommentItem | null>(null);
   const [actionSelections, setActionSelections] = useState<Record<string, 'view' | 'approved' | 'rejected'>>({});
 
+  useEffect(() => {
+    if (initialFilter !== undefined) setFilter(initialFilter);
+    if (initialChannel !== undefined) setChannelFilter(initialChannel);
+  }, [initialFilter, initialChannel]);
+
   const locale = language === 'ar' ? 'ar-SA' : language === 'en' ? 'en-US' : 'tr-TR';
-  const filteredComments = comments.filter((c) => filter === 'all' || c.status === filter);
+  const filteredComments = comments.filter((c) => {
+    const matchesStatus = filter === 'all' || c.status === filter;
+    const matchesChannel =
+      channelFilter === 'all' ||
+      (c.post_type && c.post_type.toLowerCase() === channelFilter.toLowerCase()) ||
+      (c.post_slug && c.post_slug.toLowerCase().includes(channelFilter.toLowerCase()));
+    return matchesStatus && matchesChannel;
+  });
 
   const handleModerate = async (id: string, status: 'approved' | 'rejected') => {
     setLoadingId(id);

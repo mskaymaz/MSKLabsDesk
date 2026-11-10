@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import type { Ticket, TicketDetailResponse } from '../types';
 import { Search, Sparkles, Eye, Clock, RotateCw } from 'lucide-react';
 import { api } from '../services/api';
@@ -8,16 +8,25 @@ import { useTranslation } from '../context/I18nContext';
 interface TicketsViewProps {
   tickets: Ticket[];
   onRefresh: () => void;
+  initialCategory?: string;
+  initialStatus?: string;
 }
 
 export const TicketsView: React.FC<TicketsViewProps> = ({
   tickets,
   onRefresh,
+  initialCategory,
+  initialStatus,
 }) => {
   const { t, language } = useTranslation();
   const [searchQuery, setSearchQuery] = useState('');
-  const [statusFilter, setStatusFilter] = useState<string>('new');
-  const [categoryFilter, setCategoryFilter] = useState<string>('all');
+  const [statusFilter, setStatusFilter] = useState<string>(initialStatus || 'new');
+  const [categoryFilter, setCategoryFilter] = useState<string>(initialCategory || 'all');
+
+  useEffect(() => {
+    if (initialCategory !== undefined) setCategoryFilter(initialCategory);
+    if (initialStatus !== undefined) setStatusFilter(initialStatus);
+  }, [initialCategory, initialStatus]);
   const [selectedTicketDetail, setSelectedTicketDetail] = useState<TicketDetailResponse | null>(null);
   const [loadingDetail, setLoadingDetail] = useState(false);
   const [loadingAnalyze, setLoadingAnalyze] = useState(false);
@@ -52,6 +61,7 @@ export const TicketsView: React.FC<TicketsViewProps> = ({
     if (cat === 'tesekkur' || cat === 'feedback' || cat === 'general') return 'tesekkur';
     if (cat === 'fikir' || cat === 'idea') return 'fikir';
     if (cat === 'email') return 'email';
+    if (cat === 'muhtelif' || cat === 'other' || cat === 'diger') return 'muhtelif';
     return 'diger';
   };
 
@@ -66,6 +76,8 @@ export const TicketsView: React.FC<TicketsViewProps> = ({
         return { label: '❤️ Teşekkür & Övgü', bg: 'rgba(16, 185, 129, 0.25)', border: 'rgba(16, 185, 129, 0.45)' };
       case 'fikir':
         return { label: '💡 Yeni Fikir', bg: 'rgba(245, 158, 11, 0.25)', border: 'rgba(245, 158, 11, 0.45)' };
+      case 'muhtelif':
+        return { label: '📦 Muhtelif', bg: 'rgba(148, 163, 184, 0.25)', border: 'rgba(148, 163, 184, 0.45)' };
       case 'email':
         return { label: '✉️ E-Posta', bg: 'rgba(56, 189, 248, 0.25)', border: 'rgba(56, 189, 248, 0.45)' };
       default:
@@ -87,7 +99,8 @@ export const TicketsView: React.FC<TicketsViewProps> = ({
     const matchesStatus =
       statusFilter === 'all' ||
       tItem.status === statusFilter ||
-      (statusFilter === 'new' && tItem.status === 'open');
+      (statusFilter === 'new' && tItem.status === 'open') ||
+      (statusFilter === 'urgent' && (tItem.urgency === 'high' || tItem.urgency === 'urgent' || tItem.urgency === 'critical'));
     const matchesSearch =
       tItem.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
       tItem.subject.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -190,6 +203,7 @@ export const TicketsView: React.FC<TicketsViewProps> = ({
               title="İşlem Durumuna Göre Filtrele"
             >
               <option value="new">🆕 Yeni ({tickets.filter((t) => t.status === 'new' || t.status === 'open').length})</option>
+              <option value="urgent">🚨 Acil ({tickets.filter((t) => t.urgency === 'high' || t.urgency === 'urgent' || t.urgency === 'critical').length})</option>
               <option value="all">📋 Tüm Talepler ({tickets.length})</option>
               <option value="in_progress">⏳ İşlemde ({tickets.filter((t) => t.status === 'in_progress').length})</option>
               <option value="resolved">✅ Çözüldü / Yanıtlandı ({tickets.filter((t) => t.status === 'resolved').length})</option>
@@ -219,6 +233,7 @@ export const TicketsView: React.FC<TicketsViewProps> = ({
               <option value="istek">✨ İstek ({tickets.filter((t) => normalizeCategory(t.category) === 'istek').length})</option>
               <option value="tesekkur">❤️ Teşekkür ({tickets.filter((t) => normalizeCategory(t.category) === 'tesekkur').length})</option>
               <option value="fikir">💡 Fikir ({tickets.filter((t) => normalizeCategory(t.category) === 'fikir').length})</option>
+              <option value="muhtelif">📦 Muhtelif ({tickets.filter((t) => normalizeCategory(t.category) === 'muhtelif').length})</option>
               <option value="email">✉️ E-Posta ({tickets.filter((t) => normalizeCategory(t.category) === 'email').length})</option>
             </select>
           </div>

@@ -77,10 +77,39 @@
 
 ---
 
-### INBOX-APP-001 — Müstakil Birleşik İletişim & Hızlı Yanıtlama Uygulaması (Inbox Workstation) [ ]
-- **Amaç:** Üst bardaki açılır çekmece (popover) yapısını aşarak; blog yorumları, destek talepleri ve `@msklabs.org` gelen e-postalarını tek ekranda anlık izleme, filtreleme, hızlı yanıtlama ve durum güncelleme imkanı sunan bağımsız, tam ekran, masaüstü ve mobil uyumlu bir yönetim iş istasyonu (`InboxView.tsx` / `/inbox`) inşa etmek.
-- **Not & Yöntem:** Arayüz bileşenleri, yerleşim şeması, klavye kısayolları ve aksiyon butonları kodlama öncesinde kullanıcı ile detaylı istişare edilerek şekillendirilecektir.
-- **Durum:** [ ] İstişare ve arayüz tasarımı bekleniyor (Beklemede).
+### INBOX-APP-001 — Kompakt Hızlı İletişim İstasyonu (Inbox Workstation) [*]
+- **Amaç:** Üst bar çekmecesinden bağımsız; yatayda sabit, dikey kaydırılabilir (scroll), satır içi metrikli (Yeni, İşlemde, Acil, Onay vb.) ve tek tıkla filtrelenmiş detay sayfasına yönlendiren kompakt, hafif bir operasyon merkezi (`InboxView.tsx`) inşa etmek.
+- **Tarih:** 10.11.2026 - 15:25
+- **Mimari:** Konfigürasyon odaklı (Config-Driven), sıfır hantallık, cerrahi ve modüler yaklaşım.
+
+#### 📋 Takip Edilebilir Aşama ve Görev Listesi:
+- [*] **Task 1 — Destek Masası "Muhtelif" Kategorisi ve Şema Uyumu:**
+  - [*] 1.1: `backend/src/routes/support.ts` tip tanımına ve izin verilen kategorilere `other` / `muhtelif` eklenmesi.
+  - [*] 1.2: `frontend/src/views/TicketsView.tsx` kategori normalizasyonuna ve açılır listesine `muhtelif` seçeneğinin eklenmesi.
+  - [*] 1.3: Panel arayüzünde tek dil Türkçe kuralına uygun kategori ve rozet tanımı tamamlandı.
+- [*] **Task 2 — Backend Özet Metrik Servisi (`GET /api/admin/inbox/summary`):**
+  - [*] 2.1: `backend/src/routes/adminInboxUnified.ts` içine kanal/kategori bazında gruplanmış sayıları döndüren `handleAdminGetInboxSummary` fonksiyonunun eklenmesi.
+  - [*] 2.2: Blog yorumları için kanal bazında (Bizce, Teknoloji vb.) `pending` (O) ve `unverified` (D) sayaç sorgusu.
+  - [*] 2.3: Destek talepleri için kategori bazında (Hata, İstek, Teşekkür, Fikir, Muhtelif) `new` (Y), `in_progress` (İ) ve `urgent` (!) sayaç sorgusu.
+  - [*] 2.4: Kurumsal e-postalar için alıcı adresi bazında (`iletisim@`, `destek@`, `admin@`, `muhtelif`) `unread` (Y) sayaç sorgusu.
+  - [*] 2.5: `backend/src/index.ts` rotasının bağlanması, yetki kontrolü ve birim test doğrulaması (100% PASS).
+- [*] **Task 3 — Konfigürasyon Odaklı UI Katmanı & Tip Tanımları:**
+  - [*] 3.1: `frontend/src/types/index.ts` içine InboxSummary modellerinin eklenmesi.
+  - [*] 3.2: `frontend/src/config/inboxConfig.ts` oluşturularak satır etiketleri, grup tanımları ve rozet stillerinin tanımlanması.
+  - [*] 3.3: `frontend/src/services/api.ts` servisine `getInboxSummary()` metodunun eklenmesi.
+- [*] **Task 4 — Kompakt İş İstasyonu Arayüzü (`InboxView.tsx`):**
+  - [*] 4.1: Yatayda taşmayan, maksimum 880px genişliğinde, dikey kaydırılabilir kompakt kapsayıcı tasarlandı.
+  - [*] 4.2: Grup başlıkları (Blog, Destek, E-Posta) ve her kanal için tek satır görünümü bağlandı.
+  - [*] 4.3: Satır içi durum etiketleri/rozetleri (Blog için: O/D, Destek için: Y/İ/!, E-posta için: Y) entegre edildi.
+  - [*] 4.4: 0 olan metrikler soluk/pasif, pozitif olanlar renkli ve taze yenileme aksiyonu eklendi.
+- [*] **Task 5 — Derin Yönlendirme (Deep-Linking) ve Durum Aktarımı:**
+  - [*] 5.1: `Sidebar.tsx`, `Topbar.tsx` ve `App.tsx` içine `inbox` sekmesi eklendi; `handleNavigateWithParams` ile durum aktarımı sağlandı.
+  - [*] 5.2: Satır başlığı tıklandığında `TicketsView` veya `CommentsView` ekranına ilgili kategori önceden seçili geçiş tamamlandı.
+  - [*] 5.3: Satır içi durum etiketine (örn. `!`, `Y`, `O`) tıklandığında hem kategori hem durum filtresi otomatik bağlandı.
+- [*] **Task 6 — Yerel Derleme, Test ve Doğrulama:**
+  - [*] 6.1: Backend ve frontend TypeScript kontrolleri (`tsc -b`, `npx tsc --noEmit`) 0 hatayla geçti.
+  - [*] 6.2: Backend entegrasyon testleri (`npm test`) 100% PASS doğrulandı.
+  - [*] 6.3: `PROGRESS.md` ve `tasks.md` güncellendi.
 
 ---
 

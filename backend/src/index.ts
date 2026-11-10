@@ -11,7 +11,7 @@ import { handleAdminGetTickets, handleAdminGetTicketDetail, handleAdminReplyTick
 import { handleAdminGetComments, handleAdminModerateComment } from './routes/adminComments';
 import { handleAdminGetEmailStats } from './routes/adminEmailStats';
 import { handleAdminGetSubscribers, handleAdminBroadcastNewsletter, handleAdminGetBroadcastHistory } from './routes/adminBroadcast';
-import { handleAdminGetUnifiedInbox } from './routes/adminInboxUnified';
+import { handleAdminGetUnifiedInbox, handleAdminGetInboxSummary } from './routes/adminInboxUnified';
 import { handleAdminMediaUpload, handleAdminMediaDelete } from './routes/adminMedia';
 import { handleAdminTTSGenerate, handleAdminTTSStatus, handleAdminTTSApprove, handleAdminTTSUnpublish, handleAdminTTSRegenerate, handlePublicAudioDelivery } from './routes/adminTts';
 import { handleCmsChannels } from './routes/cmsChannels';
@@ -117,6 +117,8 @@ export default {
       response = await handleAdminGetBroadcastHistory(request, env);
     } else if ((path === '/api/v1/inbox/unified' || path === '/api/admin/inbox/unified') && request.method === 'GET') {
       response = await handleAdminGetUnifiedInbox(request, env);
+    } else if ((path === '/api/v1/inbox/summary' || path === '/api/admin/inbox/summary') && request.method === 'GET') {
+      response = await handleAdminGetInboxSummary(request, env);
     } else if ((path === '/api/v1/admin/media/upload' || path === '/api/admin/media/upload') && request.method === 'POST') {
       response = await handleAdminMediaUpload(request, env);
     } else if ((path.startsWith('/api/v1/admin/media/') || path.startsWith('/api/admin/media/')) && request.method === 'DELETE') {

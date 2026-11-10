@@ -16,14 +16,15 @@ import {
   Layers,
   Layout,
   Sun,
-  Moon
+  Moon,
+  HelpCircle
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import { useTranslation } from '../context/I18nContext';
 import type { Language } from '../i18n/translations';
 
-export type TabType = 'dashboard' | 'analytics' | 'tickets' | 'comments' | 'broadcast' | 'subscribers' | 'settings' | 'channels' | 'posts' | 'apps' | 'pages' | 'templates';
+export type TabType = 'dashboard' | 'inbox' | 'analytics' | 'tickets' | 'comments' | 'broadcast' | 'subscribers' | 'settings' | 'channels' | 'posts' | 'apps' | 'pages' | 'templates';
 
 interface SidebarProps {
   activeTab: TabType;
@@ -44,11 +45,17 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
   const menuItems = [
     { id: 'dashboard' as TabType, label: t('dashboard'), icon: LayoutDashboard },
+    { 
+      id: 'inbox' as TabType, 
+      label: 'İletişim İstasyonu', 
+      icon: Inbox, 
+      badge: (pendingTicketCount + pendingCommentCount) > 0 ? (pendingTicketCount + pendingCommentCount) : undefined 
+    },
     { id: 'analytics' as TabType, label: t('analytics'), icon: BarChart3 },
     { 
       id: 'tickets' as TabType, 
       label: t('tickets'), 
-      icon: Inbox, 
+      icon: HelpCircle, 
       badge: pendingTicketCount > 0 ? pendingTicketCount : undefined 
     },
     { 

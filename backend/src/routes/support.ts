@@ -12,7 +12,7 @@ export interface SupportTicketPayload {
   sender_email: string;
   subject: string;
   content: string;
-  category?: 'general' | 'bug' | 'feature' | 'billing';
+  category?: 'general' | 'bug' | 'feature' | 'billing' | 'idea' | 'thanks' | 'muhtelif' | 'other' | string;
 }
 
 /**
