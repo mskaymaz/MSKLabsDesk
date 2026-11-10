@@ -21,7 +21,7 @@ import { api } from '../services/api';
 import { Button } from '../components/ui/Button';
 
 const STORAGE_KEY = 'msklabs_analytics_embed_url';
-const GA_CONSOLE_URL = 'https://analytics.google.com/';
+const GA_CONSOLE_URL = 'https://analytics.google.com/analytics/web/#/realtime';
 
 const isValidEmbedUrl = (url: string): boolean => {
   if (!url || typeof url !== 'string') return false;
