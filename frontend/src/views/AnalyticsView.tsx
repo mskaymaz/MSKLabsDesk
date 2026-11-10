@@ -202,7 +202,7 @@ export const AnalyticsView: React.FC = () => {
                 alignItems: 'center',
                 gap: '4px'
               }}>
-                <CheckCircle2 size={12} /> GA4 Canlı: G-MQZ4CDTHWD
+                <CheckCircle2 size={12} /> GA4 Canlı: G-WZES84LTL3
               </span>
             </div>
             <p style={{ margin: '3px 0 0 0', fontSize: '0.82rem', color: 'var(--text-muted, #94a3b8)' }}>
