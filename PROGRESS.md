@@ -1,6 +1,19 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 📌 Son Güncelleme [10.11.2026 - 16:19] — DESTEK FORMU KARTLARI 5'Lİ TEK SATIR VE MOBİL DUYARLILIK OPTİMİZASYONU [✓]
+* **Yapılan İşlemler:**
+  1. **Destek Formu Genişliği (`webMSKLabs/assets/css/global.css`):**
+     - `.support-container` maksimum genişliği `760px` -> `820px` yapılarak ferahlatıldı.
+     - `.category-grid` masaüstünde `repeat(5, 1fr)` ve `gap: 10px` yapılarak tüm 5 kartın (Hata, İstek, Teşekkür, Fikir, Muhtelif) tek satırda hizalanması sağlandı.
+     - `.category-option` yatay dolgusu optimize edilerek metin taşmaları önlendi.
+  2. **Mobil & Tablet Duyarlılığı:**
+     - Tablet ekranlarında (`<=768px`) `repeat(3, 1fr)`, mobil telefonlarda (`<=480px`) `repeat(2, 1fr)` esnek ızgarası uygulandı.
+  3. **Dağıtım ve Canlı Doğrulama:**
+     - 605 vitest testi PASS, `build.js` derlendi; GitHub `main` dalına push edilerek Cloudflare üzerinde canlıya alındı.
+
+---
+
 ## 📌 Son Güncelleme [10.11.2026 - 15:47] — KOMPAKT HIZLI İLETİŞİM İSTASYONU (INBOX-APP-001) ENTEGRASYONU [✓]
 * **Yapılan İşlemler:**
   1. **Destek Masası "Muhtelif" Kategorisi:**
