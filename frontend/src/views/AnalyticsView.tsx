@@ -7,8 +7,14 @@ import {
   Minimize2, 
   Settings2, 
   Globe2, 
+  Users, 
+  MapPin, 
+  FileText, 
+  TrendingUp, 
+  MessageSquare, 
+  Mail, 
+  BookOpen, 
   CheckCircle2, 
-  Info, 
   X
 } from 'lucide-react';
 import { api } from '../services/api';
@@ -17,10 +23,15 @@ import { Button } from '../components/ui/Button';
 const STORAGE_KEY = 'msklabs_analytics_embed_url';
 const GA_CONSOLE_URL = 'https://analytics.google.com/';
 
+const isValidEmbedUrl = (url: string): boolean => {
+  if (!url || typeof url !== 'string') return false;
+  const trimmed = url.trim();
+  return trimmed.startsWith('https://lookerstudio.google.com/embed/') || trimmed.startsWith('https://datastudio.google.com/embed/');
+};
+
 export const AnalyticsView: React.FC = () => {
   const [embedUrl, setEmbedUrl] = useState<string>('');
   const [inputUrl, setInputUrl] = useState<string>('');
-  const [loading, setLoading] = useState<boolean>(true);
   const [iframeLoading, setIframeLoading] = useState<boolean>(true);
   const [saving, setSaving] = useState<boolean>(false);
   const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
@@ -28,14 +39,25 @@ export const AnalyticsView: React.FC = () => {
   const [refreshKey, setRefreshKey] = useState<number>(0);
   const [feedback, setFeedback] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
 
-  // 1. Ayarları D1 ve LocalStorage üzerinden çek
+  // Platform canlı telemetrisi
+  const [platformStats, setPlatformStats] = useState({
+    tickets: 0,
+    comments: 0,
+    subscribers: 0,
+    posts: 0
+  });
+
   useEffect(() => {
+    // 1. LocalStorage kontrolü ve geçersiz göreli URL'leri temizleme
     const localSaved = localStorage.getItem(STORAGE_KEY) || '';
-    if (localSaved) {
+    if (isValidEmbedUrl(localSaved)) {
       setEmbedUrl(localSaved);
       setInputUrl(localSaved);
+    } else if (localSaved) {
+      localStorage.removeItem(STORAGE_KEY);
     }
 
+    // 2. D1 üzerinden site_settings çekme
     api.getTemplates()
       .then((res) => {
         const list = res.templates || [];
@@ -43,7 +65,7 @@ export const AnalyticsView: React.FC = () => {
         if (siteTpl && siteTpl.meta_json) {
           try {
             const meta = typeof siteTpl.meta_json === 'string' ? JSON.parse(siteTpl.meta_json) : siteTpl.meta_json;
-            if (meta.analytics_embed_url) {
+            if (isValidEmbedUrl(meta.analytics_embed_url)) {
               setEmbedUrl(meta.analytics_embed_url);
               setInputUrl(meta.analytics_embed_url);
               localStorage.setItem(STORAGE_KEY, meta.analytics_embed_url);
@@ -53,22 +75,44 @@ export const AnalyticsView: React.FC = () => {
           }
         }
       })
-      .catch((err) => {
-        console.error('Analytics ayar yükleme hatası:', err);
-      })
-      .finally(() => {
-        setLoading(false);
+      .catch((err) => console.error('Analytics ayar hatası:', err));
+
+    // 3. Canlı D1 telemetrisini çekme
+    Promise.allSettled([
+      api.getTickets().then(r => r.tickets?.length || 0),
+      api.getComments().then(r => r.comments?.length || 0),
+      api.getSubscribers().then(r => r.subscribers?.length || 0),
+      api.getPosts().then(r => r.posts?.length || 0)
+    ]).then(([t, c, s, p]) => {
+      setPlatformStats({
+        tickets: t.status === 'fulfilled' ? t.value : 0,
+        comments: c.status === 'fulfilled' ? c.value : 0,
+        subscribers: s.status === 'fulfilled' ? s.value : 0,
+        posts: p.status === 'fulfilled' ? p.value : 0
       });
+    });
   }, []);
 
-  // 2. URL'yi D1'e ve LocalStorage'a kaydet
   const handleSaveUrl = async (urlToSave: string) => {
     const cleaned = urlToSave.trim();
     setSaving(true);
     setFeedback(null);
 
+    if (cleaned !== '' && !isValidEmbedUrl(cleaned)) {
+      setSaving(false);
+      setFeedback({
+        type: 'error',
+        message: 'Geçersiz bağlantı! Bağlantı https://lookerstudio.google.com/embed/ ile başlamalıdır. Mülk kodu (G-...) gömme linki değildir.'
+      });
+      return;
+    }
+
     try {
-      localStorage.setItem(STORAGE_KEY, cleaned);
+      if (cleaned === '') {
+        localStorage.removeItem(STORAGE_KEY);
+      } else {
+        localStorage.setItem(STORAGE_KEY, cleaned);
+      }
       setEmbedUrl(cleaned);
 
       const res = await api.getTemplates();
@@ -88,131 +132,51 @@ export const AnalyticsView: React.FC = () => {
         is_active: 1,
       });
 
-      setFeedback({ type: 'success', message: 'Looker Studio bağlantısı Cloudflare D1 veritabanına başarıyla kaydedildi.' });
+      setFeedback({ 
+        type: 'success', 
+        message: cleaned === '' ? 'Rapor bağlantısı temizlendi.' : 'Looker Studio bağlantısı başarıyla kaydedildi.' 
+      });
       setShowConfigModal(false);
       setRefreshKey((k) => k + 1);
     } catch (err: any) {
-      setFeedback({ type: 'error', message: err.message || 'Kayıt sırasında bir hata oluştu.' });
+      setFeedback({ type: 'error', message: err.message || 'Kayıt sırasında hata oluştu.' });
     } finally {
       setSaving(false);
     }
   };
 
-  const handleRefresh = () => {
-    setIframeLoading(true);
-    setRefreshKey((k) => k + 1);
-  };
-
   return (
-    <div className={`analytics-view-container animate-fade-in ${isFullscreen ? 'fullscreen-mode' : ''}`} style={{
-      display: 'flex',
-      flexDirection: 'column',
-      height: isFullscreen ? '100vh' : 'calc(100vh - 40px)',
-      position: isFullscreen ? 'fixed' : 'relative',
-      top: isFullscreen ? 0 : 'auto',
-      left: isFullscreen ? 0 : 'auto',
-      right: isFullscreen ? 0 : 'auto',
-      bottom: isFullscreen ? 0 : 'auto',
-      zIndex: isFullscreen ? 9999 : 'auto',
-      background: 'var(--bg-primary, #0f172a)',
-      padding: isFullscreen ? '16px 20px' : '0 0 16px 0',
-      boxSizing: 'border-box'
-    }}>
-      {/* Üst Başlık & Aksiyon Barı */}
-      <div style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        flexWrap: 'wrap',
-        gap: '12px',
-        marginBottom: '14px',
-        background: 'var(--bg-card, #1e293b)',
-        padding: '12px 18px',
-        borderRadius: '12px',
-        border: '1px solid var(--border-color, #334155)',
-        boxShadow: '0 2px 8px rgba(0,0,0,0.06)'
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <div style={{
-            width: '40px',
-            height: '40px',
-            borderRadius: '10px',
-            background: 'linear-gradient(135deg, #3b82f6, #8b5cf6)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: '#fff',
-            boxShadow: '0 4px 12px rgba(59, 130, 246, 0.3)'
-          }}>
+    <div className={`analytics-view-container ${isFullscreen ? 'fixed inset-0 z-50 p-4 bg-slate-900' : 'space-y-4'}`}>
+      {/* Üst Bar */}
+      <div className="flex flex-wrap items-center justify-between gap-3 bg-slate-800/80 border border-slate-700/60 rounded-xl p-4 shadow-sm">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white shadow-md">
             <BarChart3 size={22} />
           </div>
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <h1 style={{ margin: 0, fontSize: '1.18rem', fontWeight: 700, color: 'var(--text-primary, #f8fafc)' }}>
-                Google Analytics & Looker Studio Raporu
-              </h1>
-              <span style={{
-                background: 'rgba(59, 130, 246, 0.15)',
-                color: '#60a5fa',
-                fontSize: '0.72rem',
-                fontWeight: 600,
-                padding: '2px 8px',
-                borderRadius: '6px',
-                border: '1px solid rgba(59, 130, 246, 0.3)'
-              }}>
-                Canlı GA4 Verisi
-              </span>
-              <span style={{
-                background: 'rgba(34, 197, 94, 0.15)',
-                color: '#4ade80',
-                fontSize: '0.72rem',
-                fontWeight: 600,
-                padding: '2px 8px',
-                borderRadius: '6px',
-                border: '1px solid rgba(34, 197, 94, 0.3)'
-              }}>
-                Mülk: G-MQZ4CDTHWD
+            <div className="flex items-center gap-2 flex-wrap">
+              <h1 className="text-base font-bold text-slate-100 m-0">Ziyaretçi & Platform İstatistikleri</h1>
+              <span className="bg-emerald-500/15 text-emerald-400 text-xs px-2 py-0.5 rounded-full border border-emerald-500/30 flex items-center gap-1 font-semibold">
+                <CheckCircle2 size={12} /> GA4 Canlı: G-MQZ4CDTHWD
               </span>
             </div>
-            <p style={{ margin: '3px 0 0 0', fontSize: '0.82rem', color: 'var(--text-muted, #94a3b8)' }}>
-              Türkiye ve dünya geneli yöresel ziyaretçi haritası ve sayfa analitikleri ($0 maliyet).
+            <p className="text-xs text-slate-400 m-0 mt-0.5">
+              40 web sayfası, arama motoru indeksleri ve platform telemetrisi ($0 maliyet).
             </p>
           </div>
         </div>
 
-        {/* Aksiyon Butonları */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+        <div className="flex items-center gap-2">
           {embedUrl && (
             <>
-              <Button
-                variant="secondary"
-                size="sm"
-                onClick={handleRefresh}
-                title="Raporu Yenile"
-                style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
-              >
+              <Button variant="secondary" size="sm" onClick={() => { setIframeLoading(true); setRefreshKey(k => k + 1); }}>
                 <RefreshCw size={14} className={iframeLoading ? 'animate-spin' : ''} />
-                <span className="hidden sm:inline">Yenile</span>
               </Button>
-
-              <Button
-                variant="secondary"
-                size="sm"
-                onClick={() => setIsFullscreen(!isFullscreen)}
-                title={isFullscreen ? 'Tam Ekrandan Çık' : 'Tam Ekran'}
-                style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
-              >
+              <Button variant="secondary" size="sm" onClick={() => setIsFullscreen(!isFullscreen)}>
                 {isFullscreen ? <Minimize2 size={14} /> : <Maximize2 size={14} />}
               </Button>
-
-              <Button
-                variant="secondary"
-                size="sm"
-                onClick={() => setShowConfigModal(true)}
-                style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
-              >
-                <Settings2 size={14} />
-                <span>Rapor Bağlantısı</span>
+              <Button variant="secondary" size="sm" onClick={() => setShowConfigModal(true)}>
+                <Settings2 size={14} /> <span>Rapor Ayarı</span>
               </Button>
             </>
           )}
@@ -221,287 +185,207 @@ export const AnalyticsView: React.FC = () => {
             href={GA_CONSOLE_URL}
             target="_blank"
             rel="noopener noreferrer"
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '6px',
-              padding: '6px 12px',
-              borderRadius: '8px',
-              fontSize: '0.82rem',
-              fontWeight: 600,
-              color: '#fff',
-              background: 'linear-gradient(135deg, #f59e0b, #d97706)',
-              textDecoration: 'none',
-              boxShadow: '0 2px 6px rgba(245, 158, 11, 0.25)'
-            }}
+            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold text-white bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 shadow-sm transition-all"
           >
             <ExternalLink size={14} />
-            <span className="hidden md:inline">GA4 Konsolu</span>
+            <span>Google Analytics Aç</span>
           </a>
         </div>
       </div>
 
-      {/* Geri Bildirim */}
       {feedback && (
-        <div style={{
-          padding: '10px 14px',
-          borderRadius: '8px',
-          marginBottom: '12px',
-          fontSize: '0.85rem',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '8px',
-          background: feedback.type === 'success' ? 'rgba(34, 197, 94, 0.15)' : 'rgba(239, 68, 68, 0.15)',
-          color: feedback.type === 'success' ? '#4ade80' : '#f87171',
-          border: `1px solid ${feedback.type === 'success' ? 'rgba(34, 197, 94, 0.3)' : 'rgba(239, 68, 68, 0.3)'}`
-        }}>
-          {feedback.type === 'success' ? <CheckCircle2 size={16} /> : <Info size={16} />}
+        <div className={`p-3 rounded-lg text-xs font-medium flex items-center justify-between ${feedback.type === 'success' ? 'bg-emerald-950/60 border border-emerald-800 text-emerald-200' : 'bg-rose-950/60 border border-rose-800 text-rose-200'}`}>
           <span>{feedback.message}</span>
+          <button onClick={() => setFeedback(null)} className="text-slate-400 hover:text-white"><X size={14} /></button>
         </div>
       )}
 
-      {/* Ana Gövde */}
-      <div style={{
-        flex: 1,
-        background: 'var(--bg-card, #1e293b)',
-        borderRadius: '12px',
-        border: '1px solid var(--border-color, #334155)',
-        overflow: 'hidden',
-        position: 'relative',
-        display: 'flex',
-        flexDirection: 'column'
-      }}>
-        {loading ? (
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', gap: '12px', color: 'var(--text-muted)' }}>
-            <RefreshCw size={28} className="animate-spin text-blue-500" />
-            <p style={{ margin: 0, fontSize: '0.9rem' }}>Ayar bilgileri yükleniyor...</p>
+      {/* İframe Varsa Göster */}
+      {embedUrl ? (
+        <div className="bg-slate-800 border border-slate-700 rounded-xl overflow-hidden relative" style={{ height: isFullscreen ? 'calc(100vh - 100px)' : '720px' }}>
+          {iframeLoading && (
+            <div className="absolute inset-0 flex flex-col items-center justify-center bg-slate-900/80 backdrop-blur-sm z-10 gap-2">
+              <RefreshCw size={28} className="animate-spin text-blue-400" />
+              <p className="text-sm font-medium text-slate-200">Looker Studio Raporu Yükleniyor...</p>
+            </div>
+          )}
+          <iframe
+            key={refreshKey}
+            src={embedUrl}
+            title="Google Analytics Looker Studio Raporu"
+            className="w-full h-full border-none bg-white rounded-xl"
+            loading="lazy"
+            allowFullScreen
+            sandbox="allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"
+            onLoad={() => setIframeLoading(false)}
+          />
+        </div>
+      ) : (
+        /* Standalone İstatistik ve Rapor Merkezi */
+        <div className="space-y-4">
+          {/* GA4 Canlı Hızlı Erişim Kartları */}
+          <div>
+            <h2 className="text-xs uppercase tracking-wider font-bold text-slate-400 mb-2.5">
+              Google Analytics 4 — Doğrudan Canlı Raporlar
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+              <a
+                href="https://analytics.google.com/analytics/web/#/realtime"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-slate-800/90 hover:bg-slate-750 border border-slate-700/80 hover:border-blue-500/50 rounded-xl p-3.5 transition-all group shadow-sm block"
+              >
+                <div className="flex items-center justify-between mb-2">
+                  <div className="w-8 h-8 rounded-lg bg-blue-500/15 text-blue-400 flex items-center justify-center">
+                    <Users size={18} />
+                  </div>
+                  <ExternalLink size={14} className="text-slate-500 group-hover:text-blue-400 transition-colors" />
+                </div>
+                <h3 className="text-sm font-bold text-slate-200 m-0">Anlık Ziyaretçiler</h3>
+                <p className="text-xs text-slate-400 m-0 mt-1">Son 30 dakikadaki canlı kullanıcılar ve aktif sayfalar</p>
+              </a>
+
+              <a
+                href="https://analytics.google.com/analytics/web/#/reports/dashboard"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-slate-800/90 hover:bg-slate-750 border border-slate-700/80 hover:border-emerald-500/50 rounded-xl p-3.5 transition-all group shadow-sm block"
+              >
+                <div className="flex items-center justify-between mb-2">
+                  <div className="w-8 h-8 rounded-lg bg-emerald-500/15 text-emerald-400 flex items-center justify-center">
+                    <MapPin size={18} />
+                  </div>
+                  <ExternalLink size={14} className="text-slate-500 group-hover:text-emerald-400 transition-colors" />
+                </div>
+                <h3 className="text-sm font-bold text-slate-200 m-0">Bölgesel Harita</h3>
+                <p className="text-xs text-slate-400 m-0 mt-1">Türkiye illeri ve dünya genelinde ziyaretçi yoğunluğu</p>
+              </a>
+
+              <a
+                href="https://analytics.google.com/analytics/web/#/reports/reportinghub"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-slate-800/90 hover:bg-slate-750 border border-slate-700/80 hover:border-purple-500/50 rounded-xl p-3.5 transition-all group shadow-sm block"
+              >
+                <div className="flex items-center justify-between mb-2">
+                  <div className="w-8 h-8 rounded-lg bg-purple-500/15 text-purple-400 flex items-center justify-center">
+                    <FileText size={18} />
+                  </div>
+                  <ExternalLink size={14} className="text-slate-500 group-hover:text-purple-400 transition-colors" />
+                </div>
+                <h3 className="text-sm font-bold text-slate-200 m-0">Popüler Sayfalar</h3>
+                <p className="text-xs text-slate-400 m-0 mt-1">Blog makaleleri, uygulamalar ve sayfa görüntüleme sayıları</p>
+              </a>
+
+              <a
+                href="https://analytics.google.com/analytics/web/#/reports/dashboard"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-slate-800/90 hover:bg-slate-750 border border-slate-700/80 hover:border-amber-500/50 rounded-xl p-3.5 transition-all group shadow-sm block"
+              >
+                <div className="flex items-center justify-between mb-2">
+                  <div className="w-8 h-8 rounded-lg bg-amber-500/15 text-amber-400 flex items-center justify-center">
+                    <TrendingUp size={18} />
+                  </div>
+                  <ExternalLink size={14} className="text-slate-500 group-hover:text-amber-400 transition-colors" />
+                </div>
+                <h3 className="text-sm font-bold text-slate-200 m-0">Trafik & Arama</h3>
+                <p className="text-xs text-slate-400 m-0 mt-1">Google organik arama, doğrudan ve yönlendiren kaynaklar</p>
+              </a>
+            </div>
           </div>
-        ) : embedUrl ? (
-          <>
-            {iframeLoading && (
-              <div style={{
-                position: 'absolute',
-                top: 0, left: 0, right: 0, bottom: 0,
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-                background: 'rgba(15, 23, 42, 0.75)',
-                backdropFilter: 'blur(3px)',
-                zIndex: 2,
-                gap: '10px'
-              }}>
-                <RefreshCw size={32} className="animate-spin" style={{ color: '#60a5fa' }} />
-                <p style={{ margin: 0, fontSize: '0.88rem', color: '#e2e8f0', fontWeight: 500 }}>
-                  Google Looker Studio Canlı Raporu Yükleniyor...
-                </p>
-                <span style={{ fontSize: '0.75rem', color: '#94a3b8' }}>
-                  Doğrudan Google altyapısından güvenli veri akışı sağlanıyor
-                </span>
-              </div>
-            )}
-            <iframe
-              key={refreshKey}
-              src={embedUrl}
-              title="Google Analytics Looker Studio Raporu"
-              style={{ width: '100%', height: '100%', border: 'none', borderRadius: '12px', background: '#ffffff' }}
-              loading="lazy"
-              allowFullScreen
-              sandbox="allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"
-              onLoad={() => setIframeLoading(false)}
-            />
-          </>
-        ) : (
-          /* Kurulum & Yapılandırma Rehber Kartı */
-          <div style={{
-            maxWidth: '680px',
-            margin: 'auto',
-            padding: '36px 24px',
-            textAlign: 'center',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            gap: '16px'
-          }}>
-            <div style={{
-              width: '56px',
-              height: '56px',
-              borderRadius: '16px',
-              background: 'rgba(59, 130, 246, 0.15)',
-              color: '#60a5fa',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              border: '1px solid rgba(59, 130, 246, 0.3)'
-            }}>
-              <Globe2 size={28} />
-            </div>
 
-            <div>
-              <h2 style={{ margin: '0 0 8px 0', fontSize: '1.25rem', fontWeight: 700, color: 'var(--text-primary, #f8fafc)' }}>
-                Looker Studio Ziyaretçi Haritasını Bağlayın
-              </h2>
-              <p style={{ margin: 0, fontSize: '0.88rem', color: 'var(--text-muted, #94a3b8)', lineHeight: 1.6 }}>
-                Google Analytics mülkünüzdeki gerçek Türkiye haritası ve bölgesel verileri doğrudan bu ekranda görmek için
-                ücretsiz Google Looker Studio gömme (embed) bağlantınızı ekleyin.
-              </p>
-            </div>
+          {/* Platform Canlı Telemetrisi (D1 Veritabanı) */}
+          <div>
+            <h2 className="text-xs uppercase tracking-wider font-bold text-slate-400 mb-2.5">
+              MSK Labs — Canlı Platform Telemetrisi
+            </h2>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              <div className="bg-slate-800/60 border border-slate-700/60 rounded-xl p-3.5">
+                <div className="flex items-center gap-2 text-slate-400 text-xs mb-1">
+                  <BookOpen size={14} className="text-blue-400" />
+                  <span>Blog Yazıları</span>
+                </div>
+                <div className="text-2xl font-bold text-slate-100">{platformStats.posts}</div>
+                <div className="text-[11px] text-slate-500 mt-0.5">Yayında içerikler</div>
+              </div>
 
-            {/* 3 Adımlı Kurulum Rehberi */}
-            <div style={{
-              width: '100%',
-              textAlign: 'left',
-              background: 'rgba(255, 255, 255, 0.03)',
-              borderRadius: '10px',
-              border: '1px solid var(--border-color, #334155)',
-              padding: '16px 18px',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '12px'
-            }}>
-              <div style={{ display: 'flex', gap: '10px', alignItems: 'flex-start' }}>
-                <span style={{ background: '#3b82f6', color: '#fff', width: '22px', height: '22px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.75rem', fontWeight: 700, flexShrink: 0 }}>1</span>
-                <span style={{ fontSize: '0.85rem', color: 'var(--text-primary, #e2e8f0)' }}>
-                  <a href="https://lookerstudio.google.com/" target="_blank" rel="noopener noreferrer" style={{ color: '#60a5fa', textDecoration: 'underline' }}>lookerstudio.google.com</a> adresine gidin, <strong>Boş Rapor</strong> açın ve veri kaynağı olarak <strong>Google Analytics (GA4)</strong> mülkünüzü seçin.
-                </span>
+              <div className="bg-slate-800/60 border border-slate-700/60 rounded-xl p-3.5">
+                <div className="flex items-center gap-2 text-slate-400 text-xs mb-1">
+                  <MessageSquare size={14} className="text-emerald-400" />
+                  <span>Yorumlar</span>
+                </div>
+                <div className="text-2xl font-bold text-slate-100">{platformStats.comments}</div>
+                <div className="text-[11px] text-slate-500 mt-0.5">Okuyucu etkileşimi</div>
               </div>
-              <div style={{ display: 'flex', gap: '10px', alignItems: 'flex-start' }}>
-                <span style={{ background: '#3b82f6', color: '#fff', width: '22px', height: '22px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.75rem', fontWeight: 700, flexShrink: 0 }}>2</span>
-                <span style={{ fontSize: '0.85rem', color: 'var(--text-primary, #e2e8f0)' }}>
-                  Rapora <strong>Bölgesel Harita</strong> (Türkiye / Şehirler) ve <strong>Ziyaretçi Grafiği</strong> ekleyin.
-                </span>
+
+              <div className="bg-slate-800/60 border border-slate-700/60 rounded-xl p-3.5">
+                <div className="flex items-center gap-2 text-slate-400 text-xs mb-1">
+                  <Mail size={14} className="text-purple-400" />
+                  <span>Destek Talepleri</span>
+                </div>
+                <div className="text-2xl font-bold text-slate-100">{platformStats.tickets}</div>
+                <div className="text-[11px] text-slate-500 mt-0.5">Gelen biletler</div>
               </div>
-              <div style={{ display: 'flex', gap: '10px', alignItems: 'flex-start' }}>
-                <span style={{ background: '#3b82f6', color: '#fff', width: '22px', height: '22px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.75rem', fontWeight: 700, flexShrink: 0 }}>3</span>
-                <span style={{ fontSize: '0.85rem', color: 'var(--text-primary, #e2e8f0)' }}>
-                  Sağ üstteki <strong>Paylaş ➔ Raporu Göm (Embed)</strong> seçeneğini seçip <strong>"URL'yi Göm"</strong> linkini kopyalayıp aşağıdaki kutucuğa yapıştırın.
-                </span>
+
+              <div className="bg-slate-800/60 border border-slate-700/60 rounded-xl p-3.5">
+                <div className="flex items-center gap-2 text-slate-400 text-xs mb-1">
+                  <Users size={14} className="text-amber-400" />
+                  <span>Bülten Aboneleri</span>
+                </div>
+                <div className="text-2xl font-bold text-slate-100">{platformStats.subscribers}</div>
+                <div className="text-[11px] text-slate-500 mt-0.5">Kayıtlı e-posta</div>
               </div>
             </div>
+          </div>
 
-            {/* Hızlı URL Girişi */}
-            <div style={{ width: '100%', display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+          {/* İsteğe Bağlı Looker Studio Gömme Kutusu */}
+          <div className="bg-slate-800/40 border border-slate-700/50 rounded-xl p-4">
+            <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
+              <span className="text-xs font-semibold text-slate-300 flex items-center gap-1.5">
+                <Globe2 size={14} className="text-blue-400" /> Looker Studio Raporunu Bu Sayfaya Sabitlemek İsterseniz:
+              </span>
+              <span className="text-[11px] text-slate-500">Opsiyonel</span>
+            </div>
+            <div className="flex gap-2 flex-wrap">
               <input
                 type="text"
                 value={inputUrl}
                 onChange={(e) => setInputUrl(e.target.value)}
                 placeholder="https://lookerstudio.google.com/embed/reporting/..."
-                style={{
-                  flex: 1,
-                  minWidth: '260px',
-                  padding: '10px 14px',
-                  borderRadius: '8px',
-                  border: '1px solid var(--border-color, #475569)',
-                  background: 'var(--bg-input, #0f172a)',
-                  color: 'var(--text-primary, #f8fafc)',
-                  fontSize: '0.85rem'
-                }}
+                className="flex-1 min-w-[260px] bg-slate-900 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-blue-500"
               />
-              <Button
-                variant="primary"
-                onClick={() => handleSaveUrl(inputUrl)}
-                disabled={saving || !inputUrl.trim()}
-                style={{ minWidth: '120px' }}
-              >
-                {saving ? 'Kaydediliyor...' : 'Kaydet & Bağla'}
+              <Button size="sm" onClick={() => handleSaveUrl(inputUrl)} disabled={saving}>
+                {saving ? 'Kaydediliyor...' : 'Bağla & Göster'}
               </Button>
             </div>
           </div>
-        )}
-      </div>
+        </div>
+      )}
 
-      {/* Ayarlar & Bağlantı Güncelleme Modalı */}
+      {/* Rapor Bağlantısı Değiştirme Modalı */}
       {showConfigModal && (
-        <div style={{
-          position: 'fixed',
-          top: 0, left: 0, right: 0, bottom: 0,
-          background: 'rgba(0, 0, 0, 0.65)',
-          backdropFilter: 'blur(4px)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          zIndex: 10000,
-          padding: '16px'
-        }}>
-          <div style={{
-            background: 'var(--bg-card, #1e293b)',
-            borderRadius: '14px',
-            border: '1px solid var(--border-color, #334155)',
-            width: '100%',
-            maxWidth: '520px',
-            padding: '20px 22px',
-            boxShadow: '0 12px 32px rgba(0,0,0,0.4)',
-            boxSizing: 'border-box'
-          }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <Settings2 size={18} style={{ color: '#60a5fa' }} />
-                <h3 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 700, color: 'var(--text-primary, #f8fafc)' }}>
-                  Looker Studio Rapor Bağlantısı
-                </h3>
-              </div>
-              <button
-                onClick={() => setShowConfigModal(false)}
-                style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', padding: '4px' }}
-              >
-                <X size={18} />
-              </button>
+        <div className="fixed inset-0 bg-slate-950/75 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-slate-800 border border-slate-700 rounded-xl p-5 max-w-md w-full shadow-2xl space-y-3">
+            <div className="flex items-center justify-between">
+              <h3 className="text-sm font-bold text-slate-100 m-0">Looker Studio Bağlantısı</h3>
+              <button onClick={() => setShowConfigModal(false)} className="text-slate-400 hover:text-white"><X size={16} /></button>
             </div>
-
-            <p style={{ margin: '0 0 14px 0', fontSize: '0.82rem', color: 'var(--text-muted, #94a3b8)', lineHeight: 1.5 }}>
-              Google Looker Studio üzerinden oluşturduğunuz raporun "Raporu Göm" (Embed) URL adresini buraya yapıştırın. Bu ayar Cloudflare D1 veritabanında saklanır.
+            <p className="text-xs text-slate-400">
+              Mevcut gömülü rapor bağlantısını güncelleyebilir veya boş bırakıp kaydederek raporu kaldırabilirsiniz.
             </p>
-
-            <div style={{ marginBottom: '16px' }}>
-              <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 600, color: 'var(--text-muted)', marginBottom: '6px' }}>
-                Embed Rapor URL'si
-              </label>
-              <input
-                type="text"
-                value={inputUrl}
-                onChange={(e) => setInputUrl(e.target.value)}
-                placeholder="https://lookerstudio.google.com/embed/reporting/..."
-                style={{
-                  width: '100%',
-                  padding: '9px 12px',
-                  borderRadius: '8px',
-                  border: '1px solid var(--border-color, #475569)',
-                  background: 'var(--bg-input, #0f172a)',
-                  color: 'var(--text-primary, #f8fafc)',
-                  fontSize: '0.85rem',
-                  boxSizing: 'border-box'
-                }}
-              />
-            </div>
-
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '8px' }}>
-              {embedUrl && (
-                <button
-                  type="button"
-                  onClick={() => {
-                    setInputUrl('');
-                    handleSaveUrl('');
-                  }}
-                  style={{
-                    background: 'none',
-                    border: 'none',
-                    color: '#f87171',
-                    fontSize: '0.8rem',
-                    cursor: 'pointer',
-                    textDecoration: 'underline'
-                  }}
-                >
-                  Bağlantıyı Temizle
-                </button>
-              )}
-              <div style={{ display: 'flex', gap: '8px', marginLeft: 'auto' }}>
-                <Button variant="secondary" size="sm" onClick={() => setShowConfigModal(false)}>
-                  Vazgeç
-                </Button>
-                <Button variant="primary" size="sm" onClick={() => handleSaveUrl(inputUrl)} disabled={saving}>
-                  {saving ? 'Kaydediliyor...' : 'Kaydet'}
-                </Button>
-              </div>
+            <input
+              type="text"
+              value={inputUrl}
+              onChange={(e) => setInputUrl(e.target.value)}
+              placeholder="https://lookerstudio.google.com/embed/reporting/..."
+              className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-blue-500"
+            />
+            <div className="flex justify-end gap-2 pt-2">
+              <Button variant="secondary" size="sm" onClick={() => setShowConfigModal(false)}>İptal</Button>
+              <Button size="sm" onClick={() => handleSaveUrl(inputUrl)} disabled={saving}>
+                {saving ? 'Kaydediliyor...' : 'Kaydet'}
+              </Button>
             </div>
           </div>
         </div>
