@@ -86,12 +86,13 @@
 
 ### APP-TELEMETRY-001 — Masaüstü ve Mobil Uygulamalar İçin Sessiz Telemetri & Analitik Standardı [ ]
 - **Amaç:** Masaüstü (`Avkat`, `DeskPilot`, `PDFLayout` vb.) ve mobil (`RekatSayar` vb.) uygulamalar dağıtıldığında; indirme kaynağından bağımsız olarak kullanıcıları rahatsız etmeden sessiz, anonim ve sıfır maliyetli kullanım istatistikleri toplamak.
-- **Toplanacak Metrikler:**
+- **Toplanacak Metrikler (Yazılım Aşamasında Esnek/İptal Edilebilir):**
   1. *Kullanım & Sadakat:* Günlük/aylık aktif kullanıcı (DAU/MAU), ortalama oturum süresi, ilk açılış tarihi.
   2. *Hata ve Çökme (Crash Logs):* İstisna türü, çökme anındaki modül ve hata detayları.
   3. *Özellik Kullanımı (Feature Adoption):* En çok ve en az tıklanan menü/fonksiyonlar.
-  4. *Sistem & Donanım Profili:* İşletim sistemi (Win 10/11, Android vb.), mimari (x64/ARM), uygulama sürümü.
+  4. *Sistem & Donanım Profili:* İşletim sistemi (Win 10/11, Android vb.), mimari (x64/ARM), uygulama sürümü, ekran çözünürlüğü.
   5. *Performans & Başlatma Hızı:* Uygulamanın açılış süresi (boot time).
+- **Geliştirme Prensibi:** Tüm parametreler kullanıcı gizliliğini ve performansını zedelemeyecek şekilde arka planda sessiz çalışacak; geliştirme aşamasında yük getiren veya gereksiz görülen maddeler doğrudan elenecektir.
 - **Uygulama Kuralı:** Uygulama projeleri güncellendiğinde her uygulama için Google Analytics / Firebase üzerinden özel bir akış kimliği tanımlanıp hafif bir arka plan ping modülüyle bağlanacaktır.
 
 ---
