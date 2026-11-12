@@ -1,6 +1,19 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 📌 Son Güncelleme [12.11.2026 - 09:41] — SEARCH CONSOLE 404 ONARIMI VE CANLI BULUT DAĞITIMI [✓]
+* **Yapılan İşlemler:**
+  1. **Google Search Console /aniltilar 404 Kök Neden Teşhisi:**
+     - Eski kuralın `/aniltilar` isteğini `.html` uzantısına yönlendirip 307 zinciri oluşturduğu ve `/aniltilar/` (eğik çizgi) isteğinin doğrudan 404 döndüğü tespit edildi.
+  2. **Kanonik 301 Kalıcı Yönlendirme:**
+     - `src/index.ts` ve `public/_redirects` güncellenerek tüm varyasyonlar doğrudan `https://msklabs.org/blog/anilts` adresine bağlandı.
+     - `public/aniltilar.html` ve `public/aniltilar/index.html` statik yedek şablonları oluşturuldu.
+  3. **Canlı Dağıtım & Doğrulama:**
+     - 607 vitest testi PASS; Vite üretimi derlendi (`060a4ae`).
+     - Cloudflare canlı yayını `curl -IL` ile doğrulandı (`HTTP 301 -> HTTP 200 OK`).
+
+---
+
 ## 📌 Son Güncelleme [10.11.2026 - 16:19] — DESTEK FORMU KARTLARI 5'Lİ TEK SATIR VE MOBİL DUYARLILIK OPTİMİZASYONU [✓]
 * **Yapılan İşlemler:**
   1. **Destek Formu Genişliği (`webMSKLabs/assets/css/global.css`):**
