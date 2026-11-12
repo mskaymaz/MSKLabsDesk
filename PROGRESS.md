@@ -1,6 +1,18 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 📌 Son Güncelleme [12.11.2026 - 10:45] — SEARCH CONSOLE DİZİN ANALİZİ, SITEMAP & BLOG CANONICAL ONARIMI [✓]
+* **Yapılan İşlemler:**
+  1. **Google Search Console Dizin Tablosu Analizi:**
+     - 23 sayfanın dizine girdiği (yeşil), listelenen 6 maddeden 4'ünün doğal SEO davranışı (301 yönlendirmeli sayfalar, alternatif dil sayfaları ve kuyruktaki sayfalar) olduğu doğrulandı.
+  2. **Yeniden Yönlendirme Hatası & Sitemap Onarımı:**
+     - `sitemap.xml` içindeki eski `blog/blog.html` adresi kanonik `https://msklabs.org/blog` olarak düzeltildi.
+     - `vite.config.ts` build aşamasına `dist/blog/index.html` kopyası eklenerek Cloudflare Pages'in `/blog` rotasındaki gereksiz 307 döngüsü engellendi.
+  3. **Canlı Dağıtım:**
+     - Tüm değişiklikler `origin/main` dalına push edilerek Cloudflare üzerinde canlıya alındı.
+
+---
+
 ## 📌 Son Güncelleme [12.11.2026 - 09:41] — SEARCH CONSOLE 404 ONARIMI VE CANLI BULUT DAĞITIMI [✓]
 * **Yapılan İşlemler:**
   1. **Google Search Console /aniltilar 404 Kök Neden Teşhisi:**
