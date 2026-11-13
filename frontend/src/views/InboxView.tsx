@@ -91,14 +91,13 @@ export const InboxView: React.FC<InboxViewProps> = ({ onNavigate }) => {
         onClick={onClick}
         title={`${tooltip}: ${count}`}
         style={{
-          border: `1px solid ${isZero ? 'transparent' : style.border}`,
-          backgroundColor: isZero ? 'rgba(148, 163, 184, 0.06)' : style.bg,
+          border: isZero ? '1px solid var(--border-subtle, rgba(148, 163, 184, 0.25))' : `1px solid ${style.border}`,
+          backgroundColor: isZero ? 'var(--bg-secondary, rgba(148, 163, 184, 0.08))' : style.bg,
           color: isZero ? 'var(--text-muted)' : style.color,
           cursor: isZero ? 'default' : 'pointer',
-          opacity: isZero ? 0.65 : 1,
         }}
       >
-        <span>{code}:</span>
+        <span style={{ opacity: isZero ? 0.7 : 0.95 }}>{code}:</span>
         <span style={{ fontWeight: 700 }}>{count}</span>
       </button>
     );
@@ -182,7 +181,7 @@ export const InboxView: React.FC<InboxViewProps> = ({ onNavigate }) => {
       {/* 2. Dikey Kaydırılabilir / Mobilde Doğal Akışlı Liste Alanı */}
       <div className="inbox-station-list">
         {/* GRUP 1: BLOG YORUMLARI & MODERASYON */}
-        <div className="admin-card" style={{ padding: '12px 14px' }}>
+        <div className="inbox-station-card">
           <div className="inbox-station-group-header">
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <MessageSquare size={16} style={{ color: '#6366f1', flexShrink: 0 }} />
@@ -195,7 +194,7 @@ export const InboxView: React.FC<InboxViewProps> = ({ onNavigate }) => {
             </span>
           </div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+          <div className="inbox-station-rows">
             {data?.blog_channels.map((ch) => (
               <div
                 key={ch.id}
@@ -203,7 +202,9 @@ export const InboxView: React.FC<InboxViewProps> = ({ onNavigate }) => {
                 onClick={() => onNavigate('comments', { channel: ch.slug, status: 'pending' })}
               >
                 <div className="inbox-station-row-left">
-                  {getCategoryIcon(ch.icon)}
+                  <div className="inbox-icon-box">
+                    {getCategoryIcon(ch.icon)}
+                  </div>
                   <div className="inbox-station-row-title-wrap">
                     <span className="inbox-station-row-title">{ch.name}</span>
                   </div>
@@ -218,7 +219,7 @@ export const InboxView: React.FC<InboxViewProps> = ({ onNavigate }) => {
                     e.stopPropagation();
                     onNavigate('comments', { channel: ch.slug, status: 'unverified' });
                   })}
-                  <ChevronRight size={13} style={{ color: 'var(--text-muted)', marginLeft: '2px', flexShrink: 0 }} />
+                  <ChevronRight size={13} style={{ color: 'var(--text-muted)', opacity: 0.6, marginLeft: '2px', flexShrink: 0 }} />
                 </div>
               </div>
             ))}
@@ -226,7 +227,7 @@ export const InboxView: React.FC<InboxViewProps> = ({ onNavigate }) => {
         </div>
 
         {/* GRUP 2: DESTEK MASASI & BİLETLER */}
-        <div className="admin-card" style={{ padding: '12px 14px' }}>
+        <div className="inbox-station-card">
           <div className="inbox-station-group-header">
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <HelpCircle size={16} style={{ color: '#06b6d4', flexShrink: 0 }} />
@@ -239,7 +240,7 @@ export const InboxView: React.FC<InboxViewProps> = ({ onNavigate }) => {
             </span>
           </div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+          <div className="inbox-station-rows">
             {data?.support_categories.map((cat) => (
               <div
                 key={cat.key}
@@ -247,7 +248,9 @@ export const InboxView: React.FC<InboxViewProps> = ({ onNavigate }) => {
                 onClick={() => onNavigate('tickets', { category: cat.key })}
               >
                 <div className="inbox-station-row-left">
-                  {getCategoryIcon(cat.icon)}
+                  <div className="inbox-icon-box">
+                    {getCategoryIcon(cat.icon)}
+                  </div>
                   <div className="inbox-station-row-title-wrap">
                     <span className="inbox-station-row-title">{cat.name}</span>
                   </div>
@@ -266,7 +269,7 @@ export const InboxView: React.FC<InboxViewProps> = ({ onNavigate }) => {
                     e.stopPropagation();
                     onNavigate('tickets', { category: cat.key, status: 'urgent' });
                   })}
-                  <ChevronRight size={13} style={{ color: 'var(--text-muted)', marginLeft: '2px', flexShrink: 0 }} />
+                  <ChevronRight size={13} style={{ color: 'var(--text-muted)', opacity: 0.6, marginLeft: '2px', flexShrink: 0 }} />
                 </div>
               </div>
             ))}
@@ -274,7 +277,7 @@ export const InboxView: React.FC<InboxViewProps> = ({ onNavigate }) => {
         </div>
 
         {/* GRUP 3: KURUMSAL GELEN E-POSTALAR */}
-        <div className="admin-card" style={{ padding: '12px 14px' }}>
+        <div className="inbox-station-card">
           <div className="inbox-station-group-header">
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <Mail size={16} style={{ color: '#10b981', flexShrink: 0 }} />
@@ -287,7 +290,7 @@ export const InboxView: React.FC<InboxViewProps> = ({ onNavigate }) => {
             </span>
           </div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+          <div className="inbox-station-rows">
             {data?.email_boxes.map((box) => (
               <div
                 key={box.key}
@@ -295,7 +298,9 @@ export const InboxView: React.FC<InboxViewProps> = ({ onNavigate }) => {
                 onClick={() => onNavigate('tickets', { category: 'email' })}
               >
                 <div className="inbox-station-row-left">
-                  {getCategoryIcon(box.icon)}
+                  <div className="inbox-icon-box">
+                    {getCategoryIcon(box.icon)}
+                  </div>
                   <div className="inbox-station-row-title-wrap">
                     <span className="inbox-station-row-title">{box.name}</span>
                     <span className="inbox-station-row-subtitle">({box.address})</span>
@@ -307,7 +312,7 @@ export const InboxView: React.FC<InboxViewProps> = ({ onNavigate }) => {
                     e.stopPropagation();
                     onNavigate('tickets', { category: 'email', status: 'new' });
                   })}
-                  <ChevronRight size={13} style={{ color: 'var(--text-muted)', marginLeft: '2px', flexShrink: 0 }} />
+                  <ChevronRight size={13} style={{ color: 'var(--text-muted)', opacity: 0.6, marginLeft: '2px', flexShrink: 0 }} />
                 </div>
               </div>
             ))}

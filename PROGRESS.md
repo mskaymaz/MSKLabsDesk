@@ -1,6 +1,21 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 📌 Son Güncelleme [13.11.2026 - 16:15] — İLETİŞİM İSTASYONU MOBİL VE KART ESTETİK REVİZYONU [✓]
+* **Yapılan İşlemler:**
+  1. **Grup Kartları ve Sınır Belirginliği (`responsive.css`):**
+     - Belli belirsiz duran kart yapısı yerine `.inbox-station-card` tanımlandı; `1px solid var(--border-color)`, 12px köşe yuvarlatma, açık temada `#ffffff` zemin ve zarif alt gölge (`box-shadow`) ile blok sınırları netleştirildi.
+     - Liste elemanları arasına ince ayırıcı çizgiler (`border-bottom: 1px solid var(--border-subtle)`) eklenerek grup içi ritim sağlandı.
+  2. **Tek Satır Bütünlüğü (Single-Row List Item):**
+     - Mobilde `<420px` sorgusunun rozetleri alt satıra kırıp tam genişliğe (`flex: 1`) yayan kuralı tamamen kaldırıldı.
+     - Satırlar daima tek satırda hizalandı: solda 26x26 mikro ikon kutucuğu + başlık, sağda yatay dizilen kompakt hap rozetler (`22px` yükseklik) ve chevron oku.
+  3. **Rozet ve Hücre Kontrastı:**
+     - Sıfır sayaçlı rozetlerde silik şeffaflık yerine ince kenarlıklı ve net okunur arka plan tanımlandı; aktif rozetler canlı renklerini korudu.
+  4. **Derleme & Doğrulama:**
+     - `tsc -b && vite build` 1.01s içerisinde 0 hata ile derlendi; bileşen 324 satırda tutuldu.
+
+---
+
 ## 📌 Son Güncelleme [13.11.2026 - 12:10] — MOBİL ARAYÜZ YATAY GENİŞLİK VE BOŞ ALAN ONARIMI [✓]
 * **Tespit Edilen Kök Neden:**
   - `responsive.css` içerisindeki mobil medya sorgusunun `@media (max-width: 767px) and (pointer: coarse)` kuralına bağlı kalması; dokunmatik emülasyonu kapalı veya masaüstü daraltma testlerinde mobil kuralların tetiklenememesi.
