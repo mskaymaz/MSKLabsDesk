@@ -1,6 +1,25 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 📌 Son Güncelleme [13.11.2026 - 12:10] — MOBİL ARAYÜZ YATAY GENİŞLİK VE BOŞ ALAN ONARIMI [✓]
+* **Tespit Edilen Kök Neden:**
+  - `responsive.css` içerisindeki mobil medya sorgusunun `@media (max-width: 767px) and (pointer: coarse)` kuralına bağlı kalması; dokunmatik emülasyonu kapalı veya masaüstü daraltma testlerinde mobil kuralların tetiklenememesi.
+  - `index.css` üzerinde `body`, `#root`, `.app-container`, `.page-content` için tanımlı `min-width: 1200px` / `940px` kurallarının ve `Topbar.tsx` üzerindeki inline `minWidth: '940px'` değerinin mobilde sıfırlanmaması.
+  - Bu genişlik zorlaması nedeniyle `inbox-station-container` bileşeninin `margin: 0 auto` kuralıyla ekranın solunda ~160px boşluk oluşturup içeriği sağa iterek taşmaya sebep olması.
+* **Yapılan Cerrahi Onarımlar:**
+  1. **Evrensel Mobil Medya Kuralı (`responsive.css`):**
+     - Kural `@media (max-width: 768px)` olarak sadeleştirildi; masaüstü kuralı `@media (min-width: 769px)` ile ayrıştırıldı.
+     - `html`, `body`, `#root`, `.app-container`, `.main-content`, `.topbar-header`, `.page-content` ve `.inbox-station-container` için `min-width: 0 !important; width: 100% !important; max-width: 100% !important; margin: 0 !important;` sıfırlaması yapıldı.
+  2. **Üst Bar & Yenile Butonu Optimizasyonu (`Topbar.tsx` & `responsive.css`):**
+     - `Topbar.tsx` üzerindeki katı inline `minWidth: '940px'` kaldırıldı.
+     - Mobilde `.admin-btn-refresh` butonunun gereksiz 100% genişlik yerine kompakt (`width: auto`, `align-self: flex-start`) oturması sağlandı.
+  3. **Rozet Okunabilirliği (`InboxView.tsx`):**
+     - Sıfır sayaçlı rozetlerde açık tema okunabilirliği `opacity: 0.65` ile güçlendirildi.
+  4. **Derleme & Test:**
+     - Frontend derlemesi (`tsc -b && vite build`) 0 hata ile doğrulandı.
+
+---
+
 ## 📌 Son Güncelleme [13.11.2026 - 11:45] — MOBİL MENÜ VE ALT GEZİNME ÇUBUĞU İSTASYON & DESTEK ENTEGRASYONU [✓]
 * **Yapılan İşlemler:**
   1. **Mobil Çekmece Menüsü (`MobileDrawer.tsx`):**

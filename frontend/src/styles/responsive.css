@@ -69,18 +69,62 @@
   margin-left: auto;
 }
 
-@media (max-width: 767px) and (pointer: coarse) {
-  .app-container { min-width: 100% !important; }
-  .main-content { min-width: 100% !important; }
-  .app-sidebar { display: none !important; }
+@media (max-width: 768px) {
+  html,
+  body,
+  #root {
+    min-width: 0 !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    overflow-x: hidden !important;
+  }
+  .app-container {
+    min-width: 0 !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    overflow-x: hidden !important;
+    flex-direction: column !important;
+  }
+  .main-content {
+    min-width: 0 !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    overflow-x: hidden !important;
+  }
+  .app-sidebar {
+    display: none !important;
+    width: 0 !important;
+    min-width: 0 !important;
+    max-width: 0 !important;
+  }
+  .topbar-header {
+    min-width: 0 !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    padding: 0 10px !important;
+    box-sizing: border-box !important;
+  }
+  .page-content {
+    min-width: 0 !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 8px 76px 8px !important;
+    box-sizing: border-box !important;
+  }
+  .inbox-station-container {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 10px 4px 60px 4px !important;
+    box-sizing: border-box !important;
+  }
   .mobile-bottom-nav { display: flex !important; }
   .mobile-hamburger-btn { display: inline-flex !important; }
   .hidden-mobile { display: none !important; }
   .visible-mobile { display: block; }
   .ticket-message-preview.visible-mobile { display: -webkit-box !important; }
-  .page-content { padding: 0 10px 76px 10px !important; }
   .glass-card { padding: 14px 12px; }
-  .topbar-header { padding: 0 10px !important; }
   .dashboard-metrics-grid { grid-template-columns: 1fr !important; gap: 12px !important; }
   .dashboard-panels-grid { grid-template-columns: 1fr !important; gap: 14px !important; }
   .ticket-subject-col { flex: 1 1 auto !important; width: auto !important; min-width: 0 !important; }
@@ -124,7 +168,7 @@
 .ticket-subject-col { width: 270px; max-width: 100%; flex-shrink: 0; }
 .visible-mobile { display: none; }
 
-@media (min-width: 768px) {
+@media (min-width: 769px) {
   .mobile-bottom-nav { display: none !important; }
   .mobile-hamburger-btn { display: none !important; }
   .visible-mobile { display: none !important; }
@@ -268,9 +312,10 @@
   }
 
   .inbox-station-header .admin-btn-refresh {
-    width: 100%;
-    justify-content: center;
-    height: 34px;
+    width: auto;
+    align-self: flex-start;
+    height: 30px;
+    padding: 0 12px;
   }
 
   .inbox-station-list {

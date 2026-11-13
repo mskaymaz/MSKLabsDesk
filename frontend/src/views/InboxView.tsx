@@ -95,7 +95,7 @@ export const InboxView: React.FC<InboxViewProps> = ({ onNavigate }) => {
           backgroundColor: isZero ? 'rgba(148, 163, 184, 0.06)' : style.bg,
           color: isZero ? 'var(--text-muted)' : style.color,
           cursor: isZero ? 'default' : 'pointer',
-          opacity: isZero ? 0.38 : 1,
+          opacity: isZero ? 0.65 : 1,
         }}
       >
         <span>{code}:</span>
