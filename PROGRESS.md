@@ -1,6 +1,21 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 📌 Son Güncelleme [13.11.2026 - 11:00] — İLETİŞİM İSTASYONU MOBİL DUYARLILIK (RESPONSIVE) GELİŞTİRMESİ [✓]
+* **Yapılan İşlemler:**
+  1. **Duyarlı Tasarım Sınıfları (`responsive.css`):**
+     - `.inbox-station-*` scoped sınıfları oluşturuldu; `@media (max-width: 640px)` ve `(max-width: 420px)` medya sorguları eklendi.
+  2. **Mobil Başlık, Alt Yazı & Dokunma Ergonomisi:**
+     - Mobilde e-posta ve alt metinler başlığın altına hiyerarşik olarak alındı; taşma ve sıkışmalar giderildi.
+     - Rozet butonlarına mobilde minimum 28-32px dokunma yüksekliği verilerek rahat dokunma sağlandı.
+     - 420px altındaki dar ekranlarda satırlar 2 kademeli (üstte başlık, altta tam yayılan rozetler) modern kart yapısına uyarlandı.
+  3. **Bileşen Sadeleştirmesi (`InboxView.tsx`):**
+     - Katı inline stiller temizlenerek bileşen boyutu 304 satıra indirildi (400 satır sınırının oldukça altında).
+  4. **Derleme ve Test Doğrulaması:**
+     - Frontend `tsc -b && vite build` ve backend testleri %100 PASS ile tamamlandı.
+
+---
+
 ## 📌 Son Güncelleme [12.11.2026 - 10:45] — SEARCH CONSOLE DİZİN ANALİZİ, SITEMAP & BLOG CANONICAL ONARIMI [✓]
 * **Yapılan İşlemler:**
   1. **Google Search Console Dizin Tablosu Analizi:**

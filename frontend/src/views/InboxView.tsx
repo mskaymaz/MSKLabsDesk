@@ -59,18 +59,18 @@ export const InboxView: React.FC<InboxViewProps> = ({ onNavigate }) => {
 
   const getCategoryIcon = (iconName: string) => {
     switch (iconName) {
-      case 'alert-triangle': return <AlertTriangle size={15} style={{ color: '#ef4444' }} />;
-      case 'sparkles': return <Sparkles size={15} style={{ color: '#6366f1' }} />;
-      case 'heart': return <Heart size={15} style={{ color: '#10b981' }} />;
-      case 'lightbulb': return <Lightbulb size={15} style={{ color: '#f59e0b' }} />;
-      case 'archive': return <Archive size={15} style={{ color: '#94a3b8' }} />;
-      case 'mail': return <Mail size={15} style={{ color: '#06b6d4' }} />;
-      case 'help-circle': return <HelpCircle size={15} style={{ color: '#3b82f6' }} />;
-      case 'shield': return <Shield size={15} style={{ color: '#8b5cf6' }} />;
-      case 'feather': return <Feather size={15} style={{ color: '#ec4899' }} />;
-      case 'newspaper': return <Newspaper size={15} style={{ color: '#14b8a6' }} />;
-      case 'layers': return <Layers size={15} style={{ color: '#a855f7' }} />;
-      default: return <BookOpen size={15} style={{ color: '#64748b' }} />;
+      case 'alert-triangle': return <AlertTriangle size={15} style={{ color: '#ef4444', flexShrink: 0 }} />;
+      case 'sparkles': return <Sparkles size={15} style={{ color: '#6366f1', flexShrink: 0 }} />;
+      case 'heart': return <Heart size={15} style={{ color: '#10b981', flexShrink: 0 }} />;
+      case 'lightbulb': return <Lightbulb size={15} style={{ color: '#f59e0b', flexShrink: 0 }} />;
+      case 'archive': return <Archive size={15} style={{ color: '#94a3b8', flexShrink: 0 }} />;
+      case 'mail': return <Mail size={15} style={{ color: '#06b6d4', flexShrink: 0 }} />;
+      case 'help-circle': return <HelpCircle size={15} style={{ color: '#3b82f6', flexShrink: 0 }} />;
+      case 'shield': return <Shield size={15} style={{ color: '#8b5cf6', flexShrink: 0 }} />;
+      case 'feather': return <Feather size={15} style={{ color: '#ec4899', flexShrink: 0 }} />;
+      case 'newspaper': return <Newspaper size={15} style={{ color: '#14b8a6', flexShrink: 0 }} />;
+      case 'layers': return <Layers size={15} style={{ color: '#a855f7', flexShrink: 0 }} />;
+      default: return <BookOpen size={15} style={{ color: '#64748b', flexShrink: 0 }} />;
     }
   };
 
@@ -87,24 +87,15 @@ export const InboxView: React.FC<InboxViewProps> = ({ onNavigate }) => {
     return (
       <button
         type="button"
+        className="inbox-station-badge"
         onClick={onClick}
         title={`${tooltip}: ${count}`}
         style={{
-          display: 'inline-flex',
-          alignItems: 'center',
-          gap: '4px',
-          padding: '2px 7px',
-          borderRadius: '6px',
-          fontSize: '0.74rem',
-          fontWeight: 600,
-          fontFamily: 'monospace',
           border: `1px solid ${isZero ? 'transparent' : style.border}`,
           backgroundColor: isZero ? 'rgba(148, 163, 184, 0.06)' : style.bg,
           color: isZero ? 'var(--text-muted)' : style.color,
           cursor: isZero ? 'default' : 'pointer',
           opacity: isZero ? 0.38 : 1,
-          transition: 'all 0.15s ease',
-          outline: 'none',
         }}
       >
         <span>{code}:</span>
@@ -114,21 +105,10 @@ export const InboxView: React.FC<InboxViewProps> = ({ onNavigate }) => {
   };
 
   return (
-    <div style={{ maxWidth: '880px', margin: '0 auto', padding: '16px 8px 32px' }}>
+    <div className="inbox-station-container">
       {/* 1. Üst Bar: Başlık, Özet Sayaç ve Yenileme Butonu */}
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          flexWrap: 'wrap',
-          gap: '12px',
-          marginBottom: '20px',
-          paddingBottom: '14px',
-          borderBottom: '1px solid var(--border-color)',
-        }}
-      >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+      <div className="inbox-station-header">
+        <div className="inbox-station-header-left">
           <div
             style={{
               width: '36px',
@@ -139,13 +119,14 @@ export const InboxView: React.FC<InboxViewProps> = ({ onNavigate }) => {
               alignItems: 'center',
               justifyContent: 'center',
               color: '#06b6d4',
+              flexShrink: 0,
             }}
           >
             <Inbox size={20} />
           </div>
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <h1 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 700, color: 'var(--text-main)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+              <h1 style={{ margin: 0, fontSize: '1.2rem', fontWeight: 700, color: 'var(--text-main)' }}>
                 İletişim & Yanıtlama İstasyonu
               </h1>
               {data && (
@@ -164,8 +145,8 @@ export const InboxView: React.FC<InboxViewProps> = ({ onNavigate }) => {
                 </span>
               )}
             </div>
-            <p style={{ margin: '2px 0 0', fontSize: '0.8rem', color: 'var(--text-muted)' }}>
-              Blog yorumları, destek talepleri ve kurumsal postalar için anlık operasyonel özet.
+            <p style={{ margin: '2px 0 0', fontSize: '0.78rem', color: 'var(--text-muted)' }}>
+              Blog yorumları, destek talepleri ve kurumsal postalar için operasyonel özet.
             </p>
           </div>
         </div>
@@ -198,36 +179,18 @@ export const InboxView: React.FC<InboxViewProps> = ({ onNavigate }) => {
         </div>
       )}
 
-      {/* 2. Dikey Kaydırılabilir Kompakt Liste Alanı */}
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '16px',
-          maxHeight: 'calc(100vh - 190px)',
-          overflowY: 'auto',
-          paddingRight: '4px',
-        }}
-      >
+      {/* 2. Dikey Kaydırılabilir / Mobilde Doğal Akışlı Liste Alanı */}
+      <div className="inbox-station-list">
         {/* GRUP 1: BLOG YORUMLARI & MODERASYON */}
         <div className="admin-card" style={{ padding: '12px 14px' }}>
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              marginBottom: '10px',
-              paddingBottom: '8px',
-              borderBottom: '1px solid var(--border-color)',
-            }}
-          >
+          <div className="inbox-station-group-header">
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <MessageSquare size={16} style={{ color: '#6366f1' }} />
+              <MessageSquare size={16} style={{ color: '#6366f1', flexShrink: 0 }} />
               <span style={{ fontSize: '0.88rem', fontWeight: 700, color: 'var(--text-main)' }}>
                 Blog Yorumları & Moderasyon
               </span>
             </div>
-            <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>
+            <span className="inbox-station-legend">
               O: Onay Bekleyen • D: Doğrulama Bekleyen
             </span>
           </div>
@@ -236,28 +199,17 @@ export const InboxView: React.FC<InboxViewProps> = ({ onNavigate }) => {
             {data?.blog_channels.map((ch) => (
               <div
                 key={ch.id}
+                className="inbox-station-row"
                 onClick={() => onNavigate('comments', { channel: ch.slug, status: 'pending' })}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  padding: '7px 10px',
-                  borderRadius: '6px',
-                  backgroundColor: 'var(--bg-surface-hover, rgba(255, 255, 255, 0.02))',
-                  cursor: 'pointer',
-                  transition: 'background-color 0.15s ease',
-                }}
-                onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = 'var(--bg-hover, rgba(255, 255, 255, 0.06))')}
-                onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'var(--bg-surface-hover, rgba(255, 255, 255, 0.02))')}
               >
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <div className="inbox-station-row-left">
                   {getCategoryIcon(ch.icon)}
-                  <span style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--text-main)' }}>
-                    {ch.name}
-                  </span>
+                  <div className="inbox-station-row-title-wrap">
+                    <span className="inbox-station-row-title">{ch.name}</span>
+                  </div>
                 </div>
 
-                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <div className="inbox-station-badges-wrap">
                   {renderBadge('O', ch.pending, 'Onay Bekleyen', 'warning', (e) => {
                     e.stopPropagation();
                     onNavigate('comments', { channel: ch.slug, status: 'pending' });
@@ -266,7 +218,7 @@ export const InboxView: React.FC<InboxViewProps> = ({ onNavigate }) => {
                     e.stopPropagation();
                     onNavigate('comments', { channel: ch.slug, status: 'unverified' });
                   })}
-                  <ChevronRight size={13} style={{ color: 'var(--text-muted)', marginLeft: '2px' }} />
+                  <ChevronRight size={13} style={{ color: 'var(--text-muted)', marginLeft: '2px', flexShrink: 0 }} />
                 </div>
               </div>
             ))}
@@ -275,23 +227,14 @@ export const InboxView: React.FC<InboxViewProps> = ({ onNavigate }) => {
 
         {/* GRUP 2: DESTEK MASASI & BİLETLER */}
         <div className="admin-card" style={{ padding: '12px 14px' }}>
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              marginBottom: '10px',
-              paddingBottom: '8px',
-              borderBottom: '1px solid var(--border-color)',
-            }}
-          >
+          <div className="inbox-station-group-header">
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <HelpCircle size={16} style={{ color: '#06b6d4' }} />
+              <HelpCircle size={16} style={{ color: '#06b6d4', flexShrink: 0 }} />
               <span style={{ fontSize: '0.88rem', fontWeight: 700, color: 'var(--text-main)' }}>
                 Destek Masası & Biletler
               </span>
             </div>
-            <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>
+            <span className="inbox-station-legend">
               Y: Yeni • İ: İşlemde • !: Acil / Kritik
             </span>
           </div>
@@ -300,28 +243,17 @@ export const InboxView: React.FC<InboxViewProps> = ({ onNavigate }) => {
             {data?.support_categories.map((cat) => (
               <div
                 key={cat.key}
+                className="inbox-station-row"
                 onClick={() => onNavigate('tickets', { category: cat.key })}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  padding: '7px 10px',
-                  borderRadius: '6px',
-                  backgroundColor: 'var(--bg-surface-hover, rgba(255, 255, 255, 0.02))',
-                  cursor: 'pointer',
-                  transition: 'background-color 0.15s ease',
-                }}
-                onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = 'var(--bg-hover, rgba(255, 255, 255, 0.06))')}
-                onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'var(--bg-surface-hover, rgba(255, 255, 255, 0.02))')}
               >
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <div className="inbox-station-row-left">
                   {getCategoryIcon(cat.icon)}
-                  <span style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--text-main)' }}>
-                    {cat.name}
-                  </span>
+                  <div className="inbox-station-row-title-wrap">
+                    <span className="inbox-station-row-title">{cat.name}</span>
+                  </div>
                 </div>
 
-                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <div className="inbox-station-badges-wrap">
                   {renderBadge('Y', cat.new, 'Yeni Talepler', 'info', (e) => {
                     e.stopPropagation();
                     onNavigate('tickets', { category: cat.key, status: 'new' });
@@ -334,7 +266,7 @@ export const InboxView: React.FC<InboxViewProps> = ({ onNavigate }) => {
                     e.stopPropagation();
                     onNavigate('tickets', { category: cat.key, status: 'urgent' });
                   })}
-                  <ChevronRight size={13} style={{ color: 'var(--text-muted)', marginLeft: '2px' }} />
+                  <ChevronRight size={13} style={{ color: 'var(--text-muted)', marginLeft: '2px', flexShrink: 0 }} />
                 </div>
               </div>
             ))}
@@ -343,23 +275,14 @@ export const InboxView: React.FC<InboxViewProps> = ({ onNavigate }) => {
 
         {/* GRUP 3: KURUMSAL GELEN E-POSTALAR */}
         <div className="admin-card" style={{ padding: '12px 14px' }}>
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              marginBottom: '10px',
-              paddingBottom: '8px',
-              borderBottom: '1px solid var(--border-color)',
-            }}
-          >
+          <div className="inbox-station-group-header">
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <Mail size={16} style={{ color: '#10b981' }} />
+              <Mail size={16} style={{ color: '#10b981', flexShrink: 0 }} />
               <span style={{ fontSize: '0.88rem', fontWeight: 700, color: 'var(--text-main)' }}>
                 Kurumsal Gelen E-Postalar
               </span>
             </div>
-            <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>
+            <span className="inbox-station-legend">
               Y: Cevap Bekleyen / Yeni
             </span>
           </div>
@@ -368,38 +291,23 @@ export const InboxView: React.FC<InboxViewProps> = ({ onNavigate }) => {
             {data?.email_boxes.map((box) => (
               <div
                 key={box.key}
+                className="inbox-station-row"
                 onClick={() => onNavigate('tickets', { category: 'email' })}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  padding: '7px 10px',
-                  borderRadius: '6px',
-                  backgroundColor: 'var(--bg-surface-hover, rgba(255, 255, 255, 0.02))',
-                  cursor: 'pointer',
-                  transition: 'background-color 0.15s ease',
-                }}
-                onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = 'var(--bg-hover, rgba(255, 255, 255, 0.06))')}
-                onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'var(--bg-surface-hover, rgba(255, 255, 255, 0.02))')}
               >
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <div className="inbox-station-row-left">
                   {getCategoryIcon(box.icon)}
-                  <div>
-                    <span style={{ fontSize: '0.82rem', fontWeight: 600, color: 'var(--text-main)' }}>
-                      {box.name}
-                    </span>
-                    <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginLeft: '6px' }}>
-                      ({box.address})
-                    </span>
+                  <div className="inbox-station-row-title-wrap">
+                    <span className="inbox-station-row-title">{box.name}</span>
+                    <span className="inbox-station-row-subtitle">({box.address})</span>
                   </div>
                 </div>
 
-                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <div className="inbox-station-badges-wrap">
                   {renderBadge('Y', box.new, 'Cevap Bekleyen E-Posta', 'info', (e) => {
                     e.stopPropagation();
                     onNavigate('tickets', { category: 'email', status: 'new' });
                   })}
-                  <ChevronRight size={13} style={{ color: 'var(--text-muted)', marginLeft: '2px' }} />
+                  <ChevronRight size={13} style={{ color: 'var(--text-muted)', marginLeft: '2px', flexShrink: 0 }} />
                 </div>
               </div>
             ))}
