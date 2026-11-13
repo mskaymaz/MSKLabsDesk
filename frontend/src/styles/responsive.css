@@ -361,7 +361,8 @@
 /* --- MOBİL VE KÜÇÜK EKRAN UYARLAMALARI (<= 640px) --- */
 @media (max-width: 640px) {
   .inbox-station-container {
-    padding: 8px 4px 60px;
+    padding: 8px 6px 60px 6px !important;
+    overflow-x: hidden !important;
   }
 
   .inbox-station-header {
@@ -371,40 +372,55 @@
   }
 
   .inbox-station-header h1 {
-    font-size: 1.05rem !important;
+    font-size: 1.02rem !important;
   }
 
   .inbox-station-card {
     padding: 10px 10px;
+    overflow: hidden;
+    box-sizing: border-box;
   }
 
   .inbox-station-group-header {
-    flex-wrap: wrap;
-    gap: 4px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
     margin-bottom: 4px;
     padding-bottom: 6px;
   }
 
   .inbox-station-legend {
-    font-size: 0.68rem;
+    font-size: 0.67rem;
+    line-height: 1.2;
   }
 
   .inbox-station-row {
-    padding: 7px 4px;
+    padding: 6px 4px;
     gap: 6px;
+    box-sizing: border-box;
+  }
+
+  .inbox-station-row-title-wrap {
+    gap: 4px;
   }
 
   .inbox-station-row-title {
-    font-size: 0.80rem;
+    font-size: 0.79rem;
+  }
+
+  .inbox-station-row-subtitle {
+    display: none !important;
   }
 
   .inbox-station-badges-wrap {
     gap: 3px;
+    margin-right: 4px;
   }
 
   .inbox-station-badge {
-    height: 21px;
-    padding: 0 5px;
-    font-size: 0.70rem;
+    height: 20px;
+    padding: 0 4px;
+    font-size: 0.68rem;
+    min-width: 26px;
   }
 }

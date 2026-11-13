@@ -1,6 +1,18 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 📌 Son Güncelleme [13.11.2026 - 16:20] — MOBİL SAĞ TAŞMA VE KIRPILMA (BLOWOUT) ONARIMI [✓]
+* **Tespit Edilen Kök Neden:**
+  - Grup başlıklarında (`Destek Masası & Biletler` ve açıklama lejantı `Y: Yeni • İ: İşlemde • !: Acil / Kritik`) tek satırda kalıp toplam ~380px genişliğe ulaşması; kartın ekran genişliğini (360-375px) aşarak sağdan taşmasına ve hem rozetlerin hem alt gezinme çubuğunun sağ kenardan kırpılmasına sebep olması.
+  - Kurumsal e-posta satırlarında uzun e-posta adreslerinin (`@msklabs.org`) mobilde başlıkla yan yana gelerek taşma üretmesi.
+* **Yapılan Düzeltmeler (`responsive.css`):**
+  1. **Başlık & Lejant Dikey Akışı:** Mobilde grup başlığı üst satıra, lejant ise hemen altına ince ve zarif bir alt satır olarak alındı (`flex-direction: column; align-items: flex-start;`).
+  2. **E-Posta Alt Metin Sadeleştirmesi:** Mobilde gereksiz yer kaplayan parantez içi e-posta adresleri gizlenerek (`.inbox-station-row-subtitle { display: none !important; }`) sola ~150px ferah alan kazandırıldı.
+  3. **Rozet ve Sağ Boşluk Ergonomisi:** Rozet genişlik ve dolguları mikro ölçeğe (`height: 20px, font-size: 0.68rem, gap: 3px`) çekilerek sağ sınıra `margin-right: 4px` payı eklendi; kırpılma tamamen giderildi.
+  4. **Derleme:** Frontend derlemesi 744ms'de 0 hata ile tamamlandı.
+
+---
+
 ## 📌 Son Güncelleme [13.11.2026 - 16:15] — İLETİŞİM İSTASYONU MOBİL VE KART ESTETİK REVİZYONU [✓]
 * **Yapılan İşlemler:**
   1. **Grup Kartları ve Sınır Belirginliği (`responsive.css`):**
