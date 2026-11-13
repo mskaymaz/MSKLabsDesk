@@ -1,23 +1,29 @@
 import React from 'react';
-import { LayoutDashboard, Inbox, MessageSquare, Settings, FileText, Menu } from 'lucide-react';
+import { LayoutDashboard, Inbox, HelpCircle, MessageSquare, Menu, Settings } from 'lucide-react';
 import type { TabType } from '../Sidebar';
 
 export interface MobileBottomNavProps {
   activeTab: TabType;
   setActiveTab: (tab: TabType) => void;
+  pendingTicketCount?: number;
+  pendingCommentCount?: number;
   onOpenMenu?: () => void;
 }
 
 export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
   activeTab,
   setActiveTab,
+  pendingTicketCount = 0,
+  pendingCommentCount = 0,
   onOpenMenu,
 }) => {
-  const items = [
-    { id: 'dashboard' as TabType, label: 'Özet', icon: LayoutDashboard },
-    { id: 'tickets' as TabType, label: 'Biletler', icon: Inbox },
-    { id: 'comments' as TabType, label: 'Yorumlar', icon: MessageSquare },
-    { id: 'posts' as TabType, label: 'Blog', icon: FileText },
+  const totalInboxCount = pendingTicketCount + pendingCommentCount;
+
+  const items: { id: TabType; label: string; icon: any; badge?: number }[] = [
+    { id: 'dashboard', label: 'Özet', icon: LayoutDashboard },
+    { id: 'inbox', label: 'İstasyon', icon: Inbox, badge: totalInboxCount > 0 ? totalInboxCount : undefined },
+    { id: 'tickets', label: 'Destek', icon: HelpCircle, badge: pendingTicketCount > 0 ? pendingTicketCount : undefined },
+    { id: 'comments', label: 'Yorumlar', icon: MessageSquare, badge: pendingCommentCount > 0 ? pendingCommentCount : undefined },
   ];
 
   return (
@@ -53,9 +59,32 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({
               minHeight: '44px',
               justifyContent: 'center',
               cursor: 'pointer',
+              position: 'relative',
             }}
           >
-            <Icon size={18} />
+            <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <Icon size={18} />
+              {item.badge && (
+                <span
+                  style={{
+                    position: 'absolute',
+                    top: '-6px',
+                    right: '-9px',
+                    backgroundColor: '#ef4444',
+                    color: '#ffffff',
+                    borderRadius: '9px',
+                    padding: '0 4px',
+                    fontSize: '8.5px',
+                    fontWeight: 700,
+                    lineHeight: '13px',
+                    minWidth: '13px',
+                    textAlign: 'center',
+                  }}
+                >
+                  {item.badge}
+                </span>
+              )}
+            </div>
             <span>{item.label}</span>
           </button>
         );

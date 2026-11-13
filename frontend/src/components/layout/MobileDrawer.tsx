@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react';
 import {
   LayoutDashboard,
+  BarChart3,
+  HelpCircle,
   Inbox,
   MessageSquare,
   Send,
@@ -58,12 +60,21 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({
 
   if (!isOpen) return null;
 
+  const totalInboxCount = pendingTicketCount + pendingCommentCount;
+
   const menuItems = [
     { id: 'dashboard' as TabType, label: t('dashboard') || 'Özet', icon: LayoutDashboard },
     {
+      id: 'inbox' as TabType,
+      label: 'İletişim İstasyonu',
+      icon: Inbox,
+      badge: totalInboxCount > 0 ? totalInboxCount : undefined,
+    },
+    { id: 'analytics' as TabType, label: t('analytics') || 'İstatistikler', icon: BarChart3 },
+    {
       id: 'tickets' as TabType,
       label: t('tickets') || 'Destek Biletleri',
-      icon: Inbox,
+      icon: HelpCircle,
       badge: pendingTicketCount > 0 ? pendingTicketCount : undefined,
     },
     {

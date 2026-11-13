@@ -71,6 +71,8 @@ export const AppShell: React.FC<AppShellProps> = ({
         <MobileBottomNav
           activeTab={activeTab}
           setActiveTab={setActiveTab}
+          pendingTicketCount={pendingTicketCount}
+          pendingCommentCount={pendingCommentCount}
           onOpenMenu={() => setIsMobileMenuOpen(true)}
         />
 
