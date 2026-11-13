@@ -109,14 +109,14 @@
     max-width: 100% !important;
     width: 100% !important;
     margin: 0 !important;
-    padding: 0 8px 76px 8px !important;
+    padding: 0 16px 80px 16px !important;
     box-sizing: border-box !important;
   }
   .inbox-station-container {
     width: 100% !important;
     max-width: 100% !important;
     margin: 0 !important;
-    padding: 10px 4px 60px 4px !important;
+    padding: 10px 0 60px 0 !important;
     box-sizing: border-box !important;
   }
   .mobile-bottom-nav { display: flex !important; }
@@ -361,31 +361,48 @@
 /* --- MOBİL VE KÜÇÜK EKRAN UYARLAMALARI (<= 640px) --- */
 @media (max-width: 640px) {
   .inbox-station-container {
-    padding: 8px 6px 60px 6px !important;
+    padding: 8px 0 60px 0 !important;
     overflow-x: hidden !important;
   }
 
   .inbox-station-header {
-    padding: 10px 12px;
-    gap: 8px;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    padding: 12px 14px;
+    gap: 10px;
     margin-bottom: 12px;
+    box-sizing: border-box;
+    width: 100%;
+  }
+
+  .inbox-station-header-left {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    min-width: 0;
   }
 
   .inbox-station-header h1 {
-    font-size: 1.02rem !important;
+    font-size: 1.05rem !important;
+  }
+
+  .inbox-station-header .admin-btn-refresh {
+    align-self: flex-start;
+    margin-top: 2px;
   }
 
   .inbox-station-card {
-    padding: 10px 10px;
+    padding: 12px 14px;
     overflow: hidden;
     box-sizing: border-box;
+    width: 100%;
   }
 
   .inbox-station-group-header {
     flex-direction: column;
     align-items: flex-start;
     gap: 2px;
-    margin-bottom: 4px;
+    margin-bottom: 6px;
     padding-bottom: 6px;
   }
 
@@ -395,17 +412,23 @@
   }
 
   .inbox-station-row {
-    padding: 6px 4px;
-    gap: 6px;
+    padding: 8px 4px;
+    gap: 16px;
     box-sizing: border-box;
+    width: 100%;
   }
 
   .inbox-station-row-title-wrap {
     gap: 4px;
+    min-width: 0;
+    overflow: hidden;
   }
 
   .inbox-station-row-title {
-    font-size: 0.79rem;
+    font-size: 0.82rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .inbox-station-row-subtitle {
@@ -413,13 +436,15 @@
   }
 
   .inbox-station-badges-wrap {
-    gap: 3px;
+    gap: 4px;
     margin-right: 4px;
+    margin-left: auto;
+    flex-shrink: 0;
   }
 
   .inbox-station-badge {
     height: 20px;
-    padding: 0 4px;
+    padding: 0 5px;
     font-size: 0.68rem;
     min-width: 26px;
   }

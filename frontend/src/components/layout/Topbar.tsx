@@ -206,6 +206,7 @@ export const Topbar: React.FC<TopbarProps> = ({
 
         <button
           type="button"
+          className="hidden-mobile"
           onClick={openCustomizer}
           aria-label="Görünüm Stüdyosu"
           title="Görünüm Stüdyosu (Yazı Tipi, Renk, Dolgu, Boyut)"
@@ -217,7 +218,6 @@ export const Topbar: React.FC<TopbarProps> = ({
             padding: '4px',
             width: '28px',
             height: '28px',
-            display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             borderRadius: 'var(--radius-sm)',
@@ -227,7 +227,7 @@ export const Topbar: React.FC<TopbarProps> = ({
           <Palette size={16} color="var(--accent-primary)" />
         </button>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+        <div className="hidden-mobile" style={{ alignItems: 'center', gap: '6px' }}>
           <div
             style={{
               width: '24px',
@@ -242,7 +242,7 @@ export const Topbar: React.FC<TopbarProps> = ({
           >
             <User size={13} />
           </div>
-          <span className="hidden-mobile" style={{ fontSize: '0.74rem', fontWeight: 600, color: 'var(--text-primary)' }}>
+          <span style={{ fontSize: '0.74rem', fontWeight: 600, color: 'var(--text-primary)' }}>
             {user?.name || 'Admin'}
           </span>
         </div>

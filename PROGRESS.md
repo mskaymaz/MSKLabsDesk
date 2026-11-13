@@ -1,6 +1,18 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 📌 Son Güncelleme [13.11.2026 - 16:25] — MOBİL SAĞ KENAR BOŞLUĞU (16PX) VE TOPBAR SIKIŞMA ONARIMI [✓]
+* **Tespit Edilen Kök Neden:**
+  - `Topbar.tsx` sağ bölümünde (Arama, Bildirim, Tema, Renk Paleti, Kullanıcı Avatarı) 5 butonun mobilde aynı anda yer alması; üst barın sağ kenardan taşarak ekranı genişletmesi ve `palette` butonunun yarıdan kesilmesi.
+  - Kart dış kenar boşluğunun (`.page-content`) sadece 8px olması nedeniyle kartların ekranın sağ cam sınırına yapışık/kesilmiş gibi görünmesi; kartların her iki taraftan eşit içe çekilememesi.
+* **Yapılan Cerrahi Düzeltmeler:**
+  1. **Ekran Kenarı Emniyet Payı (16px Güvenlik Koridoru):** `.page-content` mobil dolgusu `padding: 0 16px 80px 16px` olarak artırıldı; kartlar hem sağdan hem soldan ekrandan 16px içeride konumlandırıldı ve her iki köşedeki 12px yuvarlak hatlar netleşti.
+  2. **Başlık ile Rozetler Arası Güvenli Aralık:** Satır içi `gap: 16px` olarak ayarlandı; başlıklar ile rozetler arasında ferah ve orantılı bir mesafe oluşturuldu.
+  3. **Topbar Sadeleştirmesi (`Topbar.tsx`):** Mobilde çekmecede zaten bulunan `Palette` (Özelleştirici) butonu ve `User` avatarı `hidden-mobile` ile gizlendi; üst barın genişlik baskısı ortadan kaldırıldı.
+  4. **Derleme:** 581ms'de 0 hata ile derlendi.
+
+---
+
 ## 📌 Son Güncelleme [13.11.2026 - 16:20] — MOBİL SAĞ TAŞMA VE KIRPILMA (BLOWOUT) ONARIMI [✓]
 * **Tespit Edilen Kök Neden:**
   - Grup başlıklarında (`Destek Masası & Biletler` ve açıklama lejantı `Y: Yeni • İ: İşlemde • !: Acil / Kritik`) tek satırda kalıp toplam ~380px genişliğe ulaşması; kartın ekran genişliğini (360-375px) aşarak sağdan taşmasına ve hem rozetlerin hem alt gezinme çubuğunun sağ kenardan kırpılmasına sebep olması.
