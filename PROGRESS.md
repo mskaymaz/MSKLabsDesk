@@ -1,6 +1,17 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 📌 Son Güncelleme [13.11.2026 - 11:45] — MOBİL MENÜ VE ALT GEZİNME ÇUBUĞU İSTASYON & DESTEK ENTEGRASYONU [✓]
+* **Yapılan İşlemler:**
+  1. **Mobil Çekmece Menüsü (`MobileDrawer.tsx`):**
+     - Eksik olan `inbox` ("İletişim İstasyonu") ve `analytics` ("İstatistikler") sekmeleri eklendi; `tickets` ("Destek Biletleri") HelpCircle ikonuyla güncellendi.
+  2. **Mobil Alt Gezinme Çubuğu (`MobileBottomNav.tsx`):**
+     - Alt bar butonları: Özet, İstasyon (`inbox` + sayaç rozeti), Destek (`tickets` + sayaç rozeti), Yorumlar (`comments` + sayaç rozeti) ve Menü ☰ olarak yeniden düzenlendi.
+  3. **Durum ve Rozet Akışı (`AppShell.tsx`):**
+     - Bilet ve bekleyen yorum sayıları mobil alt bara bağlandı; bekleyen bildirimler için kırmızı rozet noktaları eklendi.
+
+---
+
 ## 📌 Son Güncelleme [13.11.2026 - 11:00] — İLETİŞİM İSTASYONU MOBİL DUYARLILIK (RESPONSIVE) GELİŞTİRMESİ [✓]
 * **Yapılan İşlemler:**
   1. **Duyarlı Tasarım Sınıfları (`responsive.css`):**
