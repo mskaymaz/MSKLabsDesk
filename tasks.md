@@ -77,7 +77,7 @@
 
 ---
 
-### INBOX-APP-001 — Kompakt Hızlı İletişim İstasyonu (Inbox Workstation) [*]
+### INBOX-APP-001 — Kompakt Hızlı İletişim İstasyonu (Inbox Workstation) [✓]
 - **Amaç:** Üst bar çekmecesinden bağımsız; yatayda sabit, dikey kaydırılabilir (scroll), satır içi metrikli (Yeni, İşlemde, Acil, Onay vb.) ve tek tıkla filtrelenmiş detay sayfasına yönlendiren kompakt, hafif bir operasyon merkezi (`InboxView.tsx`) inşa etmek.
 - **Tarih:** 10.11.2026 - 15:25
 - **Mimari:** Konfigürasyon odaklı (Config-Driven), sıfır hantallık, cerrahi ve modüler yaklaşım.
@@ -110,6 +110,35 @@
   - [*] 6.1: Backend ve frontend TypeScript kontrolleri (`tsc -b`, `npx tsc --noEmit`) 0 hatayla geçti.
   - [*] 6.2: Backend entegrasyon testleri (`npm test`) 100% PASS doğrulandı.
   - [*] 6.3: `PROGRESS.md` ve `tasks.md` güncellendi.
+
+---
+
+### INBOX-ACCORDION-002 — Akordeon Mimarili ve Granüler Yenilemeli İletişim İstasyonu (Inbox Station v2) [✓]
+- **Amaç:** `InboxView.tsx` bileşenini sade, dikey kaydırılabilir, başlık seviyesinde akordeon açılır-kapanır ve hem global hem de modül bazında yerel yenileme yapabilen yeni nesil ergonomik operasyon merkezine dönüştürmek.
+- **Tarih:** 16.11.2026 - 14:35
+- **Tasarım Standartları:**
+  1. *Sade & Dikey Akış:* Masaüstü ve mobilde yatay taşma olmadan tek eksende dikey scroll; mobilde 16px güvenlik koridoru.
+  2. *Akordeon Katmanları:* Başlık kapalıyken bile kümülatif sayaçları ve yerel yenileme butonunu sergileyen kompakt kartlar.
+  3. *Granüler & Global Yenileme:* Üst barda global `Tümünü Yenile` butonu ve `Son Güncelleme: SS:DD:ss` zaman damgası; her akordeon başlığında bağımsız modül yenileme ikonu.
+  4. *Titiz İnceleme Akışı (HITL):* Hızlı silme/onaylama yerine, satır tıklandığında doğrudan filtrelenmiş detay ekranına yönlendirme ile ayrıntılı okuma/denetim güvencesi.
+
+#### 📋 Takip Edilebilir Aşama ve Görev Listesi:
+- [*] **Task 1 — Zaman Damgası ve Durum Yönetimi (State Architecture):**
+  - [*] 1.1: `lastUpdated` state'i tanımlanarak formatlanmış saat-dakika-saniye (`SS:DD:ss`) göstergesinin oluşturulması.
+  - [*] 1.2: Akordeon grupları için bağımsız açılma/kapanma state'i (`expandedGroups: { blog: boolean, support: boolean, email: boolean }`, varsayılan: açık).
+  - [*] 1.3: Modül bazlı granüler yükleme/yenileme state'i (`refreshingModule: 'all' | 'blog' | 'support' | 'email' | null`).
+- [*] **Task 2 — Akordeon Başlıkları ve Granüler Yenileme Arayüzü:**
+  - [*] 2.1: Grup başlıklarının (`Blog Yorumları`, `Destek Masası`, `Kurumsal E-Postalar`) akordeon tetikleyicisi (`ChevronDown` / `ChevronRight`) ile donatılması.
+  - [*] 2.2: Her akordeon başlığının sağına tıklama yayılımını durduran (`e.stopPropagation()`) bağımsız modül yenileme butonunun yerleştirilmesi.
+  - [*] 2.3: Başlık satırında grup toplam sayaç rozetlerinin dinamik gösterilmesi (Blog: `O: XX | D: XX`, Destek: `Y: XX | İ: XX | !: XX`, E-Posta: `Y: XX`).
+- [*] **Task 3 — Dikey Akordeon Gövdesi ve İnceleme Yönlendirmesi:**
+  - [*] 3.1: Açık grupta alt kanalların (Bizce, Anıltılar, Güncel vb.) sade dikey satırlar halinde listelenmesi; kapalıyken pürüzsüz gizlenmesi.
+  - [*] 3.2: Satır veya rozet tıklandığında hedefe odaklı filtrelenmiş durumla (`onNavigate`) ayrıntılı okuma ve onaylama ekranlarına geçiş sağlanması.
+  - [*] 3.3: Masaüstü ve mobil ekranlarda 450 satır kuralına uygun CSS ve ergonomi optimizasyonunun tamamlanması.
+- [*] **Task 4 — Derleme, Test ve Dokümantasyon:**
+  - [*] 4.1: `tsc -b && vite build` ile 0 hatayla derlenmesi ve satır sınırının (< 450 satır) doğrulanması.
+  - [*] 4.2: Yerel ortamda akordeon açılma, modüler yenileme ve zaman damgası davranışlarının test edilmesi.
+  - [*] 4.3: `PROGRESS.md`, `CHANGELOG.md` ve `tasks.md` dosyalarının güncellenmesi.
 
 ---
 

@@ -1,6 +1,18 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [16.11.2026 - 15:00] - Akordeon Mimarili ve Granüler Yenilemeli İletişim İstasyonu (INBOX-ACCORDION-002)
+- **Akordeon Açılır-Kapanır Blok Düzeni (`InboxView.tsx`):**
+  - Blog Yorumları, Destek Masası ve Kurumsal E-Posta grupları bağımsız açılır-kapanır akordeon kartlarına dönüştürüldü.
+  - Kart başlıkları kapalıyken bile kümülatif sayaç rozetlerini (Örn: Blog için toplam `O: XX | D: XX`, Destek için `Y: XX | İ: XX | !: XX`) ve modüler yenileme butonunu sergileyecek şekilde kurgulandı.
+- **Granüler ve Global Yenileme Mimarisi (`RotateCw`, `Clock`):**
+  - Üst çubuğa `Tümünü Yenile` aksiyonu ile `Son Güncelleme: SS:DD:ss` zaman damgası eklendi.
+  - Her akordeon başlığının sağına sadece o bloğun D1 sorgusunu tazeleyen bağımsız döner ikon (`fetchSummary('blog')` vb.) entegre edildi.
+- **Titiz İnceleme (HITL) Odaklı Yönlendirme:**
+  - Hızlı silme/onaylama yerine, satır ve rozet tıklamaları hedeflenmiş kategori/durum parametreleriyle doğrudan `CommentsView` veya `TicketsView` modallarına bağlandı.
+- **Derleme ve Ergonomi Güvencesi:**
+  - `InboxView.tsx` 364 satırda, `responsive.css` tam 450 satır sınırında korundu. Frontend derlemesi 574ms'de 0 hatayla tamamlandı; backend entegrasyon testleri 100% PASS.
+
 ## [16.11.2026 - 12:45] - Search Console Kapsam ve Doğrulama Hatalarının Çözümü, Cloudflare Temiz URL Standardizasyonu
 - **Search Console Yönlendirme ve Canonical Çakışması Giderildi (`webMSKLabs`):**
   - Cloudflare Pages'ın `.html` uzantılarını temiz uzantısız URL'lere 307 ile yönlendirmesi nedeniyle `<head>` içindeki `<link rel="canonical">` etiketleri ile server yanıtı arasındaki çakışma ve döngü çözüldü.

@@ -12,10 +12,12 @@ import {
   HelpCircle,
   Shield,
   ChevronRight,
+  ChevronDown,
   BookOpen,
   Feather,
   Newspaper,
   Layers,
+  Clock,
 } from 'lucide-react';
 import { api } from '../services/api';
 import type { InboxSummaryResponse } from '../types';
@@ -35,27 +37,79 @@ interface InboxViewProps {
 export const InboxView: React.FC<InboxViewProps> = ({ onNavigate }) => {
   const [data, setData] = useState<InboxSummaryResponse | null>(null);
   const [loading, setLoading] = useState(true);
-  const [refreshing, setRefreshing] = useState(false);
+  const [refreshingModule, setRefreshingModule] = useState<'all' | 'blog' | 'support' | 'email' | null>(null);
+  const [lastUpdated, setLastUpdated] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
+  const [expandedGroups, setExpandedGroups] = useState<{ blog: boolean; support: boolean; email: boolean }>({
+    blog: true,
+    support: true,
+    email: true,
+  });
 
-  const fetchSummary = async (isManual = false) => {
-    if (isManual) setRefreshing(true);
-    else setLoading(true);
+  const getFormattedTime = () => {
+    return new Date().toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  };
+
+  const fetchSummary = async (module: 'all' | 'blog' | 'support' | 'email' = 'all') => {
+    setRefreshingModule(module);
+    if (module === 'all' && !data) setLoading(true);
     setError(null);
     try {
       const res = await api.getInboxSummary();
-      setData(res);
+      if (module === 'all' || !data) {
+        setData(res);
+      } else {
+        if (module === 'blog') {
+          setData(prev => prev ? {
+            ...prev,
+            blog_channels: res.blog_channels,
+            totals: {
+              ...prev.totals,
+              blog_pending: res.totals.blog_pending,
+              blog_unverified: res.totals.blog_unverified,
+              all_actionable: res.totals.blog_pending + prev.totals.support_new + prev.totals.support_urgent + prev.totals.email_new,
+            },
+          } : res);
+        } else if (module === 'support') {
+          setData(prev => prev ? {
+            ...prev,
+            support_categories: res.support_categories,
+            totals: {
+              ...prev.totals,
+              support_new: res.totals.support_new,
+              support_in_progress: res.totals.support_in_progress,
+              support_urgent: res.totals.support_urgent,
+              all_actionable: prev.totals.blog_pending + res.totals.support_new + res.totals.support_urgent + prev.totals.email_new,
+            },
+          } : res);
+        } else if (module === 'email') {
+          setData(prev => prev ? {
+            ...prev,
+            email_boxes: res.email_boxes,
+            totals: {
+              ...prev.totals,
+              email_new: res.totals.email_new,
+              all_actionable: prev.totals.blog_pending + prev.totals.support_new + prev.totals.support_urgent + res.totals.email_new,
+            },
+          } : res);
+        }
+      }
+      setLastUpdated(getFormattedTime());
     } catch (err: any) {
       setError(err.message || 'Özet verileri alınamadı.');
     } finally {
       setLoading(false);
-      setRefreshing(false);
+      setRefreshingModule(null);
     }
   };
 
   useEffect(() => {
-    fetchSummary();
+    fetchSummary('all');
   }, []);
+
+  const toggleGroup = (group: 'blog' | 'support' | 'email') => {
+    setExpandedGroups(prev => ({ ...prev, [group]: !prev[group] }));
+  };
 
   const getCategoryIcon = (iconName: string) => {
     switch (iconName) {
@@ -105,7 +159,7 @@ export const InboxView: React.FC<InboxViewProps> = ({ onNavigate }) => {
 
   return (
     <div className="inbox-station-container">
-      {/* 1. Üst Bar: Başlık, Özet Sayaç ve Yenileme Butonu */}
+      {/* 1. Üst Bar: Başlık, Özet Sayaç, Zaman Damgası ve Genel Yenileme */}
       <div className="inbox-station-header">
         <div className="inbox-station-header-left">
           <div
@@ -126,7 +180,7 @@ export const InboxView: React.FC<InboxViewProps> = ({ onNavigate }) => {
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
               <h1 style={{ margin: 0, fontSize: '1.2rem', fontWeight: 700, color: 'var(--text-main)' }}>
-                İletişim & Yanıtlama İstasyonu
+                İletişim &amp; Yanıtlama İstasyonu
               </h1>
               {data && (
                 <span
@@ -144,21 +198,29 @@ export const InboxView: React.FC<InboxViewProps> = ({ onNavigate }) => {
                 </span>
               )}
             </div>
-            <p style={{ margin: '2px 0 0', fontSize: '0.78rem', color: 'var(--text-muted)' }}>
-              Blog yorumları, destek talepleri ve kurumsal postalar için operasyonel özet.
-            </p>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginTop: '3px', flexWrap: 'wrap' }}>
+              <p style={{ margin: 0, fontSize: '0.78rem', color: 'var(--text-muted)' }}>
+                Blog yorumları, destek talepleri ve kurumsal postalar için operasyonel özet.
+              </p>
+              {lastUpdated && (
+                <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                  <Clock size={11} style={{ opacity: 0.7 }} />
+                  Son Güncelleme: {lastUpdated}
+                </span>
+              )}
+            </div>
           </div>
         </div>
 
         <button
           type="button"
           className="admin-btn admin-btn-sm admin-btn-refresh"
-          onClick={() => fetchSummary(true)}
-          disabled={loading || refreshing}
-          title="Verileri Yenile"
+          onClick={() => fetchSummary('all')}
+          disabled={loading || refreshingModule === 'all'}
+          title="Tüm Verileri Yenile"
         >
-          <RotateCw size={13} className={refreshing ? 'spin' : ''} />
-          <span>{refreshing ? 'Yenileniyor...' : 'Yenile'}</span>
+          <RotateCw size={13} className={refreshingModule === 'all' ? 'spin' : ''} />
+          <span>{refreshingModule === 'all' ? 'Yenileniyor...' : 'Tümünü Yenile'}</span>
         </button>
       </div>
 
@@ -178,145 +240,235 @@ export const InboxView: React.FC<InboxViewProps> = ({ onNavigate }) => {
         </div>
       )}
 
-      {/* 2. Dikey Kaydırılabilir / Mobilde Doğal Akışlı Liste Alanı */}
+      {/* 2. Dikey Kaydırılabilir Akordeon Liste Alanı */}
       <div className="inbox-station-list">
         {/* GRUP 1: BLOG YORUMLARI & MODERASYON */}
         <div className="inbox-station-card">
-          <div className="inbox-station-group-header">
+          <div
+            className="inbox-station-group-header"
+            onClick={() => toggleGroup('blog')}
+            style={{ cursor: 'pointer', userSelect: 'none' }}
+          >
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              {expandedGroups.blog ? (
+                <ChevronDown size={16} style={{ color: 'var(--text-muted)', flexShrink: 0 }} />
+              ) : (
+                <ChevronRight size={16} style={{ color: 'var(--text-muted)', flexShrink: 0 }} />
+              )}
               <MessageSquare size={16} style={{ color: '#6366f1', flexShrink: 0 }} />
               <span style={{ fontSize: '0.88rem', fontWeight: 700, color: 'var(--text-main)' }}>
-                Blog Yorumları & Moderasyon
+                Blog Yorumları &amp; Moderasyon
               </span>
             </div>
-            <span className="inbox-station-legend">
-              O: Onay Bekleyen • D: Doğrulama Bekleyen
-            </span>
-          </div>
 
-          <div className="inbox-station-rows">
-            {data?.blog_channels.map((ch) => (
-              <div
-                key={ch.id}
-                className="inbox-station-row"
-                onClick={() => onNavigate('comments', { channel: ch.slug, status: 'pending' })}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              {data && (
+                <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                  {renderBadge('O', data.totals.blog_pending, 'Toplam Onay Bekleyen', 'warning')}
+                  {renderBadge('D', data.totals.blog_unverified, 'Toplam Doğrulama Bekleyen', 'info')}
+                </div>
+              )}
+              <button
+                type="button"
+                className="admin-btn admin-btn-sm"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  fetchSummary('blog');
+                }}
+                disabled={refreshingModule === 'blog'}
+                title="Sadece Blog Yorumlarını Yenile"
+                style={{ padding: '3px 6px', height: '24px', background: 'transparent', border: 'none' }}
               >
-                <div className="inbox-station-row-left">
-                  <div className="inbox-icon-box">
-                    {getCategoryIcon(ch.icon)}
-                  </div>
-                  <div className="inbox-station-row-title-wrap">
-                    <span className="inbox-station-row-title">{ch.name}</span>
-                  </div>
-                </div>
-
-                <div className="inbox-station-badges-wrap">
-                  {renderBadge('O', ch.pending, 'Onay Bekleyen', 'warning', (e) => {
-                    e.stopPropagation();
-                    onNavigate('comments', { channel: ch.slug, status: 'pending' });
-                  })}
-                  {renderBadge('D', ch.unverified, 'Doğrulama Bekleyen', 'info', (e) => {
-                    e.stopPropagation();
-                    onNavigate('comments', { channel: ch.slug, status: 'unverified' });
-                  })}
-                  <ChevronRight size={13} style={{ color: 'var(--text-muted)', opacity: 0.6, marginLeft: '2px', flexShrink: 0 }} />
-                </div>
-              </div>
-            ))}
+                <RotateCw size={12} className={refreshingModule === 'blog' ? 'spin' : ''} style={{ color: 'var(--text-muted)' }} />
+              </button>
+            </div>
           </div>
+
+          {expandedGroups.blog && (
+            <div className="inbox-station-rows" style={{ marginTop: '4px' }}>
+              {data?.blog_channels.map((ch) => (
+                <div
+                  key={ch.id}
+                  className="inbox-station-row"
+                  onClick={() => onNavigate('comments', { channel: ch.slug, status: 'pending' })}
+                >
+                  <div className="inbox-station-row-left">
+                    <div className="inbox-icon-box">
+                      {getCategoryIcon(ch.icon)}
+                    </div>
+                    <div className="inbox-station-row-title-wrap">
+                      <span className="inbox-station-row-title">{ch.name}</span>
+                    </div>
+                  </div>
+
+                  <div className="inbox-station-badges-wrap">
+                    {renderBadge('O', ch.pending, 'Onay Bekleyen', 'warning', (e) => {
+                      e.stopPropagation();
+                      onNavigate('comments', { channel: ch.slug, status: 'pending' });
+                    })}
+                    {renderBadge('D', ch.unverified, 'Doğrulama Bekleyen', 'info', (e) => {
+                      e.stopPropagation();
+                      onNavigate('comments', { channel: ch.slug, status: 'unverified' });
+                    })}
+                    <ChevronRight size={13} style={{ color: 'var(--text-muted)', opacity: 0.6, marginLeft: '2px', flexShrink: 0 }} />
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* GRUP 2: DESTEK MASASI & BİLETLER */}
         <div className="inbox-station-card">
-          <div className="inbox-station-group-header">
+          <div
+            className="inbox-station-group-header"
+            onClick={() => toggleGroup('support')}
+            style={{ cursor: 'pointer', userSelect: 'none' }}
+          >
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              {expandedGroups.support ? (
+                <ChevronDown size={16} style={{ color: 'var(--text-muted)', flexShrink: 0 }} />
+              ) : (
+                <ChevronRight size={16} style={{ color: 'var(--text-muted)', flexShrink: 0 }} />
+              )}
               <HelpCircle size={16} style={{ color: '#06b6d4', flexShrink: 0 }} />
               <span style={{ fontSize: '0.88rem', fontWeight: 700, color: 'var(--text-main)' }}>
-                Destek Masası & Biletler
+                Destek Masası &amp; Biletler
               </span>
             </div>
-            <span className="inbox-station-legend">
-              Y: Yeni • İ: İşlemde • !: Acil / Kritik
-            </span>
-          </div>
 
-          <div className="inbox-station-rows">
-            {data?.support_categories.map((cat) => (
-              <div
-                key={cat.key}
-                className="inbox-station-row"
-                onClick={() => onNavigate('tickets', { category: cat.key })}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              {data && (
+                <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                  {renderBadge('Y', data.totals.support_new, 'Toplam Yeni', 'info')}
+                  {renderBadge('İ', data.totals.support_in_progress, 'Toplam İşlemde', 'warning')}
+                  {renderBadge('!', data.totals.support_urgent, 'Toplam Acil', 'danger')}
+                </div>
+              )}
+              <button
+                type="button"
+                className="admin-btn admin-btn-sm"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  fetchSummary('support');
+                }}
+                disabled={refreshingModule === 'support'}
+                title="Sadece Destek Biletlerini Yenile"
+                style={{ padding: '3px 6px', height: '24px', background: 'transparent', border: 'none' }}
               >
-                <div className="inbox-station-row-left">
-                  <div className="inbox-icon-box">
-                    {getCategoryIcon(cat.icon)}
-                  </div>
-                  <div className="inbox-station-row-title-wrap">
-                    <span className="inbox-station-row-title">{cat.name}</span>
-                  </div>
-                </div>
-
-                <div className="inbox-station-badges-wrap">
-                  {renderBadge('Y', cat.new, 'Yeni Talepler', 'info', (e) => {
-                    e.stopPropagation();
-                    onNavigate('tickets', { category: cat.key, status: 'new' });
-                  })}
-                  {renderBadge('İ', cat.in_progress, 'İşlemdeki Talepler', 'warning', (e) => {
-                    e.stopPropagation();
-                    onNavigate('tickets', { category: cat.key, status: 'in_progress' });
-                  })}
-                  {renderBadge('!', cat.urgent, 'Acil & Öncelikli', 'danger', (e) => {
-                    e.stopPropagation();
-                    onNavigate('tickets', { category: cat.key, status: 'urgent' });
-                  })}
-                  <ChevronRight size={13} style={{ color: 'var(--text-muted)', opacity: 0.6, marginLeft: '2px', flexShrink: 0 }} />
-                </div>
-              </div>
-            ))}
+                <RotateCw size={12} className={refreshingModule === 'support' ? 'spin' : ''} style={{ color: 'var(--text-muted)' }} />
+              </button>
+            </div>
           </div>
+
+          {expandedGroups.support && (
+            <div className="inbox-station-rows" style={{ marginTop: '4px' }}>
+              {data?.support_categories.map((cat) => (
+                <div
+                  key={cat.key}
+                  className="inbox-station-row"
+                  onClick={() => onNavigate('tickets', { category: cat.key })}
+                >
+                  <div className="inbox-station-row-left">
+                    <div className="inbox-icon-box">
+                      {getCategoryIcon(cat.icon)}
+                    </div>
+                    <div className="inbox-station-row-title-wrap">
+                      <span className="inbox-station-row-title">{cat.name}</span>
+                    </div>
+                  </div>
+
+                  <div className="inbox-station-badges-wrap">
+                    {renderBadge('Y', cat.new, 'Yeni Talepler', 'info', (e) => {
+                      e.stopPropagation();
+                      onNavigate('tickets', { category: cat.key, status: 'new' });
+                    })}
+                    {renderBadge('İ', cat.in_progress, 'İşlemdeki Talepler', 'warning', (e) => {
+                      e.stopPropagation();
+                      onNavigate('tickets', { category: cat.key, status: 'in_progress' });
+                    })}
+                    {renderBadge('!', cat.urgent, 'Acil & Öncelikli', 'danger', (e) => {
+                      e.stopPropagation();
+                      onNavigate('tickets', { category: cat.key, status: 'urgent' });
+                    })}
+                    <ChevronRight size={13} style={{ color: 'var(--text-muted)', opacity: 0.6, marginLeft: '2px', flexShrink: 0 }} />
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* GRUP 3: KURUMSAL GELEN E-POSTALAR */}
         <div className="inbox-station-card">
-          <div className="inbox-station-group-header">
+          <div
+            className="inbox-station-group-header"
+            onClick={() => toggleGroup('email')}
+            style={{ cursor: 'pointer', userSelect: 'none' }}
+          >
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              {expandedGroups.email ? (
+                <ChevronDown size={16} style={{ color: 'var(--text-muted)', flexShrink: 0 }} />
+              ) : (
+                <ChevronRight size={16} style={{ color: 'var(--text-muted)', flexShrink: 0 }} />
+              )}
               <Mail size={16} style={{ color: '#10b981', flexShrink: 0 }} />
               <span style={{ fontSize: '0.88rem', fontWeight: 700, color: 'var(--text-main)' }}>
                 Kurumsal Gelen E-Postalar
               </span>
             </div>
-            <span className="inbox-station-legend">
-              Y: Cevap Bekleyen / Yeni
-            </span>
-          </div>
 
-          <div className="inbox-station-rows">
-            {data?.email_boxes.map((box) => (
-              <div
-                key={box.key}
-                className="inbox-station-row"
-                onClick={() => onNavigate('tickets', { category: 'email' })}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              {data && (
+                <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                  {renderBadge('Y', data.totals.email_new, 'Cevap Bekleyen E-Posta', 'info')}
+                </div>
+              )}
+              <button
+                type="button"
+                className="admin-btn admin-btn-sm"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  fetchSummary('email');
+                }}
+                disabled={refreshingModule === 'email'}
+                title="Sadece E-Postaları Yenile"
+                style={{ padding: '3px 6px', height: '24px', background: 'transparent', border: 'none' }}
               >
-                <div className="inbox-station-row-left">
-                  <div className="inbox-icon-box">
-                    {getCategoryIcon(box.icon)}
-                  </div>
-                  <div className="inbox-station-row-title-wrap">
-                    <span className="inbox-station-row-title">{box.name}</span>
-                    <span className="inbox-station-row-subtitle">({box.address})</span>
-                  </div>
-                </div>
-
-                <div className="inbox-station-badges-wrap">
-                  {renderBadge('Y', box.new, 'Cevap Bekleyen E-Posta', 'info', (e) => {
-                    e.stopPropagation();
-                    onNavigate('tickets', { category: 'email', status: 'new' });
-                  })}
-                  <ChevronRight size={13} style={{ color: 'var(--text-muted)', opacity: 0.6, marginLeft: '2px', flexShrink: 0 }} />
-                </div>
-              </div>
-            ))}
+                <RotateCw size={12} className={refreshingModule === 'email' ? 'spin' : ''} style={{ color: 'var(--text-muted)' }} />
+              </button>
+            </div>
           </div>
+
+          {expandedGroups.email && (
+            <div className="inbox-station-rows" style={{ marginTop: '4px' }}>
+              {data?.email_boxes.map((box) => (
+                <div
+                  key={box.key}
+                  className="inbox-station-row"
+                  onClick={() => onNavigate('tickets', { category: 'email' })}
+                >
+                  <div className="inbox-station-row-left">
+                    <div className="inbox-icon-box">
+                      {getCategoryIcon(box.icon)}
+                    </div>
+                    <div className="inbox-station-row-title-wrap">
+                      <span className="inbox-station-row-title">{box.name}</span>
+                      <span className="inbox-station-row-subtitle">({box.address})</span>
+                    </div>
+                  </div>
+
+                  <div className="inbox-station-badges-wrap">
+                    {renderBadge('Y', box.new, 'Cevap Bekleyen E-Posta', 'info', (e) => {
+                      e.stopPropagation();
+                      onNavigate('tickets', { category: 'email', status: 'new' });
+                    })}
+                    <ChevronRight size={13} style={{ color: 'var(--text-muted)', opacity: 0.6, marginLeft: '2px', flexShrink: 0 }} />
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>

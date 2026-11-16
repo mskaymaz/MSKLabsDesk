@@ -123,8 +123,11 @@
 
 ---
 
-### 📋 8. AŞAMA: MÜSTAKİL BİRLEŞİK İLETİŞİM UYGULAMASI (INBOX WORKSTATION) [ ]
-* [ ] **8.1 Arayüz ve Fonksiyon İstişaresi:**
-  - [ ] Blog yorumları, destek biletleri ve gelen kurumsal e-postaları tek ekranda yöneten tam sayfa iş istasyonunun (`InboxView.tsx`) tasarımının kullanıcı ile istişare edilmesi.
-* [ ] **8.2 Geliştirme ve Entegrasyon:**
-  - [ ] Hızlı filtreleme, anlık yanıtlama ve çoklu işlem aksiyon butonlarının kodlanması.
+### 📋 8. AŞAMA: MÜSTAKİL BİRLEŞİK İLETİŞİM UYGULAMASI (INBOX WORKSTATION) [✓]
+* [x] **8.1 Arayüz ve Fonksiyon İstişaresi:**
+  - [x] Sade, dikey kaydırılabilir, akordeon açılır-kapanır ve granüler/global yenilemeli mimari kullanıcı ile mutabık kalındı. Hızlı silme yerine titiz insan incelemesi (HITL) ilkesi benimsendi.
+* [x] **8.2 Geliştirme ve Entegrasyon (`INBOX-ACCORDION-002`):**
+  - [x] Task 1: Zaman damgası (`SS:DD:ss`) ve bağımsız akordeon/yenileme durum yönetimi (State).
+  - [x] Task 2: Akordeon başlıkları, grup kümülatif sayaçları ve yerel yenileme butonları (stopPropagation).
+  - [x] Task 3: Açılır-kapanır alt kırılımlar ve hedefe odaklı filtrelenmiş inceleme yönlendirmesi.
+  - [x] Task 4: Derleme (574ms, 0 hata), mobil ergonomi (16px koridoru, 450 satır sınırı) ve test doğrulaması (7/7 test PASS).

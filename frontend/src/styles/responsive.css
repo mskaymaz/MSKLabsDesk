@@ -182,10 +182,7 @@
   to { transform: translateX(0); }
 }
 
-/* ==========================================================================
-   INBOX WORKSTATION (INBOX-APP-001) RESPONSIVE & HIGH-AESTHETIC STYLES
-   ========================================================================== */
-
+/* INBOX WORKSTATION RESPONSIVE STYLES */
 .inbox-station-container {
   max-width: 880px;
   margin: 0 auto;
@@ -230,15 +227,12 @@
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-[data-theme="dark"] .inbox-station-card,
-[data-theme="dark"] .inbox-station-header {
+[data-theme="dark"] .inbox-station-card, [data-theme="dark"] .inbox-station-header {
   background: rgba(30, 41, 59, 0.55);
   border-color: rgba(255, 255, 255, 0.09);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.22);
 }
-
-[data-theme="light"] .inbox-station-card,
-[data-theme="light"] .inbox-station-header {
+[data-theme="light"] .inbox-station-card, [data-theme="light"] .inbox-station-header {
   background: #ffffff;
   border-color: #e2e8f0;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
@@ -249,9 +243,15 @@
   align-items: center;
   justify-content: space-between;
   margin-bottom: 4px;
-  padding-bottom: 8px;
+  padding: 4px 6px 8px;
+  border-radius: 6px;
   border-bottom: 1px solid var(--border-subtle, rgba(0, 0, 0, 0.06));
   gap: 8px;
+  transition: background-color 0.15s ease;
+}
+
+.inbox-station-group-header:hover {
+  background-color: var(--bg-hover, rgba(99, 102, 241, 0.04));
 }
 
 .inbox-station-legend {
@@ -358,7 +358,7 @@
   filter: brightness(1.08);
 }
 
-/* --- MOBİL VE KÜÇÜK EKRAN UYARLAMALARI (<= 640px) --- */
+/* MOBİL UYARLAMALARI (<= 640px) */
 @media (max-width: 640px) {
   .inbox-station-container {
     padding: 8px 0 60px 0 !important;
@@ -441,7 +441,6 @@
     margin-left: auto;
     flex-shrink: 0;
   }
-
   .inbox-station-badge {
     height: 20px;
     padding: 0 5px;

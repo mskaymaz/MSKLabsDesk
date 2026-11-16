@@ -1,6 +1,18 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 📌 Son Güncelleme [16.11.2026 - 15:00] — AKORDEON MİMARİLİ VE GRANÜLER YENİLEMELİ İLETİŞİM İSTASYONU (INBOX-ACCORDION-002) [✓]
+* **Geliştirilen Mimari ve Kullanıcı Talebi:**
+  - `InboxView.tsx` ekranının sade, dikey kaydırılabilir, başlık seviyesinde akordeon açılır-kapanır ve hem global hem de modül bazında yerel yenileme yapabilen kompakt bir iş istasyonuna dönüştürülmesi.
+  - Hızlı silme/onaylama yerine, satır tıklamalarında doğrudan hedefe odaklı filtrelenmiş detay ekranına yönlendirme ile insan denetimi (Human-In-The-Loop) ilkesinin korunması.
+* **Uygulanan Değişiklikler (`InboxView.tsx`, `responsive.css`):**
+  1. **Zaman Damgası & Global Yenileme:** Üst çubuğa `Son Güncelleme: SS:DD:ss` göstergesi ve `Tümünü Yenile` butonu entegre edildi.
+  2. **Akordeon Başlıkları & Modüler Yenileme:** Blog Yorumları, Destek Masası ve Kurumsal E-Posta başlıkları `ChevronDown / ChevronRight` ile açılır-kapanır yapıldı; başlık sağına sadece o bloğu tazeleyen bağımsız `RotateCw` yenileme butonu ve kümülatif durum sayaçları eklendi.
+  3. **Derin İnceleme Yönlendirmesi:** Satır veya durum etiketine tıklandığında kategori ve durum filtresi önceden seçili olarak detay ekranına geçiş (`onNavigate`) sağlandı.
+  4. **Derleme & Standartlar:** `InboxView.tsx` 364 satırda, `responsive.css` tam 450 satır tavanında tutuldu. Frontend derlemesi 574ms'de (0 hata), backend testleri (7/7 PASS) doğrulandı.
+
+---
+
 ## 📌 Son Güncelleme [16.11.2026 - 12:45] — SEARCH CONSOLE KAPSAM VE DOĞRULAMA HATALARININ ÇÖZÜMÜ [✓]
 * **Tespit Edilen Kök Neden:**
   - Cloudflare Pages'ın `.html` sayfalarını uzantısız temiz URL'ye yönlendirmesine rağmen HTML `<head>` içindeki `<link rel="canonical">` etiketlerinin ve `sitemap.xml` haritasının `.html` uzantısıyla kalması; Googlebot için yönlendirme döngüsü ve canonical çakışması üretmesi.
