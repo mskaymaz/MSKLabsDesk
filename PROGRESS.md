@@ -1,6 +1,19 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 📌 Son Güncelleme [16.11.2026 - 12:45] — SEARCH CONSOLE KAPSAM VE DOĞRULAMA HATALARININ ÇÖZÜMÜ [✓]
+* **Tespit Edilen Kök Neden:**
+  - Cloudflare Pages'ın `.html` sayfalarını uzantısız temiz URL'ye yönlendirmesine rağmen HTML `<head>` içindeki `<link rel="canonical">` etiketlerinin ve `sitemap.xml` haritasının `.html` uzantısıyla kalması; Googlebot için yönlendirme döngüsü ve canonical çakışması üretmesi.
+  - Blog kategori sayfalarının (`bizce.html`, `anilts.html`, `guncel.html`) 24 satırlık `noindex` ve `meta-refresh` içeren geçici yönlendirme dosyaları olması; GSC doğrulamalarının başarısızlıkla sonuçlanması.
+* **Yapılan Cerrahi Düzeltmeler (`webMSKLabs`):**
+  1. **Canonical ve Hreflang Standardizasyonu:** 30+ HTML dosyasındaki canonical ve dil etiketleri uzantısız temiz URL formatına çekildi.
+  2. **Sitemap Temizliği:** `public/sitemap.xml` ve kök `sitemap.xml` içindeki tüm `.html` uzantılı yollar temiz URL formatına kavuşturuldu; ana blog `/blog/` olarak sabitlendi.
+  3. **Blog Kategori Altyapısı:** `bizce.html`, `anilts.html` ve `guncel.html` şablonları tam blog motoruna kavuşturularak her birine özel başlık, canonical ve schema tanımlandı; 200 OK ile doğrudan taranabilir hale getirildi.
+  4. **Cloudflare Pages _redirects Haritası:** Eski `.html` istekleri için 301 kalıcı yönlendirmeler (`/apps.html -> /apps`, `/download.html -> /download` vb.) ve `/blog/* -> /blog/index.html 200` rewrite kuralı tanımlandı.
+  5. **Derleme & Commit:** `npm run build` ile 0 hatayla derlendi, `webMSKLabs` üzerinde yerel commit atıldı (`493468f`).
+
+---
+
 ## 📌 Son Güncelleme [13.11.2026 - 16:25] — MOBİL SAĞ KENAR BOŞLUĞU (16PX) VE TOPBAR SIKIŞMA ONARIMI [✓]
 * **Tespit Edilen Kök Neden:**
   - `Topbar.tsx` sağ bölümünde (Arama, Bildirim, Tema, Renk Paleti, Kullanıcı Avatarı) 5 butonun mobilde aynı anda yer alması; üst barın sağ kenardan taşarak ekranı genişletmesi ve `palette` butonunun yarıdan kesilmesi.

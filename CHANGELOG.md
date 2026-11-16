@@ -1,6 +1,19 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [16.11.2026 - 12:45] - Search Console Kapsam ve Doğrulama Hatalarının Çözümü, Cloudflare Temiz URL Standardizasyonu
+- **Search Console Yönlendirme ve Canonical Çakışması Giderildi (`webMSKLabs`):**
+  - Cloudflare Pages'ın `.html` uzantılarını temiz uzantısız URL'lere 307 ile yönlendirmesi nedeniyle `<head>` içindeki `<link rel="canonical">` etiketleri ile server yanıtı arasındaki çakışma ve döngü çözüldü.
+  - 30'dan fazla HTML sayfasındaki (`apps.html`, `download.html`, `terms.html`, `destek.html`, `privacy.html`, `apps/*.html` vb.) canonical ve hreflang etiketleri uzantısız temiz URL (`https://msklabs.org/sayfa`) standardına çekildi.
+- **Sitemap.xml Temizliği ve Güncellemesi (`public/sitemap.xml`, `sitemap.xml`):**
+  - Harita içindeki tüm `.html` uzantılı yollar ve parametreli alternatif linkler temiz URL'ye dönüştürüldü. Ana blog dizini `/blog/` olarak normalize edildi. `lastmod` tarihi 16.11.2026 olarak güncellendi.
+- **Blog Kategori ve Rota Desteği (`blog/bizce.html`, `blog/anilts.html`, `blog/guncel.html`):**
+  - Eski 24 satırlık `noindex` ve `meta-refresh` içeren geçici yönlendirme shimleri kaldırılarak, her kategori bağımsız canonical, hreflang ve SEO meta verileri içeren tam blog şablonu haline getirildi; Googlebot'un 200 OK ile doğrudan indekslemesi sağlandı.
+- **Cloudflare Pages Kalıcı Yönlendirme ve Rewrite Haritası (`public/_redirects`):**
+  - Eski taranan `.html` linkleri için 301 kalıcı yönlendirmeler (`/apps.html -> /apps`, `/download.html -> /download` vb.) ve `/blog/* -> /blog/index.html 200` rewrite kuralı eklendi.
+- **Derleme Doğrulaması:**
+  - `npm run build` ile tüm statik dosyalar ve PWA servis çalışanı (116 varlık) sıfır hatayla derlendi. Yerel commit atıldı, push için kullanıcı onayı bekleniyor.
+
 ## [26.10.2026 - 17:05] - Cloudflare Build Düzeltmeleri, Domain Bağlantısı ve Dağıtım Yol Haritası
 - **Cloudflare Workers Build Onarımı (`wrangler.toml`, `vite.config.ts`, `cors.ts`):**
   - `wrangler.toml` dosyasına `main = "src/index.ts"`, `[build] command = "npm run build"` ve `nodejs_compat` tanımlandı; geçersiz sahte sıfırlı KV ID'si kaldırıldı.
