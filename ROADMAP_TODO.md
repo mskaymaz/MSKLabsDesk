@@ -131,3 +131,8 @@
   - [x] Task 2: Akordeon başlıkları, grup kümülatif sayaçları ve yerel yenileme butonları (stopPropagation).
   - [x] Task 3: Açılır-kapanır alt kırılımlar ve hedefe odaklı filtrelenmiş inceleme yönlendirmesi.
   - [x] Task 4: Derleme (574ms, 0 hata), mobil ergonomi (16px koridoru, 450 satır sınırı) ve test doğrulaması (7/7 test PASS).
+* [x] **8.3 Masaüstü ve Mobil Müstakil İletişim Takipçisi (`INBOX-COMPANION-003`) [TAMAMLANDI]:**
+  - [x] Task 1: Şifresiz güvenli panel giriş köprüsü (`/api/v1/admin/auth/bridge-ticket` & `/exchange-bridge`, 11/11 PASS).
+  - [x] Task 2: Minyatür istasyon arayüzü (`InboxMiniStation.tsx`, 251 satır, `[Panel]` ve `[Web]` çift butonlu).
+  - [x] Task 3: Desktop ve Mobile bağımsız pencere (`?mode=mini`) ve `InboxView` popout entegrasyonu.
+  - [x] Task 4: Uçtan uca testler, TypeScript check ve production vite build doğrulaması.

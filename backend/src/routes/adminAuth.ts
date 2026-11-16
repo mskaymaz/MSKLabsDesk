@@ -3,7 +3,7 @@
  * Güvenli PBKDF2 / Salt + Rate Limiting Korumalı
  */
 
-import { AuthEnv, createSessionToken, verifyPassword, hashPasswordWithSalt } from '../utils/auth';
+import { AuthEnv, createSessionToken, verifyPassword, hashPasswordWithSalt, createBridgeToken, verifyBridgeToken, verifyAuthToken } from '../utils/auth';
 
 export async function handleAdminLogin(request: Request, env: { DB: D1Database } & AuthEnv): Promise<Response> {
   try {
@@ -110,5 +110,122 @@ export async function handleAdminLogin(request: Request, env: { DB: D1Database }
       JSON.stringify({ error: 'Giriş işlemi sırasında sunucu hatası oluştu.' }),
       { status: 500, headers: { 'Content-Type': 'application/json; charset=utf-8' } }
     );
+  }
+}
+
+/**
+ * Minyatür İstasyon ve Harici Girişler İçin Şifresiz Geçiş Bileti Üretir (POST /api/admin/auth/bridge-ticket)
+ */
+export async function handleCreateBridgeTicket(request: Request, env: { DB: D1Database } & AuthEnv): Promise<Response> {
+  try {
+    const secret = env.ADMIN_JWT_SECRET;
+    if (!secret) {
+      return new Response(JSON.stringify({ error: 'Sunucu hatası: ADMIN_JWT_SECRET eksik.' }), {
+        status: 500,
+        headers: { 'Content-Type': 'application/json; charset=utf-8' },
+      });
+    }
+
+    const admin = await verifyAuthToken(request, secret);
+    if (!admin) {
+      return new Response(JSON.stringify({ error: 'Yetkisiz erişim. Geçerli oturum gereklidir.' }), {
+        status: 401,
+        headers: { 'Content-Type': 'application/json; charset=utf-8' },
+      });
+    }
+
+    const body = (await request.json().catch(() => ({}))) as { targetTab?: string; targetParams?: Record<string, any> };
+    const bridgeToken = await createBridgeToken(admin, secret, body.targetTab, body.targetParams);
+
+    const hostHeader = request.headers.get('host') || '';
+    const protocol = hostHeader.includes('localhost') || hostHeader.includes('127.0.0.1') ? 'http' : 'https';
+    const baseUrl = hostHeader ? `${protocol}://${hostHeader}` : 'https://panel.msklabs.org';
+    const bridgeUrl = `${baseUrl}/admin/?bridge_token=${encodeURIComponent(bridgeToken)}`;
+
+    return new Response(
+      JSON.stringify({
+        success: true,
+        bridge_token: bridgeToken,
+        bridge_url: bridgeUrl,
+      }),
+      { status: 200, headers: { 'Content-Type': 'application/json; charset=utf-8' } }
+    );
+  } catch (err: any) {
+    console.error('[BRIDGE TICKET CREATE ERROR]', err);
+    return new Response(JSON.stringify({ error: 'Köprü bileti üretilemedi.' }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json; charset=utf-8' },
+    });
+  }
+}
+
+/**
+ * Şifresiz Geçiş Biletini Tam Yetkili Yönetici Oturumuna Çevirir (POST /api/admin/auth/exchange-bridge)
+ */
+export async function handleExchangeBridgeTicket(request: Request, env: { DB: D1Database } & AuthEnv): Promise<Response> {
+  try {
+    const secret = env.ADMIN_JWT_SECRET;
+    if (!secret) {
+      return new Response(JSON.stringify({ error: 'Sunucu hatası: ADMIN_JWT_SECRET eksik.' }), {
+        status: 500,
+        headers: { 'Content-Type': 'application/json; charset=utf-8' },
+      });
+    }
+
+    const body = (await request.json().catch(() => ({}))) as { bridge_token?: string };
+    const bridgeToken = (body.bridge_token || '').trim();
+    if (!bridgeToken) {
+      return new Response(JSON.stringify({ error: 'bridge_token parametresi zorunludur.' }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json; charset=utf-8' },
+      });
+    }
+
+    const bridgeData = await verifyBridgeToken(bridgeToken, secret);
+    if (!bridgeData) {
+      return new Response(JSON.stringify({ error: 'Geçersiz veya süresi dolmuş köprü bileti.' }), {
+        status: 401,
+        headers: { 'Content-Type': 'application/json; charset=utf-8' },
+      });
+    }
+
+    // Veritabanından yöneticiyi doğrula
+    const admin = await env.DB.prepare('SELECT id, email, name, role FROM admins WHERE id = ?')
+      .bind(bridgeData.admin.id)
+      .first<{ id: string; email: string; name: string; role: string }>();
+
+    if (!admin) {
+      return new Response(JSON.stringify({ error: 'Yönetici hesabı bulunamadı.' }), {
+        status: 404,
+        headers: { 'Content-Type': 'application/json; charset=utf-8' },
+      });
+    }
+
+    // 30 günlük tam oturum üret
+    const sessionToken = await createSessionToken(admin, secret);
+
+    return new Response(
+      JSON.stringify({
+        success: true,
+        token: sessionToken,
+        admin,
+        user: {
+          id: admin.id,
+          email: admin.email,
+          username: admin.email.split('@')[0],
+          name: admin.name,
+          role: admin.role,
+        },
+        targetTab: bridgeData.targetTab,
+        targetParams: bridgeData.targetParams,
+      }),
+      { status: 200, headers: { 'Content-Type': 'application/json; charset=utf-8' } }
+    );
+  } catch (err: any) {
+    console.error('[BRIDGE TICKET EXCHANGE ERROR]', err);
+    return new Response(JSON.stringify({ error: 'Köprü bileti doğrulanamadı.' }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json; charset=utf-8' },
+    });
   }
 }

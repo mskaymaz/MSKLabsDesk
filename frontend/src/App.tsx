@@ -8,6 +8,7 @@ import { AppShell } from './components/layout/AppShell';
 import { LoginView } from './views/LoginView';
 import { DashboardView } from './views/DashboardView';
 import { InboxView, type InboxNavigationParams } from './views/InboxView';
+import { InboxMiniStation } from './views/InboxMiniStation';
 import { AnalyticsView } from './views/AnalyticsView';
 import { TicketsView } from './views/TicketsView';
 import { CommentsView } from './views/CommentsView';
@@ -23,10 +24,16 @@ import type { Ticket, CommentItem, Subscriber } from './types';
 import { api } from './services/api';
 
 const AdminPanelContent: React.FC = () => {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, login } = useAuth();
   const [activeTab, setActiveTab] = useState<TabType>('dashboard');
   const [ticketFilter, setTicketFilter] = useState<{ category?: string; status?: string } | null>(null);
   const [commentFilter, setCommentFilter] = useState<{ channel?: string; status?: string } | null>(null);
+  const [bridgeLoading, setBridgeLoading] = useState<boolean>(() => {
+    return typeof window !== 'undefined' && new URLSearchParams(window.location.search).has('bridge_token');
+  });
+  const [isMiniMode] = useState<boolean>(() => {
+    return typeof window !== 'undefined' && (new URLSearchParams(window.location.search).get('mode') === 'mini' || window.location.pathname.endsWith('/mini'));
+  });
 
   const handleNavigateWithParams = (tab: TabType, params?: InboxNavigationParams) => {
     if (tab === 'tickets') {
@@ -36,6 +43,31 @@ const AdminPanelContent: React.FC = () => {
     }
     setActiveTab(tab);
   };
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const bridgeToken = params.get('bridge_token');
+    if (bridgeToken) {
+      api.exchangeBridgeTicket(bridgeToken)
+        .then((res) => {
+          login(res.token, res.user);
+          if (res.targetTab) {
+            handleNavigateWithParams(res.targetTab as TabType, res.targetParams);
+          }
+          params.delete('bridge_token');
+          const remainingQuery = params.toString();
+          const cleanUrl = window.location.pathname + (remainingQuery ? `?${remainingQuery}` : '');
+          window.history.replaceState({}, document.title, cleanUrl);
+        })
+        .catch((err) => {
+          console.error('Bridge ticket exchange error:', err);
+          alert('Giriş köprüsü süresi dolmuş veya geçersiz.');
+        })
+        .finally(() => {
+          setBridgeLoading(false);
+        });
+    }
+  }, []);
 
   const [tickets, setTickets] = useState<Ticket[]>([]);
   const [comments, setComments] = useState<CommentItem[]>([]);
@@ -64,8 +96,23 @@ const AdminPanelContent: React.FC = () => {
     }
   }, [isAuthenticated]);
 
+  if (bridgeLoading) {
+    return (
+      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#0f172a', color: '#f8fafc', fontFamily: 'system-ui' }}>
+        <div style={{ textAlign: 'center' }}>
+          <div style={{ width: '28px', height: '28px', border: '3px solid rgba(255,255,255,0.1)', borderTopColor: '#3b82f6', borderRadius: '50%', margin: '0 auto 12px', animation: 'spin 1s linear infinite' }}></div>
+          <div style={{ fontSize: '13px', fontWeight: 500 }}>Güvenli Panel Girişi Sağlanıyor...</div>
+        </div>
+      </div>
+    );
+  }
+
   if (!isAuthenticated) {
     return <LoginView />;
+  }
+
+  if (isMiniMode) {
+    return <InboxMiniStation />;
   }
 
   const pendingTickets = tickets.filter((t) => t.status === 'new' || t.status === 'in_progress').length;

@@ -142,6 +142,35 @@
 
 ---
 
+### INBOX-COMPANION-003 — Masaüstü ve Mobil Müstakil İletişim Takipçisi (Companion Workstation & Magic Bridge) [x]
+- **Amaç:** Yönetici panelinden bağımsız, hem masaüstünde (Desktop) hem de mobilde (Mobile) arka planda veya ayrı bir pencerede çalışabilen; paneldeki akordeonlu yapının minyatür bir özetini sunan, `[Panel]` ve `[Web]` butonlarıyla tek tıkla tarayıcıda şifresiz doğrudan inceleme/onay ekranına ve canlı blog sayfalarına yönlendiren hafif bir takipçi uygulama inşa etmek.
+- **Tarih:** 16.11.2026 - 15:55
+- **Mimari İlkeler:**
+  1. *Güvenli Giriş Köprüsü (Magic Auth Bridge):* Tarayıcıda tekrar şifre girişiyle vakit kaybetmemek için tek kullanımlık, 120 saniye ömürlü, kriptografik imzalı JWT bilet köprüsü (`POST /api/v1/admin/auth/bridge-ticket` ve `GET /admin?bridge_token=...`).
+  2. *İkili Aksiyon Düzeni:* Her satırda `[Panel]` (doğrudan panele zıplama) ve blog satırlarında `[Web]` (canlı makale/kategori sayfasına zıplama) yönlendirmesi.
+  3. *Minyatür ve Kompakt Ergonomi:* 350-440px genişliğinde, dikey akışlı, akordeon katmanlı, kümülatif sayaçlı ve bağımsız yenileme butonlu mikro arayüz (`InboxMiniStation.tsx` - 251 satır).
+  4. *Sıfır Maliyet & Hafiflik ($0 / Ay):* D1 sorgularını ve API kotasını koruyan önbellek ve granüler yenileme desteği.
+
+#### 📋 Takip Edilebilir Aşama ve Görev Listesi:
+- [x] **Task 1 — Güvenli Şifresiz Panel Giriş Köprüsü (Magic Auth Bridge):**
+  - [x] 1.1: Backend `POST /api/v1/admin/auth/bridge-ticket` ve `/api/v1/admin/auth/exchange-bridge` uç noktalarının eklenmesi; geçerli oturumla kısa ömürlü hedef yönlendirme token'ı üretilmesi ve takası.
+  - [x] 1.2: Frontend `App.tsx` ve `api.ts` içinde `bridge_token` parametresinin yakalanarak şifresiz güvenli oturum başlatması ve doğrudan hedef sekmeye (`comments` veya `tickets`) odaklanması.
+  - [x] 1.3: Yetkisiz kullanım ve süre aşımı durumlarına karşı güvenlik testleri (`apiBridgeAuth.test.ts` - 11/11 PASS).
+- [x] **Task 2 — Minyatür İletişim İstasyonu Çekirdeği (Mini-Station UI):**
+  - [x] 2.1: 360-440px ekranlara uyarlanmış kompakt minyatür akordeon bileşeni (`InboxMiniStation.tsx`).
+  - [x] 2.2: Her satıra `[Panel]` (tarayıcıda detay okuma/onaylama) ve Blog satırlarına `[Web]` (canlı sitede görüntüleme) çift aksiyon butonlarının entegre edilmesi.
+  - [x] 2.3: Son güncelleme zaman damgası (`SS:DD:ss`) ve modül bazlı granüler yenileme desteği.
+- [x] **Task 3 — Masaüstü ve Mobil Paketleme Mimarisi (Desktop & Mobile Shell):**
+  - [x] 3.1: Masaüstü bağımsız pencere modu (`?mode=mini` URL desteği ve `InboxView` içinden tek tıkla bağımsız pencere açma butonu).
+  - [x] 3.2: Mobil bağımsız çalışma modu (Kompakt dikey kaydırma, responsive düzen ve touch target standardı).
+  - [x] 3.3: Dış bağlantıların sistemin varsayılan tarayıcısında (`window.open` / external target) güvenli açılmasını sağlayan URL yöneticisi.
+- [x] **Task 4 — Derleme, Test ve Dokümantasyon:**
+  - [x] 4.1: `tsc -b && vite build` ile sıfır hata derlemesi ve 450 satır sınırının korunması (`InboxMiniStation.tsx` 251 satır).
+  - [x] 4.2: Uçtan uca çift buton akışının (Panel'de okuma/onay, Web'de blog açılışı) doğrulanması.
+  - [x] 4.3: `PROGRESS.md`, `CHANGELOG.md`, `tasks.md` ve `ROADMAP_TODO.md` dokümanlarının güncellenmesi.
+
+---
+
 ### APP-TELEMETRY-001 — Masaüstü ve Mobil Uygulamalar İçin Sessiz Telemetri & Analitik Standardı [ ]
 - **Amaç:** Masaüstü (`Avkat`, `DeskPilot`, `PDFLayout` vb.) ve mobil (`RekatSayar` vb.) uygulamalar dağıtıldığında; indirme kaynağından bağımsız olarak kullanıcıları rahatsız etmeden sessiz, anonim ve sıfır maliyetli kullanım istatistikleri toplamak.
 - **Toplanacak Metrikler (Yazılım Aşamasında Esnek/İptal Edilebilir):**

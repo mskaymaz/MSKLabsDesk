@@ -153,6 +153,75 @@ export async function createSessionToken(admin: AdminUser, secret: string): Prom
 }
 
 /**
+ * Minyatür İletişim İstasyonu & Dış Araçlar İçin Kısa Ömürlü Köprü Bileti (Magic Auth Bridge)
+ * 2 dakika geçerli, tek hedef sekmeli ve parametreli bilet üretir.
+ */
+export async function createBridgeToken(
+  admin: AdminUser,
+  secret: string,
+  targetTab?: string,
+  targetParams?: Record<string, any>
+): Promise<string> {
+  if (!secret || secret.trim() === '') {
+    throw new Error('ADMIN_JWT_SECRET tanımlı değil veya boş.');
+  }
+
+  const payload = {
+    sub: admin.id,
+    email: admin.email,
+    name: admin.name,
+    role: admin.role,
+    targetTab: targetTab || 'inbox',
+    targetParams: targetParams || {},
+    type: 'bridge_ticket',
+    exp: Math.floor(Date.now() / 1000) + 120, // 2 dakikalık geçerlilik süresi
+  };
+
+  const payloadStr = btoa(JSON.stringify(payload));
+  const signature = await signHmacSha256(payloadStr, secret);
+  return `${payloadStr}.${signature}`;
+}
+
+/**
+ * Köprü Bileti Doğrulayıcı
+ */
+export async function verifyBridgeToken(
+  bridgeToken: string,
+  secret: string
+): Promise<{ admin: AdminUser; targetTab?: string; targetParams?: Record<string, any> } | null> {
+  if (!bridgeToken || !secret) return null;
+  const parts = bridgeToken.split('.');
+  if (parts.length !== 2) return null;
+
+  const [payloadStr, signature] = parts;
+  const expectedSignature = await signHmacSha256(payloadStr, secret);
+  if (!timingSafeEqual(signature, expectedSignature)) {
+    return null;
+  }
+
+  try {
+    const payload = JSON.parse(atob(payloadStr));
+    if (payload.type !== 'bridge_ticket') return null;
+    if (payload.exp && payload.exp < Math.floor(Date.now() / 1000)) {
+      return null;
+    }
+
+    return {
+      admin: {
+        id: payload.sub,
+        email: payload.email,
+        name: payload.name,
+        role: payload.role,
+      },
+      targetTab: payload.targetTab,
+      targetParams: payload.targetParams,
+    };
+  } catch {
+    return null;
+  }
+}
+
+/**
  * Authorization Header Doğrulama (HMAC-SHA256 & Geriye Dönük Legacy Token Uyumu)
  */
 export async function verifyAuthToken(request: Request, secret?: string): Promise<AdminUser | null> {

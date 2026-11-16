@@ -1,6 +1,23 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [16.11.2026 - 15:55] - Masaüstü ve Mobil Müstakil İletişim Takipçisi ve Şifresiz Panel Giriş Köprüsü (INBOX-COMPANION-003)
+- **Güvenli Şifresiz Panel Giriş Köprüsü (Magic Auth Bridge):**
+  - Backend POST /api/v1/admin/auth/bridge-ticket ve POST /api/v1/admin/auth/exchange-bridge uç noktaları eklendi (backend/src/routes/adminAuth.ts, backend/src/utils/auth.ts).
+  - WebCrypto HMAC-SHA256 ile imzalanan, 120s ömürlü, hedef sekme (comments, tickets) ve parametrelerini taşıyan tek kullanımlık geçiş biletleri üretildi.
+  - Kapsamlı entegrasyon testleri (backend/tests/apiBridgeAuth.test.ts) oluşturuldu ve 11/11 PASS ile doğrulandı.
+- **Minyatür İletişim İstasyonu UI (InboxMiniStation.tsx):**
+  - 360-440px genişlikte masaüstü veya mobilde dikey kaydırılabilir, sade akordeonlu takipçi bileşeni inşa edildi (251 satır, <= 450 kuralına tam uyumlu).
+  - Blog Yorumları için [Panel] ve [Web], Destek ve E-Posta için [Panel] butonları entegre edildi.
+  - [Panel] tıklandığında arka planda tek kullanımlık köprü bileti üretilerek tarayıcıda doğrudan ilgili okuma/onaylama ekranına şifresiz giriş sağlandı.
+  - [Web] tıklandığında msklabs.org/blog/{kanal} canlı sayfası harici sekmede açıldı.
+  - Son güncelleme zaman damgası (SS:DD:ss), küresel ve modüler yenileme aksiyonları uygulandı.
+- **Masaüstü ve Mobil Bağımsız Pencere ve Popout Desteği (App.tsx, InboxView.tsx):**
+  - App.tsx içine bridge_token yakalama ve ?mode=mini bağımsız pencere modu eklendi.
+  - InboxView.tsx üst çubuğuna tek tıkla ayrık minyatür pencere açan "Minyatür İstasyon" butonu yerleştirildi.
+- **Derleme ve Doğrulama:**
+  - Frontend derlemesi (tsc -b && vite build) 675ms'de 0 hatayla tamamlandı; backend test paketi 100% PASS.
+
 ## [16.11.2026 - 15:00] - Akordeon Mimarili ve Granüler Yenilemeli İletişim İstasyonu (INBOX-ACCORDION-002)
 - **Akordeon Açılır-Kapanır Blok Düzeni (`InboxView.tsx`):**
   - Blog Yorumları, Destek Masası ve Kurumsal E-Posta grupları bağımsız açılır-kapanır akordeon kartlarına dönüştürüldü.

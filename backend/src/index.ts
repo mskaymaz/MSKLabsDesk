@@ -6,7 +6,7 @@
 import { handleSupportSubmission } from './routes/support';
 import { handleCommentSubmission, handleGetApprovedComments, handleVerifyComment } from './routes/comments';
 import { handleSubscribe, handleUnsubscribe } from './routes/subscribe';
-import { handleAdminLogin } from './routes/adminAuth';
+import { handleAdminLogin, handleCreateBridgeTicket, handleExchangeBridgeTicket } from './routes/adminAuth';
 import { handleAdminGetTickets, handleAdminGetTicketDetail, handleAdminReplyTicket, handleAdminUpdateTicketStatus, handleAdminAnalyzeTicket, handleAdminAnalyzeAllTickets, handleAdminTranslateTicket } from './routes/adminTickets';
 import { handleAdminGetComments, handleAdminModerateComment } from './routes/adminComments';
 import { handleAdminGetEmailStats } from './routes/adminEmailStats';
@@ -83,6 +83,10 @@ export default {
     // 3. Destek & BÃ¼lten Admin API Endpoint'leri
     else if (path === '/api/admin/login' && request.method === 'POST') {
       response = await handleAdminLogin(request, env);
+    } else if ((path === '/api/admin/auth/bridge-ticket' || path === '/api/v1/admin/auth/bridge-ticket') && request.method === 'POST') {
+      response = await handleCreateBridgeTicket(request, env);
+    } else if ((path === '/api/admin/auth/exchange-bridge' || path === '/api/v1/admin/auth/exchange-bridge') && request.method === 'POST') {
+      response = await handleExchangeBridgeTicket(request, env);
     } else if ((path === '/api/admin/tickets' || path === '/api/v1/admin/tickets') && request.method === 'GET') {
       response = await handleAdminGetTickets(request, env);
     } else if ((path === '/api/admin/tickets/analyze-all' || path === '/api/v1/admin/tickets/analyze-all') && request.method === 'POST') {

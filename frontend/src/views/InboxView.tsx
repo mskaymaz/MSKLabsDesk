@@ -18,6 +18,7 @@ import {
   Newspaper,
   Layers,
   Clock,
+  Smartphone,
 } from 'lucide-react';
 import { api } from '../services/api';
 import type { InboxSummaryResponse } from '../types';
@@ -212,16 +213,29 @@ export const InboxView: React.FC<InboxViewProps> = ({ onNavigate }) => {
           </div>
         </div>
 
-        <button
-          type="button"
-          className="admin-btn admin-btn-sm admin-btn-refresh"
-          onClick={() => fetchSummary('all')}
-          disabled={loading || refreshingModule === 'all'}
-          title="Tüm Verileri Yenile"
-        >
-          <RotateCw size={13} className={refreshingModule === 'all' ? 'spin' : ''} />
-          <span>{refreshingModule === 'all' ? 'Yenileniyor...' : 'Tümünü Yenile'}</span>
-        </button>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <button
+            type="button"
+            className="admin-btn admin-btn-sm"
+            onClick={() => window.open('/admin/?mode=mini', 'MSKLabsDeskMini', 'width=440,height=720,resizable=yes,scrollbars=yes')}
+            title="Ayrık Mini İstasyon Penceresini Aç"
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', backgroundColor: 'rgba(255,255,255,0.06)', border: '1px solid var(--border-color)', color: 'var(--text-primary)' }}
+          >
+            <Smartphone size={13} />
+            <span>Minyatür İstasyon</span>
+          </button>
+
+          <button
+            type="button"
+            className="admin-btn admin-btn-sm admin-btn-refresh"
+            onClick={() => fetchSummary('all')}
+            disabled={loading || refreshingModule === 'all'}
+            title="Tüm Verileri Yenile"
+          >
+            <RotateCw size={13} className={refreshingModule === 'all' ? 'spin' : ''} />
+            <span>{refreshingModule === 'all' ? 'Yenileniyor...' : 'Tümünü Yenile'}</span>
+          </button>
+        </div>
       </div>
 
       {error && (

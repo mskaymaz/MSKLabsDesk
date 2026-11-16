@@ -32,8 +32,41 @@ export const api = {
       body: JSON.stringify({ username, password }),
     });
     if (!res.ok) {
-      const err = await res.json().catch(() => ({ error: 'GiriÅŸ baÅŸarÄ±sÄ±z.' }));
-      throw new Error(err.error || 'GiriÅŸ yapÄ±lamadÄ±.');
+      const err = await res.json().catch(() => ({ error: 'Giriş başarısız.' }));
+      throw new Error(err.error || 'Giriş yapılamadı.');
+    }
+    return res.json();
+  },
+
+  // Magic Auth Bridge (Şifresiz Güvenli Panel Geçişi)
+  async createBridgeTicket(targetTab?: string, targetParams?: Record<string, any>): Promise<{ success: boolean; bridge_token: string; bridge_url: string }> {
+    const res = await fetch(`${API_BASE}/admin/auth/bridge-ticket`, {
+      method: 'POST',
+      headers: getHeaders(),
+      body: JSON.stringify({ targetTab, targetParams }),
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({ error: 'Köprü bileti üretilemedi.' }));
+      throw new Error(err.error || 'Köprü bileti üretilemedi.');
+    }
+    return res.json();
+  },
+
+  async exchangeBridgeTicket(bridge_token: string): Promise<{
+    success: boolean;
+    token: string;
+    user: any;
+    targetTab?: string;
+    targetParams?: Record<string, any>;
+  }> {
+    const res = await fetch(`${API_BASE}/admin/auth/exchange-bridge`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ bridge_token }),
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({ error: 'Köprü bileti doğrulanamadı veya süresi dolmuş.' }));
+      throw new Error(err.error || 'Köprü bileti doğrulanamadı.');
     }
     return res.json();
   },
