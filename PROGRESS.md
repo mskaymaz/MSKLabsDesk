@@ -3538,3 +3538,6 @@ ight_floating) dikey yönelim (ertical-rl) ile kenara yaslandı.
   2. Frontend AnalyticsSummaryCard.tsx (288 satır) 4 metrik + ayrıntılı ülke ve şehir dağılım listesi + granüler yenileme.
   3. DashboardView.tsx entegrasyonu (290 satır, modüler ve responsive).
 - **Durum:** Testler %100 başarılı, derleme 0 hata.
+
+### [16.11.2026 - 16:44] — Merkezi Tema Uyumluluğu (Açık/Koyu Mod) Düzeltildi
+- **Düzeltme:** Sabit koyu renkler kaldırıldı, bileşenler merkezi tokens.css sistemine tam bağlandı; açık temada beyaz/ferah, koyu temada koyu çalışan dinamik arayüz sağlandı.

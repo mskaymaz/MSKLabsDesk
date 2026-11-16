@@ -1,6 +1,14 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [16.11.2026 - 16:44] - Merkezi Tasarım Sistemi Tema Uyumluluğu & Açık/Koyu Mod Düzeltmesi
+- **Hardcoded Koyu Tonlar Tasfiye Edildi:**
+  - AnalyticsSummaryCard, InboxMiniStation, App.tsx ve InboxView bileşenlerindeki sabit koyu arka planlar (#0f172a, #1e293b, rgba(255,255,255,...)) kaldırıldı.
+  - Tüm kart ve bileşenler merkezi tokens.css değişkenlerine (var(--bg-primary), var(--bg-secondary), var(--bg-card), var(--border-subtle), var(--border-card), var(--text-primary), var(--text-secondary)) bağlandı.
+  - Açık tema (Light theme) ve koyu tema (Dark theme) arasında kusursuz geçiş ve panel bütünlüğü sağlandı.
+- **Derleme:**
+  - Frontend derlemesi (tsc -b && vite build) 566ms'de 0 hatayla tamamlandı; backend test paketi %100 başarılı.
+
 ## [16.11.2026 - 16:25] - Özet Ekranı Ziyaretçi & Coğrafi Analitik İstasyonu (DASHBOARD-ANALYTICS-001)
 - **Backend Analitik API Endpoint'i (adminAnalytics.ts):**
   - GET /api/v1/admin/analytics/summary uç noktası eklendi; period (realtime, today, 7d, 30d) ve refresh desteği sağlandı.

@@ -43,7 +43,7 @@ export const AnalyticsSummaryCard: React.FC = () => {
   }, [period]);
 
   const periods: { key: 'realtime' | 'today' | '7d' | '30d'; label: string; icon?: React.ReactNode }[] = [
-    { key: 'realtime', label: 'Anlık (Son 30 dk)', icon: <Activity size={12} style={{ color: '#10b981' }} /> },
+    { key: 'realtime', label: 'Anlık (Son 30 dk)', icon: <Activity size={12} style={{ color: 'var(--success, #10b981)' }} /> },
     { key: 'today', label: 'Bugün' },
     { key: '7d', label: 'Son 7 Gün' },
     { key: '30d', label: 'Son 30 Gün' },
@@ -54,10 +54,6 @@ export const AnalyticsSummaryCard: React.FC = () => {
       className="admin-panel-card"
       style={{
         marginBottom: '16px',
-        padding: '14px 16px',
-        borderRadius: '10px',
-        border: '1px solid var(--border-color)',
-        backgroundColor: 'var(--card-bg, #1e293b)',
         display: 'flex',
         flexDirection: 'column',
         gap: '12px',
@@ -71,7 +67,7 @@ export const AnalyticsSummaryCard: React.FC = () => {
               width: '30px',
               height: '30px',
               borderRadius: '8px',
-              background: 'linear-gradient(135deg, #3b82f6 0%, #6366f1 100%)',
+              background: 'linear-gradient(135deg, var(--accent-primary, #3b82f6) 0%, var(--accent-secondary, #6366f1) 100%)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -95,11 +91,11 @@ export const AnalyticsSummaryCard: React.FC = () => {
                     padding: '2px 6px',
                     borderRadius: '10px',
                     backgroundColor: 'rgba(16, 185, 129, 0.15)',
-                    color: '#10b981',
+                    color: 'var(--success, #10b981)',
                     fontWeight: 600,
                   }}
                 >
-                  <span style={{ width: '5px', height: '5px', borderRadius: '50%', backgroundColor: '#10b981' }}></span>
+                  <span style={{ width: '5px', height: '5px', borderRadius: '50%', backgroundColor: 'var(--success, #10b981)' }}></span>
                   Canlı
                 </span>
               )}
@@ -114,7 +110,15 @@ export const AnalyticsSummaryCard: React.FC = () => {
 
         {/* Aksiyonlar: Periyot Filtreleri + Yenile Butonu */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
-          <div style={{ display: 'inline-flex', backgroundColor: 'rgba(255, 255, 255, 0.04)', borderRadius: '6px', padding: '2px', border: '1px solid var(--border-color)' }}>
+          <div
+            style={{
+              display: 'inline-flex',
+              backgroundColor: 'var(--bg-secondary)',
+              borderRadius: '6px',
+              padding: '2px',
+              border: '1px solid var(--border-subtle)',
+            }}
+          >
             {periods.map((p) => {
               const active = period === p.key;
               return (
@@ -126,7 +130,7 @@ export const AnalyticsSummaryCard: React.FC = () => {
                     padding: '4px 8px',
                     fontSize: '11px',
                     fontWeight: active ? 600 : 500,
-                    backgroundColor: active ? 'var(--accent-primary, #3b82f6)' : 'transparent',
+                    backgroundColor: active ? 'var(--accent-primary)' : 'transparent',
                     color: active ? '#fff' : 'var(--text-secondary)',
                     border: 'none',
                     borderRadius: '4px',
@@ -156,9 +160,6 @@ export const AnalyticsSummaryCard: React.FC = () => {
               display: 'inline-flex',
               alignItems: 'center',
               gap: '4px',
-              backgroundColor: 'rgba(255, 255, 255, 0.04)',
-              border: '1px solid var(--border-color)',
-              color: 'var(--text-primary)',
             }}
           >
             <RotateCw size={12} className={refreshing ? 'spin-animation' : ''} />
@@ -168,16 +169,23 @@ export const AnalyticsSummaryCard: React.FC = () => {
       </div>
 
       {error && (
-        <div style={{ padding: '8px 12px', backgroundColor: 'rgba(239, 68, 68, 0.1)', color: '#ef4444', borderRadius: '6px', fontSize: '12px' }}>
+        <div style={{ padding: '8px 12px', backgroundColor: 'rgba(239, 68, 68, 0.1)', color: 'var(--danger, #ef4444)', borderRadius: '6px', fontSize: '12px' }}>
           {error}
         </div>
       )}
 
       {/* 4'lü Sayısal Özet Metrikleri */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: '8px' }}>
-        <div style={{ padding: '8px 10px', borderRadius: '6px', backgroundColor: 'rgba(255, 255, 255, 0.02)', border: '1px solid var(--border-color)' }}>
+        <div
+          style={{
+            padding: '8px 10px',
+            borderRadius: 'var(--radius-md, 8px)',
+            backgroundColor: 'var(--bg-secondary)',
+            border: '1px solid var(--border-subtle)',
+          }}
+        >
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--text-muted)', fontSize: '11px' }}>
-            <Users size={12} style={{ color: '#3b82f6' }} />
+            <Users size={12} style={{ color: 'var(--accent-primary, #3b82f6)' }} />
             <span>{period === 'realtime' ? 'Anlık Kullanıcı' : 'Ziyaretçi Sayısı'}</span>
           </div>
           <div style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--text-primary)', marginTop: '2px' }}>
@@ -185,9 +193,16 @@ export const AnalyticsSummaryCard: React.FC = () => {
           </div>
         </div>
 
-        <div style={{ padding: '8px 10px', borderRadius: '6px', backgroundColor: 'rgba(255, 255, 255, 0.02)', border: '1px solid var(--border-color)' }}>
+        <div
+          style={{
+            padding: '8px 10px',
+            borderRadius: 'var(--radius-md, 8px)',
+            backgroundColor: 'var(--bg-secondary)',
+            border: '1px solid var(--border-subtle)',
+          }}
+        >
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--text-muted)', fontSize: '11px' }}>
-            <Eye size={12} style={{ color: '#10b981' }} />
+            <Eye size={12} style={{ color: 'var(--success, #10b981)' }} />
             <span>Sayfa Görüntüleme</span>
           </div>
           <div style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--text-primary)', marginTop: '2px' }}>
@@ -195,9 +210,16 @@ export const AnalyticsSummaryCard: React.FC = () => {
           </div>
         </div>
 
-        <div style={{ padding: '8px 10px', borderRadius: '6px', backgroundColor: 'rgba(255, 255, 255, 0.02)', border: '1px solid var(--border-color)' }}>
+        <div
+          style={{
+            padding: '8px 10px',
+            borderRadius: 'var(--radius-md, 8px)',
+            backgroundColor: 'var(--bg-secondary)',
+            border: '1px solid var(--border-subtle)',
+          }}
+        >
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--text-muted)', fontSize: '11px' }}>
-            <Globe2 size={12} style={{ color: '#f59e0b' }} />
+            <Globe2 size={12} style={{ color: 'var(--accent-amber, #f59e0b)' }} />
             <span>Farklı Ülke</span>
           </div>
           <div style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--text-primary)', marginTop: '2px' }}>
@@ -205,9 +227,16 @@ export const AnalyticsSummaryCard: React.FC = () => {
           </div>
         </div>
 
-        <div style={{ padding: '8px 10px', borderRadius: '6px', backgroundColor: 'rgba(255, 255, 255, 0.02)', border: '1px solid var(--border-color)' }}>
+        <div
+          style={{
+            padding: '8px 10px',
+            borderRadius: 'var(--radius-md, 8px)',
+            backgroundColor: 'var(--bg-secondary)',
+            border: '1px solid var(--border-subtle)',
+          }}
+        >
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--text-muted)', fontSize: '11px' }}>
-            <MapPin size={12} style={{ color: '#a855f7' }} />
+            <MapPin size={12} style={{ color: 'var(--accent-secondary, #a855f7)' }} />
             <span>Farklı Şehir</span>
           </div>
           <div style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--text-primary)', marginTop: '2px' }}>
@@ -217,7 +246,7 @@ export const AnalyticsSummaryCard: React.FC = () => {
       </div>
 
       {/* Ayrıntılı Kırılım (Ülkeler & Şehirler Akordeon Listesi) */}
-      <div style={{ borderTop: '1px solid var(--border-color)', paddingTop: '10px' }}>
+      <div style={{ borderTop: '1px solid var(--border-subtle)', paddingTop: '10px' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
           <div
             onClick={() => setIsExpanded(prev => !prev)}
@@ -238,8 +267,8 @@ export const AnalyticsSummaryCard: React.FC = () => {
                   padding: '3px 8px',
                   fontSize: '11px',
                   borderRadius: '4px',
-                  border: 'none',
-                  backgroundColor: activeBreakdown === 'countries' ? '#3b82f6' : 'rgba(255, 255, 255, 0.04)',
+                  border: '1px solid var(--border-subtle)',
+                  backgroundColor: activeBreakdown === 'countries' ? 'var(--accent-primary, #3b82f6)' : 'var(--bg-secondary)',
                   color: activeBreakdown === 'countries' ? '#fff' : 'var(--text-secondary)',
                   cursor: 'pointer',
                   fontWeight: activeBreakdown === 'countries' ? 600 : 400,
@@ -254,8 +283,8 @@ export const AnalyticsSummaryCard: React.FC = () => {
                   padding: '3px 8px',
                   fontSize: '11px',
                   borderRadius: '4px',
-                  border: 'none',
-                  backgroundColor: activeBreakdown === 'cities' ? '#a855f7' : 'rgba(255, 255, 255, 0.04)',
+                  border: '1px solid var(--border-subtle)',
+                  backgroundColor: activeBreakdown === 'cities' ? 'var(--accent-secondary, #a855f7)' : 'var(--bg-secondary)',
                   color: activeBreakdown === 'cities' ? '#fff' : 'var(--text-secondary)',
                   cursor: 'pointer',
                   fontWeight: activeBreakdown === 'cities' ? 600 : 400,
@@ -272,15 +301,16 @@ export const AnalyticsSummaryCard: React.FC = () => {
             {(activeBreakdown === 'countries' ? (data?.countries || []) : (data?.cities || [])).map((item, idx) => {
               const maxUsers = Math.max(1, (activeBreakdown === 'countries' ? data?.countries[0]?.users : data?.cities[0]?.users) || 1);
               const barWidth = Math.min(100, Math.round((item.users / maxUsers) * 100));
-              const barColor = activeBreakdown === 'countries' ? '#3b82f6' : '#a855f7';
+              const barColor = activeBreakdown === 'countries' ? 'var(--accent-primary, #3b82f6)' : 'var(--accent-secondary, #a855f7)';
 
               return (
                 <div
                   key={`${item.name}_${idx}`}
                   style={{
                     padding: '6px 8px',
-                    borderRadius: '5px',
-                    backgroundColor: 'rgba(255, 255, 255, 0.02)',
+                    borderRadius: 'var(--radius-sm, 4px)',
+                    backgroundColor: 'var(--bg-secondary)',
+                    border: '1px solid var(--border-subtle)',
                     display: 'flex',
                     flexDirection: 'column',
                     gap: '4px',
@@ -293,8 +323,8 @@ export const AnalyticsSummaryCard: React.FC = () => {
                       <strong style={{ color: 'var(--text-primary)' }}>{item.users.toLocaleString('tr-TR')}</strong> kişi ({item.percentage}%)
                     </span>
                   </div>
-                  {/* Progress bar */}
-                  <div style={{ width: '100%', height: '4px', backgroundColor: 'rgba(255, 255, 255, 0.06)', borderRadius: '2px', overflow: 'hidden' }}>
+                  {/* Progress bar track */}
+                  <div style={{ width: '100%', height: '4px', backgroundColor: 'var(--border-subtle)', borderRadius: '2px', overflow: 'hidden' }}>
                     <div
                       style={{
                         width: `${barWidth}%`,

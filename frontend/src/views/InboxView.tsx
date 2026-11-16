@@ -216,10 +216,10 @@ export const InboxView: React.FC<InboxViewProps> = ({ onNavigate }) => {
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <button
             type="button"
-            className="admin-btn admin-btn-sm"
+            className="admin-btn admin-btn-sm admin-btn-view"
             onClick={() => window.open('/admin/?mode=mini', 'MSKLabsDeskMini', 'width=440,height=720,resizable=yes,scrollbars=yes')}
             title="Ayrık Mini İstasyon Penceresini Aç"
-            style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', backgroundColor: 'rgba(255,255,255,0.06)', border: '1px solid var(--border-color)', color: 'var(--text-primary)' }}
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '5px' }}
           >
             <Smartphone size={13} />
             <span>Minyatür İstasyon</span>
