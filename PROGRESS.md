@@ -3530,3 +3530,11 @@ ight_floating) dikey yönelim (ertical-rl) ile kenara yaslandı.
   2. Frontend InboxMiniStation.tsx (251 satır) çift butonlu ([Panel] & [Web]) akordeon mimarisi.
   3. App.tsx şifresiz bilet takası & ?mode=mini bağımsız pencere desteği.
 - **Durum:** Derlemeler 0 hata, testler %100 başarılı.
+
+### [16.11.2026 - 16:25] — DASHBOARD-ANALYTICS-001: Özet Ekranı Ziyaretçi & Coğrafi Analitik İstasyonu Tamamlandı
+- **Tamamlanan Görev:** Özet Ekranı (DashboardView) için Anlık, Günlük, Haftalık ve Aylık ziyaretçi trafiğini; ülke/şehir sayılarını ve detaylı kişi dökümünü sunan analitik kartı tamamlandı.
+- **Yapılanlar:**
+  1. Backend GET /api/v1/admin/analytics/summary (adminAnalytics.ts) ve 18 entegrasyon testi (%100 PASS).
+  2. Frontend AnalyticsSummaryCard.tsx (288 satır) 4 metrik + ayrıntılı ülke ve şehir dağılım listesi + granüler yenileme.
+  3. DashboardView.tsx entegrasyonu (290 satır, modüler ve responsive).
+- **Durum:** Testler %100 başarılı, derleme 0 hata.

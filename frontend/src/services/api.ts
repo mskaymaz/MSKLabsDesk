@@ -1,4 +1,4 @@
-import type { Ticket, TicketDetailResponse, CommentItem, Subscriber, StudioBlock, UnifiedInboxResponse, InboxSummaryResponse } from '../types';
+import type { Ticket, TicketDetailResponse, CommentItem, Subscriber, StudioBlock, UnifiedInboxResponse, InboxSummaryResponse, AnalyticsSummaryResponse } from '../types';
 
 const API_BASE = import.meta.env.VITE_API_URL || (typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1' ? 'https://msklabsdesk-backend.msklabs-org.workers.dev/api' : 'http://localhost:8787/api');
 
@@ -67,6 +67,20 @@ export const api = {
     if (!res.ok) {
       const err = await res.json().catch(() => ({ error: 'Köprü bileti doğrulanamadı veya süresi dolmuş.' }));
       throw new Error(err.error || 'Köprü bileti doğrulanamadı.');
+    }
+    return res.json();
+  },
+
+  // Analytics Summary (Özet Ekranı Ziyaretçi & Coğrafi Veri)
+  async getAnalyticsSummary(period: 'realtime' | 'today' | '7d' | '30d' = 'today', refresh = false): Promise<AnalyticsSummaryResponse> {
+    const params = new URLSearchParams({ period });
+    if (refresh) params.append('refresh', '1');
+    const res = await fetch(`${API_BASE}/admin/analytics/summary?${params.toString()}`, {
+      headers: getHeaders(),
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({ error: 'Analitik verileri yüklenemedi.' }));
+      throw new Error(err.error || 'Analitik verileri yüklenemedi.');
     }
     return res.json();
   },

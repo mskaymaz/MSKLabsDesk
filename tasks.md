@@ -171,6 +171,34 @@
 
 ---
 
+### DASHBOARD-ANALYTICS-001 — Özet Ekranı Ziyaretçi & Coğrafi Analitik İstasyonu [x]
+- **Amaç:** Yönetici panelinde Özet Ekranı'na (`DashboardView`) anlık, günlük, haftalık ve aylık ziyaretçi trafiğini; toplam kullanıcı, tekil şehir sayısı, tekil ülke sayısı ve ülke/şehir bazlı detaylı dökümünü sergileyen, granüler yenileme butonlu kompakt bir analitik kartı eklemek.
+- **Tarih:** 16.11.2026 - 16:25
+- **Mimari İlkeler:**
+  1. *Zaman Filtreleme:* `realtime` (son 30 dk), `today` (bugün), `7d` (son 7 gün), `30d` (son 30 gün) butonları.
+  2. *Granüler Yenileme:* Sadece analitik kartının verilerini tazeleyen bağımsız `RotateCw` butonu ve `Son Güncelleme: SS:DD:ss` damgası.
+  3. *Coğrafi Dağılım Listesi:* Ülke ve şehir kırılımını kaçar ziyaretçi aldığını gösteren akordeon/liste formatında sunum.
+  4. *Yedekli ve Sıfır Kırılganlık ($0):* GA4 Data API / Edge önbellek desteği; anahtar olmadığında da paneli çökertmeyen dayanıklı API yanıtı.
+
+#### 📋 Takip Edilebilir Aşama ve Görev Listesi:
+- [x] **Task 1 — Backend Analitik API Endpoint'i (`adminAnalytics.ts`):**
+  - [x] 1.1: `GET /api/v1/admin/analytics/summary` uç noktası; `period` (`realtime`, `today`, `7d`, `30d`) ve `refresh` parametreleriyle ziyaretçi, sayfa görüntüleme, ülke ve şehir verisi derlemesi.
+  - [x] 1.2: D1 / Edge önbellek mekanizması (5-10 dk TTL) ve GA4 entegrasyon şablonu.
+  - [x] 1.3: Yetkisiz erişim ve parametre doğrulama testleri (`apiAnalyticsSummary.test.ts` - 18/18 PASS).
+- [x] **Task 2 — Frontend Özet Ekranı Analitik Kartı (`AnalyticsSummaryCard.tsx`):**
+  - [x] 2.1: Zaman filtresi (Anlık, Bugün, Bu Hafta, Bu Ay) buton çubuğu.
+  - [x] 2.2: 4'lü sayısal özet metrikleri (Aktif Ziyaretçi, Sayfa Görüntüleme, Ülke Sayısı, Şehir Sayısı).
+  - [x] 2.3: Ayrıntılı ülke ve şehir dağılımı listeleri (bar göstergeli ve kişi sayılı).
+  - [x] 2.4: Granüler `Yenile` butonu ve zaman damgası.
+- [x] **Task 3 — DashboardView Entegrasyonu ve Ergonomi:**
+  - [x] 3.1: `frontend/src/views/DashboardView.tsx` içine kartın eklenmesi; responsive grid uyumu ve 400-450 satır sınırının korunması (290 satır).
+  - [x] 3.2: `frontend/src/services/api.ts` içine `getAnalyticsSummary(period, refresh)` fonksiyonunun bağlanması.
+- [x] **Task 4 — Derleme, Test ve Dokümantasyon:**
+  - [x] 4.1: `npm --prefix backend test` (tüm testler 100% PASS) ve `npm --prefix frontend run build` test doğrulaması (793ms, 0 hata).
+  - [x] 4.2: `tasks.md`, `ROADMAP_TODO.md`, `CHANGELOG.md` ve `PROGRESS.md` güncellemeleri.
+
+---
+
 ### APP-TELEMETRY-001 — Masaüstü ve Mobil Uygulamalar İçin Sessiz Telemetri & Analitik Standardı [ ]
 - **Amaç:** Masaüstü (`Avkat`, `DeskPilot`, `PDFLayout` vb.) ve mobil (`RekatSayar` vb.) uygulamalar dağıtıldığında; indirme kaynağından bağımsız olarak kullanıcıları rahatsız etmeden sessiz, anonim ve sıfır maliyetli kullanım istatistikleri toplamak.
 - **Toplanacak Metrikler (Yazılım Aşamasında Esnek/İptal Edilebilir):**

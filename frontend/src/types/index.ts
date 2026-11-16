@@ -475,4 +475,25 @@ export interface SiteSettingsData {
   gaMeasurementId?: string;
 }
 
+export interface AnalyticsBreakdownItem {
+  name: string;
+  code?: string;
+  users: number;
+  percentage: number;
+}
+
+export interface AnalyticsSummaryResponse {
+  success: boolean;
+  period: 'realtime' | 'today' | '7d' | '30d';
+  activeUsers: number;
+  pageViews: number;
+  sessions: number;
+  totalCountries: number;
+  totalCities: number;
+  countries: AnalyticsBreakdownItem[];
+  cities: AnalyticsBreakdownItem[];
+  source: 'ga4' | 'cache' | 'telemetry';
+  lastUpdated: string;
+}
+
 

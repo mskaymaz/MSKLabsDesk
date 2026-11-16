@@ -1,6 +1,21 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [16.11.2026 - 16:25] - Özet Ekranı Ziyaretçi & Coğrafi Analitik İstasyonu (DASHBOARD-ANALYTICS-001)
+- **Backend Analitik API Endpoint'i (adminAnalytics.ts):**
+  - GET /api/v1/admin/analytics/summary uç noktası eklendi; period (realtime, today, 7d, 30d) ve refresh desteği sağlandı.
+  - Aktif kullanıcı, sayfa görüntüleme, tekil ülke/şehir sayısı ve ayrıntılı ülke/şehir kişi dağılımı derlendi.
+  - 5 dakikalık Edge bellek önbelleği (X-Cache: HIT / MISS) ve GA4 entegrasyon altyapısı uygulandı.
+  - Kapsamlı entegrasyon testleri (apiAnalyticsSummary.test.ts) 18/18 PASS ile tamamlandı.
+- **Frontend Analitik Kartı (AnalyticsSummaryCard.tsx):**
+  - Zaman filtresi çubuğu (Anlık, Bugün, Son 7 Gün, Son 30 Gün) ve granüler Yenileme butonu ile son güncelleme zaman damgası eklendi.
+  - 4'lü sayısal özet kartları (Ziyaretçi Sayısı, Sayfa Görüntüleme, Farklı Ülke, Farklı Şehir) oluşturuldu.
+  - Ayrıntılı açılır-kapanır ülke ve şehir dağılımı listesi, yüzde oranları ve bar göstergeleri uygulandı.
+- **Özet Ekranı Entegrasyonu (DashboardView.tsx):**
+  - AnalyticsSummaryCard bileşeni DashboardView içerisine entegre edildi (290 satır, <= 450 kuralı korundu).
+- **Derleme ve Doğrulama:**
+  - Frontend derlemesi (tsc -b && vite build) 793ms'de sıfır hatayla geçti; backend test paketi %100 başarılı.
+
 ## [16.11.2026 - 15:55] - Masaüstü ve Mobil Müstakil İletişim Takipçisi ve Şifresiz Panel Giriş Köprüsü (INBOX-COMPANION-003)
 - **Güvenli Şifresiz Panel Giriş Köprüsü (Magic Auth Bridge):**
   - Backend POST /api/v1/admin/auth/bridge-ticket ve POST /api/v1/admin/auth/exchange-bridge uç noktaları eklendi (backend/src/routes/adminAuth.ts, backend/src/utils/auth.ts).

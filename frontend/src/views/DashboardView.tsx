@@ -7,6 +7,7 @@ import {
   ArrowRight
 } from 'lucide-react';
 import type { TabType } from '../components/Sidebar';
+import { AnalyticsSummaryCard } from '../components/dashboard/AnalyticsSummaryCard';
 
 interface DashboardViewProps {
   tickets: Ticket[];
@@ -177,6 +178,9 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
           </div>
         </div>
       </div>
+
+      {/* Ziyaretçi & Coğrafi Analitik Özeti */}
+      <AnalyticsSummaryCard />
 
       {/* Recent Tickets Overview */}
       <div className="dashboard-panels-grid">

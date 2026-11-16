@@ -136,3 +136,8 @@
   - [x] Task 2: Minyatür istasyon arayüzü (`InboxMiniStation.tsx`, 251 satır, `[Panel]` ve `[Web]` çift butonlu).
   - [x] Task 3: Desktop ve Mobile bağımsız pencere (`?mode=mini`) ve `InboxView` popout entegrasyonu.
   - [x] Task 4: Uçtan uca testler, TypeScript check ve production vite build doğrulaması.
+* [x] **8.4 Özet Ekranı Ziyaretçi & Coğrafi Analitik İstasyonu (`DASHBOARD-ANALYTICS-001`) [TAMAMLANDI]:**
+  - [x] Task 1: Backend analitik özeti API (`/api/v1/admin/analytics/summary`, anlık/günlük/haftalık/aylık filtreli, 18/18 test PASS).
+  - [x] Task 2: Frontend analitik kartı (`AnalyticsSummaryCard.tsx`, 4 metrik + ülke/şehir kırılım listesi + granüler yenileme).
+  - [x] Task 3: `DashboardView` entegrasyonu ve API servisi bağlantısı (290 satır).
+  - [x] Task 4: Testler, derleme (793ms, 0 hata) ve dokümantasyon.
