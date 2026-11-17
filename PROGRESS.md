@@ -1,6 +1,15 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 📌 Son Güncelleme [17.11.2026 - 15:18] — DUYURU HAVUZU ARAÇ ÇUBUĞU KONUM & TİPOGRAFİ STANDARDI (ANNOUNCEMENT-UI-003) [✓]
+* **Geliştirilen Altyapı ve Arayüz Kazanımları:**
+  1. **Konum Değişimi:** Duyuru Havuzu seçici ve akış modu çubuğu, editörün altındaki dar/ayrık alandan alınarak "Masaüstü Konum & Boyut" bloğunun hemen altına taşındı.
+  2. **Tek Satır ve Dikey Bölünmelerin Tasfiyesi:** İki satıra kırılan "Duyuru Havuzu:" başlığı `nowrap` standardına bağlandı, tüm metinler ferahça tek satıra yayıldı.
+  3. **Tipografi Bütünlüğü:** "Duyuru Havuzu:" ve "Akış Modu:" başlıkları `Masaüstü Konum & Boyut:` başlığıyla birebir eşleştirilerek `fontWeight: 700`, `10.5px` ve `var(--text-primary)` yapıldı.
+  4. **Doğrulama:** Frontend derlemesi (722ms, 0 hata) doğrulandı.
+
+---
+
 ## 📌 Son Güncelleme [17.11.2026 - 14:15] — CANLI GOOGLE GEMINI AI ENTEGRASYONU & ÇOK DİLLİ ÇEVİRİ (GEMINI-AI-LIVE-001) [✓]
 * **Geliştirilen Altyapı ve Kazanımlar:**
   1. **Google AI Studio Canlı Anahtar:** Ücretsiz (`Free tier`) `GEMINI_API_KEY` Cloudflare Worker secrets'a yüklendi, `CREDENTIALS.enc` kasasına kilitlendi ve yerel `.dev.vars` dosyasına işlendi.

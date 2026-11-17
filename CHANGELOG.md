@@ -1,6 +1,14 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [17.11.2026 - 15:18] - Duyuru Havuzu Araç Çubuğu Konum ve Tek Satır Tipografi İyileştirmesi (ANNOUNCEMENT-UI-003)
+- **Duyuru Havuzu Araç Çubuğu Konum Güncellemesi (`AnnouncementBarSection.tsx`):**
+  - Duyuru havuzu seçici ve akış modu araç çubuğu, editörün altından alınarak "Masaüstü Konum & Boyut" bölümünün hemen altına (Canlı Önizleme vitrininin üstüne) taşındı.
+  - İki satıra kırılan "Duyuru \n Havuzu:" başlığı `flexWrap: 'nowrap'` ve `whiteSpace: 'nowrap'` ile tek satıra kavuşturuldu.
+  - "Duyuru Havuzu:" ve "Akış Modu:" başlık stilleri, "Masaüstü Konum & Boyut:" standardına uyum sağlayacak şekilde `10.5px`, `fontWeight: 700` ve `color: var(--text-primary)` olarak eşitlendi.
+- **Derleme:**
+  - Frontend derlemesi (`tsc -b && vite build`) 722ms'de 0 hatayla tamamlandı.
+
 ## [17.11.2026 - 14:15] - Canlı Google Gemini AI API Entegrasyonu & Çok Modelli Çeviri Motoru (GEMINI-AI-LIVE-001)
 - **Google AI Studio Canlı Gemini API Entegrasyonu (`backend/src/utils/ai.ts`, `aiBlocks.ts`):**
   - Kullanıcının `Default Gemini Project` üzerinden sağladığı ücretsiz (`Free tier`) API anahtarı Cloudflare Worker'a (`GEMINI_API_KEY`) yüklendi ve `CREDENTIALS.enc` kasasına AES-256-GCM ile kilitlendi.

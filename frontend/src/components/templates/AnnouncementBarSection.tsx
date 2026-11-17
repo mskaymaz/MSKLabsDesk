@@ -190,7 +190,7 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
         </div>
       </div>
 
-      {/* 2. Tek Satır Konum & Boyut Ayarları (Canlı Önizleme Vitrininin Hemen Üstünde) */}
+      {/* 2. Tek Satır Konum & Boyut Ayarları (Masaüstü / Mobil) */}
       <AnnouncementPlacementSettings
         activeItem={activeItem}
         updateCurrentItem={updateCurrentItem}
@@ -200,7 +200,88 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
         setPreviewWebWidth={setPreviewWebWidth}
       />
 
-      {/* 3. Canlı Önizleme Vitrini (Browser / Device Mockup Penceresi) */}
+      {/* 3. Duyuru Havuzu Araç Çubuğu (Masaüstü Konum & Boyut Bölümünün Hemen Altında) */}
+      <div style={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        gap: '12px',
+        marginBottom: '8px',
+        flexWrap: 'nowrap',
+        whiteSpace: 'nowrap',
+        background: 'var(--bg-secondary, rgba(15, 23, 42, 0.45))',
+        padding: '6px 10px',
+        borderRadius: '6px',
+        border: '1px solid var(--border-subtle)',
+        minWidth: '940px',
+        flexShrink: 0,
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', whiteSpace: 'nowrap' }}>
+          <span style={{
+            fontSize: '10.5px',
+            fontWeight: 700,
+            color: 'var(--text-primary)',
+            whiteSpace: 'nowrap',
+            display: 'inline-block',
+          }}>
+            Duyuru Havuzu:
+          </span>
+          <select
+            className="form-select"
+            value={activeItem.id}
+            onChange={(e) => handleSelectId(e.target.value)}
+            style={{ fontSize: '10.5px', height: '25px', minWidth: '170px', fontWeight: 600, padding: '1px 8px' }}
+          >
+            {items.map((it, idx) => {
+              const sym = it.placement?.startsWith('bottom_') ? '↓' : (it.placement === 'left_floating' || it.placement === 'top_left' || it.placement === 'bottom_left') ? '←' : (it.placement === 'right_floating' || it.placement === 'top_right' || it.placement === 'bottom_right') ? '→' : '↑';
+              return (
+                <option key={it.id} value={it.id}>
+                  {sym} {it.title || `Duyuru #${idx + 1}`} {!it.isActive ? '(Pasif)' : ''}
+                </option>
+              );
+            })}
+          </select>
+          <button
+            type="button"
+            onClick={handleAddNewItem}
+            className="admin-btn admin-btn-secondary admin-btn-sm"
+            style={{ height: '25px', padding: '0 10px', fontSize: '10.5px', display: 'inline-flex', alignItems: 'center', gap: '4px', whiteSpace: 'nowrap' }}
+          >
+            <Plus size={12} /><span>Yeni Ekle</span>
+          </button>
+          {items.length > 1 && (
+            <button
+              type="button"
+              onClick={() => handleDeleteItem(activeItem.id)}
+              className="admin-btn admin-btn-sm"
+              style={{ color: '#ef4444', borderColor: 'rgba(239, 68, 68, 0.35)', height: '25px', width: '28px', padding: 0, display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
+              title="Duyuruyu sil"
+            >
+              <Trash2 size={12} />
+            </button>
+          )}
+        </div>
+
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', whiteSpace: 'nowrap' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <span style={{ fontSize: '10.5px', fontWeight: 700, color: 'var(--text-primary)', whiteSpace: 'nowrap' }}>
+              Akış Modu:
+            </span>
+            <select
+              className="form-select"
+              value={activeItem.displayMode || 'static'}
+              onChange={(e) => updateCurrentItem({ displayMode: e.target.value as any })}
+              style={{ fontSize: '10.5px', height: '25px', padding: '1px 8px', fontWeight: 600 }}
+            >
+              <option value="static">Sabit / Çok Satırlı</option>
+              <option value="ticker">Kayan Yazı (Ticker)</option>
+              <option value="rotator">Dönüşümlü (Dikey)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      {/* 4. Canlı Önizleme Vitrini (Browser / Device Mockup Penceresi) */}
       <AnnouncementPreviewMockup
         activeItem={activeItem}
         announcementActive={announcementActive}
@@ -349,43 +430,7 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
         </div>
       </div>
 
-      {/* 5. Kompakt Araç Çubuğu: Duyuru Havuzu Seçici + Yerleşim & Akış Modları */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '10px', marginBottom: '10px', flexWrap: 'wrap', background: 'var(--bg-secondary, rgba(15,23,42,0.3))', padding: '5px 10px', borderRadius: '6px', border: '1px solid var(--border-subtle)' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <span style={{ fontSize: '10.5px', fontWeight: 600, color: 'var(--text-secondary)' }}>Duyuru Havuzu:</span>
-          <select className="form-select" value={activeItem.id} onChange={(e) => handleSelectId(e.target.value)} style={{ fontSize: '10.5px', height: '25px', minWidth: '150px', fontWeight: 600, padding: '1px 6px' }}>
-            {items.map((it, idx) => {
-              const sym = it.placement?.startsWith('bottom_') ? '↓' : (it.placement === 'left_floating' || it.placement === 'top_left' || it.placement === 'bottom_left') ? '←' : (it.placement === 'right_floating' || it.placement === 'top_right' || it.placement === 'bottom_right') ? '→' : '↑';
-              return (
-                <option key={it.id} value={it.id}>
-                  {sym} {it.title || `Duyuru #${idx + 1}`} {!it.isActive ? '(Pasif)' : ''}
-                </option>
-              );
-            })}
-          </select>
-          <button type="button" onClick={handleAddNewItem} className="admin-btn admin-btn-secondary admin-btn-sm" style={{ height: '25px', padding: '0 8px', fontSize: '10.5px', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-            <Plus size={11} /><span>Yeni Ekle</span>
-          </button>
-          {items.length > 1 && (
-            <button type="button" onClick={() => handleDeleteItem(activeItem.id)} className="admin-btn admin-btn-sm" style={{ marginLeft: '8px', color: '#ef4444', borderColor: 'rgba(239,68,68,0.3)', height: '25px', width: '30px', padding: 0, display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }} title="Duyuruyu sil">
-              <Trash2 size={11} />
-            </button>
-          )}
-        </div>
-
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-            <span style={{ fontSize: '10px', fontWeight: 600, color: 'var(--text-secondary)' }}>Akış Modu:</span>
-            <select className="form-select" value={activeItem.displayMode || 'static'} onChange={(e) => updateCurrentItem({ displayMode: e.target.value as any })} style={{ fontSize: '10px', height: '25px', padding: '1px 6px' }}>
-              <option value="static">Sabit / Çok Satırlı</option>
-              <option value="ticker">Kayan Yazı (Ticker)</option>
-              <option value="rotator">Dönüşümlü (Dikey)</option>
-            </select>
-          </div>
-        </div>
-      </div>
-
-      {/* 6. Detay & Tema Ayarları (3 Kolonlu Kompakt Alt Panel) */}
+      {/* 5. Detay & Tema Ayarları (3 Kolonlu Kompakt Alt Panel) */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px', padding: '10px', background: 'var(--bg-secondary, rgba(15, 23, 42, 0.4))', borderRadius: '6px', border: '1px solid var(--border-subtle)' }}>
         {/* Kolon 1: Başlık, Aktiflik & Buton/Etkileşim */}
         <div>
