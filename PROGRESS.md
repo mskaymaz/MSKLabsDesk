@@ -1,6 +1,14 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 📌 Son Güncelleme [17.11.2026 - 16:15] — REPO İSİMLENDİRME STANDARDI & MSKLABSWEB SENKRONİZASYONU (MSKLABS-REPO-SYNC-001) [✓]
+* **Geliştirilen Altyapı ve Kazanımlar:**
+  1. **Uzak Depo Güncellemesi:** GitHub üzerindeki web deposu `webMSKLabs` ➔ `MSKLabsWeb` olarak yeniden adlandırıldı.
+  2. **Yerel Klasör ve Git Remote:** Yerel dizin `d:\Code\mskaymaz\MSKLabsWeb` yapıldı, git remote origin URL'si `MSKLabsWeb.git` olarak güncellendi ve fetch/push doğrulandı.
+  3. **Dokümantasyon Hizalaması:** `MSKLabsDesk` ve `MSKLabsWeb` repolarındaki `AGENTS.md` ve `package.json` referansları güncellendi.
+
+---
+
 ## 📌 Son Güncelleme [17.11.2026 - 15:18] — DUYURU HAVUZU ARAÇ ÇUBUĞU KONUM & TİPOGRAFİ STANDARDI (ANNOUNCEMENT-UI-003) [✓]
 * **Geliştirilen Altyapı ve Arayüz Kazanımları:**
   1. **Konum Değişimi:** Duyuru Havuzu seçici ve akış modu çubuğu, editörün altındaki dar/ayrık alandan alınarak "Masaüstü Konum & Boyut" bloğunun hemen altına taşındı.

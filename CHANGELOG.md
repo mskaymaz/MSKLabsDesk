@@ -1,6 +1,12 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [17.11.2026 - 16:15] - Web Deposu Standart İsimlendirme Hizalaması (MSKLABS-REPO-SYNC-001)
+- **Web Vitrini Repo ve Klasör Hizalaması (`MSKLabsWeb`):**
+  - Uzak GitHub deposu `webMSKLabs` adından `MSKLabsWeb` adına taşındı (`gh repo rename MSKLabsWeb -R mskaymaz/webMSKLabs`).
+  - Yerel proje dizini `MSKLabsWeb` olarak adlandırıldı, git remote URL `https://github.com/mskaymaz/MSKLabsWeb.git` olarak güncellendi.
+  - `AGENTS.md` ve `package.json` referansları simetrik kurumsal isimlendirme (`MSKLabsDesk` & `MSKLabsWeb`) ile senkronize edildi.
+
 ## [17.11.2026 - 15:18] - Duyuru Havuzu Araç Çubuğu Konum ve Tek Satır Tipografi İyileştirmesi (ANNOUNCEMENT-UI-003)
 - **Duyuru Havuzu Araç Çubuğu Konum Güncellemesi (`AnnouncementBarSection.tsx`):**
   - Duyuru havuzu seçici ve akış modu araç çubuğu, editörün altından alınarak "Masaüstü Konum & Boyut" bölümünün hemen altına (Canlı Önizleme vitrininin üstüne) taşındı.

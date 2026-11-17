@@ -22,7 +22,7 @@
 * Kullanıcı süreçle ilgili genel/özel bir kural ifade ettiğinde fark edilir ve `AGENTS.md` dosyasına eklenerek kayıt altına alınır.
 
 ## 4. Ana Dal (Main) ve Canlı Yayın Protokolü
-* **Ana Dal Çalışma Standardı:** Hem panel yapısı (`MSKLabsDesk`) hem de web arayüzü (`webMSKLabs`) tamamen normal yayına geçmiş olup, tüm geliştirmeler ve güncellemeler doğrudan ana dal (`main`) üzerinde yürütülür. Şimdilik doğrudan `main` dalında çalışıyoruz; kullanıcı açıkça yeni bir dala geçilmesini belirtmediği sürece doğrudan ana dalda kalınır, commit ve push işlemleri doğrudan `main` dalına yapılır.
+* **Ana Dal Çalışma Standardı:** Hem panel yapısı (`MSKLabsDesk`) hem de web arayüzü (`MSKLabsWeb`) tamamen normal yayına geçmiş olup, tüm geliştirmeler ve güncellemeler doğrudan ana dal (`main`) üzerinde yürütülür. Şimdilik doğrudan `main` dalında çalışıyoruz; kullanıcı açıkça yeni bir dala geçilmesini belirtmediği sürece doğrudan ana dalda kalınır, commit ve push işlemleri doğrudan `main` dalına yapılır.
 * **Yedek Dal Güvencesi:** Canlıya geçiş öncesindeki kararlı durumlar (`OldMain`, `OldMaster` ve `DevAdmin`) yedek ve arşiv amaçlı olarak hem yerelde hem uzak repoda korunur; silinmez.
 * **Push ve Dağıtım Protokolü (Kullanıcı Onay Zorunluluğu):** Her geliştirme adımında yerel commit serbestçe atılabilir; ancak kullanıcı açıkça "push yapalım" demeden kesinlikle uzak depoya (`git push`) push veya canlı yayın dağıtımı yapılamaz.
 * **Yerel Öncelikli Doğrulama (Local-First Verification):** Değişiklikler doğrudan ana dalda geliştirilse dahi önce yerel sunucuda (`localhost`) derlenip test edilir; kullanıcıdan yerel görünüm ve işlevsellik için açık onay alınmadan uzak sunucuya (Cloudflare Pages / GitHub) push/dağıtım yapılmaz.
@@ -39,6 +39,6 @@
 
 
 ## 7. Kurumsal E-Posta ve İletişim Mimarisi Kuralı
-* **Vitrinde Gmail Yasağı:** Hiçbir kullanıcı arayüzünde (`webMSKLabs`, `contact.html`, `apps/*`, `config.js`) `@gmail.com` adresi sergilenemez. Vitrinde daima kurumsal `iletisim@msklabs.org` (veya `contact@msklabs.org`) kullanılır.
+* **Vitrinde Gmail Yasağı:** Hiçbir kullanıcı arayüzünde (`MSKLabsWeb`, `contact.html`, `apps/*`, `config.js`) `@gmail.com` adresi sergilenemez. Vitrinde daima kurumsal `iletisim@msklabs.org` (veya `contact@msklabs.org`) kullanılır.
 * **Destek Masası Önceliği:** Tüm destek ve kullanıcı temaslarında birincil kanal takip numaralı `destek.html` formudur; kullanıcılar doğrudan e-postaya yönlendirilmez. E-postalar SEO, AdSense ve meşruiyet onayı içindir.
 * **Email Routing & Gönderici Standardı:** Tüm gelen kurumsal mailler (`iletisim@`, `contact@`, `destek@`, `support@`, `admin@`, `bildirim@`, `noreply@`, `bilgi@`, `info@` ve Catch-All) Cloudflare üzerinden tek merkez `msklabs.org@gmail.com` kutusuna akar. Giden onay postaları Resend üzerinden `bildirim@msklabs.org` / `noreply@msklabs.org` ile çıkar. Ayrıntılar için bkz: `docs/architecture/KURUMSAL_EPOSTA_VE_ROUTING_MIMARISI.md`.
