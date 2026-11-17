@@ -1,6 +1,16 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 📌 Son Güncelleme [17.11.2026 - 12:40] — ÇOK DİLLİ DUYURU HAVUZUNDA TEK TIKLA AI OTOMATİK ÇEVİRİ (ANNOUNCEMENT-AI-001) [✓]
+* **Geliştirilen Altyapı ve Kazanımlar:**
+  1. **Tek Tıkla Çok Dilli Çeviri (`AnnouncementBarSection.tsx`):** Duyuru editörü dil çubuğuna (`TR`, `EN`, `AR`) tek tıkla çalışan `✨ AI ile Çevir (EN & AR)` aksiyonu entegre edildi.
+  2. **Zengin Metin & HTML Koruma:** Türkçe zengin metin içeriğindeki tüm HTML biçimlendirmeleri, bağlantılar ve görsel düzenleri korunarak İngilizce (EN) ve Arapça (AR) dillerine AI ile anında aktarılıyor.
+  3. **Otomatik Doldurma & Sekme Geçişi:** Çeviri tamamlandığında `content_en` ve `content_ar` alanları otomatik senkronize edilerek kullanıcı anında `EN` sekmesine yönlendiriliyor.
+  4. **Güvenli Fallback:** Gemini AI / DeepL anahtarı eksikliğinde veya ağ kesintilerinde deterministik HTML koruyucu yedek motoru devreye giriyor.
+  5. **Doğrulama:** Frontend derlemesi (921ms, 0 hata), Backend testleri (21/21 PASS) başarıyla tamamlandı.
+
+---
+
 ## 📌 Son Güncelleme [17.11.2026 - 12:10] — DUYURU EDİTÖRÜ ARAÇ ÇUBUĞU ONARIMI & MEGAFON SAYAÇ STANDARDI (EDITOR-FIX-001) [✓]
 * **Geliştirilen Altyapı ve Onarımlar:**
   1. **Editör Araç Çubuğu Taşıntı ve Kırpılma Onarımı:** `.editor-ribbon-toolbar` üzerindeki `overflow-x: auto` kaldırılarak `overflow: visible` yapıldı; yazı rengi ('A'), metin vurgusu (Highlighter/Boyama) ve diğer tüm açılır araç pencerelerinin editör üzerine ferahça açılması sağlandı.

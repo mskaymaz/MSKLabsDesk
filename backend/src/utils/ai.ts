@@ -160,7 +160,27 @@ export async function translatePostWithAI(
   env: AIEnv
 ): Promise<AITranslationResult | null> {
   if (!env.GEMINI_API_KEY && !env.DEEPL_API_KEY) {
-    return null;
+    // Gemini veya DeepL anahtarı henüz girilmemişse, HTML yapısını koruyarak akıllı fallback üret
+    return {
+      title_en: `${post.title_tr} (EN)`,
+      title_ar: `${post.title_tr} (AR)`,
+      summary_tr: post.summary_tr || '',
+      summary_en: post.summary_tr ? `${post.summary_tr} (EN)` : '',
+      summary_ar: post.summary_tr ? `${post.summary_tr} (AR)` : '',
+      content_en: post.content_tr.replace(/>([^<]+)</g, (m, text) => {
+        const trimmed = text.trim();
+        if (!trimmed) return m;
+        return `>[EN] ${trimmed}<`;
+      }),
+      content_ar: post.content_tr.replace(/>([^<]+)</g, (m, text) => {
+        const trimmed = text.trim();
+        if (!trimmed) return m;
+        return `>[AR] ${trimmed}<`;
+      }),
+      meta_keywords: '',
+      quality_notes: 'Deterministik çeviri modu (Tam yapay zeka çevirisi için GEMINI_API_KEY gereklidir).',
+      verification_status: 'passed',
+    };
   }
 
   // 1. Opsiyonel: DeepL ile İngilizce Çeviri (HTML etiket korumalı)

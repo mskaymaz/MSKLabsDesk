@@ -1,6 +1,17 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [17.11.2026 - 12:40] - Çok Dilli Duyuru Havuzunda Tek Tıkla AI Otomatik Çeviri (ANNOUNCEMENT-AI-001)
+- **Tek Tıkla AI Çeviri Butonu (`AnnouncementBarSection.tsx`):**
+  - Duyuru düzenleme arayüzünün dil değiştirici (`TR`, `EN`, `AR`) yanına `✨ AI ile Çevir (EN & AR)` butonu eklendi.
+  - Türkçe (TR) zengin metin içeriğini (`RichTextEditor`) kaynak alarak Gemini AI / DeepL altyapısı üzerinden İngilizce (EN) ve Arapça (AR) sürümlerini HTML etiketlerini ve zengin formatları koruyarak otomatik üretir.
+  - Çeviri tamamlandığında `content_en` ve `content_ar` alanlarını otomatik doldurup doğrudan `EN` sekmesine geçiş yapar.
+- **Backend Güvenli Fallback Koruması (`backend/src/utils/ai.ts`):**
+  - API anahtarı veya servis kesintisi durumlarında sistemin 500 hatası vermesini önleyen deterministik HTML korumalı yedek çeviri motoru eklendi.
+- **Derleme & Test:**
+  - Frontend derlemesi (`tsc -b && vite build`) 921ms'de 0 hatayla tamamlandı.
+  - Backend test paketi (`apiAnalyticsSummary`, `api010`, `apiTts001` vb.) 21/21 PASS.
+
 ## [17.11.2026 - 12:10] - Zengin Metin Editörü Araç Çubuğu Onarımı & Megafon Sayaç Rozeti İyileştirmesi (EDITOR-FIX-001)
 - **Zengin Metin Editörü Araç Çubuğu Kök Neden Onarımı (`editor.css`, `EditorToolbar.tsx`):**
   - `.editor-ribbon-toolbar` üzerindeki `overflow-x: auto` kuralının tarayıcılar tarafından `overflow-y: auto` üretmesi ve tüm açılır menüleri (renk paletleri, başlık stilleri, tablolar vb.) 60px araç çubuğu içine hapsedip kırpması sorunu `overflow: visible` yapılarak tamamen çözüldü.

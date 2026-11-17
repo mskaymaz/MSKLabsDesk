@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Megaphone, Save, Plus, Trash2, Monitor, Smartphone } from 'lucide-react';
+import { Megaphone, Save, Plus, Trash2, Monitor, Smartphone, Sparkles } from 'lucide-react';
+import { api } from '../../services/api';
 import { Switch } from '../ui/Input';
 import { RichTextEditor } from '../ui/RichTextEditor';
 import { type AnnouncementMeta, type AnnouncementItem, BANNER_THEMES } from './announcementConfig';
@@ -25,6 +26,7 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
   announcementMeta, setAnnouncementMeta, onSave, saving = false,
 }) => {
   const [activeLangTab, setActiveLangTab] = useState<'tr' | 'en' | 'ar'>('tr');
+  const [isTranslating, setIsTranslating] = useState<boolean>(false);
   const [previewDevice, setPreviewDevice] = useState<'desktop' | 'mobile'>('desktop');
   const [previewWebWidth, setPreviewWebWidth] = useState<number>(1160);
 
@@ -83,6 +85,39 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
     const nextList = items.filter((x) => x.id !== idToDelete);
     setAnnouncementMeta({ ...announcementMeta, items: nextList, activeItemId: nextList[0].id });
     setSelectedId(nextList[0].id);
+  };
+
+  const handleAiTranslateAnnouncement = async () => {
+    const trContent = announcementText.tr || activeItem.content_tr || '';
+    if (!trContent.trim()) {
+      alert('Lütfen önce Türkçe (TR) duyuru içeriğini doldurunuz.');
+      return;
+    }
+    try {
+      setIsTranslating(true);
+      const res = await api.translatePostAI({
+        title_tr: activeItem.title || 'Duyuru',
+        content_tr: trContent,
+      });
+      if (res && res.translation) {
+        const enContent = res.translation.content_en || '';
+        const arContent = res.translation.content_ar || '';
+        setAnnouncementText((prev) => ({
+          ...prev,
+          en: enContent,
+          ar: arContent,
+        }));
+        updateCurrentItem({
+          content_en: enContent,
+          content_ar: arContent,
+        });
+        setActiveLangTab('en');
+      }
+    } catch (err: any) {
+      alert(`AI çeviri hatası: ${err.message || 'Bilinmeyen hata'}`);
+    } finally {
+      setIsTranslating(false);
+    }
   };
 
   const handleSaveClick = (e: React.FormEvent) => {
@@ -261,7 +296,29 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
                 Görsel, link ve zengin format ekleyebilirsiniz
               </span>
             </div>
-            <div style={{ display: 'inline-flex', gap: '3px' }}>
+            <div style={{ display: 'inline-flex', gap: '4px', alignItems: 'center' }}>
+              <button
+                type="button"
+                onClick={handleAiTranslateAnnouncement}
+                disabled={isTranslating}
+                className="admin-btn admin-btn-sm admin-btn-secondary"
+                title="Türkçe içerikten İngilizce ve Arapça versiyonlarını AI ile otomatik üret"
+                style={{
+                  fontSize: '9.5px',
+                  height: '22px',
+                  padding: '0 8px',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '4px',
+                  color: 'var(--accent-amber, #f59e0b)',
+                  borderColor: 'rgba(245, 158, 11, 0.4)',
+                  marginRight: '4px',
+                  cursor: isTranslating ? 'wait' : 'pointer',
+                }}
+              >
+                <Sparkles size={11} className={isTranslating ? 'animate-spin' : ''} />
+                <span>{isTranslating ? 'Çevriliyor...' : '✨ AI ile Çevir (EN & AR)'}</span>
+              </button>
               {(['tr', 'en', 'ar'] as const).map((lang) => (
                 <button
                   key={lang}
