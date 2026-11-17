@@ -1,6 +1,16 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 📌 Son Güncelleme [17.11.2026 - 14:15] — CANLI GOOGLE GEMINI AI ENTEGRASYONU & ÇOK DİLLİ ÇEVİRİ (GEMINI-AI-LIVE-001) [✓]
+* **Geliştirilen Altyapı ve Kazanımlar:**
+  1. **Google AI Studio Canlı Anahtar:** Ücretsiz (`Free tier`) `GEMINI_API_KEY` Cloudflare Worker secrets'a yüklendi, `CREDENTIALS.enc` kasasına kilitlendi ve yerel `.dev.vars` dosyasına işlendi.
+  2. **Yeni Nesil Gemini Modeli (`gemini-3.5-flash-lite`):** Deprecated modeller yerine modern `models/gemini-3.5-flash-lite` ve `gemini-flash-latest` ile çalışan `callGeminiGenerate` yürütücüsü devreye alındı.
+  3. **Gerçek & Akıcı Çeviri:** Filistin boykot ve duyuru metinleri gibi tüm zengin metinler için doğal, kurumsal ve akıcı İngilizce (EN) ve Arapça (AR) çıktıları %100 HTML bütünlüğüyle üretildi.
+  4. **Canlı Dağıtım:** Cloudflare Worker (`msklabsdesk-backend`) güncellendi (Version: `f726220c-1f23-4eac-a55d-5e96bbd7c968`).
+  5. **Doğrulama:** Backend testleri (21/21 PASS) ve frontend derlemesi (0 hata) başarıyla tamamlandı.
+
+---
+
 ## 📌 Son Güncelleme [17.11.2026 - 13:05] — API ANAHTARSIZ DETERMINISTIK ÇOK DİLLİ ÇEVİRİ DAĞITIMI (ANNOUNCEMENT-AI-002) [✓]
 * **Geliştirilen Altyapı ve Kazanımlar:**
   1. **Harici Key Bağımsızlığı:** Harici API maliyeti ve anahtar zorunluluğu olmadan çalışan HTML ve düz metin etiket koruyucu deterministik çeviri motoru güçlendirildi (`backend/src/utils/ai.ts`).

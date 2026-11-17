@@ -17,6 +17,37 @@ export interface AIEnv {
 }
 
 /**
+ * Gemini API çağrısını güncel modellerle (gemini-3.5-flash-lite vb.) çoklu fallback ile yürütür.
+ */
+export async function callGeminiGenerate(prompt: string, apiKey: string): Promise<string | null> {
+  const models = ['gemini-3.5-flash-lite', 'gemini-flash-latest', 'gemini-3.8-flash', 'gemini-2.5-flash'];
+  for (const model of models) {
+    try {
+      const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+      const response = await fetch(apiUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: prompt }] }],
+          generationConfig: {
+            temperature: 0.2,
+            responseMimeType: 'application/json',
+          },
+        }),
+      });
+      if (response.ok) {
+        const data = (await response.json()) as any;
+        const rawText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+        if (rawText) return rawText;
+      }
+    } catch {
+      // Sonraki modeli dene
+    }
+  }
+  return null;
+}
+
+/**
  * Gelen destek talebini Gemini API ile analiz eder
  */
 export async function analyzeSupportTicketWithAI(
@@ -74,28 +105,7 @@ DESTEK TALEBİ:
 }
 `;
 
-    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${env.GEMINI_API_KEY}`;
-    
-    const response = await fetch(apiUrl, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        contents: [{ parts: [{ text: prompt }] }],
-        generationConfig: {
-          temperature: 0.2,
-          responseMimeType: 'application/json'
-        }
-      })
-    });
-
-    if (!response.ok) {
-      console.error('[AI API ERROR] Status:', response.status, await response.text());
-      return null;
-    }
-
-    const data = await response.json() as any;
-    const rawText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-
+    const rawText = await callGeminiGenerate(prompt, env.GEMINI_API_KEY);
     if (!rawText) return null;
 
     const parsed = JSON.parse(rawText) as AIAnalysisResult;
@@ -246,24 +256,7 @@ Başlık: "${post.title_tr}"
 }
 `;
 
-    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${env.GEMINI_API_KEY}`;
-
-    const response = await fetch(apiUrl, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        contents: [{ parts: [{ text: prompt }] }],
-        generationConfig: {
-          temperature: 0.2,
-          responseMimeType: 'application/json',
-        },
-      }),
-    });
-
-    if (!response.ok) return null;
-
-    const data = (await response.json()) as any;
-    const rawText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+    const rawText = await callGeminiGenerate(prompt, env.GEMINI_API_KEY);
     if (!rawText) return null;
 
     const parsed = JSON.parse(rawText) as AITranslationResult;
@@ -344,25 +337,7 @@ Konu: "${ticket.subject}"
 }
 `;
 
-    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${env.GEMINI_API_KEY}`;
-    const response = await fetch(apiUrl, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        contents: [{ parts: [{ text: prompt }] }],
-        generationConfig: {
-          temperature: 0.2,
-          responseMimeType: 'application/json'
-        }
-      })
-    });
-
-    if (!response.ok) {
-      throw new Error(`Gemini API failed with status ${response.status}`);
-    }
-
-    const data = await response.json() as any;
-    const rawText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+    const rawText = await callGeminiGenerate(prompt, env.GEMINI_API_KEY);
     if (!rawText) throw new Error('Empty Gemini response');
 
     return JSON.parse(rawText) as TicketTranslationResult;

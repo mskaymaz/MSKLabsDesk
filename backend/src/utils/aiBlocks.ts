@@ -3,7 +3,7 @@
  * File: backend/src/utils/aiBlocks.ts
  */
 
-import type { AIEnv } from './ai';
+import { type AIEnv, callGeminiGenerate } from './ai';
 
 /**
  * CMS Bloklarını Gemini AI ile İngilizce ve Arapça'ya çevirir
@@ -70,19 +70,7 @@ Girdi bloklarındaki her öğe için 'title_en', 'title_ar', 'subtitle_en', 'sub
 BLOKLAR:
 ${JSON.stringify(simplified, null, 2)}`;
 
-    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${env.GEMINI_API_KEY}`;
-    const response = await fetch(apiUrl, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        contents: [{ parts: [{ text: prompt }] }],
-        generationConfig: { temperature: 0.2, responseMimeType: 'application/json' },
-      }),
-    });
-
-    if (!response.ok) throw new Error(`Gemini status ${response.status}`);
-    const data = (await response.json()) as any;
-    const rawText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+    const rawText = await callGeminiGenerate(prompt, env.GEMINI_API_KEY);
     if (!rawText) throw new Error('Empty translation output');
 
     const translatedList = JSON.parse(rawText) as any[];

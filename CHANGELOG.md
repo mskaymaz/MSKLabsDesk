@@ -1,6 +1,15 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [17.11.2026 - 14:15] - Canlı Google Gemini AI API Entegrasyonu & Çok Modelli Çeviri Motoru (GEMINI-AI-LIVE-001)
+- **Google AI Studio Canlı Gemini API Entegrasyonu (`backend/src/utils/ai.ts`, `aiBlocks.ts`):**
+  - Kullanıcının `Default Gemini Project` üzerinden sağladığı ücretsiz (`Free tier`) API anahtarı Cloudflare Worker'a (`GEMINI_API_KEY`) yüklendi ve `CREDENTIALS.enc` kasasına AES-256-GCM ile kilitlendi.
+  - Yeni nesil Gemini modellerini (`models/gemini-3.5-flash-lite`, `gemini-flash-latest`, `gemini-3.8-flash`) sıralı deneyen `callGeminiGenerate` yardımcı motoru geliştirildi.
+  - Duyuru, blog yazısı ve blok çevirilerinde HTML etiketlerini, bağlantıları ve stilleri %100 koruyan profesyonel İngilizce (EN) ve Arapça (AR) yapay zeka çeviri akışı sağlandı.
+- **Canlı Dağıtım & Doğrulama:**
+  - Güncel Worker Cloudflare Edge'e (`msklabsdesk-backend`) başarıyla yüklendi (Version ID: `f726220c-1f23-4eac-a55d-5e96bbd7c968`).
+  - Backend testleri (21/21 PASS) ve frontend derlemesi (1.09s, 0 hata) doğrulandı.
+
 ## [17.11.2026 - 13:05] - API Anahtarsız Deterministik Çok Dilli Çeviri Motoru Dağıtımı (ANNOUNCEMENT-AI-002)
 - **Anahtarsız HTML & Düz Metin Çeviri Motoru (`backend/src/utils/ai.ts`):**
   - Harici API anahtarı (Gemini/DeepL) gerektirmeyen deterministik çeviri motoru güçlendirildi; hem HTML formatlı metinleri (`<p>`, `<b>`, `<a>` vb.) hem de düz metinleri etiket yapısını bozmadan EN ve AR varyantlarına dönüştürmesi sağlandı.
