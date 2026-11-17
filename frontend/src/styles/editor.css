@@ -18,7 +18,7 @@
 .editor-ribbon-toolbar {
   min-width: 680px;
   flex-shrink: 0;
-  overflow-x: auto;
+  overflow: visible;
 }
 
 .rich-editor-wrapper:focus-within {

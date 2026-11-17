@@ -7,6 +7,7 @@ interface ColorMenuDropdownProps {
   onSelectColor: (color: string) => void;
   onClearColor: () => void;
   title: string;
+  align?: 'left' | 'right';
 }
 
 const PRESET_COLORS = [
@@ -22,6 +23,7 @@ export const ColorMenuDropdown: React.FC<ColorMenuDropdownProps> = ({
   onSelectColor,
   onClearColor,
   title,
+  align = 'right',
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -47,6 +49,7 @@ export const ColorMenuDropdown: React.FC<ColorMenuDropdownProps> = ({
     <div ref={containerRef} style={{ position: 'relative', display: 'inline-flex' }}>
       <button
         type="button"
+        onMouseDown={(e) => e.preventDefault()}
         onClick={() => setIsOpen(!isOpen)}
         style={{
           display: 'inline-flex',
@@ -78,7 +81,7 @@ export const ColorMenuDropdown: React.FC<ColorMenuDropdownProps> = ({
           style={{
             position: 'absolute',
             top: 'calc(100% + 4px)',
-            left: 0,
+            ...(align === 'right' ? { right: 0 } : { left: 0 }),
             zIndex: 9999,
             width: '168px',
             background: 'var(--bg-card, #1F2937)',
@@ -94,6 +97,7 @@ export const ColorMenuDropdown: React.FC<ColorMenuDropdownProps> = ({
           {/* 1. Renksiz / Otomatik Butonu */}
           <button
             type="button"
+            onMouseDown={(e) => e.preventDefault()}
             onClick={() => {
               onClearColor();
               setIsOpen(false);
@@ -128,6 +132,7 @@ export const ColorMenuDropdown: React.FC<ColorMenuDropdownProps> = ({
                 <button
                   key={c}
                   type="button"
+                  onMouseDown={(e) => e.preventDefault()}
                   onClick={() => {
                     onSelectColor(c);
                     setIsOpen(false);
@@ -150,6 +155,7 @@ export const ColorMenuDropdown: React.FC<ColorMenuDropdownProps> = ({
 
           {/* 3. Özel Renk Seçici */}
           <label
+            onMouseDown={(e) => e.stopPropagation()}
             style={{
               display: 'flex',
               alignItems: 'center',
@@ -170,6 +176,7 @@ export const ColorMenuDropdown: React.FC<ColorMenuDropdownProps> = ({
             <input
               type="color"
               value={activeColor || (type === 'text' ? '#000000' : '#FEF08A')}
+              onInput={(e: any) => onSelectColor(e.target.value)}
               onChange={(e) => {
                 onSelectColor(e.target.value);
                 setIsOpen(false);

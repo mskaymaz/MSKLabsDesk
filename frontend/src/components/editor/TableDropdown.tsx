@@ -98,7 +98,7 @@ export const TableDropdown: React.FC<TableDropdownProps> = ({ editor, onOpenFloa
             border: '1px solid var(--border-card-hover, rgba(99, 102, 241, 0.4))',
             borderRadius: '6px',
             boxShadow: '0 8px 24px rgba(0, 0, 0, 0.35)',
-            zIndex: 99,
+            zIndex: 9999,
             padding: '8px',
             display: 'flex',
             flexDirection: 'column',

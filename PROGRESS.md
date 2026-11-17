@@ -1,6 +1,16 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 📌 Son Güncelleme [17.11.2026 - 12:10] — DUYURU EDİTÖRÜ ARAÇ ÇUBUĞU ONARIMI & MEGAFON SAYAÇ STANDARDI (EDITOR-FIX-001) [✓]
+* **Geliştirilen Altyapı ve Onarımlar:**
+  1. **Editör Araç Çubuğu Taşıntı ve Kırpılma Onarımı:** `.editor-ribbon-toolbar` üzerindeki `overflow-x: auto` kaldırılarak `overflow: visible` yapıldı; yazı rengi ('A'), metin vurgusu (Highlighter/Boyama) ve diğer tüm açılır araç pencerelerinin editör üzerine ferahça açılması sağlandı.
+  2. **Seçim & Odak Güvencesi:** `ColorMenuDropdown.tsx` butonlarına `onMouseDown preventDefault` eklenerek palet açıldığında veya renk tıklandığında seçili metin odağının kaybolması önlendi; sağa yaslama (`right: 0`) ile yatay taşmalar giderildi.
+  3. **Z-Index Standardizasyonu:** Editör araç çubuğundaki tüm dropdown pencereleri (`HeadingStyle`, `Typography`, `Table`, `Component`, `CharStyle`) `z-index: 9999` ile tuvalin en üst katmanına sabitlendi.
+  4. **Web Arayüzü Megafon Sayaç Rozeti (`webMSKLabs`):** Kırmızı sağ-üst baloncuk tasfiye edildi; megafon simgesinin soluna parantez içinde `(X)` formatında ve megafonla eşleşen amber renkte (`#f59e0b`) yerleştirildi.
+  5. **Doğrulama:** Frontend derlemesi (716ms), Backend test paketi (%100 PASS) ve webMSKLabs derlemesi (0 hata) başarıyla tamamlandı.
+
+---
+
 ## 📌 Son Güncelleme [17.11.2026 - 11:35] — CANLI GOOGLE ANALYTICS 4 (GA4) DATA API ENTEGRASYONU (DASHBOARD-GA4-LIVE-002) [✓]
 * **Geliştirilen Altyapı ve Kazanımlar:**
   - Google Cloud üzerinde açılan `msklabs-analytics@msklabs-org.iam.gserviceaccount.com` servis hesabı, GA4 Mülk `536224806` için Görüntüleyici yetkisiyle bağlandı ve Google Analytics Data API v1beta konsoldan etkinleştirildi.

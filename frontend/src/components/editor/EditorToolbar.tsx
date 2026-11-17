@@ -156,6 +156,7 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
           background: 'var(--bg-card, #1F2937)',
           borderBottom: '1px solid var(--border-subtle)',
           userSelect: 'none',
+          overflow: 'visible',
         }}
       >
         {/* 1. ÜST SATIR: Tipografi & Karakter Biçimlendirme & Renkler */}
@@ -274,6 +275,7 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
                 setActiveTextColor('');
               }}
               title="Yazı Rengi"
+              align="right"
             />
             <ColorMenuDropdown
               type="highlight"
@@ -287,6 +289,7 @@ export const EditorToolbar: React.FC<EditorToolbarProps> = ({
                 setActiveHighlightColor('');
               }}
               title="Metin Vurgu Rengi"
+              align="right"
             />
           </div>
 

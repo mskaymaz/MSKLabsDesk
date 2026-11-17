@@ -197,7 +197,7 @@ export const ComponentDropdown: React.FC<ComponentDropdownProps> = ({ editor }) 
             position: 'absolute',
             top: 'calc(100% + 4px)',
             left: 0,
-            zIndex: 110,
+            zIndex: 9999,
             background: 'var(--bg-card)',
             border: '1px solid var(--border-card)',
             borderRadius: '6px',

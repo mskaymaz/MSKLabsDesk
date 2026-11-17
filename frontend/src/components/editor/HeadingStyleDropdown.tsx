@@ -83,7 +83,7 @@ export const HeadingStyleDropdown: React.FC<HeadingStyleDropdownProps> = ({ edit
             position: 'absolute',
             top: 'calc(100% + 4px)',
             left: 0,
-            zIndex: 100,
+            zIndex: 9999,
             background: 'var(--bg-card)',
             border: '1px solid var(--border-card)',
             borderRadius: '6px',

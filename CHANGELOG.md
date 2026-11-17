@@ -1,6 +1,19 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [17.11.2026 - 12:10] - Zengin Metin Editörü Araç Çubuğu Onarımı & Megafon Sayaç Rozeti İyileştirmesi (EDITOR-FIX-001)
+- **Zengin Metin Editörü Araç Çubuğu Kök Neden Onarımı (`editor.css`, `EditorToolbar.tsx`):**
+  - `.editor-ribbon-toolbar` üzerindeki `overflow-x: auto` kuralının tarayıcılar tarafından `overflow-y: auto` üretmesi ve tüm açılır menüleri (renk paletleri, başlık stilleri, tablolar vb.) 60px araç çubuğu içine hapsedip kırpması sorunu `overflow: visible` yapılarak tamamen çözüldü.
+  - `EditorToolbar.tsx` inline stiline `overflow: visible` güvencesi eklendi.
+- **Yazı Rengi & Metin Vurgu Boyama Paletleri (`ColorMenuDropdown.tsx`):**
+  - Renk butonları, hazır palet ve silme aksiyonlarına `onMouseDown={(e) => e.preventDefault()}` eklenerek editördeki seçili metin odağının kaybolması önlendi.
+  - Açılır menüye sağa yaslama desteği (`align="right"`) verilerek sağ kenar taşmaları engellendi.
+  - Özel renk seçicide anlık renk önizlemesi için `onInput` tetikleyicisi bağlandı.
+- **Tüm Araç Çubuğu Menülerinde Z-Index Bütünlüğü:**
+  - `HeadingStyleDropdown`, `AdvancedCharStyleDropdown`, `CaseAndFormatControls`, `TableDropdown`, `ComponentDropdown` ve `EditorTypographyControls` z-index değerleri `9999` seviyesinde eşitlenerek içerik alanının daima üzerinde açılması sağlandı.
+- **Web Arayüzü Megafon Rozeti İyileştirmesi (`webMSKLabs`):**
+  - Megafonun sağ üstündeki kırmızı yuvarlak rozet kaldırıldı; megafonun soluna parantez içinde `(X)` formatında ve megafonun kendi amber renginde (`#f59e0b`) küçük zarif bir sayaç olarak konumlandırıldı (`layout.js`, `announcement-loader.js`, `global.css`).
+
 ## [17.11.2026 - 11:35] - Canlı Google Analytics 4 (GA4) Data API Entegrasyonu & RS256 WebCrypto İmzası (DASHBOARD-GA4-LIVE-002)
 - **Harici Bağımlılıksız WebCrypto RS256 İmzası (`backend/src/utils/ga4.ts`):**
   - Cloudflare Edge çalışma ortamı üzerinde harici kütüphane gerektirmeyen saf WebCrypto (`crypto.subtle`) tabanlı Google OAuth2 RS256 JWT assert motoru geliştirildi.

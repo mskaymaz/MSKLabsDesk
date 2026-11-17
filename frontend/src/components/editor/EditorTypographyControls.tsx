@@ -148,7 +148,7 @@ export const EditorTypographyControls: React.FC<EditorTypographyControlsProps> =
               top: '100%',
               left: 0,
               marginTop: '4px',
-              zIndex: 1000,
+              zIndex: 9999,
               background: 'var(--bg-card, #1e293b)',
               border: '1px solid var(--border-subtle, #334155)',
               borderRadius: '8px',
