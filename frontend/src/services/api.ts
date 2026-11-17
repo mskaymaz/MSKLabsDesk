@@ -329,7 +329,10 @@ export const api = {
       headers: getHeaders(),
       body: JSON.stringify(data),
     });
-    if (!res.ok) throw new Error('AI Ã§evirisi yapÄ±lamadÄ±.');
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.error || 'AI çevirisi yapılamadı.');
+    }
     return res.json();
   },
 

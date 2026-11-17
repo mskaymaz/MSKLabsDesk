@@ -18,12 +18,16 @@ export async function handleCmsPosts(request: Request, env: any): Promise<Respon
   if (url.pathname === '/api/admin/translate' && method === 'POST') {
     const body = await request.json() as any;
     const { title_tr, content_tr, summary_tr } = body;
+    const effectiveTitle = (title_tr && String(title_tr).trim()) ? String(title_tr).trim() : 'Duyuru / Başlık';
 
-    if (!title_tr || !content_tr) {
-      return new Response(JSON.stringify({ error: 'title_tr ve content_tr zorunludur' }), { status: 400 });
+    if (!content_tr || !String(content_tr).trim()) {
+      return new Response(JSON.stringify({ error: 'Çevrilecek Türkçe içerik (content_tr) zorunludur.' }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' },
+      });
     }
 
-    const translated = await translatePostWithAI({ title_tr, content_tr, summary_tr }, env);
+    const translated = await translatePostWithAI({ title_tr: effectiveTitle, content_tr, summary_tr }, env);
     if (!translated) {
       return new Response(JSON.stringify({ error: 'AI çeviri başarısız oldu' }), { status: 500 });
     }

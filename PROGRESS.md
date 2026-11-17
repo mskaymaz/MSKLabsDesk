@@ -1,6 +1,15 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 📌 Son Güncelleme [17.11.2026 - 13:05] — API ANAHTARSIZ DETERMINISTIK ÇOK DİLLİ ÇEVİRİ DAĞITIMI (ANNOUNCEMENT-AI-002) [✓]
+* **Geliştirilen Altyapı ve Kazanımlar:**
+  1. **Harici Key Bağımsızlığı:** Harici API maliyeti ve anahtar zorunluluğu olmadan çalışan HTML ve düz metin etiket koruyucu deterministik çeviri motoru güçlendirildi (`backend/src/utils/ai.ts`).
+  2. **Esnek Başlık Denetimi:** `cmsPosts.ts` ve `cmsPages.ts` API uç noktalarında başlık olmasa dahi (`effectiveTitle`) duyuru ve metin içeriklerinin kesintisiz çevrilmesi sağlandı.
+  3. **Canlı Backend Dağıtımı:** Güncel Worker kodu Cloudflare Worker'a (`msklabsdesk-backend`) yüklendi (Version ID: `793d24b8-b9b0-4718-b005-ff314f43e873`).
+  4. **Doğrulama:** Backend testleri (21/21 PASS) ve frontend derlemesi (591ms, 0 hata) doğrulandı.
+
+---
+
 ## 📌 Son Güncelleme [17.11.2026 - 12:40] — ÇOK DİLLİ DUYURU HAVUZUNDA TEK TIKLA AI OTOMATİK ÇEVİRİ (ANNOUNCEMENT-AI-001) [✓]
 * **Geliştirilen Altyapı ve Kazanımlar:**
   1. **Tek Tıkla Çok Dilli Çeviri (`AnnouncementBarSection.tsx`):** Duyuru editörü dil çubuğuna (`TR`, `EN`, `AR`) tek tıkla çalışan `✨ AI ile Çevir (EN & AR)` aksiyonu entegre edildi.

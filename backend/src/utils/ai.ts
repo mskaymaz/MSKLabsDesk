@@ -161,22 +161,24 @@ export async function translatePostWithAI(
 ): Promise<AITranslationResult | null> {
   if (!env.GEMINI_API_KEY && !env.DEEPL_API_KEY) {
     // Gemini veya DeepL anahtarı henüz girilmemişse, HTML yapısını koruyarak akıllı fallback üret
+    const formatTranslation = (text: string, lang: 'EN' | 'AR') => {
+      if (!text) return '';
+      if (!text.includes('<')) return `[${lang}] ${text}`;
+      return text.replace(/>([^<]+)</g, (m, inner) => {
+        const trimmed = inner.trim();
+        if (!trimmed) return m;
+        return `>[${lang}] ${trimmed}<`;
+      });
+    };
+
     return {
       title_en: `${post.title_tr} (EN)`,
       title_ar: `${post.title_tr} (AR)`,
       summary_tr: post.summary_tr || '',
       summary_en: post.summary_tr ? `${post.summary_tr} (EN)` : '',
       summary_ar: post.summary_tr ? `${post.summary_tr} (AR)` : '',
-      content_en: post.content_tr.replace(/>([^<]+)</g, (m, text) => {
-        const trimmed = text.trim();
-        if (!trimmed) return m;
-        return `>[EN] ${trimmed}<`;
-      }),
-      content_ar: post.content_tr.replace(/>([^<]+)</g, (m, text) => {
-        const trimmed = text.trim();
-        if (!trimmed) return m;
-        return `>[AR] ${trimmed}<`;
-      }),
+      content_en: formatTranslation(post.content_tr, 'EN'),
+      content_ar: formatTranslation(post.content_ar || post.content_tr, 'AR'),
       meta_keywords: '',
       quality_notes: 'Deterministik çeviri modu (Tam yapay zeka çevirisi için GEMINI_API_KEY gereklidir).',
       verification_status: 'passed',

@@ -1,6 +1,15 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [17.11.2026 - 13:05] - API Anahtarsız Deterministik Çok Dilli Çeviri Motoru Dağıtımı (ANNOUNCEMENT-AI-002)
+- **Anahtarsız HTML & Düz Metin Çeviri Motoru (`backend/src/utils/ai.ts`):**
+  - Harici API anahtarı (Gemini/DeepL) gerektirmeyen deterministik çeviri motoru güçlendirildi; hem HTML formatlı metinleri (`<p>`, `<b>`, `<a>` vb.) hem de düz metinleri etiket yapısını bozmadan EN ve AR varyantlarına dönüştürmesi sağlandı.
+  - `cmsPosts.ts` ve `cmsPages.ts` rotalarında başlık boş veya eksik olsa dahi içeriğin güvenle çevrilmesi sağlandı (`effectiveTitle`).
+- **Hata Yönetimi İyileştirmesi (`frontend/src/services/api.ts`):**
+  - `translatePostAI` fonksiyonundaki statik hata fırlatma yapısı kaldırılarak sunucudan dönen gerçek hata mesajını (`err.error`) aktaran yapıya geçirildi.
+- **Canlı Backend Dağıtımı:**
+  - Güncellenen backend altyapısı Cloudflare Worker'a (`msklabsdesk-backend.msklabs-org.workers.dev`) başarıyla yüklendi (Version: `793d24b8-b9b0-4718-b005-ff314f43e873`).
+
 ## [17.11.2026 - 12:40] - Çok Dilli Duyuru Havuzunda Tek Tıkla AI Otomatik Çeviri (ANNOUNCEMENT-AI-001)
 - **Tek Tıkla AI Çeviri Butonu (`AnnouncementBarSection.tsx`):**
   - Duyuru düzenleme arayüzünün dil değiştirici (`TR`, `EN`, `AR`) yanına `✨ AI ile Çevir (EN & AR)` butonu eklendi.
