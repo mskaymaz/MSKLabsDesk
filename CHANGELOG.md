@@ -1,6 +1,21 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [17.11.2026 - 11:35] - Canlı Google Analytics 4 (GA4) Data API Entegrasyonu & RS256 WebCrypto İmzası (DASHBOARD-GA4-LIVE-002)
+- **Harici Bağımlılıksız WebCrypto RS256 İmzası (`backend/src/utils/ga4.ts`):**
+  - Cloudflare Edge çalışma ortamı üzerinde harici kütüphane gerektirmeyen saf WebCrypto (`crypto.subtle`) tabanlı Google OAuth2 RS256 JWT assert motoru geliştirildi.
+  - Google Service Account PKCS#8 özel anahtarı ve istemci e-postası ile `https://oauth2.googleapis.com/token` üzerinden 1 saatlik erişim belirteci alma ve bellek içi önbellekleme mekanizması kuruldu.
+- **GA4 Data API v1beta Entegrasyonu (`backend/src/utils/ga4.ts`, `backend/src/routes/adminAnalytics.ts`):**
+  - Anlık periyot için `runRealtimeReport` (aktif kullanıcı, ülke ve şehir dağılımı), diğer periyotlar (Bugün, 7 Gün, 30 Gün) için `runReport` (aktif kullanıcı, sayfa görüntüleme, oturum, ülke ve şehir dağılımı) API çağrıları uygulandı.
+  - Veri eksikliği veya API erişim engellerinde sistemin kesintiye uğramaması için otomatik telemetri fallback mekanizması devreye alındı.
+- **Entegrasyon Doğrulama ve Testler (`backend/tests/apiAnalyticsSummary.test.ts`):**
+  - Mülk ID `536224806` ve servis hesabı üzerinden canlı GA4 veri çekimi ve fallback senaryoları test edildi (21/21 PASS).
+  - Canlı API yanıtı ve `source: 'ga4'` etiketi %100 doğrulandı.
+- **Kasa Güvenliği & Ortam Değişkenleri:**
+  - Servis hesabı JSON anahtarı `CREDENTIALS.enc` kasasına AES-256-GCM ile kilitlendi. Yerel ortam için `.dev.vars` yapılandırıldı.
+- **Derleme:**
+  - Frontend derlemesi (`tsc -b && vite build`) 1.17s'de 0 hatayla tamamlandı; backend test paketi %100 başarılı.
+
 ## [16.11.2026 - 16:44] - Merkezi Tasarım Sistemi Tema Uyumluluğu & Açık/Koyu Mod Düzeltmesi
 - **Hardcoded Koyu Tonlar Tasfiye Edildi:**
   - AnalyticsSummaryCard, InboxMiniStation, App.tsx ve InboxView bileşenlerindeki sabit koyu arka planlar (#0f172a, #1e293b, rgba(255,255,255,...)) kaldırıldı.

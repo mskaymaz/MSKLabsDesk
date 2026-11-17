@@ -5,6 +5,7 @@
  */
 
 import { AuthEnv, verifyAuthToken } from '../utils/auth';
+import { fetchGA4Analytics } from '../utils/ga4';
 
 export interface AnalyticsBreakdownItem {
   name: string;
@@ -153,14 +154,22 @@ export async function handleAdminGetAnalyticsSummary(request: Request, env: Anal
       });
     }
 
-    // 2. Canlı veri derleme (GA4 yapılandırması varsa veya telemetri)
+    // 2. Canlı GA4 verisi çekmeyi dene
+    let periodData: Omit<AnalyticsSummaryResponse, 'success' | 'source' | 'lastUpdated'> | null = null;
     let source: 'ga4' | 'telemetry' = 'telemetry';
+
     if (env.GA4_PROPERTY_ID && env.GA4_SERVICE_ACCOUNT_KEY) {
-      // Gelecekte GA4 API bağlantısı aktifleştiğinde buradan çekilir
-      source = 'ga4';
+      periodData = await fetchGA4Analytics(env, period);
+      if (periodData) {
+        source = 'ga4';
+      }
     }
 
-    const telemetryData = generatePeriodTelemetry(period);
+    // GA4 verisi yapılandırılmamışsa veya API çekilemediyse telemetri fallback'e geç
+    if (!periodData) {
+      periodData = generatePeriodTelemetry(period);
+    }
+
     const lastUpdated = new Date().toLocaleTimeString('tr-TR', {
       hour: '2-digit',
       minute: '2-digit',
@@ -169,7 +178,7 @@ export async function handleAdminGetAnalyticsSummary(request: Request, env: Anal
 
     const responsePayload: AnalyticsSummaryResponse = {
       success: true,
-      ...telemetryData,
+      ...periodData,
       source,
       lastUpdated,
     };

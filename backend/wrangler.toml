@@ -17,6 +17,7 @@ binding = "MEDIA"
 bucket_name = "msklabs-media"
 
 [vars]
+GA4_PROPERTY_ID = "536224806"
 CDN_BASE_URL = "https://media.msklabs.org"
 ENVIRONMENT = "production"
 ALLOWED_ORIGINS = "http://localhost:3000,http://localhost:5173,https://mskaymaz.com,https://msklabs.org,https://dev.msklabs.org,https://panel.msklabs.org"

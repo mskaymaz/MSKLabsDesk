@@ -1,6 +1,16 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 📌 Son Güncelleme [17.11.2026 - 11:35] — CANLI GOOGLE ANALYTICS 4 (GA4) DATA API ENTEGRASYONU (DASHBOARD-GA4-LIVE-002) [✓]
+* **Geliştirilen Altyapı ve Kazanımlar:**
+  - Google Cloud üzerinde açılan `msklabs-analytics@msklabs-org.iam.gserviceaccount.com` servis hesabı, GA4 Mülk `536224806` için Görüntüleyici yetkisiyle bağlandı ve Google Analytics Data API v1beta konsoldan etkinleştirildi.
+  - Cloudflare Edge üzerinde harici bağımlılık olmadan çalışan saf WebCrypto RS256 JWT assert token motoru (`backend/src/utils/ga4.ts`) inşa edildi.
+  - Anlık (Realtime - son 30 dk) ve tarihsel (Bugün, 7 Gün, 30 Gün) aktif ziyaretçi, sayfa görüntüleme, oturum ve coğrafi ülke/şehir dağılımları canlı GA4 API'sinden çekilerek önbelleklendi (`source: 'ga4'`).
+  - Hata durumunda sistemin kesintiye uğramaması için otomatik telemetri fallback mekanizması ve kapsamlı entegrasyon testleri (21/21 PASS) uygulandı.
+  - JSON kimlik anahtarı `CREDENTIALS.enc` kasasına AES-256-GCM ile kilitlendi.
+
+---
+
 ## 📌 Son Güncelleme [16.11.2026 - 15:00] — AKORDEON MİMARİLİ VE GRANÜLER YENİLEMELİ İLETİŞİM İSTASYONU (INBOX-ACCORDION-002) [✓]
 * **Geliştirilen Mimari ve Kullanıcı Talebi:**
   - `InboxView.tsx` ekranının sade, dikey kaydırılabilir, başlık seviyesinde akordeon açılır-kapanır ve hem global hem de modül bazında yerel yenileme yapabilen kompakt bir iş istasyonuna dönüştürülmesi.

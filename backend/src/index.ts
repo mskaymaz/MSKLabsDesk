@@ -29,6 +29,8 @@ import { handleInboundEmail } from './services/emailInbound';
 export interface Env extends EmailEnv, AIEnv, AuthEnv {
   DB: D1Database;
   MEDIA: R2Bucket;
+  GA4_PROPERTY_ID?: string;
+  GA4_SERVICE_ACCOUNT_KEY?: string;
 }
 
 export default {

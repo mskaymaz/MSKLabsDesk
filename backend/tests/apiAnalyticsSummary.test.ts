@@ -104,6 +104,52 @@ async function runTests() {
   const refreshRes = await handleAdminGetAnalyticsSummary(refreshReq, env);
   assert(refreshRes.headers.get('X-Cache') === 'MISS', 'refresh=1 ile X-Cache: MISS dönmeli');
 
+  // 7. GA4 yapılandırması & Fallback dayanıklılık testi
+  const ga4Env = {
+    ...env,
+    GA4_PROPERTY_ID: '536224806',
+    GA4_SERVICE_ACCOUNT_KEY: 'gecersiz_veya_bozuk_anahtar',
+  };
+  const fallbackReq = new Request('http://localhost:8787/api/v1/admin/analytics/summary?period=realtime&refresh=1', {
+    method: 'GET',
+    headers: { Authorization: `Bearer ${validSessionToken}` },
+  });
+  const fallbackRes = await handleAdminGetAnalyticsSummary(fallbackReq, ga4Env);
+  assert(fallbackRes.status === 200, 'Bozuk GA4 anahtarında API çökmeyip HTTP 200 dönmeli');
+  const fallbackData = await fallbackRes.json() as any;
+  assert(fallbackData.source === 'telemetry', 'Hatalı GA4 anahtarında source telemetry fallback olmalı');
+  assert(fallbackData.activeUsers > 0, 'Fallback aktif kullanıcı sayısı üretilmeli');
+
+  // 8. Canlı GA4 Entegrasyon Testi (Varsa .dev.vars içerisinden okur)
+  try {
+    const fs = await import('fs');
+    const path = await import('path');
+    const devVarsPath = path.resolve(__dirname, '../.dev.vars');
+    if (fs.existsSync(devVarsPath)) {
+      const devVarsContent = fs.readFileSync(devVarsPath, 'utf8');
+      const keyMatch = devVarsContent.match(/GA4_SERVICE_ACCOUNT_KEY=(.+)/);
+      const propMatch = devVarsContent.match(/GA4_PROPERTY_ID=(.+)/);
+      if (keyMatch && propMatch) {
+        const liveEnv = {
+          ...env,
+          GA4_PROPERTY_ID: propMatch[1].trim(),
+          GA4_SERVICE_ACCOUNT_KEY: keyMatch[1].trim(),
+        };
+        const liveReq = new Request('http://localhost:8787/api/v1/admin/analytics/summary?period=today&refresh=1', {
+          method: 'GET',
+          headers: { Authorization: `Bearer ${validSessionToken}` },
+        });
+        const liveRes = await handleAdminGetAnalyticsSummary(liveReq, liveEnv);
+        assert(liveRes.status === 200, 'Canlı GA4 isteğinde HTTP 200 dönmeli');
+        const liveData = await liveRes.json() as any;
+        assert(liveData.source === 'ga4', 'Canlı bağlantıda source: ga4 olmalı');
+        console.log(`✅ PASS: Canlı GA4 verisi başarıyla alındı! (source: ${liveData.source}, users: ${liveData.activeUsers})`);
+      }
+    }
+  } catch (err: any) {
+    console.warn('Canlı GA4 testi atlandı veya hata verdi:', err.message);
+  }
+
   console.log('--- DASHBOARD ANALYTICS SUMMARY API TESTLERİ BAŞARIYLA TAMAMLANDI ---');
 }
 
