@@ -1,6 +1,15 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 📌 Son Güncelleme [17.11.2026 - 16:50] — TÜM REPOLARDA İSİM VE LİNK HİZALAMASI (MSKLABS-APPS-SYNC-001) [✓]
+* **Geliştirilen Altyapı ve Kazanımlar:**
+  1. **Uzak Depo Güncellemesi:** GitHub üzerindeki uygulama deposu `mskaymaz/AllApp` ➔ `mskaymaz/MSKLabsApps` olarak yeniden adlandırıldı.
+  2. **Yerel Klasör ve Git Remote:** Yerel dizin `d:\Code\mskaymaz\MSKLabsApps` yapıldı, git remote origin URL'si `MSKLabsApps.git` olarak güncellendi.
+  3. **Katalog & İndirme Linkleri Hizalaması:** `app_catalog.json`, `manifests/haydi_namaza.json`, `manifests/rekatsay.json`, `update_manifest.json` ve `prayer/diyanet/manifest.json` içindeki tüm ham indirme linkleri `MSKLabsApps` olarak güncellendi.
+  4. **MSKLabsWeb Entegrasyonu:** `config.js`, `app.html` ve `apps/haydinamaza.html` içindeki indirme ve katalog URL'leri güncellendi, Vite derlemesi başarıyla doğrulandı.
+
+---
+
 ## 📌 Son Güncelleme [17.11.2026 - 16:15] — REPO İSİMLENDİRME STANDARDI & MSKLABSWEB SENKRONİZASYONU (MSKLABS-REPO-SYNC-001) [✓]
 * **Geliştirilen Altyapı ve Kazanımlar:**
   1. **Uzak Depo Güncellemesi:** GitHub üzerindeki web deposu `webMSKLabs` ➔ `MSKLabsWeb` olarak yeniden adlandırıldı.
