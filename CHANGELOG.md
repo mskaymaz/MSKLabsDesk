@@ -1,6 +1,17 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [17.11.2026 - 17:05] - MSKLabs Ekosistemi Repoları ve Web Yayını Hizalaması (MSKLABS-APPS-SYNC-001)
+- **Tüm Repolarda Kurumsal İsim ve Link Standardı:**
+  - `AllApp` uzak GitHub deposu `MSKLabsApps` olarak güncellendi (`gh repo rename`).
+  - Yerel dizin `d:\Code\mskaymaz\MSKLabsApps` yapıldı ve origin remote URL'si güncellendi.
+  - `app_catalog.json`, manifestler ve takvim API bağlantılarındaki tüm ham indirme linkleri `MSKLabsApps` adresine taşındı.
+  - `MSKLabsWeb` projesindeki `config.js`, `app.html` ve `haydinamaza.html` linkleri güncellendi.
+- **Cloudflare Dağıtım & Önbellek Düzeltmesi:**
+  - `MSKLabsWeb/public/_redirects` dosyasındaki kural (`/blog/* /blog/index.html 200`) Cloudflare Static Assets sonsuz döngü hatasına yol açtığı için kaldırıldı.
+  - Megafon bildirim sayısının parantezsiz ve %70 ton ile taze yüklenmesi için `layout.js` ve `announcement-loader.js` önbellek kırıcı sürüm parametresi (`v20261117_02`) ile etiketlendi.
+  - Üç deponun (`MSKLabsDesk`, `MSKLabsWeb`, `MSKLabsApps`) güncellemeleri GitHub `main` dallarına başarıyla push edildi.
+
 ## [17.11.2026 - 16:15] - Web Deposu Standart İsimlendirme Hizalaması (MSKLABS-REPO-SYNC-001)
 - **Web Vitrini Repo ve Klasör Hizalaması (`MSKLabsWeb`):**
   - Uzak GitHub deposu `webMSKLabs` adından `MSKLabsWeb` adına taşındı (`gh repo rename MSKLabsWeb -R mskaymaz/webMSKLabs`).
