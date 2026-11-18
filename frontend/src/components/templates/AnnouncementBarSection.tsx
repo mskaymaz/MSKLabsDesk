@@ -40,7 +40,8 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
         cardWidth: announcementMeta.cardWidth, cardHeight: announcementMeta.cardHeight, topOffset: announcementMeta.topOffset ?? 110,
         opacity: announcementMeta.opacity ?? 95, isDismissable: announcementMeta.isDismissable !== false,
         ctaText: announcementMeta.ctaText, ctaUrl: announcementMeta.ctaUrl, targetUrl: announcementMeta.targetUrl, isActive: true,
-        displayMode: announcementMeta.displayMode || 'static', tickerDirection: announcementMeta.tickerDirection || 'rtl', tickerSpeed: announcementMeta.tickerSpeed || 'normal',
+        displayMode: announcementMeta.displayMode || 'static', tickerDirection: announcementMeta.tickerDirection || 'auto', tickerSpeed: announcementMeta.tickerSpeed || 'normal',
+        langMode: announcementMeta.langMode || 'sync', rotateLangs: announcementMeta.rotateLangs || ['tr', 'en', 'ar'], fixedLang: announcementMeta.fixedLang || 'tr',
       }];
 
   const [selectedId, setSelectedId] = useState<string>(announcementMeta.activeItemId || items[0].id);
@@ -132,6 +133,9 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
       items: syncedItems,
       activeItemId: activeItem.id,
       displayMode: activeItem.displayMode,
+      langMode: activeItem.langMode,
+      rotateLangs: activeItem.rotateLangs,
+      fixedLang: activeItem.fixedLang,
       placement: activeItem.placement,
       mobilePlacement: activeItem.mobilePlacement,
       deviceTarget: activeItem.deviceTarget,
@@ -203,7 +207,7 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
       {/* 3. Duyuru Havuzu Araç Çubuğu (Masaüstü Konum & Boyut Bölümünün Hemen Altında) */}
       <div style={{
         display: 'flex',
-        justifyContent: 'space-between',
+        justifyContent: 'flex-start',
         alignItems: 'center',
         gap: '12px',
         marginBottom: '8px',
@@ -254,7 +258,7 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
               type="button"
               onClick={() => handleDeleteItem(activeItem.id)}
               className="admin-btn admin-btn-sm"
-              style={{ color: '#ef4444', borderColor: 'rgba(239, 68, 68, 0.35)', height: '25px', width: '28px', padding: 0, display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
+              style={{ color: '#ef4444', borderColor: 'rgba(239, 68, 68, 0.35)', height: '25px', width: '32px', minWidth: '32px', flexShrink: 0, padding: 0, display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
               title="Duyuruyu sil"
             >
               <Trash2 size={12} />
@@ -262,7 +266,7 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
           )}
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', whiteSpace: 'nowrap' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', whiteSpace: 'nowrap', marginLeft: '20px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
             <span style={{ fontSize: '10.5px', fontWeight: 700, color: 'var(--text-primary)', whiteSpace: 'nowrap' }}>
               Akış Modu:
@@ -278,6 +282,71 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
               <option value="rotator">Dönüşümlü (Dikey)</option>
             </select>
           </div>
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <span style={{ fontSize: '10.5px', fontWeight: 700, color: 'var(--text-primary)', whiteSpace: 'nowrap' }}>
+              Dil Modu:
+            </span>
+            <select
+              className="form-select"
+              value={activeItem.langMode || 'sync'}
+              onChange={(e) => updateCurrentItem({
+                langMode: e.target.value as any,
+                rotateLangs: activeItem.rotateLangs || ['tr', 'en', 'ar'],
+                fixedLang: activeItem.fixedLang || 'tr',
+              })}
+              style={{ fontSize: '10.5px', height: '25px', padding: '1px 8px', fontWeight: 600, width: 'auto' }}
+            >
+              <option value="sync">Sayfa Diliyle</option>
+              <option value="rotate">Sırayla Döndür</option>
+              <option value="fixed">Sabit Tek Dil</option>
+            </select>
+          </div>
+
+          {activeItem.langMode === 'rotate' && (
+            <div style={{ display: 'flex', alignItems: 'center', gap: '3px' }}>
+              {(['tr', 'en', 'ar'] as const).map((lCode) => {
+                const list = activeItem.rotateLangs || ['tr', 'en', 'ar'];
+                const isSel = list.includes(lCode);
+                return (
+                  <button
+                    key={lCode}
+                    type="button"
+                    onClick={() => {
+                      if (isSel && list.length <= 1) return;
+                      const next = isSel ? list.filter((x) => x !== lCode) : [...list, lCode];
+                      updateCurrentItem({ rotateLangs: next });
+                    }}
+                    className={`admin-btn admin-btn-sm ${isSel ? 'admin-btn-primary' : 'admin-btn-secondary'}`}
+                    style={{ fontSize: '9.5px', height: '23px', padding: '0 6px', fontWeight: isSel ? 700 : 500, opacity: isSel ? 1 : 0.6 }}
+                    title={isSel ? `${lCode.toUpperCase()} rotasyondan çıkar` : `${lCode.toUpperCase()} rotasyona ekle`}
+                  >
+                    {lCode.toUpperCase()}
+                  </button>
+                );
+              })}
+            </div>
+          )}
+
+          {activeItem.langMode === 'fixed' && (
+            <div style={{ display: 'flex', alignItems: 'center', gap: '3px' }}>
+              {(['tr', 'en', 'ar'] as const).map((lCode) => {
+                const isSel = (activeItem.fixedLang || 'tr') === lCode;
+                return (
+                  <button
+                    key={lCode}
+                    type="button"
+                    onClick={() => updateCurrentItem({ fixedLang: lCode })}
+                    className={`admin-btn admin-btn-sm ${isSel ? 'admin-btn-primary' : 'admin-btn-secondary'}`}
+                    style={{ fontSize: '9.5px', height: '23px', padding: '0 8px', fontWeight: isSel ? 700 : 500 }}
+                    title={`Sabit dil: ${lCode.toUpperCase()}`}
+                  >
+                    {lCode.toUpperCase()}
+                  </button>
+                );
+              })}
+            </div>
+          )}
         </div>
       </div>
 
@@ -379,32 +448,17 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
             </div>
             <div style={{ display: 'inline-flex', gap: '4px', alignItems: 'center' }}>
               <button
-                type="button"
-                onClick={handleAiTranslateAnnouncement}
-                disabled={isTranslating}
+                type="button" onClick={handleAiTranslateAnnouncement} disabled={isTranslating}
                 className="admin-btn admin-btn-sm admin-btn-secondary"
                 title="Türkçe içerikten İngilizce ve Arapça versiyonlarını AI ile otomatik üret"
-                style={{
-                  fontSize: '9.5px',
-                  height: '22px',
-                  padding: '0 8px',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '4px',
-                  color: 'var(--accent-amber, #f59e0b)',
-                  borderColor: 'rgba(245, 158, 11, 0.4)',
-                  marginRight: '4px',
-                  cursor: isTranslating ? 'wait' : 'pointer',
-                }}
+                style={{ fontSize: '9.5px', height: '22px', padding: '0 8px', display: 'inline-flex', alignItems: 'center', gap: '4px', color: 'var(--accent-amber, #f59e0b)', borderColor: 'rgba(245, 158, 11, 0.4)', marginRight: '4px', cursor: isTranslating ? 'wait' : 'pointer' }}
               >
                 <Sparkles size={11} className={isTranslating ? 'animate-spin' : ''} />
                 <span>{isTranslating ? 'Çevriliyor...' : '✨ AI ile Çevir (EN & AR)'}</span>
               </button>
               {(['tr', 'en', 'ar'] as const).map((lang) => (
                 <button
-                  key={lang}
-                  type="button"
-                  onClick={() => setActiveLangTab(lang)}
+                  key={lang} type="button" onClick={() => setActiveLangTab(lang)}
                   className={`admin-btn admin-btn-sm ${activeLangTab === lang ? 'admin-btn-primary' : 'admin-btn-secondary'}`}
                   style={{ fontSize: '9.5px', height: '22px', padding: '0 8px' }}
                 >
@@ -442,13 +496,11 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
             </label>
           </div>
           <input type="text" className="form-input" value={activeItem.title || ''} onChange={(e) => updateCurrentItem({ title: e.target.value })} placeholder="Duyuru Başlığı" style={{ fontSize: '10.5px', height: '25px', marginBottom: '6px' }} />
-
           <label style={{ display: 'block', fontSize: '9.5px', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: '3px' }}>Etkileşim & Buton</label>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4px', marginBottom: '5px' }}>
             <input type="text" className="form-input" placeholder="Buton Metni" value={activeItem.ctaText || ''} onChange={(e) => updateCurrentItem({ ctaText: e.target.value })} style={{ fontSize: '9.5px', height: '23px' }} />
             <input type="text" className="form-input" placeholder="Buton URL (/apps)" value={activeItem.ctaUrl || ''} onChange={(e) => updateCurrentItem({ ctaUrl: e.target.value })} style={{ fontSize: '9.5px', height: '23px' }} />
           </div>
-
           <label style={{ display: 'flex', alignItems: 'center', gap: '4px', fontSize: '9.5px', cursor: 'pointer', color: 'var(--text-secondary)' }}>
             <input type="checkbox" checked={activeItem.isDismissable} onChange={(e) => updateCurrentItem({ isDismissable: e.target.checked })} />
             <span>Kapatma '✕' butonu görünsün</span>
@@ -477,12 +529,7 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
           )}
           <div>
             <span style={{ display: 'block', fontSize: '9px', color: 'var(--text-muted)', marginBottom: '2px' }}>Zemin Efekti:</span>
-            <select
-              className="form-select"
-              value={activeItem.glassEffect || 'none'}
-              onChange={(e) => updateCurrentItem({ glassEffect: e.target.value as any })}
-              style={{ fontSize: '10px', height: '24px', padding: '1px 5px' }}
-            >
+            <select className="form-select" value={activeItem.glassEffect || 'none'} onChange={(e) => updateCurrentItem({ glassEffect: e.target.value as any })} style={{ fontSize: '10px', height: '24px', padding: '1px 5px' }}>
               <option value="none">Düz Şeffaf (Altı Net Okunur)</option>
               <option value="blur">Buzlu Cam (Bulanık Arka Plan)</option>
             </select>
@@ -493,18 +540,7 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
         <div>
           <label style={{ display: 'block', fontSize: '10.5px', fontWeight: 700, color: 'var(--text-secondary)', marginBottom: '4px' }}>Bant Boyutu & Opaklık</label>
           <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr 1fr', gap: '4px', marginBottom: '5px' }}>
-            <select
-              className="form-select" value={activeItem.sizePreset || 'standard'}
-              onChange={(e) => {
-                const preset = e.target.value as 'compact' | 'standard' | 'large';
-                updateCurrentItem({
-                  sizePreset: preset,
-                  customHeight: preset === 'compact' ? 26 : preset === 'large' ? 48 : 34,
-                  paddingY: preset === 'compact' ? 1 : preset === 'large' ? 3 : 2,
-                });
-              }}
-              style={{ fontSize: '10px', height: '25px', padding: '1px 4px' }}
-            >
+            <select className="form-select" value={activeItem.sizePreset || 'standard'} onChange={(e) => { const preset = e.target.value as any; updateCurrentItem({ sizePreset: preset, customHeight: preset === 'compact' ? 26 : preset === 'large' ? 48 : 34, paddingY: preset === 'compact' ? 1 : preset === 'large' ? 3 : 2 }); }} style={{ fontSize: '10px', height: '25px', padding: '1px 4px' }}>
               <option value="compact">Kompakt</option>
               <option value="standard">Standart</option>
               <option value="large">Geniş</option>
@@ -539,9 +575,10 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
           <span style={{ fontSize: '10.5px', fontWeight: 700, color: 'var(--accent-primary)' }}>Kayan Yazı (Ticker) Ayarları:</span>
           <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
             <span style={{ fontSize: '9.5px', color: 'var(--text-secondary)' }}>Yön:</span>
-            <select className="form-select" style={{ fontSize: '10px', height: '24px', padding: '1px 5px' }} value={activeItem.tickerDirection || 'rtl'} onChange={(e: any) => updateCurrentItem({ tickerDirection: e.target.value })}>
-              <option value="rtl">Sağdan Sola (RTL)</option>
-              <option value="ltr">Soldan Sağa (LTR)</option>
+            <select className="form-select" style={{ fontSize: '10px', height: '24px', padding: '1px 5px' }} value={activeItem.tickerDirection || 'auto'} onChange={(e: any) => updateCurrentItem({ tickerDirection: e.target.value })}>
+              <option value="auto">Dile Göre Otomatik (TR/EN Sağdan Sola, AR Soldan Sağa)</option>
+              <option value="rtl">Her Zaman Sağdan Sola (RTL)</option>
+              <option value="ltr">Her Zaman Soldan Sağa (LTR)</option>
             </select>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>

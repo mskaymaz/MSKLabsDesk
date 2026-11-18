@@ -1,6 +1,16 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 📌 Son Güncelleme [18.11.2026 - 13:55] — MOBİL YATAY TAŞMA KİLİDİ & ARAPÇA (RTL) KAYAN YAZI AKIŞI (MOBILE-OVERFLOW-RTL-001) [✓]
+* **Geliştirilen Altyapı ve Arayüz Kazanımları:**
+  1. **Mobil Yatay Sürüklenme / Taşma Engellendi:** `responsive.css` üzerinde `html, body, #root, .app-container, .main-content, .page-content` kapsayıcıları `overflow-x: hidden !important; max-width: 100% !important;` standardına çekilerek mobil ekranlarda sayfanın sağa sola kayması, sarsılması ve taşması tamamen kilitlendi.
+  2. **İzole Yatay Kaydırma (`.admin-horizontal-scroll`):** Masaüstü araç çubuğu ve stüdyo genişliği gerektiren `TemplatesView` ve `BroadcastView` bileşenleri `.admin-horizontal-scroll` ile sarıldı. Masaüstü stüdyo araçları sayfa düzenini bozmadan ve ekranı genişletmeden yalnızca kendi sınırları içinde dokunmatik olarak kaydırılabilir hale getirildi.
+  3. **Arapça (RTL) Kayan Yazı (Ticker) Yön Standardı:** Arapça metinlerin sağdan sola yazılma ve okunma kuralına uygun olarak `marqueeArabic` keyframe animasyonu ve `.ann-ticker-track.is-arabic` stili tanımlandı (`padding-right: 100%`, `transform: 0 -> 100%`, `dir="rtl"`). Arapça seçildiğinde metin başı soldan girip sağa doğru doğal okuma akışıyla ilerler.
+  4. **Akıllı Yön Seçici:** `tickerDirection` konfigürasyonuna `"auto"` (Dile Göre Otomatik: TR/EN Sağdan Sola, AR Soldan Sağa) seçeneği eklendi ve varsayılan yapıldı; isteğe bağlı zorunlu RTL veya LTR seçenekleri korundu.
+  5. **Doğrulama:** Frontend derlemesi (`tsc -b && vite build`) 664ms içinde 0 hata ile başarıyla doğrulandı.
+
+---
+
 ## 📌 Son Güncelleme [17.11.2026 - 16:50] — TÜM REPOLARDA İSİM VE LİNK HİZALAMASI (MSKLABS-APPS-SYNC-001) [✓]
 * **Geliştirilen Altyapı ve Kazanımlar:**
   1. **Uzak Depo Güncellemesi:** GitHub üzerindeki uygulama deposu `mskaymaz/AllApp` ➔ `mskaymaz/MSKLabsApps` olarak yeniden adlandırıldı.

@@ -50,14 +50,20 @@ export interface AnnouncementItem {
   targetUrl?: string;
   isActive: boolean;
   displayMode?: 'static' | 'ticker' | 'rotator';
-  tickerDirection?: 'rtl' | 'ltr';
+  tickerDirection?: 'auto' | 'rtl' | 'ltr';
   tickerSpeed?: 'slow' | 'normal' | 'fast';
+  langMode?: 'sync' | 'rotate' | 'fixed';
+  rotateLangs?: ('tr' | 'en' | 'ar')[];
+  fixedLang?: 'tr' | 'en' | 'ar';
 }
 
 export interface AnnouncementMeta {
   bannerType: 'info' | 'success' | 'warning' | 'purple' | 'custom';
   customBg?: string;
   customText?: string;
+  langMode?: 'sync' | 'rotate' | 'fixed';
+  rotateLangs?: ('tr' | 'en' | 'ar')[];
+  fixedLang?: 'tr' | 'en' | 'ar';
   placement?: AnnouncementPlacement;
   mobilePlacement?: AnnouncementPlacement;
   deviceTarget?: 'all' | 'desktop' | 'mobile';
@@ -87,7 +93,7 @@ export interface AnnouncementMeta {
   ctaUrl?: string;
   targetUrl?: string;
   displayMode?: 'static' | 'ticker' | 'rotator';
-  tickerDirection?: 'rtl' | 'ltr';
+  tickerDirection?: 'auto' | 'rtl' | 'ltr';
   tickerSpeed?: 'slow' | 'normal' | 'fast';
   items?: AnnouncementItem[];
   activeItemId?: string;

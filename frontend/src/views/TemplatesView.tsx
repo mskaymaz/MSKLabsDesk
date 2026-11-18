@@ -198,8 +198,9 @@ export const TemplatesView: React.FC = () => {
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', position: 'relative', minWidth: '940px', flexShrink: 0 }}>
-      {/* ================= SABİT ÜST BÖLÜM (KULLANICININ İŞARET ETTİĞİ TÜM ALAN) ================= */}
+    <div className="admin-horizontal-scroll" style={{ display: 'flex', flexDirection: 'column', gap: '14px', position: 'relative', width: '100%', maxWidth: '100%' }}>
+      <div style={{ minWidth: '940px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
+        {/* ================= SABİT ÜST BÖLÜM (KULLANICININ İŞARET ETTİĞİ TÜM ALAN) ================= */}
       <div
         style={{
           position: 'sticky',
@@ -517,6 +518,7 @@ export const TemplatesView: React.FC = () => {
           onSave={handleSaveAnnouncement}
         />
       )}
+      </div>
 
       {/* 5. Modallar */}
       <NewAdSlotModal

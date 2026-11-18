@@ -175,12 +175,28 @@ export const AnnouncementPreviewMockup: React.FC<AnnouncementPreviewMockupProps>
                 }}
               >
                 <div style={{ position: 'absolute', inset: 0, background: previewBg, opacity: announcementActive ? currentBgOpacity / 100 : 0.3, zIndex: 0, pointerEvents: 'none' }} />
-                <div style={{ position: 'relative', zIndex: 1, width: '100%', maxWidth: '1160px', margin: '0 auto', padding: sizeMetrics.padding, fontSize: sizeMetrics.fontSize, color: previewText, opacity: announcementActive ? currentTextOpacity / 100 : 0.45, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px', boxSizing: 'border-box' }}>
+                <div dir={activeLangTab === 'ar' ? 'rtl' : 'ltr'} style={{ position: 'relative', zIndex: 1, width: '100%', maxWidth: '1160px', margin: '0 auto', padding: sizeMetrics.padding, fontSize: sizeMetrics.fontSize, color: previewText, opacity: announcementActive ? currentTextOpacity / 100 : 0.45, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px', boxSizing: 'border-box' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flex: 1, minWidth: 0, overflow: isTicker ? 'hidden' : 'visible' }}>
                     <span style={{ display: 'inline-flex', flexShrink: 0, marginTop: '1px' }}>{currentThemeObj.icon}</span>
                     {isTicker ? (
-                      <div className="ann-ticker-wrap">
-                        <div className="ann-ticker-track" style={{ animation: `${(activeItem.tickerDirection || 'rtl') === 'ltr' ? 'marqueeLTR' : 'marqueeRTL'} ${(activeItem.tickerSpeed || 'normal') === 'slow' ? '28s' : (activeItem.tickerSpeed || 'normal') === 'fast' ? '10s' : '18s'} linear infinite` }} dangerouslySetInnerHTML={{ __html: announcementText[activeLangTab] || 'Duyuru metni...' }} />
+                      <div className="ann-ticker-wrap" dir={activeLangTab === 'ar' ? 'rtl' : 'ltr'}>
+                        {(() => {
+                          const isArabic = activeLangTab === 'ar';
+                          const dirSetting = activeItem.tickerDirection || 'auto';
+                          const effectiveDir = dirSetting === 'auto'
+                            ? (isArabic ? 'arabic' : 'rtl')
+                            : (dirSetting === 'ltr' ? 'ltr' : 'rtl');
+                          const animName = effectiveDir === 'arabic' ? 'marqueeArabic' : effectiveDir === 'ltr' ? 'marqueeLTR' : 'marqueeRTL';
+                          const speedSec = (activeItem.tickerSpeed === 'slow') ? '28s' : (activeItem.tickerSpeed === 'fast') ? '10s' : '18s';
+
+                          return (
+                            <div
+                              className={`ann-ticker-track ${isArabic ? 'is-arabic' : ''}`}
+                              style={{ animation: `${animName} ${speedSec} linear infinite` }}
+                              dangerouslySetInnerHTML={{ __html: announcementText[activeLangTab] || 'Duyuru metni...' }}
+                            />
+                          );
+                        })()}
                       </div>
                     ) : isRotator ? (
                       <div style={{ flex: 1, overflow: 'hidden', height: '22px', display: 'flex', alignItems: 'center' }}>
