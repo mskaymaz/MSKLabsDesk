@@ -1,6 +1,23 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [18.11.2026 - 16:55] - Duyuru Kayan Yazı Aralık Sistemi (Gap), Zıt Yön Güvenlik Eşiği ve Sağ Kenar Taşma Kilidi (TICKER-GAP-OVERFLOW-007)
+- **Kayan Yazı (Ticker) Aralık / Bekleme (sn) Parametresi (`tickerGap`):**
+  - Metnin son harfinin ekrandan tamamen çıktığı an 0 (sıfır) referans noktası kabul edildi.
+  - Admin panelde Hız seçicisinin hemen sağına ondalıklı sayı destekli `Aralık (sn)` kontrolü eklendi (+: bekleme süresi, 0: uç uca kesintisiz, -: erken takip / iç içe akış).
+  - Ticker yapılandırma tiplerine (`AnnouncementItem` ve `AnnouncementMeta`) `tickerGap?: number` entegre edildi ve kaydetme akışına dahil edildi.
+- **Zıt Yön Çaprazlama Güvenlik Eşiği:**
+  - Latin dilleri (TR/EN - sağdan sola) ile Arapça (AR - soldan sağa) arasındaki yön zıtlığı nedeniyle, dil rotasyonlarında metinlerin kafa kafaya çarpışmasını önlemek üzere `effectiveGap = Math.max(0, tickerGap)` güvenlik mekanizması oluşturuldu.
+  - Önceki metin ekrandan tamamen çıkmadan zıt yönlü yeni metnin başlatılması engellendi.
+- **Kart İçi Taşma ve Sağ Kenar Sınır Kilidi:**
+  - Kartın (`admin-list-card`) sağ dikey sınırından dışarı taşan `AnnouncementPlacementSettings` ve `Duyuru Havuzu` çubukları `maxWidth: 100%; overflowX: auto;` ve sıkılaştırılmış boşluklarla (`gap: 6-8px`, `marginLeft: 8px`) kartın 16px iç boşluğuna hapsedildi; dışarı taşma kesin olarak giderildi.
+- **Canlı Web Sitesi ve Önizleme Entegrasyonu (`MSKLabsWeb` & `Desk`):**
+  - `MSKLabsWeb/assets/js/announcement-loader.js` üzerinde `animationiteration` ve dinamik zamanlayıcı ile tekil döngüler ve rotasyonlu geçişler `tickerGap` ve zıt yön güvenlik eşiğiyle uyumlu hale getirildi.
+  - `AnnouncementPreviewMockup.tsx` önizleme vitrinine negatif aralık gecikmesi yansıtıldı.
+- **Satır Sınırları ve Üretim Derlemesi:**
+  - `AnnouncementBarSection.tsx` (580 satır, <= 600 satır tavanı) ve `AnnouncementPlacementSettings.tsx` (236 satır) sınırları korundu.
+  - Her iki projede de (`MSKLabsDesk` ve `MSKLabsWeb`) üretim derlemeleri 0 hata ile doğrulandı.
+
 ## [17.11.2026 - 17:05] - MSKLabs Ekosistemi Repoları ve Web Yayını Hizalaması (MSKLABS-APPS-SYNC-001)
 - **Tüm Repolarda Kurumsal İsim ve Link Standardı:**
   - `AllApp` uzak GitHub deposu `MSKLabsApps` olarak güncellendi (`gh repo rename`).
