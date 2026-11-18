@@ -1,6 +1,16 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 📌 Son Güncelleme [18.11.2026 - 14:30] — KART İÇİ TAŞMALAR GİDERİLDİ & ORİJİNAL TUVAL EBATLARI KORUNDU (ANNOUNCEMENT-CANVAS-FIX-005) [✓]
+* **Geliştirilen Altyapı ve Arayüz Kazanımları:**
+  1. **Orijinal Masaüstü Tuval Ebatları Korundu:** `minWidth: 940px` masaüstü arayüz düzeni ve web ebatları aynen korundu; mobilde `.page-content` yatay ve dikey kaydırma (`overflow-x: auto; -webkit-overflow-scrolling: touch;`) yeteneğiyle tam tuval gezilebilir kılındı.
+  2. **Kart Sınırından Dışarı Taşma Çözüldü:** Kartın sağ kenarından (mavi sınır) dışarı taşan `AnnouncementPlacementSettings` ve Duyuru Havuzu araç çubuklarındaki `minWidth: 940px` fazlalığı kaldırıldı. Kartın 16px iç boşluğuna (`padding: 16px`) tam oturacak şekilde `width: 100%; box-sizing: border-box;` uygulandı ve çubuklar kart sınırlarının içine hapsedildi.
+  3. **İkili Izgara ve Editör Kolonu Hizalandı:** İkili bölüm ve zengin metin editörü kapsayıcısı `minWidth: 0; flex: 1; box-sizing: border-box;` yapılarak 260px sol yuva haritası ile birlikte kartın sağ sınırına tam sıfırlandı.
+  4. **Satır Sayıları Standartları Doğrulandı:** `AnnouncementBarSection.tsx` (596 satır), `AnnouncementPlacementSettings.tsx` (234 satır), `AnnouncementPreviewMockup.tsx` (387 satır), `TemplatesView.tsx` (539 satır) ile kural sınırları eksiksiz sağlandı.
+  5. **Doğrulama:** Frontend derlemesi (`tsc -b && vite build`) 780ms içinde 0 hata ile doğrulandı.
+
+---
+
 ## 📌 Son Güncelleme [18.11.2026 - 13:55] — MOBİL YATAY TAŞMA KİLİDİ & ARAPÇA (RTL) KAYAN YAZI AKIŞI (MOBILE-OVERFLOW-RTL-001) [✓]
 * **Geliştirilen Altyapı ve Arayüz Kazanımları:**
   1. **Mobil Yatay Sürüklenme / Taşma Engellendi:** `responsive.css` üzerinde `html, body, #root, .app-container, .main-content, .page-content` kapsayıcıları `overflow-x: hidden !important; max-width: 100% !important;` standardına çekilerek mobil ekranlarda sayfanın sağa sola kayması, sarsılması ve taşması tamamen kilitlendi.

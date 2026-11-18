@@ -217,8 +217,8 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
         padding: '6px 10px',
         borderRadius: '6px',
         border: '1px solid var(--border-subtle)',
-        minWidth: '940px',
-        flexShrink: 0,
+        width: '100%',
+        boxSizing: 'border-box',
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px', whiteSpace: 'nowrap' }}>
           <span style={{
@@ -369,8 +369,8 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
         gap: '12px',
         margin: '10px 0 12px 0',
         alignItems: 'start',
-        minWidth: '940px',
-        flexShrink: 0,
+        width: '100%',
+        boxSizing: 'border-box',
       }}>
         {/* Sol Taraf (1/4): Yerleşim, Harita & Yuva Seçici */}
         <div style={{
@@ -427,15 +427,15 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
 
         {/* Sağ Taraf (3/4): Duyuru İçerik Düzenleme (RichTextEditor) */}
         <div style={{
-          minWidth: '650px',
+          minWidth: 0,
           flex: 1,
-          flexShrink: 0,
           display: 'flex',
           flexDirection: 'column',
           background: 'var(--bg-secondary, rgba(15, 23, 42, 0.45))',
           padding: '8px 10px',
           borderRadius: '6px',
           border: '1px solid var(--border-subtle)',
+          boxSizing: 'border-box',
         }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '6px' }}>
             <div>
@@ -485,7 +485,7 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
       </div>
 
       {/* 5. Detay & Tema Ayarları (3 Kolonlu Kompakt Alt Panel) */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px', padding: '10px', background: 'var(--bg-secondary, rgba(15, 23, 42, 0.4))', borderRadius: '6px', border: '1px solid var(--border-subtle)' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px', padding: '10px', background: 'var(--bg-secondary, rgba(15, 23, 42, 0.4))', borderRadius: '6px', border: '1px solid var(--border-subtle)', width: '100%', boxSizing: 'border-box' }}>
         {/* Kolon 1: Başlık, Aktiflik & Buton/Etkileşim */}
         <div>
           <div style={{ display: 'flex', alignItems: 'center', marginBottom: '4px' }}>
@@ -571,7 +571,7 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
 
       {/* 6.1 Ticker (Kayan Yazı) Ayarları Özel Bloğu */}
       {isTicker && (
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginTop: '8px', padding: '6px 10px', background: 'rgba(59,130,246,0.08)', borderRadius: '6px', border: '1px solid rgba(59,130,246,0.25)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginTop: '8px', padding: '6px 10px', background: 'rgba(59,130,246,0.08)', borderRadius: '6px', border: '1px solid rgba(59,130,246,0.25)', width: '100%', boxSizing: 'border-box' }}>
           <span style={{ fontSize: '10.5px', fontWeight: 700, color: 'var(--accent-primary)' }}>Kayan Yazı (Ticker) Ayarları:</span>
           <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
             <span style={{ fontSize: '9.5px', color: 'var(--text-secondary)' }}>Yön:</span>

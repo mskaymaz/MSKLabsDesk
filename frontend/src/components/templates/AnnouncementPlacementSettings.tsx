@@ -69,9 +69,8 @@ export const AnnouncementPlacementSettings: React.FC<AnnouncementPlacementSettin
       borderRadius: '6px',
       border: '1px solid var(--border-subtle)',
       marginBottom: '8px',
-      minWidth: '940px',
-      flexShrink: 0,
-      overflowX: 'auto',
+      width: '100%',
+      boxSizing: 'border-box',
     }}>
       {/* 1. Sol Kısım: Başlık & Hedef Cihaz */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
