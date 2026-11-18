@@ -179,20 +179,21 @@ export const AnnouncementPreviewMockup: React.FC<AnnouncementPreviewMockupProps>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flex: 1, minWidth: 0, overflow: isTicker ? 'hidden' : 'visible' }}>
                     <span style={{ display: 'inline-flex', flexShrink: 0, marginTop: '1px' }}>{currentThemeObj.icon}</span>
                     {isTicker ? (
-                      <div className="ann-ticker-wrap" dir={activeLangTab === 'ar' ? 'rtl' : 'ltr'}>
+                      <div className="ann-ticker-wrap">
                         {(() => {
                           const isArabic = activeLangTab === 'ar';
-                          const dirSetting = activeItem.tickerDirection || 'auto';
-                          const effectiveDir = dirSetting === 'auto'
-                            ? (isArabic ? 'arabic' : 'rtl')
-                            : (dirSetting === 'ltr' ? 'ltr' : 'rtl');
-                          const animName = effectiveDir === 'arabic' ? 'marqueeArabic' : effectiveDir === 'ltr' ? 'marqueeLTR' : 'marqueeRTL';
+                          const dirSetting = activeItem.tickerDirection;
+                          const isReverse = isArabic
+                            ? (dirSetting !== 'ltr')
+                            : (dirSetting === 'ltr');
                           const speedSec = (activeItem.tickerSpeed === 'slow') ? '28s' : (activeItem.tickerSpeed === 'fast') ? '10s' : '18s';
+                          const animStyle = `marqueeRTL ${speedSec} linear infinite ${isReverse ? 'reverse' : 'normal'}`;
 
                           return (
                             <div
-                              className={`ann-ticker-track ${isArabic ? 'is-arabic' : ''}`}
-                              style={{ animation: `${animName} ${speedSec} linear infinite` }}
+                              className="ann-ticker-track"
+                              dir={isArabic ? 'rtl' : 'ltr'}
+                              style={{ animation: animStyle }}
                               dangerouslySetInnerHTML={{ __html: announcementText[activeLangTab] || 'Duyuru metni...' }}
                             />
                           );

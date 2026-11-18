@@ -1,6 +1,14 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 📌 Son Güncelleme [18.11.2026 - 14:38] — ARAPÇA (RTL) DOĞAL AKIŞIN KESİN ENTEGRASYONU (ARABIC-TICKER-FIX-006) [✓]
+* **Geliştirilen Altyapı ve Arayüz Kazanımları:**
+  1. **Arapça Akış Yönü Kilitlendi:** Önceden veritabanında `"rtl"` olarak kayıtlı kalan duyurularda koşul hatası nedeniyle ters akışın tetiklenmeme sorunu giderildi. `AnnouncementPreviewMockup.tsx` üzerinde dil `AR` seçildiğinde metin akışı doğal Arapça yönünde soldan sağa (`animation-direction: reverse`) akacak şekilde kesinleştirildi.
+  2. **Yalın Animasyon Mimarisi:** Koordinat çakışması yaratan gereksiz alt sınıflar tasfiye edildi; standart `marqueeRTL` keyframe'i üzerinden ters yön çalıştırıldı ve metin bloğuna `dir="rtl"` uygulandı.
+  3. **Doğrulama:** Frontend derlemesi (`tsc -b && vite build`) 794ms içinde 0 hata ile doğrulandı.
+
+---
+
 ## 📌 Son Güncelleme [18.11.2026 - 14:30] — KART İÇİ TAŞMALAR GİDERİLDİ & ORİJİNAL TUVAL EBATLARI KORUNDU (ANNOUNCEMENT-CANVAS-FIX-005) [✓]
 * **Geliştirilen Altyapı ve Arayüz Kazanımları:**
   1. **Orijinal Masaüstü Tuval Ebatları Korundu:** `minWidth: 940px` masaüstü arayüz düzeni ve web ebatları aynen korundu; mobilde `.page-content` yatay ve dikey kaydırma (`overflow-x: auto; -webkit-overflow-scrolling: touch;`) yeteneğiyle tam tuval gezilebilir kılındı.

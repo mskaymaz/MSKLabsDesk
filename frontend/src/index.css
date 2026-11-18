@@ -448,10 +448,6 @@ body.theme-light {
   0%   { transform: translate3d(-100%, 0, 0); }
   100% { transform: translate3d(0, 0, 0); }
 }
-@keyframes marqueeArabic {
-  0%   { transform: translate3d(0, 0, 0); }
-  100% { transform: translate3d(100%, 0, 0); }
-}
 .ann-ticker-wrap {
   width: 100%;
   overflow: hidden;
@@ -462,12 +458,6 @@ body.theme-light {
   white-space: pre;
   padding-left: 100%;
   will-change: transform;
-}
-.ann-ticker-track.is-arabic {
-  padding-left: 0;
-  padding-right: 100%;
-  direction: rtl;
-  text-align: right;
 }
 .ann-ticker-track p {
   display: inline;
