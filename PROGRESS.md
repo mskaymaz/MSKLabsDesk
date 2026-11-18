@@ -1,6 +1,16 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 📌 Son Güncelleme [18.11.2026 - 16:55] — TICKER ARALIK (GAP) SİSTEMİ, ZIT YÖN GÜVENLİK EŞİĞİ VE SAĞ KENAR TAŞMA KİLİDİ (TICKER-GAP-OVERFLOW-007) [✓]
+* **Geliştirilen Altyapı ve Arayüz Kazanımları:**
+  1. **Sağ Kenar Çubuk Taşması Kesin Çözüldü:** Kartın (`admin-list-card`) sağ dikey sınırından dışarı taşan `AnnouncementPlacementSettings` ve `Duyuru Havuzu` çubukları `maxWidth: 100%; overflowX: auto;` ve sıkılaştırılmış boşluklarla (`gap: 6-8px`, `marginLeft: 8px`) kart sınırları içine tam oturtuldu; taşma tamamen sonlandırıldı.
+  2. **Ticker Aralık / Bekleme (sn) Parametresi (`tickerGap`):** Metnin son harfinin ekrandan tamamen çıktığı an 0 (sıfır) referansı kabul edildi. Admin panelde Hız alanının hemen sağına `Aralık (sn)` girdi alanı eklendi (negatif, sıfır ve pozitif değerleri destekler).
+  3. **Zıt Yön Çaprazlama Güvenlik Eşiği:** Latin dilleri (TR/EN - sağdan sola) ile Arapça (AR - soldan sağa) arasındaki yön zıtlığı nedeniyle, dil geçişlerinde metinlerin kafa kafaya çarpışmasını önlemek amacıyla `effectiveGap = Math.max(0, tickerGap)` kuralı devreye alındı. Önceki metin ekrandan çıkmadan zıt yönlü yeni metin başlatılmaz.
+  4. **Canlı Web Motoru Entegrasyonu:** `MSKLabsWeb/assets/js/announcement-loader.js` üzerinde `animationiteration` ve dinamik zamanlayıcı ile tekil döngülerde ve çok dilli rotasyonda `tickerGap` ve güvenlik eşiği devreye alındı.
+  5. **Satır Sınırı ve Derleme Doğrulaması:** `AnnouncementBarSection.tsx` 580 satıra çekilerek AGENTS.md tavanı (600 satır) korundu. `MSKLabsDesk` ve `MSKLabsWeb` üretim derlemeleri 0 hata ile tamamlandı.
+
+---
+
 ## 📌 Son Güncelleme [18.11.2026 - 14:38] — ARAPÇA (RTL) DOĞAL AKIŞIN KESİN ENTEGRASYONU (ARABIC-TICKER-FIX-006) [✓]
 * **Geliştirilen Altyapı ve Arayüz Kazanımları:**
   1. **Arapça Akış Yönü Kilitlendi:** Önceden veritabanında `"rtl"` olarak kayıtlı kalan duyurularda koşul hatası nedeniyle ters akışın tetiklenmeme sorunu giderildi. `AnnouncementPreviewMockup.tsx` üzerinde dil `AR` seçildiğinde metin akışı doğal Arapça yönünde soldan sağa (`animation-direction: reverse`) akacak şekilde kesinleştirildi.

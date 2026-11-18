@@ -63,14 +63,16 @@ export const AnnouncementPlacementSettings: React.FC<AnnouncementPlacementSettin
       alignItems: 'center',
       justifyContent: 'space-between',
       flexWrap: 'nowrap',
-      gap: '8px',
+      gap: '6px',
       background: 'var(--bg-secondary, rgba(15, 23, 42, 0.45))',
       padding: '6px 10px',
       borderRadius: '6px',
       border: '1px solid var(--border-subtle)',
       marginBottom: '8px',
       width: '100%',
+      maxWidth: '100%',
       boxSizing: 'border-box',
+      overflowX: 'auto',
     }}>
       {/* 1. Sol Kısım: Başlık & Hedef Cihaz */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>

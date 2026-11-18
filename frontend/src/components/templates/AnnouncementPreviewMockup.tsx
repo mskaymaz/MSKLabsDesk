@@ -187,7 +187,9 @@ export const AnnouncementPreviewMockup: React.FC<AnnouncementPreviewMockupProps>
                             ? (dirSetting !== 'ltr')
                             : (dirSetting === 'ltr');
                           const speedSec = (activeItem.tickerSpeed === 'slow') ? '28s' : (activeItem.tickerSpeed === 'fast') ? '10s' : '18s';
-                          const animStyle = `marqueeRTL ${speedSec} linear infinite ${isReverse ? 'reverse' : 'normal'}`;
+                          const gapSec = activeItem.tickerGap ?? 0;
+                          const delayStr = gapSec < 0 ? ` ${gapSec}s` : '';
+                          const animStyle = `marqueeRTL ${speedSec} linear infinite${delayStr} ${isReverse ? 'reverse' : 'normal'}`;
 
                           return (
                             <div

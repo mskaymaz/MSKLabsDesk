@@ -52,6 +52,7 @@ export interface AnnouncementItem {
   displayMode?: 'static' | 'ticker' | 'rotator';
   tickerDirection?: 'auto' | 'rtl' | 'ltr';
   tickerSpeed?: 'slow' | 'normal' | 'fast';
+  tickerGap?: number;
   langMode?: 'sync' | 'rotate' | 'fixed';
   rotateLangs?: ('tr' | 'en' | 'ar')[];
   fixedLang?: 'tr' | 'en' | 'ar';
@@ -95,6 +96,7 @@ export interface AnnouncementMeta {
   displayMode?: 'static' | 'ticker' | 'rotator';
   tickerDirection?: 'auto' | 'rtl' | 'ltr';
   tickerSpeed?: 'slow' | 'normal' | 'fast';
+  tickerGap?: number;
   items?: AnnouncementItem[];
   activeItemId?: string;
 }

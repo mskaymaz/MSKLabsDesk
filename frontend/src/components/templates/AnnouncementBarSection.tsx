@@ -40,7 +40,7 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
         cardWidth: announcementMeta.cardWidth, cardHeight: announcementMeta.cardHeight, topOffset: announcementMeta.topOffset ?? 110,
         opacity: announcementMeta.opacity ?? 95, isDismissable: announcementMeta.isDismissable !== false,
         ctaText: announcementMeta.ctaText, ctaUrl: announcementMeta.ctaUrl, targetUrl: announcementMeta.targetUrl, isActive: true,
-        displayMode: announcementMeta.displayMode || 'static', tickerDirection: announcementMeta.tickerDirection || 'auto', tickerSpeed: announcementMeta.tickerSpeed || 'normal',
+        displayMode: announcementMeta.displayMode || 'static', tickerDirection: announcementMeta.tickerDirection || 'auto', tickerSpeed: announcementMeta.tickerSpeed || 'normal', tickerGap: announcementMeta.tickerGap ?? 0,
         langMode: announcementMeta.langMode || 'sync', rotateLangs: announcementMeta.rotateLangs || ['tr', 'en', 'ar'], fixedLang: announcementMeta.fixedLang || 'tr',
       }];
 
@@ -155,6 +155,9 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
       tabText: activeItem.tabText,
       autoCollapseDelay: activeItem.autoCollapseDelay,
       glassEffect: activeItem.glassEffect,
+      tickerDirection: activeItem.tickerDirection,
+      tickerSpeed: activeItem.tickerSpeed,
+      tickerGap: activeItem.tickerGap,
     };
     setAnnouncementMeta(nextMeta);
     (onSave as any)(e, nextMeta);
@@ -209,7 +212,7 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
         display: 'flex',
         justifyContent: 'flex-start',
         alignItems: 'center',
-        gap: '12px',
+        gap: '8px',
         marginBottom: '8px',
         flexWrap: 'nowrap',
         whiteSpace: 'nowrap',
@@ -218,23 +221,19 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
         borderRadius: '6px',
         border: '1px solid var(--border-subtle)',
         width: '100%',
+        maxWidth: '100%',
         boxSizing: 'border-box',
+        overflowX: 'auto',
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', whiteSpace: 'nowrap' }}>
-          <span style={{
-            fontSize: '10.5px',
-            fontWeight: 700,
-            color: 'var(--text-primary)',
-            whiteSpace: 'nowrap',
-            display: 'inline-block',
-          }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', whiteSpace: 'nowrap' }}>
+          <span style={{ fontSize: '10.5px', fontWeight: 700, color: 'var(--text-primary)', whiteSpace: 'nowrap' }}>
             Duyuru Havuzu:
           </span>
           <select
             className="form-select"
             value={activeItem.id}
             onChange={(e) => handleSelectId(e.target.value)}
-            style={{ fontSize: '10.5px', height: '25px', minWidth: '170px', fontWeight: 600, padding: '1px 8px' }}
+            style={{ fontSize: '10.5px', height: '25px', minWidth: '140px', fontWeight: 600, padding: '1px 8px' }}
           >
             {items.map((it, idx) => {
               const sym = it.placement?.startsWith('bottom_') ? '↓' : (it.placement === 'left_floating' || it.placement === 'top_left' || it.placement === 'bottom_left') ? '←' : (it.placement === 'right_floating' || it.placement === 'top_right' || it.placement === 'bottom_right') ? '→' : '↑';
@@ -266,7 +265,7 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
           )}
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', whiteSpace: 'nowrap', marginLeft: '20px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', whiteSpace: 'nowrap', marginLeft: '8px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
             <span style={{ fontSize: '10.5px', fontWeight: 700, color: 'var(--text-primary)', whiteSpace: 'nowrap' }}>
               Akış Modu:
@@ -373,43 +372,14 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
         boxSizing: 'border-box',
       }}>
         {/* Sol Taraf (1/4): Yerleşim, Harita & Yuva Seçici */}
-        <div style={{
-          width: '260px',
-          minWidth: '260px',
-          flexShrink: 0,
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '6px',
-          background: 'var(--bg-secondary, rgba(15, 23, 42, 0.45))',
-          padding: '8px',
-          borderRadius: '6px',
-          border: '1px solid var(--border-subtle)',
-        }}>
+        <div style={{ width: '260px', minWidth: '260px', flexShrink: 0, display: 'flex', flexDirection: 'column', gap: '6px', background: 'var(--bg-secondary, rgba(15, 23, 42, 0.45))', padding: '8px', borderRadius: '6px', border: '1px solid var(--border-subtle)' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <span style={{ fontSize: '10.5px', fontWeight: 700, color: 'var(--text-primary)' }}>
-              Yuva Haritası:
-            </span>
+            <span style={{ fontSize: '10.5px', fontWeight: 700, color: 'var(--text-primary)' }}>Yuva Haritası:</span>
             <div style={{ display: 'inline-flex', borderRadius: '4px', overflow: 'hidden', border: '1px solid var(--border-subtle)', background: 'var(--bg-primary, #0f172a)' }}>
-              <button
-                type="button"
-                onClick={() => setPreviewDevice('desktop')}
-                style={{
-                  display: 'inline-flex', alignItems: 'center', gap: '3px', padding: '2px 6px', fontSize: '9px',
-                  border: 'none', background: previewDevice === 'desktop' ? 'var(--accent-primary, #2563eb)' : 'transparent',
-                  color: previewDevice === 'desktop' ? '#FFFFFF' : 'var(--text-secondary)', cursor: 'pointer', fontWeight: previewDevice === 'desktop' ? 700 : 500,
-                }}
-              >
+              <button type="button" onClick={() => setPreviewDevice('desktop')} style={{ display: 'inline-flex', alignItems: 'center', gap: '3px', padding: '2px 6px', fontSize: '9px', border: 'none', background: previewDevice === 'desktop' ? 'var(--accent-primary, #2563eb)' : 'transparent', color: previewDevice === 'desktop' ? '#FFFFFF' : 'var(--text-secondary)', cursor: 'pointer', fontWeight: previewDevice === 'desktop' ? 700 : 500 }}>
                 <Monitor size={10} /><span>Web</span>
               </button>
-              <button
-                type="button"
-                onClick={() => setPreviewDevice('mobile')}
-                style={{
-                  display: 'inline-flex', alignItems: 'center', gap: '3px', padding: '2px 6px', fontSize: '9px',
-                  border: 'none', background: previewDevice === 'mobile' ? 'var(--accent-primary, #2563eb)' : 'transparent',
-                  color: previewDevice === 'mobile' ? '#FFFFFF' : 'var(--text-secondary)', cursor: 'pointer', fontWeight: previewDevice === 'mobile' ? 700 : 500,
-                }}
-              >
+              <button type="button" onClick={() => setPreviewDevice('mobile')} style={{ display: 'inline-flex', alignItems: 'center', gap: '3px', padding: '2px 6px', fontSize: '9px', border: 'none', background: previewDevice === 'mobile' ? 'var(--accent-primary, #2563eb)' : 'transparent', color: previewDevice === 'mobile' ? '#FFFFFF' : 'var(--text-secondary)', cursor: 'pointer', fontWeight: previewDevice === 'mobile' ? 700 : 500 }}>
                 <Smartphone size={10} /><span>Mobil</span>
               </button>
             </div>
@@ -571,14 +541,14 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
 
       {/* 6.1 Ticker (Kayan Yazı) Ayarları Özel Bloğu */}
       {isTicker && (
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginTop: '8px', padding: '6px 10px', background: 'rgba(59,130,246,0.08)', borderRadius: '6px', border: '1px solid rgba(59,130,246,0.25)', width: '100%', boxSizing: 'border-box' }}>
-          <span style={{ fontSize: '10.5px', fontWeight: 700, color: 'var(--accent-primary)' }}>Kayan Yazı (Ticker) Ayarları:</span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginTop: '8px', padding: '6px 10px', background: 'rgba(59,130,246,0.08)', borderRadius: '6px', border: '1px solid rgba(59,130,246,0.25)', width: '100%', maxWidth: '100%', boxSizing: 'border-box', overflowX: 'auto' }}>
+          <span style={{ fontSize: '10.5px', fontWeight: 700, color: 'var(--accent-primary)' }}>Kayan Yazı (Ticker):</span>
           <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
             <span style={{ fontSize: '9.5px', color: 'var(--text-secondary)' }}>Yön:</span>
             <select className="form-select" style={{ fontSize: '10px', height: '24px', padding: '1px 5px' }} value={activeItem.tickerDirection || 'auto'} onChange={(e: any) => updateCurrentItem({ tickerDirection: e.target.value })}>
-              <option value="auto">Dile Göre Otomatik (TR/EN Sağdan Sola, AR Soldan Sağa)</option>
-              <option value="rtl">Her Zaman Sağdan Sola (RTL)</option>
-              <option value="ltr">Her Zaman Soldan Sağa (LTR)</option>
+              <option value="auto">Dile Göre Otomatik (TR/EN Sağa-Sola, AR Soldan-Sağa)</option>
+              <option value="rtl">Her Zaman Sağa (RTL)</option>
+              <option value="ltr">Her Zaman Sola (LTR)</option>
             </select>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
@@ -588,6 +558,20 @@ export const AnnouncementBarSection: React.FC<AnnouncementBarSectionProps> = ({
               <option value="normal">Normal (18s)</option>
               <option value="fast">Hızlı (10s)</option>
             </select>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }} title="Metin bittikten sonraki bekleme süresi (+: bekleme, 0: uç uca, -: iç içe)">
+            <span style={{ fontSize: '9.5px', color: 'var(--text-secondary)' }}>Aralık:</span>
+            <input
+              type="number"
+              step="0.1"
+              min="-15"
+              max="60"
+              className="form-input"
+              style={{ width: '48px', height: '24px', fontSize: '10px', textAlign: 'center', padding: '1px' }}
+              value={activeItem.tickerGap ?? 0}
+              onChange={(e) => updateCurrentItem({ tickerGap: e.target.value === '' ? 0 : parseFloat(e.target.value) })}
+            />
+            <span style={{ fontSize: '8.5px', color: 'var(--text-muted)' }}>sn</span>
           </div>
         </div>
       )}
