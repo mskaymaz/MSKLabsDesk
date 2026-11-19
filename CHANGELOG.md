@@ -1,6 +1,22 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [19.11.2026 - 17:15] - Kayan Yazı 1000 px Ortalı Koridor, 100 px Dış X Butonu, Arapça/Latin Font Ailesi ve Container Query Ticker Geometrisi (TICKER-ALIGN-1000PX-008)
+- **1000 px Ortalı Kayan Yazı Koridoru ve 100 px Dış Buton Hizası:**
+  - Kayan yazı iç alanı (`.msk-ann-inner`) `max-width: 1000px; margin: 0 auto;` olarak güncellendi ve sayfaya simetrik ortalandı.
+  - Dış kapsayıcı (`.msk-ann-outer`) `max-width: 1200px;` olarak kurgulandı; kapatma (X) butonu TR/EN modunda 1000 px alanın 100 px sağında, Arapça modunda 100 px solunda konumlandırılarak metin giriş/çıkış noktasından izole edildi.
+  - Mobil ekranlarda (<= 1200 px) X butonu ekran kenarına 3 px mesafeye çekildi; iç koridora 28 px güvenlik payı verildi.
+- **Arapça ve Türkçe/İngilizce Zengin Tipografi Yelpazesi:**
+  - Arapça font kütüphanesi genişletildi: `Cairo` (Otantik), `Amiri` (Klasik Hat), `Tajawal` (Modern), `IBM Plex Sans Arabic` (Teknik) ve `Noto Kufi Arabic` (Kalın).
+  - TR/EN Latin font desteği eklendi: `Plus Jakarta Sans`, `Poppins`, `Outfit`, `Roboto`.
+  - Fontlar `tokens.css` ve `EditorTypographyControls.tsx` bileşenine entegre edildi.
+- **Container Query (`cqw`) Ticker Geometrisi:**
+  - Asimetrik `padding-left: 100%` bağımlılığı kaldırılarak `container-type: inline-size` ve `100cqw` tabanlı `marqueeToLeft` / `marqueeToRight` keyframe standardına geçildi.
+  - Arapça duyuruların geç gelmesi ve animasyonun ortada kesilmesi kalıcı olarak giderildi.
+- **Satır Limitleri ve Derleme Doğrulaması:**
+  - `AnnouncementBarSection.tsx` (580 satır, <= 600 satır tavanı) ve `AnnouncementPreviewMockup.tsx` (391 satır, <= 450 satır tavanı) sınırları korundu.
+  - `MSKLabsDesk` ve `MSKLabsWeb` üretim derlemeleri 0 hata ile tamamlandı.
+
 ## [18.11.2026 - 16:55] - Duyuru Kayan Yazı Aralık Sistemi (Gap), Zıt Yön Güvenlik Eşiği ve Sağ Kenar Taşma Kilidi (TICKER-GAP-OVERFLOW-007)
 - **Kayan Yazı (Ticker) Aralık / Bekleme (sn) Parametresi (`tickerGap`):**
   - Metnin son harfinin ekrandan tamamen çıktığı an 0 (sıfır) referans noktası kabul edildi.

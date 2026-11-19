@@ -1,6 +1,17 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 📌 Son Güncelleme [19.11.2026 - 17:15] — KAYAN YAZI 1000 PX ORTALI KORİDOR, 100 PX DIŞ X BUTONU, TİPOGRAFİ GENİŞLEMESİ VE CQW TİCKER GEOMETRİSİ (TICKER-ALIGN-1000PX-008) [✓]
+* **Geliştirilen Altyapı ve Arayüz Kazanımları:**
+  1. **1000 px Ortalı Kayan Yazı Koridoru:** Kayan yazı tuvali (`.msk-ann-inner`) 1000 px genişliğe çıkarıldı ve sayfaya sağdan/soldan eşit payla tam ortalandı.
+  2. **100 px Dış Buton İzolasyonu:** Dış çerçeve (`.msk-ann-outer`) 1200 px yapılarak kapatma (X) butonu TR/EN'de 100 px sağda, Arapça'da 100 px solda konumlandırıldı. Yazıların giriş/çıkış noktasından izole edildi.
+  3. **Mobil Kenar Yaklaşımı (<= 1200 px):** Mobil ve dar ekranlarda X butonu ekran sınırına 3 px mesafeye çekildi; iç koridora 28 px emniyet payı verildi.
+  4. **Zengin Font Ailesi:** Arapça (`Amiri`, `Tajawal`, `IBM Plex Sans Arabic`, `Noto Kufi Arabic`) ve Latin (`Plus Jakarta Sans`, `Poppins`, `Outfit`, `Roboto`) fontları panel editörüne ve token tanımlarına işlendi.
+  5. **Container Query (`cqw`) Ticker:** `100cqw` ve `marqueeToLeft` / `marqueeToRight` ile asimetrik padding kaldırıldı; Arapça metinlerin soldan beklemeden girip sağa kadar kesintisiz akması sağlandı.
+  6. **Doğrulama:** Frontend derlemesi 686ms içinde 0 hata ile doğrulandı.
+
+---
+
 ## 📌 Son Güncelleme [18.11.2026 - 16:55] — TICKER ARALIK (GAP) SİSTEMİ, ZIT YÖN GÜVENLİK EŞİĞİ VE SAĞ KENAR TAŞMA KİLİDİ (TICKER-GAP-OVERFLOW-007) [✓]
 * **Geliştirilen Altyapı ve Arayüz Kazanımları:**
   1. **Sağ Kenar Çubuk Taşması Kesin Çözüldü:** Kartın (`admin-list-card`) sağ dikey sınırından dışarı taşan `AnnouncementPlacementSettings` ve `Duyuru Havuzu` çubukları `maxWidth: 100%; overflowX: auto;` ve sıkılaştırılmış boşluklarla (`gap: 6-8px`, `marginLeft: 8px`) kart sınırları içine tam oturtuldu; taşma tamamen sonlandırıldı.

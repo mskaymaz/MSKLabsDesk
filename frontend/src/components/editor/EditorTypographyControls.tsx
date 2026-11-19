@@ -18,11 +18,19 @@ interface EditorTypographyControlsProps {
 }
 
 const FONT_FAMILIES = [
-  { label: 'Sistem Standart', value: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' },
+  { label: 'Sistem Standart (Inter)', value: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' },
+  { label: 'Plus Jakarta Sans (TR/EN)', value: '"Plus Jakarta Sans", sans-serif' },
+  { label: 'Poppins (TR/EN)', value: 'Poppins, sans-serif' },
+  { label: 'Outfit (TR/EN)', value: 'Outfit, sans-serif' },
+  { label: 'Modern Başlık (Montserrat)', value: 'Montserrat, sans-serif' },
+  { label: 'Roboto (TR/EN)', value: 'Roboto, sans-serif' },
   { label: 'Serif (Kitap)', value: 'Georgia, "Times New Roman", Merriweather, serif' },
   { label: 'Monospace (Kod)', value: 'Consolas, Menlo, Monaco, monospace' },
-  { label: 'Otantik Arapça', value: 'Cairo, sans-serif' },
-  { label: 'Modern Başlık', value: 'Montserrat, sans-serif' },
+  { label: 'Arapça - Cairo (Otantik)', value: 'Cairo, sans-serif' },
+  { label: 'Arapça - Amiri (Klasik Hat)', value: 'Amiri, serif' },
+  { label: 'Arapça - Tajawal (Modern)', value: 'Tajawal, sans-serif' },
+  { label: 'Arapça - IBM Plex (Teknik)', value: '"IBM Plex Sans Arabic", sans-serif' },
+  { label: 'Arapça - Noto Kufi (Kalın)', value: '"Noto Kufi Arabic", sans-serif' },
 ];
 
 const FONT_SIZE_PRESETS = ['8', '9', '10', '11', '12', '14', '16', '18', '20', '24', '28', '32', '36', '48', '72'];

@@ -175,8 +175,8 @@ export const AnnouncementPreviewMockup: React.FC<AnnouncementPreviewMockupProps>
                 }}
               >
                 <div style={{ position: 'absolute', inset: 0, background: previewBg, opacity: announcementActive ? currentBgOpacity / 100 : 0.3, zIndex: 0, pointerEvents: 'none' }} />
-                <div dir={activeLangTab === 'ar' ? 'rtl' : 'ltr'} style={{ position: 'relative', zIndex: 1, width: '100%', maxWidth: '1160px', margin: '0 auto', padding: sizeMetrics.padding, fontSize: sizeMetrics.fontSize, color: previewText, opacity: announcementActive ? currentTextOpacity / 100 : 0.45, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px', boxSizing: 'border-box' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flex: 1, minWidth: 0, overflow: isTicker ? 'hidden' : 'visible' }}>
+                <div dir={activeLangTab === 'ar' ? 'rtl' : 'ltr'} style={{ position: 'relative', zIndex: 1, width: '100%', maxWidth: '1200px', margin: '0 auto', padding: sizeMetrics.padding, fontSize: sizeMetrics.fontSize, color: previewText, opacity: announcementActive ? currentTextOpacity / 100 : 0.45, display: 'flex', alignItems: 'center', boxSizing: 'border-box' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', maxWidth: '1000px', width: '100%', margin: '0 auto', overflow: isTicker ? 'hidden' : 'visible' }}>
                     <span style={{ display: 'inline-flex', flexShrink: 0, marginTop: '1px' }}>{currentThemeObj.icon}</span>
                     {isTicker ? (
                       <div className="ann-ticker-wrap">
@@ -189,7 +189,8 @@ export const AnnouncementPreviewMockup: React.FC<AnnouncementPreviewMockupProps>
                           const speedSec = (activeItem.tickerSpeed === 'slow') ? '28s' : (activeItem.tickerSpeed === 'fast') ? '10s' : '18s';
                           const gapSec = activeItem.tickerGap ?? 0;
                           const delayStr = gapSec < 0 ? ` ${gapSec}s` : '';
-                          const animStyle = `marqueeRTL ${speedSec} linear infinite${delayStr} ${isReverse ? 'reverse' : 'normal'}`;
+                          const animName = isReverse ? 'marqueeToRight' : 'marqueeToLeft';
+                          const animStyle = `${animName} ${speedSec} linear infinite${delayStr}`;
 
                           return (
                             <div
@@ -209,7 +210,7 @@ export const AnnouncementPreviewMockup: React.FC<AnnouncementPreviewMockupProps>
                       <div className="ann-rich-content" style={{ flex: 1, display: 'flex', alignItems: 'center', margin: 0, lineHeight: 1.25 }} dangerouslySetInnerHTML={{ __html: announcementText[activeLangTab] || 'Duyuru içeriği...' }} />
                     )}
                   </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
+                  <div style={{ position: 'absolute', [activeLangTab === 'ar' ? 'left' : 'right']: '0px', top: '50%', transform: 'translateY(-50%)', display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
                     {activeItem.ctaText && (
                       <a href={previewLink || '#'} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()} style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '3px', padding: '3px 9px', fontSize: '10px', fontWeight: 700, borderRadius: '12px', background: isDark ? 'rgba(255,255,255,0.18)' : 'rgba(0,0,0,0.08)', color: 'inherit' }}>
                         {activeItem.ctaText} <ExternalLink size={9} />

@@ -440,23 +440,32 @@ body.theme-light {
 [data-theme="light"] ::-webkit-scrollbar-thumb:hover { background: rgba(0, 0, 0, 0.25); }
 
 /* ===== Ticker / Marquee Keyframes & Duyuru Alanları ===== */
+@keyframes marqueeToLeft {
+  0%   { transform: translate3d(100cqw, 0, 0); }
+  100% { transform: translate3d(-100%, 0, 0); }
+}
+@keyframes marqueeToRight {
+  0%   { transform: translate3d(-100%, 0, 0); }
+  100% { transform: translate3d(100cqw, 0, 0); }
+}
 @keyframes marqueeRTL {
-  0%   { transform: translate3d(0, 0, 0); }
+  0%   { transform: translate3d(100cqw, 0, 0); }
   100% { transform: translate3d(-100%, 0, 0); }
 }
 @keyframes marqueeLTR {
   0%   { transform: translate3d(-100%, 0, 0); }
-  100% { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(100cqw, 0, 0); }
 }
 .ann-ticker-wrap {
   width: 100%;
+  direction: ltr;
   overflow: hidden;
   white-space: nowrap;
+  container-type: inline-size;
 }
 .ann-ticker-track {
   display: inline-block;
   white-space: pre;
-  padding-left: 100%;
   will-change: transform;
 }
 .ann-ticker-track p {
