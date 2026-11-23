@@ -42,3 +42,7 @@
 * **Vitrinde Gmail Yasağı:** Hiçbir kullanıcı arayüzünde (`MSKLabsWeb`, `contact.html`, `apps/*`, `config.js`) `@gmail.com` adresi sergilenemez. Vitrinde daima kurumsal `iletisim@msklabs.org` (veya `contact@msklabs.org`) kullanılır.
 * **Destek Masası Önceliği:** Tüm destek ve kullanıcı temaslarında birincil kanal takip numaralı `destek.html` formudur; kullanıcılar doğrudan e-postaya yönlendirilmez. E-postalar SEO, AdSense ve meşruiyet onayı içindir.
 * **Email Routing & Gönderici Standardı:** Tüm gelen kurumsal mailler (`iletisim@`, `contact@`, `destek@`, `support@`, `admin@`, `bildirim@`, `noreply@`, `bilgi@`, `info@` ve Catch-All) Cloudflare üzerinden tek merkez `msklabs.org@gmail.com` kutusuna akar. Giden onay postaları Resend üzerinden `bildirim@msklabs.org` / `noreply@msklabs.org` ile çıkar. Ayrıntılar için bkz: `docs/architecture/KURUMSAL_EPOSTA_VE_ROUTING_MIMARISI.md`.
+
+## 8. Ekosistem Telemetri & İstişare Ayna Kuralı (IST-013)
+* **1:1 Ayna Senkronizasyonu:** `docs/architecture/013-ekosistem-telemetri-cihaz-kimligi-ve-istatistik-mimarisi.md` dosyası, `D:\Code\istisare\istisareler\013-ekosistem-telemetri-cihaz-kimligi-ve-istatistik-mimarisi.md` ile birebir aynalıdır.
+* **Güncelleme Zorunluluğu:** Herhangi bir tarafta (uygulama veya `MSKLabsDesk` tarafında) telemetri/kimlik/şema değişikliği yapıldığında her iki dosya da aynı anda güncellenir ve Bölüm 11'deki senkronizasyon günlüğüne kaynak repo ile tarih-saat notu düşülür.

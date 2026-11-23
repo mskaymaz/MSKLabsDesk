@@ -27,3 +27,4 @@
 * **[`webMSKLabs_cms_integration.md`](file:///d:/Code/mskaymaz/MSKLabsDesk/docs/architecture/webMSKLabs_cms_integration.md):** Web vitrini ile CMS entegrasyonu rehberi.
 * **[`webMSKLabs_integration_guide.md`](file:///d:/Code/mskaymaz/MSKLabsDesk/docs/architecture/webMSKLabs_integration_guide.md):** Uçtan uca frontend API ve veri bağlama rehberi.
 * **[`tasks_apps_cms.md`](file:///d:/Code/mskaymaz/MSKLabsDesk/docs/architecture/tasks_apps_cms.md):** Uygulama kataloğu ve CMS görev dökümü.
+* **[`013-ekosistem-telemetri-cihaz-kimligi-ve-istatistik-mimarisi.md`](file:///d:/Code/mskaymaz/MSKLabsDesk/docs/architecture/013-ekosistem-telemetri-cihaz-kimligi-ve-istatistik-mimarisi.md):** Ekosistem telemetri, anonim cihaz kimliği (`eco_device_id`) ve MSKLabsDesk entegrasyon mimarisi (`D:\Code\istisare\istisareler\013-...md` ile 1:1 aynalı).
