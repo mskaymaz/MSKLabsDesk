@@ -34,6 +34,31 @@
 
 ## 🚨 ÖNCELİKLİ YENİ GÖREVLER (IMMEDIATE ACTION BACKLOG)
 
+### DIST-CDN-001 — Melez Hızlı Dağıtım & İndirme Sayacı (Cloudflare R2 + Worker Cache Proxy + D1) [ ]
+- **Amaç:** `MSKLabsApps` üzerinden dağıtılan uygulama paketlerinin (`.exe`, `.apk`) Türkiye ve globalde tam hızda indirilmesini sağlamak; en güncel `r2_keep_versions` (varsayılan `2`) sürümü **Cloudflare R2** üzerinden, eski arşiv sürümleri ise **GitHub Releases + Cloudflare Worker Cache Proxy** üzerinden sunmak ve her indirmeyi D1'de saymak.
+- **Referans Kararlar:** `istisare/istisareler/016-melez-hizli-dagitim-r2-ve-worker-cache-mimarisi.md` (`IST-016`) & `013-ekosistem-telemetri-cihaz-kimligi-ve-istatistik-mimarisi.md` (`IST-013`).
+- **Mimari & Kota Kuralları:**
+  1. Sıfır yeni sunucu/proje: Mevcut `msklabsdesk-backend` Worker ve D1 veritabanı kullanılır ($0 / Ay).
+  2. Aktif R2 sürümlerinde `ctx.waitUntil(...)` ile `0 ms` gecikmeli D1 sayaç artırma + `302 Redirect -> R2 Custom Domain URL` uygulanır (dosya baytları Worker'dan geçmez).
+  3. Eski arşiv sürümlerinde Worker, GitHub Releases dosyasını `512 MB/dosya` limitli Cloudflare CDN Cache'e alır.
+  4. Kod içeren hiçbir dosya 400-450 satırı geçmez.
+
+#### 📋 Takip Edilebilir Aşama ve Görev Listesi:
+- [ ] **Task 1 — D1 `download_stats` Şema & Migration Eklemesi:**
+  - [ ] 1.1: `backend/migrations/` altına `download_stats` tablosu (`app_slug`, `version`, `tier` [`r2` | `archive_proxy`], `download_count`, `last_downloaded_at`) eklenmesi (`UNIQUE(app_slug, version)` ile Upsert uyumlu).
+- [ ] **Task 2 — Worker İndirme & Önbellek Proxy Rotası (`GET /dl/:appSlug/:version`):**
+  - [ ] 2.1: Modüler `backend/src/routes/downloadProxy.ts` dosyasının oluşturulması (<= 400 satır).
+  - [ ] 2.2: `app_catalog.json` / R2 eşlemesine göre sürüm aktif R2 katmanındaysa `ctx.waitUntil` ile D1 `download_stats` `+1` artırılıp `302 Redirect` ile R2 URL'sine yönlendirilmesi.
+  - [ ] 2.3: Sürüm arşiv katmanındaysa GitHub Releases kaynağının Cloudflare Cache API (`caches.default`) üzerinden önbelleklenerek servis edilmesi ve `download_stats` `+1` güncellenmesi.
+  - [ ] 2.4: `backend/src/index.ts` içine `/dl/*` rotasının bağlanması ve geçersiz/bilinmeyen `appSlug` için temiz `404` dönüşü.
+- [ ] **Task 3 — MSKLabsDesk Admin Paneli İndirme İstatistikleri Görünümü:**
+  - [ ] 3.1: `GET /api/admin/downloads/summary` uç noktası ile uygulama ve sürüm bazlı toplam indirme sayılarının sunulması.
+  - [ ] 3.2: Mevcut istatistik/dashboard görünümüne kompakt "İndirme Sayaçları" kartının eklenmesi.
+- [ ] **Task 4 — Test ve Doğrulama:**
+  - [ ] 4.1: `backend/tests/` altında `/dl/:appSlug/:version` yönlendirme, D1 sayaç artışı ve cache proxy testlerinin yazılıp `npm test` ile %100 geçirilmesi.
+
+---
+
 ### SYS-SETTINGS-001 — Çok Katmanlı Sistem Ayarları & Granular Bakım Modu (Under Construction Hub) [Aktif]
 - **Amaç:** MSK Labs yönetim panelinde Sistem Ayarları ekranını modern, sekmeli ve tasarım sistemine tam uyumlu bir mimariye kavuşturmak; tüm site için genel (global) ve sayfa/rota bazlı (granular) çalışan dinamik "Bakım / Yapım Aşamasında" (Under Construction) motorunu SEO uyumlu (`HTTP 503 Service Unavailable`), yönetici muafiyetli (admin bypass) ve sıfır maliyetli ($0 Edge Cache) olarak inşa etmek.
 - **Kapsam:** `MSKLabsDesk/frontend/src/views/SettingsView.tsx`, `MSKLabsDesk/frontend/src/components/settings/*`, `MSKLabsDesk/backend/src/routes/cmsTemplates.ts`, `MSKLabsDesk/backend/src/index.ts`, `webMSKLabs/maintenance.html`.

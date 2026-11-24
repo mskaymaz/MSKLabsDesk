@@ -352,9 +352,23 @@ CREATE TABLE IF NOT EXISTS app_daily_stats (
    - *Öneri:* Parmak izi yerine yalnızca `localStorage` + üst alan adı çerezi (`Domain=.msklabs.org`) ile yetinilmesi; gizli sekmede yeni oturum olarak sayılmasının kabul edilmesi.
 
 ### B. Ek Geliştirme ve İyileştirme Önerileri
-- **Heartbeat Periyodu Standardizasyonu:** Pil, veri ve D1 yazma kotasını korumak için periyodik zamanlayıcı yerine **"açılışta 1 kez + uygulama kapanırken/arka plana geçerken 1 kez"** modeli standartlaştırılmalıdır.
+- **Heartbeat Periyodu ve Kaba Yaşam Döngüsü Modeli:** Kapanışta ağ isteği atılmaz (OS kesintisi ve gereksiz D1 yazması önlenir). Uygulama açık kaldığı süreyi (`total_usage_seconds`) ve yeniden kurulum bilgisini (`reinstall_count`) yerelde biriktirir; yalnızca **ilk/yeniden kurulumda**, **sürüm değiştiğinde** ve **cihazın kurulum anından itibaren 7 günde 1 kez** (trafiği haftanın 7 gününe doğal eşit dağıtmak için) açılışta tek paket olarak gönderir.
 - **Mevcut Şema ile Sıfır Maliyetli Kohort (Retention) Analizi:** `device_apps` tablosundaki `first_seen_at` ve `last_seen_at` sütunları zaten 1., 7. ve 30. gün kalıcılık oranlarını ek tablo açmadan SQL ile hesaplamaya uygundur.
 - **Ücretli/Ücretsiz Ayrımı Notu:** İstatistiklerde ayrıca bir `tier` alanı tutulmasına gerek yoktur; uygulama isimleri (`app_id`) zaten bu ayrımı doğal olarak karşılamaktadır.
+
+### C. Mimari Açıklar, Gerçekçilik Sınırları ve Zorunlu Sıkılaştırmalar (`24.11.2026` Denetimi)
+1. **Web Doğruluk Sınırı (~%60–75 Gerçek Veri):**
+   - *Risk:* Safari ITP JS ile yazılan çerezleri 7 günde siler; Brave/Firefox gizlilik kalkanları, in-app tarayıcılar (WhatsApp/Instagram) ve çerez temizliği her seferinde yeni `eco_device_id` üreterek tekil kullanıcı sayısını şişirir. Ayrıca Web kimliği masaüstü/mobil ile birleşmez.
+   - *Kabul & Önlem:* Web metriği "%95+ tekil cihaz" değil **oturum/tarayıcı trendi** olarak yorumlanmalı; mümkünse Worker tarafından `Set-Cookie` (First-Party) başlığıyla çerez ömrü güçlendirilmelidir.
+2. **Android `Signature ContentProvider` Anahtar ve Silinme Riski:**
+   - *Risk:* Google Play App Signing'de uygulamalar farklı anahtarlarla imzalanırsa `signature` koruması çalışmaz. Ayrıca ilk kurulan uygulama cihazdan silinirse `ContentProvider` kaybolur.
+   - *Zorunlu Kural:* Play Console'da tüm uygulamalar için **aynı imza anahtarı** kullanılmalı ve 2. uygulama ID'yi okuduğu anda **kendi `EncryptedSharedPreferences` deposuna kalıcı kopyasını** yazmalıdır.
+3. **Masaüstü Eşzamanlı Yazma Yarışı (Race Condition):**
+   - *Risk:* İki MSK masaüstü uygulaması ilk kez aynı anda açılırsa `%APPDATA%\MSKLabs\eco_identity.json` dosyasını birbirinin üzerine yazıp bozabilir.
+   - *Zorunlu Kural:* Dosya oluşturma işlemi **atomik yazma** (`.tmp` dosyasına yazıp `rename`) ile yapılmalıdır.
+4. **Cloudflare D1 Günlük 100.000 Satır Yazma Kotası (Ölçek Riski):**
+   - *Risk:* D1 ücretsiz planda **günde 100.000 satır yazma** limiti vardır. "Açılışta 1 + kapanışta 1" modeli 50.000+ günlük aktif kullanıcıda kotayı aşar.
+   - *Zorunlu Kural:* İstemci yerelde `last_heartbeat_date` kontrolü yaparak **cihaz+uygulama başına günde en fazla 1 kez** (sürüm değişmediyse **7 günde 1 kez**) heartbeat atmalıdır. Yüksek hacimli event/sayaç akışları için **Cloudflare Workers Analytics Engine** (`writeDataPoint`) D1'e yük bindirmeden kullanılabilir.
 
 ---
 
@@ -364,14 +378,18 @@ CREATE TABLE IF NOT EXISTS app_daily_stats (
 - **Uygulama Tarafı (Masaüstü / Mobil / Web):**
   - `eco_device_id` (`eco_<UUIDv4>`) üretimi/okuması + Ayarlar'da tek tıkla Opt-out anahtarı.
   - Android 11+ için `AndroidManifest.xml` içine `<queries>` bloğu + imza korumalı `ContentProvider`; iOS için `group.org.msklabs.shared`.
-  - Heartbeat gönderimi: Açılışta ve arka plana geçerken/kapanırken `POST /api/v1/telemetry/heartbeat` (`msklabsdesk-backend.msklabs-org.workers.dev`).
+  - Heartbeat gönderimi: Kapanış isteği olmadan, yerelde biriktirilen `total_usage_seconds` + `reinstall_count` ile ilk/yeniden kurulumda, sürüm değişiminde ve kurulumdan itibaren 7 günde 1 kez `POST /api/v1/telemetry/heartbeat` (`msklabsdesk-backend.msklabs-org.workers.dev`).
   - Destek formunda (`support.ts` uç noktası) yük içine opsiyonel `eco_device_id` ve `app_version` eklenmesi.
 - **MSKLabsDesk Tarafı (`D:\Code\mskaymaz\MSKLabsDesk`):**
   - Yeni D1 migration: `device_apps` (içinde `feature_counts_json` ile), `crash_reports`, `device_clusters`, `app_daily_stats` tabloları ve `messages` tablosuna `eco_device_id`, `app_version` sütunları.
   - Backend route'ları: `POST /api/v1/telemetry/heartbeat` (Worker rate-limit + JSON şema doğrulama + `remote_config` yanıtı) ve kritik çökmede `messages` tablosuna otomatik sistem bileti.
   - `support.ts` ve `adminInboxUnified.ts` güncellemeleri + Admin panelde "Ekosistem & İstatistik" ekranı.
+  - **`IST-016` Dağıtım & İndirme Sayacı Entegrasyonu:** Uygulama indirme sayacı ve R2/GitHub Releases yönlendirmesi için ayrı Worker/D1 açılmaz; bu aynı Worker (`msklabsdesk-backend`) içine `/dl/<app-slug>/<version>` rotası ve D1'de `download_stats` tablosu eklenir (`ctx.waitUntil` ile `+1` sayaç + `302 Redirect` -> R2 URL; eski sürümler için Worker Cache Proxy). *(Detaylar: `istisare/istisareler/016-melez-hizli-dagitim-r2-ve-worker-cache-mimarisi.md`).*
 
 ### B. Değişiklik ve Ayna Senkronizasyon Günlüğü
 | Tarih-Saat | Düzenlenen Kaynak | Ayna Hedef | Yapılan İşlem |
 | :--- | :--- | :--- | :--- |
 | `23.11.2026 - 11:34` | `istisare` + `MSKLabsDesk` | Her iki repo (`013-...md`) | Alan adları `.msklabs.com` / `alanadiniz.com` -> `.msklabs.org` (`group.org.msklabs.shared`) düzeltildi; `device_apps.feature_counts_json` ve `messages` (`eco_device_id`, `app_version`) şema notları netleştirildi; AI ajanları için Uygulama/Desk uygulama özeti eklendi ve `MSKLabsDesk/docs/architecture/` altına 1:1 ayna oluşturuldu. |
+| `24.11.2026 - 14:35` | `istisare` + `MSKLabsDesk` | Her iki repo (`013-...md`) | `IST-016` (R2 + Worker Cache Proxy) ile ortak Worker/D1 kullanımı ve `/dl/<app-slug>/<version>` indirme sayacı entegrasyon notu eklendi. |
+| `24.11.2026 - 14:46` | `istisare` + `MSKLabsDesk` | Her iki repo (`013-...md`) | Bölüm 10.C eklendi: Web %60-75 gerçeklik sınırı, Android ortak imza + yerel kopya şartı, Masaüstü atomik `.tmp->rename` yazma ve D1 100K/gün yazma kotasına karşı günlük/haftalık heartbeat seyreltmesi + Analytics Engine notu işlendi. |
+| `24.11.2026 - 15:02` | `istisare` + `MSKLabsDesk` | Her iki repo (`013-...md`) | Kapanış heartbeat'i kaldırıldı; `total_usage_seconds` + `reinstall_count` yerelde biriktirilip ilk/yeniden kurulum, sürüm değişimi ve cihaz bazlı `+7 gün` doğal dağılımıyla gönderilecek şekilde güncellendi. |
