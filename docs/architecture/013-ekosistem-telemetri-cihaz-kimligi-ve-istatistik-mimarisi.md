@@ -375,16 +375,18 @@ CREATE TABLE IF NOT EXISTS app_daily_stats (
 ## 11. Uygulama ve Desk Entegrasyon Kontrol Listesi + Ayna Senkronizasyon Günlüğü
 
 ### A. Kodlama Ajanları İçin Uygulama Özeti (Uygulama vs. Desk)
-- **Uygulama Tarafı (Masaüstü / Mobil / Web):**
-  - `eco_device_id` (`eco_<UUIDv4>`) üretimi/okuması + Ayarlar'da tek tıkla Opt-out anahtarı.
+- **Uygulama Tarafı (Masaüstü / Mobil / Web — Detaylı Kod Rehberi: `017-eco-sdk-istemci-entegrasyon-rehberi.md`):**
+  - `eco_device_id` (`eco_<UUIDv4>`) üretimi/okuması.
+  - **Sessiz Çalışma & Mağaza (Google Play / App Store) Politikası Notu:** Uygulamalar kişisel veri (PII, ad, e-posta, IP) toplamadığı için uygulama ayarlarına kullanıcıya gösterilen "istatistiği kapat" (opt-out) anahtarı veya rahatsız edici pop-up/izin penceresi **konulmaz**; telemetri arka planda sessiz çalışır. Ancak ileride **Google Play / App Store**'a yüklenecek uygulamalarda mağaza inceleme formu (*Data Safety / App Privacy — App Analytics & Diagnostics*) doldurulurken `privacy.html` (Gizlilik Politikası) sayfasında *"Uygulama kalitesi ve sürüm takibi için kişisel bilgi içermeyen anonim teknik veriler işlenir"* ifadesinin yer alması zorunlu hatırlatma olarak korunur.
   - Android 11+ için `AndroidManifest.xml` içine `<queries>` bloğu + imza korumalı `ContentProvider`; iOS için `group.org.msklabs.shared`.
-  - Heartbeat gönderimi: Kapanış isteği olmadan, yerelde biriktirilen `total_usage_seconds` + `reinstall_count` ile ilk/yeniden kurulumda, sürüm değişiminde ve kurulumdan itibaren 7 günde 1 kez `POST /api/v1/telemetry/heartbeat` (`msklabsdesk-backend.msklabs-org.workers.dev`).
+  - Heartbeat gönderimi: Kapanış isteği olmadan, yerelde biriktirilen `launch_count` (açılış sayısı, delta) + `reinstall_count` (`total_usage_seconds` opsiyonel/varsayılan 0) ile ilk/yeniden kurulumda, sürüm değişiminde ve kurulumdan itibaren 7 günde 1 kez açılışta `POST /api/v1/telemetry/heartbeat` (`msklabsdesk-backend.msklabs-org.workers.dev`). Kurulu kalma ömrü `first_seen_at` ve `last_seen_at` farkından otomatik hesaplanır.
   - Destek formunda (`support.ts` uç noktası) yük içine opsiyonel `eco_device_id` ve `app_version` eklenmesi.
 - **MSKLabsDesk Tarafı (`D:\Code\mskaymaz\MSKLabsDesk`):**
+  - **Hedef Ölçek:** 20–30 uygulama (50–100 MB paket boyutu) ve $0 maliyet (100K/gün D1 yazma kotası altında).
   - Yeni D1 migration: `device_apps` (içinde `feature_counts_json` ile), `crash_reports`, `device_clusters`, `app_daily_stats` tabloları ve `messages` tablosuna `eco_device_id`, `app_version` sütunları.
-  - Backend route'ları: `POST /api/v1/telemetry/heartbeat` (Worker rate-limit + JSON şema doğrulama + `remote_config` yanıtı) ve kritik çökmede `messages` tablosuna otomatik sistem bileti.
-  - `support.ts` ve `adminInboxUnified.ts` güncellemeleri + Admin panelde "Ekosistem & İstatistik" ekranı.
-  - **`IST-016` Dağıtım & İndirme Sayacı Entegrasyonu:** Uygulama indirme sayacı ve R2/GitHub Releases yönlendirmesi için ayrı Worker/D1 açılmaz; bu aynı Worker (`msklabsdesk-backend`) içine `/dl/<app-slug>/<version>` rotası ve D1'de `download_stats` tablosu eklenir (`ctx.waitUntil` ile `+1` sayaç + `302 Redirect` -> R2 URL; eski sürümler için Worker Cache Proxy). *(Detaylar: `istisare/istisareler/016-melez-hizli-dagitim-r2-ve-worker-cache-mimarisi.md`).*
+  - Backend route'ları: `POST /api/v1/telemetry/heartbeat` (Worker rate-limit + JSON şema doğrulama + `app_id` whitelist + `launch_count` delta toplama + `remote_config` yanıtı) ve kritik çökmede `messages` tablosuna otomatik sistem bileti.
+  - `support.ts` ve `adminInboxUnified.ts` güncellemeleri + Admin panelde sadeleştirilmiş **"Ekosistem & İstatistik"**: Ana odak **Gerçek Kurulan Cihaz (`eco_device_id`), Kurulu Kalma Süresi (`first_seen_at -> last_seen_at`), Açılış Sayısı (`launch_count`), Yeniden Kurulum (`reinstall_count`)** ve **Uygulamaya Göre Birlikte Kullanılan Uygulamalar (korelasyon & kombinasyonlar)**.
+  - **`IST-016` Dağıtım & İndirme Sayacı Entegrasyonu:** Uygulama indirme sayacı ve R2/GitHub Releases yönlendirmesi için ayrı Worker/D1 açılmaz; bu aynı Worker (`msklabsdesk-backend`) içine `/dl/<app-slug>/<version>` rotası ve D1'de `download_stats` tablosu eklenir (`ctx.waitUntil` ile yalnızca `GET` + ilk parça istekte `+1` sayaç + `302 Redirect` -> R2 URL; eski sürümler için 512 MB Worker Cache Proxy). Panelde R2/Arşiv katman rozeti gösterilmez; indirme sayacı yardımcı özet olarak yer alır. *(Detaylar: `istisare/istisareler/016-melez-hizli-dagitim-r2-ve-worker-cache-mimarisi.md`).*
 
 ### B. Değişiklik ve Ayna Senkronizasyon Günlüğü
 | Tarih-Saat | Düzenlenen Kaynak | Ayna Hedef | Yapılan İşlem |
@@ -393,3 +395,4 @@ CREATE TABLE IF NOT EXISTS app_daily_stats (
 | `24.11.2026 - 14:35` | `istisare` + `MSKLabsDesk` | Her iki repo (`013-...md`) | `IST-016` (R2 + Worker Cache Proxy) ile ortak Worker/D1 kullanımı ve `/dl/<app-slug>/<version>` indirme sayacı entegrasyon notu eklendi. |
 | `24.11.2026 - 14:46` | `istisare` + `MSKLabsDesk` | Her iki repo (`013-...md`) | Bölüm 10.C eklendi: Web %60-75 gerçeklik sınırı, Android ortak imza + yerel kopya şartı, Masaüstü atomik `.tmp->rename` yazma ve D1 100K/gün yazma kotasına karşı günlük/haftalık heartbeat seyreltmesi + Analytics Engine notu işlendi. |
 | `24.11.2026 - 15:02` | `istisare` + `MSKLabsDesk` | Her iki repo (`013-...md`) | Kapanış heartbeat'i kaldırıldı; `total_usage_seconds` + `reinstall_count` yerelde biriktirilip ilk/yeniden kurulum, sürüm değişimi ve cihaz bazlı `+7 gün` doğal dağılımıyla gönderilecek şekilde güncellendi. |
+| `24.11.2026 - 16:13` | `MSKLabsDesk` + `istisare` | Her iki repo (`013-...md`) | Uygulama içi opt-out/pop-up kaldırılarak sessiz çalışma benimsendi; ileride Google Play / App Store uygulamaları için `privacy.html` & Data Safety hatırlatma notu eklendi. Ana metrik `launch_count` (açılış sayısı) + `first_seen_at / last_seen_at` (kurulu kalma süresi) olarak sadeleştirildi. |

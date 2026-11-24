@@ -36,6 +36,9 @@
 
 ### DIST-CDN-001 — Melez Hızlı Dağıtım & İndirme Sayacı (Cloudflare R2 + Worker Cache Proxy + D1) [ ]
 - **Amaç:** `MSKLabsApps` üzerinden dağıtılan uygulama paketlerinin (`.exe`, `.apk`) Türkiye ve globalde tam hızda indirilmesini sağlamak; en güncel `r2_keep_versions` (varsayılan `2`) sürümü **Cloudflare R2** üzerinden, eski arşiv sürümleri ise **GitHub Releases + Cloudflare Worker Cache Proxy** üzerinden sunmak ve her indirmeyi D1'de saymak.
+- **Sebep:** `24.11.2026` ölçümünde GitHub Releases CDN (`objects.githubusercontent.com`) hızı `~196 KB/s` çıktı (48 MB dosya ~172 sn). Ayrıca doğrudan GitHub linkleri D1 indirme istatistiği üretmiyordu.
+- **Tasarlanan Değişiklik:** Tüm web ve uygulama içi indirme bağlantıları `GET /dl/:appSlug/:version` Worker rotasına yönlendirilir; Worker `ctx.waitUntil` ile D1 `download_stats` sayacını `+1` artırır, aktif sürümleri **`302 Redirect -> Cloudflare R2`**'ya, arşiv sürümleri ise **Cache Proxy (GitHub Releases)** katmanına bağlar.
+- **Beklenen Sonuç:** İndirme hızı yerel Cloudflare Edge hızına çıkar, 10 GB R2 kotası `r2_keep_versions` ile korunur, tüm indirmeler `MSKLabsDesk` panelinde canlı izlenir ($0/ay).
 - **Referans Kararlar:** `istisare/istisareler/016-melez-hizli-dagitim-r2-ve-worker-cache-mimarisi.md` (`IST-016`) & `013-ekosistem-telemetri-cihaz-kimligi-ve-istatistik-mimarisi.md` (`IST-013`).
 - **Mimari & Kota Kuralları:**
   1. Sıfır yeni sunucu/proje: Mevcut `msklabsdesk-backend` Worker ve D1 veritabanı kullanılır ($0 / Ay).
@@ -48,14 +51,40 @@
   - [ ] 1.1: `backend/migrations/` altına `download_stats` tablosu (`app_slug`, `version`, `tier` [`r2` | `archive_proxy`], `download_count`, `last_downloaded_at`) eklenmesi (`UNIQUE(app_slug, version)` ile Upsert uyumlu).
 - [ ] **Task 2 — Worker İndirme & Önbellek Proxy Rotası (`GET /dl/:appSlug/:version`):**
   - [ ] 2.1: Modüler `backend/src/routes/downloadProxy.ts` dosyasının oluşturulması (<= 400 satır).
-  - [ ] 2.2: `app_catalog.json` / R2 eşlemesine göre sürüm aktif R2 katmanındaysa `ctx.waitUntil` ile D1 `download_stats` `+1` artırılıp `302 Redirect` ile R2 URL'sine yönlendirilmesi.
-  - [ ] 2.3: Sürüm arşiv katmanındaysa GitHub Releases kaynağının Cloudflare Cache API (`caches.default`) üzerinden önbelleklenerek servis edilmesi ve `download_stats` `+1` güncellenmesi.
+  - [ ] 2.2: `app_catalog.json` (Edge Cache ile önbellekli) / R2 eşlemesine göre sürüm aktif R2 katmanındaysa `ctx.waitUntil` ile D1 `download_stats` `+1` (yalnızca `GET` ve `HEAD`/çoklu `Range` hariç) artırılıp `302 Redirect` ile R2 URL'sine yönlendirilmesi.
+  - [ ] 2.3: Sürüm arşiv katmanındaysa GitHub Releases kaynağının Cloudflare Cache API (`caches.default`, 512 MB/dosya) üzerinden önbelleklenerek servis edilmesi ve `download_stats` `+1` güncellenmesi.
   - [ ] 2.4: `backend/src/index.ts` içine `/dl/*` rotasının bağlanması ve geçersiz/bilinmeyen `appSlug` için temiz `404` dönüşü.
 - [ ] **Task 3 — MSKLabsDesk Admin Paneli İndirme İstatistikleri Görünümü:**
-  - [ ] 3.1: `GET /api/admin/downloads/summary` uç noktası ile uygulama ve sürüm bazlı toplam indirme sayılarının sunulması.
-  - [ ] 3.2: Mevcut istatistik/dashboard görünümüne kompakt "İndirme Sayaçları" kartının eklenmesi.
+  - [ ] 3.1: `GET /api/admin/downloads/summary` uç noktası ile uygulama ve sürüm bazlı toplam web/R2 indirme sayılarının sunulması.
+  - [ ] 3.2: Mevcut istatistik/dashboard görünümüne kompakt "Web/R2 İndirme Özeti" kartının eklenmesi (R2/Arşiv katman rozeti gösterilmez).
 - [ ] **Task 4 — Test ve Doğrulama:**
   - [ ] 4.1: `backend/tests/` altında `/dl/:appSlug/:version` yönlendirme, D1 sayaç artışı ve cache proxy testlerinin yazılıp `npm test` ile %100 geçirilmesi.
+
+---
+
+### TELEMETRY-ECO-001 — Ekosistem Telemetri, Anonim Cihaz Kimliği ve Kaba Yaşam Döngüsü Merkezi (IST-013) [ ]
+- **Amaç:** 20–30 masaüstü, mobil ve web uygulamasından PII içermeyen anonim cihaz kimliği (`eco_device_id`) ile kaba yaşam döngüsü (`first_seen_at`, `last_seen_at` ile kurulu kalma süresi, `launch_count`, `reinstall_count`), çapraz uygulama (cross-app) kullanımı ve çökme/destek verilerini $0 maliyetle tek `MSKLabsDesk` panelinde toplamak.
+- **Referans Karar:** `docs/architecture/013-ekosistem-telemetri-cihaz-kimligi-ve-istatistik-mimarisi.md` (`IST-013`, son güncelleme: `24.11.2026`).
+- **Mimari & Kota Kuralları:**
+  1. **Kapanış İsteği Yok & `+7 Gün` Doğal Dağıtım:** Uygulamalar kapanışta istek atmaz; açılış sayısını (`launch_count`, delta) yerelde biriktirip yalnızca ilk/yeniden kurulumda, sürüm değişiminde ve cihaz kurulumundan itibaren `+7 günde 1` açılışta tek paket gönderir (D1 100K/gün yazma kotası koruması).
+  2. **Sessiz Çalışma & Google Play / App Store Hatırlatması:** Uygulama ayarlarında opt-out anahtarı veya pop-up konulmaz; arka planda sessiz çalışır. İleride Google Play / App Store'a yüklenecek uygulamalarda mağaza *Data Safety* formu ve `privacy.html` içine *"anonim teknik/sürüm verisi"* notu eklenmesi unutulmaz.
+  3. **Upsert & Offline-First:** `(eco_device_id, app_id)` çifti üzerinden D1 satır şişmesini önleyen Upsert modeli; 429/kota aşımında istemci FIFO kuyruğu bir sonraki açılışta tekrar dener.
+  4. **Dosya Boyutu:** Kod içeren hiçbir dosya 400–450 satırı geçmez.
+
+#### 📋 Takip Edilebilir Aşama ve Görev Listesi:
+- [ ] **Task 1 — D1 Telemetri Şeması & Migration:**
+  - [ ] 1.1: `device_apps` (`eco_device_id`, `app_id`, `app_version`, `platform`, `first_seen_at`, `last_seen_at`, `total_usage_seconds`, `reinstall_count`, `feature_counts_json` — `UNIQUE(eco_device_id, app_id)`), `crash_reports`, `device_clusters` ve `app_daily_stats` tablolarının migration'a eklenmesi.
+  - [ ] 1.2: `messages` tablosuna opsiyonel `eco_device_id` ve `app_version` sütunlarının eklenmesi.
+- [ ] **Task 2 — Backend Telemetri API & Destek Bağlantısı:**
+  - [ ] 2.1: `backend/src/routes/telemetry.ts` içinde `POST /api/v1/telemetry/heartbeat` (strict JSON şema doğrulama, IP/device rate-limit, Upsert ve yanıtta `remote_config` dönüşü).
+  - [ ] 2.2: Kritik çökme raporlarında `messages` tablosuna otomatik sistem destek bileti açılması.
+  - [ ] 2.3: `support.ts` ve `adminInboxUnified.ts` içinde `eco_device_id` / `app_version` alanlarının desteklenerek bilet yanında cihaz özetinin gösterilmesi.
+- [ ] **Task 3 — Admin Panel "Ekosistem & İstatistik" Ekranı:**
+  - [ ] 3.1: `GET /api/admin/telemetry/overview` uç noktası (uygulama ligi, kurulu kalma süresi `first_seen_at -> last_seen_at`, açılış sayısı `launch_count`, `reinstall_count` ve uygulamaya göre birlikte kullanım korelasyonu / kombinasyonlar; Edge Cache + `?refresh=1`).
+  - [ ] 3.2: `MSKLabsDesk/frontend` içinde `TelemetryView.tsx` ve modüler kartlar (`<= 450 satır`, ana odak kurulan/çalıştırılan cihaz ve çapraz uygulama korelasyonu).
+- [ ] **Task 4 — İstemci Ortak Kimlik & Test Doğrulaması:**
+  - [ ] 4.1: İstemci SDK sözleşmesinin netleştirilmesi (Masaüstü atomik `.tmp -> rename` `eco_identity.json`; Android ortak imza + `EncryptedSharedPreferences` yerel kopya + `<queries>`; iOS `Keychain Access Groups`; Web `First-Party Set-Cookie` trend notu).
+  - [ ] 4.2: `backend/tests/` altında heartbeat Upsert, rate-limit, `reinstall_count` ve `support.ts` testlerinin yazılıp `npm test` ile %100 geçirilmesi.
 
 ---
 
