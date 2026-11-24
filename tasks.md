@@ -32,6 +32,17 @@
 
 ---
 
+## 🗺️ UÇTAN UCA EKOSİSTEM DAĞITIM & TELEMETRİ YOL HARİTASI (MASTER CHECKLIST)
+> **Kural:** Canlıda 404 veya eksik veri oluşmaması için aşağıdaki 5 aşama **sırayla** yürütülür; bir aşama doğrulanmadan sonrakine geçilmez.
+
+- [ ] **Aşama 1 — R2 Bucket Kurulumu & İlk Aktif Paketler (`IST-016`):** Cloudflare R2 bucket açılır, her uygulamanın son `r2_keep_versions` (varsayılan `2`) sürümü yüklenir ve R2 URL'sinin `200 OK` döndüğü doğrulanır.
+- [ ] **Aşama 2 — `MSKLabsDesk` Hızlı İndirme & Sayaç (`DIST-CDN-001`):** D1 `download_stats` migration + `GET /dl/:appSlug/:version` (R2 `302` + 512 MB Worker Cache Proxy) + `GET /api/admin/downloads/summary` + testler tamamlanıp canlıya alınır.
+- [ ] **Aşama 3 — `MSKLabsDesk` Ekosistem Telemetri & Panel (`TELEMETRY-ECO-001`):** D1 telemetri tabloları + `POST /api/v1/telemetry/heartbeat` + `GET /api/admin/telemetry/overview` + `support.ts`/`adminInboxUnified.ts` bağlantısı + `panel.msklabs.org` ekranları (`TelemetryView` vb.) tamamlanıp canlıya alınır.
+- [ ] **Aşama 4 — `MSKLabsApps` Katalog & `MSKLabsWeb` Geçişi (`WEB-DIST-001`):** `app_catalog.json` ve `update_manifest.json` `/dl/...` adreslerine geçirilir; ardından `MSKLabsWeb` (`app.html`, `download.html`, `apps/*.html` ve `privacy.html` mağaza notu) güncellenir.
+- [ ] **Aşama 5 — Uygulama Repolarına `IST-017` Entegrasyonu (`ECO_TELEMETRY_GUIDE.md`):** `D_*`, `M_*`, `PushPull`, `Avkat` repoları güncellendikçe `eco_device_id` + 7 günlük `launch_count` heartbeat'i eklenir ve panelden gerçek kurulum/açılış verisi doğrulanır.
+
+---
+
 ## 🚨 ÖNCELİKLİ YENİ GÖREVLER (IMMEDIATE ACTION BACKLOG)
 
 ### DIST-CDN-001 — Melez Hızlı Dağıtım & İndirme Sayacı (Cloudflare R2 + Worker Cache Proxy + D1) [ ]

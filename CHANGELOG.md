@@ -1,6 +1,14 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [24.11.2026 - 16:37] - Ekosistem Telemetri (IST-013), Melez Dağıtım (IST-016), İstemci Rehberi (IST-017) ve Uçtan Uca Yol Haritası
+- **Mimari İstişare & Doküman Güncellemeleri (`013`, `016`, `017`, `tasks.md`):**
+  - `DIST-CDN-001` ve `TELEMETRY-ECO-001` kararları 20–30 uygulama (50–100 MB) ölçeğine göre netleştirildi; panelde R2/Arşiv rozeti yerine gerçek kurulum/açılış ve çapraz uygulama korelasyonu odak alındı.
+  - `017-eco-sdk-istemci-entegrasyon-rehberi.md` hazırlanarak `MSKLabsDesk`, `istisare` ve tüm aktif uygulama repolarına dağıtıldı.
+  - `tasks.md` içine 5 aşamalı işaretlenebilir `MASTER CHECKLIST` yol haritası eklendi.
+
+---
+
 ## [19.11.2026 - 17:15] - Kayan Yazı 1000 px Ortalı Koridor, 100 px Dış X Butonu, Arapça/Latin Font Ailesi ve Container Query Ticker Geometrisi (TICKER-ALIGN-1000PX-008)
 - **1000 px Ortalı Kayan Yazı Koridoru ve 100 px Dış Buton Hizası:**
   - Kayan yazı iç alanı (`.msk-ann-inner`) `max-width: 1000px; margin: 0 auto;` olarak güncellendi ve sayfaya simetrik ortalandı.

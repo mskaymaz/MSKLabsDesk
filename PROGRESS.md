@@ -1,6 +1,15 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 📌 Son Güncelleme [24.11.2026 - 16:37] — EKOSİSTEM TELEMETRİ (IST-013), MELEZ DAĞITIM (IST-016), İSTEMCİ REHBERİ (IST-017) VE UÇTAN UCA YOL HARİTASI İSTİŞARESİ [✓]
+* **Tamamlanan Mimari İstişare ve Dokümantasyon:**
+  1. **Ölçek & Kota Hizalaması:** 20–30 uygulama (50–100 MB) ve $0 ücretsiz Cloudflare D1 (100K/gün yazma) + R2 (10 GB) sınırları için netleştirildi (`r2_keep_versions` varsayılan `2`, eski sürümler için 512 MB Worker Cache Proxy).
+  2. **Kaba Yaşam Döngüsü & Sessiz Çalışma:** Kapanış isteği kaldırıldı; `launch_count` + `first_seen_at -> last_seen_at` (kurulu kalma süresi) + 7 günde 1 gönderim modeli benimsendi. Uygulama içi opt-out/pop-up yerine Google Play / App Store için `privacy.html` & Data Safety hatırlatması eklendi.
+  3. **`IST-017` İstemci Rehberi & 14 Repoya Dağıtım:** `017-eco-sdk-istemci-entegrasyon-rehberi.md` oluşturulup 14 aktif uygulama reposuna `ECO_TELEMETRY_GUIDE.md` ve `AGENTS.md` kuralı olarak işlendi.
+  4. **Uçtan Uca Ana Sıra (`MASTER CHECKLIST`):** `tasks.md` başına 5 aşamalı işaretlenebilir yol haritası eklendi.
+
+---
+
 ## 📌 Son Güncelleme [19.11.2026 - 17:15] — KAYAN YAZI 1000 PX ORTALI KORİDOR, 100 PX DIŞ X BUTONU, TİPOGRAFİ GENİŞLEMESİ VE CQW TİCKER GEOMETRİSİ (TICKER-ALIGN-1000PX-008) [✓]
 * **Geliştirilen Altyapı ve Arayüz Kazanımları:**
   1. **1000 px Ortalı Kayan Yazı Koridoru:** Kayan yazı tuvali (`.msk-ann-inner`) 1000 px genişliğe çıkarıldı ve sayfaya sağdan/soldan eşit payla tam ortalandı.
