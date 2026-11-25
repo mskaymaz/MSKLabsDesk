@@ -46,3 +46,7 @@
 ## 8. Ekosistem Telemetri & İstişare Ayna Kuralı (IST-013)
 * **1:1 Ayna Senkronizasyonu:** `docs/architecture/013-ekosistem-telemetri-cihaz-kimligi-ve-istatistik-mimarisi.md` dosyası, `D:\Code\istisare\istisareler\013-ekosistem-telemetri-cihaz-kimligi-ve-istatistik-mimarisi.md` ile birebir aynalıdır.
 * **Güncelleme Zorunluluğu:** Herhangi bir tarafta (uygulama veya `MSKLabsDesk` tarafında) telemetri/kimlik/şema değişikliği yapıldığında her iki dosya da aynı anda güncellenir ve Bölüm 11'deki senkronizasyon günlüğüne kaynak repo ile tarih-saat notu düşülür.
+
+## Response Budget & Commit Format (Mandatory)
+- **<= 10 Lines Limit:** Keep ALL replies concise, bulleted, and strictly **<= 10 lines total** (1–3 lines for Yes/No, max 1–2 lines/single sentence per bullet). No unrequested elaboration unless asked.
+- **Commit Format:** On user-approved commits, summarize the change clearly in Turkish followed by `(yy/mm/dd_hh.mm)` (e.g., `Aktif hesap okuma düzeltildi (26/11/25_15.42)`).
