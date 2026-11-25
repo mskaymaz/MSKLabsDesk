@@ -47,6 +47,10 @@
 * **1:1 Ayna Senkronizasyonu:** `docs/architecture/013-ekosistem-telemetri-cihaz-kimligi-ve-istatistik-mimarisi.md` dosyası, `D:\Code\istisare\istisareler\013-ekosistem-telemetri-cihaz-kimligi-ve-istatistik-mimarisi.md` ile birebir aynalıdır.
 * **Güncelleme Zorunluluğu:** Herhangi bir tarafta (uygulama veya `MSKLabsDesk` tarafında) telemetri/kimlik/şema değişikliği yapıldığında her iki dosya da aynı anda güncellenir ve Bölüm 11'deki senkronizasyon günlüğüne kaynak repo ile tarih-saat notu düşülür.
 
+## 9. Release, İkili Dosya Adlandırma & Melez Dağıtım Kuralı (IST-015 / IST-016)
+* **Standart Dosya Adı (`IST-015`):** `MSKLabsDesk` `/dl/:appSlug/:version` ve R2 eşlemelerinde `app-release.apk` / `app-debug.apk` gibi genel isimler **kesinlikle kullanılmaz**. Tüm public ikili dosyalar **`<UygulamaAdı>-vX.Y.Z.<uzantı>`** (ör. `RekatSay-v1.3.1.apk`) adıyla saklanır ve sunulur.
+* **5 Aşamalı Geçiş (`IST-016`):** R2 (`msklabs-releases`) → `MSKLabsDesk` `/dl/` Worker rotası → `MSKLabsApps` katalog/manifest → `MSKLabsWeb` → Uçtan uca doğrulama sırası bozulmadan yürütülür.
+
 ## Response Budget & Commit Format (Mandatory)
 - **<= 10 Lines Limit:** Keep ALL replies concise, bulleted, and strictly **<= 10 lines total** (1–3 lines for Yes/No, max 1–2 lines/single sentence per bullet). No unrequested elaboration unless asked.
 - **Commit Format:** On user-approved commits, summarize the change clearly in Turkish followed by `(yy/mm/dd_hh.mm)` (e.g., `Aktif hesap okuma düzeltildi (26/11/25_15.42)`).
