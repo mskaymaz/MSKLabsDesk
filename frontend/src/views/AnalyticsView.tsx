@@ -4,7 +4,7 @@ import { WebAnalyticsTab } from '../components/analytics/WebAnalyticsTab';
 import { TelemetryView } from '../components/analytics/TelemetryView';
 
 export const AnalyticsView: React.FC = () => {
-  const [tab, setTab] = useState<'web' | 'ecosystem'>('ecosystem');
+  const [tab, setTab] = useState<'web' | 'ecosystem'>('web');
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
@@ -17,26 +17,6 @@ export const AnalyticsView: React.FC = () => {
           flexWrap: 'wrap',
         }}
       >
-        <button
-          type="button"
-          onClick={() => setTab('ecosystem')}
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '8px',
-            padding: '8px 14px',
-            borderRadius: '8px',
-            border: 'none',
-            cursor: 'pointer',
-            fontSize: '13px',
-            fontWeight: 600,
-            background: tab === 'ecosystem' ? 'var(--accent-primary, #3b82f6)' : 'transparent',
-            color: tab === 'ecosystem' ? '#fff' : 'var(--text-secondary)',
-          }}
-        >
-          <Smartphone size={15} />
-          Uygulama & Ekosistem
-        </button>
         <button
           type="button"
           onClick={() => setTab('web')}
@@ -57,9 +37,29 @@ export const AnalyticsView: React.FC = () => {
           <Globe2 size={15} />
           Web İstatistikleri
         </button>
+        <button
+          type="button"
+          onClick={() => setTab('ecosystem')}
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '8px',
+            padding: '8px 14px',
+            borderRadius: '8px',
+            border: 'none',
+            cursor: 'pointer',
+            fontSize: '13px',
+            fontWeight: 600,
+            background: tab === 'ecosystem' ? 'var(--accent-primary, #3b82f6)' : 'transparent',
+            color: tab === 'ecosystem' ? '#fff' : 'var(--text-secondary)',
+          }}
+        >
+          <Smartphone size={15} />
+          Uygulama & Ekosistem
+        </button>
       </div>
 
-      {tab === 'ecosystem' ? <TelemetryView /> : <WebAnalyticsTab />}
+      {tab === 'web' ? <WebAnalyticsTab /> : <TelemetryView />}
     </div>
   );
 };
