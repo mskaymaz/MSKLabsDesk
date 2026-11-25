@@ -19,12 +19,15 @@
 3. **Sessiz Çalışma & Mağaza Kuralı:**
    - Uygulama içi ayarlarda opt-out anahtarı veya izin pop-up'ı **konulmaz**.
    - **Google Play / App Store** uygulamalarında mağaza *Data Safety / App Privacy* formunda *"App Analytics & Diagnostics (anonim, PII içermez)"* işaretlenir ve webdeki `privacy.html` bağlantısı gösterilir.
+4. **Resmi `app_id` & İsimlendirme Standardı (Tek Kaynak = `app_catalog.json`):**
+   - **Görünen Ad (Vitrin):** `Haydi Namaza`, `RekatSay`, `Date Counter` (boşluklu).
+   - **Teknik Kimlik (`app_id`, R2, `/dl/`, Telemetri — `snake_case`):** `haydi_namaza`, `rekatsay`, `date_counter` *(Mağaza paket adı: `org.msklabs.<app_id>`).* Kod içine asla repo adı (`D_...`, `M_...`) veya görünen ad yazılmaz.
 
 ### Ortak JSON İstek Gövdesi
 ```json
 {
   "eco_device_id": "eco_d4a1b89c-3e2f-4c5a-90ab-123456789abc",
-  "app_id": "haydinamaza",
+  "app_id": "haydi_namaza",
   "app_version": "2.4.1",
   "install_source": "direct",
   "platform": "windows",
