@@ -15,6 +15,8 @@ export interface UnifiedInboxItem {
   status: string;
   urgency?: string;
   category?: string;
+  eco_device_id?: string | null;
+  app_version?: string | null;
   target_route: 'tickets' | 'comments';
   created_at: string;
 }
@@ -103,6 +105,8 @@ export async function handleAdminGetUnifiedInbox(
         status, 
         urgency, 
         ai_summary, 
+        eco_device_id,
+        app_version,
         created_at 
       FROM messages 
       WHERE status IN ('new', 'open', 'in_progress')
@@ -154,6 +158,8 @@ export async function handleAdminGetUnifiedInbox(
         status: String(m.status || 'new'),
         urgency: m.urgency ? String(m.urgency) : undefined,
         category: m.category ? String(m.category) : undefined,
+        eco_device_id: m.eco_device_id ? String(m.eco_device_id) : null,
+        app_version: m.app_version ? String(m.app_version) : null,
         target_route: 'tickets',
         created_at: String(m.created_at),
       });

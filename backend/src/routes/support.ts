@@ -85,11 +85,17 @@ export async function handleSupportSubmission(
 
     const ticketId = generateTicketId();
     const category = rawPayload.category || 'general';
+    const ecoDeviceId = typeof rawPayload.eco_device_id === 'string' && /^eco_[a-zA-Z0-9_-]{8,64}$/.test(rawPayload.eco_device_id.trim())
+      ? rawPayload.eco_device_id.trim()
+      : null;
+    const appVersion = typeof rawPayload.app_version === 'string' && rawPayload.app_version.trim()
+      ? rawPayload.app_version.trim().slice(0, 32)
+      : null;
 
     // 1. D1 Veritabanına Kayıt
     await env.DB.prepare(`
-      INSERT INTO messages (id, sender_name, sender_email, subject, content, category, status, email_status, created_at)
-      VALUES (?, ?, ?, ?, ?, ?, 'new', ?, CURRENT_TIMESTAMP)
+      INSERT INTO messages (id, sender_name, sender_email, subject, content, category, status, email_status, eco_device_id, app_version, created_at)
+      VALUES (?, ?, ?, ?, ?, ?, 'new', ?, ?, ?, CURRENT_TIMESTAMP)
     `).bind(
       ticketId,
       sender_name,
@@ -97,7 +103,9 @@ export async function handleSupportSubmission(
       subject,
       content,
       category,
-      emailStatus
+      emailStatus,
+      ecoDeviceId,
+      appVersion
     ).run();
 
     // 2. Message Event Log Kaydı

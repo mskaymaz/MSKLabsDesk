@@ -1,4 +1,4 @@
-import type { Ticket, TicketDetailResponse, CommentItem, Subscriber, StudioBlock, UnifiedInboxResponse, InboxSummaryResponse, AnalyticsSummaryResponse } from '../types';
+import type { Ticket, TicketDetailResponse, CommentItem, Subscriber, StudioBlock, UnifiedInboxResponse, InboxSummaryResponse, AnalyticsSummaryResponse, DownloadsSummaryResponse, TelemetryOverviewResponse } from '../types';
 
 const API_BASE = import.meta.env.VITE_API_URL || (typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1' ? 'https://msklabsdesk-backend.msklabs-org.workers.dev/api' : 'http://localhost:8787/api');
 
@@ -81,6 +81,32 @@ export const api = {
     if (!res.ok) {
       const err = await res.json().catch(() => ({ error: 'Analitik verileri yüklenemedi.' }));
       throw new Error(err.error || 'Analitik verileri yüklenemedi.');
+    }
+    return res.json();
+  },
+
+  // DIST-CDN-001: Web/R2 İndirme Özeti
+  async getDownloadsSummary(refresh = false): Promise<DownloadsSummaryResponse> {
+    const query = refresh ? '?refresh=1' : '';
+    const res = await fetch(`${API_BASE}/admin/downloads/summary${query}`, {
+      headers: getHeaders(),
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({ error: 'İndirme verileri yüklenemedi.' }));
+      throw new Error(err.error || 'İndirme verileri yüklenemedi.');
+    }
+    return res.json();
+  },
+
+  // TELEMETRY-ECO-001: Ekosistem Telemetri Özeti
+  async getTelemetryOverview(refresh = false): Promise<TelemetryOverviewResponse> {
+    const query = refresh ? '?refresh=1' : '';
+    const res = await fetch(`${API_BASE}/admin/telemetry/overview${query}`, {
+      headers: getHeaders(),
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({ error: 'Telemetri verileri yüklenemedi.' }));
+      throw new Error(err.error || 'Telemetri verileri yüklenemedi.');
     }
     return res.json();
   },

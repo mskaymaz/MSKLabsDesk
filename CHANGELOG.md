@@ -1,6 +1,17 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [25.11.2026 - 11:56] - R2 Hızlı Dağıtım (DIST-CDN-001) & Ekosistem Telemetri Merkezi (TELEMETRY-ECO-001)
+- **Cloudflare R2 & Dağıtım Proxy (`DIST-CDN-001`):**
+  - `msklabs-releases` bucket'ı ve `releases.msklabs.org` domain'i kuruldu; ilk 3 aktif paket yüklendi.
+  - `backend/migrations/0022_download_stats.sql` ve `backend/src/routes/downloadProxy.ts` eklendi (`GET /dl/:appSlug/:version`, `GET /api/admin/downloads/summary`).
+- **Ekosistem Telemetri & Panel (`TELEMETRY-ECO-001`):**
+  - `backend/migrations/0023_telemetry_eco.sql`, `backend/src/routes/telemetry.ts`, `support.ts` ve `adminInboxUnified.ts` güncellendi.
+  - `frontend/src/views/AnalyticsView.tsx` iki sekmeli hale getirildi; `TelemetryView.tsx` ve `WebAnalyticsTab.tsx` eklendi.
+  - `tasks.md` içine gelecek UX sadeleştirme notu (`UX-MENU-001`) işlendi.
+
+---
+
 ## [24.11.2026 - 16:37] - Ekosistem Telemetri (IST-013), Melez Dağıtım (IST-016), İstemci Rehberi (IST-017) ve Uçtan Uca Yol Haritası
 - **Mimari İstişare & Doküman Güncellemeleri (`013`, `016`, `017`, `tasks.md`):**
   - `DIST-CDN-001` ve `TELEMETRY-ECO-001` kararları 20–30 uygulama (50–100 MB) ölçeğine göre netleştirildi; panelde R2/Arşiv rozeti yerine gerçek kurulum/açılış ve çapraz uygulama korelasyonu odak alındı.

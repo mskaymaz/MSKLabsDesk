@@ -1,6 +1,16 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 📌 Son Güncelleme [25.11.2026 - 11:56] — AŞAMA 1-3: R2 HIZLI DAĞITIM (DIST-CDN-001) & EKOSİSTEM TELEMETRİ MERKEZİ (TELEMETRY-ECO-001) [✓]
+* **Tamamlanan Altyapı ve Arayüz Kazanımları:**
+  1. **R2 Bucket (`msklabs-releases`):** `releases.msklabs.org` custom domain'i bağlandı; `haydi_namaza` (`v1.0.5`), `rekatsay` (`v1.3.1`) ve `date_counter` (`v1.1.0`) paketleri yüklenip `200 OK` doğrulandı.
+  2. **Melez İndirme Proxy (`DIST-CDN-001`):** `0022_download_stats.sql` ve `downloadProxy.ts` (`399` satır) ile `GET /dl/:appSlug/:version` (R2 `302` + 512 MB Worker Cache Proxy + `HEAD`/parça `Range` koruması) ve `GET /api/admin/downloads/summary` devreye alındı.
+  3. **Ekosistem Telemetri (`TELEMETRY-ECO-001`):** `0023_telemetry_eco.sql` ve `telemetry.ts` (`388` satır) ile `POST /api/v1/telemetry/heartbeat`, `GET /api/admin/telemetry/overview` ve `support.ts`/`adminInboxUnified.ts` cihaz bağlamı eklendi.
+  4. **Panel Arayüzü (`panel.msklabs.org`):** Sol menüye yeni öğe eklenmeden `AnalyticsView.tsx` (`65` satır) altında `Uygulama & Ekosistem` (`TelemetryView.tsx`, `269` satır) ve `Web İstatistikleri` (`WebAnalyticsTab.tsx`) sekmeleri oluşturuldu.
+  5. **Doğrulama:** Tüm 11 backend test dosyası (`npm test`) ve frontend build (`tsc -b && vite build`, `984 ms`) 0 hata ile geçti.
+
+---
+
 ## 📌 Son Güncelleme [24.11.2026 - 16:37] — EKOSİSTEM TELEMETRİ (IST-013), MELEZ DAĞITIM (IST-016), İSTEMCİ REHBERİ (IST-017) VE UÇTAN UCA YOL HARİTASI İSTİŞARESİ [✓]
 * **Tamamlanan Mimari İstişare ve Dokümantasyon:**
   1. **Ölçek & Kota Hizalaması:** 20–30 uygulama (50–100 MB) ve $0 ücretsiz Cloudflare D1 (100K/gün yazma) + R2 (10 GB) sınırları için netleştirildi (`r2_keep_versions` varsayılan `2`, eski sürümler için 512 MB Worker Cache Proxy).

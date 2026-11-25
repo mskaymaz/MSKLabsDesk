@@ -14,6 +14,8 @@ import { handleAdminGetSubscribers, handleAdminBroadcastNewsletter, handleAdminG
 import { handleAdminGetUnifiedInbox, handleAdminGetInboxSummary } from './routes/adminInboxUnified';
 import { handleAdminMediaUpload, handleAdminMediaDelete } from './routes/adminMedia';
 import { handleAdminGetAnalyticsSummary } from './routes/adminAnalytics';
+import { handleDownloadProxy, handleAdminGetDownloadsSummary } from './routes/downloadProxy';
+import { handleTelemetryHeartbeat, handleAdminGetTelemetryOverview } from './routes/telemetry';
 import { handleAdminTTSGenerate, handleAdminTTSStatus, handleAdminTTSApprove, handleAdminTTSUnpublish, handleAdminTTSRegenerate, handlePublicAudioDelivery } from './routes/adminTts';
 import { handleCmsChannels } from './routes/cmsChannels';
 import { handleCmsPosts } from './routes/cmsPosts';
@@ -126,8 +128,16 @@ export default {
       response = await handleAdminGetUnifiedInbox(request, env);
     } else if ((path === '/api/v1/inbox/summary' || path === '/api/admin/inbox/summary') && request.method === 'GET') {
       response = await handleAdminGetInboxSummary(request, env);
+    } else if (path.startsWith('/dl/')) {
+      response = await handleDownloadProxy(request, env, ctx);
     } else if ((path === '/api/v1/admin/analytics/summary' || path === '/api/admin/analytics/summary') && request.method === 'GET') {
       response = await handleAdminGetAnalyticsSummary(request, env);
+    } else if ((path === '/api/v1/admin/downloads/summary' || path === '/api/admin/downloads/summary') && request.method === 'GET') {
+      response = await handleAdminGetDownloadsSummary(request, env);
+    } else if (path === '/api/v1/telemetry/heartbeat' && request.method === 'POST') {
+      response = await handleTelemetryHeartbeat(request, env);
+    } else if ((path === '/api/v1/admin/telemetry/overview' || path === '/api/admin/telemetry/overview') && request.method === 'GET') {
+      response = await handleAdminGetTelemetryOverview(request, env);
     } else if ((path === '/api/v1/admin/media/upload' || path === '/api/admin/media/upload') && request.method === 'POST') {
       response = await handleAdminMediaUpload(request, env);
     } else if ((path.startsWith('/api/v1/admin/media/') || path.startsWith('/api/admin/media/')) && request.method === 'DELETE') {

@@ -496,4 +496,39 @@ export interface AnalyticsSummaryResponse {
   lastUpdated: string;
 }
 
+export interface DownloadsSummaryResponse {
+  success: boolean;
+  totalDownloads: number;
+  apps: { appSlug: string; totalDownloads: number; lastDownloadedAt: string }[];
+  versions: { appSlug: string; version: string; downloadCount: number; lastDownloadedAt: string }[];
+  lastUpdated: string;
+}
+
+export interface TelemetryAppLeagueItem {
+  appId: string;
+  deviceCount: number;
+  totalLaunches: number;
+  avgLaunchesPerDevice: number;
+  avgRetentionDays: number;
+  reinstallCount: number;
+}
+
+export interface TelemetryOverviewResponse {
+  success: boolean;
+  totals: {
+    totalDevices: number;
+    totalInstallations: number;
+    totalLaunches: number;
+    unresolvedCrashes: number;
+  };
+  appLeague: TelemetryAppLeagueItem[];
+  crossApp: {
+    multiAppBuckets: { twoPlus: number; threePlus: number; fivePlus: number };
+    appCorrelations: Record<string, { coAppId: string; sharedDevices: number; percentage: number }[]>;
+    topCombinations: { apps: string[]; deviceCount: number }[];
+  };
+  lastUpdated: string;
+}
+
+
 
