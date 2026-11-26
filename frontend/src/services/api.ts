@@ -10,6 +10,16 @@ const getHeaders = (): HeadersInit => {
   };
 };
 
+const authFetch = async (url: string, init?: RequestInit): Promise<Response> => {
+  const res = await fetch(url, init);
+  if (res.status === 401 && typeof window !== 'undefined') {
+    localStorage.removeItem('msk_admin_token');
+    localStorage.removeItem('msk_admin_user');
+    window.dispatchEvent(new Event('msk:auth-expired'));
+  }
+  return res;
+};
+
 export interface BroadcastCampaign {
   id: string;
   subject: string;
@@ -40,7 +50,7 @@ export const api = {
 
   // Magic Auth Bridge (Şifresiz Güvenli Panel Geçişi)
   async createBridgeTicket(targetTab?: string, targetParams?: Record<string, any>): Promise<{ success: boolean; bridge_token: string; bridge_url: string }> {
-    const res = await fetch(`${API_BASE}/admin/auth/bridge-ticket`, {
+    const res = await authFetch(`${API_BASE}/admin/auth/bridge-ticket`, {
       method: 'POST',
       headers: getHeaders(),
       body: JSON.stringify({ targetTab, targetParams }),
@@ -75,7 +85,7 @@ export const api = {
   async getAnalyticsSummary(period: 'realtime' | 'today' | '7d' | '30d' = 'today', refresh = false): Promise<AnalyticsSummaryResponse> {
     const params = new URLSearchParams({ period });
     if (refresh) params.append('refresh', '1');
-    const res = await fetch(`${API_BASE}/admin/analytics/summary?${params.toString()}`, {
+    const res = await authFetch(`${API_BASE}/admin/analytics/summary?${params.toString()}`, {
       headers: getHeaders(),
     });
     if (!res.ok) {
@@ -88,7 +98,7 @@ export const api = {
   // DIST-CDN-001: Web/R2 İndirme Özeti
   async getDownloadsSummary(refresh = false): Promise<DownloadsSummaryResponse> {
     const query = refresh ? '?refresh=1' : '';
-    const res = await fetch(`${API_BASE}/admin/downloads/summary${query}`, {
+    const res = await authFetch(`${API_BASE}/admin/downloads/summary${query}`, {
       headers: getHeaders(),
     });
     if (!res.ok) {
@@ -101,7 +111,7 @@ export const api = {
   // TELEMETRY-ECO-001: Ekosistem Telemetri Özeti
   async getTelemetryOverview(refresh = false): Promise<TelemetryOverviewResponse> {
     const query = refresh ? '?refresh=1' : '';
-    const res = await fetch(`${API_BASE}/admin/telemetry/overview${query}`, {
+    const res = await authFetch(`${API_BASE}/admin/telemetry/overview${query}`, {
       headers: getHeaders(),
     });
     if (!res.ok) {
@@ -114,7 +124,7 @@ export const api = {
   // Tickets
   async getTickets(status?: string): Promise<{ tickets: Ticket[] }> {
     const query = status ? `?status=${encodeURIComponent(status)}` : '';
-    const res = await fetch(`${API_BASE}/admin/tickets${query}`, {
+    const res = await authFetch(`${API_BASE}/admin/tickets${query}`, {
       headers: getHeaders(),
     });
     if (!res.ok) throw new Error('Biletler yÃ¼klenemedi.');
@@ -122,7 +132,7 @@ export const api = {
   },
 
   async getTicketDetail(id: string): Promise<TicketDetailResponse> {
-    const res = await fetch(`${API_BASE}/admin/tickets/${id}`, {
+    const res = await authFetch(`${API_BASE}/admin/tickets/${id}`, {
       headers: getHeaders(),
     });
     if (!res.ok) throw new Error('Bilet detayÄ± yÃ¼klenemedi.');
@@ -130,7 +140,7 @@ export const api = {
   },
 
   async replyTicket(id: string, reply_content: string) {
-    const res = await fetch(`${API_BASE}/admin/tickets/${id}/reply`, {
+    const res = await authFetch(`${API_BASE}/admin/tickets/${id}/reply`, {
       method: 'POST',
       headers: getHeaders(),
       body: JSON.stringify({ reply_content }),
@@ -140,7 +150,7 @@ export const api = {
   },
 
   async updateTicketStatus(id: string, status: string) {
-    const res = await fetch(`${API_BASE}/admin/tickets/${id}/status`, {
+    const res = await authFetch(`${API_BASE}/admin/tickets/${id}/status`, {
       method: 'POST',
       headers: getHeaders(),
       body: JSON.stringify({ status }),
@@ -150,7 +160,7 @@ export const api = {
   },
 
   async analyzeTicket(id: string) {
-    const res = await fetch(`${API_BASE}/admin/tickets/${id}/analyze`, {
+    const res = await authFetch(`${API_BASE}/admin/tickets/${id}/analyze`, {
       method: 'POST',
       headers: getHeaders(),
     });
@@ -159,7 +169,7 @@ export const api = {
   },
 
   async analyzeAllTickets() {
-    const res = await fetch(`${API_BASE}/admin/tickets/analyze-all`, {
+    const res = await authFetch(`${API_BASE}/admin/tickets/analyze-all`, {
       method: 'POST',
       headers: getHeaders(),
     });
@@ -168,7 +178,7 @@ export const api = {
   },
 
   async translateTicket(id: string) {
-    const res = await fetch(`${API_BASE}/admin/tickets/${id}/translate`, {
+    const res = await authFetch(`${API_BASE}/admin/tickets/${id}/translate`, {
       method: 'POST',
       headers: getHeaders(),
     });
@@ -187,7 +197,7 @@ export const api = {
   // Comments
   async getComments(status?: string): Promise<{ comments: CommentItem[] }> {
     const query = status ? `?status=${encodeURIComponent(status)}` : '';
-    const res = await fetch(`${API_BASE}/admin/comments${query}`, {
+    const res = await authFetch(`${API_BASE}/admin/comments${query}`, {
       headers: getHeaders(),
     });
     if (!res.ok) throw new Error('Yorumlar yÃ¼klenemedi.');
@@ -195,7 +205,7 @@ export const api = {
   },
 
   async moderateComment(id: string, status: 'approved' | 'rejected') {
-    const res = await fetch(`${API_BASE}/admin/comments/${id}/moderate`, {
+    const res = await authFetch(`${API_BASE}/admin/comments/${id}/moderate`, {
       method: 'POST',
       headers: getHeaders(),
       body: JSON.stringify({ status }),
@@ -206,7 +216,7 @@ export const api = {
 
   // Subscribers & Broadcast
   async getSubscribers(): Promise<{ subscribers: Subscriber[] }> {
-    const res = await fetch(`${API_BASE}/admin/subscribers`, {
+    const res = await authFetch(`${API_BASE}/admin/subscribers`, {
       headers: getHeaders(),
     });
     if (!res.ok) throw new Error('Aboneler yÃ¼klenemedi.');
@@ -226,7 +236,7 @@ export const api = {
       content_html: data.content_html || data.content,
       category: data.category || data.target_preference || 'all',
     };
-    const res = await fetch(`${API_BASE}/admin/broadcast`, {
+    const res = await authFetch(`${API_BASE}/admin/broadcast`, {
       method: 'POST',
       headers: getHeaders(),
       body: JSON.stringify(payload),
@@ -239,7 +249,7 @@ export const api = {
   },
 
   async getBroadcastHistory(): Promise<{ success: boolean; campaigns: BroadcastCampaign[] }> {
-    const res = await fetch(`${API_BASE}/admin/broadcast/history`, {
+    const res = await authFetch(`${API_BASE}/admin/broadcast/history`, {
       headers: getHeaders(),
     });
     if (!res.ok) throw new Error('Bülten geçmişi yüklenemedi.');
@@ -248,26 +258,26 @@ export const api = {
 
   async getUnifiedInbox(type?: string): Promise<UnifiedInboxResponse> {
     const url = type && type !== 'all' ? `${API_BASE}/admin/inbox/unified?type=${type}` : `${API_BASE}/admin/inbox/unified`;
-    const res = await fetch(url, { headers: getHeaders() });
+    const res = await authFetch(url, { headers: getHeaders() });
     if (!res.ok) throw new Error('Bildirimler yüklenemedi.');
     return res.json();
   },
 
   async getInboxSummary(): Promise<InboxSummaryResponse> {
-    const res = await fetch(`${API_BASE}/admin/inbox/summary`, { headers: getHeaders() });
+    const res = await authFetch(`${API_BASE}/admin/inbox/summary`, { headers: getHeaders() });
     if (!res.ok) throw new Error('İletişim istasyonu özet verisi yüklenemedi.');
     return res.json();
   },
 
   // Headless CMS â€” Channels
   async getChannels() {
-    const res = await fetch(`${API_BASE}/admin/channels`, { headers: getHeaders() });
+    const res = await authFetch(`${API_BASE}/admin/channels`, { headers: getHeaders() });
     if (!res.ok) throw new Error('Kanallar yÃ¼klenemedi.');
     return res.json();
   },
 
   async createChannel(data: any) {
-    const res = await fetch(`${API_BASE}/admin/channels`, {
+    const res = await authFetch(`${API_BASE}/admin/channels`, {
       method: 'POST',
       headers: getHeaders(),
       body: JSON.stringify(data),
@@ -277,7 +287,7 @@ export const api = {
   },
 
   async updateChannel(id: string, data: any) {
-    const res = await fetch(`${API_BASE}/admin/channels/${id}`, {
+    const res = await authFetch(`${API_BASE}/admin/channels/${id}`, {
       method: 'PUT',
       headers: getHeaders(),
       body: JSON.stringify(data),
@@ -287,7 +297,7 @@ export const api = {
   },
 
   async deleteChannel(id: string) {
-    const res = await fetch(`${API_BASE}/admin/channels/${id}`, {
+    const res = await authFetch(`${API_BASE}/admin/channels/${id}`, {
       method: 'DELETE',
       headers: getHeaders(),
     });
@@ -298,13 +308,13 @@ export const api = {
   // Headless CMS â€” Posts & AI Translate
   async getPosts(channelId?: string) {
     const query = channelId ? `?channel_id=${channelId}` : '';
-    const res = await fetch(`${API_BASE}/admin/posts${query}`, { headers: getHeaders() });
+    const res = await authFetch(`${API_BASE}/admin/posts${query}`, { headers: getHeaders() });
     if (!res.ok) throw new Error('YazÄ±lar yÃ¼klenemedi.');
     return res.json();
   },
 
   async createPost(data: any) {
-    const res = await fetch(`${API_BASE}/admin/posts`, {
+    const res = await authFetch(`${API_BASE}/admin/posts`, {
       method: 'POST',
       headers: getHeaders(),
       body: JSON.stringify(data),
@@ -314,7 +324,7 @@ export const api = {
   },
 
   async updatePost(id: string, data: any) {
-    const res = await fetch(`${API_BASE}/admin/posts/${id}`, {
+    const res = await authFetch(`${API_BASE}/admin/posts/${id}`, {
       method: 'PUT',
       headers: getHeaders(),
       body: JSON.stringify(data),
@@ -324,7 +334,7 @@ export const api = {
   },
 
   async updatePostStatus(id: string, status: 'published' | 'draft' | 'unpublished' | 'trash') {
-    const res = await fetch(`${API_BASE}/admin/posts/${id}`, {
+    const res = await authFetch(`${API_BASE}/admin/posts/${id}`, {
       method: 'PUT',
       headers: getHeaders(),
       body: JSON.stringify({ status }),
@@ -338,7 +348,7 @@ export const api = {
 
   async deletePost(id: string, permanent: boolean = false) {
     const query = permanent ? '?permanent=true' : '';
-    const res = await fetch(`${API_BASE}/admin/posts/${id}${query}`, {
+    const res = await authFetch(`${API_BASE}/admin/posts/${id}${query}`, {
       method: 'DELETE',
       headers: getHeaders(),
     });
@@ -350,7 +360,7 @@ export const api = {
   },
 
   async translatePostAI(data: { title_tr: string; content_tr: string; summary_tr?: string }) {
-    const res = await fetch(`${API_BASE}/admin/translate`, {
+    const res = await authFetch(`${API_BASE}/admin/translate`, {
       method: 'POST',
       headers: getHeaders(),
       body: JSON.stringify(data),
@@ -364,13 +374,13 @@ export const api = {
 
   // Headless CMS â€” Apps
   async getApps() {
-    const res = await fetch(`${API_BASE}/admin/apps`, { headers: getHeaders() });
+    const res = await authFetch(`${API_BASE}/admin/apps`, { headers: getHeaders() });
     if (!res.ok) throw new Error('Uygulamalar yÃ¼klenemedi.');
     return res.json();
   },
 
   async createApp(data: any) {
-    const res = await fetch(`${API_BASE}/admin/apps`, {
+    const res = await authFetch(`${API_BASE}/admin/apps`, {
       method: 'POST',
       headers: getHeaders(),
       body: JSON.stringify(data),
@@ -383,7 +393,7 @@ export const api = {
   },
 
   async updateApp(id: string, data: any) {
-    const res = await fetch(`${API_BASE}/admin/apps/${id}`, {
+    const res = await authFetch(`${API_BASE}/admin/apps/${id}`, {
       method: 'PUT',
       headers: getHeaders(),
       body: JSON.stringify(data),
@@ -396,7 +406,7 @@ export const api = {
   },
 
   async deleteApp(id: string) {
-    const res = await fetch(`${API_BASE}/admin/apps/${id}`, {
+    const res = await authFetch(`${API_BASE}/admin/apps/${id}`, {
       method: 'DELETE',
       headers: getHeaders(),
     });
@@ -408,7 +418,7 @@ export const api = {
   },
 
   async addAppVersion(appId: string, data: any) {
-    const res = await fetch(`${API_BASE}/admin/apps/${appId}/versions`, {
+    const res = await authFetch(`${API_BASE}/admin/apps/${appId}/versions`, {
       method: 'POST',
       headers: getHeaders(),
       body: JSON.stringify(data),
@@ -421,7 +431,7 @@ export const api = {
   },
 
   async deleteAppVersion(appId: string, versionId: string) {
-    const res = await fetch(`${API_BASE}/admin/apps/${appId}/versions/${versionId}`, {
+    const res = await authFetch(`${API_BASE}/admin/apps/${appId}/versions/${versionId}`, {
       method: 'DELETE',
       headers: getHeaders(),
     });
@@ -434,13 +444,13 @@ export const api = {
 
   // Headless CMS â€” Templates & Ads
   async getTemplates() {
-    const res = await fetch(`${API_BASE}/admin/templates`, { headers: getHeaders() });
+    const res = await authFetch(`${API_BASE}/admin/templates`, { headers: getHeaders() });
     if (!res.ok) throw new Error('Åablonlar yÃ¼klenemedi.');
     return res.json();
   },
 
   async updateTemplate(data: any) {
-    const res = await fetch(`${API_BASE}/admin/templates`, {
+    const res = await authFetch(`${API_BASE}/admin/templates`, {
       method: 'PUT',
       headers: getHeaders(),
       body: JSON.stringify(data),
@@ -451,13 +461,13 @@ export const api = {
 
   // Headless CMS â€” Ads Management (ADS-001 & ADS-002)
   async getAds() {
-    const res = await fetch(`${API_BASE}/admin/ads`, { headers: getHeaders() });
+    const res = await authFetch(`${API_BASE}/admin/ads`, { headers: getHeaders() });
     if (!res.ok) throw new Error('Reklam ayarlarÄ± yÃ¼klenemedi.');
     return res.json();
   },
 
   async updateAd(slotKey: string, data: any) {
-    const res = await fetch(`${API_BASE}/admin/ads`, {
+    const res = await authFetch(`${API_BASE}/admin/ads`, {
       method: 'PUT',
       headers: getHeaders(),
       body: JSON.stringify({ ...data, slot_key: slotKey }),
@@ -471,7 +481,7 @@ export const api = {
   },
 
   async updateAdMatrix(matrix: any) {
-    const res = await fetch(`${API_BASE}/admin/ads`, {
+    const res = await authFetch(`${API_BASE}/admin/ads`, {
       method: 'PUT',
       headers: getHeaders(),
       body: JSON.stringify({ matrix }),
@@ -481,7 +491,7 @@ export const api = {
   },
 
   async deleteAd(slotKey: string) {
-    const res = await fetch(`${API_BASE}/admin/ads?slot_key=${encodeURIComponent(slotKey)}`, {
+    const res = await authFetch(`${API_BASE}/admin/ads?slot_key=${encodeURIComponent(slotKey)}`, {
       method: 'DELETE',
       headers: getHeaders(),
     });
@@ -499,7 +509,7 @@ export const api = {
     formData.append('file', file);
     if (altText) formData.append('altText', altText);
 
-    const res = await fetch(`${API_BASE}/v1/admin/media/upload`, {
+    const res = await authFetch(`${API_BASE}/v1/admin/media/upload`, {
       method: 'POST',
       headers: {
         ...(token ? { Authorization: `Bearer ${token}` } : {}),
@@ -515,19 +525,19 @@ export const api = {
 
   // Headless CMS â€” Corporate Pages (CMS-PAGES)
   async getPages() {
-    const res = await fetch(`${API_BASE}/admin/pages`, { headers: getHeaders() });
+    const res = await authFetch(`${API_BASE}/admin/pages`, { headers: getHeaders() });
     if (!res.ok) throw new Error('Kurumsal sayfalar yÃ¼klenemedi.');
     return res.json();
   },
 
   async getPage(id: string) {
-    const res = await fetch(`${API_BASE}/admin/pages/${encodeURIComponent(id)}`, { headers: getHeaders() });
+    const res = await authFetch(`${API_BASE}/admin/pages/${encodeURIComponent(id)}`, { headers: getHeaders() });
     if (!res.ok) throw new Error('Sayfa detayÄ± yÃ¼klenemedi.');
     return res.json();
   },
 
   async createPage(data: any) {
-    const res = await fetch(`${API_BASE}/admin/pages`, {
+    const res = await authFetch(`${API_BASE}/admin/pages`, {
       method: 'POST',
       headers: getHeaders(),
       body: JSON.stringify(data),
@@ -540,7 +550,7 @@ export const api = {
   },
 
   async updatePage(id: string, data: any) {
-    const res = await fetch(`${API_BASE}/admin/pages/${encodeURIComponent(id)}`, {
+    const res = await authFetch(`${API_BASE}/admin/pages/${encodeURIComponent(id)}`, {
       method: 'PUT',
       headers: getHeaders(),
       body: JSON.stringify(data),
@@ -557,7 +567,7 @@ export const api = {
   },
 
   async deletePage(id: string) {
-    const res = await fetch(`${API_BASE}/admin/pages/${encodeURIComponent(id)}`, {
+    const res = await authFetch(`${API_BASE}/admin/pages/${encodeURIComponent(id)}`, {
       method: 'DELETE',
       headers: getHeaders(),
     });
@@ -569,7 +579,7 @@ export const api = {
   },
 
   async translatePage(data: { title_tr?: string; content_tr?: string; summary_tr?: string; blocks?: StudioBlock[] }) {
-    const res = await fetch(`${API_BASE}/admin/pages/translate`, {
+    const res = await authFetch(`${API_BASE}/admin/pages/translate`, {
       method: 'POST',
       headers: getHeaders(),
       body: JSON.stringify(data),
@@ -583,7 +593,7 @@ export const api = {
 
   // TTS & Audio Management (CMS-TTS-002)
   async getTtsStatus(postId: number | string) {
-    const res = await fetch(`${API_BASE}/admin/tts/status/${postId}`, {
+    const res = await authFetch(`${API_BASE}/admin/tts/status/${postId}`, {
       headers: getHeaders(),
     });
     if (!res.ok) {
@@ -595,7 +605,7 @@ export const api = {
 
   async generateTts(postId: number | string, language: string) {
     const numericPostId = typeof postId === 'string' ? parseInt(postId, 10) || 1 : postId;
-    const res = await fetch(`${API_BASE}/admin/tts/generate`, {
+    const res = await authFetch(`${API_BASE}/admin/tts/generate`, {
       method: 'POST',
       headers: {
         ...getHeaders(),
@@ -612,7 +622,7 @@ export const api = {
 
   async regenerateTts(postId: number | string, language: string) {
     const numericPostId = typeof postId === 'string' ? parseInt(postId, 10) || 1 : postId;
-    const res = await fetch(`${API_BASE}/admin/tts/regenerate`, {
+    const res = await authFetch(`${API_BASE}/admin/tts/regenerate`, {
       method: 'POST',
       headers: {
         ...getHeaders(),
@@ -629,7 +639,7 @@ export const api = {
 
   async approveTts(audioId: number, postId: number | string, language: string) {
     const numericPostId = typeof postId === 'string' ? parseInt(postId, 10) || 1 : postId;
-    const res = await fetch(`${API_BASE}/admin/tts/approve`, {
+    const res = await authFetch(`${API_BASE}/admin/tts/approve`, {
       method: 'POST',
       headers: getHeaders(),
       body: JSON.stringify({ audioId, postId: numericPostId, language }),
@@ -643,7 +653,7 @@ export const api = {
 
   async unpublishTts(audioId: number, postId: number | string, language: string) {
     const numericPostId = typeof postId === 'string' ? parseInt(postId, 10) || 1 : postId;
-    const res = await fetch(`${API_BASE}/admin/tts/unpublish`, {
+    const res = await authFetch(`${API_BASE}/admin/tts/unpublish`, {
       method: 'POST',
       headers: getHeaders(),
       body: JSON.stringify({ audioId, postId: numericPostId, language }),

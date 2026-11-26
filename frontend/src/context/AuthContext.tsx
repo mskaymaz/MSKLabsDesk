@@ -12,9 +12,30 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+const isTokenExpired = (rawToken: string): boolean => {
+  try {
+    const payloadStr = rawToken.split('.')[0];
+    if (!payloadStr) return true;
+    const payload = JSON.parse(atob(payloadStr));
+    return Boolean(payload.exp && payload.exp < Math.floor(Date.now() / 1000));
+  } catch {
+    return true;
+  }
+};
+
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [token, setToken] = useState<string | null>(localStorage.getItem('msk_admin_token'));
+  const [token, setToken] = useState<string | null>(() => {
+    const saved = localStorage.getItem('msk_admin_token');
+    if (saved && isTokenExpired(saved)) {
+      localStorage.removeItem('msk_admin_token');
+      localStorage.removeItem('msk_admin_user');
+      return null;
+    }
+    return saved;
+  });
   const [user, setUser] = useState<AdminUser | null>(() => {
+    const savedToken = localStorage.getItem('msk_admin_token');
+    if (!savedToken || isTokenExpired(savedToken)) return null;
     const saved = localStorage.getItem('msk_admin_user');
     return saved ? JSON.parse(saved) : null;
   });
@@ -52,6 +73,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setToken(null);
     setUser(null);
   };
+
+  useEffect(() => {
+    const handleExpired = () => logout();
+    window.addEventListener('msk:auth-expired', handleExpired);
+    return () => window.removeEventListener('msk:auth-expired', handleExpired);
+  }, []);
 
   const hasPermission = (permission: string) => {
     if (!user) return false;
