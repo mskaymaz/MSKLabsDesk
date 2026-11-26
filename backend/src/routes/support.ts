@@ -217,13 +217,18 @@ export async function handleSupportSubmission(
  * Kullanıcı e-posta onay / iptal uç noktası
  */
 export async function handleSupportVerify(request: Request, env: { DB: D1Database }): Promise<Response> {
+  const purpose = (request.headers.get('Sec-Purpose') || request.headers.get('Purpose') || request.headers.get('X-Purpose') || '').toLowerCase();
+  if (request.method === 'HEAD' || purpose.includes('prefetch') || purpose.includes('preview')) {
+    return new Response('OK', { status: 200 });
+  }
+
   const url = new URL(request.url);
   const token = (url.searchParams.get('token') || '').trim();
   const action = (url.searchParams.get('action') || 'confirm').trim().toLowerCase();
 
   const renderHtml = (icon: string, title: string, desc: string, ok: boolean) => {
     const color = ok ? '#16a34a' : '#dc2626';
-    const html = `<!DOCTYPE html><html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title} — MSK Labs</title></head><body style="font-family:'Segoe UI',system-ui,sans-serif;background:#f8fafc;color:#0f172a;margin:0;padding:40px 16px;display:flex;justify-content:center;"><div style="max-width:480px;width:100%;background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:32px;text-align:center;box-shadow:0 4px 12px rgba(15,23,42,0.06);"><div style="font-size:40px;margin-bottom:12px;">${icon}</div><h1 style="margin:0 0 12px;font-size:20px;color:${color};">${title}</h1><p style="margin:0 0 24px;font-size:15px;line-height:1.6;color:#334155;">${desc}</p><a href="https://msklabs.org" style="display:inline-block;background:#2563eb;color:#fff;text-decoration:none;padding:10px 20px;border-radius:8px;font-weight:600;font-size:14px;">MSK Labs Ana Sayfa</a></div></body></html>`;
+    const html = `<!DOCTYPE html><html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title} — MSK Labs</title></head><body style="font-family:'Segoe UI',system-ui,sans-serif;background:#f8fafc;color:#0f172a;margin:0;padding:40px 16px;display:flex;justify-content:center;"><div style="max-width:480px;width:100%;background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:32px;text-align:center;box-shadow:0 4px 12px rgba(15,23,42,0.06);"><div style="font-size:40px;margin-bottom:12px;">${icon}</div><h1 style="margin:0 0 12px;font-size:20px;color:${color};">${title}</h1><p style="margin:0 0 16px;font-size:15px;line-height:1.6;color:#334155;">${desc}</p><p style="margin:0;font-size:12px;color:#94a3b8;">Bu pencereyi güvenle kapatabilirsiniz. <a href="https://msklabs.org" style="color:#64748b;text-decoration:underline;">msklabs.org</a></p></div></body></html>`;
     return new Response(html, { status: 200, headers: { 'Content-Type': 'text/html; charset=utf-8' } });
   };
 
