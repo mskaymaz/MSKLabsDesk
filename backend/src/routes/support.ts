@@ -88,9 +88,12 @@ export async function handleSupportSubmission(
     const ecoDeviceId = typeof rawPayload.eco_device_id === 'string' && /^eco_[a-zA-Z0-9_-]{8,64}$/.test(rawPayload.eco_device_id.trim())
       ? rawPayload.eco_device_id.trim()
       : null;
-    const appVersion = typeof rawPayload.app_version === 'string' && rawPayload.app_version.trim()
-      ? rawPayload.app_version.trim().slice(0, 32)
+    const appVersionRaw = rawPayload.app_version ?? rawPayload.ver;
+    const appVersion = typeof appVersionRaw === 'string' && appVersionRaw.trim()
+      ? appVersionRaw.trim().slice(0, 32)
       : null;
+    const appSource = typeof rawPayload.app === 'string' && rawPayload.app.trim() ? rawPayload.app.trim().slice(0, 64) : 'Genel';
+    const osSource = typeof rawPayload.os === 'string' && rawPayload.os.trim() ? rawPayload.os.trim().slice(0, 32) : '-';
 
     // 1. D1 Veritabanına Kayıt
     await env.DB.prepare(`
@@ -109,9 +112,10 @@ export async function handleSupportSubmission(
     ).run();
 
     // 2. Message Event Log Kaydı
+    const metaNote = `[Uygulama: ${appSource}, OS: ${osSource}, Sürüm: ${appVersion || '-'}]`;
     const eventDetails = isEmailValid
-      ? 'Kullanıcı destek talebi oluşturdu.'
-      : `Kullanıcı destek talebi oluşturdu. (E-posta doğrulanamadı: ${emailValidation.reason || 'invalid_domain'})`;
+      ? `Kullanıcı destek talebi oluşturdu. ${metaNote}`
+      : `Kullanıcı destek talebi oluşturdu. ${metaNote} (E-posta doğrulanamadı: ${emailValidation.reason || 'invalid_domain'})`;
 
     await env.DB.prepare(`
       INSERT INTO message_events (message_id, actor, action, details)

@@ -99,3 +99,25 @@
 
 - **Kimlik:** `document.cookie` üzerinden `Domain=.msklabs.org; SameSite=Lax; Secure; max-age=31536000` çerezi + `localStorage.getItem('eco_device_id')` fallback'i kullanılır. Parmak izi (`FingerprintJS`, Canvas/Audio hash) **yasaktır**.
 - **Gönderim:** Sayfa açılışında `localStorage` üzerindeki `eco_state_<app_id>` kontrol edilir; aynı 7 günlük kural geçerlidir. İstek `fetch(ENDPOINT, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(payload), keepalive: true })` ile atılır.
+
+
+---
+
+## 5. Destek Formu Link Standardı (`destek.html`)
+
+Uygulama içinden "Destek / Bize Ulaşın" bağlantısı açılırken **yalnızca çıplak `/destek` adresi değil**, aşağıdaki sorgu parametreleri mutlaka eklenmelidir:
+
+```text
+https://msklabs.org/destek?app=<app_id>&ver=<sürüm>&os=<işletim_sistemi>&lang=<dil>
+```
+
+- **`app`:** Resmi `snake_case` teknik kimlik (`haydi_namaza`, `rekatsay`, `date_counter`).
+- **`ver`:** Uygulamanın aktif sürümü (ör. `1.0.5`, `1.3.1`, `1.1.0` — `PackageInfo` / sürüm sabitinden okunur).
+- **`os`:** Platform adı (`Android`, `iOS`, `Windows`, `macOS`, `Linux`).
+- **`lang`:** Aktif uygulama dili (`tr`, `en`, `ar`).
+- **Örnekler:**
+  - `haydi_namaza`: `https://msklabs.org/destek?app=haydi_namaza&ver=1.0.5&os=Android&lang=tr`
+  - `rekatsay`: `https://msklabs.org/destek?app=rekatsay&ver=1.3.1&os=Android&lang=tr`
+  - `date_counter`: `https://msklabs.org/destek?app=date_counter&ver=1.1.0&os=Windows&lang=tr`
+- **Önemli Kural:** Uygulama doğrudan `/api/support` uç noktasına `POST` **atmaz**; yalnızca yukarıdaki parametreli URL'yi dış tarayıcıda (`launchUrl` / `QDesktopServices.openUrl`) açar (`POST` ve CAPTCHA doğrulamasını `destek.html` yapar).
+- **Dinamik Okuma (`ver` & `os` Sabit Yazılmaz):** Flutter'da `PackageInfo.fromPlatform().version` ve `Platform.isAndroid ? 'Android' : 'iOS'`; Python/Qt'de uygulama sürüm sabiti (`APP_VERSION`) ve `platform.system()` kullanılır.
