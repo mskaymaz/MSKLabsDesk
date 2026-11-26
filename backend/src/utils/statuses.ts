@@ -3,12 +3,15 @@
  */
 
 export const TICKET_STATUSES = [
+  'unverified',
   'new',
   'open',
+  'read',
   'in_progress',
   'resolved',
   'closed',
   'rejected',
+  'cancelled',
   'spam'
 ] as const;
 

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import type { TicketDetailResponse } from '../types';
-import { Sparkles, Send, X, User, Clock, CheckCircle, Ban, Eye, Languages, ZoomIn, ZoomOut, RotateCcw } from 'lucide-react';
+import { Sparkles, Send, X, User, Clock, CheckCircle, Ban, Languages, ZoomIn, ZoomOut, RotateCcw } from 'lucide-react';
 import { api } from '../services/api';
 
 interface TicketDetailModalProps {
@@ -43,7 +43,7 @@ export const TicketDetailModal: React.FC<TicketDetailModalProps> = ({
   };
 
   const getStatusBadgeLabel = (s: string) =>
-    s === 'new' || s === 'open' ? 'Yeni' : s === 'unverified' ? 'Onay Bekliyor' : s === 'in_progress' ? 'İşlemde / Okundu' : s === 'resolved' ? 'Çözüldü' : s === 'rejected' || s === 'closed' ? 'Reddedildi' : s;
+    s === 'new' || s === 'open' ? 'Yeni' : s === 'read' ? 'Okunmuş' : s === 'unverified' ? 'Onay Bekliyor' : s === 'in_progress' ? 'İşlem Yapılacak' : s === 'resolved' ? 'Çözüldü' : s === 'rejected' || s === 'closed' ? 'Reddedildi' : s;
 
   const getCategoryLabel = (category?: string) => {
     const cat = (category || '').toLowerCase();
@@ -438,8 +438,8 @@ export const TicketDetailModal: React.FC<TicketDetailModalProps> = ({
 
         {/* Status Action Buttons Toolbar */}
         <div style={{ borderTop: '1px solid var(--border-color)', paddingTop: '16px', display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-          <button type="button" className="btn btn-sm" style={btnStyle('#38BDF8', 'rgba(56, 189, 248, 0.4)')} disabled={loadingStatus} onClick={() => handleStatusChange('in_progress')}>
-            <Eye size={14} color="#000000" /> Okundu
+          <button type="button" className="btn btn-sm" style={btnStyle('#F59E0B', 'rgba(245, 158, 11, 0.4)')} disabled={loadingStatus} onClick={() => handleStatusChange('in_progress')}>
+            <Clock size={14} color="#000000" /> İşlem Yapılacak
           </button>
           <button type="button" className="btn btn-sm" style={btnStyle('#10B981', 'rgba(16, 185, 129, 0.4)')} disabled={loadingStatus} onClick={() => handleStatusChange('resolved')}>
             <CheckCircle size={14} color="#000000" /> Çözüldü

@@ -1,4 +1,4 @@
-export type TicketStatus = 'unverified' | 'new' | 'open' | 'in_progress' | 'resolved' | 'closed' | 'rejected' | 'cancelled' | 'spam';
+export type TicketStatus = 'unverified' | 'new' | 'open' | 'read' | 'in_progress' | 'resolved' | 'closed' | 'rejected' | 'cancelled' | 'spam';
 export type TicketPriority = 'low' | 'medium' | 'high' | 'urgent';
 
 export interface Ticket {

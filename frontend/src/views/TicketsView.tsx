@@ -88,9 +88,9 @@ export const TicketsView: React.FC<TicketsViewProps> = ({
   const getUnifiedStatusBadge = (ticket: Ticket) => {
     if (ticket.status === 'unverified') return { label: '⏳ Onay Bekliyor', bg: 'rgba(245, 158, 11, 0.18)', border: 'rgba(245, 158, 11, 0.45)' };
     if (ticket.status === 'resolved') return { label: 'Çözüldü', bg: 'rgba(16, 185, 129, 0.25)', border: 'rgba(16, 185, 129, 0.45)' };
-    if (ticket.status === 'in_progress') return { label: 'İşlemde', bg: 'rgba(245, 158, 11, 0.25)', border: 'rgba(245, 158, 11, 0.45)' };
+    if (ticket.status === 'in_progress') return { label: '⏳ İşlem Yapılacak', bg: 'rgba(245, 158, 11, 0.25)', border: 'rgba(245, 158, 11, 0.45)' };
     if (ticket.status === 'rejected' || ticket.status === 'closed') return { label: 'Reddedildi', bg: 'rgba(239, 68, 68, 0.25)', border: 'rgba(239, 68, 68, 0.45)' };
-    if (openedIds.includes(ticket.id)) return { label: '👁️ Açıldı', bg: 'rgba(156, 163, 175, 0.25)', border: 'rgba(156, 163, 175, 0.45)' };
+    if (ticket.status === 'read' || openedIds.includes(ticket.id)) return { label: '👁️ Okunmuş', bg: 'rgba(156, 163, 175, 0.25)', border: 'rgba(156, 163, 175, 0.45)' };
     return { label: '🔔 Yeni', bg: 'rgba(6, 182, 212, 0.25)', border: 'rgba(6, 182, 212, 0.45)' };
   };
 
@@ -114,7 +114,7 @@ export const TicketsView: React.FC<TicketsViewProps> = ({
     markAsOpened(id);
     const target = tickets.find((tItem) => tItem.id === id);
     if (target && (target.status === 'new' || target.status === 'open')) {
-      api.updateTicketStatus(id, 'in_progress').then(() => onRefresh()).catch(() => {});
+      api.updateTicketStatus(id, 'read').then(() => onRefresh()).catch(() => {});
     }
     setLoadingDetail(true);
     try {
@@ -212,10 +212,11 @@ export const TicketsView: React.FC<TicketsViewProps> = ({
               title="İşlem Durumuna Göre Filtrele"
             >
               <option value="new">🆕 Yeni ({tickets.filter((t) => t.status === 'new' || t.status === 'open').length})</option>
-              <option value="unverified">⏳ Onay Bekleyen ({tickets.filter((t) => t.status === 'unverified').length})</option>
+              <option value="read">👁️ Okunmuşlar ({tickets.filter((t) => t.status === 'read').length})</option>
+              <option value="in_progress">⏳ İşlem Yapılacak ({tickets.filter((t) => t.status === 'in_progress').length})</option>
+              <option value="unverified">✉️ Onay Bekleyen ({tickets.filter((t) => t.status === 'unverified').length})</option>
               <option value="urgent">🚨 Acil ({tickets.filter((t) => t.urgency === 'high' || t.urgency === 'urgent' || t.urgency === 'critical').length})</option>
               <option value="all">📋 Tüm Talepler ({tickets.length})</option>
-              <option value="in_progress">⏳ İşlemde / Okundu ({tickets.filter((t) => t.status === 'in_progress').length})</option>
               <option value="resolved">✅ Çözüldü / Yanıtlandı ({tickets.filter((t) => t.status === 'resolved').length})</option>
               <option value="rejected">❌ Kapatıldı / Reddedildi ({tickets.filter((t) => t.status === 'rejected').length})</option>
             </select>
