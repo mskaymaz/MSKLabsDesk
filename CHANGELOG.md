@@ -1,6 +1,13 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [26.11.2026 - 17:09] - Talep Onay E-Postası Özet Paneli ve Mesaj Kutusu
+- **Onay E-Postası Zenginleştirme (`emailTemplates.ts`, `support.ts`):**
+  - `getTicketConfirmationEmail` şablonuna üst bilgi paneli (Talep Grubu, Uygulama, Sürüm, Ortam/Platform, Konu) ve onay/iptal butonlarının üstünde çerçeveli talep metni kutusu eklendi (TR/EN/AR destekli, XSS korumalı).
+  - `POST /api/support` (`support.ts`) çağrısı `category`, `appSource`, `appVersion`, `osSource`, `subject` ve `content` verilerini şablona iletecek şekilde güncellendi.
+
+---
+
 ## [25.11.2026 - 11:56] - R2 Hızlı Dağıtım (DIST-CDN-001) & Ekosistem Telemetri Merkezi (TELEMETRY-ECO-001)
 - **Cloudflare R2 & Dağıtım Proxy (`DIST-CDN-001`):**
   - `msklabs-releases` bucket'ı ve `releases.msklabs.org` domain'i kuruldu; ilk 3 aktif paket yüklendi.

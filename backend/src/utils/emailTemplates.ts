@@ -7,11 +7,56 @@ export interface TicketVerifyLinks {
   cancelUrl: string;
 }
 
+export interface TicketConfirmationMeta {
+  category?: string;
+  app?: string;
+  version?: string | null;
+  os?: string | null;
+  subject?: string;
+  content?: string;
+}
+
+function formatCategoryLabel(category: string | undefined, lang: Language): string {
+  const key = (category || 'general').trim().toLowerCase();
+  const labels: Record<string, Record<Language, string>> = {
+    bug: { tr: 'Hata Bildirimi', en: 'Bug Report', ar: 'الإبلاغ عن خطأ' },
+    hata: { tr: 'Hata Bildirimi', en: 'Bug Report', ar: 'الإبلاغ عن خطأ' },
+    feature: { tr: 'Özellik Talebi', en: 'Feature Request', ar: 'طلب ميزة' },
+    istek: { tr: 'Özellik Talebi', en: 'Feature Request', ar: 'طلب ميزة' },
+    idea: { tr: 'Fikir / Öneri', en: 'Idea / Suggestion', ar: 'فكرة / اقتراح' },
+    fikir: { tr: 'Fikir / Öneri', en: 'Idea / Suggestion', ar: 'فكرة / اقتراح' },
+    thanks: { tr: 'Teşekkür / Geri Bildirim', en: 'Thanks / Feedback', ar: 'شكر / ملاحظات' },
+    tesekkur: { tr: 'Teşekkür / Geri Bildirim', en: 'Thanks / Feedback', ar: 'شكر / ملاحظات' },
+    billing: { tr: 'Ödeme / Abonelik', en: 'Billing / Subscription', ar: 'الدفع / الاشتراك' },
+    general: { tr: 'Genel Destek', en: 'General Support', ar: 'دعم عام' },
+    muhtelif: { tr: 'Muhtelif', en: 'Miscellaneous', ar: 'متنوع' },
+    other: { tr: 'Diğer', en: 'Other', ar: 'أخرى' },
+  };
+  if (labels[key]) return labels[key][lang];
+  return escapeHtml(category || '-');
+}
+
+function formatPlatformLabel(os: string | null | undefined, lang: Language): string {
+  const raw = (os || '').trim();
+  if (!raw || raw === '-') return '-';
+  const lower = raw.toLowerCase();
+  if (lower === 'web' || lower.includes('browser') || lower.includes('tarayıcı')) {
+    return 'Web';
+  }
+  if (lower === 'android' || lower === 'ios' || lower === 'mobile' || lower === 'mobil') {
+    const mobileTag: Record<Language, string> = { tr: 'Mobil', en: 'Mobile', ar: 'جوال' };
+    const pretty = lower === 'ios' ? 'iOS' : lower === 'android' ? 'Android' : mobileTag[lang];
+    return lower === 'mobile' || lower === 'mobil' ? mobileTag[lang] : `${mobileTag[lang]} (${pretty})`;
+  }
+  return escapeHtml(raw);
+}
+
 export function getTicketConfirmationEmail(
   ticketNo: string,
   name: string,
   lang: Language = 'tr',
-  verifyLinks?: TicketVerifyLinks
+  verifyLinks?: TicketVerifyLinks,
+  meta?: TicketConfirmationMeta
 ): { subject: string; html: string } {
   const isRtl = lang === 'ar';
   const dir = isRtl ? 'rtl' : 'ltr';
@@ -85,6 +130,84 @@ export function getTicketConfirmationEmail(
     ar: 'فريق دعم MSK Labs',
   };
 
+  const metaLabels: Record<Language, {
+    summaryTitle: string;
+    category: string;
+    app: string;
+    version: string;
+    platform: string;
+    subject: string;
+    messageTitle: string;
+  }> = {
+    tr: {
+      summaryTitle: 'Talep Özeti',
+      category: 'Talep Grubu',
+      app: 'Uygulama',
+      version: 'Sürüm',
+      platform: 'Ortam / Platform',
+      subject: 'Konu',
+      messageTitle: 'Gönderdiğiniz Talep Metni',
+    },
+    en: {
+      summaryTitle: 'Request Summary',
+      category: 'Request Group',
+      app: 'Application',
+      version: 'Version',
+      platform: 'Platform',
+      subject: 'Subject',
+      messageTitle: 'Your Request Message',
+    },
+    ar: {
+      summaryTitle: 'ملخص الطلب',
+      category: 'مجموعة الطلب',
+      app: 'التطبيق',
+      version: 'الإصدار',
+      platform: 'المنصة',
+      subject: 'الموضوع',
+      messageTitle: 'نص طلبك المرسل',
+    },
+  };
+
+  const labels = metaLabels[lang];
+  const safeApp = escapeHtml(meta?.app || (lang === 'tr' ? 'Genel' : lang === 'en' ? 'General' : 'عام'));
+  const safeVersion = escapeHtml(meta?.version || '-');
+  const safeCategory = formatCategoryLabel(meta?.category, lang);
+  const safePlatform = formatPlatformLabel(meta?.os, lang);
+  const safeSubject = escapeHtml(meta?.subject || '');
+  const safeContent = meta?.content ? escapeHtml(meta.content).replace(/\n/g, '<br />') : '';
+
+  const metaPanelHtml = meta
+    ? `<div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px 16px; margin: 18px 0 12px; font-size: 13px; color: #334155;">
+         <div style="font-weight: 700; color: #0f172a; margin-bottom: 8px; font-size: 13px; text-transform: uppercase; letter-spacing: 0.03em;">${labels.summaryTitle}</div>
+         <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
+           <tr>
+             <td style="padding: 3px 0; color: #64748b; width: 38%;">${labels.category}:</td>
+             <td style="padding: 3px 0; color: #0f172a; font-weight: 600;">${safeCategory}</td>
+           </tr>
+           <tr>
+             <td style="padding: 3px 0; color: #64748b;">${labels.app}:</td>
+             <td style="padding: 3px 0; color: #0f172a; font-weight: 600;">${safeApp}</td>
+           </tr>
+           <tr>
+             <td style="padding: 3px 0; color: #64748b;">${labels.version}:</td>
+             <td style="padding: 3px 0; color: #0f172a; font-weight: 600;">${safeVersion}</td>
+           </tr>
+           <tr>
+             <td style="padding: 3px 0; color: #64748b;">${labels.platform}:</td>
+             <td style="padding: 3px 0; color: #0f172a; font-weight: 600;">${safePlatform}</td>
+           </tr>
+           ${safeSubject ? `<tr><td style="padding: 3px 0; color: #64748b;">${labels.subject}:</td><td style="padding: 3px 0; color: #0f172a; font-weight: 600;">${safeSubject}</td></tr>` : ''}
+         </table>
+       </div>`
+    : '';
+
+  const messageBoxHtml = safeContent
+    ? `<div style="background: #ffffff; border: 1px solid #cbd5e1; border-${isRtl ? 'right' : 'left'}: 4px solid #2563eb; border-radius: 8px; padding: 14px 16px; margin: 12px 0 20px;">
+         <div style="font-size: 12px; font-weight: 700; color: #475569; margin-bottom: 6px;">${labels.messageTitle}</div>
+         <div style="font-size: 14px; line-height: 1.6; color: #1e293b;">${safeContent}</div>
+       </div>`
+    : '';
+
   const actionHtml = verifyLinks
     ? `<div style="text-align: center; margin: 24px 0 8px;">
          <a href="${escapeHtml(verifyLinks.confirmUrl)}" style="display: inline-block; background: #2563eb; color: #ffffff; text-decoration: none; font-weight: 600; padding: 11px 22px; border-radius: 8px; font-size: 14px; margin: 4px;">${confirmLabels[lang]}</a>
@@ -117,6 +240,8 @@ export function getTicketConfirmationEmail(
           <p>${greetings[lang]}</p>
           <p>${bodies[lang]}</p>
         </div>
+        ${metaPanelHtml}
+        ${messageBoxHtml}
         ${actionHtml}
         <div class="footer">
           <p>© ${new Date().getFullYear()} MSK Labs — ${footerTexts[lang]}</p>

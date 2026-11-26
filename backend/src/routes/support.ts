@@ -174,7 +174,14 @@ export async function handleSupportSubmission(
             cancelUrl: `${origin}/api/support/verify?token=${verificationToken}&action=cancel`,
           }
         : undefined;
-      const emailData = getTicketConfirmationEmail(ticketId, sender_name, userLang, verifyLinks);
+      const emailData = getTicketConfirmationEmail(ticketId, sender_name, userLang, verifyLinks, {
+        category,
+        app: appSource,
+        version: appVersion,
+        os: osSource,
+        subject,
+        content,
+      });
 
       const emailPromise = sendEmail({
         to: sender_email,
