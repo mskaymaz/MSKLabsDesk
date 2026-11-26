@@ -52,8 +52,8 @@ const KNOWN_R2_ASSETS: Record<string, { appId: string; filename: string; activeV
   },
   rekatsay: {
     appId: 'rekatsay',
-    filename: 'RekatSay.apk',
-    activeVersions: ['v1.3.1', '1.3.1'],
+    filename: 'RekatSay-v1.3.2.apk',
+    activeVersions: ['v1.3.2', '1.3.2', 'v1.3.1', '1.3.1'],
     archiveRepo: 'https://github.com/mskaymaz/MSKLabsApps/releases/download',
   },
   date_counter: {
