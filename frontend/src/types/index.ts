@@ -1,4 +1,4 @@
-export type TicketStatus = 'new' | 'open' | 'in_progress' | 'resolved' | 'closed' | 'rejected';
+export type TicketStatus = 'unverified' | 'new' | 'open' | 'in_progress' | 'resolved' | 'closed' | 'rejected' | 'cancelled' | 'spam';
 export type TicketPriority = 'low' | 'medium' | 'high' | 'urgent';
 
 export interface Ticket {
@@ -11,6 +11,9 @@ export interface Ticket {
   urgency?: string;
   status: TicketStatus;
   email_status?: 'valid' | 'invalid' | 'bounced';
+  app_name?: string;
+  os_name?: string;
+  app_version?: string;
   message_content?: string;
   content?: string;
   ai_summary?: string;

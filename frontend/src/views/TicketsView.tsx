@@ -58,11 +58,11 @@ export const TicketsView: React.FC<TicketsViewProps> = ({
     const cat = (category || '').toLowerCase();
     if (cat === 'hata' || cat === 'bug') return 'hata';
     if (cat === 'istek' || cat === 'feature') return 'istek';
-    if (cat === 'tesekkur' || cat === 'feedback' || cat === 'general') return 'tesekkur';
+    if (cat === 'tesekkur' || cat === 'feedback') return 'tesekkur';
     if (cat === 'fikir' || cat === 'idea') return 'fikir';
     if (cat === 'email') return 'email';
-    if (cat === 'muhtelif' || cat === 'other' || cat === 'diger') return 'muhtelif';
-    return 'diger';
+    if (cat === 'muhtelif' || cat === 'other' || cat === 'diger' || cat === 'general') return 'muhtelif';
+    return 'muhtelif';
   };
 
   const getCategoryBadge = (category?: string) => {
@@ -86,6 +86,7 @@ export const TicketsView: React.FC<TicketsViewProps> = ({
   };
 
   const getUnifiedStatusBadge = (ticket: Ticket) => {
+    if (ticket.status === 'unverified') return { label: '⏳ Onay Bekliyor', bg: 'rgba(245, 158, 11, 0.18)', border: 'rgba(245, 158, 11, 0.45)' };
     if (ticket.status === 'resolved') return { label: 'Çözüldü', bg: 'rgba(16, 185, 129, 0.25)', border: 'rgba(16, 185, 129, 0.45)' };
     if (ticket.status === 'in_progress') return { label: 'İşlemde', bg: 'rgba(245, 158, 11, 0.25)', border: 'rgba(245, 158, 11, 0.45)' };
     if (ticket.status === 'rejected' || ticket.status === 'closed') return { label: 'Reddedildi', bg: 'rgba(239, 68, 68, 0.25)', border: 'rgba(239, 68, 68, 0.45)' };
@@ -111,6 +112,10 @@ export const TicketsView: React.FC<TicketsViewProps> = ({
 
   const handleOpenDetail = async (id: string) => {
     markAsOpened(id);
+    const target = tickets.find((tItem) => tItem.id === id);
+    if (target && (target.status === 'new' || target.status === 'open')) {
+      api.updateTicketStatus(id, 'in_progress').then(() => onRefresh()).catch(() => {});
+    }
     setLoadingDetail(true);
     try {
       const res = await api.getTicketDetail(id);
@@ -188,7 +193,11 @@ export const TicketsView: React.FC<TicketsViewProps> = ({
             <select
               className="form-select"
               value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
+              onChange={(e) => {
+                const next = e.target.value;
+                setStatusFilter(next);
+                if (next === 'all') setCategoryFilter('all');
+              }}
               style={{
                 width: 'auto',
                 maxWidth: '210px',
@@ -203,9 +212,10 @@ export const TicketsView: React.FC<TicketsViewProps> = ({
               title="İşlem Durumuna Göre Filtrele"
             >
               <option value="new">🆕 Yeni ({tickets.filter((t) => t.status === 'new' || t.status === 'open').length})</option>
+              <option value="unverified">⏳ Onay Bekleyen ({tickets.filter((t) => t.status === 'unverified').length})</option>
               <option value="urgent">🚨 Acil ({tickets.filter((t) => t.urgency === 'high' || t.urgency === 'urgent' || t.urgency === 'critical').length})</option>
               <option value="all">📋 Tüm Talepler ({tickets.length})</option>
-              <option value="in_progress">⏳ İşlemde ({tickets.filter((t) => t.status === 'in_progress').length})</option>
+              <option value="in_progress">⏳ İşlemde / Okundu ({tickets.filter((t) => t.status === 'in_progress').length})</option>
               <option value="resolved">✅ Çözüldü / Yanıtlandı ({tickets.filter((t) => t.status === 'resolved').length})</option>
               <option value="rejected">❌ Kapatıldı / Reddedildi ({tickets.filter((t) => t.status === 'rejected').length})</option>
             </select>
@@ -336,6 +346,11 @@ export const TicketsView: React.FC<TicketsViewProps> = ({
 
                   <div className="admin-meta-text" style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', marginLeft: '4px', flexWrap: 'wrap' }}>
                     <strong>{ticket.sender_name}</strong>
+                    {(ticket.app_name || ticket.os_name || ticket.app_version) && (
+                      <span className="admin-badge" style={{ background: 'rgba(59, 130, 246, 0.14)', border: '1px solid rgba(59, 130, 246, 0.35)', color: 'var(--text-primary)', fontSize: '0.70rem', padding: '1px 6px' }}>
+                        📱 {[ticket.app_name, ticket.os_name, ticket.app_version ? `v${ticket.app_version}` : ''].filter(v => v && v !== '-').join(' • ')}
+                      </span>
+                    )}
                     <span>•</span>
                     <span>{ticket.sender_email}</span>
                     {ticket.email_status === 'invalid' && (

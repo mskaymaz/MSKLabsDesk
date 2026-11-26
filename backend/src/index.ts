@@ -3,7 +3,7 @@
  * Cloudflare Workers + TypeScript API Service
  */
 
-import { handleSupportSubmission } from './routes/support';
+import { handleSupportSubmission, handleSupportVerify } from './routes/support';
 import { handleCommentSubmission, handleGetApprovedComments, handleVerifyComment } from './routes/comments';
 import { handleSubscribe, handleUnsubscribe } from './routes/subscribe';
 import { handleAdminLogin, handleCreateBridgeTicket, handleExchangeBridgeTicket } from './routes/adminAuth';
@@ -65,6 +65,8 @@ export default {
       });
     } else if (path === '/api/support' && request.method === 'POST') {
       response = await handleSupportSubmission(request, env, ctx);
+    } else if ((path === '/api/support/verify' || path === '/api/v1/support/verify') && request.method === 'GET') {
+      response = await handleSupportVerify(request, env);
     } else if (path === '/api/subscribe' && request.method === 'POST') {
       response = await handleSubscribe(request, env, ctx);
     } else if (path === '/api/unsubscribe' && request.method === 'POST') {

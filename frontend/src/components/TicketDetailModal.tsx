@@ -43,7 +43,17 @@ export const TicketDetailModal: React.FC<TicketDetailModalProps> = ({
   };
 
   const getStatusBadgeLabel = (s: string) =>
-    s === 'new' || s === 'open' ? 'Yeni' : s === 'in_progress' ? 'İşlemde' : s === 'resolved' ? 'Çözüldü' : s === 'rejected' || s === 'closed' ? 'Reddedildi' : s;
+    s === 'new' || s === 'open' ? 'Yeni' : s === 'unverified' ? 'Onay Bekliyor' : s === 'in_progress' ? 'İşlemde / Okundu' : s === 'resolved' ? 'Çözüldü' : s === 'rejected' || s === 'closed' ? 'Reddedildi' : s;
+
+  const getCategoryLabel = (category?: string) => {
+    const cat = (category || '').toLowerCase();
+    if (cat === 'hata' || cat === 'bug') return '🐛 Hata Bildirimi';
+    if (cat === 'istek' || cat === 'feature') return '✨ Özellik Talebi';
+    if (cat === 'tesekkur' || cat === 'feedback') return '❤️ Teşekkür & Övgü';
+    if (cat === 'fikir' || cat === 'idea') return '💡 Yeni Fikir';
+    if (cat === 'email') return '✉️ E-Posta';
+    return '📦 Muhtelif';
+  };
 
   const btnStyle = (bg: string, shadow: string): React.CSSProperties => ({
     background: bg, color: '#000000', fontWeight: 700, border: 'none', boxShadow: `0 2px 8px ${shadow}`
@@ -113,7 +123,12 @@ export const TicketDetailModal: React.FC<TicketDetailModalProps> = ({
                   ✉️ E-Posta
                 </span>
               ) : (
-                <span className="ticket-badge" style={{ fontSize: '0.78rem', background: 'rgba(156, 163, 175, 0.25)', border: '1px solid rgba(156, 163, 175, 0.45)', padding: '2px 8px', borderRadius: '4px', fontWeight: 700 }}>{ticket.category}</span>
+                <span className="ticket-badge" style={{ fontSize: '0.78rem', background: 'rgba(156, 163, 175, 0.25)', border: '1px solid rgba(156, 163, 175, 0.45)', padding: '2px 8px', borderRadius: '4px', fontWeight: 700 }}>{getCategoryLabel(ticket.category)}</span>
+              )}
+              {(ticket.app_name || ticket.os_name || ticket.app_version) && (
+                <span className="ticket-badge" style={{ fontSize: '0.75rem', background: 'rgba(59, 130, 246, 0.15)', border: '1px solid rgba(59, 130, 246, 0.35)', padding: '2px 8px', borderRadius: '4px', fontWeight: 600 }}>
+                  📱 {[ticket.app_name, ticket.os_name, ticket.app_version ? `v${ticket.app_version}` : ''].filter(v => v && v !== '-').join(' • ')}
+                </span>
               )}
             </div>
             <h2 style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--text-primary)' }}>

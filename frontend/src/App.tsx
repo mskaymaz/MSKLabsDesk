@@ -115,13 +115,19 @@ const AdminPanelContent: React.FC = () => {
     return <InboxMiniStation />;
   }
 
-  const pendingTickets = tickets.filter((t) => t.status === 'new' || t.status === 'in_progress').length;
+  const pendingTickets = tickets.filter((t) => t.status === 'new' || t.status === 'open').length;
   const pendingComments = comments.filter((c) => c.status === 'pending').length;
+
+  const handleTabChange = (tab: TabType) => {
+    setTicketFilter(null);
+    setCommentFilter(null);
+    setActiveTab(tab);
+  };
 
   return (
     <AppShell
       activeTab={activeTab}
-      setActiveTab={setActiveTab}
+      setActiveTab={handleTabChange}
       pendingTicketCount={pendingTickets}
       pendingCommentCount={pendingComments}
     >
@@ -130,7 +136,7 @@ const AdminPanelContent: React.FC = () => {
           tickets={tickets}
           comments={comments}
           subscribers={subscribers}
-          onNavigate={setActiveTab}
+          onNavigate={handleTabChange}
         />
       )}
 
