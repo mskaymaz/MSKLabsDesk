@@ -58,8 +58,8 @@ const KNOWN_R2_ASSETS: Record<string, { appId: string; filename: string; activeV
   },
   date_counter: {
     appId: 'date_counter',
-    filename: 'DateCounter.exe',
-    activeVersions: ['v1.1.0', '1.1.0'],
+    filename: 'DateCounter-v1.1.1.exe',
+    activeVersions: ['v1.1.1', '1.1.1', 'v1.1.0', '1.1.0'],
     archiveRepo: 'https://github.com/mskaymaz/D_DateCounter/releases/download',
   },
 };

@@ -1,6 +1,12 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [27.11.2026 - 12:39] - DateCounter v1.1.1 R2 Dağıtımı
+- **İndirme Proxy (`downloadProxy.ts`):**
+  - `KNOWN_R2_ASSETS.date_counter` kaydı `v1.1.1` (`DateCounter-v1.1.1.exe`) için güncellendi; `DateCounter-v1.1.1.exe` Cloudflare R2 (`msklabs-releases/date_counter/v1.1.1/`) üzerine yüklendi.
+
+---
+
 ## [26.11.2026 - 17:09] - Talep Onay E-Postası Özet Paneli ve Mesaj Kutusu
 - **Onay E-Postası Zenginleştirme (`emailTemplates.ts`, `support.ts`):**
   - `getTicketConfirmationEmail` şablonuna üst bilgi paneli (Talep Grubu, Uygulama, Sürüm, Ortam/Platform, Konu) ve onay/iptal butonlarının üstünde çerçeveli talep metni kutusu eklendi (TR/EN/AR destekli, XSS korumalı).
