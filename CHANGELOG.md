@@ -1,6 +1,12 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [27.11.2026 - 16:23] - Topbar Sadeleştirme & Ekosistem Genel Tarama Notu
+- **Yönetici Paneli (`Topbar.tsx`):** Üst çubuktaki salt bilgilendirme amaçlı kullanıcı avatar/isim etiketi kaldırıldı.
+- **Ekosistem Denetim Notu:** `D_GcPiluyari`, `D_HaydiNamaza`, `M_HaydiNamaza`, `D_PDFLayout` ve `D_DeskPilot` repolarında repo ve uygulama eksikleri genel tarama yapıldı; tespit edildi (`27.11.2026 - 16:23`).
+
+---
+
 ## [27.11.2026 - 12:39] - DateCounter v1.1.1 R2 Dağıtımı
 - **İndirme Proxy (`downloadProxy.ts`):**
   - `KNOWN_R2_ASSETS.date_counter` kaydı `v1.1.1` (`DateCounter-v1.1.1.exe`) için güncellendi; `DateCounter-v1.1.1.exe` Cloudflare R2 (`msklabs-releases/date_counter/v1.1.1/`) üzerine yüklendi.
