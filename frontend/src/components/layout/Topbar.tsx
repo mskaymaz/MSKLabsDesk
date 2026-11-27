@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Bell, User, Sun, Moon, Menu, Palette } from 'lucide-react';
+import { Search, Bell, Sun, Moon, Menu, Palette } from 'lucide-react';
 import type { TabType } from '../Sidebar';
-import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
 import { useCustomizer } from '../../context/CustomizerContext';
 import { UnifiedInboxPopover } from '../inbox/UnifiedInboxPopover';
@@ -37,7 +36,6 @@ export const Topbar: React.FC<TopbarProps> = ({
   onToggleMobileMenu,
   onNavigate,
 }) => {
-  const { user } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const { openCustomizer } = useCustomizer();
   const [isInboxOpen, setIsInboxOpen] = useState(false);
@@ -226,26 +224,6 @@ export const Topbar: React.FC<TopbarProps> = ({
         >
           <Palette size={16} color="var(--accent-primary)" />
         </button>
-
-        <div className="hidden-mobile" style={{ alignItems: 'center', gap: '6px' }}>
-          <div
-            style={{
-              width: '24px',
-              height: '24px',
-              borderRadius: '50%',
-              background: 'var(--accent-primary)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: '#FFF',
-            }}
-          >
-            <User size={13} />
-          </div>
-          <span style={{ fontSize: '0.74rem', fontWeight: 600, color: 'var(--text-primary)' }}>
-            {user?.name || 'Admin'}
-          </span>
-        </div>
       </div>
     </header>
   );
