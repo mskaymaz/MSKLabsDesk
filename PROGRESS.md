@@ -1,6 +1,13 @@
 # MSKLabsDesk — İlerleme ve Durum Raporu (PROGRESS.md)
 > **Amaç:** Geliştirme sürecinde yapılan son işlemlerin, aşamaların ve oturum özetlerinin AI asistanları ve geliştirici tarafından takip edilmesi için kullanılır.
 
+## 📌 Son Güncelleme [28.11.2026 - 14:18] — ADSENSE HESAP TEKİLLEŞTİRME & WEB UYUMLULUK DÜZELTMELERİ [✓]
+* **Hesap & Yapılandırma:**
+  1. **Yinelenen Hesap Kapatıldı:** `mskaymaz05@gmail.com` (`pub-7458139167668436`) kapatıldı; tek aktif AdSense hesabı `mustafasalihkaymaz@gmail.com` (**Yayıncı Kimliği:** `pub-8005300749197156`, **Müşteri Kimliği:** `5102466332`) olarak belirlendi.
+  2. **Worker & Web Senkronu:** `backend/wrangler.toml` `[vars]` içine `ADSENSE_PUBLISHER_ID` ve `ADSENSE_CLIENT_ID` işlendi. `MSKLabsWeb` tarafında kimlikler güncellendi, boş reklam yer tutucuları gizlendi, `adsbygoogle.js` tüm içerik sayfalarına yayıldı ve `apps.html` çelişkisi düzeltildi.
+
+---
+
 ## 📌 Son Güncelleme [25.11.2026 - 11:56] — AŞAMA 1-3: R2 HIZLI DAĞITIM (DIST-CDN-001) & EKOSİSTEM TELEMETRİ MERKEZİ (TELEMETRY-ECO-001) [✓]
 * **Tamamlanan Altyapı ve Arayüz Kazanımları:**
   1. **R2 Bucket (`msklabs-releases`):** `releases.msklabs.org` custom domain'i bağlandı; `haydi_namaza` (`v1.0.5`), `rekatsay` (`v1.3.1`) ve `date_counter` (`v1.1.0`) paketleri yüklenip `200 OK` doğrulandı.

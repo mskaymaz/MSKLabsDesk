@@ -1,6 +1,13 @@
 # MSKLabsDesk — Değişiklik Günlüğü (CHANGELOG.md)
 > **Amaç:** Git commit ve push öncesinde projede yapılan teknik değişikliklerin versiyon, tarih ve saat bazlı kaydedildiği dokümandır.
 
+## [28.11.2026 - 14:18] - AdSense Hesap Konsolidasyonu ve Yayıncı Kimliği Güncellemesi
+- **Tekil AdSense Hesap Standardı:** Yinelenen `pub-7458139167668436` (`mskaymaz05@gmail.com`) hesabı kapatıldı; aktif yayıncı kimliği **`pub-8005300749197156`** (Müşteri Kimliği: `5102466332`, `mustafasalihkaymaz@gmail.com`) olarak tekilleştirildi.
+- **Worker Ortam Değişkenleri (`backend/wrangler.toml`):** `[vars]` altına `ADSENSE_PUBLISHER_ID = "pub-8005300749197156"` ve `ADSENSE_CLIENT_ID = "ca-pub-8005300749197156"` eklendi.
+- **Web Arayüzü Uyumluluğu (`MSKLabsWeb`):** `ads.txt`, `public/ads.txt`, `config.js` ve `index.html` kimlikleri güncellendi; `ads-loader.js` boş yer tutucuları gizleyecek şekilde sertleştirildi; `layout.js` tüm içerik sayfalarına `adsbygoogle.js` enjekte edecek şekilde güncellendi; `apps.html` reklam/ücretsiz metin çelişkisi giderildi.
+
+---
+
 ## [27.11.2026 - 16:23] - Topbar Sadeleştirme & Ekosistem Genel Tarama Notu
 - **Yönetici Paneli (`Topbar.tsx`):** Üst çubuktaki salt bilgilendirme amaçlı kullanıcı avatar/isim etiketi kaldırıldı.
 - **Ekosistem Denetim Notu:** `D_GcPiluyari`, `D_HaydiNamaza`, `M_HaydiNamaza`, `D_PDFLayout` ve `D_DeskPilot` repolarında repo ve uygulama eksikleri genel tarama yapıldı; tespit edildi (`27.11.2026 - 16:23`).
